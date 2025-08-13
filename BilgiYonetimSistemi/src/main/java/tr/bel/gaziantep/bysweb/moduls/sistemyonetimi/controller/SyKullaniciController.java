@@ -99,6 +99,7 @@ public class SyKullaniciController extends AbstractController<SyKullanici> {
                 .map(rolYetki -> rolYetki.getSyYetki().getYetki())
                 .forEach(permissions::add);
         selectedRols = new ArrayList<>();
+        readColumns();
     }
 
     public boolean hasPermission(String permissionKey) {
