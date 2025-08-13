@@ -17,7 +17,7 @@
         <p:outputLabel value="#{messages.yeniParolaLabel}" for="@next"/>
         <p:password id="password" value="#{syKullaniciController.newPassword}" title="#{messages.yeniParolaText}" required="true"
                     feedback="true" promptLabel="#{messages.lutfenSifreGiriniz}" weakLabel="#{messages.zayif}"
-                    goodLabel="#{messages.ortaSeviye}" strongLabel="#{messages.guclu}" match="yeniParolaTekrar">
+                    goodLabel="#{messages.ortaSeviye}" strongLabel="#{messages.guclu}" match="passwordRepeat">
             <f:validateLength minimum="6"/>
         </p:password>
 
