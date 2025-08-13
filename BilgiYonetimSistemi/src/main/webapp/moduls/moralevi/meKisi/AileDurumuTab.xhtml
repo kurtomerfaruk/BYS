@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <p:outputLabel value="#{messages.kiminleYasiyorLabel}" for="@next"/>
+    <p:selectOneMenu id="kiminleYasiyor" value="#{meKisiController.selected.eyKisi.gnlKisi.kiminleYasiyor}" styleClass="tcUpdate">
+        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+        <f:selectItems value="#{enumKiminleYasiyor.ALL_VALUES}"
+                       var="kiminleYasiyors"
+                       itemValue="#{kiminleYasiyors}"
+                       itemLabel="#{kiminleYasiyors.displayValue}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.tcKimlikNoLabel}" for="@next"/>
+    <coco:tcKimlikNoDogumTarihi actionListener="#{meKisiController.getTcKimlik(true)}"
+                                update=":growl,@(.refekatci)" required="false"
+                                value="#{meKisiController.selected.refakatciTcKimlikNo}"
+                                dateValue="#{meKisiController.selected.refakatciDogumTarihi}"/>
+
+    <p:outputLabel value="#{messages.adLabel}" for="@next"/>
+    <p:inputText id="refekatciAd" value="#{meKisiController.selected.refakatciAd}" title="#{messages.adText}" readonly="true" styleClass="refekatci"/>
+
+    <p:outputLabel value="#{messages.soyadLabel}" for="@next"/>
+    <p:inputText id="refekatciSoyad" value="#{meKisiController.selected.refakatciSoyad}" title="#{messages.soyadText}" readonly="true"
+                 styleClass="refekatci"/>
+
+    <p:outputLabel value="#{messages.adresLabel}" for="@next"/>
+    <p:inputTextarea rows="4" id="refekatciAdres" value="#{meKisiController.selected.refakatciAdres}" title="#{messages.adresText}"
+                     styleClass="w-100 refekatci" autoResize="false" readonly="true"/>
+
+    <p:outputLabel value="#{messages.telefonLabel}" for="@next"/>
+    <p:inputMask id="refekatciTelefon" value="#{meKisiController.selected.refakatciTelefon}" mask="(999) 999 99 99" title="#{messages.telefonText}"
+                 size="14" styleClass="refekatci"/>
+
+    <p:outputLabel value="#{messages.yakinlikDerecesiLabel}" for="@next"/>
+    <p:selectOneMenu id="yakinlikDerecesi" value="#{meKisiController.selected.yakinlik}" converter="omnifaces.SelectItemsConverter">
+        <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+        <f:selectItems value="#{enumYakinlikDerecesi.ALL_VALUES}"
+                       var="enumYakinlikDerecesis"
+                       itemLabel="#{enumYakinlikDerecesis.displayValue}"
+                       itemValue="#{enumYakinlikDerecesis}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.aciklamaLabel}" for="@next"/>
+    <p:inputTextarea rows="4" id="aciklama" value="#{meKisiController.selected.digerAciklama}" title="#{messages.aciklamaText}" styleClass="w-100"
+                     autoResize="false"/>
+
+    <p:outputLabel value="#{messages.ozelDurumuLabel}" for="@next"/>
+    <p:inputTextarea rows="4" id="ozelDurumu" value="#{meKisiController.selected.eyKisi.ozelDurumlar}" title="#{messages.ozelDurumuText}"
+                     styleClass="w-100" autoResize="false"/>
+
+</ui:composition>
+</html>

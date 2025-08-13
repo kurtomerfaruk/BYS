@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:createpage id="EySosyalIncelemeRaporuCreateForm"
+                     renderedListener="#{eySosyalIncelemeRaporuController.selected != null}"
+                     widgetVar="EySosyalIncelemeRaporuCreateDialog"
+                     actionListener="#{eySosyalIncelemeRaporuController.saveNew}"
+                     listForm="EySosyalIncelemeRaporuListForm">
+
+        <p:outputLabel value="#{messages.raporTarihiLabel}" for="raporTarihi"/>
+        <p:datePicker id="raporTarihi" locale="tr" pattern="#{messages.tarihSaatFormat}" value="#{eySosyalIncelemeRaporuController.selected.raporTarihi}"
+                      title="#{messages.raporTarihiText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
+                      showOnFocus="false"/>
+
+        <p:outputLabel value="#{messages.raporuDuzenleyenLabel}" for="raporuDuzenleyen"/>
+        <p:inputText id="raporuDuzenleyen" value="#{eySosyalIncelemeRaporuController.selected.raporuDuzenleyenGnlPersonel.gnlKisi.adSoyad}"
+                     title="#{messages.raporuDuzenleyenText}" readonly="true"/>
+
+
+        <p:outputLabel value="#{messages.incelemeNedeniLabel}" for="incelemeNedeniId"/>
+        <p:selectOneMenu id="incelemeNedeniId" value="#{eySosyalIncelemeRaporuController.selected.eyIncelemeNedeni}"
+                         converter="omnifaces.SelectItemsConverter"
+                         required="true" filter="true">
+            <f:selectItem itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{eyIncelemeNedeniController.items}"
+                           var="incelemeNedeniIdItem"
+                           itemValue="#{incelemeNedeniIdItem}"
+                           itemLabel="#{incelemeNedeniIdItem.tanim.toString()}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.tcKimlikNoLabel}" for="@next"/>
+        <coco:inputWithButton id="inputWithButtonEyKisi" inputId="eyKisiId"
+                              inputValue="#{eySosyalIncelemeRaporuController.selected.eyKisi.gnlKisi.tcKimlikNo}"
+                              inputTitle="#{messages.tcKimlikNoText}"
+                              actionListener="#{bysController.openCommonDialog('eyKisiSec')}"
+                              ajaxListener="#{eySosyalIncelemeRaporuController.secilenEyKisi}"
+                              buttonTitle="#{messages.kisiSecmelisiniz}"
+                              size="50"
+                              dialogId="EySosyalIncelemeRaporuCreateDialogId"/>
+
+
+        <h:outputText value="#{messages.adSoyadLabel}"/>
+        <p:inputText value="#{eySosyalIncelemeRaporuController.selected.eyKisi.gnlKisi.adSoyad}" label="#{messages.adSoyadText}" styleClass="inputUpdate"
+                     readonly="true" size="50" title="#{messages.adSoyadText}"/>
+
+        <h:outputText value="#{messages.anaBabaAdiLabel}"/>
+        <p:inputText
+                value="#{eySosyalIncelemeRaporuController.selected.eyKisi.gnlKisi.anaAdi} / #{eySosyalIncelemeRaporuController.selected.eyKisi.gnlKisi.babaAdi}"
+                styleClass="inputUpdate" readonly="true" size="50"/>
+
+        <h:outputText value="#{messages.dogumYeriYiliLabel}"/>
+        <h:panelGroup>
+            <p:inputText value="#{eySosyalIncelemeRaporuController.selected.eyKisi.gnlKisi.dogumYeri}" styleClass="inputUpdate" readonly="true"/>
+            <p:inputText value="#{eySosyalIncelemeRaporuController.selected.eyKisi.gnlKisi.dogumTarihi}" styleClass="inputUpdate" readonly="true">
+                <f:convertDateTime pattern="yyyy" type="localDateTime"/>
+            </p:inputText>
+        </h:panelGroup>
+
+        <h:outputText value="#{messages.telefonLabel}"/>
+        <h:panelGroup>
+            <p:inputText value="#{eySosyalIncelemeRaporuController.selected.eyKisi.gnlKisi.telefon}" styleClass="inputUpdate" readonly="true"/>
+            <p:inputText value="#{eySosyalIncelemeRaporuController.selected.eyKisi.gnlKisi.telefon2}" styleClass="inputUpdate" readonly="true"/>
+        </h:panelGroup>
+
+        <h:outputText value="#{messages.egitimDurumuLabel}"/>
+        <p:inputText
+                value="#{eySosyalIncelemeRaporuController.selected.eyKisi.gnlKisi.egitimDurumu.label ne null ?
+                eySosyalIncelemeRaporuController.selected.eyKisi.gnlKisi.egitimDurumu.displayValue : ''}"
+                styleClass="inputUpdate" readonly="true"/>
+
+        <h:outputText value="#{messages.engelGrubuLabel}"/>
+        <p:inputText value="#{eySosyalIncelemeRaporuController.selected.eyKisi.kisiEngelGrubuStr}" styleClass="inputUpdate" readonly="true"/>
+
+        <h:outputText value="#{messages.engelOraniLabel}"/>
+        <p:inputText value="#{eySosyalIncelemeRaporuController.selected.eyKisi.toplamVucutKayipOrani}" styleClass="inputUpdate" readonly="true"/>
+
+        <h:outputText value="#{messages.agirOzurluLabel}"/>
+        <p:selectBooleanCheckbox value="#{eySosyalIncelemeRaporuController.selected.eyKisi.agirOzurlu}" styleClass="inputUpdate" disabled="true"/>
+
+        <p:outputLabel value="#{messages.aileBilgileriLabel}" for="@next"/>
+        <p:inputTextarea rows="4" id="aileBilgileri" value="#{eySosyalIncelemeRaporuController.selected.aileBilgileri}" title="#{messages.aileBilgileriText}"
+                         autoResize="false" styleClass="w-100"/>
+
+        <p:outputLabel value="#{messages.engelinOlusumBilgisiLabel}" for="@next"/>
+        <p:inputTextarea rows="4" id="engelinOlusumuBilgisi" value="#{eySosyalIncelemeRaporuController.selected.engelinOlusumuBilgisi}"
+                         title="#{messages.engelinOlusumBilgisiText}" autoResize="false" styleClass="w-100"/>
+
+        <p:outputLabel value="#{messages.aileninEkonomikDurumuLabel}" for="@next"/>
+        <p:inputTextarea rows="4" id="ekonomikDurumu" value="#{eySosyalIncelemeRaporuController.selected.ekonomikDurumu}"
+                         title="#{messages.aileninEkonomikDurumuText}" autoResize="false" styleClass="w-100"/>
+
+        <p:outputLabel value="#{messages.aileninYasadigiKonutDurumuLabel}" for="@next"/>
+        <p:inputTextarea rows="4" id="konutDurumu" value="#{eySosyalIncelemeRaporuController.selected.konutDurumu}"
+                         title="#{messages.aileninYasadigiKonutDurumuText}" autoResize="false" styleClass="w-100"/>
+
+        <p:outputLabel value="#{messages.isinmaDurumuLabel}" for="@next"/>
+        <p:selectOneMenu id="isinmaTuru" value="#{eySosyalIncelemeRaporuController.selected.eyKisi.gnlKisi.isinmaDurumu}"
+                         label="#{messages.isinmaDurumuText}" styleClass="inputUpdate">
+            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{enumIsinmaDurumu.ALL_VALUES}"
+                           var="isinmas"
+                           itemValue="#{isinmas}"
+                           itemLabel="#{isinmas.displayValue}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.kisilikOzellikleriLabel}" for="@next"/>
+        <p:inputTextarea rows="4" id="kisilikOzellikleri" value="#{eySosyalIncelemeRaporuController.selected.kisilikOzellikleri}"
+                         title="#{messages.kisilikOzellikleriLabel}" autoResize="false" styleClass="w-100"/>
+
+        <p:outputLabel value="#{messages.konutunBulunduguFizikiCevreLabel}" for="@next"/>
+        <p:inputTextarea rows="4" id="konutunFizikiCevresi" value="#{eySosyalIncelemeRaporuController.selected.konutunFizikiCevresi}"
+                         title="#{messages.konutunBulunduguFizikiCevreText}" autoResize="false" styleClass="w-100"/>
+
+        <p:outputLabel value="#{messages.talepIstekSikayetDurumuLabel}" for="@next"/>
+        <p:inputTextarea rows="4" id="talep" value="#{eySosyalIncelemeRaporuController.selected.talep}" title="#{messages.talepIstekSikayetDurumuText}"
+                         autoResize="false" styleClass="w-100"/>
+
+        <p:outputLabel value="#{messages.genelDegerlendirmeAciklamaLabel}" for="@next"/>
+        <p:inputTextarea rows="4" id="genelDegerlendirmeAciklama" value="#{eySosyalIncelemeRaporuController.selected.genelDegerlendirmeAciklama}"
+                         title="#{messages.genelDegerlendirmeAciklamaText}" autoResize="false" styleClass="w-100"/>
+
+        <p:outputLabel value="#{messages.degerlendirmeDurumuLabel}" for="@next"/>
+        <p:selectOneMenu id="degerlendirmeDurumu" value="#{eySosyalIncelemeRaporuController.selected.degerlendirmeDurumu}"
+                         required="true" label="#{messages.degerlendirmeDurumuText}"
+                         styleClass="inputUpdate">
+            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{enumDegerlendirmeDurumu.ALL_VALUES}"
+                           var="durums"
+                           itemValue="#{durums}"
+                           itemLabel="#{durums.displayValue}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.aciklamaLabel}" for="@next"/>
+        <p:inputTextarea rows="4" id="aciklama" value="#{eySosyalIncelemeRaporuController.selected.aciklama}" title="#{messages.aciklamaText}"
+                         autoResize="false" styleClass="w-100"/>
+
+
+    </coco:createpage>
+
+</ui:composition>
+
+</html>

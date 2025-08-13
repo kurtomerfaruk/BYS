@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="jakarta.faces.facelets"
+                xmlns:p="primefaces">
+
+    <!--    BYS    -->
+    <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.bys.EnumModul" var="enumModul"/>
+    <!--    BYS    -->
+
+    <!--    GENEL    -->
+    <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlUyruk" var="enumUyruk"/>
+    <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlEvTuru" var="enumEvTuru"/>
+    <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlCinsiyet" var="enumCinsiyet"/>
+    <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlMedeniDurum" var="enumMedeniDurum"/>
+    <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlKiminleYasiyor" var="enumKiminleYasiyor"/>
+    <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlEbeveynDurumu" var="enumEbeveynDurumu"/>
+    <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlCalismaDurumu" var="enumCalismaDurumu"/>
+    <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlDurum" var="enumGnlDurum"/>
+    <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlSosyalGuvence" var="enumSosyalGuvence"/>
+    <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlGelirKaynagi" var="enumAileninGelirKaynagi"/>
+    <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlEgitimDurumu" var="enumEgitimDurumu"/>
+    <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlFaydalandigiHak" var="enumFaydalandigiHaklar"/>
+    <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlYardimAlinanYerler" var="enumYardimAlinanYerler"/>
+    <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlYardimTuru" var="enumYardimTuru"/>
+    <!--    GENEL    -->
+
+    <!--    ENGELSIZLER    -->
+    <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.engelsizler.EnumEyKullandigiCihaz" var="enumKullandigiCihazlar"/>
+    <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.engelsizler.EnumEyYardimaUygun" var="enumYardimaUygun"/>
+    <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.engelsizler.EnumEyHizmetlerdenMemnun" var="enumHizmetlerdenMemnun"/>
+    <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.engelsizler.EnumEyAnketDurumu" var="enumAnketDurumus"/>
+    <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.engelsizler.EnumEyMaddeKullanimi" var="enumMaddeKullanimi"/>
+    <!--    ENGELSIZLER    -->
+
+    <ui:include src="/moduls/engelsizler/eyKisi/List.xhtml"/>
+    <ui:include src="/moduls/engelsizler/eyKisi/View.xhtml"/>
+    <ui:include src="/moduls/engelsizler/eyKisi/Edit.xhtml"/>
+    <ui:include src="/moduls/engelsizler/eyKisi/Create.xhtml"/>
+    <ui:include src="/moduls/engelsizler/eyKisi/QrCode.xhtml"/>
+    <ui:include src="/moduls/engelsizler/eyKisi/TarihSec.xhtml"/>
+    <ui:include src="/moduls/engelsizler/eyKisi/KisiMernisListeGuncelle.xhtml"/>
+    <ui:include src="/moduls/engelsizler/eyKisi/TalepEkle.xhtml"/>
+    <ui:include src="/moduls/engelsizler/eyKisi/AdresListeGuncelle.xhtml"/>
+    <ui:include src="/moduls/engelsizler/eyKisi/ListeGuncelle.xhtml"/>
+
+</ui:composition>

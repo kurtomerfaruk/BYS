@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:h="jakarta.faces.html"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+
+    <p:dialog widgetVar="ShKisiEditDialog"
+              modal="true"
+              resizable="false"
+              closeOnEscape="true"
+              header="#{messages.dialogYeniKayit}"
+              appendTo="@(body)"
+              responsive="true"
+              style="max-width: 800px !important;"
+              onShow="PF('ShKisiEditDialog').initPosition();"
+              fitViewport="true"
+              position="top">
+
+        <h:form id="ShKisiEditForm">
+
+            <h:panelGroup id="display">
+                <p:focus context="display"/>
+                <div class="card">
+
+                    <div class="card-body">
+                        <ul class="nav nav-tabs mb-3 tab-style-8 scaleX" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="shKisiBilgisiCreateTab" data-bs-toggle="tab"
+                                        data-bs-target="#shKisiBilgisiCreateTabPane" type="button" role="tab"
+                                        aria-controls="shKisiBilgisiCreateTabPane" aria-selected="true">Kişi Bilgisi
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="shKisiKontrolCreateTab" data-bs-toggle="tab"
+                                        data-bs-target="#shKisiKontrolCreateTabPane" type="button" role="tab"
+                                        aria-controls="shKisiKontrolCreateTabPane" aria-selected="true">Kontrol
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="shKanTahliliCreateTab" data-bs-toggle="tab"
+                                        data-bs-target="#shKanTahliliCreateTabPane" type="button" role="tab"
+                                        aria-controls="shKanTahliliCreateTabPane" aria-selected="true">Kan Tahlili
+                                </button>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content">
+                            <div class="tab-pane overflow-hidden active show" id="shKisiBilgisiCreateTabPane" role="tabpanel"
+                                 aria-labelledby="shKisiBilgisiCreateTab" tabindex="0">
+                                <p:panelGrid id="kisiBilgisiPanel" columns="2" styleClass="w-100" rendered="#{shKisiController.selected!=null}"
+                                             layout="tabular">
+                                    <p:outputLabel value="#{messages.tcKimlikNoLabel}" for="@next"/>
+                                    <coco:tcKimlikNoDogumTarihi actionListener="#{shKisiController.getTcKimlik()}" update=":growl,@(.tcUpdate)"
+                                                                value="#{shKisiController.selected.gnlKisi.tcKimlikNo}"
+                                                                dateValue="#{shKisiController.selected.gnlKisi.dogumTarihi}"/>
+
+                                    <p:outputLabel value="#{messages.adLabel}" for="@next"/>
+                                    <p:inputText id="ad" value="#{shKisiController.selected.gnlKisi.ad}" title="#{messages.adText}" required="true"
+                                                 readonly="#{facesContext.renderResponse}" styleClass="tcUpdate" size="50"/>
+
+                                    <p:outputLabel value="#{messages.soyadLabel}" for="@next"/>
+                                    <p:inputText id="soyad" value="#{shKisiController.selected.gnlKisi.soyad}" title="#{messages.soyadText}" required="true"
+                                                 readonly="#{facesContext.renderResponse}" styleClass="tcUpdate"/>
+
+                                    <p:outputLabel value="#{messages.telefonLabel}" for="@next"/>
+                                    <p:inputMask id="telefon" value="#{shKisiController.selected.gnlKisi.telefon}" title="#{messages.telefonText}" size="50"
+                                                 maxlength="50"
+                                                 mask="(999) 999 99 99" required="true" styleClass="tcUpdate"/>
+
+                                    <p:outputLabel value="#{messages.cinsiyetLabel}" for="@next"/>
+                                    <p:inputText id="cinsiyet" value="#{shKisiController.selected.gnlKisi.cinsiyet}" required="true"
+                                                 readonly="#{facesContext.renderResponse}"
+                                                 styleClass="tcUpdate"/>
+
+                                    <p:outputLabel value="#{messages.medeniDurumLabel}" for="@next"/>
+                                    <p:inputText id="medeniDurum" value="#{shKisiController.selected.gnlKisi.medeniDurum}" title="#{messages.medeniDurumText}"
+                                                 required="true"
+                                                 readonly="#{facesContext.renderResponse}" styleClass="tcUpdate"/>
+
+                                    <p:outputLabel value="#{messages.ilceLabel}" for="@next"/>
+                                    <p:inputText id="ilce" value="#{shKisiController.selected.gnlKisi.gnlIlce.tanim}" title="#{messages.ilceText}"
+                                                 readonly="true" styleClass="tcUpdate"/>
+
+                                    <p:outputLabel value="#{messages.mahalleLabel}" for="@next"/>
+                                    <p:inputText id="mahalle" value="#{shKisiController.selected.gnlKisi.gnlMahalle.tanim}" title="#{messages.mahalleText}"
+                                                 readonly="true"
+                                                 styleClass="tcUpdate"/>
+
+                                    <p:outputLabel value="#{messages.adresLabel}" for="@next"/>
+                                    <p:inputTextarea id="adres" value="#{shKisiController.selected.gnlKisi.adres}" title="#{messages.adresText}" readonly="true"
+                                                     styleClass="w-100 tcUpdate"/>
+
+                                    <p:outputLabel value="#{messages.gelisTarihiLabel}" for="@next"/>
+                                    <p:datePicker id="gelisTarihi" locale="tr" pattern="#{messages.tarihFormat}"
+                                                  value="#{shKisiController.selected.gelisTarihi}"
+                                                  title="#{messages.gelisTarihiText}" mask="true" monthNavigator="true" yearNavigator="true"
+                                                  showButtonBar="true" showIcon="true"
+                                                  showOnFocus="false" required="true"/>
+
+                                    <p:outputLabel value="#{messages.danismanlikHizmetiLabel}" for="@next"/>
+                                    <p:selectOneMenu id="danismanlikHizmeti" value="#{shKisiController.selected.danismanlikHizmeti}"
+                                                     converter="omnifaces.SelectItemsConverter" required="true">
+                                        <f:selectItem itemLabel="#{messages.seciniz}"/>
+                                        <f:selectItems value="#{enumDanismanlik.ALL_VALUES}"
+                                                       var="hizmet"
+                                                       itemLabel="#{hizmet.displayValue}"
+                                                       itemValue="#{hizmet}"/>
+                                    </p:selectOneMenu>
+
+                                    <p:outputLabel value="#{messages.verilenHizmetlerLabel}" for="verilenHizmet"/>
+                                    <p:selectOneMenu id="verilenHizmet" value="#{shKisiController.selected.verilenHizmet}"
+                                                     converter="omnifaces.SelectItemsConverter" required="true">
+                                        <f:selectItem itemLabel="#{messages.seciniz}"/>
+                                        <f:selectItems value="#{enumObezite.ALL_VALUES}"
+                                                       var="obezite"
+                                                       itemLabel="#{obezite.displayValue}"
+                                                       itemValue="#{obezite}"/>
+                                    </p:selectOneMenu>
+
+                                </p:panelGrid>
+                            </div>
+
+                            <div class="tab-pane overflow-hidden" id="shKisiKontrolCreateTabPane" role="tabpanel"
+                                 aria-labelledby="shKisiKontrolCreateTab" tabindex="0">
+                                <p:panelGrid id="kontrolPanel" columns="1" styleClass="w-100" rendered="#{shKisiController.selected!=null}"
+                                             layout="tabular">
+
+                                    <p:panelGrid columns="2" styleClass="w-100">
+                                        <p:outputLabel value="#{messages.tarihLabel}" for="tarih"/>
+                                        <p:datePicker id="tarih" locale="tr" pattern="#{messages.tarihFormat}" value="#{shKisiController.shKisiKontrol.tarih}"
+                                                      title="#{messages.tarihText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true"
+                                                      showIcon="true"
+                                                      showOnFocus="false"/>
+
+                                        <p:outputLabel value="#{messages.boyLabel}" for="boy"/>
+                                        <p:inputText id="boy" value="#{shKisiController.shKisiKontrol.boy}"
+                                                     title="#{messages.boyText}">
+                                            <p:keyFilter regEx="/[\d]/"/>
+                                            <p:ajax event="change" listener="#{shKisiController.getBki}" update="@(.bki)"/>
+                                        </p:inputText>
+
+                                        <p:outputLabel value="#{messages.kiloLabel}" for="kilo"/>
+                                        <p:inputText id="kilo" value="#{shKisiController.shKisiKontrol.kilo}"
+                                                     title="#{messages.kiloText}">
+                                            <p:keyFilter regEx="/[\d]/"/>
+                                            <p:ajax event="change" listener="#{shKisiController.getBki}" update="@(.bki)"/>
+                                        </p:inputText>
+
+                                        <p:outputLabel value="#{messages.belCevresiLabel}" for="belCevresi"/>
+                                        <p:inputText id="belCevresi" value="#{shKisiController.shKisiKontrol.belCevresi}"
+                                                     title="#{messages.belCevresiText}">
+                                            <p:keyFilter regEx="/[\d]/"/>
+                                        </p:inputText>
+
+                                        <p:outputLabel value="#{messages.bkiLabel}" for="bki"/>
+                                        <p:inputText id="bki" value="#{shKisiController.shKisiKontrol.bki}"
+                                                     styleClass="bki"
+                                                     title="#{messages.bkiText}" readonly="true">
+                                            <f:convertNumber maxFractionDigits="2"/>
+                                        </p:inputText>
+
+                                        <f:facet name="footer">
+                                            <div class="float-end">
+                                                <p:commandButton value="#{messages.buttonKaydet}" icon="pi pi-plus"
+                                                                 styleClass="btn btn-success"
+                                                                 actionListener="#{shKisiController.addControl()}"
+                                                                 process="kontrolPanel" update=":growl,kontrolPanel"/>
+                                            </div>
+                                        </f:facet>
+                                    </p:panelGrid>
+
+                                    <p:dataTable id="kisiKontrolDatalist"
+                                                 value="#{shKisiController.selected.shKisiKontrolList}"
+                                                 var="items"
+                                                 lazy="false"
+                                                 emptyMessage="#{messages.kayitBulunamadi}">
+
+                                        <f:facet name="header">
+                                            <h:outputText value="#{messages.kisiKontrolListesi}"/>
+                                        </f:facet>
+
+                                        <p:column styleClass="text-center">
+                                            <f:facet name="header">
+                                                <h:outputText value="#{messages.tarihText}"/>
+                                            </f:facet>
+                                            <h:outputText value="#{items.tarih}">
+                                                <f:convertDateTime pattern="#{messages.tarihFormat}" type="localDate"/>
+                                            </h:outputText>
+                                        </p:column>
+
+                                        <p:column styleClass="text-center">
+                                            <f:facet name="header">
+                                                <h:outputText value="#{messages.boyText}"/>
+                                            </f:facet>
+                                            <h:outputText value="#{items.boy}">
+                                                <f:convertNumber maxFractionDigits="0"/>
+                                            </h:outputText>
+                                        </p:column>
+
+                                        <p:column styleClass="text-center">
+                                            <f:facet name="header">
+                                                <h:outputText value="#{messages.kiloText}"/>
+                                            </f:facet>
+                                            <h:outputText value="#{items.kilo}">
+                                                <f:convertNumber maxFractionDigits="0"/>
+                                            </h:outputText>
+                                        </p:column>
+
+                                        <p:column styleClass="text-center">
+                                            <f:facet name="header">
+                                                <h:outputText value="#{messages.belCevresiText}"/>
+                                            </f:facet>
+                                            <h:outputText value="#{items.belCevresi}">
+                                                <f:convertNumber maxFractionDigits="0"/>
+                                            </h:outputText>
+                                        </p:column>
+
+                                        <p:column styleClass="text-center">
+                                            <f:facet name="header">
+                                                <h:outputText value="#{messages.bkiText}"/>
+                                            </f:facet>
+                                            <h:outputText value="#{items.bki}">
+                                                <f:convertNumber maxFractionDigits="2"/>
+                                            </h:outputText>
+                                        </p:column>
+
+                                        <p:column width="60" headerText="#{messages.buttonSil}">
+                                            <p:commandButton icon="pi pi-trash"
+                                                             title="#{messages.buttonSil}"
+                                                             actionListener="#{shKisiController.removeControl(items)}"
+                                                             update="kisiKontrolDatalist,:growl"
+                                                             process="kisiKontrolDatalist"/>
+                                        </p:column>
+
+                                    </p:dataTable>
+
+                                </p:panelGrid>
+                            </div>
+
+                            <div class="tab-pane overflow-hidden" id="shKanTahliliCreateTabPane" role="tabpanel"
+                                 aria-labelledby="shKanTahliliCreateTab" tabindex="0">
+                                <p:panelGrid id="kanTahliliPanel" columns="1" rendered="#{shKisiController.selected!=null}">
+                                    <p:dataTable id="kanTahliliDatalist"
+                                                 value="#{shKisiController.selected.shKisiKanTahlilSonucList}"
+                                                 var="item"
+                                                 lazy="false"
+                                                 style="width: 720px !important;"
+                                                 liveScroll="true">
+
+                                        <f:facet name="header">
+                                            <h:outputText value="#{messages.kanTahliliListesi}"/>
+                                        </f:facet>
+
+                                        <p:column width="100" styleClass="text-center">
+                                            <f:facet name="header">
+                                                <h:outputText value="#{messages.glikozAclikText}"/>
+                                            </f:facet>
+                                            <h:outputText value="#{item.glikozAclik}"/>
+                                        </p:column>
+
+
+                                        <p:column width="100" styleClass="text-center">
+                                            <f:facet name="header">
+                                                <h:outputText value="#{messages.insulinText}"/>
+                                            </f:facet>
+                                            <h:outputText value="#{item.insulin}">
+                                                <f:convertNumber maxFractionDigits="2"/>
+                                            </h:outputText>
+                                        </p:column>
+
+
+                                        <p:column width="100" styleClass="text-center">
+                                            <f:facet name="header">
+                                                <h:outputText value="#{messages.totalKolesterolText}"/>
+                                            </f:facet>
+                                            <h:outputText value="#{item.totalKolesterol}"/>
+                                        </p:column>
+
+
+                                        <p:column width="100" styleClass="text-center">
+                                            <f:facet name="header">
+                                                <h:outputText value="#{messages.ldlText}"/>
+                                            </f:facet>
+                                            <h:outputText value="#{item.ldl}"/>
+                                        </p:column>
+
+
+                                        <p:column width="100" styleClass="text-center">
+                                            <f:facet name="header">
+                                                <h:outputText value="#{messages.trigliseridText}"/>
+                                            </f:facet>
+                                            <h:outputText value="#{item.trigliserid}"/>
+                                        </p:column>
+
+                                        <p:column width="100" styleClass="text-center">
+                                            <f:facet name="header">
+                                                <h:outputText value="#{messages.demirText}"/>
+                                            </f:facet>
+                                            <h:outputText value="#{item.demir}"/>
+                                        </p:column>
+
+                                        <p:column width="100" styleClass="text-center">
+                                            <f:facet name="header">
+                                                <h:outputText value="#{messages.b12VitaminiText}"/>
+                                            </f:facet>
+                                            <h:outputText value="#{item.b12Vitamini}"/>
+                                        </p:column>
+
+                                        <p:column width="100" styleClass="text-center">
+                                            <f:facet name="header">
+                                                <h:outputText value="#{messages.tshText}"/>
+                                            </f:facet>
+                                            <h:outputText value="#{item.tsh}">
+                                                <f:convertNumber maxFractionDigits="2"/>
+                                            </h:outputText>
+                                        </p:column>
+
+                                        <p:column width="100" styleClass="text-center">
+                                            <f:facet name="header">
+                                                <h:outputText value="#{messages.t3Text}"/>
+                                            </f:facet>
+                                            <h:outputText value="#{item.t3}">
+                                                <f:convertNumber maxFractionDigits="2"/>
+                                            </h:outputText>
+                                        </p:column>
+
+                                        <p:column width="100">
+                                            <f:facet name="header">
+                                                <h:outputText value="#{messages.t4Text}"/>
+                                            </f:facet>
+                                            <h:outputText value="#{item.t4}">
+                                                <f:convertNumber maxFractionDigits="2"/>
+                                            </h:outputText>
+                                        </p:column>
+
+                                        <p:column width="100">
+                                            <f:facet name="header">
+                                                <h:outputText value="#{messages.dvitaminiText}"/>
+                                            </f:facet>
+                                            <h:outputText value="#{item.DVitamini}">
+                                                <f:convertNumber maxFractionDigits="2"/>
+                                            </h:outputText>
+                                        </p:column>
+
+                                    </p:dataTable>
+                                </p:panelGrid>
+                            </div>
+                        </div>
+                    </div><!-- end card-body -->
+                    <div class="card-footer">
+                        <div class="float-end">
+                            <p:commandButton icon="pi pi-check" styleClass="ui-button-success"
+                                             actionListener="#{shKisiController.save}"
+                                             value="#{messages.buttonKaydet}"
+                                             update="display,:ShKisiListForm:datalist:datalist,:growl"
+                                             oncomplete="handleSubmit(xhr,status,args,PF('ShKisiEditDialog'));"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                            <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                             value="#{messages.buttonIptal}" onclick="PF('ShKisiEditDialog').hide()"
+                                             immediate="true" onstart="PF('Loading').show()"
+                                             onsuccess="PF('Loading').hide()"/>
+                        </div>
+                    </div>
+                </div>
+            </h:panelGroup>
+        </h:form>
+
+    </p:dialog>
+
+</ui:composition>
+
+</html>

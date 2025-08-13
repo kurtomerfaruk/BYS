@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:pt="jakarta.faces.passthrough"
+                xmlns:p="primefaces"
+                xmlns:coco="jakarta.faces.composite/ui">
+
+    <h:form id="EyAracCihazTeslimiVefatEdenListForm" styleClass="form-height">
+        <p:contextMenu id="EyAracCihazTeslimiVefatEdenDataTableContextMenu" for="datalist:datalist">
+            <p:menuitem value="#{messages.buttonGuncelle}"
+                        onclick="document.getElementById('EyAracCihazTeslimiVefatEdenListForm:datalist:datalist:editButton').click();"
+                        icon="pi pi-pencil" rendered="#{syKullaniciController.hasPermission('eyaraccihazteslimivefateden:guncelle')}"/>
+            <p:menuitem value="#{messages.buttonDetay}"
+                        onclick="document.getElementById('EyAracCihazTeslimiVefatEdenListForm:datalist:datalist:viewButton').click();"
+                        icon="pi pi-search"/>
+        </p:contextMenu>
+        <coco:datatable id="datalist"
+                        value="#{eyAracCihazTeslimiVefatEdenController.lazyItems}"
+                        rowKey="#{item.id}"
+                        selection="#{eyAracCihazTeslimiVefatEdenController.selected}"
+                        filtered="#{eyAracCihazTeslimiVefatEdenController.filtered}"
+                        rowselect=":EyAracCihazTeslimiVefatEdenListForm:datalist:datalist:viewButton,:EyAracCihazTeslimiVefatEdenListForm:datalist:datalist:editButton"
+                        rowDblselect="document.getElementById('EyAracCihazTeslimiVefatEdenListForm:datalist:datalist:editButton').click()"
+                        contextMenu=":EyAracCihazTeslimiVefatEdenListForm:datalist:datalist:viewButton :EyAracCihazTeslimiVefatEdenListForm:datalist:datalist:editButton"
+                        selectListener="#{eyAracCihazTeslimiVefatEdenController.resetParents}"
+                        controller="#{eyAracCihazTeslimiVefatEdenController}"
+                        header="#{messages.vefatEdenListesi}">
+
+            <p:ajax event="colResize" listener="#{eyAracCihazTeslimiVefatEdenController.onResize}"/>
+
+            <f:facet name="paginatorBottomLeft">
+                <p:commandButton id="editButton" styleClass="btn btn-success" icon="pi pi-pencil"
+                                 pt:data-tooltip="#{messages.buttonGuncelle}"
+                                 update=":EyAracCihazTeslimiVefatEdenEditForm:EyAracCihazTeslimiVefatEdenEditForm"
+                                 oncomplete="PF('EyAracCihazTeslimiVefatEdenEditDialog').show()"
+                                 disabled="#{empty eyAracCihazTeslimiVefatEdenController.selected}"
+                                 onstart="PF('Loading').show()"
+                                 onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('eyaraccihazteslimivefateden:guncelle')}"/>
+                <p:commandButton id="viewButton" styleClass="btn btn-info" icon="pi pi-search"
+                                 pt:data-tooltip="#{messages.buttonDetay}"
+                                 update=":EyAracCihazTeslimiVefatEdenViewForm:EyAracCihazTeslimiVefatEdenViewForm"
+                                 oncomplete="PF('EyAracCihazTeslimiVefatEdenViewDialog').show()"
+                                 disabled="#{empty eyAracCihazTeslimiVefatEdenController.selected}"
+                                 onstart="PF('Loading').show()"
+                                 onsuccess="PF('Loading').hide()"/>
+            </f:facet>
+
+        </coco:datatable>
+
+    </h:form>
+
+</ui:composition>

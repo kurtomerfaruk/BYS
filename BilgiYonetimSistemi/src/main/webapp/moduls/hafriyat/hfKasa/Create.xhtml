@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:createpage id="HfKasaCreateForm"
+                     renderedListener="#{hfKasaController.selected != null}"
+                     widgetVar="HfKasaCreateDialog"
+                     actionListener="#{hfKasaController.saveNew}"
+                     listForm="HfKasaListForm">
+
+        <p:outputLabel value="#{messages.tahsilatTuruLabel}" for="@next"/>
+        <p:selectOneMenu id="tahsilatTuru" value="#{hfKasaController.selected.tahsilatTuru}" converter="omnifaces.SelectItemsConverter" required="true">
+            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{enumTahsilatTuru.ALL_VALUES}"
+                           var="tahsilats"
+                           itemValue="#{tahsilats}"
+                           itemLabel="#{tahsilats.displayValue}"/>
+            <p:ajax event="change" update="display"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.firmaUnvaniLabel}" for="@next"/>
+        <coco:inputWithButton id="inputWithButtonFirmaId" inputId="firma"
+                              inputValue="#{hfKasaController.selected.hfFirma.firmaUnvani}"
+                              inputTitle="#{messages.firmaText}"
+                              actionListener="#{bysController.openCommonDialog('hfFirmaSec')}"
+                              ajaxListener="#{hfKasaController.secilenFirma}"
+                              buttonTitle="#{messages.firmaSecmelisiniz}"
+                              size="50"
+                              dialogId="HfKasaCreateDialogId"/>
+
+        <p:outputLabel value="#{messages.sozlesmeNoLabel}" for="@next"/>
+        <coco:inputWithButton id="inputWithButtonHafriyatIsId" inputId="hafriyatIs"
+                              inputValue="#{hfKasaController.selected.hfHafriyatIs.sozlesmeNo}"
+                              inputTitle="#{messages.sozlesmeNoText}"
+                              actionListener="#{bysController.openCommonDialog('hfHafriyatIsSec')}"
+                              ajaxListener="#{hfKasaController.secilenHafriyatIs}"
+                              buttonTitle="#{messages.sozlesmeSecmelisiniz}"
+                              size="50"
+                              dialogId="HfKasaCreateDialogId"/>
+
+        <p:outputLabel value="#{messages.bankaAdiLabel}" for="@next"
+                       rendered="#{hfKasaController.selected.tahsilatTuru eq 'BANKA_TAHSILAT' or hfKasaController.selected.tahsilatTuru eq 'CEK' or hfKasaController.selected.tahsilatTuru eq 'EFT' or hfKasaController.selected.tahsilatTuru eq 'HAVALE'}"/>
+        <p:selectOneMenu id="banka" value="#{hfKasaController.selected.gnlBanka}" required="true" filter="true"
+                         converter="omnifaces.SelectItemsConverter"
+                         rendered="#{hfKasaController.selected.tahsilatTuru eq 'BANKA_TAHSILAT' or hfKasaController.selected.tahsilatTuru eq 'CEK' or hfKasaController.selected.tahsilatTuru eq 'EFT' or hfKasaController.selected.tahsilatTuru eq 'HAVALE'}">
+            <f:selectItem itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{gnlBankaController.items}"
+                           var="bankaItem"
+                           itemValue="#{bankaItem}"
+                           itemLabel="#{bankaItem.bankaAdi.toString()}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.tahsilatTutariLabel}" for="@next"/>
+        <p:inputNumber id="tutar" value="#{hfKasaController.selected.tutar}" inputStyleClass="text-right" decimalPlaces="3" decimalSeparator=","
+                       thousandSeparator="." emptyValue="zero"/>
+
+        <p:outputLabel value="#{messages.tahsilTarihiLabel}" for="@next"/>
+        <p:datePicker id="tahsilTarihi" locale="tr" pattern="#{messages.tarihFormat}" value="#{hfKasaController.selected.tahsilTarihi}"
+                      title="#{messages.tahsilTarihiText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
+                      showOnFocus="false"/>
+
+        <p:outputLabel value="#{messages.vadeTarihiLabel}" for="@next" rendered="#{hfKasaController.selected.tahsilatTuru eq 'CEK'}"/>
+        <p:datePicker id="vadeTarihi" locale="tr" pattern="#{messages.tarihFormat}" value="#{hfKasaController.selected.vadeTarihi}"
+                      title="#{messages.vadeTarihiText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
+                      showOnFocus="false" rendered="#{hfKasaController.selected.tahsilatTuru eq 'CEK'}"/>
+
+        <p:outputLabel value="#{messages.seriNoLabel}" for="@next" rendered="#{hfKasaController.selected.tahsilatTuru eq 'CEK'}"/>
+        <p:inputText id="seriNo" value="#{hfKasaController.selected.seriNo}" title="#{messages.seriNoText}" size="50" maxlength="50"
+                     rendered="#{hfKasaController.selected.tahsilatTuru eq 'CEK'}"/>
+
+        <p:outputLabel value="#{messages.aciklamaLabel}" for="@next"/>
+        <p:inputTextarea rows="4" id="aciklama" value="#{hfKasaController.selected.aciklama}" title="#{messages.aciklamaText}" styleClass="w-100"
+                         autoResize="false"/>
+
+    </coco:createpage>
+
+</ui:composition>
+
+</html>

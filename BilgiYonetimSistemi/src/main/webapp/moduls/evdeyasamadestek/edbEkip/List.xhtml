@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:p="primefaces"
+                xmlns:pt="jakarta.faces.passthrough"
+                xmlns:coco="jakarta.faces.composite/ui">
+
+    <h:form id="EdbEkipListForm" styleClass="form-height">
+
+        <p:contextMenu id="EdbEkipDataTableContextMenu" for="datalist:datalist">
+            <p:menuitem value="#{messages.buttonEkle}" onclick="document.getElementById('EdbEkipListForm:datalist:datalist:createButton').click();"
+                        icon="pi pi-plus" rendered="#{syKullaniciController.hasPermission('edbekip:ekle')}"/>
+            <p:menuitem value="#{messages.buttonGuncelle}" onclick="document.getElementById('EdbEkipListForm:datalist:datalist:editButton').click();"
+                        icon="pi pi-pencil" rendered="#{syKullaniciController.hasPermission('edbekip:guncelle')}"/>
+            <p:menuitem value="#{messages.buttonDetay}" onclick="document.getElementById('EdbEkipListForm:datalist:datalist:viewButton').click();"
+                        icon="pi pi-search"/>
+            <p:menuitem value="#{messages.buttonSil}" onclick="document.getElementById('EdbEkipListForm:datalist:datalist:deleteButton').click();"
+                        icon="pi pi-trash" rendered="#{syKullaniciController.hasPermission('edbekip:sil')}"/>
+        </p:contextMenu>
+        <coco:datatable id="datalist"
+                        value="#{edbEkipController.lazyItems}"
+                        rowKey="#{item.id}"
+                        selection="#{edbEkipController.selected}"
+                        filtered="#{edbEkipController.filtered}"
+                        rowselect=":EdbEkipListForm:datalist:datalist:createButton,:EdbEkipListForm:datalist:datalist:viewButton,:EdbEkipListForm:datalist:datalist:editButton,:EdbEkipListForm:datalist:datalist:deleteButton"
+                        rowDblselect="document.getElementById('EdbEkipListForm:datalist:datalist:editButton').click()"
+                        contextMenu=":EdbEkipListForm:datalist:datalist:createButton :EdbEkipListForm:datalist:datalist:viewButton :EdbEkipListForm:datalist:datalist:editButton :EdbEkipListForm:datalist:datalist:deleteButton"
+                        selectListener="#{edbEkipController.resetParents}"
+                        controller="#{edbEkipController}"
+                        header="#{messages.ekipListesi}">
+
+
+            <p:ajax event="colResize" listener="#{edbEkipController.onResize}"/>
+
+            <f:facet name="paginatorBottomLeft">
+
+                <p:commandButton id="createButton" styleClass="ui-button-primary" icon="pi pi-plus" pt:data-tooltip="#{messages.buttonEkle}"
+                                 actionListener="#{edbEkipController.prepareCreate}" update=":EdbEkipCreateForm:EdbEkipCreateForm"
+                                 oncomplete="PF('EdbEkipCreateDialog').show()" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('edbekip:ekle')}"/>
+                <p:commandButton id="editButton" styleClass="ui-button-success" icon="pi pi-pencil" pt:data-tooltip="#{messages.buttonGuncelle}"
+                                 update=":EdbEkipEditForm:EdbEkipEditForm" oncomplete="PF('EdbEkipEditDialog').show()"
+                                 disabled="#{empty edbEkipController.selected}" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('edbekip:guncelle')}"/>
+                <p:commandButton id="viewButton" styleClass="ui-button-info" icon="pi pi-search" pt:data-tooltip="#{messages.buttonDetay}"
+                                 update=":EdbEkipViewForm:EdbEkipViewForm" oncomplete="PF('EdbEkipViewDialog').show()"
+                                 disabled="#{empty edbEkipController.selected}" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                <p:commandButton id="deleteButton" styleClass="ui-button-danger" icon="pi pi-trash" pt:data-tooltip="#{messages.buttonSil}"
+                                 actionListener="#{edbEkipController.delete}" update=":growl,datalist" disabled="#{empty edbEkipController.selected}"
+                                 rendered="#{syKullaniciController.hasPermission('edbekip:sil')}">
+                    <p:confirm header="#{messages.ConfirmationHeader}" message="#{messages.ConfirmDeleteMessage}" icon="pi pi-exclamation-circle"/>
+                </p:commandButton>
+
+            </f:facet>
+
+        </coco:datatable>
+
+
+        <ui:include src="/confirmation.xhtml"/>
+
+    </h:form>
+
+</ui:composition>

@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:p="primefaces"
+>
+
+<ui:composition>
+
+    <p:dialog widgetVar="AyKisiCreateDialog"
+              modal="true"
+              resizable="false"
+              closeOnEscape="true"
+              header="#{messages.dialogYeniKayit}"
+              appendTo="@(body)"
+              responsive="true"
+              onShow="PF('AyKisiCreateDialog').initPosition();"
+              fitViewport="true"
+              position="top">
+
+        <h:form id="AyKisiCreateForm">
+
+
+            <h:panelGroup id="display">
+                <p:focus context="display"/>
+                <div class="card">
+                    <div class="card-body">
+                        <ul class="nav nav-tabs mb-3 tab-style-8 scaleX" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="aykisiBilgileriCreateTab" data-bs-toggle="tab"
+                                        data-bs-target="#aykisiBilgileriCreateTabPane" type="button" role="tab"
+                                        aria-controls="aykisiBilgileriCreateTabPane" aria-selected="false">Kişi Bilgileri
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="aydetayBilgileriCreateTab" data-bs-toggle="tab"
+                                        data-bs-target="#aydetayBilgileriCreateTabPane" type="button" role="tab"
+                                        aria-controls="aydetayBilgileriCreateTabPane" aria-selected="false">Detay Bilgileri
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="aygelirDurumuCreateTab" data-bs-toggle="tab"
+                                        data-bs-target="#aygelirDurumuCreateTabPane" type="button" role="tab"
+                                        aria-controls="aygelirDurumuCreateTabPane" aria-selected="false">Gelir Durumu
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="ayevDurumuCreateTab" data-bs-toggle="tab"
+                                        data-bs-target="#ayevDurumuCreateTabPane" type="button" role="tab"
+                                        aria-controls="ayevDurumuCreateTabPane" aria-selected="false">Ev Durumu
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="ayyasamsalAktiviteCreateTab" data-bs-toggle="tab"
+                                        data-bs-target="#ayyasamsalAktiviteCreateTabPane" type="button" role="tab"
+                                        aria-controls="ayyasamsalAktiviteCreateTabPane" aria-selected="false">Yaşamsal Aktiviteler
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="ayaranacakKisiCreateTab" data-bs-toggle="tab"
+                                        data-bs-target="#ayaranacakKisiCreateTabPane" type="button" role="tab"
+                                        aria-controls="ayaranacakKisiCreateTabPane" aria-selected="false">Aranacak Kişiler
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="aysaglikBilgileriCreateTab" data-bs-toggle="tab"
+                                        data-bs-target="#aysaglikBilgileriCreateTabPane" type="button" role="tab"
+                                        aria-controls="aysaglikBilgileriCreateTabPane" aria-selected="false">Sağlık Bilgileri
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="ayadresBilgileriCreateTab" data-bs-toggle="tab"
+                                        data-bs-target="#ayadresBilgileriCreateTabPane" type="button" role="tab"
+                                        aria-controls="ayadresBilgileriCreateTabPane" aria-selected="false">Adres Bilgileri
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="aydurumBilgileriCreateTab" data-bs-toggle="tab"
+                                        data-bs-target="#aydurumBilgileriCreateTabPane" type="button" role="tab"
+                                        aria-controls="aydurumBilgileriCreateTabPane" aria-selected="false">Durum Bilgileri
+                                </button>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane show active overflow-hidden" id="aykisiBilgileriCreateTabPane" role="tabpanel"
+                                 aria-labelledby="aykisiBilgileriCreateTab" tabindex="0">
+                                <p:panelGrid id="kisiPanel" columns="2" styleClass="w-100" rendered="#{ayKisiController.selected!=null}" layout="tabular">
+
+                                    <ui:include src="KisiBilgileriTab.xhtml"/>
+
+                                </p:panelGrid>
+                            </div>
+                            <div class="tab-pane overflow-hidden" id="aydetayBilgileriCreateTabPane" role="tabpanel" aria-labelledby="aydetayBilgileriCreateTab"
+                                 tabindex="0">
+                                <p:panelGrid id="detayPanel" columns="2" styleClass="w-100" rendered="#{ayKisiController.selected!=null}" layout="tabular">
+
+                                    <ui:include src="DetayBilgileriTab.xhtml"/>
+
+                                </p:panelGrid>
+                            </div>
+                            <div class="tab-pane overflow-hidden" id="aygelirDurumuCreateTabPane" role="tabpanel" aria-labelledby="aygelirDurumuCreateTab"
+                                 tabindex="0">
+                                <p:panelGrid id="gelirDurumuPanel" columns="2" styleClass="w-100" rendered="#{ayKisiController.selected!=null}"
+                                             layout="tabular">
+
+                                    <ui:include src="GelirDurumuTab.xhtml"/>
+
+                                </p:panelGrid>
+                            </div>
+                            <div class="tab-pane overflow-hidden" id="ayevDurumuCreateTabPane" role="tabpanel" aria-labelledby="ayevDurumuCreateTab"
+                                 tabindex="0">
+                                <p:panelGrid id="evDurumuPanel" columns="2" styleClass="w-100" rendered="#{ayKisiController.selected!=null}"
+                                             layout="tabular">
+
+                                    <ui:include src="EvDurumuTab.xhtml"/>
+
+                                </p:panelGrid>
+                            </div>
+                            <div class="tab-pane overflow-hidden" id="ayyasamsalAktiviteCreateTabPane" role="tabpanel"
+                                 aria-labelledby="ayyasamsalAktiviteCreateTab"
+                                 tabindex="0">
+                                <p:panelGrid id="yasamsalAktivitePanel" columns="2" styleClass="w-100" rendered="#{ayKisiController.selected!=null}"
+                                             layout="tabular">
+
+                                    <ui:include src="YasamsalAktiviteTab.xhtml"/>
+
+                                </p:panelGrid>
+                            </div>
+                            <div class="tab-pane overflow-hidden" id="ayaranacakKisiCreateTabPane" role="tabpanel" aria-labelledby="ayaranacakKisiCreateTab"
+                                 tabindex="0">
+                                <p:panelGrid id="aranacakKisiPanel" columns="1" styleClass="w-100" rendered="#{ayKisiController.selected!=null}">
+
+                                    <ui:include src="AranacakKisiTab.xhtml"/>
+
+                                </p:panelGrid>
+                            </div>
+                            <div class="tab-pane overflow-hidden" id="aysaglikBilgileriCreateTabPane" role="tabpanel"
+                                 aria-labelledby="aysaglikBilgileriCreateTab"
+                                 tabindex="0">
+                                <p:panelGrid id="saglikBilgileriPanel" columns="2" styleClass="w-100" rendered="#{ayKisiController.selected!=null}"
+                                             layout="tabular">
+
+                                    <ui:include src="SaglikBilgileriTab.xhtml"/>
+
+                                </p:panelGrid>
+                            </div>
+                            <div class="tab-pane overflow-hidden" id="ayadresBilgileriCreateTabPane" role="tabpanel" aria-labelledby="ayadresBilgileriCreateTab"
+                                 tabindex="0">
+                                <p:panelGrid id="adresBilgileriPanel" columns="2" styleClass="w-100" rendered="#{ayKisiController.selected!=null}"
+                                             layout="tabular">
+
+                                    <ui:include src="AdresBilgileriTab.xhtml"/>
+
+                                </p:panelGrid>
+                            </div>
+                            <div class="tab-pane overflow-hidden" id="aydurumBilgileriCreateTabPane" role="tabpanel" aria-labelledby="aydurumBilgileriCreateTab"
+                                 tabindex="0">
+                                <p:panelGrid id="durumBilgileriPanel" columns="2" styleClass="w-100" rendered="#{ayKisiController.selected!=null}"
+                                             layout="tabular">
+
+                                    <ui:include src="DurumBilgileriTab.xhtml"/>
+
+                                </p:panelGrid>
+                            </div>
+                        </div>
+                    </div><!-- end card-body -->
+                    <div class="card-footer">
+                        <div class="float-end">
+                            <p:commandButton icon="pi pi-check" styleClass="ui-button-success"
+                                             actionListener="#{ayKisiController.create}"
+                                             value="#{messages.buttonKaydet}"
+                                             update="display,:AyKisiListForm:datalist:datalist,:growl"
+                                             oncomplete="handleSubmit(xhr,status,args,PF('AyKisiCreateDialog'));"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                            <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                             value="#{messages.buttonIptal}" onclick="PF('AyKisiCreateDialog').hide()"
+                                             immediate="true" onstart="PF('Loading').show()"
+                                             onsuccess="PF('Loading').hide()"/>
+                        </div>
+                    </div>
+                </div>
+            </h:panelGroup>
+        </h:form>
+
+    </p:dialog>
+
+</ui:composition>
+
+</html>

@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="primefaces">
+<h:body>
+
+    <h:form id="KisilerYasAraligiYazdirForm">
+        <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.bys.EnumRaporTuru" var="enumRaporTuru"/>
+        <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlDurum" var="enumGnlDurum"/>
+        <div class="row">
+            <div class="col-xxl-12">
+                <div class="card custom-card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            Genel Rapor
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row clearfix">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+
+
+                                <div class="row clearfix">
+                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                                        <label for="yasAralik">#{messages.yasAraligiLabel}</label>
+                                    </div>
+                                    <div class="col-lg-10 col-md-5 col-sm-8 col-xs-7">
+                                        <div class="form-group">
+                                            <h:panelGroup id="yasAralik">
+                                                <p:spinner id="yasBaslangic"
+                                                           value="#{eyGenelPrint.yasBaslangic}"
+                                                           max="100" min="0"/>
+                                                <p:spinner id="yasBitis"
+                                                           value="#{eyGenelPrint.yasBitis}" max="100"
+                                                           min="0"/>
+                                            </h:panelGroup>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row clearfix">
+                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                                        <label for="ilceYas">#{messages.ilceLabel}</label>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-8 col-xs-7">
+                                        <div class="form-group">
+                                            <p:selectOneMenu id="ilceYas"
+                                                             value="#{eyGenelPrint.gnlIlce}"
+                                                             converter="omnifaces.SelectItemsConverter" filter="true">
+                                                <f:selectItem itemValue="#{null}"
+                                                              itemLabel="#{messages.tumuText}"/>
+                                                <f:selectItems value="#{gnlIlceController.getIlceByIl()}"
+                                                               var="ilcelers"
+                                                               itemValue="#{ilcelers}"
+                                                               itemLabel="#{ilcelers.tanim}"/>
+                                                <p:ajax event="change" update="mahalleYas"/>
+                                            </p:selectOneMenu>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row clearfix">
+                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                                        <label for="mahalleYas">#{messages.mahalleLabel}</label>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-8 col-xs-7">
+                                        <div class="form-group">
+                                            <p:selectOneMenu id="mahalleYas"
+                                                             value="#{eyGenelPrint.gnlMahalle}"
+                                                             immediate="true" converter="omnifaces.SelectItemsConverter"
+                                                             filter="true" label="#{messages.mahalleText}">
+                                                <f:selectItem itemValue="#{null}"
+                                                              itemLabel="#{messages.tumuText}"/>
+                                                <f:selectItems
+                                                        value="#{gnlMahalleController.getMahalleByIlce(eyGenelPrint.gnlIlce)}"
+                                                        var="mahallelers"
+                                                        itemValue="#{mahallelers}"
+                                                        itemLabel="#{mahallelers.tanim}"/>
+                                            </p:selectOneMenu>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row clearfix">
+                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                                        <label for="engelGrubuYas">#{messages.engelGrubuLabel}</label>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-8 col-xs-7">
+                                        <div class="form-group">
+                                            <p:selectOneMenu id="engelGrubuYas"
+                                                             value="#{eyGenelPrint.eyEngelGrubu}"
+                                                             converter="omnifaces.SelectItemsConverter" filter="true">
+                                                <f:selectItem itemValue="#{null}"
+                                                              itemLabel="#{messages.tumuText}"/>
+                                                <f:selectItems value="#{eyEngelGrubuController.items}"
+                                                               var="engelGrubus"
+                                                               itemValue="#{engelGrubus}"
+                                                               itemLabel="#{engelGrubus.tanim}"/>
+                                            </p:selectOneMenu>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row clearfix">
+                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                                        <label for="durum">#{messages.durumuLabel}</label>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-8 col-xs-7">
+                                        <div class="form-group">
+                                            <p:selectOneMenu id="durum" value="#{eyGenelPrint.durum}" required="true">
+                                                <f:selectItems value="#{enumGnlDurum.ALL_VALUES}"
+                                                               var="durums"
+                                                               itemValue="#{durums}"
+                                                               itemLabel="#{durums.displayValue}"/>
+                                                <p:ajax event="change" update="raporButton"/>
+                                            </p:selectOneMenu>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row clearfix">
+                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                                        <label for="raporTuruYas">#{messages.raporTuruLabel}</label>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-8 col-xs-7">
+                                        <div class="form-group">
+                                            <p:selectOneMenu id="raporTuruYas"
+                                                             value="#{eyGenelPrint.raporTuru}"
+                                                             required="true">
+                                                <f:selectItems value="#{enumRaporTuru.ALL_VALUES}"
+                                                               var="raporTurs"
+                                                               itemValue="#{raporTurs}"
+                                                               itemLabel="#{raporTurs.displayValue}"/>
+                                                <p:ajax event="change" update="raporButton"/>
+                                            </p:selectOneMenu>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-footer border-top-0">
+                        <div class="px-4 py-3 border-top border-block-start-dashed d-sm-flex justify-content-start">
+                            <p:commandButton id="raporButton"
+                                             icon="pi pi-print"
+                                             class="btn btn-primary"
+                                             update=":growl,@form,:PrintForm"
+                                             actionListener="#{eyGenelPrint.print()}"
+                                             value="#{messages.buttonRaporla}"
+                                             ajax="#{eyGenelPrint.raporTuru eq 'PDF' or eyGenelPrint.raporTuru eq '' or
+                                                         eyGenelPrint.raporTuru eq null}"/>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </h:form>
+    <!-- #END# Tabs With Custom Animations -->
+
+    <ui:include src="/print/Print.xhtml"/>
+</h:body>
+</html>

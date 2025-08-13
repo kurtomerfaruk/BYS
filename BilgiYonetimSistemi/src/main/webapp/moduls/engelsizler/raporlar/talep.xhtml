@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="primefaces">
+
+<h:head>
+
+</h:head>
+<h:body>
+
+
+    <h:form id="EyTalepYazdirForm">
+        <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.bys.EnumRaporTuru" var="enumRaporTuru"/>
+        <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlTalepDurumu" var="enumGnlDurum"/>
+        <div class="row">
+            <div class="col-xxl-6">
+                <div class="card custom-card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            Talep Raporu
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <div class="row">
+                            <div class="col-xxl-12">
+                                <div class="row clearfix">
+                                    <div class="col-xxl-3">
+                                        <label for="tarih">#{messages.tarihLabel}</label>
+                                    </div>
+                                    <div class="col-xxl-9">
+                                        <div class="form-group">
+                                            <h:panelGroup id="tarih">
+                                                <p:datePicker id="baslangicTarihi" locale="tr" pattern="#{messages.tarihFormat}"
+                                                              value="#{eyTalepRaporuPrint.baslangicTarihi}" mask="true"
+                                                              monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
+                                                              showOnFocus="false" required="true" label="#{messages.baslangicTarihiText}"/>
+                                                <p:datePicker id="bitisTarihi" locale="tr" pattern="#{messages.tarihFormat}"
+                                                              value="#{eyTalepRaporuPrint.bitisTarihi}" mask="true"
+                                                              monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
+                                                              showOnFocus="false" required="true" label="#{messages.bitisTarihiText}"/>
+                                            </h:panelGroup>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row clearfix">
+                                    <div class="col-xxl-3">
+                                        <label for="ilceYas">#{messages.ilceLabel}</label>
+                                    </div>
+                                    <div class="col-xxl-9">
+                                        <div class="form-group">
+                                            <p:selectOneMenu id="ilceYas"
+                                                             value="#{eyTalepRaporuPrint.gnlIlce}"
+                                                             converter="omnifaces.SelectItemsConverter" filter="true">
+                                                <f:selectItem itemValue="#{null}"
+                                                              itemLabel="#{messages.tumuText}"/>
+                                                <f:selectItems value="#{gnlIlceController.getIlceByIl()}"
+                                                               var="ilcelers"
+                                                               itemValue="#{ilcelers}"
+                                                               itemLabel="#{ilcelers.tanim}"/>
+                                                <p:ajax event="change" update="mahalle"/>
+                                            </p:selectOneMenu>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row clearfix">
+                                    <div class="col-xxl-3">
+                                        <label for="mahalle">#{messages.mahalleLabel}</label>
+                                    </div>
+                                    <div class="col-xxl-9">
+                                        <div class="form-group">
+                                            <p:selectOneMenu id="mahalle"
+                                                             value="#{eyTalepRaporuPrint.gnlMahalle}"
+                                                             immediate="true" converter="omnifaces.SelectItemsConverter"
+                                                             filter="true" label="#{messages.mahalleText}">
+                                                <f:selectItem itemValue="#{null}"
+                                                              itemLabel="#{messages.tumuText}"/>
+                                                <f:selectItems
+                                                        value="#{gnlMahalleController.getMahalleByIlce(eyTalepRaporuPrint.gnlIlce)}"
+                                                        var="mahallelers"
+                                                        itemValue="#{mahallelers}"
+                                                        itemLabel="#{mahallelers.tanim}"/>
+                                            </p:selectOneMenu>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row clearfix">
+                                    <div class="col-xxl-3">
+                                        <label for="talepKonu">#{messages.talepKonusuLabel}</label>
+                                    </div>
+                                    <div class="col-xxl-9">
+                                        <div class="form-group">
+                                            <p:selectOneMenu id="talepKonu"
+                                                             value="#{eyTalepRaporuPrint.eyTalepKonu}"
+                                                             converter="omnifaces.SelectItemsConverter" filter="true">
+                                                <f:selectItem itemValue="#{null}"
+                                                              itemLabel="#{messages.tumuText}"/>
+                                                <f:selectItems value="#{eyTalepKonuController.items}"
+                                                               var="konus"
+                                                               itemValue="#{konus}"
+                                                               itemLabel="#{konus.tanim}"/>
+                                            </p:selectOneMenu>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row clearfix">
+                                    <div class="col-xxl-3">
+                                        <label for="durum">#{messages.durumuLabel}</label>
+                                    </div>
+                                    <div class="col-xxl-9">
+                                        <div class="form-group">
+                                            <p:selectOneMenu id="durum" value="#{eyTalepRaporuPrint.durum}">
+                                                <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+                                                <f:selectItems value="#{enumGnlDurum.ALL_VALUES}"
+                                                               var="durums"
+                                                               itemValue="#{durums}"
+                                                               itemLabel="#{durums.displayValue}"/>
+                                            </p:selectOneMenu>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row clearfix">
+                                    <div class="col-xxl-3">
+                                        <label for="raporTuruYas">#{messages.raporTuruLabel}</label>
+                                    </div>
+                                    <div class="col-xxl-9">
+                                        <div class="form-group">
+                                            <p:selectOneMenu id="raporTuruYas"
+                                                             value="#{eyTalepRaporuPrint.raporTuru}"
+                                                             required="true">
+                                                <f:selectItems value="#{enumRaporTuru.ALL_VALUES}"
+                                                               var="raporTurs"
+                                                               itemValue="#{raporTurs}"
+                                                               itemLabel="#{raporTurs.displayValue}"/>
+                                                <p:ajax event="change" update="raporButton"/>
+                                            </p:selectOneMenu>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                    <div class="card-footer border-top-0">
+                        <div class="px-4 py-3 border-top border-block-start-dashed d-sm-flex justify-content-start">
+                            <p:commandButton id="raporButton"
+                                             icon="pi pi-print"
+                                             class="btn btn-primary"
+                                             update=":growl,@form,:PrintForm"
+                                             actionListener="#{eyTalepRaporuPrint.print()}"
+                                             value="#{messages.buttonRaporla}"
+                                             ajax="#{eyTalepRaporuPrint.raporTuru eq 'PDF' or eyTalepRaporuPrint.raporTuru eq '' or
+                                                         eyTalepRaporuPrint.raporTuru eq null}"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </h:form>
+    <ui:include src="/print/Print.xhtml"/>
+</h:body>
+</html>
+

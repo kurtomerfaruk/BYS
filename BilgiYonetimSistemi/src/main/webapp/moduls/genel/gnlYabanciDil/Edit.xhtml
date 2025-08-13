@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:editpage id="GnlYabanciDilEditForm"
+                   widgetVar="GnlYabanciDilEditDialog"
+                   actionListener="#{gnlYabanciDilController.save}"
+                   listForm="GnlYabanciDilListForm"
+                   model="#{gnlYabanciDilController.selected}">
+
+        <p:outputLabel value="#{messages.yabanciDilLabel}" for="@next"/>
+        <p:inputText id="tanim" value="#{gnlYabanciDilController.selected.tanim}" title="#{messages.yabanciDilText}" required="true" size="50" maxlength="50"/>
+
+    </coco:editpage>
+
+</ui:composition>
+
+</html>

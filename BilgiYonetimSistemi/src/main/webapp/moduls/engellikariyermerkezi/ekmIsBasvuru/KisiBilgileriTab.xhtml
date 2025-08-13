@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+<ui:composition>
+
+    <p:outputLabel value="#{messages.basvuruTarihiLabel}" for="@next"/>
+    <p:datePicker id="basvuruTarihi" locale="tr" pattern="#{messages.tarihFormat}" value="#{ekmIsBasvuruController.selected.basvuruTarihi}"
+                  title="#{messages.basvuruTarihiText}"
+                  mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true" showOnFocus="false"/>
+
+    <p:outputLabel value="#{messages.isPozisyonLabel}" for="@next"/>
+    <p:selectOneMenu id="pozisyonId" value="#{ekmIsBasvuruController.selected.ekmIsPozisyon}" required="true" converter="omnifaces.SelectItemsConverter"
+                     filter="true">
+        <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+        <f:selectItems value="#{ekmIsPozisyonController.items}"
+                       var="pozisyon"
+                       itemLabel="#{pozisyon.tanim}"
+                       itemValue="#{pozisyon}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.tcKimlikNoLabel}" for="@next"/>
+    <coco:tcKimlikNoDogumTarihi actionListener="#{ekmIsBasvuruController.getTcKimlik()}" update=":growl,@(.tcUpdate)"
+                                value="#{ekmIsBasvuruController.selected.eyKisi.gnlKisi.tcKimlikNo}"
+                                dateValue="#{ekmIsBasvuruController.selected.eyKisi.gnlKisi.dogumTarihi}"/>
+
+    <p:outputLabel value="#{messages.adLabel}" for="@next"/>
+    <p:inputText id="ad" value="#{ekmIsBasvuruController.selected.eyKisi.gnlKisi.ad}" title="#{messages.adText}" required="true"
+                 readonly="#{facesContext.renderResponse}"
+                 styleClass="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.soyadLabel}" for="@next"/>
+    <p:inputText id="soyad" value="#{ekmIsBasvuruController.selected.eyKisi.gnlKisi.soyad}" title="#{messages.soyadText}" required="true"
+                 readonly="#{facesContext.renderResponse}"
+                 styleClass="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.dogumYeriLabel}" for="@next"/>
+    <p:inputText id="dogumYeri" value="#{ekmIsBasvuruController.selected.eyKisi.gnlKisi.dogumYeri}" title="#{messages.dogumYeriText}" required="true"
+                 class="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.cinsiyetLabel}" for="@next"/>
+    <p:inputText id="cinsiyet" value="#{ekmIsBasvuruController.selected.eyKisi.gnlKisi.cinsiyet}" required="true" readonly="#{facesContext.renderResponse}"
+                 styleClass="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.uyrukLabel}" for="@next"/>
+    <p:inputText id="uyruk" value="#{ekmIsBasvuruController.selected.eyKisi.gnlKisi.uyruk}" readonly="true" styleClass="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.engelGrubuLabel}" for="@next"/>
+    <p:selectCheckboxMenu id="engelGrubu" value="#{ekmIsBasvuruController.engelGrubus}" label="Kişi Engel Grubu" multiple="true" styleClass="tcUpdate"
+                          converter="omnifaces.SelectItemsConverter" filter="true" filterMatchMode="startsWith">
+        <f:selectItems value="#{eyEngelGrubuController.items}"
+                       var="engelGrubus"
+                       itemValue="#{engelGrubus}"
+                       itemLabel="#{engelGrubus.tanim.toString()}"/>
+    </p:selectCheckboxMenu>
+
+    <p:outputLabel value="#{messages.toplamVucutKayipOraniLabel}" for="@next"/>
+    <p:inputText id="toplamVucutKayipOrani" value="#{ekmIsBasvuruController.selected.eyKisi.toplamVucutKayipOrani}" styleClass="tcUpdate">
+        <p:keyFilter regEx="/[\d]/"/>
+    </p:inputText>
+
+    <p:outputLabel value="#{messages.evinDurumuLabel}" for="@next"/>
+    <p:inputText id="evinDurumu" value="#{ekmIsBasvuruController.selected.eyKisi.gnlKisi.evinDurumu}" title="#{messages.evinDurumuText}"
+                 styleClass="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.adresLabel}" for="@next"/>
+    <p:inputTextarea id="adres" value="#{ekmIsBasvuruController.selected.eyKisi.gnlKisi.adres}" title="#{messages.adresText}" required="true" rows="4"
+                     styleClass="w-100 tcUpdate"/>
+
+    <p:outputLabel value="#{messages.telefonLabel}" for="@next"/>
+    <p:inputMask id="telefon" value="#{ekmIsBasvuruController.selected.eyKisi.gnlKisi.telefon}" mask="(999) 999 99 99" required="true"
+                 title="#{messages.telefonText}" size="14"
+                 styleClass="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.telefonLabel}" for="@next"/>
+    <p:inputMask id="telefon2" value="#{ekmIsBasvuruController.selected.eyKisi.gnlKisi.telefon2}" mask="(999) 999 99 99" title="#{messages.telefonText}"
+                 size="14"
+                 styleClass="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.askerlikDurumuLabel}" for="@next"/>
+    <p:selectOneMenu id="askerlikDurumu" value="#{ekmIsBasvuruController.selected.eyKisi.gnlKisi.askerlikDurumu}" required="true"
+                     converter="omnifaces.SelectItemsConverter">
+        <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+        <f:selectItems value="#{enumAskerlikDurumu.ALL_VALUES}"
+                       var="askerlikDurums"
+                       itemLabel="#{askerlikDurums.displayValue}"
+                       itemValue="#{askerlikDurums}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.sabikaKaydiLabel}" for="@next"/>
+    <h:panelGroup>
+        <div class="ui-inputgroup">
+            <div class="ui-inputgroup-addon">
+                <p:selectBooleanCheckbox id="sabikaKaydi"
+                                         value="#{ekmIsBasvuruController.selected.eyKisi.gnlKisi.sabikaKaydi}">
+                    <p:ajax event="change" update="sabikaKaydiAciklama"
+                            listener="#{ekmIsBasvuruController.selected.eyKisi.gnlKisi.setSabikaKaydiAciklama('')}"/>
+                </p:selectBooleanCheckbox>
+            </div>
+            <p:inputText id="sabikaKaydiAciklama"
+                         value="#{ekmIsBasvuruController.selected.eyKisi.gnlKisi.sabikaKaydiAciklama}"
+                         title="#{messages.sabikaKaydiAciklamaText}"
+                         required="#{ekmIsBasvuruController.selected.eyKisi.gnlKisi.sabikaKaydi}"
+                         disabled="#{!ekmIsBasvuruController.selected.eyKisi.gnlKisi.sabikaKaydi}"/>
+        </div>
+    </h:panelGroup>
+
+    <p:outputLabel value="#{messages.engelinOlusumBilgisiLabel}" for="@next"/>
+    <p:selectOneMenu id="engelinOlusumBilgisi" value="#{ekmIsBasvuruController.selected.engelOlusmaDurumu}" required="true"
+                     converter="omnifaces.SelectItemsConverter">
+        <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+        <f:selectItems value="#{enumEngelOlusmaDurumu.ALL_VALUES}"
+                       var="engelOlusmas"
+                       itemLabel="#{engelOlusmas.displayValue}"
+                       itemValue="#{engelOlusmas}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.sabikaKaydiLabel}" for="@next"/>
+    <h:panelGroup>
+        <div class="ui-inputgroup">
+            <div class="ui-inputgroup-addon">
+                <p:selectBooleanCheckbox id="ehliyet"
+                                         value="#{ekmIsBasvuruController.selected.eyKisi.gnlKisi.ehliyet}">
+                    <p:ajax event="change" update="ehliyetAciklama"
+                            listener="#{ekmIsBasvuruController.selected.eyKisi.gnlKisi.setEhliyetAciklama('')}"/>
+                </p:selectBooleanCheckbox>
+            </div>
+            <p:inputText id="ehliyetAciklama"
+                         value="#{ekmIsBasvuruController.selected.eyKisi.gnlKisi.ehliyetAciklama}"
+                         title="#{messages.ehliyetAciklamaText}"
+                         required="#{ekmIsBasvuruController.selected.eyKisi.gnlKisi.ehliyet}"
+                         disabled="#{!ekmIsBasvuruController.selected.eyKisi.gnlKisi.ehliyet}"/>
+        </div>
+    </h:panelGroup>
+
+    <p:outputLabel value="#{messages.sigaraKullaniyorMuLabel}" for="@next"/>
+    <p:selectBooleanCheckbox id="sigaraKullaniyorMu" value="#{ekmIsBasvuruController.selected.sigaraKullaniyor}" required="true"/>
+
+    <p:outputLabel value="#{messages.esininMeslegiLabel}" for="@next"/>
+    <p:inputText id="esininMeslegi" value="#{ekmIsBasvuruController.selected.eyKisi.gnlKisi.esininMeslegi}" styleClass="tcUpdate"/>
+
+</ui:composition>
+</html>

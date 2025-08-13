@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+>
+<ui:composition>
+
+    <p:dataTable id="kasaId"
+                 var="kasa"
+                 value="#{hfHafriyatIsController.selected.hfKasaList}"
+                 emptyMessage="#{messages.kayitBulunamadi}"
+                 rows="3"
+                 paginator="true"
+                 paginatorPosition="bottom"
+                 style="max-width: 500px !important;">
+
+        <p:column>
+            <f:facet name="header">
+                <h:outputText value="#{messages.tahsilatTuruText}"/>
+            </f:facet>
+            <h:outputText value="#{kasa.tahsilatTuru.displayValue}"/>
+        </p:column>
+
+        <p:column width="120">
+            <f:facet name="header">
+                <h:outputText value="#{messages.tutarText}"/>
+            </f:facet>
+            <h:outputText value="#{kasa.tutar}">
+                <f:convertNumber minFractionDigits="2" maxFractionDigits="2" locale="tr"/>
+            </h:outputText>
+        </p:column>
+
+        <p:column width="200">
+            <f:facet name="header">
+                <h:outputText value="#{messages.tahsilTarihiText}"/>
+            </f:facet>
+            <h:outputText value="#{kasa.tahsilTarihi}">
+                <f:convertDateTime pattern="#{messages.tarihFormat}"/>
+            </h:outputText>
+        </p:column>
+
+    </p:dataTable>
+
+    <p:dataTable id="faturaId"
+                 var="fatura"
+                 value="#{hfHafriyatIsController.selected.hfHafriyatIsFaturaList}"
+                 emptyMessage="#{messages.kayitBulunamadi}"
+                 rows="3"
+                 paginator="true"
+                 paginatorPosition="bottom"
+                 style="max-width: 500px !important;">
+
+        <p:column>
+            <f:facet name="header">
+                <h:outputText value="#{messages.faturaNoText}"/>
+            </f:facet>
+            <h:outputText value="#{fatura.faturaNo}"/>
+        </p:column>
+
+        <p:column width="120">
+            <f:facet name="header">
+                <h:outputText value="#{messages.faturaTarihiText}"/>
+            </f:facet>
+            <h:outputText value="#{fatura.faturaTarihi}">
+                <f:convertDateTime pattern="#{messages.tarihFormat}"/>
+            </h:outputText>
+        </p:column>
+
+        <p:column width="60" headerText="#{messages.buttonSil}">
+            <p:commandButton icon="pi pi-trash white fa-lg"
+                             title="#{messages.buttonSil}"
+                             actionListener="#{hfHafriyatIsController.removeInvoice(fatura)}"
+                             update="faturaId,:growl"/>
+        </p:column>
+
+
+    </p:dataTable>
+
+    <p:panelGrid columns="2" columnClasses="column" rendered="#{hfHafriyatIsController.selected != null}" styleClass="w-100" layout="tabular">
+        <p:outputLabel value="#{messages.faturaNoLabel}" for="faturaNo"/>
+        <p:inputText id="faturaNo" value="#{hfHafriyatIsController.fatura.faturaNo}"
+                     title="#{messages.faturaNoText}" size="50" maxlength="50"/>
+
+        <p:outputLabel value="#{messages.faturaTarihiLabel}" for="faturaTarihi"/>
+        <p:datePicker id="faturaTarihi" locale="tr" pattern="#{messages.tarihFormat}" value="#{hfHafriyatIsController.fatura.faturaTarihi}"
+                      title="#{messages.tarihText}"  mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
+                      showOnFocus="false"/>
+
+        <f:facet name="footer">
+            <div style="float: right">
+                <p:commandButton icon="pi pi-check white fa-lg"
+                                 actionListener="#{hfHafriyatIsController.addInvoice()}"
+                                 value="#{messages.buttonKaydet}" update="muhasebePanel,:growl"
+                                 onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()">
+                </p:commandButton>
+                <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                 value="#{messages.buttonIptal}"
+                                 onclick="PF('HafriyatIsEditDialog').hide()" immediate="true"
+                                 onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+            </div>
+        </f:facet>
+    </p:panelGrid>
+</ui:composition>
+</html>

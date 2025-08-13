@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:createpage id="EyAracCreateForm"
+                     renderedListener="#{eyAracController.selected != null}"
+                     widgetVar="EyAracCreateDialog"
+                     actionListener="#{eyAracController.saveNew}"
+                     listForm="EyAracListForm">
+
+        <p:outputLabel value="#{messages.engelGrubuLabel}" for="@next"/>
+        <p:selectOneMenu id="eyengelGrubuId" value="#{eyAracController.selected.eyEngelGrubu}" filter="true"
+                         converter="omnifaces.SelectItemsConverter" required="true">
+            <f:selectItem itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{eyEngelGrubuController.items}"
+                           var="eyengelGrubuIdItem"
+                           itemValue="#{eyengelGrubuIdItem}"
+                           itemLabel="#{eyengelGrubuIdItem.tanim.toString()}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.aracLabel}" for="@next"/>
+        <p:inputText id="tanim" value="#{eyAracController.selected.tanim}" title="#{messages.aracText}"
+                     required="true" size="50" maxlength="150"/>
+
+        <p:outputLabel value="#{messages.yenilenmeSuresiLabel}" for="@next"/>
+        <p:spinner id="yenilenmeSuresi" value="#{eyAracController.selected.yenilenmeSuresi}" title="#{messages.yenilenmeSuresiText}" stepFactor="1" min="1"
+                   max="48"/>
+
+    </coco:createpage>
+
+</ui:composition>
+
+</html>

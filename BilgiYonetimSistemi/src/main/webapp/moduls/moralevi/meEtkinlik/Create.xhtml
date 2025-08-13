@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:createpage id="MeEtkinlikCreateForm"
+                     renderedListener="#{meEtkinlikController.selected != null}"
+                     widgetVar="MeEtkinlikCreateDialog"
+                     actionListener="#{meEtkinlikController.saveNew}"
+                     listForm="MeEtkinlikListForm">
+
+
+        <p:outputLabel value="#{messages.tarihLabel}" for="@next"/>
+        <p:datePicker id="tarih" locale="tr" pattern="#{messages.tarihFormat}" value="#{meEtkinlikController.selected.tarih}" title="#{messages.tarihText}"
+                      mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true" showOnFocus="false" required="true"/>
+
+        <p:outputLabel value="#{messages.konuLabel}" for="@next"/>
+        <p:inputTextarea rows="4" id="konu" value="#{meEtkinlikController.selected.konu}" title="#{messages.konuText}" styleClass="w-100"
+                         autoResize="false" required="true"/>
+
+        <p:outputLabel value="#{messages.aciklamaLabel}" for="@next"/>
+        <p:inputTextarea rows="4" id="aciklama" value="#{meEtkinlikController.selected.aciklama}" title="#{messages.aciklamaText}" styleClass="w-100"
+                         autoResize="false"/>
+
+    </coco:createpage>
+
+</ui:composition>
+
+</html>

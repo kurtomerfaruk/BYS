@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+>
+<ui:composition>
+
+    <p:panelGrid columns="2" styleClass="w-100" layout="tabular">
+        <p:outputLabel value="#{messages.yabanciDilLabel}" for="@next"/>
+        <p:selectOneMenu id="yabanciDil" value="#{ekmIsBasvuruController.ekmIsBasvuruYabanciDil.gnlYabanciDil}" converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemLabel="${messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{gnlYabanciDilController.items}"
+                           var="yabanciDils"
+                           itemLabel="#{yabanciDils.tanim}"
+                           itemValue="#{yabanciDils}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.okumaLabel}" for="@next"/>
+        <p:selectOneMenu id="okuma"  value="#{ekmIsBasvuruController.ekmIsBasvuruYabanciDil.okuma}">
+            <f:selectItem itemLabel="${messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{enumPuanlama.ALL_VALUES}"
+                           var="okumas"
+                           itemLabel="#{okumas.displayValue}"
+                           itemValue="#{okumas}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.yazmaLabel}" for="@next"/>
+        <p:selectOneMenu id="yazma"   value="#{ekmIsBasvuruController.ekmIsBasvuruYabanciDil.yazma}">
+            <f:selectItem itemLabel="${messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{enumPuanlama.ALL_VALUES}"
+                           var="yazmas"
+                           itemLabel="#{yazmas.displayValue}"
+                           itemValue="#{yazmas}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.konusmaLabel}" for="@next"/>
+        <p:selectOneMenu id="konusma"  value="#{ekmIsBasvuruController.ekmIsBasvuruYabanciDil.konusma}">
+            <f:selectItem itemLabel="${messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{enumPuanlama.ALL_VALUES}"
+                           var="konusmas"
+                           itemLabel="#{konusmas.displayValue}"
+                           itemValue="#{konusmas}"/>
+        </p:selectOneMenu>
+
+        <f:facet name="footer">
+            <div class="float-end">
+                <p:commandButton value="#{messages.buttonEkle}" icon="pi pi-plus"
+                                 styleClass="btn btn-success"
+                                 actionListener="#{ekmIsBasvuruController.addLanguage()}"
+                                 process="yabanciDilPanel" update=":growl,yabanciDilPanel"/>
+            </div>
+        </f:facet>
+
+    </p:panelGrid>
+
+    <p:panelGrid columns="1" styleClass="w-100">
+        <p:dataTable id="yabanciDilId"
+                     value="#{ekmIsBasvuruController.selected.ekmIsBasvuruYabanciDilList}"
+                     var="yabanciDilVar"
+                     emptyMessage="#{messages.kayitBulunamadi}"
+                     paginator="true"
+                     rows="5"
+                     paginatorPosition="bottom">
+
+            <p:column>
+                <f:facet name="header">
+                    <h:outputText value="#{messages.yabanciDilText}"/>
+                </f:facet>
+                #{yabanciDilVar.gnlYabanciDil.tanim}
+            </p:column>
+
+            <p:column>
+                <f:facet name="header">
+                    <h:outputText value="#{messages.okumaText}"/>
+                </f:facet>
+                #{yabanciDilVar.okuma.displayValue}
+            </p:column>
+
+            <p:column>
+                <f:facet name="header">
+                    <h:outputText value="#{messages.yazmaText}"/>
+                </f:facet>
+                #{yabanciDilVar.yazma.displayValue}
+            </p:column>
+
+            <p:column>
+                <f:facet name="header">
+                    <h:outputText value="#{messages.konusmaText}"/>
+                </f:facet>
+                #{yabanciDilVar.konusma.displayValue}
+            </p:column>
+
+
+            <p:column width="60" headerText="#{messages.buttonSil}">
+                <p:commandButton icon="pi pi-trash"
+                                 title="#{messages.buttonSil}"
+                                 actionListener="#{ekmIsBasvuruController.removeLanguage(yabanciDilVar)}"
+                                 update="yabanciDilId,:growl"
+                                 process="yabanciDilId"/>
+            </p:column>
+
+        </p:dataTable>
+
+    </p:panelGrid>
+
+</ui:composition>
+</html>

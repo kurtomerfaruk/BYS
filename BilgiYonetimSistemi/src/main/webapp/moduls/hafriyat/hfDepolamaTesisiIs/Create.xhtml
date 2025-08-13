@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:createpage id="HfDepolamaTesisiIsCreateForm"
+                     renderedListener="#{hfDepolamaTesisiIsController.selected != null}"
+                     widgetVar="HfDepolamaTesisiIsCreateDialog"
+                     actionListener="#{hfDepolamaTesisiIsController.saveNew}"
+                     listForm="HfDepolamaTesisiIsListForm">
+
+        <p:outputLabel value="#{messages.tarihLabel}" for="@next"/>
+        <p:datePicker id="tarih" locale="tr" pattern="#{messages.tarihSaatFormat}" value="#{hfDepolamaTesisiIsController.selected.tarih}"
+                      title="#{messages.tarihText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
+                      showOnFocus="false" showTime="true"/>
+
+        <p:outputLabel value="#{messages.firmaLabel}" for="@next"/>
+        <coco:inputWithButton inputId="firma" inputValue="#{hfDepolamaTesisiIsController.selected.hfFirma.firmaUnvani}"
+                              inputTitle="#{messages.firmaUnvaniText}" inputRequired="true"
+                              actionListener="#{bysController.openCommonDialog('hfFirmaSec')}"
+                              ajaxListener="#{hfDepolamaTesisiIsController.secilenHfFirma}"
+                              buttonTitle="Firma seçmelisiniz"
+                              dialogId="HfDepolamaTesisiIsCreateDialogId"/>
+
+        <p:outputLabel value="#{messages.plakaLabel}" for="@next"/>
+        <coco:inputWithButton inputId="plaka" inputValue="#{hfDepolamaTesisiIsController.selected.hfArac.plaka}"
+                              inputTitle="#{messages.firmaUnvaniText}" inputRequired="true"
+                              actionListener="#{bysController.openCommonDialog('hfAracSec')}"
+                              ajaxListener="#{hfDepolamaTesisiIsController.secilenHfArac}"
+                              buttonTitle="Araç seçmelisiniz"
+                              dialogId="HfDepolamaTesisiIsCreateDialogId"/>
+
+        <p:outputLabel value="#{messages.malCinsiLabel}" for="@next"/>
+        <p:selectOneMenu id="malCinsi" value="#{hfDepolamaTesisiIsController.selected.malCinsi}"
+                         required="true" converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{enumMalCinsi.ALL_VALUES}"
+                           var="malCinsis"
+                           itemLabel="#{malCinsis.displayValue}"
+                           itemValue="#{malCinsis}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.fiyatLabel}" for="@next"/>
+        <p:inputNumber id="fiyat" value="#{hfDepolamaTesisiIsController.selected.fiyat}" styleClass="text-right" decimalPlaces="3" decimalSeparator=","
+                       thousandSeparator="." emptyValue="zero">
+            <p:ajax event="keyup" listener="#{hfDepolamaTesisiIsController.calculate()}" update="tutar"/>
+        </p:inputNumber>
+
+        <p:outputLabel value="#{messages.miktarLabel}" for="@next"/>
+        <p:inputNumber id="miktar" value="#{hfDepolamaTesisiIsController.selected.miktar}" styleClass="text-right" decimalPlaces="3" decimalSeparator=","
+                       thousandSeparator="." emptyValue="zero">
+            <p:ajax event="keyup" listener="#{hfDepolamaTesisiIsController.calculate()}" update="tutar"/>
+        </p:inputNumber>
+
+        <p:outputLabel value="#{messages.tutarLabel}" for="@next"/>
+        <p:inputNumber id="tutar" value="#{hfDepolamaTesisiIsController.selected.tutar}" styleClass="text-right" decimalPlaces="3" decimalSeparator=","
+                       thousandSeparator="." emptyValue="zero" readonly="true"/>
+
+        <p:outputLabel value="#{messages.geldigiYerLabel}" for="@next"/>
+        <p:inputText id="geldigiYer" value="#{hfDepolamaTesisiIsController.selected.geldigiYer}" title="#{messages.geldigiYerText}" size="50" maxlength="250"/>
+
+        <p:outputLabel value="#{messages.gittigiYerLabel}" for="@next"/>
+        <p:inputText id="gittigiYer" value="#{hfDepolamaTesisiIsController.selected.gittigiYer}" title="#{messages.gittigiYerText}" size="50" maxlength="250"/>
+
+        <p:outputLabel value="#{messages.soforLabel}" for="@next"/>
+        <p:inputText id="sofor" value="#{hfDepolamaTesisiIsController.selected.sofor}" title="#{messages.soforText}" size="50" maxlength="50"/>
+
+    </coco:createpage>
+
+</ui:composition>
+
+</html>

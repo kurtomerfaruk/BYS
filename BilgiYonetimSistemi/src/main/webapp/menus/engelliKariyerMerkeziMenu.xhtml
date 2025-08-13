@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="primefaces">
+
+<ui:composition>
+
+    <!-- Aktif Yasam -->
+    <ui:fragment rendered="#{syKullaniciController.hasPermission('engelsiz_kariyer_merkezi:goster')}">
+        <li class="slide has-sub">
+            <a href="javascript:void(0);" class="side-menu__item main_menu">
+                <i class="ti ti-building side-menu__icon"></i>
+                <span class="side-menu__label">Engelli Kariyer Merkezi</span>
+                <i class="ri-arrow-right-s-line side-menu__angle"></i>
+            </a>
+            <ul class="slide-menu child1">
+                <li class="slide side-menu__label1">
+                    <a href="javascript:void(0)">Aktif Yaşam</a>
+                </li>
+
+                <!--    Islemler    -->
+                <ui:fragment rendered="#{syKullaniciController.hasPermission('engelsiz_kariyer_merkezi_islemler:goster')}">
+                    <li class="slide has-sub">
+                        <a href="javascript:void(0);" class="side-menu__item sublevel1">İşlemler
+                            <i class="ri-arrow-right-s-line side-menu__angle"></i></a>
+                        <ul class="slide-menu child2">
+
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('ekmisbasvuru:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/engellikariyermerkezi/ekmIsBasvuru/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="İş Başvuru Listesi"/>
+                                </li>
+                            </ui:fragment>
+
+
+                        </ul>
+                    </li>
+                </ui:fragment>
+                <!--    Islemler    -->
+
+                <!--    Tanimlamalar    -->
+                <ui:fragment rendered="#{syKullaniciController.hasPermission('engelsiz_kariyer_merkezi_tanimlamalar:goster')}">
+                    <li class="slide has-sub">
+                        <a href="javascript:void(0);" class="side-menu__item sublevel1">Tanımlamalar
+                            <i class="ri-arrow-right-s-line side-menu__angle"></i></a>
+                        <ul class="slide-menu child2">
+
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('ekmispozisyon:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/engellikariyermerkezi/ekmIsPozisyon/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="İş Pozisyon Listesi"/>
+                                </li>
+                            </ui:fragment>
+
+                        </ul>
+                    </li>
+                </ui:fragment>
+                <!--    Tanimlamalar    -->
+
+
+            </ul>
+        </li>
+    </ui:fragment>
+    <!-- Aktif Yasam -->
+
+</ui:composition>
+
+</html>
+

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:h="jakarta.faces.html"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:createpage id="EdbHizmetPlanlamaCreateForm"
+                     renderedListener="#{edbHizmetPlanlamaController.selected != null}"
+                     widgetVar="EdbHizmetPlanlamaCreateDialog"
+                     actionListener="#{edbHizmetPlanlamaController.saveNew}"
+                     listForm="EdbHizmetPlanlamaListForm">
+
+        <p:outputLabel value="#{messages.baslangicTarihiLabel}" for="@next"/>
+        <p:datePicker id="baslangicTarihi" locale="tr" pattern="#{messages.tarihFormat}" value="#{edbHizmetPlanlamaController.selected.baslangicTarihi}"
+                      title="#{messages.baslangicTarihiText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
+                      showOnFocus="false"/>
+
+        <p:outputLabel value="#{messages.hizmetTalepNoLabel}" for="@next"/>
+        <h:panelGroup>
+            <div class="ui-inputgroup">
+                <p:inputText id="hizmetTalepNo" value="#{edbHizmetPlanlamaController.selected.edbTalep.id}" title="#{messages.kayitNoText}"
+                             label="#{messages.kayitNoText}" readonly="#{facesContext.renderResponse}" required="true">
+                    <f:convertNumber pattern="#{messages.sayiFormat}"/>
+                </p:inputText>
+                <p:commandButton icon="pi pi-search"
+                                 actionListener="#{bysController.openCommonDialog('edbTalepSec')}"
+                                 process="@this"
+                                 update=":growl" title="Talep seçmelisiniz">
+                    <p:resetInput target="@form"/>
+                    <p:ajax event="dialogReturn" listener="#{edbHizmetPlanlamaController.secilenTalep}" update=":growl,@(.inputUpdate),hizmetTalepNo"/>
+                </p:commandButton>
+            </div>
+        </h:panelGroup>
+
+        <p:outputLabel value="#{messages.tcKimlikNoLabel}" for="@next"/>
+        <p:inputText id="tcKimlikNo" value="#{edbHizmetPlanlamaController.selected.edbTalep.edbBasvuru.gnlKisi.tcKimlikNo}" title="#{messages.tcKimlikNoText}"
+                     size="50" required="true" readonly="#{facesContext.renderResponse}" styleClass="inputUpdate"/>
+
+        <p:outputLabel value="#{messages.adSoyadLabel}" for="@next"/>
+        <p:inputText id="adSoyad" value="#{edbHizmetPlanlamaController.selected.edbTalep.edbBasvuru.gnlKisi.adSoyad}" title="#{messages.adSoyadText}"
+                     size="50" required="true" readonly="#{facesContext.renderResponse}" styleClass="inputUpdate"/>
+
+        <p:outputLabel value="#{messages.talepEdilenHizmetlerLabel}" for="@next"/>
+        <p:inputText id="talepEdilenHizmetler" value="#{edbHizmetPlanlamaController.selected.edbTalep.talepEdilenHizmetler.displayValue}"
+                     size="50" readonly="true"
+                     styleClass="inputUpdate"/>
+
+        <p:outputLabel value="#{messages.periyotLabel}" for="@next"/>
+        <p:selectOneMenu id="periyot" value="#{edbHizmetPlanlamaController.selected.periyot}" filter="true" required="true">
+            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItem itemLabel="1 Gün" itemValue="1"/>
+            <f:selectItem itemLabel="3 Gün" itemValue="3"/>
+            <f:selectItem itemLabel="5 Gün" itemValue="5"/>
+            <f:selectItem itemLabel="7 Gün" itemValue="7"/>
+            <f:selectItem itemLabel="15 Gün" itemValue="15"/>
+            <f:selectItem itemLabel="30 Gün" itemValue="30"/>
+            <f:selectItem itemLabel="45 Gün" itemValue="45"/>
+            <f:selectItem itemLabel="60 Gün" itemValue="60"/>
+            <f:selectItem itemLabel="90 Gün" itemValue="90"/>
+            <f:selectItem itemLabel="180 Gün" itemValue="180"/>
+            <f:selectItem itemLabel="365 Gün" itemValue="365"/>
+        </p:selectOneMenu>
+
+    </coco:createpage>
+
+</ui:composition>
+
+</html>

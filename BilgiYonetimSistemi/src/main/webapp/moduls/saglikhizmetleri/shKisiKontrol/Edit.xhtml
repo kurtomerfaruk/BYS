@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:editpage id="ShKisiKontrolEditForm"
+                   widgetVar="ShKisiKontrolEditDialog"
+                   actionListener="#{shKisiKontrolController.save}"
+                   listForm="ShKisiKontrolListForm"
+                   model="#{shKisiKontrolController.selected}">
+
+        <p:outputLabel value="#{messages.tcKimlikNoLabel}" for="@next"/>
+        <coco:inputWithButton id="inputWithButtonShKisi" inputId="shKisiId"
+                              inputValue="#{shKisiKontrolController.selected.shKisi.gnlKisi.tcKimlikNo}"
+                              inputTitle="#{messages.tcKimlikNoText}"
+                              actionListener="#{bysController.openCommonDialog('shKisiSec')}"
+                              ajaxListener="#{eyTalepController.secilenEyKisi}"
+                              buttonTitle="#{messages.kisiSecmelisiniz}"
+                              size="50"
+                              dialogId="ShKisiKontrolEditDialogId"/>
+
+        <p:outputLabel value="#{messages.adSoyadLabel}" for="@next"/>
+        <p:inputText id="adSoyad" value="#{shKisiKontrolController.selected.shKisi.gnlKisi.adSoyad}" title="#{messages.adSoyadText}" size="50"
+                     required="true" readonly="#{facesContext.renderResponse}" styleClass="inputUpdate"/>
+
+        <p:outputLabel value="#{messages.tarihLabel}" for="@next"/>
+        <p:datePicker id="tarih" locale="tr" pattern="#{messages.tarihFormat}" value="#{shKisiKontrolController.selected.tarih}" title="#{messages.tarihText}"
+                      mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true" showOnFocus="false"/>
+
+        <p:outputLabel value="#{messages.boyLabel}" for="boy"/>
+        <p:inputText id="boy" value="#{shKisiKontrolController.selected.boy}"
+                     title="#{messages.boyText}">
+            <p:keyFilter regEx="/[\d]/"/>
+            <p:ajax event="change" listener="#{shKisiKontrolController.getBki}" update="@(.bki)"/>
+        </p:inputText>
+
+        <p:outputLabel value="#{messages.kiloLabel}" for="kilo"/>
+        <p:inputText id="kilo" value="#{shKisiKontrolController.selected.kilo}"
+                     title="#{messages.kiloText}">
+            <p:keyFilter regEx="/[\d]/"/>
+            <p:ajax event="change" listener="#{shKisiKontrolController.getBki}" update="@(.bki)"/>
+        </p:inputText>
+
+        <p:outputLabel value="#{messages.belCevresiLabel}" for="belCevresi"/>
+        <p:inputText id="belCevresi" value="#{shKisiKontrolController.selected.belCevresi}"
+                     title="#{messages.belCevresiText}">
+            <p:keyFilter regEx="/[\d]/"/>
+        </p:inputText>
+
+        <p:outputLabel value="#{messages.bkiLabel}" for="bki"/>
+        <p:inputText id="bki" value="#{shKisiKontrolController.selected.bki}"
+                     styleClass="bki"
+                     title="#{messages.bkiText}" readonly="true">
+            <f:convertNumber maxFractionDigits="2"/>
+        </p:inputText>
+
+    </coco:editpage>
+
+</ui:composition>
+
+</html>

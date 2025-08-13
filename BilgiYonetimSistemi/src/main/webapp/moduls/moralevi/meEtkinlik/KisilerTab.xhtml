@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+<ui:composition>
+
+    <p:panelGrid columns="2" styleClass="w-100" layout="tabular">
+
+        <p:outputLabel value="#{messages.kisiLabel}" for="@next"/>
+        <coco:inputWithButton id="inputWithButtonMeKisi" inputId="ayKisiId"
+                              inputValue="#{meEtkinlikController.meKisi.eyKisi.gnlKisi.adSoyad}"
+                              inputTitle="#{messages.tcKimlikNoText}"
+                              actionListener="#{bysController.openCommonDialog('meKisiSec')}"
+                              ajaxListener="#{meEtkinlikController.secilenMeKisi}"
+                              buttonTitle="#{messages.kisiSecmelisiniz}"
+                              size="50" inputRequired="false"
+                              dialogId="MeEtkinlikEditDialogId"/>
+
+        <f:facet name="footer">
+            <div class="float-end">
+                <p:commandButton value="#{messages.buttonEkle}" icon="pi pi-plus"
+                                 styleClass="btn btn-success"
+                                 actionListener="#{meEtkinlikController.addPerson()}"
+                                 process="kisilerPanel"
+                                 update=":growl,kisilerPanel"/>
+            </div>
+        </f:facet>
+    </p:panelGrid>
+
+    <p:panelGrid columns="1" styleClass="w-100">
+        <p:dataTable id="kisiId"
+                     value="#{meEtkinlikController.selected.meEtkinlikKisiList}"
+                     var="kisiVar"
+                     emptyMessage="#{messages.kayitBulunamadi}"
+                     paginator="true"
+                     rows="5"
+                     lazy="false"
+                     paginatorPosition="bottom"
+                     tableStyle="max-width: 600px !important;">
+
+            <p:column>
+                <f:facet name="header">
+                    <h:outputText value="#{messages.adText}"/>
+                </f:facet>
+                #{kisiVar.meKisi.eyKisi.gnlKisi.ad}
+            </p:column>
+
+            <p:column>
+                <f:facet name="header">
+                    <h:outputText value="#{messages.soyadText}"/>
+                </f:facet>
+                #{kisiVar.meKisi.eyKisi.gnlKisi.soyad}
+            </p:column>
+
+            <p:column width="60" headerText="#{messages.buttonSil}">
+                <p:commandButton icon="pi pi-trash"
+                                 title="#{messages.buttonSil}"
+                                 actionListener="#{meEtkinlikController.removePerson(kisiVar)}"
+                                 update="kisiId,:growl"
+                                 process="kisiId"/>
+            </p:column>
+
+        </p:dataTable>
+
+    </p:panelGrid>
+</ui:composition>
+</html>

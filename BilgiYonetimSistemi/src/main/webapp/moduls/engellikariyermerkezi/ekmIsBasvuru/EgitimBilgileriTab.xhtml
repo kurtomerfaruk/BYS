@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+>
+<ui:composition>
+
+    <p:panelGrid columns="2" styleClass="w-100" layout="tabular">
+        <p:outputLabel value="#{messages.egitimDurumuLabel}" for="@next"/>
+        <p:selectOneMenu id="egitimDurumu"
+                         value="#{ekmIsBasvuruController.ekmIsBasvuruEgitim.egitimDurumu}">
+            <f:selectItem itemLabel="${messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{enumEgitimDurumu.ALL_VALUES}"
+                           var="egitimDurumus"
+                           itemLabel="#{egitimDurumus.displayValue}"
+                           itemValue="#{egitimDurumus}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.okulAdiLabel}" for="@next"/>
+        <p:inputText id="okulAdi" value="#{ekmIsBasvuruController.ekmIsBasvuruEgitim.okulAdi}"
+                     title="#{messages.okulAdiText}"/>
+
+        <p:outputLabel value="#{messages.bolumuLabel}" for="@next"/>
+        <p:selectOneMenu id="bolumu" value="#{ekmIsBasvuruController.ekmIsBasvuruEgitim.gnlEgitimBolum}"
+                         filter="true" converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemLabel="${messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{gnlEgitimBolumController.items}"
+                           var="egitimBolums"
+                           itemLabel="#{egitimBolums.tanim}"
+                           itemValue="#{egitimBolums}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.baslangicTarihiLabel}" for="@next"/>
+        <p:datePicker id="baslangicTarihi" locale="tr" pattern="#{messages.tarihFormat}" value="#{ekmIsBasvuruController.ekmIsBasvuruEgitim.baslangicTarihi}"
+                      title="#{messages.baslangicTarihiText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
+                      showOnFocus="false"/>
+
+        <p:outputLabel value="#{messages.bitisTarihiLabel}" for="@next"/>
+        <p:datePicker id="bitisTarihi" locale="tr" pattern="#{messages.tarihFormat}" value="#{ekmIsBasvuruController.ekmIsBasvuruEgitim.bitisTarihi}"
+                      title="#{messages.bitisTarihiText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true" showOnFocus="false"/>
+
+        <p:outputLabel value="#{messages.mezuniyetDerecesiLabel}" for="@next"/>
+        <p:inputText id="mezuniyetDerecesi" value="#{ekmIsBasvuruController.ekmIsBasvuruEgitim.mezuniyetDerecesi}" title="#{messages.mezuniyetDerecesiText}"/>
+
+        <f:facet name="footer">
+            <div class="float-end">
+                <p:commandButton value="#{messages.buttonEkle}" icon="pi pi-plus" styleClass="btn btn-success"
+                                 actionListener="#{ekmIsBasvuruController.addEducation()}"
+                                 process="egitimPanel" update=":growl,egitimPanel"/>
+            </div>
+        </f:facet>
+    </p:panelGrid>
+
+    <p:panelGrid columns="1" styleClass="w-100">
+        <p:dataTable id="egitimId"
+                     value="#{ekmIsBasvuruController.selected.ekmIsBasvuruEgitimList}"
+                     var="egitimVar"
+                     emptyMessage="#{messages.kayitBulunamadi}"
+                     paginator="true"
+                     rows="5"
+                     paginatorPosition="bottom">
+
+            <p:column>
+                <f:facet name="header">
+                    <h:outputText value="#{messages.egitimDurumuText}"/>
+                </f:facet>
+                #{egitimVar.egitimDurumu.displayValue}
+            </p:column>
+
+            <p:column>
+                <f:facet name="header">
+                    <h:outputText value="#{messages.okulAdiText}"/>
+                </f:facet>
+                #{egitimVar.okulAdi}
+            </p:column>
+
+            <p:column>
+                <f:facet name="header">
+                    <h:outputText value="#{messages.bolumuText}"/>
+                </f:facet>
+                #{egitimVar.gnlEgitimBolum.tanim}
+            </p:column>
+
+            <p:column>
+                <f:facet name="header">
+                    <h:outputText value="#{messages.baslangicTarihiText}"/>
+                </f:facet>
+                <h:outputText value="#{egitimVar.baslangicTarihi}">
+                    <f:convertDateTime pattern="#{messages.tarihFormat}" type="localDate"/>
+                </h:outputText>
+            </p:column>
+
+            <p:column>
+                <f:facet name="header">
+                    <h:outputText value="#{messages.bitisTarihiText}"/>
+                </f:facet>
+                <h:outputText value="#{egitimVar.bitisTarihi}">
+                    <f:convertDateTime pattern="#{messages.tarihFormat}" type="localDate"/>
+                </h:outputText>
+            </p:column>
+
+            <p:column>
+                #{egitimVar.mezuniyetDerecesi}
+            </p:column>
+
+            <p:column width="60" headerText="#{messages.buttonSil}">
+                <p:commandButton icon="pi pi-trash" title="#{messages.buttonSil}" actionListener="#{ekmIsBasvuruController.removeEducation(egitimVar)}" update="egitimId,:growl"
+                                 process="egitimId"/>
+            </p:column>
+
+        </p:dataTable>
+
+    </p:panelGrid>
+
+</ui:composition>
+</html>

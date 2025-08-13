@@ -1,0 +1,45 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="primefaces"
+      xmlns:composite="jakarta.faces.composite"
+      xmlns:h="jakarta.faces.html">
+
+<composite:interface>
+    <composite:attribute name="actionListener" method-signature="void actionListener(jakarta.faces.event.ActionEvent)"
+                         required="true"/>
+    <composite:attribute name="value" required="true"/>
+    <composite:attribute name="update" required="true"/>
+    <composite:attribute name="inputId" default="tcKimlikNo"/>
+    <composite:attribute name="required" default="true"/>
+    <composite:attribute name="dateValue" required="true"/>
+    <composite:attribute name="dateTitle" default="#{messages.dogumTarihiText}"/>
+    <composite:attribute name="pattern" default="#{messages.tarihFormat}"/>
+</composite:interface>
+
+
+<composite:implementation>
+
+    <h:panelGroup>
+        <p:datePicker value="#{cc.attrs.dateValue}" label="#{messages.dogumTarihiText}"
+                      title="#{cc.attrs.dateTitle}" mask="true" required="#{cc.attrs.required}"
+                      pattern="#{cc.attrs.pattern}" monthNavigator="true"
+                      yearNavigator="true" showIcon="true" showButtonBar="true" showOnFocus="false" style="width: 100% !important;" styleClass="datePicker"/>
+        <div class="ui-inputgroup">
+            <p:inputMask id="#{cc.attrs.inputId}"
+                         value="#{cc.attrs.value}" label="#{messages.tcKimlikNoText}"
+                         required="#{cc.attrs.required}"
+                         title="#{messages.tcKimlikNoText}" mask="99999999999" style="min-width: 150px !important;"/>
+            <p:commandButton icon="pi pi-search" process="@parent,:growl"
+                             update="#{cc.attrs.update}"
+                             actionListener="#{cc.attrs.actionListener}"
+                             styleClass="btn-xs btn btn-info" onstart="PF('Loading').show()"
+                             onsuccess="PF('Loading').hide()" resetValues="true"/>
+        </div>
+    </h:panelGroup>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var width = $(".datePicker input").width();
+            $(".ui-inputgroup input").width(width);
+        });
+    </script>
+</composite:implementation>
+</html>

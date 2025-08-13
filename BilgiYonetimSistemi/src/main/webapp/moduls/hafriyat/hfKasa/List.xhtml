@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pt="jakarta.faces.passthrough"
+                xmlns:coco="jakarta.faces.composite/ui">
+
+    <h:form id="HfKasaListForm" styleClass="form-height">
+
+
+        <p:contextMenu id="HfKasaDataTableContextMenu" for="datalist:datalist">
+            <p:menuitem value="#{messages.buttonEkle}" onclick="document.getElementById('HfKasaListForm:datalist:datalist:createButton').click();"
+                        icon="pi pi-plus" rendered="#{syKullaniciController.hasPermission('hfkasa:ekle')}"/>
+            <p:menuitem value="#{messages.buttonGuncelle}" onclick="document.getElementById('HfKasaListForm:datalist:datalist:editButton').click();"
+                        icon="pi pi-pencil" rendered="#{syKullaniciController.hasPermission('hfkasa:guncelle')}"/>
+            <p:menuitem value="#{messages.buttonDetay}" onclick="document.getElementById('HfKasaListForm:datalist:datalist:viewButton').click();"
+                        icon="pi pi-search"/>
+            <p:menuitem value="#{messages.buttonSil}" onclick="document.getElementById('HfKasaListForm:datalist:datalist:deleteButton').click();"
+                        icon="pi pi-trash" rendered="#{syKullaniciController.hasPermission('hfkasa:sil')}"/>
+        </p:contextMenu>
+        <coco:datatable id="datalist"
+                        value="#{hfKasaController.lazyItems}"
+                        rowKey="#{item.id}"
+                        selection="#{hfKasaController.selected}"
+                        filtered="#{hfKasaController.filtered}"
+                        rowselect=":HfKasaListForm:datalist:datalist:createButton,:HfKasaListForm:datalist:datalist:viewButton,:HfKasaListForm:datalist:datalist:editButton,:HfKasaListForm:datalist:datalist:deleteButton,:HfKasaListForm:HfKasaDataTableContextMenu"
+                        rowDblselect="document.getElementById('HfKasaListForm:datalist:datalist:editButton').click()"
+                        contextMenu=":HfKasaListForm:datalist:datalist:createButton :HfKasaListForm:datalist:datalist:viewButton :HfKasaListForm:datalist:datalist:editButton :HfKasaListForm:datalist:datalist:deleteButton"
+                        selectListener="#{hfKasaController.resetParents}"
+                        controller="#{hfKasaController}"
+                        header="#{messages.kasaListesi}">
+
+            <p:ajax event="colResize" listener="#{hfKasaController.onResize}"/>
+
+            <f:facet name="paginatorBottomLeft">
+
+                <p:commandButton id="createButton" styleClass="ui-button-primary" icon="pi pi-plus" pt:data-tooltip="#{messages.buttonEkle}"
+                                 actionListener="#{hfKasaController.prepareCreate}" update=":HfKasaCreateForm:HfKasaCreateForm"
+                                 oncomplete="PF('HfKasaCreateDialog').show()" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('hfkasa:ekle')}"/>
+                <p:commandButton id="editButton" styleClass="ui-button-success" icon="pi pi-pencil" pt:data-tooltip="#{messages.buttonGuncelle}"
+                                 update=":HfKasaEditForm:HfKasaEditForm" oncomplete="PF('HfKasaEditDialog').show()"
+                                 disabled="#{empty hfKasaController.selected}" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('hfkasa:guncelle')}"/>
+                <p:commandButton id="viewButton" styleClass="ui-button-info" icon="pi pi-search" pt:data-tooltip="#{messages.buttonDetay}"
+                                 update=":HfKasaViewForm:HfKasaViewForm" oncomplete="PF('HfKasaViewDialog').show()"
+                                 disabled="#{empty hfKasaController.selected}" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                <p:commandButton id="deleteButton" styleClass="ui-button-danger" icon="pi pi-trash" pt:data-tooltip="#{messages.buttonSil}"
+                                 actionListener="#{hfKasaController.delete}" update=":growl,datalist" disabled="#{empty hfKasaController.selected}"
+                                 rendered="#{syKullaniciController.hasPermission('hfkasa:sil')}">
+                    <p:confirm header="#{messages.ConfirmationHeader}" message="#{messages.ConfirmDeleteMessage}" icon="pi pi-exclamation-circle"/>
+                </p:commandButton>
+
+            </f:facet>
+
+        </coco:datatable>
+
+
+        <ui:include src="/confirmation.xhtml"/>
+
+    </h:form>
+
+</ui:composition>

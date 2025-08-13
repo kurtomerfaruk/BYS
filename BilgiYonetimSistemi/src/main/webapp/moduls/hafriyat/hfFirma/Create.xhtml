@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:createpage id="HfFirmaCreateForm"
+                     renderedListener="#{hfFirmaController.selected != null}"
+                     widgetVar="HfFirmaCreateDialog"
+                     actionListener="#{hfFirmaController.saveNew}"
+                     listForm="HfFirmaListForm">
+
+        <p:outputLabel value="#{messages.kodLabel}" for="@next"/>
+        <p:inputText id="kod" value="#{hfFirmaController.selected.kod}" title="#{messages.kodText}" size="50" maxlength="50"/>
+
+        <p:outputLabel value="#{messages.firmaUnvaniLabel}" for="@next"/>
+        <p:inputTextarea id="firmaUnvani" value="#{hfFirmaController.selected.firmaUnvani}" title="#{messages.firmaUnvaniText}" rows="4" autoResize="false"
+                         styleClass="w-100"/>
+
+        <p:outputLabel value="#{messages.yetkiliLabel}" for="@next"/>
+        <p:inputText id="yetkili" value="#{hfFirmaController.selected.yetkili}" title="#{messages.yetkiliText}" size="50" maxlength="250"/>
+
+        <p:outputLabel value="#{messages.telefonLabel}" for="@next"/>
+        <p:inputMask id="telefon" value="#{hfFirmaController.selected.telefon}" title="#{messages.telefonText}" size="50" maxlength="50"
+                     mask="(999) 999 99 99"/>
+
+        <p:outputLabel value="#{messages.faksLabel}" for="@next"/>
+        <p:inputMask id="faks" value="#{hfFirmaController.selected.faks}" title="#{messages.faksText}" size="50" maxlength="50" mask="(999) 999 99 99"/>
+
+        <p:outputLabel value="#{messages.adresLabel}" for="@next"/>
+        <p:inputTextarea rows="4" id="adres" value="#{hfFirmaController.selected.adres}" title="#{messages.adresText}" styleClass="w-100"
+                         autoResize="false"/>
+
+        <p:outputLabel value="#{messages.vergiDairesiLabel}" for="@next"/>
+        <p:inputText id="vergiDairesi" value="#{hfFirmaController.selected.vergiDairesi}" title="#{messages.vergiDairesiText}" size="50" maxlength="50"/>
+
+        <p:outputLabel value="#{messages.vergiNoLabel}" for="@next"/>
+        <p:inputText id="vergiNo" value="#{hfFirmaController.selected.vergiNo}" title="#{messages.vergiNoText}" size="50" maxlength="50"/>
+
+        <p:outputLabel value="#{messages.sehirLabel}" for="@next"/>
+        <p:selectOneMenu id="gnlilId" value="#{hfFirmaController.selected.gnlIl}" filter="true" converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{gnlIlController.items}"
+                           var="gnlilIdItem"
+                           itemValue="#{gnlilIdItem}"
+                           itemLabel="#{gnlilIdItem.tanim.toString()}"/>
+            <p:ajax event="change" update="gnlilceId"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.ilceLabel}" for="@next"/>
+        <p:selectOneMenu id="gnlilceId" value="#{hfFirmaController.selected.gnlIlce}" filter="true" converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{gnlIlceController.getIlceByIlId(hfFirmaController.selected.gnlIl)}"
+                           var="gnlilceIdItem"
+                           itemValue="#{gnlilceIdItem}"
+                           itemLabel="#{gnlilceIdItem.tanim.toString()}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.firmaTuruLabel}" for="@next"/>
+        <p:selectOneMenu id="firmaTuru" value="#{hfFirmaController.selected.firmaTuru}"
+                         required="true" converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{enumFirmaTuru.ALL_VALUES}"
+                           var="firmaTurs"
+                           itemLabel="#{firmaTurs.displayValue}"
+                           itemValue="#{firmaTurs}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.evrakAylikMiLabel}" for="@next"/>
+        <p:selectBooleanCheckbox id="evrakAylikMi" value="#{hfFirmaController.selected.evrakAylikMi}"/>
+
+    </coco:createpage>
+
+</ui:composition>
+
+</html>

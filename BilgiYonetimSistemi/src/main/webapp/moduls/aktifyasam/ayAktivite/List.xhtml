@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:p="primefaces"
+                xmlns:pt="jakarta.faces.passthrough"
+                xmlns:coco="jakarta.faces.composite/ui">
+
+    <h:form id="AyAktiviteListForm" styleClass="form-height">
+
+        <p:contextMenu id="AyAktiviteDataTableContextMenu" for="datalist:datalist">
+            <p:menuitem value="#{messages.buttonEkle}" onclick="document.getElementById('AyAktiviteListForm:datalist:datalist:createButton').click();"
+                        icon="pi pi-plus" rendered="#{syKullaniciController.hasPermission('ayaktivite:ekle')}"/>
+            <p:menuitem value="#{messages.buttonGuncelle}" onclick="document.getElementById('AyAktiviteListForm:datalist:datalist:editButton').click();"
+                        icon="pi pi-pencil" rendered="#{syKullaniciController.hasPermission('ayaktivite:guncelle')}"/>
+            <p:menuitem value="#{messages.buttonDetay}" onclick="document.getElementById('AyAktiviteListForm:datalist:datalist:viewButton').click();"
+                        icon="pi pi-search"/>
+            <p:menuitem value="#{messages.buttonSil}" onclick="document.getElementById('AyAktiviteListForm:datalist:datalist:deleteButton').click();"
+                        icon="pi pi-trash" rendered="#{syKullaniciController.hasPermission('ayaktivite:sil')}"/>
+        </p:contextMenu>
+        <coco:datatable id="datalist"
+                        value="#{ayAktiviteController.lazyItems}"
+                        rowKey="#{item.id}"
+                        selection="#{ayAktiviteController.selected}"
+                        filtered="#{ayAktiviteController.filtered}"
+                        rowselect=":AyAktiviteListForm:datalist:datalist:createButton,:AyAktiviteListForm:datalist:datalist:viewButton,:AyAktiviteListForm:datalist:datalist:editButton,:AyAktiviteListForm:datalist:datalist:deleteButton,:AyAktiviteListForm:AyAktiviteDataTableContextMenu"
+                        rowDblselect="document.getElementById('AyAktiviteListForm:datalist:datalist:editButton').click()"
+                        contextMenu=":AyAktiviteListForm:datalist:datalist:createButton :AyAktiviteListForm:datalist:datalist:viewButton :AyAktiviteListForm:datalist:datalist:editButton :AyAktiviteListForm:datalist:datalist:deleteButton"
+                        selectListener="#{ayAktiviteController.resetParents}"
+                        controller="#{ayAktiviteController}"
+                        header="#{messages.aktiviteListesi}">
+
+            <p:ajax event="colResize" listener="#{ayAktiviteController.onResize}"/>
+
+            <f:facet name="paginatorBottomLeft">
+                <p:commandButton id="createButton" styleClass="ui-button-primary" icon="pi pi-plus" pt:data-tooltip="#{messages.buttonEkle}"
+                                 actionListener="#{ayAktiviteController.prepareCreate}" update=":AyAktiviteCreateForm:AyAktiviteCreateForm"
+                                 oncomplete="PF('AyAktiviteCreateDialog').show()" onstart="PF('Loading').show()"
+                                 onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('ayaktivite:ekle')}"/>
+                <p:commandButton id="editButton" styleClass="ui-button-success" icon="pi pi-pencil" pt:data-tooltip="#{messages.buttonGuncelle}"
+                                 update=":AyAktiviteEditForm:AyAktiviteEditForm" oncomplete="PF('AyAktiviteEditDialog').show()"
+                                 disabled="#{empty ayAktiviteController.selected}" onstart="PF('Loading').show()"
+                                 onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('ayaktivite:guncelle')}"/>
+                <p:commandButton id="viewButton" styleClass="ui-button-info" icon="pi pi-search" pt:data-tooltip="#{messages.buttonDetay}"
+                                 update=":AyAktiviteViewForm:AyAktiviteViewForm" oncomplete="PF('AyAktiviteViewDialog').show()"
+                                 disabled="#{empty ayAktiviteController.selected}" onstart="PF('Loading').show()"
+                                 onsuccess="PF('Loading').hide()"/>
+                <p:commandButton id="deleteButton" styleClass="ui-button-danger" icon="pi pi-trash" pt:data-tooltip="#{messages.buttonSil}"
+                                 actionListener="#{ayAktiviteController.delete}" update=":growl,datalist"
+                                 disabled="#{empty ayAktiviteController.selected}"
+                                 rendered="#{syKullaniciController.hasPermission('ayaktivite:sil')}">
+                    <p:confirm header="#{messages.ConfirmationHeader}" message="#{messages.ConfirmDeleteMessage}" icon="pi pi-warning"/>
+                </p:commandButton>
+
+            </f:facet>
+
+        </coco:datatable>
+
+
+        <ui:include src="/confirmation.xhtml"/>
+
+    </h:form>
+
+</ui:composition>

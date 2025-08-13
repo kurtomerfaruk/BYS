@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:p="primefaces"
+                xmlns:pt="jakarta.faces.passthrough"
+                xmlns:coco="jakarta.faces.composite/ui">
+
+    <h:form id="EyTalepKonuListForm" styleClass="form-height">
+
+        <p:contextMenu id="EyTalepKonuDataTableContextMenu" for="datalist:datalist">
+            <p:menuitem value="#{messages.buttonEkle}"
+                        onclick="document.getElementById('EyTalepKonuListForm:datalist:datalist:createButton').click();"
+                        icon="pi pi-plus" rendered="#{syKullaniciController.hasPermission('eytalepkonu:ekle')}"/>
+            <p:menuitem value="#{messages.buttonGuncelle}"
+                        onclick="document.getElementById('EyTalepKonuListForm:datalist:datalist:editButton').click();"
+                        icon="pi pi-pencil" rendered="#{syKullaniciController.hasPermission('eytalepkonu:guncelle')}"/>
+            <p:menuitem value="#{messages.buttonDetay}"
+                        onclick="document.getElementById('EyTalepKonuListForm:datalist:datalist:viewButton').click();"
+                        icon="pi pi-search"/>
+            <p:menuitem value="#{messages.buttonSil}"
+                        onclick="document.getElementById('EyTalepKonuListForm:datalist:datalist:deleteButton').click();"
+                        icon="pi pi-trash" rendered="#{syKullaniciController.hasPermission('eytalepkonu:sil')}"/>
+        </p:contextMenu>
+        <coco:datatable id="datalist"
+                        value="#{eyTalepKonuController.lazyItems}"
+                        rowKey="#{item.id}"
+                        selection="#{eyTalepKonuController.selected}"
+                        filtered="#{eyTalepKonuController.filtered}"
+                        rowselect=":EyTalepKonuListForm:datalist:datalist:createButton,:EyTalepKonuListForm:datalist:datalist:viewButton,:EyTalepKonuListForm:datalist:datalist:editButton,:EyTalepKonuListForm:datalist:datalist:deleteButton"
+                        rowDblselect="document.getElementById('EyTalepKonuListForm:datalist:datalist:editButton').click()"
+                        contextMenu=":EyTalepKonuListForm:datalist:datalist:createButton :EyTalepKonuListForm:datalist:datalist:viewButton :EyTalepKonuListForm:datalist:datalist:editButton :EyTalepKonuListForm:datalist:datalist:deleteButton"
+                        selectListener="#{eyTalepKonuController.resetParents}"
+                        controller="#{eyTalepKonuController}"
+                        header="#{messages.talepKonuListesi}">
+
+            <p:ajax event="colResize" listener="#{eyTalepKonuController.onResize}"/>
+
+            <f:facet name="paginatorBottomLeft">
+                <p:commandButton id="createButton" styleClass="ui-button-primary" icon="pi pi-plus"
+                                 pt:data-tooltip="#{messages.buttonEkle}"
+                                 actionListener="#{eyTalepKonuController.prepareCreate}"
+                                 update=":EyTalepKonuCreateForm:EyTalepKonuCreateForm"
+                                 oncomplete="PF('EyTalepKonuCreateDialog').show()" onstart="PF('Loading').show()"
+                                 onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('eytalepkonu:ekle')}"/>
+                <p:commandButton id="editButton" styleClass="ui-button-success" icon="pi pi-pencil"
+                                 pt:data-tooltip="#{messages.buttonGuncelle}"
+                                 update=":EyTalepKonuEditForm:EyTalepKonuEditForm"
+                                 oncomplete="PF('EyTalepKonuEditDialog').show()"
+                                 disabled="#{empty eyTalepKonuController.selected}" onstart="PF('Loading').show()"
+                                 onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('eytalepkonu:guncelle')}"/>
+                <p:commandButton id="viewButton" styleClass="ui-button-info" icon="pi pi-search"
+                                 pt:data-tooltip="#{messages.buttonDetay}"
+                                 update=":EyTalepKonuViewForm:EyTalepKonuViewForm"
+                                 oncomplete="PF('EyTalepKonuViewDialog').show()"
+                                 disabled="#{empty eyTalepKonuController.selected}" onstart="PF('Loading').show()"
+                                 onsuccess="PF('Loading').hide()"/>
+                <p:commandButton id="deleteButton" styleClass="ui-button-danger" icon="pi pi-trash"
+                                 pt:data-tooltip="#{messages.buttonSil}"
+                                 actionListener="#{eyTalepKonuController.delete}" update=":growl,datalist"
+                                 disabled="#{empty eyTalepKonuController.selected}"
+                                 rendered="#{syKullaniciController.hasPermission('eytalepkonu:sil')}">
+                    <p:confirm header="#{messages.ConfirmationHeader}" message="#{messages.ConfirmDeleteMessage}"
+                               icon="pi pi-warning"/>
+                </p:commandButton>
+            </f:facet>
+
+        </coco:datatable>
+
+
+        <ui:include src="/confirmation.xhtml"/>
+
+    </h:form>
+
+</ui:composition>

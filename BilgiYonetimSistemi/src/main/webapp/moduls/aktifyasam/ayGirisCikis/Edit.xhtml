@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:h="jakarta.faces.html"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:editpage id="AyGirisCikisEditForm"
+                   widgetVar="AyGirisCikisEditDialog"
+                   actionListener="#{ayGirisCikisController.save}"
+                   listForm="AyGirisCikisListForm"
+                   model="#{ayGirisCikisController.selected}">
+
+        <p:outputLabel value="#{messages.tcKimlikNoLabel}" for="@next"/>
+        <coco:inputWithButton id="inputWithButtonAyKisi" inputId="ayKisiId"
+                              inputValue="#{ayGirisCikisController.selected.ayKisi.gnlKisi.tcKimlikNo}"
+                              inputTitle="#{messages.tcKimlikNoText}"
+                              actionListener="#{bysController.openCommonDialog('ayKisiSec')}"
+                              ajaxListener="#{ayGirisCikisController.secilenAyKisi}"
+                              buttonTitle="#{messages.kisiSecmelisiniz}"
+                              size="50"
+                              dialogId="AyGirisCikisEditDialogId"/>
+
+
+        <h:outputText value="#{messages.adSoyadLabel}"/>
+        <p:inputText value="#{ayGirisCikisController.selected.ayKisi.gnlKisi.adSoyad}" label="#{messages.adSoyadText}" styleClass="inputUpdate"
+                     readonly="true" size="50" title="#{messages.adSoyadText}"/>
+
+        <h:outputText value="#{messages.anaBabaAdiLabel}"/>
+        <p:inputText value="#{ayGirisCikisController.selected.ayKisi.gnlKisi.anaAdi} / #{ayGirisCikisController.selected.ayKisi.gnlKisi.babaAdi}"
+                     styleClass="inputUpdate" readonly="true" size="50"/>
+
+        <h:outputText value="#{messages.dogumYeriYiliLabel}"/>
+        <h:panelGroup>
+            <p:inputText value="#{ayGirisCikisController.selected.ayKisi.gnlKisi.dogumYeri}" styleClass="inputUpdate" readonly="true"/>
+            <p:inputText value="#{ayGirisCikisController.selected.ayKisi.gnlKisi.dogumTarihi}" styleClass="inputUpdate" readonly="true">
+                <f:convertDateTime pattern="yyyy" type="localDateTime"/>
+            </p:inputText>
+        </h:panelGroup>
+
+        <h:outputText value="#{messages.telefonLabel}"/>
+        <h:panelGroup>
+            <p:inputText value="#{ayGirisCikisController.selected.ayKisi.gnlKisi.telefon}" styleClass="inputUpdate" readonly="true"/>
+            <p:inputText value="#{ayGirisCikisController.selected.ayKisi.gnlKisi.telefon2}" styleClass="inputUpdate" readonly="true"/>
+        </h:panelGroup>
+
+        <p:outputLabel value="#{messages.girisTarihiLabel}" for="@next"/>
+        <p:datePicker id="girisTarihi" locale="tr" pattern="#{messages.tarihSaatFormat}" value="#{ayGirisCikisController.selected.girisTarihi}"
+                      title="#{messages.girisTarihiText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
+                      showOnFocus="false" showTime="true"/>
+
+        <p:outputLabel value="#{messages.cikisTarihiLabel}" for="@next"/>
+        <p:datePicker id="cikisTarihi" locale="tr" pattern="#{messages.tarihSaatFormat}" value="#{ayGirisCikisController.selected.cikisTarihi}"
+                      title="#{messages.cikisTarihiText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
+                      showOnFocus="false" showTime="true"/>
+
+        <p:outputLabel value="#{messages.tansiyonLabel}" for="@next"/>
+        <p:inputText id="tansiyon" value="#{ayGirisCikisController.selected.tansiyon}" title="#{messages.tansiyonText}" size="50" maxlength="50"/>
+
+        <p:outputLabel value="#{messages.sekerLabel}" for="@next"/>
+        <p:inputText id="seker" value="#{ayGirisCikisController.selected.seker}" title="#{messages.sekerText}" size="50" maxlength="50"/>
+
+    </coco:editpage>
+
+</ui:composition>
+
+</html>

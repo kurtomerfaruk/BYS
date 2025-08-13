@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+>
+
+<ui:composition>
+    <p:outputLabel value="#{messages.saglikBilgileriLabel}" for="saglikBilgileri"/>
+    <p:selectManyCheckbox id="saglikBilgileri" value="#{ayKisiController.aySaglikBilgis}" layout="responsive" columns="3"
+                          converter="omnifaces.SelectItemsConverter"
+                          valueChangeListener="#{ayKisiController.valueChangeSaglikBilgi}">
+        <f:selectItems value="#{aySaglikBilgiController.items}"
+                       var="sagliks"
+                       itemLabel="#{sagliks.tanim}"
+                       itemValue="#{sagliks}"/>
+    </p:selectManyCheckbox>
+</ui:composition>
+</html>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:p="primefaces"
+                xmlns:pt="jakarta.faces.passthrough"
+                xmlns:coco="jakarta.faces.composite/ui">
+
+    <h:form id="AySanatsalBeceriListForm" styleClass="form-height">
+
+        <p:contextMenu id="AySanatsalBeceriDataTableContextMenu" for="datalist:datalist">
+            <p:menuitem value="#{messages.buttonEkle}" onclick="document.getElementById('AySanatsalBeceriListForm:datalist:datalist:createButton').click();"
+                        icon="pi pi-plus" rendered="#{syKullaniciController.hasPermission('aysanatsalbeceri:ekle')}"/>
+            <p:menuitem value="#{messages.buttonGuncelle}"
+                        onclick="document.getElementById('AySanatsalBeceriListForm:datalist:datalist:editButton').click();" icon="pi pi-pencil"
+                        rendered="#{syKullaniciController.hasPermission('aysanatsalbeceri:guncelle')}"/>
+            <p:menuitem value="#{messages.buttonDetay}" onclick="document.getElementById('AySanatsalBeceriListForm:datalist:datalist:viewButton').click();"
+                        icon="pi pi-search"/>
+            <p:menuitem value="#{messages.buttonSil}" onclick="document.getElementById('AySanatsalBeceriListForm:datalist:datalist:deleteButton').click();"
+                        icon="pi pi-trash" rendered="#{syKullaniciController.hasPermission('aysanatsalbeceri:sil')}"/>
+        </p:contextMenu>
+        <coco:datatable id="datalist"
+                        value="#{aySanatsalBeceriController.lazyItems}"
+                        rowKey="#{item.id}"
+                        selection="#{aySanatsalBeceriController.selected}"
+                        filtered="#{aySanatsalBeceriController.filtered}"
+                        rowselect=":AySanatsalBeceriListForm:datalist:datalist:createButton,:AySanatsalBeceriListForm:datalist:datalist:viewButton,:AySanatsalBeceriListForm:datalist:datalist:editButton,:AySanatsalBeceriListForm:datalist:datalist:deleteButton,:AySanatsalBeceriListForm:AySanatsalBeceriDataTableContextMenu"
+                        rowDblselect="document.getElementById('AySanatsalBeceriListForm:datalist:datalist:editButton').click()"
+                        contextMenu=":AySanatsalBeceriListForm:datalist:datalist:createButton :AySanatsalBeceriListForm:datalist:datalist:viewButton :AySanatsalBeceriListForm:datalist:datalist:editButton :AySanatsalBeceriListForm:datalist:datalist:deleteButton"
+                        selectListener="#{aySanatsalBeceriController.resetParents}"
+                        controller="#{aySanatsalBeceriController}"
+                        header="#{messages.sanatsalBeceriListesi}">
+
+            <p:ajax event="colResize" listener="#{aySanatsalBeceriController.onResize}"/>
+
+            <f:facet name="paginatorBottomLeft">
+
+                <p:commandButton id="createButton" styleClass="ui-button-primary" icon="pi pi-plus" pt:data-tooltip="#{messages.buttonEkle}"
+                                 actionListener="#{aySanatsalBeceriController.prepareCreate}"
+                                 update=":AySanatsalBeceriCreateForm:AySanatsalBeceriCreateForm"
+                                 oncomplete="PF('AySanatsalBeceriCreateDialog').show()" onstart="PF('Loading').show()"
+                                 onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('aysanatsalbeceri:ekle')}"/>
+                <p:commandButton id="editButton" styleClass="ui-button-success" icon="pi pi-pencil" pt:data-tooltip="#{messages.buttonGuncelle}"
+                                 update=":AySanatsalBeceriEditForm:AySanatsalBeceriEditForm" oncomplete="PF('AySanatsalBeceriEditDialog').show()"
+                                 disabled="#{empty aySanatsalBeceriController.selected}" onstart="PF('Loading').show()"
+                                 onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('aysanatsalbeceri:guncelle')}"/>
+                <p:commandButton id="viewButton" styleClass="ui-button-info" icon="pi pi-search" pt:data-tooltip="#{messages.buttonDetay}"
+                                 update=":AySanatsalBeceriViewForm:AySanatsalBeceriViewForm" oncomplete="PF('AySanatsalBeceriViewDialog').show()"
+                                 disabled="#{empty aySanatsalBeceriController.selected}" onstart="PF('Loading').show()"
+                                 onsuccess="PF('Loading').hide()"/>
+                <p:commandButton id="deleteButton" styleClass="ui-button-danger" icon="pi pi-trash" pt:data-tooltip="#{messages.buttonSil}"
+                                 actionListener="#{aySanatsalBeceriController.delete}" update=":growl,datalist"
+                                 disabled="#{empty aySanatsalBeceriController.selected}"
+                                 rendered="#{syKullaniciController.hasPermission('aysanatsalbeceri:sil')}">
+                    <p:confirm header="#{messages.ConfirmationHeader}" message="#{messages.ConfirmDeleteMessage}" icon="pi pi-warning"/>
+                </p:commandButton>
+
+            </f:facet>
+
+        </coco:datatable>
+
+
+        <ui:include src="/confirmation.xhtml"/>
+
+    </h:form>
+
+</ui:composition>

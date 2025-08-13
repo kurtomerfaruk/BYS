@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:createpage id="EdbVerilecekHizmetCreateForm"
+                     renderedListener="#{edbVerilecekHizmetController.selected != null}"
+                     widgetVar="EdbVerilecekHizmetCreateDialog"
+                     actionListener="#{edbVerilecekHizmetController.saveNew}"
+                     listForm="EdbVerilecekHizmetListForm"
+                     onShow="adjustMenuWidth();">
+
+        <p:outputLabel value="#{messages.tcKimlikNoLabel}" for="@next"/>
+        <p:inputText id="tcKimlikNo" value="#{edbVerilecekHizmetController.selected.edbHizmetPlanlama.edbTalep.edbBasvuru.gnlKisi.tcKimlikNo}"
+                     title="#{messages.tcKimlikNoText}" readonly="true"/>
+
+        <p:outputLabel value="#{messages.adSoyadLabel}" for="@next"/>
+        <p:inputText id="adSoyad" value="#{edbVerilecekHizmetController.selected.edbHizmetPlanlama.edbTalep.edbBasvuru.gnlKisi.adSoyad}"
+                     title="#{messages.adSoyadText}" readonly="true" size="50"/>
+
+        <p:outputLabel value="#{messages.telefonLabel}" for="@next"/>
+        <p:inputText id="telefon" value="#{edbVerilecekHizmetController.selected.edbHizmetPlanlama.edbTalep.edbBasvuru.gnlKisi.telefon}"
+                     title="#{messages.telefonText}" readonly="true"/>
+
+        <p:outputLabel value="#{messages.ilceLabel}" for="@next"/>
+        <p:inputText id="ilce" value="#{edbVerilecekHizmetController.selected.edbHizmetPlanlama.edbTalep.edbBasvuru.gnlKisi.gnlIlce.tanim}"
+                     title="#{messages.ilceText}" readonly="true"/>
+
+        <p:outputLabel value="#{messages.mahalleLabel}" for="@next"/>
+        <p:inputText id="mahalle" value="#{edbVerilecekHizmetController.selected.edbHizmetPlanlama.edbTalep.edbBasvuru.gnlKisi.gnlMahalle.tanim}"
+                     title="#{messages.mahalleText}" readonly="true"/>
+
+        <p:outputLabel value="#{messages.adresLabel}" for="@next"/>
+        <p:inputTextarea rows="4" id="adres" value="#{edbVerilecekHizmetController.selected.edbHizmetPlanlama.edbTalep.edbBasvuru.gnlKisi.adres}"
+                         title="#{messages.adresText}" styleClass="w-100" autoResize="false" readonly="true"/>
+
+        <p:outputLabel value="#{messages.hizmetTuruLabel}" for="@next"/>
+        <p:inputText id="hizmetTuru" value="#{edbVerilecekHizmetController.selected.edbHizmetPlanlama.edbTalep.edbHizmet.tanim}"
+                     title="#{messages.hizmetTuruText}" readonly="true"/>
+
+        <p:outputLabel value="#{messages.personelListesi}" for="@next"/>
+        <p:selectCheckboxMenu id="personel" value="#{edbVerilecekHizmetController.edbPersonelList}"
+                              label="Personeller" styleClass="checkboxMenu" converter="omnifaces.SelectItemsConverter"
+                              multiple="true" filter="true" filterMatchMode="startsWith"
+                              valueChangeListener="#{edbVerilecekHizmetController.valueChangeEdbPersonel}">
+            <f:selectItems value="#{edbPersonelController.items}"
+                           var="personels"
+                           itemValue="#{personels}"
+                           itemLabel="#{personels.syKullanici.gnlPersonel.gnlKisi.adSoyad}"/>
+        </p:selectCheckboxMenu>
+
+        <p:outputLabel value="#{messages.tarihLabel}" for="@next"/>
+        <p:inputText id="tarih" value="#{edbVerilecekHizmetController.selected.tarih}" title="#{messages.tarihText}" readonly="true">
+            <f:convertDateTime pattern="#{messages.tarihFormat}" type="localDate"/>
+        </p:inputText>
+
+        <p:outputLabel value="#{messages.hizmetTarihiLabel}" for="@next"/>
+        <p:datePicker id="hizmetTarihi" locale="tr" pattern="#{messages.tarihFormat}" value="#{edbVerilecekHizmetController.selected.hizmetTarihi}"
+                      title="#{messages.hizmetTarihiText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
+                      showOnFocus="false"/>
+
+        <p:outputLabel value="#{messages.hizmetMemnunLabel}" for="@next"/>
+        <p:selectOneRadio id="hizmetMemnun" value="#{edbVerilecekHizmetController.selected.hizmettenMemnun}" columns="1"
+                          layout="pageDirection">
+            <f:selectItem itemLabel="#{messages.hizmettenMemnunum}" itemValue="#{true}"/>
+            <f:selectItem itemLabel="#{messages.hizmettenMemnunumDegilim}" itemValue="#{false}"/>
+            <p:ajax event="change" update="sikayet"/>
+        </p:selectOneRadio>
+
+        <p:outputLabel value="#{messages.sikayetLabel}" for="@next"/>
+        <p:inputTextarea id="sikayet" value="#{edbVerilecekHizmetController.selected.sikayet}" rows="4" styleClass="w-100" autoResize="false"
+                         disabled="#{edbVerilecekHizmetController.selected.hizmettenMemnun}"/>
+
+        <p:outputLabel value="#{messages.durumLabel}" for="@next"/>
+        <p:selectOneMenu id="durum" value="#{edbVerilecekHizmetController.selected.durum}" converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{enumDurum.ALL_VALUES}"
+                           var="durums"
+                           itemValue="#{durums}"
+                           itemLabel="#{durums.displayValue}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.resimLabel}" for="@next"/>
+        <h:panelGroup id="group">
+
+            <p:remoteCommand name="rc" actionListener="#{edbVerilecekHizmetController.changeActiveIndex}" update="custom"
+                             oncomplete="PF('galleriaCustom').show();console.log('deneme');"/>
+
+
+            <p:galleria id="galleria" widgetVar="galleriaWidget" value="#{edbVerilecekHizmetController.selected.edbVerilecekHizmetResimList}" var="image"
+                        numVisible="5"
+                        responsiveOptions="#{edbVerilecekHizmetController.responsiveOptions}" style="max-width: 480px" autoPlay="true"
+                        transitionInterval="5000"
+                        circular="true" varStatus="status" styleClass="galleria-style">
+
+                <div class="form_image_gallery">
+                    <p:graphicImage id="#{image.id}" value="/images/dynamic/?file=#{image.resimYolu}" style="width: 100%;cursor:pointer"
+                                    onclick="rc([{'name': 'index', 'value': #{status.index} }])"/>
+                    <div class="form_image_buttons" style="position: absolute; width: 100%;">
+                        <p:commandButton id="deleteButton" styleClass="form_image_remove ui-button-danger w-100" icon="pi pi-trash"
+                                         actionListener="#{edbVerilecekHizmetController.confirmDelete(image)}" update=":growl,galleria,custom">
+                            <p:confirm header="#{messages.ConfirmationHeader}" message="#{messages.ConfirmDeleteMessage}" icon="pi pi-warning"/>
+                        </p:commandButton>
+                    </div>
+                </div>
+                <f:facet name="thumbnail">
+                    <p:graphicImage value="/images/dynamic/?file=#{image.resimYolu}" style="width: 80px;height:60px"/>
+                </f:facet>
+            </p:galleria>
+
+            <p:galleria id="custom" widgetVar="galleriaCustom" value="#{edbVerilecekHizmetController.selected.edbVerilecekHizmetResimList}" var="image"
+                        activeIndex="#{edbVerilecekHizmetController.activeIndex}"
+                        numVisible="7" responsiveOptions="#{edbVerilecekHizmetController.responsiveOptions}"
+                        circular="true" fullScreen="true" showItemNavigators="true" showThumbnails="true" style="max-width: 850px">
+                <p:graphicImage value="/images/dynamic/?file=#{image.resimYolu}" alt="#{image.resimAdi}" style="width: 100%; display: block"/>
+
+                <f:facet name="thumbnail">
+                    <p:graphicImage value="/images/dynamic/?file=#{image.resimYolu}" style="width: 80px;height:60px"/>
+                </f:facet>
+            </p:galleria>
+
+            <p:fileUpload listener="#{edbVerilecekHizmetController.uploadImage}"
+                          mode="advanced"
+                          fileLimit="10"
+                          multiple="true"
+                          uploadLabel="#{messages.buttonYukle}"
+                          cancelLabel="#{messages.buttonIptal}"
+                          label="#{messages.buttonSec}"
+                          allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
+                          update=":growl,galleria,custom"
+                          style="max-width: 480px !important;"/>
+
+        </h:panelGroup>
+
+
+    </coco:createpage>
+
+    <script type="text/javascript">
+        var dialogWidth = 0;
+
+        function adjustMenuWidth() {
+            setTimeout(function () {
+                var dialog = PF('EdbVerilecekHizmetCreateDialog');
+                var menu = $(".checkboxMenu");
+                var galleria = $(".galleria-style");
+                var removeWidth = dialog.jq.innerWidth() - galleria.width();
+
+                if (dialog &amp;&amp; menu) {
+                    if (dialogWidth === 0) {
+                        dialogWidth = dialog.jq.innerWidth() - removeWidth;
+                    }
+                    var menuContainer = $(menu).closest('.ui-selectcheckboxmenu');
+                    menuContainer.width(dialogWidth);
+                }
+            }, 500);
+
+        }
+
+        function onShow() {
+            setTimeout(function () {
+                PF('galleriaWidget').render();
+                PF('galleriaCustom').render();
+            }, 500);
+        }
+
+    </script>
+
+</ui:composition>
+
+</html>

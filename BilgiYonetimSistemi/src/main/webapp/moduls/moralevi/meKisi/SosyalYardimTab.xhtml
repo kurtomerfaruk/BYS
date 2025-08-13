@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces">
+
+<ui:composition>
+    <p:outputLabel value="#{messages.yardimAlinanYerlerLabel}" for="@next"/>
+    <p:selectCheckboxMenu id="yardimAlinanYerler" value="#{meKisiController.yardimAlinanYerlers}" label="#{messages.yardimAlinanYerlerText}" multiple="true"
+                          filter="true" filterMatchMode="startsWith" styleClass="checkboxMenu tcUpdate">
+        <f:selectItems value="#{enumYardimAlinanYerler.ALL_VALUES}"
+                       var="yardimAlinanYerlers"
+                       itemValue="#{yardimAlinanYerlers}"
+                       itemLabel="#{yardimAlinanYerlers.displayValue}"/>
+        <f:converter converterId="omnifaces.GenericEnumConverter"/>
+    </p:selectCheckboxMenu>
+
+    <p:outputLabel value="#{messages.aldiginizYardimlarLabel}" for="@next"/>
+    <p:selectCheckboxMenu id="aldiginizYardimlar" value="#{meKisiController.yardimTurus}" label="#{messages.aldiginizYardimlarText}" multiple="true"
+                          filter="true" filterMatchMode="startsWith" styleClass="checkboxMenu tcUpdate">
+        <f:selectItems value="#{enumYardimTuru.ALL_VALUES}"
+                       var="yardimTurus"
+                       itemValue="#{yardimTurus}"
+                       itemLabel="#{yardimTurus.displayValue}"/>
+        <f:converter converterId="omnifaces.GenericEnumConverter"/>
+    </p:selectCheckboxMenu>
+</ui:composition>
+</html>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces">
+
+<ui:composition>
+
+    <p:outputLabel value="#{messages.evDurumuLabel}" for="@next"/>
+    <p:selectOneMenu id="evDurumu" value="#{ayKisiController.selected.gnlKisi.evinDurumu}" converter="omnifaces.SelectItemsConverter">
+        <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+        <f:selectItems value="#{enumEvinDurumu.ALL_VALUES}"
+                       var="evDurumus"
+                       itemValue="#{evDurumus}"
+                       itemLabel="#{evDurumus.displayValue}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.kiraBedeliLabel}" for="@next"/>
+    <p:inputNumber id="kiraBedeli" value="#{ayKisiController.selected.gnlKisi.kiraBedeli}" styleClass="text-end"  decimalSeparator=","
+                   thousandSeparator="." emptyValue="zero"/>
+
+    <p:outputLabel value="Ev Durumu #{messages.aciklamaLabel}" for="@next"/>
+    <p:inputTextarea rows="4" id="evinDurumuAciklama" value="#{ayKisiController.selected.gnlKisi.evinDurumuAciklama}"
+                     title="#{messages.evDurumuTab} #{messages.aciklamaText}"
+                     styleClass="w-100 tcUpdate" autoResize="false"/>
+
+    <p:outputLabel value="#{messages.isinmaDurumuLabel}" for="@next"/>
+    <p:selectOneMenu id="isinmaDurumu" value="#{ayKisiController.selected.gnlKisi.isinmaDurumu}" converter="omnifaces.SelectItemsConverter">
+        <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+        <f:selectItems value="#{enumIsinmaDurumu.ALL_VALUES}"
+                       var="isinmaDurumus"
+                       itemValue="#{isinmaDurumus}"
+                       itemLabel="#{isinmaDurumus.displayValue}"/>
+    </p:selectOneMenu>
+</ui:composition>
+</html>

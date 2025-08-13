@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces">
+<ui:composition>
+    <p:outputLabel value="#{messages.kiminleYasiyorLabel}" for="@next"/>
+    <p:selectOneMenu id="kiminleYasiyor"
+                     value="#{edbBasvuruController.selected.gnlKisi.kiminleYasiyor}" styleClass="tcUpdate" converter="omnifaces.SelectItemsConverter">
+        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+        <f:selectItems value="#{enumKiminleYasiyor.ALL_VALUES}"
+                       var="kiminleYasiyors"
+                       itemValue="#{kiminleYasiyors}"
+                       itemLabel="#{kiminleYasiyors.displayValue}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.durumLabel}" for="@next"/>
+    <p:inputTextarea rows="4" id="durum" value="#{edbBasvuruController.selected.durum}" title="#{messages.durumText}" styleClass="w-100"
+                     autoResize="false"/>
+
+    <p:outputLabel value="#{messages.ozelDurumuLabel}" for="@next"/>
+    <p:selectOneMenu id="ozelDurum" value="#{edbBasvuruController.selected.ozelDurum}" converter="omnifaces.SelectItemsConverter">
+        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+        <f:selectItems value="#{enumOzelDurum.ALL_VALUES}"
+                       var="ozelDurums"
+                       itemValue="#{ozelDurums}"
+                       itemLabel="#{ozelDurums.displayValue}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.basvuranKendisiLabel}" for="@next"/>
+    <p:selectBooleanCheckbox id="basvuranKendisi" value="#{edbBasvuruController.selected.basvuranKendisi}">
+        <p:ajax event="change" update="@(.basvuran)" listener="#{edbBasvuruController.getApplicant()}"/>
+    </p:selectBooleanCheckbox>
+
+    <p:outputLabel value="#{messages.tcKimlikNoText}" for="yakinTc"/>
+    <p:inputText id="yakinTc" value="#{edbBasvuruController.selected.kisiYakiniTcKimlikNo}" readonly="#{edbBasvuruController.selected.basvuranKendisi}"
+                 styleClass="basvuran"/>
+
+    <p:outputLabel value="#{messages.adLabel}" for="yakinAd"/>
+    <p:inputText id="yakinAd" value="#{edbBasvuruController.selected.kisiYakiniAdi}" readonly="#{edbBasvuruController.selected.basvuranKendisi}" size="50"
+                 styleClass="basvuran"/>
+
+    <p:outputLabel value="#{messages.soyadLabel}" for="yakinSoyad"/>
+    <p:inputText id="yakinSoyad" value="#{edbBasvuruController.selected.kisiYakiniSoyadi}" readonly="#{edbBasvuruController.selected.basvuranKendisi}"
+                 styleClass="basvuran"/>
+
+    <p:outputLabel value="#{messages.telefonLabel}" for="yakinTelefon"/>
+    <p:inputText id="yakinTelefon" value="#{edbBasvuruController.selected.kisiYakiniTelefon}" readonly="#{edbBasvuruController.selected.basvuranKendisi}"
+                 styleClass="basvuran"/>
+
+    <p:outputLabel value="#{messages.yakinlikDerecesiLabel}" for="yakinDerece"/>
+    <p:selectOneMenu id="yakinDerece" styleClass="basvuran"
+                     value="#{edbBasvuruController.selected.kisiYakiniYakinlikDerecesi}">
+        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+        <f:selectItems value="#{enumYakinlikDerecesi.ALL_VALUES}"
+                       var="yakinlikDerecesis"
+                       itemValue="#{yakinlikDerecesis}"
+                       itemLabel="#{yakinlikDerecesis.displayValue}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.adresLabel}" for="yakinAdres"/>
+    <p:inputTextarea id="yakinAdres" value="#{edbBasvuruController.selected.kisiYakiniAdres}"
+                     readonly="#{edbBasvuruController.selected.basvuranKendisi}"
+                     autoResize="false"
+                     rows="4"
+                     styleClass="basvuran w-100"/>
+
+    <p:outputLabel value="#{messages.ilceLabel}" for="yakinIlce"/>
+    <p:selectOneMenu id="yakinIlce" filter="true"
+                     styleClass="basvuran"
+                     value="#{edbBasvuruController.selected.kisiYakiniGnlIlce}"
+                     converter="omnifaces.SelectItemsConverter">
+        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+        <f:selectItems value="#{gnlIlceController.getIlceByIl()}"
+                       var="ilce"
+                       itemValue="#{ilce}"
+                       itemLabel="#{ilce.tanim}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.durumAciklamaLabel}" for="aileDurumuAciklama"/>
+    <p:inputTextarea id="aileDurumuAciklama" value="#{edbBasvuruController.selected.aileDurumuAciklama}" title="#{messages.durumAciklamaText}" rows="4"
+                     autoResize="false" styleClass="w-100"/>
+
+</ui:composition>
+</html>

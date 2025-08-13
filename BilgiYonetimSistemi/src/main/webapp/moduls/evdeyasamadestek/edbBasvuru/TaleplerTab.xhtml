@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces">
+<ui:composition>
+
+    <p:panelGrid columns="1" styleClass="w-100" id="talepPanel" rendered="#{edbBasvuruController.selected !=null}" layout="tabular">
+        <p:dataTable value="#{edbBasvuruController.selected.edbTalepList}"
+                     var="talep"
+                     id="talepDt"
+                     scrollable="true"
+                     paginator="true"
+                     rows="3"
+                     emptyMessage="#{messages.kayitBulunamadi}"
+                     paginatorPosition="bottom"
+                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                     currentPageReportTemplate="#{messages.currentPageTemplate}">
+
+            <p:column sortBy="#{talep.talepTuru}">
+                <f:facet name="header">
+                    <h:outputText value="#{messages.talepTuruText}"/>
+                </f:facet>
+                <h:outputText value="#{talep.talepTuru.displayValue}"/>
+            </p:column>
+
+            <p:column sortBy="#{talep.talepTipi}">
+                <f:facet name="header">
+                    <h:outputText value="#{messages.talepTipiText}"/>
+                </f:facet>
+                <h:outputText value="#{talep.talepTipi.displayValue}"/>
+            </p:column>
+
+            <p:column sortBy="#{talep.aciklama}">
+                <f:facet name="header">
+                    <h:outputText value="#{messages.aciklamaText}"/>
+                </f:facet>
+                <h:outputText value="#{talep.aciklama}"/>
+            </p:column>
+
+            <p:column sortBy="#{talep.durumAciklama}">
+                <f:facet name="header">
+                    <h:outputText value="#{messages.durumAciklamaText}"/>
+                </f:facet>
+                <h:outputText value="#{talep.durumAciklama}"/>
+            </p:column>
+
+        </p:dataTable>
+
+    </p:panelGrid>
+
+</ui:composition>
+</html>

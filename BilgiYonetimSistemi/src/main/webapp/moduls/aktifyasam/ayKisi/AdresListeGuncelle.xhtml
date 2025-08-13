@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces">
+
+<ui:composition>
+
+    <p:dialog widgetVar="AdresListeGuncelleDialog"
+              modal="true"
+              id="AdresListeGuncelleDlg"
+              resizable="false"
+              closeOnEscape="true"
+              header="Liste Güncelle"
+              appendTo="@(body)"
+              styleClass="box box-pink"
+              responsive="true"
+              style="overflow: auto;max-height: 500px">
+
+        <h:form id="AdresListeGuncelleForm">
+            <h:panelGroup id="display">
+                <p:focus context="display"/>
+                <p:panelGrid columns="1" style="min-width: 200px !important;" layout="tabular">
+                    <h:outputText value="Güncellenecek Kayıt Sayısı"/>
+                    <p:selectOneMenu value="#{ayKisiController.recordCount}" required="true">
+                        <f:selectItem itemLabel="10" itemValue="10"/>
+                        <f:selectItem itemLabel="50" itemValue="50"/>
+                        <f:selectItem itemLabel="100" itemValue="100"/>
+                        <f:selectItem itemLabel="200" itemValue="200"/>
+                        <f:selectItem itemLabel="500" itemValue="500"/>
+                        <f:selectItem itemLabel="1000" itemValue="1000"/>
+                        <f:selectItem itemLabel="2000" itemValue="2000"/>
+                        <f:selectItem itemLabel="5000" itemValue="5000"/>
+                    </p:selectOneMenu>
+
+                    <f:facet name="footer">
+                        <div class="float-end">
+                            <p:commandButton id="AdresListeGuncelleButton" value="#{messages.buttonListeyiGuncelle}" icon="pi pi-refresh"
+                                             class="btn bg-amber" actionListener="#{ayKisiController.updateAdress()}"
+                                             onclick="PF('KisiMernisListeGuncelle').show()"
+                                             update="display,:AyKisiListForm:datalist:datalist,:growl">
+                            </p:commandButton>
+                            <p:commandButton icon="pi pi-close fa-lg" styleClass="btn bg-red" value="#{messages.buttonKapat}"
+                                             onclick="PF('AdresListeGuncelleDialog').hide()" immediate="true" onstart="PF('Loading').show()"
+                                             onsuccess="PF('Loading').hide()"/>
+                        </div>
+                    </f:facet>
+                </p:panelGrid>
+            </h:panelGroup>
+        </h:form>
+
+    </p:dialog>
+
+</ui:composition>
+
+</html>

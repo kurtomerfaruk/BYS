@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:pe="primefaces.extensions">
+
+<ui:composition>
+
+    <p:dialog widgetVar="QrCodeDialog"
+              modal="true"
+              resizable="false"
+              closeOnEscape="true"
+              id="QrCodeDlg"
+              header="#{messages.dialogQrCode}"
+              appendTo="@(body)"
+              styleClass="box box-blue"
+              style="overflow: auto;max-height: 500px"
+              responsive="true"
+              onShow="PF('QrCodeDialog').initPosition();"
+              fitViewport="true">
+
+        <h:form id="QrCodeForm" target="_blank">
+            <p:panel>
+                <pe:qrCode id="qrCodeElem"
+                           renderMethod="canvas"
+                           renderMode="2"
+                           text="#{eyKisiController.qrText}"
+                           label="#{eyKisiController.qrLabel}"
+                           size="200"
+                           fillColor="000000"
+                           fontName="Ubuntu"
+                           fontColor="#1f8cf1"
+                           ecLevel="H"
+                           radius="0.5"/>
+                <f:facet name="footer">
+                    <div class="float-end">
+                        <a href="#{eyKisiController.qrText}" class="ui-button-success" target="_blank">
+                            #{messages.buttonLokasyonaGit}
+                        </a>
+                    </div>
+                    <div class="clearfix"></div>
+                </f:facet>
+            </p:panel>
+
+        </h:form>
+    </p:dialog>
+
+</ui:composition>
+
+</html>

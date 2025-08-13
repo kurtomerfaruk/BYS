@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<facelet-taglib xmlns="https://jakarta.ee/xml/ns/jakartaee"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-facelettaglibrary_4_0.xsd"
+                version="4.0">
+
+    <namespace>http://kurtomerfaruk.com/ui</namespace>
+
+    <tag>
+        <tag-name>map</tag-name>
+        <component>
+            <component-type>com.kurtomerfaruk.leafmap.component.LMap</component-type>
+            <renderer-type>com.kurtomerfaruk.leafmap.renderer.LMapRenderer</renderer-type>
+        </component>
+        <attribute>
+            <name>widgetVar</name>
+            <required>true</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>center</name>
+        </attribute>
+        <attribute>
+            <name>zoom</name>
+        </attribute>
+        <attribute>
+            <name>width</name>
+        </attribute>
+        <attribute>
+            <name>height</name>
+        </attribute>
+        <attribute>
+            <name>style</name>
+        </attribute>
+        <attribute>
+            <name>styleClass</name>
+        </attribute>
+    </tag>
+
+    <tag>
+        <tag-name>marker</tag-name>
+        <component>
+            <component-type>com.kurtomerfaruk.leafmap.component.LMarker</component-type>
+            <renderer-type>com.kurtomerfaruk.leafmap.renderer.LMarkerRenderer</renderer-type>
+        </component>
+        <attribute>
+            <name>lat</name>
+        </attribute>
+        <attribute>
+            <name>lng</name>
+        </attribute>
+        <attribute>
+            <name>title</name>
+        </attribute>
+        <attribute>
+            <name>draggable</name>
+        </attribute>
+    </tag>
+</facelet-taglib>

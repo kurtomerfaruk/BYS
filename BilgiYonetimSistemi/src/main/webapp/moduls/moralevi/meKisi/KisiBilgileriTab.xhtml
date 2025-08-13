@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+<ui:composition>
+
+    <h:outputText value="#{messages.eklemeYeriLabel}"/>
+    <h:outputText value="#{meKisiController.selected.eyKisi.gnlKisi.eklemeYeri.displayValue}"/>
+
+    <p:outputLabel value="#{messages.uyrukLabel}" for="@next"/>
+    <p:selectOneMenu id="uyruk" value="#{meKisiController.selected.eyKisi.gnlKisi.uyruk}"
+                     required="true" converter="omnifaces.SelectItemsConverter">
+        <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+        <f:selectItems value="#{enumUyruk.ALL_VALUES}"
+                       var="uyruks"
+                       itemLabel="#{uyruks.displayValue}"
+                       itemValue="#{uyruks}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.kayitTarihiLabel}" for="@next"/>
+    <p:datePicker id="kayitTarihi" locale="tr" pattern="#{messages.tarihFormat}" value="#{meKisiController.selected.kayitTarihi}"
+                  title="#{messages.kayitTarihiText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
+                  showOnFocus="false"/>
+
+    <p:outputLabel value="#{messages.tcKimlikNoLabel}" for="@next"/>
+    <coco:tcKimlikNoDogumTarihi actionListener="#{meKisiController.getTcKimlik(false)}"
+                                update=":growl,@(.tcUpdate)"
+                                value="#{meKisiController.selected.eyKisi.gnlKisi.tcKimlikNo}"
+                                dateValue="#{meKisiController.selected.eyKisi.gnlKisi.dogumTarihi}"/>
+
+    <p:outputLabel value="#{messages.adLabel}" for="@next"/>
+    <p:inputText id="ad" value="#{meKisiController.selected.eyKisi.gnlKisi.ad}" title="#{messages.adText}" required="true"
+                 readonly="#{facesContext.renderResponse}" styleClass="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.soyadLabel}" for="@next"/>
+    <p:inputText id="soyad" value="#{meKisiController.selected.eyKisi.gnlKisi.soyad}"
+                 title="#{messages.soyadText}"
+                 required="true" readonly="#{facesContext.renderResponse}"
+                 styleClass="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.anaAdiLabel}" for="anaAdi"/>
+    <p:inputText id="anaAdi" value="#{meKisiController.selected.eyKisi.gnlKisi.anaAdi}"
+                 title="#{messages.anaAdiLabel}" required="true" class="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.babaAdiLabel}" for="babaAdi"/>
+    <p:inputText id="babaAdi" value="#{meKisiController.selected.eyKisi.gnlKisi.babaAdi}"
+                 title="#{messages.babaAdiLabel}" required="true" class="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.dogumYeriLabel}" for="dogumYeri"/>
+    <p:inputText id="dogumYeri" value="#{meKisiController.selected.eyKisi.gnlKisi.dogumYeri}"
+                 title="#{messages.dogumYeriText}" required="true" class="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.cinsiyetLabel}" for="@next"/>
+    <p:inputText id="cinsiyet" value="#{meKisiController.selected.eyKisi.gnlKisi.cinsiyet}"
+                 required="true" readonly="#{facesContext.renderResponse}"
+                 styleClass="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.medeniDurumLabel}" for="@next"/>
+    <p:inputText id="medeniDurum"
+                 value="#{meKisiController.selected.eyKisi.gnlKisi.medeniDurum}"
+                 title="#{messages.medeniDurumText}" required="true"
+                 readonly="#{facesContext.renderResponse}"
+                 styleClass="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.egitimDurumuLabel}" for="@next"/>
+    <p:selectOneMenu id="egitimDurumu" styleClass="tcUpdate" value="#{meKisiController.selected.eyKisi.gnlKisi.egitimDurumu}" required="true"
+                     converter="omnifaces.SelectItemsConverter" filter="true">
+        <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+        <f:selectItems value="#{enumEgitimDurumu.ALL_VALUES}"
+                       var="enumEgitimDurumus"
+                       itemLabel="#{enumEgitimDurumus.displayValue}"
+                       itemValue="#{enumEgitimDurumus}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.telefonLabel}" for="telefon"/>
+    <p:inputMask id="telefon" value="#{meKisiController.selected.eyKisi.gnlKisi.telefon}"
+                 mask="(999) 999 99 99" required="true" title="#{messages.telefonText}"
+                 size="14" styleClass="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.telefonLabel}" for="telefon2"/>
+    <p:inputMask id="telefon2" value="#{meKisiController.selected.eyKisi.gnlKisi.telefon2}"
+                 mask="(999) 999 99 99" title="#{messages.telefonText}" size="14"
+                 styleClass="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.adresLabel}" for="@next"/>
+    <p:inputTextarea rows="4" id="adres"
+                     value="#{meKisiController.selected.eyKisi.gnlKisi.adres}"
+                     title="#{messages.adresText}"
+                     styleClass="w-100 tcUpdate" autoResize="false"
+                     readonly="true"/>
+
+    <p:outputLabel value="#{messages.cocukSayisiLabel}" for="@next"/>
+    <p:spinner id="cocukSayisi" value="#{meKisiController.selected.eyKisi.gnlKisi.cocukSayisi}" stepFactor="1" title="#{messages.cocukSayisiText}"
+               styleClass="tcUpdate"/>
+
+</ui:composition>
+</html>

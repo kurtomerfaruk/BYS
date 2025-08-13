@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+>
+<ui:composition>
+    <p:outputLabel value="#{messages.atikCinsiLabel}" for="@next"/>
+    <p:selectOneMenu id="atikCinsi" value="#{hfHafriyatIsController.selected.atikCinsi}" converter="omnifaces.SelectItemsConverter" required="true">
+        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+        <f:selectItems value="#{enumAtikCinsi.ALL_VALUES}"
+                       var="atikCinsis"
+                       itemValue="#{atikCinsis}"
+                       itemLabel="#{atikCinsis.displayValue}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.ayakYeriLabel}" for="@next" />
+    <p:selectBooleanCheckbox id="aktif" value="#{hfHafriyatIsController.selected.ayakYeri}" />
+
+    <p:outputLabel value="#{messages.fiyatLabel}" for="@next"/>
+    <p:inputNumber id="fiyat" value="#{hfHafriyatIsController.selected.atikCinsiFiyat}" inputStyleClass="text-right" decimalPlaces="3" decimalSeparator=","
+                   thousandSeparator="." emptyValue="zero">
+        <p:ajax event="keyup" listener="#{hfHafriyatIsController.calculate()}" update="tahminiTutar,gercekTutar"/>
+    </p:inputNumber>
+
+    <p:outputLabel value="#{messages.tahminiMiktarLabel}" for="@next"/>
+    <p:inputNumber id="tahminiMiktar" value="#{hfHafriyatIsController.selected.tahminiMiktar}" inputStyleClass="text-right" decimalPlaces="3"
+                   decimalSeparator=","
+                   thousandSeparator="." emptyValue="zero">
+        <p:ajax event="keyup" listener="#{hfHafriyatIsController.calculate()}" update="tahminiTutar"/>
+    </p:inputNumber>
+
+    <p:outputLabel value="#{messages.tahminiTutarLabel}" for="@next"/>
+    <p:inputNumber id="tahminiTutar" value="#{hfHafriyatIsController.selected.tahminiTutar}" inputStyleClass="text-right" decimalPlaces="3" decimalSeparator=","
+                   thousandSeparator="." emptyValue="zero" readonly="true"/>
+
+    <p:outputLabel value="#{messages.gercekMiktarLabel}" for="@next"/>
+    <p:inputNumber id="gercekMiktar" value="#{hfHafriyatIsController.selected.gercekMiktar}" inputStyleClass="text-right" decimalPlaces="3"
+                   decimalSeparator=","
+                   thousandSeparator="." emptyValue="zero">
+        <p:ajax event="keyup" listener="#{hfHafriyatIsController.calculate()}" update="gercekTutar"/>
+    </p:inputNumber>
+
+    <p:outputLabel value="#{messages.gercekTutarLabel}" for="@next"/>
+    <p:inputNumber id="gercekTutar" value="#{hfHafriyatIsController.selected.gercekTutar}" inputStyleClass="text-right" decimalPlaces="3" decimalSeparator=","
+                   thousandSeparator="." emptyValue="zero" readonly="true"/>
+</ui:composition>
+</html>

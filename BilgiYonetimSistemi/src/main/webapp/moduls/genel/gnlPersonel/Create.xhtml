@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+    <ui:composition>
+
+        <coco:createpage id="GnlPersonelCreateForm"
+                         renderedListener="#{gnlPersonelController.selected != null}"
+                         widgetVar="GnlPersonelCreateDialog"
+                         actionListener="#{gnlPersonelController.saveNew}"
+                         listForm="GnlPersonelListForm">
+
+            <p:outputLabel value="#{messages.kisiLabel}" for="inputWithButtonKisiId"/>
+            <coco:inputWithButton id="inputWithButtonKisiId" inputId="kisiId"
+                                  inputValue="#{gnlPersonelController.selected.gnlKisi.adSoyad}"
+                                  inputTitle="#{messages.personelText}"
+                                  actionListener="#{bysController.openCommonDialog('gnlKisiSec')}"
+                                  ajaxListener="#{gnlPersonelController.secilenGnlKisi}"
+                                  buttonTitle="#{messages.kisiSecmelisiniz}"
+                                  size="50"
+                                  dialogId="GnlPersonelCreateDialogId"/>
+
+            <p:outputLabel value="#{messages.unvanLabel}" for="@next" />
+            <p:selectOneMenu id="gnlunvanId" value="#{gnlPersonelController.selected.gnlUnvan}"  filter="true" converter="omnifaces.SelectItemsConverter">
+                <f:selectItem itemLabel="#{messages.seciniz}"/>
+                <f:selectItems value="#{gnlUnvanController.items}"
+                               var="gnlunvanIdItem"
+                               itemValue="#{gnlunvanIdItem}"
+                               itemLabel="#{gnlunvanIdItem.tanim.toString()}" />
+            </p:selectOneMenu>
+
+            <p:outputLabel value="#{messages.birimLabel}" for="@next"/>
+            <p:selectCheckboxMenu id="gnlBirim" value="#{gnlPersonelController.gnlBirims}" label="Birim" multiple="true"
+                                  converter="omnifaces.SelectItemsConverter" filter="true" filterMatchMode="startsWith">
+                <f:selectItems value="#{gnlBirimController.items}"
+                               var="birims"
+                               itemValue="#{birims}"
+                               itemLabel="#{birims.tanim.toString()}"/>
+            </p:selectCheckboxMenu>
+
+        </coco:createpage>
+
+    </ui:composition>
+
+</html>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:createpage id="EyEngelGrubuCreateForm"
+                     renderedListener="#{eyEngelGrubuController.selected != null}"
+                     widgetVar="EyEngelGrubuCreateDialog"
+                     actionListener="#{eyEngelGrubuController.saveNew}"
+                     listForm="EyEngelGrubuListForm">
+
+
+        <p:outputLabel value="#{messages.engelGrubuLabel}" for="@next"/>
+        <p:inputText id="tanim" value="#{eyEngelGrubuController.selected.tanim}" title="#{messages.engelGrubuText}" size="50"
+                     maxlength="50" required="true"/>
+
+    </coco:createpage>
+
+</ui:composition>
+
+</html>

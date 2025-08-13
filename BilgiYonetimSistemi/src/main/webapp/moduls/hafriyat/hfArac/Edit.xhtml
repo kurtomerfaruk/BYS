@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+    <ui:composition>
+
+        <coco:editpage id="HfAracEditForm"
+                       model="#{hfAracController.selected}"
+                       widgetVar="HfAracEditDialog"
+                       actionListener="#{hfAracController.save}"
+                       listForm="HfAracListForm">
+
+            <p:outputLabel value="#{messages.plakaLabel}" for="@next" />
+            <p:inputText id="plaka" value="#{hfAracController.selected.plaka}" title="#{messages.plakaText}" size="50" maxlength="50" required="true"/>
+
+            <p:outputLabel value="#{messages.firmaLabel}" for="@next"/>
+            <coco:inputWithButton inputId="firma" inputValue="#{hfAracController.selected.hfFirma.firmaUnvani}"
+                                  inputTitle="#{messages.firmaUnvaniText}" inputRequired="true"
+                                  actionListener="#{bysController.openCommonDialog('hfFirmaSec')}"
+                                  ajaxListener="#{hfAracController.secilenHfFirma}"
+                                  buttonTitle="Firma seçmelisiniz"
+                                  dialogId="HfAracEditDialogId"/>
+
+        </coco:editpage>
+
+    </ui:composition>
+
+</html>

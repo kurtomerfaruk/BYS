@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="primefaces"
+>
+
+<ui:composition>
+
+    <h:outputText value="#{messages.mahalleLabel}"/>
+    <h:outputText id="mahalle"
+                  value="#{ayKisiController.selected.gnlKisi.gnlMahalle.tanim}"
+                  styleClass="tcUpdate"/>
+
+    <h:outputText value="#{messages.ilceLabel}"/>
+    <h:outputText id="ilce" value="#{ayKisiController.selected.gnlKisi.gnlIlce.tanim}"
+                  styleClass="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.adresLabel}" for="adres"/>
+    <p:inputTextarea id="adres" value="#{ayKisiController.selected.gnlKisi.adres}"  title="#{messages.adresText}" required="true" rows="4"
+                     styleClass="w-100 tcUpdate"/>
+</ui:composition>
+</html>

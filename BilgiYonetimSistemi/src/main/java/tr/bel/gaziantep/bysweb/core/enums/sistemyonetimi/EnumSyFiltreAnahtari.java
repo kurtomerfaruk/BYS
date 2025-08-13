@@ -1,0 +1,58 @@
+package tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi;
+
+import lombok.Getter;
+import tr.bel.gaziantep.bysweb.core.enums.BaseEnum;
+
+/**
+ * @author Omer Faruk KURT kurtomerfaruk@gmail.com
+ * @version 1.0.0
+ * @since 16.06.2025 08:39
+ */
+@Getter
+public enum EnumSyFiltreAnahtari implements BaseEnum {
+    EVET_HAYIR("Evet/Hayır"),
+    MENU_TUR("Menü Tür"),
+    FILTRE_TURU("Filtre Türü"),
+    FILTRE_ANAHTARI("Filtre Anahtarı"),
+    VERI_TIPI("Veri Tipi"),
+    FILTRE_ESLESTIRME_MODU("Filtre Eşleştirme Modu"),
+    KULLANICI_TURU("Kullanıcı Türü"),
+    UYRUK("Uyruk"),
+    ILCE("İlçe"),
+    IL("İl"),
+    CINSIYET("Cinsiyet"),
+    MEDENI_DURUM("Medeni Durum"),
+    KISI_DURUM("Kişi Durum"),
+    EKLEME_YERI("Ekleme Yeri"),
+    ENGELSIZ_ANKET_DURUMU("Engelsiz Anket Durumu"),
+    TALEP_TURU("Talep Türü"),
+    TALEP_TIPI("Talep Tipi"),
+    TALEP_DURUMU("Talep Durumu"),
+    EYTALEP_KONU("Engelsiz Talep Konu"),
+    EYARAC_BILGISI("Engelsiz Araç Bilgisi"),
+    EYARAC_ARIZA_TURU("Engelsiz Arıza Türü"),
+    EYARAC_CIHAZ_DURUMU("Engelsiz Cihaz Durumu"),
+    EYDEGERLENDIRME_DURUMU("Engelsiz Değerlendirme Durumu"),
+    AYDEVAM_DURUMU("Aktif Yaşam Devam Durumu"),
+    AYBIRIM("Aktif Yaşam Birim"),
+    EDBHIZMET_TURU("Evde Yaşama Destek Hizmet Türü"),
+    EDBBASVURU_DURUMU("Evde Yaşama Destek Başvuru Durumu"),
+    SHDANISMANLIK_HIZMETI("Sağlık Hizmetleri Danışmanlık Hizmeti"),
+    SHOBEZITE_HIZMETI("Sağlık Hizmetleri Obezite Hizmet"),
+    SORU_TURU("Soru Türü"),
+    HFFIRMA_TURU("Hafriyat Firma Türü"),
+    HFMAL_CINSI("Hafriyat Mal Cinsi"),
+    BELEDIYE("Belediye"),
+    HFTAHSILAT_TURU("Hafriyat Tahsilat Türü");
+
+    private final String label;
+
+    EnumSyFiltreAnahtari(String label) {
+        this.label = label;
+    }
+
+    @Override
+    public String getDisplayValue() {
+        return label;
+    }
+}

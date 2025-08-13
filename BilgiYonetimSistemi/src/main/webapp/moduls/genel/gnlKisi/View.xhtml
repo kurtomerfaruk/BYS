@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+>
+
+    <ui:composition>
+
+        <p:dialog widgetVar="GnlKisiViewDialog"
+                  modal="true"
+                  resizable="false"
+                  closeOnEscape="true"
+                  header="#{messages.dialogKayitDetay}"
+                  appendTo="@(body)"
+                  responsive="true"
+                  onShow="PF('GnlKisiViewDialog').initPosition();"
+                  fitViewport="true">
+
+            <h:form id="GnlKisiViewForm">
+                <h:panelGroup id="display">
+                    <p:focus context="display"/>
+                    <div class="card">
+                        <div class="card-header">
+                            <ul class="nav nav-pills animation-nav gap-2 mb-3" role="tablist">
+                                <li class="nav-item">
+                                    <a href="#kisiBilgileriViewTab" data-bs-toggle="tab" aria-expanded="false"
+                                       class="nav-link active">
+                                        <i class="ri-user-fill nav-icon nav-tab-position"></i>Kişi Bilgileri
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#adresBilgileriViewTab" data-bs-toggle="tab" aria-expanded="true"
+                                       class="nav-link">
+                                        <i class="ri-file-text-line nav-icon nav-tab-position"></i>Adres Bilgileri
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="card-body">
+                            <div class="tab-content text-muted">
+                                <div class="tab-pane show active" id="kisiBilgileriViewTab">
+                                    <p:panelGrid id="kisiPanel" columns="2" styleClass="w-100" layout="tabular">
+
+                                        <h:outputText value="#{messages.kayitNoLabel}"/>
+                                        <h:outputText value="#{gnlKisiController.selected.id}"/>
+
+                                        <h:outputText value="#{messages.uyrukLabel}"/>
+                                        <h:outputText value="#{gnlKisiController.selected.uyruk.displayValue}"/>
+
+                                        <h:outputText value="#{messages.tcKimlikNoLabel}"/>
+                                        <h:outputText value="#{gnlKisiController.selected.tcKimlikNo}"/>
+
+                                        <h:outputText value="#{messages.adLabel}"/>
+                                        <h:outputText value="#{gnlKisiController.selected.ad}"/>
+
+                                        <h:outputText value="#{messages.soyadLabel}"/>
+                                        <h:outputText value="#{gnlKisiController.selected.soyad}"/>
+
+                                        <h:outputText value="#{messages.dogumTarihiLabel}"/>
+                                        <h:outputText value="#{gnlKisiController.selected.dogumTarihi}">
+                                            <f:convertDateTime pattern="#{messages.tarihFormat}" type="localDate"/>
+                                        </h:outputText>
+
+                                        <h:outputText value="#{messages.dogumYeriLabel}"/>
+                                        <h:outputText value="#{gnlKisiController.selected.dogumYeri}"/>
+
+                                        <h:outputText value="#{messages.cinsiyetLabel}"/>
+                                        <h:outputText value="#{gnlKisiController.selected.cinsiyet.displayValue}"/>
+
+                                        <h:outputText value="#{messages.medeniDurumLabel}"/>
+                                        <h:outputText value="#{gnlKisiController.selected.medeniDurum.displayValue}"/>
+
+                                        <h:outputText value="#{messages.egitimDurumuLabel}"/>
+                                        <h:outputText value="#{gnlKisiController.selected.egitimDurumu.displayValue}"/>
+
+                                        <h:outputText value="#{messages.anaAdiLabel}"/>
+                                        <h:outputText value="#{gnlKisiController.selected.anaAdi}"/>
+
+                                        <h:outputText value="#{messages.babaAdiLabel}"/>
+                                        <h:outputText value="#{gnlKisiController.selected.babaAdi}"/>
+
+                                        <h:outputText value="#{messages.cocukSayisiLabel}"/>
+                                        <h:outputText value="#{gnlKisiController.selected.cocukSayisi}"/>
+
+                                        <h:outputText value="#{messages.durumuLabel}"/>
+                                        <h:outputText value="#{gnlKisiController.selected.durum.displayValue}"/>
+
+                                        <h:outputText value="#{messages.mernisGuncellemeTarihiLabel}"/>
+                                        <h:outputText value="#{gnlKisiController.selected.mernisGuncellemeTarihi}">
+                                            <f:convertDateTime pattern="#{messages.tarihSaatFormat}" />
+                                        </h:outputText>
+
+                                        <h:outputText value="#{messages.olumTarihiLabel}"/>
+                                        <h:outputText value="#{gnlKisiController.selected.olumTarihi}">
+                                            <f:convertDateTime pattern="#{messages.tarihSaatFormat}" type="localDate"/>
+                                        </h:outputText>
+
+                                        <h:outputText value="#{messages.ekleyenLabel}"/>
+                                        <h:outputText value="#{gnlKisiController.selected.ekleyen.gnlpersonelId.gnlkisiId.adSoyad}"/>
+
+                                        <h:outputText value="#{messages.eklemeTarihiLabel}"/>
+                                        <h:outputText value="#{gnlKisiController.selected.eklemeTarihi}">
+                                            <f:convertDateTime pattern="#{messages.tarihSaatFormat}" type="localDateTime"/>
+                                        </h:outputText>
+
+                                        <h:outputText value="#{messages.guncelleyenLabel}"/>
+                                        <h:outputText value="#{gnlKisiController.selected.guncelleyen.gnlpersonelId.gnlkisiId.adSoyad}"/>
+
+                                        <h:outputText value="#{messages.guncellemeTarihiLabel}"/>
+                                        <h:outputText value="#{gnlKisiController.selected.guncellemeTarihi}">
+                                            <f:convertDateTime pattern="#{messages.tarihSaatFormat}" type="localDateTime"/>
+                                        </h:outputText>
+
+                                        <h:outputText value="#{messages.aktifLabel}"/>
+                                        <p:selectBooleanCheckbox id="aktif" value="#{gnlKisiController.selected.aktif}"  disabled="true"/>
+
+
+                                    </p:panelGrid>
+                                </div>
+                                <div class="tab-pane" id="adresBilgileriViewTab">
+
+                                    <p:panelGrid id="adresBilgileriPanel" columns="2" styleClass="w-100" layout="tabular">
+<!--                                        <h:outputText value="#{messages.evdeYasayanLabel}"/>-->
+<!--                                        <h:outputText value="#{gnlKisiController.selected.evdeYasayan}"/>-->
+
+<!--                                        <h:outputText value="#{messages.evdeYasayan18AltiLabel}"/>-->
+<!--                                        <h:outputText value="#{gnlKisiController.selected.evdeYasayan18Alti}"/>-->
+
+<!--                                        <h:outputText value="#{messages.evdeYasayan18UstuLabel}"/>-->
+<!--                                        <h:outputText value="#{gnlKisiController.selected.evdeYasayan18Ustu}"/>-->
+
+                                        <h:outputText value="#{messages.adresNoLabel}"/>
+                                        <h:outputText value="#{gnlKisiController.selected.adresNo}"/>
+
+                                        <h:outputText value="#{messages.adresLabel}"/>
+                                        <h:outputText value="#{gnlKisiController.selected.adres}"/>
+
+                                        <h:outputText value="#{messages.binaNoLabel}"/>
+                                        <h:outputText value="#{gnlKisiController.selected.binaNo}"/>
+
+                                        <h:outputText value="#{messages.binaKoduLabel}"/>
+                                        <h:outputText value="#{gnlKisiController.selected.binaKodu}"/>
+
+                                        <h:outputText value="#{messages.koordinatLabel}"/>
+                                        <h:outputText value="#{gnlKisiController.selected.latLng}"/>
+
+                                        <h:outputText value="#{messages.sehirLabel}"/>
+                                        <h:outputText value="#{gnlKisiController.selected.gnlilId.tanim}"/>
+
+                                        <h:outputText value="#{messages.ilceLabel}"/>
+                                        <h:outputText value="#{gnlKisiController.selected.gnlilceId.tanim}"/>
+
+                                        <h:outputText value="#{messages.mahalleLabel}"/>
+                                        <h:outputText value="#{gnlKisiController.selected.gnlmahalleId.tanim}"/>
+
+                                    </p:panelGrid>
+                                </div>
+                            </div>
+                        </div><!-- end card-body -->
+                        <div class="card-footer">
+                            <div class="pull-right">
+                                <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                                 value="#{messages.buttonKapat}" onclick="PF('GnlKisiViewDialog').hide()"
+                                                 immediate="true" onstart="PF('Loading').show()"
+                                                 onsuccess="PF('Loading').hide()"/>
+                            </div>
+                        </div>
+                    </div>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+
+</html>
+

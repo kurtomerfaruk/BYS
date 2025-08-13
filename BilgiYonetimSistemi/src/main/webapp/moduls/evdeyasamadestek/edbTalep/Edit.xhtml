@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:editpage id="EdbTalepEditForm"
+                   model="#{edbTalepController.selected}"
+                   widgetVar="EdbTalepEditDialog"
+                   actionListener="#{edbTalepController.save}"
+                   listForm="EdbTalepListForm">
+
+        <p:outputLabel value="#{messages.tarihLabel}" for="@next"/>
+        <p:datePicker id="tarih" locale="tr" pattern="#{messages.tarihFormat}" value="#{edbTalepController.selected.tarih}" title="#{messages.tarihText}"
+                      mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true" showOnFocus="false"/>
+
+        <p:outputLabel value="#{messages.tcKimlikNoLabel}" for="@next"/>
+        <h:panelGroup>
+            <div class="ui-inputgroup">
+                <p:inputText id="kisiId" value="#{edbTalepController.selected.edbBasvuru.gnlKisi.tcKimlikNo}" title="#{messages.adSoyadText}"
+                             label="#{messages.adSoyadText}" readonly="#{facesContext.renderResponse}">
+                </p:inputText>
+                <p:commandButton icon="pi pi-search"
+                                 actionListener="#{bysController.openCommonDialog('edbBasvuruSec')}"
+                                 process="@this"
+                                 update=":growl" title="Kişi seçmelisiniz">
+                    <p:ajax event="dialogReturn" listener="#{edbTalepController.secilenBasvuru}" update=":growl,@(.inputUpdate),kisiId"/>
+                </p:commandButton>
+            </div>
+        </h:panelGroup>
+
+        <p:outputLabel value="#{messages.adSoyadLabel}" for="@next"/>
+        <p:inputText id="adSoyad" value="#{edbTalepController.selected.edbBasvuru.gnlKisi.adSoyad}" title="#{messages.adSoyadText}" size="50"
+                     required="true" readonly="#{facesContext.renderResponse}" styleClass="inputUpdate"/>
+
+        <p:outputLabel value="#{messages.ilceLabel}" for="@next"/>
+        <p:inputText id="ilce" value="#{edbTalepController.selected.edbBasvuru.gnlKisi.gnlIlce.tanim}" title="#{messages.ilceText}" size="50"
+                     required="true" readonly="#{facesContext.renderResponse}" styleClass="inputUpdate"/>
+
+        <p:outputLabel value="#{messages.mahalleLabel}" for="@next"/>
+        <p:inputText id="mahalle" value="#{edbTalepController.selected.edbBasvuru.gnlKisi.gnlMahalle.tanim}" title="#{messages.mahalleText}" size="50"
+                     required="true" readonly="#{facesContext.renderResponse}" styleClass="inputUpdate"/>
+
+        <p:outputLabel value="#{messages.adresLabel}" for="@next"/>
+        <p:inputTextarea id="adres" value="#{edbTalepController.selected.edbBasvuru.gnlKisi.adres}" rows="4" styleClass="w-100 inputUpdate"
+                         autoResize="false" readonly="#{facesContext.renderResponse}"/>
+
+        <p:outputLabel value="#{messages.engellilikVarMiLabel}" for="@next"/>
+        <p:selectBooleanCheckbox id="engelliMi" value="#{edbTalepController.selected.edbBasvuru.engelDurumu}" title="#{messages.engellilikVarMiText}"
+                                 disabled="true" styleClass="inputUpdate"/>
+
+        <p:outputLabel value="#{messages.talepTuruLabel}" for="@next"/>
+        <p:selectOneMenu id="talepTuru" value="#{edbTalepController.selected.talepTuru}" required="true">
+            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{enumTalepTuru.ALL_VALUES}"
+                           var="talepTurus"
+                           itemValue="#{talepTurus}"
+                           itemLabel="#{talepTurus.displayValue}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.talepTipiLabel}" for="@next"/>
+        <p:selectOneMenu id="talepTipi" value="#{edbTalepController.selected.talepTipi}" required="true">
+            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{enumTalepTipi.ALL_VALUES}"
+                           var="talepTipis"
+                           itemValue="#{talepTipis}"
+                           itemLabel="#{talepTipis.displayValue}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.talepEdilenHizmetlerLabel}" for="@next"/>
+        <p:selectOneMenu id="talepEdilenHizmetler" value="#{edbTalepController.selected.talepEdilenHizmetler}" required="true">
+            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{enumHizmetTuru.ALL_VALUES}"
+                           var="hizmetTurus"
+                           itemValue="#{hizmetTurus}"
+                           itemLabel="#{hizmetTurus.displayValue}"/>
+            <p:ajax event="change" update="edbhizmetId"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.hizmetlerLabel}" for="@next"/>
+        <p:selectOneMenu id="edbhizmetId" value="#{edbTalepController.selected.edbHizmet}" filter="true" converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{edbTalepController.getHizmetList()}"
+                           var="edbhizmetIdItem"
+                           itemValue="#{edbhizmetIdItem}"
+                           itemLabel="#{edbhizmetIdItem.tanim.toString()}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.durumAciklamaLabel}" for="@next"/>
+        <p:inputTextarea rows="4" id="durumAciklama" value="#{edbTalepController.selected.durumAciklama}" title="#{messages.durumAciklamaText}"
+                         styleClass="w-100" autoResize="false"/>
+
+        <p:outputLabel value="#{messages.aciklamaLabel}" for="@next"/>
+        <p:inputTextarea rows="4" id="aciklama" value="#{edbTalepController.selected.aciklama}" title="#{messages.aciklamaText}" styleClass="w-100"
+                         autoResize="false"/>
+
+        <p:outputLabel value="#{messages.incelemeTarihiLabel}" for="@next"/>
+        <p:datePicker id="incelemeTarihi" locale="tr" pattern="#{messages.tarihFormat}" value="#{edbTalepController.selected.incelemeTarihi}"
+                      title="#{messages.incelemeTarihiText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
+                      showOnFocus="false"/>
+
+        <p:outputLabel value="#{messages.incelemeYapanLabel}" for="@next"/>
+        <p:selectOneMenu id="incelemeyiYapanEdbpersonel" value="#{edbTalepController.selected.incelemeyiYapanEdbPersonel}" filter="true"
+                         converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{edbPersonelController.items}"
+                           var="incelemeyiYapanEdbpersonelItem"
+                           itemValue="#{incelemeyiYapanEdbpersonelItem}"
+                           itemLabel="#{incelemeyiYapanEdbpersonelItem.syKullanici.gnlPersonel.gnlKisi.adSoyad.toString()}"  />
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.sosyalIncelemeKarariLabel}" for="@next"/>
+        <p:inputTextarea rows="4" id="sosyalIncelemeKarari" value="#{edbTalepController.selected.sosyalIncelemeKarari}"
+                         title="#{messages.sosyalIncelemeKarariText}" styleClass="w-100" autoResize="false"/>
+
+        <p:outputLabel value="#{messages.talepDurumuLabel}" for="@next"/>
+        <p:selectOneMenu id="talepDurumu" value="#{edbTalepController.selected.talepDurumu}" required="true">
+            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{enumHizmetDurumu.ALL_VALUES}"
+                           var="hizmetDurums"
+                           itemValue="#{hizmetDurums}"
+                           itemLabel="#{hizmetDurums.displayValue}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.hizmeteEklensinMiLabel}" for="@next"/>
+        <p:selectBooleanCheckbox id="hizmeteEklensinMi" value="#{edbTalepController.selected.hizmeteEklensinMi}"/>
+
+    </coco:editpage>
+
+</ui:composition>
+
+</html>

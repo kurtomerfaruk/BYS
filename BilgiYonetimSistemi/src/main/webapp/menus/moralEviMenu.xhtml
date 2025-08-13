@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="primefaces">
+
+<ui:composition>
+
+    <!-- Moral Evi -->
+    <ui:fragment rendered="#{syKullaniciController.hasPermission('moral_evi:goster')}">
+        <li class="slide has-sub">
+            <a href="javascript:void(0);" class="side-menu__item main_menu">
+                <i class="ri-team-line side-menu__icon"></i>
+                <span class="side-menu__label">Moral Evi</span>
+                <i class="ri-arrow-right-s-line side-menu__angle"></i>
+            </a>
+            <ul class="slide-menu child1">
+                <li class="slide side-menu__label1">
+                    <a href="javascript:void(0)">Moral Evi</a>
+                </li>
+
+                <!--    Islemler    -->
+                <ui:fragment rendered="#{syKullaniciController.hasPermission('moral_evi_islemler:goster')}">
+                    <li class="slide has-sub">
+                        <a href="javascript:void(0);" class="side-menu__item sublevel1">İşlemler
+                            <i class="ri-arrow-right-s-line side-menu__angle"></i></a>
+                        <ul class="slide-menu child2">
+
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('meetkinlik:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/moralevi/meEtkinlik/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="Etkinlikler"/>
+                                </li>
+                            </ui:fragment>
+
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('mekisi:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/moralevi/meKisi/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="Kişi Listesi"/>
+                                </li>
+                            </ui:fragment>
+
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('metalep:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/moralevi/meTalep/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="Talepler"/>
+                                </li>
+                            </ui:fragment>
+
+                        </ul>
+                    </li>
+                </ui:fragment>
+                <!--    Islemler    -->
+
+                <!--    Tanimlamalar    -->
+                <ui:fragment rendered="#{syKullaniciController.hasPermission('moral_evi_tanimlamalar:goster')}">
+                    <li class="slide has-sub">
+                        <a href="javascript:void(0);" class="side-menu__item sublevel1">Tanımlamalar
+                            <i class="ri-arrow-right-s-line side-menu__angle"></i></a>
+                        <ul class="slide-menu child2">
+
+<!--                            <ui:fragment rendered="#{syKullaniciController.hasPermission('metalepkonu:goster')}">-->
+<!--                                <li class="slide">-->
+<!--                                    <p:commandLink styleClass="side-menu__item sublevel2"-->
+<!--                                                   actionListener="#{menuController.setPageLink('/moduls/moralevi/meTalepKonu/index')}"-->
+<!--                                                   update="myPanel,:growl"-->
+<!--                                                   onstart="PF('Loading').show()"-->
+<!--                                                   onsuccess="PF('Loading').hide()"-->
+<!--                                                   value="Talep Konuları"/>-->
+<!--                                </li>-->
+<!--                            </ui:fragment>-->
+
+                        </ul>
+                    </li>
+                </ui:fragment>
+                <!--    Tanimlamalar    -->
+
+
+            </ul>
+        </li>
+    </ui:fragment>
+    <!-- Moral Evi -->
+
+</ui:composition>
+
+</html>
+

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:p="primefaces"
+                xmlns:pt="jakarta.faces.passthrough"
+                xmlns:coco="jakarta.faces.composite/ui">
+
+    <h:form id="EdbBasvuruListForm" styleClass="form-height">
+
+        <p:contextMenu id="EdbBasvuruDataTableContextMenu" for="datalist:datalist">
+            <p:menuitem value="#{messages.buttonEkle}" onclick="document.getElementById('EdbBasvuruListForm:datalist:datalist:createButton').click();"
+                        icon="pi pi-plus" rendered="#{syKullaniciController.hasPermission('edbbasvuru:ekle')}"/>
+            <p:menuitem value="#{messages.buttonGuncelle}" onclick="document.getElementById('EdbBasvuruListForm:datalist:datalist:editButton').click();"
+                        icon="pi pi-pencil" rendered="#{syKullaniciController.hasPermission('edbbasvuru:guncelle')}"/>
+            <p:menuitem value="#{messages.buttonDetay}" onclick="document.getElementById('EdbBasvuruListForm:datalist:datalist:viewButton').click();"
+                        icon="pi pi-search"/>
+            <p:menuitem value="#{messages.buttonSil}" onclick="document.getElementById('EdbBasvuruListForm:datalist:datalist:deleteButton').click();"
+                        icon="pi pi-trash" rendered="#{syKullaniciController.hasPermission('edbbasvuru:sil')}"/>
+        </p:contextMenu>
+        <coco:datatable id="datalist"
+                        value="#{edbBasvuruController.lazyItems}"
+                        rowKey="#{item.id}"
+                        selection="#{edbBasvuruController.selected}"
+                        filtered="#{edbBasvuruController.filtered}"
+                        rowselect=":EdbBasvuruListForm:datalist:datalist:createButton,:EdbBasvuruListForm:datalist:datalist:viewButton,:EdbBasvuruListForm:datalist:datalist:editButton,:EdbBasvuruListForm:datalist:datalist:deleteButton"
+                        rowDblselect="document.getElementById('EdbBasvuruListForm:datalist:datalist:editButton').click()"
+                        contextMenu=":EdbBasvuruListForm:datalist:datalist:createButton :EdbBasvuruListForm:datalist:datalist:viewButton :EdbBasvuruListForm:datalist:datalist:editButton :EdbBasvuruListForm:datalist:datalist:deleteButton"
+                        selectListener="#{edbBasvuruController.resetParents}"
+                        controller="#{edbBasvuruController}"
+                        header="#{messages.basvuruListesi}">
+
+            <p:ajax event="colResize" listener="#{edbBasvuruController.onResize}"/>
+
+            <f:facet name="paginatorBottomLeft">
+
+                <p:commandButton id="createButton" styleClass="ui-button-primary" icon="pi pi-plus" pt:data-tooltip="#{messages.buttonEkle}"
+                                 actionListener="#{edbBasvuruController.prepareCreate}" update=":EdbBasvuruCreateForm"
+                                 oncomplete="PF('EdbBasvuruCreateDialog').show()" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('edbbasvuru:ekle')}"/>
+                <p:commandButton id="editButton" styleClass="ui-button-success" icon="pi pi-pencil" pt:data-tooltip="#{messages.buttonGuncelle}"
+                                 update=":EdbBasvuruEditForm" oncomplete="PF('EdbBasvuruEditDialog').show()"
+                                 actionListener="#{edbBasvuruController.readInfo()}"
+                                 disabled="#{empty edbBasvuruController.selected}" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('edbbasvuru:guncelle')}"/>
+                <p:commandButton id="viewButton" styleClass="ui-button-info" icon="pi pi-search" pt:data-tooltip="#{messages.buttonDetay}"
+                                 update=":EdbBasvuruViewForm:EdbBasvuruViewForm" oncomplete="PF('EdbBasvuruViewDialog').show()"
+                                 disabled="#{empty edbBasvuruController.selected}" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                <p:commandButton id="deleteButton" styleClass="ui-button-danger" icon="pi pi-trash" pt:data-tooltip="#{messages.buttonSil}"
+                                 actionListener="#{edbBasvuruController.delete}" update=":growl,datalist" disabled="#{empty edbBasvuruController.selected}"
+                                 rendered="#{syKullaniciController.hasPermission('edbbasvuru:sil')}">
+                    <p:confirm header="#{messages.ConfirmationHeader}" message="#{messages.ConfirmDeleteMessage}" icon="pi pi-exclamation-circle"/>
+                </p:commandButton>
+
+            </f:facet>
+
+        </coco:datatable>
+
+
+        <ui:include src="/confirmation.xhtml"/>
+
+    </h:form>
+
+</ui:composition>

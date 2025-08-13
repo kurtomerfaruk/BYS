@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:h="jakarta.faces.html"
+      xmlns:p="primefaces"
+>
+
+<ui:composition>
+    <p:outputLabel value="#{messages.kiminleYasiyorLabel}" for="@next"/>
+    <p:selectOneMenu id="kiminleYasiyor" value="#{ayKisiController.selected.gnlKisi.kiminleYasiyor}" filter="true" converter="omnifaces.SelectItemsConverter">
+        <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+        <f:selectItems value="#{enumKiminleYasiyor.ALL_VALUES}"
+                       var="kiminleYasiyors"
+                       itemLabel="#{kiminleYasiyors.displayValue}"
+                       itemValue="#{kiminleYasiyors}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.meslekLabel}" for="@next"/>
+    <p:inputText id="meslek" value="#{ayKisiController.selected.gnlKisi.meslek}" title="#{messages.meslekText}" size="50" maxlength="50"/>
+
+    <p:outputLabel value="#{messages.esininMeslegiLabel}" for="@next"/>
+    <p:inputText id="esininMeslegi" value="#{ayKisiController.selected.gnlKisi.esininMeslegi}"
+                 title="#{messages.esininMeslegiText}" size="50" maxlength="50"/>
+
+    <p:outputLabel value="#{messages.cocukSayisiLabel}" for="@next"/>
+    <p:inputText id="cocukSayisi" value="#{ayKisiController.selected.gnlKisi.cocukSayisi}"
+                 title="#{messages.cocukSayisiText}">
+        <p:keyFilter regEx="/[\d]/"/>
+    </p:inputText>
+
+    <p:outputLabel value="#{messages.egitimDurumuLabel}" for="@next"/>
+    <p:selectOneMenu id="egitimDurumu" value="#{ayKisiController.selected.gnlKisi.egitimDurumu}" filter="true" styleClass="tcUpdate"
+                     converter="omnifaces.SelectItemsConverter">
+        <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+        <f:selectItems value="#{enumEgitimDurumu.ALL_VALUES}"
+                       var="egitimDurumus"
+                       itemLabel="#{egitimDurumus.displayValue}"
+                       itemValue="#{egitimDurumus}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.aildekiHukumluLabel}" for="@next"/>
+    <h:panelGroup>
+        <div class="ui-inputgroup">
+            <div class="ui-inputgroup-addon">
+                <p:selectBooleanCheckbox id="ailedekiHukumlu"
+                                         value="#{ayKisiController.selected.ailedekiHukumluDurumu}">
+                    <p:ajax event="change" update="ailedekiHukumluAciklama"
+                            listener="#{ayKisiController.selected.setAiledekiHukumluDurumuAciklama('')}"/>
+                </p:selectBooleanCheckbox>
+            </div>
+            <p:inputText id="ailedekiHukumluAciklama"
+                         value="#{ayKisiController.selected.ailedekiHukumluDurumuAciklama}"
+                         title="#{messages.aildekiHukumluText}"
+                         required="#{ayKisiController.selected.ailedekiHukumluDurumu}"
+                         disabled="#{!ayKisiController.selected.ailedekiHukumluDurumu}"/>
+        </div>
+    </h:panelGroup>
+
+    <p:outputLabel value="#{messages.ailedekiAskerDurumuLabel}" for="@next"/>
+    <p:selectBooleanCheckbox id="ailedekiAskerDurumu"  value="#{ayKisiController.selected.ailedekiAskerDurumu}"/>
+
+    <p:outputLabel value="#{messages.ailedekiGaziDurumuLabel}" for="@next"/>
+    <p:selectBooleanCheckbox id="ailedekiGaziDurumu"  value="#{ayKisiController.selected.ailedekiGaziDurumu}"/>
+
+    <p:outputLabel value="#{messages.ailedekiSehitDurumuLabel}" for="@next"/>
+    <p:selectBooleanCheckbox id="ailedekiSehitDurumu"  value="#{ayKisiController.selected.ailedekiSehitDurumu}"/>
+
+
+</ui:composition>
+</html>

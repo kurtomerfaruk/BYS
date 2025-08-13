@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:p="primefaces">
+
+<ui:composition>
+    <p:dialog widgetVar="MeEtkinlikEditDialog"
+              id="MeEtkinlikEditDialogId"
+              modal="true"
+              resizable="false"
+              closeOnEscape="true"
+              header="#{messages.dialogKayitGuncelle}"
+              appendTo="@(body)"
+              responsive="true"
+              onShow="PF('MeEtkinlikEditDialog').initPosition();"
+              fitViewport="true"
+              position="top"
+              dynamic="true">
+
+        <h:form id="MeEtkinlikEditForm">
+            <h:panelGroup id="display">
+                <p:focus context="display"/>
+                <div class="card">
+                    <div class="card-body">
+                        <ul class="nav nav-tabs mb-3 tab-style-8 scaleX" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="meEtkinlikKayitBilgisiEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#meEtkinlikKayitBilgisiEditTabPane" type="button" role="tab"
+                                        aria-controls="meEtkinlikKayitBilgisiEditTabPane" aria-selected="false">Kayıt Bilgisi
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="meEtkinlikKisilerEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#meEtkinlikKisilerEditTabPane" type="button" role="tab"
+                                        aria-controls="meEtkinlikKisilerEditTabPane" aria-selected="false">Kişiler
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="meEtkinlikResimlerEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#meEtkinlikResimlerEditTabPane" type="button" role="tab"
+                                        aria-controls="meEtkinlikResimlerEditTabPane" aria-selected="false">Resimler
+                                </button>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane show active overflow-hidden" id="meEtkinlikKayitBilgisiEditTabPane" role="tabpanel"
+                                 aria-labelledby="meEtkinlikKayitBilgisiEditTab" tabindex="0">
+                                <p:panelGrid id="kayitBilgisiPanel" columns="2" styleClass="w-100" rendered="#{meEtkinlikController.selected!=null}"
+                                             layout="tabular">
+
+                                    <ui:include src="KayitBilgisiTab.xhtml"/>
+
+                                </p:panelGrid>
+                            </div>
+                            <div class="tab-pane overflow-hidden" id="meEtkinlikKisilerEditTabPane" role="tabpanel"
+                                 aria-labelledby="meEtkinlikKisilerEditTab" tabindex="0">
+                                <p:panelGrid id="kisilerPanel" columns="1" styleClass="w-100" rendered="#{meEtkinlikController.selected!=null}">
+
+                                    <ui:include src="KisilerTab.xhtml"/>
+
+                                </p:panelGrid>
+                            </div>
+                            <div class="tab-pane overflow-hidden" id="meEtkinlikResimlerEditTabPane" role="tabpanel"
+                                 aria-labelledby="meEtkinlikResimlerEditTab" tabindex="0">
+                                <p:panelGrid id="resimlerPanel" columns="1" styleClass="w-100" rendered="#{meEtkinlikController.selected!=null}">
+
+                                    <ui:include src="ResimlerTab.xhtml"/>
+
+                                </p:panelGrid>
+                            </div>
+                        </div>
+                    </div><!-- end card-body -->
+                    <div class="card-footer">
+                        <div class="float-end">
+                            <p:commandButton icon="pi pi-check" styleClass="ui-button-success"
+                                             actionListener="#{meEtkinlikController.save}"
+                                             value="#{messages.buttonKaydet}"
+                                             update="display,:MeEtkinlikListForm:datalist:datalist,:growl"
+                                             oncomplete="handleSubmit(xhr,status,args,PF('MeEtkinlikEditDialog'));"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                            <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                             value="#{messages.buttonIptal}" onclick="PF('MeEtkinlikEditDialog').hide()"
+                                             immediate="true" onstart="PF('Loading').show()"
+                                             onsuccess="PF('Loading').hide()"/>
+                        </div>
+                    </div>
+                </div>
+            </h:panelGroup>
+
+    </h:form>
+
+</p:dialog>
+
+</ui:composition>
+
+        </html>

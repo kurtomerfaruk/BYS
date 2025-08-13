@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="primefaces"
+      xmlns:f="jakarta.faces.core"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+    <ui:composition>
+
+        <coco:createpage id="GnlBirimCreateForm"
+                         renderedListener="#{gnlBirimController.selected != null}"
+                         widgetVar="GnlBirimCreateDialog"
+                         actionListener="#{gnlBirimController.saveNew}"
+                         listForm="GnlBirimListForm">
+
+            <p:outputLabel value="#{messages.ustBirimLabel}" for="@next"/>
+            <p:selectOneMenu id="ustBirimId" value="#{gnlBirimController.selected.ustBirimId}" filter="true">
+                <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+                <f:selectItems value="#{gnlBirimController.items}"
+                               var="gnlBirims"
+                               itemLabel="#{gnlBirims.tanim}"
+                               itemValue="#{gnlBirims.id}"/>
+            </p:selectOneMenu>
+
+            <p:outputLabel value="#{messages.birimLabel}" for="@next" />
+            <p:inputText id="tanim" value="#{gnlBirimController.selected.tanim}" title="#{messages.birimText}" required="true" size="50" maxlength="100"/>
+
+        </coco:createpage>
+
+    </ui:composition>
+
+</html>

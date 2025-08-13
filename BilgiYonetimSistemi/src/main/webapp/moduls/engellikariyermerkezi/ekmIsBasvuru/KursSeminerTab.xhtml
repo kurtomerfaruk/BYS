@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+>
+<ui:composition>
+
+    <p:panelGrid columns="2" styleClass="w-100" layout="tabular">
+        <p:outputLabel value="#{messages.konuLabel}" for="@next"/>
+        <p:inputText id="konu"
+                     value="#{ekmIsBasvuruController.ekmIsBasvuruKursSeminer.konu}"
+                     title="#{messages.konuText}" size="50"/>
+
+        <p:outputLabel value="#{messages.kurumAdiLabel}" for="@next"/>
+        <p:inputText id="kurum"
+                     value="#{ekmIsBasvuruController.ekmIsBasvuruKursSeminer.kurum}"
+                     title="#{messages.kurumAdiText}" size="50"/>
+
+
+        <p:outputLabel value="#{messages.sureLabel}" for="@next"/>
+        <p:inputText id="sure"
+                     value="#{ekmIsBasvuruController.ekmIsBasvuruKursSeminer.sure}"
+                     title="#{messages.sureText}" size="50"/>
+
+        <p:outputLabel value="#{messages.tarihLabel}" for="@next"/>
+        <p:datePicker id="tarih" locale="tr" pattern="#{messages.tarihFormat}" value="#{ekmIsBasvuruController.ekmIsBasvuruKursSeminer.tarih}"
+                      title="#{messages.tarihText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
+                      showOnFocus="false"/>
+
+        <f:facet name="footer">
+            <div class="float-end">
+                <p:commandButton value="#{messages.buttonEkle}" icon="pi pi-plus"
+                                 styleClass="btn btn-success"
+                                 actionListener="#{ekmIsBasvuruController.addCourse()}"
+                                 process="kursSeminerPanel"
+                                 update=":growl,kursSeminerPanel"/>
+            </div>
+        </f:facet>
+    </p:panelGrid>
+
+    <p:panelGrid columns="1" styleClass="w-100">
+        <p:dataTable id="seminerId"
+                     value="#{ekmIsBasvuruController.selected.ekmIsBasvuruKursSeminerList}"
+                     var="seminerVar"
+                     emptyMessage="#{messages.kayitBulunamadi}"
+                     paginator="true"
+                     rows="5"
+                     paginatorPosition="bottom">
+
+            <p:column>
+                <f:facet name="header">
+                    <h:outputText value="#{messages.konuText}"/>
+                </f:facet>
+                #{seminerVar.konu}
+            </p:column>
+
+            <p:column>
+                <f:facet name="header">
+                    <h:outputText value="#{messages.kurumAdiText}"/>
+                </f:facet>
+                #{seminerVar.kurum}
+            </p:column>
+
+            <p:column>
+                <f:facet name="header">
+                    <h:outputText value="#{messages.sureText}"/>
+                </f:facet>
+                #{seminerVar.sure}
+            </p:column>
+
+            <p:column>
+                <f:facet name="header">
+                    <h:outputText value="#{messages.tarihText}"/>
+                </f:facet>
+                <h:outputText value="#{seminerVar.tarih}">
+                    <f:convertDateTime pattern="#{messages.tarihFormat}" type="localDate"/>
+                </h:outputText>
+            </p:column>
+
+            <p:column width="60" headerText="#{messages.buttonSil}">
+                <p:commandButton icon="pi pi-trash"
+                                 title="#{messages.buttonSil}"
+                                 actionListener="#{ekmIsBasvuruController.removeCourse(seminerVar)}"
+                                 update="seminerId,:growl"
+                                 process="seminerId"/>
+            </p:column>
+
+        </p:dataTable>
+
+    </p:panelGrid>
+
+</ui:composition>
+</html>

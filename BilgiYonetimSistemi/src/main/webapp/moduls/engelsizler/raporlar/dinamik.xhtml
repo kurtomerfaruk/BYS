@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:pt="jakarta.faces.passthrough"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="primefaces">
+<h:body>
+
+    <h:form id="DinamikRapor">
+        <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.bys.EnumOperator" var="enumOperator"/>
+        <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.bys.EnumRaporTuru" var="enumRaporTuru"/>
+        <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlCinsiyet" var="enumCinsiyet"/>
+        <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.engelsizler.EnumEyAnketDurumu" var="enumAnketDurumu"/>
+        <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlMedeniDurum" var="enumMedeniHal"/>
+        <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlDurum" var="enumDurums"/>
+        <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlEgitimDurumu" var="enumEgitimDurums"/>
+        <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.bys.EnumEvetHayir" var="enumEvetHayirs"/>
+        <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlSosyalGuvence" var="enumSosyalGuvence"/>
+
+            <div class="row">
+                <div class="col-xxl-12">
+                    <div class="card custom-card">
+                        <div class="card-header">
+                            <div class="card-title">
+                                Dinamik Rapor
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <p:panelGrid columns="6" layout="grid"
+                                         columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+                                         styleClass="ui-panelgrid-blank ui-fluid">
+                                <p:outputLabel value="Kolon" for="@next" style="margin-top: 10px !important;"/>
+                                <p:selectOneMenu value="#{eyDinamikPrint.dynamicReportModel.columnKey}" converter="omnifaces.SelectItemsConverter"
+                                                 filter="true"
+                                                 filterMatchMode="contains" filterPlaceholder="Kolon seçiniz">
+                                    <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+                                    <f:selectItems value="#{eyDinamikPrint.columns.entrySet()}"
+                                                   var="kolonlar"
+                                                   itemLabel="#{kolonlar.value}"
+                                                   itemValue="#{kolonlar.key}"/>
+                                    <p:ajax event="change" update="panelGroup"/>
+                                </p:selectOneMenu>
+
+                                <p:outputLabel value="Operator" for="@next"  style="margin-top: 10px !important;"/>
+                                <p:selectOneMenu value="#{eyDinamikPrint.dynamicReportModel.operator}" converter="omnifaces.GenericEnumConverter">
+                                    <f:selectItem itemLabel="#{messages.seciniz}" value="#{null}"/>
+                                    <f:selectItems value="#{enumOperator.ALL_VALUES}"
+                                                   var="operators"
+                                                   itemValue="#{operators}"
+                                                   itemLabel="#{operators.displayValue}"/>
+                                </p:selectOneMenu>
+
+                                <p:outputLabel value="Değer" for="@next" style="margin-top: 10px !important;"/>
+                                <h:panelGroup id="panelGroup">
+
+                                    <p:selectOneRadio id="cinsiyet" value="#{eyDinamikPrint.dynamicReportModel.value}"
+                                                      converter="omnifaces.SelectItemsConverter" layout="lineDirection"
+                                                      rendered="#{eyDinamikPrint.dynamicReportModel.columnKey eq 'G.CINSIYET'}">
+                                        <f:selectItems value="#{enumCinsiyet.ALL_VALUES}"
+                                                       var="cinsiyets"
+                                                       itemValue="#{cinsiyets.label}"
+                                                       itemLabel="#{cinsiyets.displayValue}"/>
+                                    </p:selectOneRadio>
+                                    <p:selectOneMenu id="anketDurumu" value="#{eyDinamikPrint.dynamicReportModel.value}" filter="true"
+                                                     converter="omnifaces.SelectItemsConverter"
+                                                     rendered="#{eyDinamikPrint.dynamicReportModel.columnKey eq 'EK.ANKET_DURUMU'}">
+                                        <f:selectItem itemValue="#{null}" itemLabel="#{messages.tumuText}"/>
+                                        <f:selectItems value="#{enumAnketDurumu.ALL_VALUES}"
+                                                       var="anketDurumus"
+                                                       itemValue="#{anketDurumus}"
+                                                       itemLabel="#{anketDurumus.displayValue}"/>
+                                    </p:selectOneMenu>
+                                    <p:selectOneMenu id="ilce" value="#{eyDinamikPrint.dynamicReportModel.value}" filter="true"
+                                                     converter="omnifaces.SelectItemsConverter"
+                                                     rendered="#{eyDinamikPrint.dynamicReportModel.columnKey eq 'G.ILCE_ID'}">
+                                        <f:selectItem itemValue="#{null}" itemLabel="#{messages.tumuText}"/>
+                                        <f:selectItems value="#{gnlIlceController.getIlceByIl()}"
+                                                       var="ilces"
+                                                       itemValue="#{ilces.id}"
+                                                       itemLabel="#{ilces.tanim}"/>
+                                    </p:selectOneMenu>
+                                    <p:selectOneMenu id="mahalle" value="#{eyDinamikPrint.dynamicReportModel.value}" filter="true"
+                                                     converter="omnifaces.SelectItemsConverter"
+                                                     rendered="#{eyDinamikPrint.dynamicReportModel.columnKey  eq 'G.MAHALLE_ID'}">
+                                        <f:selectItem itemValue="#{null}" itemLabel="#{messages.tumuText}"/>
+                                        <f:selectItems value="#{gnlMahalleController.items}"
+                                                       var="mahallelers"
+                                                       itemValue="#{mahallelers.id}"
+                                                       itemLabel="#{mahallelers.tanim}"/>
+                                    </p:selectOneMenu>
+
+                                    <p:selectOneMenu id="medeniHal" value="#{eyDinamikPrint.dynamicReportModel.value}" filter="true"
+                                                     converter="omnifaces.SelectItemsConverter"
+                                                     rendered="#{eyDinamikPrint.dynamicReportModel.columnKey eq 'G.MEDENI_DURUM'}">
+                                        <f:selectItem itemValue="#{null}" itemLabel="#{messages.tumuText}"/>
+                                        <f:selectItems value="#{enumMedeniHal.ALL_VALUES}"
+                                                       var="medeniHals"
+                                                       itemValue="#{medeniHals}"
+                                                       itemLabel="#{medeniHals.displayValue}"/>
+                                    </p:selectOneMenu>
+                                    <p:selectOneMenu id="durum" value="#{eyDinamikPrint.dynamicReportModel.value}" filter="true"
+                                                     converter="omnifaces.SelectItemsConverter"
+                                                     rendered="#{eyDinamikPrint.dynamicReportModel.columnKey eq 'G.DURUM'}">
+                                        <f:selectItem itemValue="#{null}" itemLabel="#{messages.tumuText}"/>
+                                        <f:selectItems value="#{enumDurums.ALL_VALUES}"
+                                                       var="durums"
+                                                       itemValue="#{durums}"
+                                                       itemLabel="#{durums.displayValue}"/>
+                                    </p:selectOneMenu>
+                                    <p:selectOneMenu id="egitimDurumu" value="#{eyDinamikPrint.dynamicReportModel.value}" filter="true"
+                                                     converter="omnifaces.SelectItemsConverter"
+                                                     rendered="#{eyDinamikPrint.dynamicReportModel.columnKey eq 'G.EGITIM_DURUMU'}">
+                                        <f:selectItem itemValue="#{null}" itemLabel="#{messages.tumuText}"/>
+                                        <f:selectItems value="#{enumEgitimDurums.ALL_VALUES}"
+                                                       var="egitimDurums"
+                                                       itemValue="#{egitimDurums}"
+                                                       itemLabel="#{egitimDurums.displayValue}"/>
+                                    </p:selectOneMenu>
+
+                                    <p:selectOneRadio value="#{eyDinamikPrint.dynamicReportModel.value}"
+                                                      converter="omnifaces.SelectItemsConverter" layout="lineDirection"
+                                                      rendered="#{eyDinamikPrint.dynamicReportModel.columnKey  eq 'G.SABIKA_KAYDI'}">
+                                        <f:selectItems value="#{enumEvetHayirs.ALL_VALUES}"
+                                                       var="evetHayirs"
+                                                       itemValue="#{evetHayirs}"
+                                                       itemLabel="#{evetHayirs.displayValue}"/>
+                                    </p:selectOneRadio>
+                                    <p:selectOneRadio value="#{eyDinamikPrint.dynamicReportModel.value}"
+                                                      converter="omnifaces.SelectItemsConverter" layout="lineDirection"
+                                                      rendered="#{eyDinamikPrint.dynamicReportModel.columnKey  eq 'G.ISKUR_KAYDI'}">
+                                        <f:selectItems value="#{enumEvetHayirs.ALL_VALUES}"
+                                                       var="evetHayirs"
+                                                       itemValue="#{evetHayirs}"
+                                                       itemLabel="#{evetHayirs.displayValue}"/>
+                                    </p:selectOneRadio>
+                                    <p:selectOneRadio value="#{eyDinamikPrint.dynamicReportModel.value}"
+                                                      converter="omnifaces.SelectItemsConverter" layout="lineDirection"
+                                                      rendered="#{eyDinamikPrint.dynamicReportModel.columnKey  eq 'G.EHLIYET'}">
+                                        <f:selectItems value="#{enumEvetHayirs.ALL_VALUES}"
+                                                       var="evetHayirs"
+                                                       itemValue="#{evetHayirs}"
+                                                       itemLabel="#{evetHayirs.displayValue}"/>
+                                    </p:selectOneRadio>
+                                    <p:selectOneMenu value="#{eyDinamikPrint.dynamicReportModel.value}" filter="true"
+                                                     converter="omnifaces.SelectItemsConverter"
+                                                     rendered="#{eyDinamikPrint.dynamicReportModel.columnKey eq 'G.SOSYAL_GUVENCE'}">
+                                        <f:selectItem itemValue="#{null}" itemLabel="#{messages.tumuText}"/>
+                                        <f:selectItems value="#{enumSosyalGuvence.ALL_VALUES}"
+                                                       var="sosyalGuvences"
+                                                       itemValue="#{sosyalGuvences}"
+                                                       itemLabel="#{sosyalGuvences.displayValue}"/>
+                                    </p:selectOneMenu>
+
+                                    <p:spinner value="#{eyDinamikPrint.dynamicReportModel.value}" stepFactor="1"
+                                               rendered="#{eyDinamikPrint.dynamicReportModel.columnKey eq 'EK.TOPLAM_VUCUT_KAYIP_ORANI'}"/>
+                                </h:panelGroup>
+                            </p:panelGrid>
+                        </div>
+                        <div class="card-footer border-top-0">
+                            <div class="px-4 py-3 border-top border-block-start-dashed d-sm-flex justify-content-end">
+                                <p:commandButton value="#{messages.buttonEkle}" styleClass="mr-2" style="width: auto" icon="pi pi-plus"
+                                                 actionListener="#{eyDinamikPrint.addToModel()}"
+                                                 process="@form" update=":growl,@form"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xxl-12">
+                    <div class="card custom-card">
+                        <div class="card-header">
+                            <div class="card-title">
+                                Parametreler
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <p:dataTable id="dataId"
+                                         value="#{eyDinamikPrint.dynamicReportModels}"
+                                         var="dataVar"
+                                         emptyMessage="#{messages.kayitBulunamadi}"
+                                         paginator="true"
+                                         rows="5"
+                                         paginatorPosition="bottom">
+
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Kolon"/>
+                                    </f:facet>
+                                    #{dataVar.columnValue}
+                                </p:column>
+
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Operator"/>
+                                    </f:facet>
+                                    #{dataVar.operator.displayValue}
+                                </p:column>
+
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Değer"/>
+                                    </f:facet>
+                                    #{dataVar.value}
+                                </p:column>
+
+                                <p:column width="60" headerText="#{messages.buttonSil}">
+                                    <p:commandButton icon="pi pi-trash" title="#{messages.buttonSil}"
+                                                     actionListener="#{eyDinamikPrint.removeModel(dataVar)}" update="dataId,:growl"
+                                                     process="dataId"/>
+                                </p:column>
+
+                            </p:dataTable>
+
+                            <p:separator/>
+
+                            <p:outputLabel value="#{messages.raporTuruLabel}" for="@next"/>
+                            <p:selectOneMenu id="raporTuru" value="#{eyDinamikPrint.raporTuru}"
+                                             filter="true"
+                                             converter="omnifaces.SelectItemsConverter">
+                                <f:selectItems value="#{enumRaporTuru.ALL_VALUES}"
+                                               var="raporTurus"
+                                               itemValue="#{raporTurus}"
+                                               itemLabel="#{raporTurus.displayValue}"/>
+                            </p:selectOneMenu>
+                        </div>
+                        <div class="card-footer border-top-0">
+                            <div class="px-4 py-3 border-top border-block-start-dashed d-sm-flex justify-content-end">
+                                <p:commandButton id="raporButton" styleClass="ui-button-primary"
+                                                 icon="pi pi-print"
+                                                 pt:data-tooltip="#{messages.buttonYazdir}"
+                                                 value="#{messages.buttonYazdir}"
+                                                 actionListener="#{eyDinamikPrint.print()}"
+                                                 update=":growl,@form,:PrintForm"
+                                                 ajax="#{eyDinamikPrint.raporTuru eq 'PDF' or eyDinamikPrint.raporTuru eq '' or eyDinamikPrint.raporTuru eq null}"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+    </h:form>
+    <ui:include src="/print/Print.xhtml"/>
+</h:body>
+</html>

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:createpage id="HfHafriyatIsCreateForm"
+                     renderedListener="#{hfHafriyatIsController.selected != null}"
+                     widgetVar="HfHafriyatIsCreateDialog"
+                     actionListener="#{hfHafriyatIsController.saveNew}"
+                     listForm="HfHafriyatIsListForm">
+
+        <p:outputLabel value="#{messages.evrakNoLabel}" for="@next"/>
+        <p:inputText id="evrakNo" value="#{hfHafriyatIsController.selected.evrakNo}" title="#{messages.evrakNoText}" size="50" maxlength="50" required="true"/>
+
+        <p:outputLabel value="#{messages.evrakTarihiLabel}" for="@next"/>
+        <p:datePicker id="evrakTarihi" locale="tr" pattern="#{messages.tarihFormat}" value="#{hfHafriyatIsController.selected.evrakTarihi}"
+                      title="#{messages.evrakTarihiText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
+                      showOnFocus="false"/>
+
+        <p:outputLabel value="#{messages.sozlesmeNoLabel}" for="@next"/>
+        <p:inputText id="sozlesmeNo" value="#{hfHafriyatIsController.selected.sozlesmeNo}" title="#{messages.sozlesmeNoText}" size="50" maxlength="50"
+                     required="true"/>
+
+        <p:outputLabel value="#{messages.sozlesmeTarihiLabel}" for="@next"/>
+        <p:datePicker id="sozlesmeTarihi" locale="tr" pattern="#{messages.tarihFormat}" value="#{hfHafriyatIsController.selected.sozlesmeTarihi}"
+                      title="#{messages.sozlesmeTarihiText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
+                      showOnFocus="false"/>
+
+        <p:outputLabel value="#{messages.ureticiText} #{messages.firmaLabel}" for="@next"/>
+        <coco:inputWithButton id="inputWithButtonUreticiFirmaId" inputId="ureticiFirma"
+                              inputValue="#{hfHafriyatIsController.selected.ureticiHfFirma.firmaUnvani}"
+                              inputTitle="#{messages.ureticiText} #{messages.firmaText}"
+                              actionListener="#{bysController.openCommonDialog('hfFirmaSec')}"
+                              ajaxListener="#{hfHafriyatIsController.secilenUreticiFirma}"
+                              buttonTitle="#{messages.ureticiText} #{messages.firmaSecmelisiniz}"
+                              size="50"
+                              dialogId="HfHafriyatIsCreateDialogId"/>
+
+        <p:outputLabel value="#{messages.tasiyiciText} #{messages.firmaLabel}" for="@next"/>
+        <coco:inputWithButton id="inputWithButtonTasiyiciFirmaId" inputId="tasiyiciFirma"
+                              inputValue="#{hfHafriyatIsController.selected.tasiyiciHfFirma.firmaUnvani}"
+                              inputTitle="#{messages.tasiyiciText} #{messages.firmaText}"
+                              actionListener="#{bysController.openCommonDialog('hfFirmaSec')}"
+                              ajaxListener="#{hfHafriyatIsController.secilenTasiyiciFirma}"
+                              buttonTitle="#{messages.tasiyiciText} #{messages.firmaSecmelisiniz}"
+                              size="50"
+                              dialogId="HfHafriyatIsCreateDialogId"/>
+
+        <p:outputLabel value="#{messages.belediyeLabel}" for="@next"/>
+        <p:selectOneMenu id="evrakBelediyeId" value="#{hfHafriyatIsController.selected.evrakBelediye}" converter="omnifaces.SelectItemsConverter" required="true">
+            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{enumBelediye.ALL_VALUES}"
+                           var="belediyes"
+                           itemValue="#{belediyes}"
+                           itemLabel="#{belediyes.displayValue}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.depolamaTesisiText} #{messages.firmaLabel}" for="@next"/>
+        <coco:inputWithButton id="inputWithButtonDepolamaFirmaId" inputId="depolamaFirma"
+                              inputValue="#{hfHafriyatIsController.selected.depolamaTesisiHfFirma.firmaUnvani}"
+                              inputTitle="#{messages.depolamaTesisiText} #{messages.firmaText}"
+                              actionListener="#{bysController.openCommonDialog('hfFirmaSec')}"
+                              ajaxListener="#{hfHafriyatIsController.secilenDepolamaTesisiFirma}"
+                              buttonTitle="#{messages.depolamaTesisiText} #{messages.firmaSecmelisiniz}"
+                              size="50"
+                              inputRequired="false"
+                              dialogId="HfHafriyatIsCreateDialogId"/>
+
+        <p:outputLabel value="#{messages.plakaLabel}" for="@next"/>
+        <p:autoComplete id="plakas" multiple="true" value="#{hfHafriyatIsController.selectedAracs}"
+                        completeMethod="#{hfHafriyatIsController.completeArac}" var="aracs" itemLabel="#{aracs.plaka}" itemValue="#{aracs}"
+                        converter="hfAracConverter" forceSelection="true" scrollHeight="250">
+            <p:column>
+                <h:outputText value="#{aracs.plaka}"/>
+            </p:column>
+        </p:autoComplete>
+
+        <p:outputLabel value="#{messages.mevkiLabel}" for="@next"/>
+        <p:inputTextarea id="mevki" value="#{hfHafriyatIsController.selected.mevki}" title="#{messages.mevkiText}" styleClass="w-100" autoResize="false"/>
+
+        <p:outputLabel value="#{messages.paftaText} / #{messages.adaText} / #{messages.parselLabel}" for="@next"/>
+        <h:panelGroup>
+            <div class="ui-inputgroup">
+                <p:inputText id="pafta" value="#{hfHafriyatIsController.selected.pafta}" title="#{messages.paftaText}" maxlength="50" size="14"/>
+                <h:outputText value="/"/>
+                <p:inputText id="ada" value="#{hfHafriyatIsController.selected.ada}" title="#{messages.adaLabel}" maxlength="50" size="15"/>
+                <h:outputText value="/"/>
+                <p:inputText id="parsel" value="#{hfHafriyatIsController.selected.parsel}" title="#{messages.parselText}" maxlength="50" size="13"/>
+            </div>
+        </h:panelGroup>
+
+        <p:outputLabel value="#{messages.neredenLabel}" for="@next"/>
+        <p:inputText id="nereden" value="#{hfHafriyatIsController.selected.nereden}" title="#{messages.neredenText}" size="50" maxlength="250"/>
+
+        <p:outputLabel value="#{messages.nereyeLabel}" for="@next"/>
+        <p:inputText id="nereye" value="#{hfHafriyatIsController.selected.nereye}" title="#{messages.nereyeText}" size="50" maxlength="250"/>
+
+        <p:outputLabel value="#{messages.isTuruLabel}" for="@next"/>
+        <p:selectOneMenu id="isTuru" value="#{hfHafriyatIsController.selected.isTuru}" converter="omnifaces.SelectItemsConverter" required="true">
+            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{enumIsTuru.ALL_VALUES}"
+                           var="isTurus"
+                           itemValue="#{isTurus}"
+                           itemLabel="#{isTurus.displayValue}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.baslangicTarihiLabel}" for="@next"/>
+        <p:datePicker id="ihaleBaslangicTarihi" locale="tr" pattern="#{messages.tarihFormat}" value="#{hfHafriyatIsController.selected.ihaleBaslangicTarihi}"
+                      title="#{messages.baslangicTarihiText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
+                      showOnFocus="false"/>
+
+        <p:outputLabel value="#{messages.bitisTarihiLabel}" for="@next"/>
+        <p:datePicker id="ihaleBitisTarihi" locale="tr" pattern="#{messages.tarihFormat}" value="#{hfHafriyatIsController.selected.ihaleBitisTarihi}"
+                      title="#{messages.bitisTarihiText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
+                      showOnFocus="false"/>
+
+        <p:outputLabel value="#{messages.atikCinsiLabel}" for="@next"/>
+        <p:selectOneMenu id="atikCinsi" value="#{hfHafriyatIsController.selected.atikCinsi}" converter="omnifaces.SelectItemsConverter" required="true">
+            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{enumAtikCinsi.ALL_VALUES}"
+                           var="atikCinsis"
+                           itemValue="#{atikCinsis}"
+                           itemLabel="#{atikCinsis.displayValue}"/>
+        </p:selectOneMenu>
+
+
+        <p:outputLabel value="#{messages.fiyatLabel}" for="@next"/>
+        <p:inputNumber id="fiyat" value="#{hfHafriyatIsController.selected.atikCinsiFiyat}" inputStyleClass="text-end" decimalPlaces="3" decimalSeparator=","
+                       thousandSeparator="." emptyValue="zero">
+            <p:ajax event="keyup" listener="#{hfHafriyatIsController.calculate()}" update="tahminiTutar"/>
+        </p:inputNumber>
+
+        <p:outputLabel value="#{messages.tahminiMiktarLabel}" for="@next"/>
+        <p:inputNumber id="tahminiMiktar" value="#{hfHafriyatIsController.selected.tahminiMiktar}" inputStyleClass="text-end" decimalPlaces="3"
+                       decimalSeparator="," thousandSeparator="." emptyValue="zero">
+            <p:ajax event="keyup" listener="#{hfHafriyatIsController.calculate()}" update="tahminiTutar"/>
+        </p:inputNumber>
+
+        <p:outputLabel value="#{messages.tahminiTutarLabel}" for="@next"/>
+        <p:inputNumber id="tahminiTutar" value="#{hfHafriyatIsController.selected.tahminiTutar}" inputStyleClass="text-end" decimalPlaces="3"
+                       decimalSeparator=","  thousandSeparator="." emptyValue="zero" readonly="true"/>
+
+    </coco:createpage>
+
+</ui:composition>
+
+</html>

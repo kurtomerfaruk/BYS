@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:p="primefaces"
+                xmlns:pt="jakarta.faces.passthrough"
+                xmlns:coco="jakarta.faces.composite/ui">
+
+    <h:form id="EdbTalepListForm" styleClass="form-height">
+
+        <p:contextMenu id="EdbTalepDataTableContextMenu" for="datalist:datalist">
+            <p:menuitem value="#{messages.buttonEkle}" onclick="document.getElementById('EdbTalepListForm:datalist:datalist:createButton').click();"
+                        icon="pi pi-plus" rendered="#{syKullaniciController.hasPermission('edbtalep:ekle')}"/>
+            <p:menuitem value="#{messages.buttonGuncelle}" onclick="document.getElementById('EdbTalepListForm:datalist:datalist:editButton').click();"
+                        icon="pi pi-pencil" rendered="#{syKullaniciController.hasPermission('edbtalep:guncelle')}"/>
+            <p:menuitem value="#{messages.buttonDetay}" onclick="document.getElementById('EdbTalepListForm:datalist:datalist:viewButton').click();"
+                        icon="pi pi-search"/>
+            <p:menuitem value="#{messages.buttonSil}" onclick="document.getElementById('EdbTalepListForm:datalist:datalist:deleteButton').click();"
+                        icon="pi pi-trash" rendered="#{syKullaniciController.hasPermission('edbtalep:sil')}"/>
+        </p:contextMenu>
+        <coco:datatable id="datalist"
+                        value="#{edbTalepController.lazyItems}"
+                        rowKey="#{item.id}"
+                        selection="#{edbTalepController.selected}"
+                        filtered="#{edbTalepController.filtered}"
+                        rowselect=":EdbTalepListForm:datalist:datalist:createButton,:EdbTalepListForm:datalist:datalist:viewButton,:EdbTalepListForm:datalist:datalist:editButton,:EdbTalepListForm:datalist:datalist:deleteButton"
+                        rowDblselect="document.getElementById('EdbTalepListForm:datalist:datalist:editButton').click()"
+                        contextMenu=":EdbTalepListForm:datalist:datalist:createButton :EdbTalepListForm:datalist:datalist:viewButton :EdbTalepListForm:datalist:datalist:editButton :EdbTalepListForm:datalist:datalist:deleteButton"
+                        selectListener="#{edbTalepController.resetParents}"
+                        controller="#{edbTalepController}"
+                        header="#{messages.talepListesi}">
+
+
+            <p:ajax event="colResize" listener="#{edbTalepController.onResize}"/>
+
+
+            <f:facet name="paginatorBottomLeft">
+
+                <p:commandButton id="createButton" styleClass="ui-button-primary" icon="pi pi-plus" pt:data-tooltip="#{messages.buttonEkle}"
+                                 actionListener="#{edbTalepController.prepareCreate}" update=":EdbTalepCreateForm:EdbTalepCreateForm"
+                                 oncomplete="PF('EdbTalepCreateDialog').show()" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('edbtalep:ekle')}"/>
+                <p:commandButton id="editButton" styleClass="ui-button-success" icon="pi pi-pencil" pt:data-tooltip="#{messages.buttonGuncelle}"
+                                 update=":EdbTalepEditForm:EdbTalepEditForm" oncomplete="PF('EdbTalepEditDialog').show()"
+                                 actionListener="#{edbTalepController.readInfo()}"
+                                 disabled="#{empty edbTalepController.selected}" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('edbtalep:guncelle')}"/>
+                <p:commandButton id="viewButton" styleClass="ui-button-info" icon="pi pi-search" pt:data-tooltip="#{messages.buttonDetay}"
+                                 update=":EdbTalepViewForm:EdbTalepViewForm" oncomplete="PF('EdbTalepViewDialog').show()"
+                                 disabled="#{empty edbTalepController.selected}" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                <p:commandButton id="deleteButton" styleClass="ui-button-danger" icon="pi pi-trash" pt:data-tooltip="#{messages.buttonSil}"
+                                 actionListener="#{edbTalepController.delete}" update=":growl,datalist" disabled="#{empty edbTalepController.selected}"
+                                 rendered="#{syKullaniciController.hasPermission('edbtalep:sil')}">
+                    <p:confirm header="#{messages.ConfirmationHeader}" message="#{messages.ConfirmDeleteMessage}" icon="pi pi-exclamation-circle"/>
+                </p:commandButton>
+
+            </f:facet>
+
+        </coco:datatable>
+
+
+        <ui:include src="/confirmation.xhtml"/>
+
+    </h:form>
+
+</ui:composition>

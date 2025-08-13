@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pt="jakarta.faces.passthrough"
+                xmlns:coco="jakarta.faces.composite/ui">
+
+    <h:form id="GnlMahalleListForm" class="form-height">
+
+        <p:contextMenu id="GnlMahalleDataTableContextMenu" for="datalist:datalist">
+            <p:menuitem value="#{messages.buttonDetay}"
+                        onclick="document.getElementById('GnlMahalleListForm:datalist:datalist:viewButton').click();"
+                        icon="pi pi-search"/>
+            <p:menuitem value="#{messages.buttonSil}"
+                        onclick="document.getElementById('GnlMahalleListForm:datalist:datalist:deleteButton').click();"
+                        icon="pi pi-trash" rendered="#{syKullaniciController.hasPermission('gnlmahalle:sil')}"/>
+        </p:contextMenu>
+        <coco:datatable id="datalist"
+                        value="#{gnlMahalleController.lazyItems}"
+                        rowKey="#{item.id}"
+                        selection="#{gnlMahalleController.selected}"
+                        filtered="#{gnlMahalleController.filtered}"
+                        rowselect=":GnlMahalleListForm:datalist:datalist:viewButton,:GnlMahalleListForm:datalist:datalist:deleteButton"
+                        rowDblselect="document.getElementById('GnlMahalleListForm:datalist:datalist:viewButton').click()"
+                        contextMenu=":GnlMahalleListForm:datalist:datalist:viewButton :GnlMahalleListForm:datalist:datalist:deleteButton"
+                        selectListener="#{gnlMahalleController.resetParents}"
+                        controller="#{gnlMahalleController}"
+                        header="#{messages.mahalleListesi}">
+
+
+            <p:ajax event="colResize" listener="#{gnlMahalleController.onResize}"/>
+
+            <f:facet name="paginatorBottomLeft">
+                    <p:commandButton id="viewButton" styleClass="ui-button-info" icon="pi pi-search"
+                                     pt:data-tooltip="#{messages.buttonDetay}"
+                                     update=":GnlMahalleViewForm:GnlMahalleViewForm"
+                                     oncomplete="PF('GnlMahalleViewDialog').show()"
+                                     disabled="#{empty gnlMahalleController.selected}" onstart="PF('Loading').show()"
+                                     onsuccess="PF('Loading').hide()"/>
+                    <p:commandButton id="deleteButton" styleClass="ui-button-danger" icon="pi pi-trash"
+                                     pt:data-tooltip="#{messages.buttonSil}"
+                                     actionListener="#{gnlMahalleController.delete}"
+                                     update=":growl,datalist" disabled="#{empty gnlMahalleController.selected}">
+                        <p:confirm header="#{messages.ConfirmationHeader}" message="#{messages.ConfirmDeleteMessage}"
+                                   icon="pi pi-warning"/>
+                    </p:commandButton>
+
+                    <p:commandButton id="listeGuncelleButton" styleClass="ui-button-success" icon="pi pi-refresh"
+                                     pt:data-tooltip="#{messages.buttonListeyiGuncelle}"
+                                     actionListener="#{gnlMahalleController.updateList}" update=":growl,datalist"
+                                     onclick="PF('MahalleGuncelle').show()"
+                    rendered="#{syKullaniciController.hasPermission('gnlmahalle:listeyiGuncelle')}">
+                        <p:confirm header="#{messages.listeGuncelleOnay}" message="#{messages.listeGuncelleOnayMesaj}"
+                                   icon="pi pi-warning"/>
+                    </p:commandButton>
+            </f:facet>
+
+        </coco:datatable>
+
+
+        <ui:include src="/confirmation.xhtml"/>
+
+    </h:form>
+
+</ui:composition>

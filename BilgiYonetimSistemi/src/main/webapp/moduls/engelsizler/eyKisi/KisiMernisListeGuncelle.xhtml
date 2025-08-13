@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:p="primefaces"
+      xmlns:o="http://omnifaces.org/ui">
+
+<ui:composition>
+
+    <script type="text/javascript">
+        function kisi(data) {
+            var sonuc = data.split(",");
+            $('.kisi').html(sonuc[0]);
+            $('.tc').html(sonuc[1]);
+            var sayi = sonuc[2];
+            sayi += sayi === "" ? "" : "/";
+            sayi +=sonuc[3];
+            $('.sayi').html(sayi);
+            $('.message').html(sonuc[4])
+        }
+    </script>
+
+    <p:dialog appendTo="@(body)" style="overflow: hidden" modal="true" resizable="false" closable="false"
+              header="#{messages.lutfenBekleyin}" widgetVar="KisiMernisListeGuncelle" width="700">
+        <h:form id="KisiMernisListeGuncelleForm">
+            <div class="row">
+                <div class="col-xl-12 col-md-12">
+                    <!-- card -->
+                    <div class="card card-animate bg-primary">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h2 class="mt-4 ff-secondary fw-semibold text-white sayi"></h2>
+                                    <p class="fw-medium text-white mb-0 tc"></p>
+                                    <h2 class="mt-4 ff-secondary fw-semibold text-white kisi"></h2>
+                                    <h2 class="mt-4 ff-secondary fw-semibold text-white message"></h2>
+                                </div>
+                                <div>
+                                    <div class="spinner">
+                                        <div class="rect1 back-white"></div>
+                                        <div class="rect2 back-white"></div>
+                                        <div class="rect3 back-white"></div>
+                                        <div class="rect4 back-white"></div>
+                                        <div class="rect5 back-white"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- end card body -->
+                    </div> <!-- end card-->
+                    <!-- end card -->
+                </div><!-- end col -->
+            </div>
+        </h:form>
+
+        <o:socket channel="eyKisiChannel" onmessage="kisi" user="#{syKullanici.id}"/>
+
+    </p:dialog>
+
+</ui:composition>
+
+</html>

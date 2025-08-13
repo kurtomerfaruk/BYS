@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:editpage id="EyGorusmeEditForm"
+                   widgetVar="EyGorusmeEditDialog"
+                   actionListener="#{eyGorusmeController.save}"
+                   listForm="EyGorusmeListForm"
+                   model="#{eyGorusmeController.selected}">
+
+        <p:outputLabel value="#{messages.gorusmeKonusuLabel}" for="@next"/>
+        <p:selectOneMenu id="konuId" value="#{eyGorusmeController.selected.eyGorusmeKonu}" converter="omnifaces.SelectItemsConverter" filter="true">
+            <f:selectItem itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{eyGorusmeKonuController.items}"
+                           var="konuIdItem"
+                           itemValue="#{konuIdItem}"
+                           itemLabel="#{konuIdItem.tanim.toString()}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.tcKimlikNoLabel}" for="@next"/>
+        <coco:tcKimlikNoDogumTarihi actionListener="#{eyGorusmeController.getTcKimlik()}"
+                                    update=":growl,@(.tcUpdate)"
+                                    value="#{eyGorusmeController.selected.gnlKisi.tcKimlikNo}"
+                                    dateValue="#{eyGorusmeController.selected.gnlKisi.dogumTarihi}"/>
+
+        <p:outputLabel value="#{messages.adLabel}" for="@next"/>
+        <p:inputText id="ad" value="#{eyGorusmeController.selected.gnlKisi.ad}" title="#{messages.adText}" required="true"
+                     size="50" maxlength="50" styleClass="tcUpdate"/>
+
+        <p:outputLabel value="#{messages.soyadLabel}" for="@next"/>
+        <p:inputText id="soyad" value="#{eyGorusmeController.selected.gnlKisi.soyad}" title="#{messages.soyadText}" required="true"
+                     size="50" maxlength="100" styleClass="tcUpdate"/>
+
+        <p:outputLabel value="#{messages.telefonLabel}" for="@next"/>
+        <p:inputMask id="telefon" value="#{eyGorusmeController.selected.gnlKisi.telefon}" title="#{messages.telefonText}" required="true"
+                     mask="(999) 999 99 99" styleClass="tcUpdate"/>
+
+        <p:outputLabel value="#{messages.gorusmeTarihiLabel}" for="@next"/>
+        <p:datePicker id="gorusmeTarihi" locale="tr" pattern="#{messages.tarihFormat}"
+                      value="#{eyGorusmeController.selected.gorusmeTarihi}"
+                      title="#{messages.gorusmeTarihiText}" mask="true"
+                      monthNavigator="true" yearNavigator="true" showButtonBar="true"
+                      showIcon="true" showOnFocus="false" required="true"/>
+
+        <p:outputLabel value="#{messages.aciklamaLabel}" for="@next"/>
+        <p:inputTextarea rows="4" id="aciklama" value="#{eyGorusmeController.selected.aciklama}" title="#{messages.aciklamaText}" autoResize="false"
+                         styleClass="w-100" required="true"/>
+
+    </coco:editpage>
+
+</ui:composition>
+
+</html>

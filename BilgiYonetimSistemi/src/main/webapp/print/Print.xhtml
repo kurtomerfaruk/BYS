@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:p="primefaces"
+      xmlns:pe="primefaces.extensions">
+<h:head>
+    <style type="text/css">
+        #PrintDlg{
+            top: 70px !important;
+            width: 100% !important;
+            height: 90% !important;
+            max-width: 100% !important;
+        }
+    </style>
+</h:head>
+<h:body>
+    <p:dialog id="PrintDlg"
+              widgetVar="PrintDialog"
+              closeOnEscape="true"
+              appendTo="@(body)"
+              header="Yazdır"
+              modal="true"
+              resizable="false"
+              onShow="resizeViewer();"
+              draggable="false"
+              responsive="true"
+              styleClass="box box-pink"
+              minHeight="400"
+              fitViewport="true">
+
+        <h:form id="PrintForm" style="height: 100%">
+            <p:remoteCommand name="updateViewer" update="viewer"/>
+            <script type="text/javascript">
+                function resizeViewer() {
+                    var windowH = $(window).height();
+                    windowH -= 150;
+                    $("#PrintForm\\:viewer").css("height", windowH + "px");
+                }
+            </script>
+            <pe:documentViewer id="viewer" url="/ReportServlet" download="Rapor.pdf" zoom="auto" transient="true"/>
+
+        </h:form>
+
+    </p:dialog>
+</h:body>
+</html>

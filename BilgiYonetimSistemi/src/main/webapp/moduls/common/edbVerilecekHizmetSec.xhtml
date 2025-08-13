@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:p="primefaces"
+      xmlns:f="jakarta.faces.core">
+
+<h:head>
+    <h:outputScript library="primefaces" name="jquery/jquery.js"/>
+    <h:outputScript library="primefaces" name="jquery/jquery-plugins.js"/>
+    <h:outputStylesheet library="css" name="pfcrud.css"/>
+</h:head>
+<h:body>
+
+    <h:form id="AyKisiSec">
+        <p:dataTable id="datalist"
+                     value="#{edbVerilecekHizmetSecController.lazyItems}"
+                     var="item"
+                     rowKey="#{item.id}"
+                     paginator="true"
+                     rows="10"
+                     selection="#{edbVerilecekHizmetSecController.selected}"
+                     paginatorPosition="bottom"
+                     lazy="true"
+                     pageLinks="5"
+                     filteredValue="#{edbVerilecekHizmetSecController.filtered}"
+                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                     currentPageReportTemplate="#{messages.currentPageTemplate}"
+                     emptyMessage="#{messages.kayitBulunamadi}"
+                     size="small"
+                     styleClass="w-100">
+
+            <f:facet name="header">
+                <div class="products-table-header">
+                    <span style="font-weight: bold">#{messages.verilecekHizmetListesi}</span>
+                </div>
+            </f:facet>
+
+            <p:ajax event="rowDblselect" listener="#{edbVerilecekHizmetSecController.onRowDblSelect}"/>
+
+            <p:column sortBy="#{item.id}" filterBy="#{item.id}">
+                <f:facet name="header">
+                    <h:outputText value="#{messages.kayitNoText}"/>
+                </f:facet>
+                <h:outputText value="#{item.id}">
+                    <f:convertNumber pattern="#{messages.sayiFormat}"/>
+                </h:outputText>
+            </p:column>
+
+            <p:column sortBy="#{item.edbHizmetPlanlama.edbTalep.edbBasvuru.gnlKisi.tcKimlikNo}"
+                      filterBy="#{item.edbHizmetPlanlama.edbTalep.edbBasvuru.gnlKisi.tcKimlikNo}">
+                <f:facet name="header">
+                    <h:outputText value="#{messages.tcKimlikNoText}"/>
+                </f:facet>
+                <h:outputText value="#{item.edbHizmetPlanlama.edbTalep.edbBasvuru.gnlKisi.tcKimlikNo}"/>
+            </p:column>
+
+            <p:column sortBy="#{item.edbHizmetPlanlama.edbTalep.edbBasvuru.gnlKisi.ad}" filterBy="#{item.edbHizmetPlanlama.edbTalep.edbBasvuru.gnlKisi.ad}">
+                <f:facet name="header">
+                    <h:outputText value="#{messages.adText}"/>
+                </f:facet>
+                <h:outputText value="#{item.edbHizmetPlanlama.edbTalep.edbBasvuru.gnlKisi.ad}"/>
+            </p:column>
+
+            <p:column sortBy="#{item.edbHizmetPlanlama.edbTalep.edbBasvuru.gnlKisi.soyad}" filterBy="#{item.edbHizmetPlanlama.edbTalep.edbBasvuru.gnlKisi.soyad}">
+                <f:facet name="header">
+                    <h:outputText value="#{messages.soyadText}"/>
+                </f:facet>
+                <h:outputText value="#{item.edbHizmetPlanlama.edbTalep.edbBasvuru.gnlKisi.soyad}"/>
+            </p:column>
+
+            <p:column headerText="#{messages.buttonSec}" style="width: 70px;text-align: center">
+                <p:commandButton icon="pi pi-check" actionListener="#{edbVerilecekHizmetSecController.edbVerilecekHizmetSecKapat(item)}"
+                                 style="width: 20px !important; height: 20px !important;"/>
+            </p:column>
+
+        </p:dataTable>
+    </h:form>
+
+
+</h:body>
+</html>
+
+

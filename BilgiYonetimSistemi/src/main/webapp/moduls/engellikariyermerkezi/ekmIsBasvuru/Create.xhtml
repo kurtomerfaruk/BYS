@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="primefaces"
+      xmlns:h="jakarta.faces.html"
+>
+
+<ui:composition>
+
+    <p:dialog widgetVar="EkmIsBasvuruCreateDialog"
+              id="EkmIsBasvuruCreateDialogId"
+              modal="true"
+              resizable="false"
+              closeOnEscape="true"
+              header="#{messages.dialogYeniKayit}"
+              appendTo="@(body)"
+              responsive="true"
+              onShow="PF('EkmIsBasvuruCreateDialog').initPosition();fitTabWidth('ekmKisiBilgileriCreateTabPane')"
+              fitViewport="true"
+              position="top">
+
+        <h:form id="EkmIsBasvuruCreateForm">
+            <h:panelGroup id="display">
+                <p:focus context="display"/>
+                <div class="card">
+                    <div class="card-body">
+
+                        <ul class="nav nav-tabs mb-3 tab-style-8 scaleX" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="ekmKisiBilgileriCreateTab" data-bs-toggle="tab"
+                                        data-bs-target="#ekmKisiBilgileriCreateTabPane" type="button" role="tab"
+                                        aria-controls="ekmKisiBilgileriCreateTabPane" aria-selected="true">Kişi Bilgileri
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="ekmEgitimBilgileriCreateTab" data-bs-toggle="tab"
+                                        data-bs-target="#ekmEgitimBilgileriCreateTabPane" type="button" role="tab"
+                                        aria-controls="ekmEgitimBilgileriCreateTabPane" aria-selected="true">Eğitim Bilgileri
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="ekmYabanciDilCreateTab" data-bs-toggle="tab"
+                                        data-bs-target="#ekmYabanciDilCreateTabPane" type="button" role="tab"
+                                        aria-controls="ekmYabanciDilCreateTabPane" aria-selected="true">Yabancı Dil
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="ekmKullandigiProgramCreateTab" data-bs-toggle="tab"
+                                        data-bs-target="#ekmKullandigiProgramCreateTabPane" type="button" role="tab"
+                                        aria-controls="ekmKullandigiProgramCreateTabPane" aria-selected="true">Kullandığı Programlar
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="ekmIsTecrubesiCreateTab" data-bs-toggle="tab"
+                                        data-bs-target="#ekmIsTecrubesiCreateTabPane" type="button" role="tab"
+                                        aria-controls="ekmIsTecrubesiCreateTabPane" aria-selected="true">İş Tecrübesi
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="ekmKursSeminerCreateTab" data-bs-toggle="tab"
+                                        data-bs-target="#ekmKursSeminerCreateTabPane" type="button" role="tab"
+                                        aria-controls="ekmKursSeminerCreateTabPane" aria-selected="true">Kurslar / Seminerler
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="ekmReferanslarCreateTab" data-bs-toggle="tab"
+                                        data-bs-target="#ekmReferanslarCreateTabPane" type="button" role="tab"
+                                        aria-controls="ekmReferanslarCreateTabPane" aria-selected="true">Referanslar
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="ekmDigerBilgilerCreateTab" data-bs-toggle="tab"
+                                        data-bs-target="#ekmDigerBilgilerCreateTabPane" type="button" role="tab"
+                                        aria-controls="ekmDigerBilgilerCreateTabPane" aria-selected="true">Diğer Bilgiler
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="ekmUzmanGorusuCreateTab" data-bs-toggle="tab"
+                                        data-bs-target="#ekmUzmanGorusuCreateTabPane" type="button" role="tab"
+                                        aria-controls="ekmUzmanGorusuCreateTabPane" aria-selected="true">Uzman Görüşü
+                                </button>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+
+                            <div class="tab-pane overflow-hidden active show" id="ekmKisiBilgileriCreateTabPane" role="tabpanel"
+                                 aria-labelledby="ekmKisiBilgileriCreateTab" tabindex="0">
+                                <p:panelGrid id="kisiPanel" columns="2" styleClass="w-100" rendered="#{ekmIsBasvuruController.selected!=null}" layout="tabular">
+
+                                    <ui:include src="KisiBilgileriTab.xhtml"/>
+
+                                </p:panelGrid>
+                            </div>
+                            <div class="tab-pane overflow-hidden" id="ekmEgitimBilgileriCreateTabPane" role="tabpanel"
+                                 aria-labelledby="ekmEgitimBilgileriCreateTab" tabindex="0">
+                                <p:panelGrid id="egitimPanel" columns="1" styleClass="w-100" rendered="#{ekmIsBasvuruController.selected!=null}"
+                                             layout="tabular">
+
+                                    <ui:include src="EgitimBilgileriTab.xhtml"/>
+
+                                </p:panelGrid>
+                            </div>
+                            <div class="tab-pane overflow-hidden" id="ekmYabanciDilCreateTabPane" role="tabpanel"
+                                 aria-labelledby="ekmYabanciDilCreateTab" tabindex="0">
+                                <p:panelGrid id="yabanciDilPanel" columns="1" styleClass="w-100" rendered="#{ekmIsBasvuruController.selected!=null}"
+                                             layout="tabular">
+
+                                    <ui:include src="YabanciDilTab.xhtml"/>
+
+                                </p:panelGrid>
+                            </div>
+                            <div class="tab-pane overflow-hidden" id="ekmKullandigiProgramCreateTabPane" role="tabpanel"
+                                 aria-labelledby="ekmKullandigiProgramCreateTab" tabindex="0">
+                                <p:panelGrid id="kullandigiProgramPanel" columns="1" styleClass="w-100"
+                                             rendered="#{ekmIsBasvuruController.selected!=null}" layout="tabular">
+
+                                    <ui:include src="KullandigiProgramlarTab.xhtml"/>
+
+                                </p:panelGrid>
+                            </div>
+                            <div class="tab-pane overflow-hidden" id="ekmIsTecrubesiCreateTabPane" role="tabpanel"
+                                 aria-labelledby="ekmIsTecrubesiCreateTab" tabindex="0">
+                                <p:panelGrid id="isTecrubesiPanel" columns="1" styleClass="w-100" rendered="#{ekmIsBasvuruController.selected!=null}"
+                                             layout="tabular">
+
+                                    <ui:include src="IsTecrubesiTab.xhtml"/>
+
+                                </p:panelGrid>
+                            </div>
+                            <div class="tab-pane overflow-hidden" id="ekmKursSeminerCreateTabPane" role="tabpanel"
+                                 aria-labelledby="ekmKursSeminerCreateTab" tabindex="0">
+                                <p:panelGrid id="kursSeminerPanel" columns="1" styleClass="w-100" rendered="#{ekmIsBasvuruController.selected!=null}"
+                                             layout="tabular">
+
+                                    <ui:include src="KursSeminerTab.xhtml"/>
+
+                                </p:panelGrid>
+                            </div>
+                            <div class="tab-pane overflow-hidden" id="ekmReferanslarCreateTabPane" role="tabpanel"
+                                 aria-labelledby="ekmReferanslarCreateTab" tabindex="0">
+                                <p:panelGrid id="referanslarPanel" columns="1" styleClass="w-100" rendered="#{ekmIsBasvuruController.selected!=null}"
+                                             layout="tabular">
+
+                                    <ui:include src="ReferansTab.xhtml"/>
+
+                                </p:panelGrid>
+                            </div>
+                            <div class="tab-pane overflow-hidden" id="ekmDigerBilgilerCreateTabPane" role="tabpanel"
+                                 aria-labelledby="ekmDigerBilgilerCreateTab" tabindex="0">
+                                <p:panelGrid id="digerBilgiler" columns="2" styleClass="w-100" rendered="#{ekmIsBasvuruController.selected!=null}"
+                                             layout="tabular">
+                                    <p:outputLabel value="#{messages.saglikProblemiVarMiLabel}" for="saglikProblemiVarMi"/>
+                                    <p:selectBooleanCheckbox id="saglikProblemiVarMi" value="#{ekmIsBasvuruController.selected.saglikProblemiVarMi}"/>
+
+                                    <p:outputLabel value="#{messages.aciklamaLabel}" for="saglikAciklama"/>
+                                    <p:inputTextarea id="saglikAciklama" value="#{ekmIsBasvuruController.selected.saglikAciklama}" rows="4" autoResize="false"
+                                                     styleClass="w-100"/>
+
+                                </p:panelGrid>
+                            </div>
+                            <div class="tab-pane overflow-hidden" id="ekmUzmanGorusuCreateTabPane" role="tabpanel"
+                                 aria-labelledby="ekmUzmanGorusuCreateTab" tabindex="0">
+                                <p:panelGrid id="uzmanGorusuPanel" columns="2" styleClass="w-100" rendered="#{ekmIsBasvuruController.selected!=null}"
+                                             layout="tabular">
+                                    <p:outputLabel value="#{messages.uzmanGorusuLabel}" for="uzmanGorusu"/>
+                                    <p:inputTextarea id="uzmanGorusu" value="#{ekmIsBasvuruController.selected.uzmanGorusu}" rows="4" autoResize="false"
+                                                     styleClass="w-100"
+                                                     title="#{messages.uzmanGorusuText}"/>
+                                </p:panelGrid>
+                            </div>
+
+                        </div>
+                    </div><!-- end card-body -->
+                    <div class="card-footer">
+                        <div class="float-end">
+                            <p:commandButton icon="pi pi-check" styleClass="ui-button-success"
+                                             actionListener="#{ekmIsBasvuruController.create}"
+                                             value="#{messages.buttonKaydet}"
+                                             update="display,:EkmIsBasvuruListForm:datalist:datalist,:growl"
+                                             oncomplete="handleSubmit(xhr,status,args,PF('EkmIsBasvuruCreateDialog'));"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                            <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                             value="#{messages.buttonIptal}" onclick="PF('EkmIsBasvuruCreateDialog').hide()"
+                                             immediate="true" onstart="PF('Loading').show()"
+                                             onsuccess="PF('Loading').hide()"/>
+                        </div>
+                    </div>
+                </div>
+            </h:panelGroup>
+        </h:form>
+
+    </p:dialog>
+</ui:composition>
+
+</html>

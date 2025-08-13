@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+>
+
+<ui:composition>
+    <p:panelGrid columns="2" class="w-100" layout="tabular">
+        <p:outputLabel value="#{messages.adLabel}" for="@next"/>
+        <p:inputText id="aranacakAd" value="#{ayKisiController.ayKisiAranacakKisi.ad}"
+                     size="50" maxlength="50"/>
+
+        <p:outputLabel value="#{messages.soyadLabel}" for="@next"/>
+        <p:inputText id="aranacakSoyad" value="#{ayKisiController.ayKisiAranacakKisi.soyad}"
+                     size="50" maxlength="50"/>
+
+        <p:outputLabel value="#{messages.yakinlikDerecesiLabel}" for="@next"/>
+        <p:selectOneMenu id="yakinlikDerecesi" value="#{ayKisiController.ayKisiAranacakKisi.yakinlikDerecesi}" converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{enumYakinlikDerecesi.ALL_VALUES}"
+                           var="yakinlikDerecesis"
+                           itemValue="#{yakinlikDerecesis}"
+                           itemLabel="#{yakinlikDerecesis.displayValue}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.telefonLabel}" for="@next"/>
+        <p:inputMask id="aranacakTelefon" value="#{ayKisiController.ayKisiAranacakKisi.telefon}" mask="(999) 999 99 99" size="14"/>
+
+        <f:facet name="footer">
+            <div class="float-end">
+                <p:commandButton value="#{messages.buttonEkle}" actionListener="#{ayKisiController.addCalledPerson()}" update=":growl,AyKisiCreateForm:datalist"
+                                 styleClass="ui-button-success" icon="pi pi-check"/>
+            </div>
+        </f:facet>
+    </p:panelGrid>
+
+    <p:panelGrid columns="1">
+        <p:dataTable id="datalist"
+                     value="#{ayKisiController.selected.ayAranacakKisiList}"
+                     var="items"
+                     reflow="true"
+                     scrollable="true"
+                     scrollHeight="150"
+                     emptyMessage="#{messages.kayitBulunamadi}"
+                     pageLinks="1">
+
+            <p:column sortBy="#{items.ad}" filterBy="#{items.ad}">
+                <f:facet name="header">
+                    <h:outputText value="#{messages.adText}"/>
+                </f:facet>
+                <h:outputText value="#{items.ad}"/>
+            </p:column>
+
+            <p:column sortBy="#{items.soyad}" filterBy="#{items.soyad}">
+                <f:facet name="header">
+                    <h:outputText value="#{messages.soyadText}"/>
+                </f:facet>
+                <h:outputText value="#{items.soyad}"/>
+            </p:column>
+
+            <p:column sortBy="#{items.yakinlikDerecesi}" filterBy="#{items.yakinlikDerecesi}">
+                <f:facet name="header">
+                    <h:outputText value="#{messages.yakinlikDerecesiText}"/>
+                </f:facet>
+                <h:outputText value="#{items.yakinlikDerecesi}"/>
+            </p:column>
+
+            <p:column sortBy="#{items.telefon}" filterBy="#{items.telefon}">
+                <f:facet name="header">
+                    <h:outputText value="#{messages.telefonText}"/>
+                </f:facet>
+                <h:outputText value="#{items.telefon}"/>
+            </p:column>
+
+            <p:column width="60" headerText="#{messages.buttonSil}">
+                <p:commandButton icon="ui-icon-trash" title="#{messages.buttonSil}" actionListener="#{ayKisiController.removeCalledPerson(items)}" update="datalist,:growl"
+                                 process="datalist" styleClass="ui-button-danger"/>
+            </p:column>
+
+        </p:dataTable>
+    </p:panelGrid>
+</ui:composition>
+</html>

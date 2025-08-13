@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:p="primefaces"
+                xmlns:pt="jakarta.faces.passthrough"
+                xmlns:coco="jakarta.faces.composite/ui">
+
+
+    <h:form id="EyKisiListForm" styleClass="form-height">
+        <p:contextMenu id="EyKisiDataTableContextMenu" for="datalist:datalist">
+            <p:menuitem value="#{messages.buttonEkle}"
+                        onclick="document.getElementById('EyKisiListForm:datalist:datalist:createButton').click();"
+                        icon="pi pi-plus" rendered="#{syKullaniciController.hasPermission('eykisi:ekle')}"/>
+            <p:menuitem value="#{messages.buttonGuncelle}"
+                        onclick="document.getElementById('EyKisiListForm:datalist:datalist:editButton').click();"
+                        icon="pi pi-pencil" rendered="#{syKullaniciController.hasPermission('eykisi:guncelle')}"/>
+            <p:menuitem value="#{messages.buttonDetay}"
+                        onclick="document.getElementById('EyKisiListForm:datalist:datalist:viewButton').click();"
+                        icon="pi pi-search"/>
+            <p:menuitem value="#{messages.buttonSil}"
+                        onclick="document.getElementById('EyKisiListForm:datalist:datalist:deleteButton').click();"
+                        icon="pi pi-trash" rendered="#{syKullaniciController.hasPermission('eykisi:sil')}"/>
+            <p:separator/>
+            <p:menuitem value="#{messages.buttonNvidenGuncelle}"
+                        onclick="document.getElementById('EyKisiListForm:datalist:datalist:nviUpdateButton').click();"
+                        icon="pi pi-refresh" rendered="#{syKullaniciController.hasPermission('eykisi:nvidenGuncelle')}"/>
+            <p:separator/>
+            <p:menuitem value="#{messages.buttonQrCodeOlustur}"
+                        onclick="document.getElementById('EyKisiListForm:datalist:datalist:qrCodeButton').click();"
+                        icon="pi pi-qrcode" rendered="#{syKullaniciController.hasPermission('eykisi:qrOlustur')}"/>
+            <p:menuitem value="#{messages.buttonYazdir}"
+                        onclick="document.getElementById('EyKisiListForm:datalist:datalist:printButton').click();"
+                        icon="pi pi-print" rendered="#{syKullaniciController.hasPermission('eykisi:yazdir')}"/>
+            <p:separator/>
+            <p:menuitem value="#{messages.buttonListeyiGuncelle}"
+                        onclick="document.getElementById('EyKisiListForm:datalist:datalist:updateListButton').click();"
+                        icon="pi pi-check"  rendered="#{syKullaniciController.hasPermission('eykisi:listeyiGuncelle')}"/>
+            <p:menuitem value="#{messages.buttonGaziKartVeriAl}"
+                        onclick="document.getElementById('EyKisiListForm:datalist:datalist:gaziKartVeriAlButton').click();"
+                        icon="pi pi-check-circle" rendered="#{syKullaniciController.hasPermission('eykisi:gaziKarttanGuncelle')}"/>
+            <p:menuitem value="#{messages.buttonAdresGuncelle}"
+                        onclick="document.getElementById('EyKisiListForm:datalist:datalist:addressUpdateButton').click();"
+                        icon="pi pi-list" rendered="#{syKullaniciController.hasPermission('eykisi:adresGuncelle')}"/>
+        </p:contextMenu>
+        <coco:datatable id="datalist"
+                        value="#{eyKisiController.lazyItems}"
+                        rowKey="#{item.id}"
+                        selection="#{eyKisiController.selected}"
+                        filtered="#{eyKisiController.filtered}"
+                        rowselect=":EyKisiListForm:datalist:datalist:createButton,:EyKisiListForm:datalist:datalist:viewButton,:EyKisiListForm:datalist:datalist:editButton,:EyKisiListForm:datalist:datalist:deleteButton,:EyKisiListForm:datalist:datalist:nviUpdateButton,:EyKisiListForm:datalist:datalist:qrCodeButton,:EyKisiListForm:datalist:datalist:printButton"
+                        rowDblselect="document.getElementById('EyKisiListForm:datalist:datalist:editButton').click()"
+                        contextMenu=":EyKisiListForm:datalist:datalist:createButton :EyKisiListForm:datalist:datalist:viewButton :EyKisiListForm:datalist:datalist:editButton :EyKisiListForm:datalist:datalist:deleteButton :EyKisiListForm:datalist:datalist:nviUpdateButton :EyKisiListForm:datalist:datalist:qrCodeButton :EyKisiListForm:datalist:datalist:printButton"
+                        selectListener="#{eyKisiController.resetParents}"
+                        controller="#{eyKisiController}"
+                        header="#{messages.kisiListesi}">
+
+            <p:ajax event="colResize" listener="#{eyKisiController.onResize}"/>
+
+            <f:facet name="paginatorBottomLeft">
+                <div class="float-end">
+                    <p:commandButton id="createButton" styleClass="ui-button-primary" icon="pi pi-plus"
+                                     pt:data-tooltip="#{messages.buttonEkle}"
+                                     actionListener="#{eyKisiController.prepareCreate}"
+                                     update=":EyKisiCreateForm"
+                                     oncomplete="PF('EyKisiCreateDialog').show()" onstart="PF('Loading').show()"
+                                     onsuccess="PF('Loading').hide()"
+                                     rendered="#{syKullaniciController.hasPermission('eykisi:ekle')}"/>
+                    <p:commandButton id="editButton" styleClass="ui-button-success" icon="pi pi-pencil"
+                                     pt:data-tooltip="#{messages.buttonGuncelle}"
+                                     actionListener="#{eyKisiController.readInfo()}"
+                                     update=":EyKisiEditForm" oncomplete="PF('EyKisiEditDialog').show()"
+                                     disabled="#{empty eyKisiController.selected}" onstart="PF('Loading').show()"
+                                     onsuccess="PF('Loading').hide()"
+                                     rendered="#{syKullaniciController.hasPermission('eykisi:guncelle')}">
+                        <f:attribute name="eyKisi" value="#{eyKisiController.selected}"/>
+                        <f:actionListener binding="#{eyKisiDosyaController.kisiBilgisiGetir()}"/>
+                    </p:commandButton>
+                    <p:commandButton id="viewButton" styleClass="ui-button-info" icon="pi pi-search"
+                                     pt:data-tooltip="#{messages.buttonDetay}" update=":EyKisiViewForm:EyKisiViewForm"
+                                     oncomplete="PF('EyKisiViewDialog').show()"
+                                     disabled="#{empty eyKisiController.selected}" onstart="PF('Loading').show()"
+                                     onsuccess="PF('Loading').hide()"/>
+                    <p:commandButton id="deleteButton" styleClass="ui-button-danger" icon="pi pi-trash"
+                                     pt:data-tooltip="#{messages.buttonSil}" actionListener="#{eyKisiController.delete}"
+                                     update=":growl,datalist" disabled="#{empty eyKisiController.selected}"
+                                     rendered="#{syKullaniciController.hasPermission('eykisi:sil')}">
+                        <p:confirm header="#{messages.ConfirmationHeader}" message="#{messages.ConfirmDeleteMessage}"
+                                   icon="pi pi-warning"/>
+                    </p:commandButton>
+                    <p:commandButton id="nviUpdateButton" icon="pi pi-refresh" styleClass="ui-button-secondary"
+                                     pt:data-tooltip="#{messages.buttonNvidenGuncelle}" update="datalist,:growl"
+                                     actionListener="#{eyKisiController.nviUpdate}" disabled="#{empty eyKisiController.selected}"
+                                     onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                     rendered="#{syKullaniciController.hasPermission('eykisi:nvidenGuncelle')}"/>
+                    <p:commandButton id="qrCodeButton" icon="pi pi-qrcode" styleClass="ui-button-success" pt:data-tooltip="#{messages.buttonQrCodeOlustur}"
+                                     update=":QrCodeForm,:growl"
+                                     actionListener="#{eyKisiController.createQRCode()}" disabled="#{empty eyKisiController.selected}"
+                                     onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                     rendered="#{syKullaniciController.hasPermission('eykisi:qrOlustur')}"/>
+                    <p:commandButton id="printButton" icon="pi pi-print" styleClass="ui-button-info" pt:data-tooltip="#{messages.buttonYazdir}"
+                                     update=":PrintForm,:growl"
+                                     actionListener="#{eyKisiPrint.print(eyKisiController.selected.id)}" disabled="#{empty eyKisiController.selected}"
+                                     onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                     rendered="#{syKullaniciController.hasPermission('eykisi:yazdir')}"/>
+                    <p:commandButton id="updateListButton" icon="pi pi-check" styleClass="ui-button-warning" pt:data-tooltip="#{messages.buttonListeyiGuncelle}"
+                                     update=":ListeGuncelleForm" oncomplete="PF('ListeGuncelleDialog').show()" onstart="PF('Loading').show()"
+                                     onsuccess="PF('Loading').hide()"
+                                     rendered="#{syKullaniciController.hasPermission('eykisi:listeGuncelle')}"/>
+                    <p:commandButton id="gaziKartVeriAlButton" icon="pi pi-check-circle" styleClass="ui-button-secondary"
+                                     pt:data-tooltip="#{messages.buttonGaziKartVeriAl}" update=":TarihSecForm"
+                                     oncomplete="PF('TarihSecDialog').show()" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                     rendered="#{syKullaniciController.hasPermission('eykisi:gaziKarttanGuncelle')}"/>
+                    <p:commandButton id="addressUpdateButton" icon="pi pi-list" styleClass="ui-button-info" pt:data-tooltip="#{messages.buttonAdresGuncelle}"
+                                     update=":AdresListeGuncelleForm" oncomplete="PF('AdresListeGuncelleDialog').show()" onstart="PF('Loading').show()"
+                                     onsuccess="PF('Loading').hide()"
+                                     rendered="#{syKullaniciController.hasPermission('eykisi:adresGuncelle')}"/>
+                </div>
+            </f:facet>
+
+        </coco:datatable>
+
+
+        <ui:include src="/confirmation.xhtml"/>
+
+
+    </h:form>
+
+    <ui:include src="/print/Print.xhtml"/>
+
+</ui:composition>

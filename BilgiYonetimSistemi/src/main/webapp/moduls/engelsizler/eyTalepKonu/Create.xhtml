@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:createpage id="EyTalepKonuCreateForm"
+                     renderedListener="#{eyTalepKonuController.selected != null}"
+                     widgetVar="EyTalepKonuCreateDialog"
+                     actionListener="#{eyTalepKonuController.saveNew}"
+                     listForm="EyTalepKonuListForm">
+
+
+        <p:outputLabel value="#{messages.konuLabel}" for="@next"/>
+        <p:inputText id="tanim" value="#{eyTalepKonuController.selected.tanim}" title="#{messages.konuText}" size="50"
+                     maxlength="150" required="true"/>
+
+    </coco:createpage>
+
+</ui:composition>
+
+</html>

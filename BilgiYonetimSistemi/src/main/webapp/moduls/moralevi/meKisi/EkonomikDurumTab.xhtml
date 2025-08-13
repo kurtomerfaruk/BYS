@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces">
+<ui:composition>
+
+    <p:outputLabel value="#{messages.aileninSosyalGuvencesiLabel}" for="@next"/>
+    <p:selectOneMenu id="aileSosyalGuvence" value="#{meKisiController.selected.eyKisi.gnlKisi.sosyalGuvence}" styleClass="tcUpdate">
+        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+        <f:selectItems value="#{enumSosyalGuvence.ALL_VALUES}"
+                       var="sosyalGuvences"
+                       itemValue="#{sosyalGuvences}"
+                       itemLabel="#{sosyalGuvences.displayValue}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.meslekLabel}" for="@next"/>
+    <p:inputText id="meslek" value="#{meKisiController.selected.eyKisi.gnlKisi.meslek}" size="50" title="#{messages.meslekText}" styleClass="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.aylikGeliriLabel}" for="@next"/>
+    <p:inputNumber id="aylikGeliri" value="#{meKisiController.selected.eyKisi.gnlKisi.aylikGeliri}" styleClass="text-end tcUpdate" decimalSeparator=","
+                   thousandSeparator="." emptyValue="zero"/>
+
+    <p:outputLabel value="#{messages.aileninGelirKaynagiLabel}" for="@next"/>
+    <p:selectCheckboxMenu id="aileninGelirKaynagi" value="#{meKisiController.aileninGelirKaynagis}" label="#{messages.aileninGelirKaynagiText}" multiple="true"
+                          filter="true" filterMatchMode="startsWith" styleClass="checkboxMenu tcUpdate">
+        <f:selectItems value="#{enumAileninGelirKaynagi.ALL_VALUES}"
+                       var="aileninGelirKaynagis"
+                       itemValue="#{aileninGelirKaynagis}"
+                       itemLabel="#{aileninGelirKaynagis.displayValue}"/>
+        <f:converter converterId="omnifaces.GenericEnumConverter"/>
+    </p:selectCheckboxMenu>
+
+    <p:outputLabel value="#{messages.aileninGelirKaynagiAciklamaLabel}" for="@next"/>
+    <p:inputText id="aileninGelirKaynagiAciklama" value="#{meKisiController.selected.eyKisi.gnlKisi.gelirKaynagiAciklama}" styleClass="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.evinDurumuLabel}" for="@next"/>
+    <p:selectOneMenu id="evinDurumu" value="#{meKisiController.selected.eyKisi.gnlKisi.evinDurumu}" converter="omnifaces.SelectItemsConverter"
+                     styleClass="tcUpdate">
+        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+        <f:selectItems value="#{enumEvinDurumu.ALL_VALUES}"
+                       var="evinDurumus"
+                       itemValue="#{evinDurumus}"
+                       itemLabel="#{evinDurumus.displayValue}"/>
+    </p:selectOneMenu>
+
+</ui:composition>
+</html>

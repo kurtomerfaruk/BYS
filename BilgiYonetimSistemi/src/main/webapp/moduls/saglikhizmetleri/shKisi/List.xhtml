@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:p="primefaces"
+                xmlns:pt="jakarta.faces.passthrough"
+                xmlns:coco="jakarta.faces.composite/ui">
+
+    <h:form id="ShKisiListForm" styleClass="form-height">
+
+        <p:contextMenu id="ShKisiDataTableContextMenu" for="datalist:datalist">
+            <p:menuitem value="#{messages.buttonEkle}" onclick="document.getElementById('ShKisiListForm:datalist:datalist:createButton').click();"
+                        icon="pi pi-plus" rendered="#{syKullaniciController.hasPermission('shkisi:ekle')}"/>
+            <p:menuitem value="#{messages.buttonGuncelle}" onclick="document.getElementById('ShKisiListForm:datalist:datalist:editButton').click();"
+                        icon="pi pi-pencil" rendered="#{syKullaniciController.hasPermission('shkisi:guncelle')}"/>
+            <p:menuitem value="#{messages.buttonDetay}" onclick="document.getElementById('ShKisiListForm:datalist:datalist:viewButton').click();"
+                        icon="pi pi-search"/>
+            <p:menuitem value="#{messages.buttonSil}" onclick="document.getElementById('ShKisiListForm:datalist:datalist:deleteButton').click();"
+                        icon="pi pi-trash" rendered="#{syKullaniciController.hasPermission('shkisi:sil')}"/>
+        </p:contextMenu>
+        <coco:datatable id="datalist"
+                        value="#{shKisiController.lazyItems}"
+                        rowKey="#{item.id}"
+                        selection="#{shKisiController.selected}"
+                        filtered="#{shKisiController.filtered}"
+                        rowselect=":ShKisiListForm:datalist:datalist:createButton,:ShKisiListForm:datalist:datalist:viewButton,:ShKisiListForm:datalist:datalist:editButton,:ShKisiListForm:datalist:datalist:deleteButton,:ShKisiListForm:datalist:datalist:nviUpdateButton,:ShKisiListForm:ShKisiDataTableContextMenu"
+                        rowDblselect="document.getElementById('ShKisiListForm:datalist:datalist:editButton').click()"
+                        contextMenu=":ShKisiListForm:datalist:datalist:createButton :ShKisiListForm:datalist:datalist:viewButton :ShKisiListForm:datalist:datalist:editButton :ShKisiListForm:datalist:datalist:deleteButton :ShKisiListForm:datalist:datalist:nviUpdateButton"
+                        selectListener="#{shKisiController.resetParents}"
+                        controller="#{shKisiController}"
+                        header="#{messages.kisiListesi}">
+
+            <p:ajax event="colResize" listener="#{shKisiController.onResize}"/>
+
+            <f:facet name="paginatorBottomLeft">
+
+                <p:commandButton id="createButton" styleClass="ui-button-primary" icon="pi pi-plus" pt:data-tooltip="#{messages.buttonEkle}"
+                                 actionListener="#{shKisiController.prepareCreate}" update=":ShKisiCreateForm:ShKisiCreateForm"
+                                 oncomplete="PF('ShKisiCreateDialog').show()" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('shkisi:ekle')}"/>
+                <p:commandButton id="editButton" styleClass="ui-button-success" icon="pi pi-pencil" pt:data-tooltip="#{messages.buttonGuncelle}"
+                                 update=":ShKisiEditForm" oncomplete="PF('ShKisiEditDialog').show()" disabled="#{empty shKisiController.selected}"
+                                 onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()" actionListener="#{shKisiController.readInfo()}"
+                                 rendered="#{syKullaniciController.hasPermission('shkisi:guncelle')}"/>
+                <p:commandButton id="viewButton" styleClass="ui-button-info" icon="pi pi-search" pt:data-tooltip="#{messages.buttonDetay}"
+                                 update=":ShKisiViewForm" oncomplete="PF('ShKisiViewDialog').show()"
+                                 disabled="#{empty shKisiController.selected}" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                <p:commandButton id="deleteButton" styleClass="ui-button-danger" icon="pi pi-trash" pt:data-tooltip="#{messages.buttonSil}"
+                                 actionListener="#{shKisiController.delete}" update=":growl,datalist" disabled="#{empty shKisiController.selected}"
+                                 rendered="#{syKullaniciController.hasPermission('shkisi:sil')}">
+                    <p:confirm header="#{messages.ConfirmationHeader}" message="#{messages.ConfirmDeleteMessage}" icon="pi pi-warning"/>
+                </p:commandButton>
+                <p:commandButton id="nviUpdateButton" icon="pi pi-refresh" styleClass="ui-button-secondary"
+                                 pt:data-tooltip="#{messages.buttonNvidenGuncelle}" update="datalist,:growl"
+                                 actionListener="#{shKisiController.nviUpdate}" disabled="#{empty shKisiController.selected}"
+                                 onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('shkisi:nviguncelle')}"/>
+
+            </f:facet>
+
+        </coco:datatable>
+
+
+        <ui:include src="/confirmation.xhtml"/>
+
+    </h:form>
+
+</ui:composition>

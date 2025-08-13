@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="primefaces"
+      xmlns:h="jakarta.faces.html">
+
+<ui:composition>
+
+    <p:dialog widgetVar="EyKisiCreateDialog"
+              modal="true"
+              resizable="false"
+              closeOnEscape="true"
+              header="#{messages.dialogYeniKayit}"
+              appendTo="@(body)"
+              responsive="true"
+              onShow="PF('EyKisiCreateDialog').initPosition();adjustMenuWidth()"
+              fitViewport="true"
+              position="top">
+
+        <h:form id="EyKisiCreateForm">
+            <h:panelGroup id="display">
+                <p:focus context="display"/>
+                <div class="card">
+
+                    <div class="card-body">
+
+                        <ul class="nav nav-tabs mb-3 tab-style-8 scaleX" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="eykisiBilgileriCreateTab" data-bs-toggle="tab"
+                                        data-bs-target="#eykisiBilgileriCreateTabPane" type="button" role="tab"
+                                        aria-controls="eykisiBilgileriCreateTabPane" aria-selected="true">Kişi Bilgileri
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="aileDurumuCreateTab" data-bs-toggle="tab"
+                                        data-bs-target="#aileDurumuCreateTabPane" type="button" role="tab"
+                                        aria-controls="aileDurumuCreateTabPane" aria-selected="false">Aile Durumu
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="ekonomomikDurumCreateTab" data-bs-toggle="tab"
+                                        data-bs-target="#ekonomomikDurumCreateTabPane" type="button" role="tab"
+                                        aria-controls="ekonomomikDurumCreateTabPane" aria-selected="false">Ekonomik Durum
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="sosyalYardimCreateTab" data-bs-toggle="tab"
+                                        data-bs-target="#sosyalYardimCreateTabPane" type="button" role="tab"
+                                        aria-controls="sosyalYardimCreateTabPane" aria-selected="false">Sosyal Yardım Durumu
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="engellilikCreateTab" data-bs-toggle="tab"
+                                        data-bs-target="#engellilikCreateTabPane" type="button" role="tab"
+                                        aria-controls="engellilikCreateTabPane" aria-selected="false">Engellilik Durumu
+                                </button>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content">
+                            <div class="tab-pane overflow-hidden active show" id="eykisiBilgileriCreateTabPane" role="tabpanel"
+                                 aria-labelledby="eykisiBilgileriCreateTab"  tabindex="0">
+                                <p:panelGrid id="kisiPanel" columns="2" styleClass="w-100" rendered="#{eyKisiController.selected!=null}" layout="tabular">
+
+                                    <ui:include src="/moduls/engelsizler/eyKisi/KisiBilgileriTab.xhtml"/>
+                                </p:panelGrid>
+                            </div>
+
+                            <div class="tab-pane overflow-hidden" id="aileDurumuCreateTabPane" role="tabpanel" aria-labelledby="aileDurumuCreateTab"
+                                 tabindex="0">
+
+                                <p:panelGrid id="aileDurumuPanel" columns="2" styleClass="w-100" rendered="#{eyKisiController.selected!=null}"
+                                             layout="tabular">
+
+                                    <ui:include src="/moduls/engelsizler/eyKisi/AileDurumuTab.xhtml"/>
+
+                                </p:panelGrid>
+                            </div>
+
+                            <div class="tab-pane overflow-hidden" id="ekonomomikDurumCreateTabPane" role="tabpanel" aria-labelledby="ekonomomikDurumCreateTab"
+                                 tabindex="0">
+                                <p:panelGrid id="ekonomikDurumPanel" columns="2" styleClass="w-100" rendered="#{eyKisiController.selected!=null}"
+                                             layout="tabular">
+
+                                    <ui:include src="/moduls/engelsizler/eyKisi/EkonomikDurumTab.xhtml"/>
+
+                                </p:panelGrid>
+                            </div>
+
+                            <div class="tab-pane overflow-hidden" id="sosyalYardimCreateTabPane" role="tabpanel" aria-labelledby="sosyalYardimCreateTab"
+                                 tabindex="0">
+                                <p:panelGrid id="sosyalYardimPanel" columns="2" styleClass="w-100"
+                                             rendered="#{eyKisiController.selected!=null}" layout="tabular">
+                                    <ui:include src="/moduls/engelsizler/eyKisi/SosyalYardimTab.xhtml"/>
+
+                                </p:panelGrid>
+                            </div>
+
+                            <div class="tab-pane overflow-hidden" id="engellilikCreateTabPane" role="tabpanel" aria-labelledby="engellilikCreateTab"
+                                 tabindex="0">
+                                <p:panelGrid id="engellilikPanel" columns="2" styleClass="w-100"
+                                             rendered="#{eyKisiController.selected!=null}" layout="tabular">
+
+                                    <ui:include src="/moduls/engelsizler/eyKisi/EngellilikTab.xhtml"/>
+
+                                </p:panelGrid>
+                            </div>
+                        </div>
+                    </div><!-- end card-body -->
+                    <div class="card-footer">
+                        <div class="float-end">
+                            <p:commandButton icon="pi pi-check" styleClass="ui-button-success"
+                                             actionListener="#{eyKisiController.update}"
+                                             value="#{messages.buttonKaydet}"
+                                             update="display,:EyKisiListForm:datalist:datalist,:growl"
+                                             oncomplete="handleSubmit(xhr,status,args,PF('EyKisiCreateDialog'));"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                            <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                             value="#{messages.buttonIptal}" onclick="PF('EyKisiCreateDialog').hide()"
+                                             immediate="true" onstart="PF('Loading').show()"
+                                             onsuccess="PF('Loading').hide()"/>
+                        </div>
+                    </div>
+                </div>
+            </h:panelGroup>
+        </h:form>
+
+    </p:dialog>
+
+    <script type="text/javascript">
+        function adjustMenuWidth() {
+            var dialog = PF('EyKisiCreateDialog');
+            var menu = $(".checkboxMenu");
+
+            if (dialog &amp;&amp; menu) {
+                var dialogWidth = dialog.jq.innerWidth();
+                var menuContainer = $(menu).closest('.ui-selectcheckboxmenu');
+                menuContainer.width(dialogWidth - 30); // 30px padding/margin için
+            }
+        }
+    </script>
+
+</ui:composition>
+
+</html>

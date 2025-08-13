@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:p="primefaces"
+                xmlns:pt="jakarta.faces.passthrough"
+                xmlns:coco="jakarta.faces.composite/ui">
+
+    <h:form id="SyYetkiListForm" styleClass="form-height">
+
+        <p:contextMenu id="SyYetkiDataTableContextMenu" for="datalist:datalist">
+            <p:menuitem value="#{messages.buttonEkle}" onclick="document.getElementById('SyYetkiListForm:datalist:datalist:createButton').click();"
+                        icon="pi pi-plus" rendered="#{syKullaniciController.hasPermission('syyetki:ekle')}"/>
+            <p:menuitem value="#{messages.buttonGuncelle}" onclick="document.getElementById('SyYetkiListForm:datalist:datalist:editButton').click();"
+                        icon="pi pi-pencil" rendered="#{syKullaniciController.hasPermission('syyetki:guncelle')}"/>
+            <p:menuitem value="#{messages.buttonKayitBilgisi}" onclick="document.getElementById('SyYetkiListForm:datalist:datalist:viewButton').click();"
+                        icon="pi pi-search"/>
+            <p:menuitem value="#{messages.buttonSil}" onclick="document.getElementById('SyYetkiListForm:datalist:datalist:deleteButton').click();"
+                        icon="pi pi-trash" rendered="#{syKullaniciController.hasPermission('syyetki:sil')}"/>
+        </p:contextMenu>
+        <coco:datatable id="datalist"
+                        value="#{syYetkiController.lazyItems}"
+                        rowKey="#{item.id}"
+                        selection="#{syYetkiController.selected}"
+                        filtered="#{syYetkiController.filtered}"
+                        rowselect=":SyYetkiListForm:datalist:datalist:createButton,:SyYetkiListForm:datalist:datalist:viewButton,:SyYetkiListForm:datalist:datalist:editButton,:SyYetkiListForm:datalist:datalist:deleteButton,:SyYetkiListForm:SyYetkiDataTableContextMenu"
+                        rowDblselect="document.getElementById('SyYetkiListForm:datalist:datalist:editButton').click()"
+                        contextMenu=":SyYetkiListForm:datalist:datalist:createButton :SyYetkiListForm:datalist:datalist:viewButton :SyYetkiListForm:datalist:datalist:editButton :SyYetkiListForm:datalist:datalist:deleteButton"
+                        selectListener="#{syYetkiController.resetParents}"
+                        controller="#{syYetkiController}"
+                        header="#{messages.yetkiListesi}">
+
+            <p:ajax event="colResize" listener="#{syYetkiController.onResize}"/>
+
+            <f:facet name="paginatorBottomLeft">
+
+                <p:commandButton id="createButton" styleClass="ui-button-primary" icon="pi pi-plus" pt:data-tooltip="#{messages.buttonEkle}"
+                                 actionListener="#{syYetkiController.prepareCreate}" update=":SyYetkiCreateForm:SyYetkiCreateForm"
+                                 oncomplete="PF('SyYetkiCreateDialog').show()" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('syyetki:ekle')}"/>
+                <p:commandButton id="editButton" styleClass="ui-button-success" icon="pi pi-pencil" pt:data-tooltip="#{messages.buttonGuncelle}"
+                                 update=":SyYetkiEditForm:SyYetkiEditForm" oncomplete="PF('SyYetkiEditDialog').show()" disabled="#{empty
+                                 syYetkiController.selected}"
+                                 onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('syyetki:guncelle')}"/>
+                <p:commandButton id="viewButton" styleClass="ui-button-info" icon="pi pi-search" pt:data-tooltip="#{messages.buttonKayitBilgisi}"
+                                 update=":SyYetkiViewForm:SyYetkiViewForm" oncomplete="PF('SyYetkiViewDialog').show()" disabled="#{empty
+                                 syYetkiController.selected}"
+                                 onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                <p:commandButton id="deleteButton" styleClass="ui-button-danger" icon="pi pi-trash" pt:data-tooltip="#{messages.buttonSil}"
+                                 actionListener="#{syYetkiController.delete}" update=":growl,datalist" disabled="#{empty syYetkiController.selected}"
+                                 rendered="#{syKullaniciController.hasPermission('syyetki:sil')}">
+                    <p:confirm header="#{messages.ConfirmationHeader}" message="#{messages.ConfirmDeleteMessage}" icon="pi pi-exclamation-circle"/>
+                </p:commandButton>
+
+            </f:facet>
+
+        </coco:datatable>
+
+        <ui:include src="/confirmation.xhtml"/>
+
+    </h:form>
+
+</ui:composition>

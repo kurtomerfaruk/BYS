@@ -1,0 +1,68 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="primefaces"
+      xmlns:composite="jakarta.faces.composite"
+      xmlns:f="jakarta.faces.core"
+      xmlns:h="jakarta.faces.html">
+
+<composite:interface>
+    <composite:attribute name="id"/>
+    <composite:attribute name="widgetVar"/>
+    <composite:attribute name="renderedListener"/>
+    <composite:attribute name="actionListener" method-signature="void actionListener(jakarta.faces.event.ActionEvent)"
+                         required="true"/>
+    <composite:attribute name="proceedActionListener" method-signature="void actionListener(jakarta.faces.event.ActionEvent)"
+                         required="true"/>
+    <composite:attribute name="listForm"/>
+    <composite:attribute name="columns" default="2"/>
+    <composite:attribute name="focus"/>
+    <composite:attribute name="onShow"/>
+    <composite:attribute name="position" default="#{null}"/>
+</composite:interface>
+
+
+<composite:implementation>
+    <p:dialog widgetVar="#{cc.attrs.widgetVar}"
+              modal="true"
+              resizable="false"
+              closeOnEscape="true"
+              header="#{messages.dialogYeniKayit}"
+              appendTo="@(body)"
+              focus="#{cc.attrs.focus}"
+              responsive="true"
+              onShow="PF('#{cc.attrs.widgetVar}').initPosition();#{cc.attrs.onShow}"
+              fitViewport="true"
+              position="#{cc.attrs.position}">
+
+        <h:form id="#{cc.id}">
+            <h:panelGroup id="display">
+                <p:focus context="display"/>
+                <p:panelGrid columns="#{cc.attrs.columns}" columnClasses="column"  rendered="#{cc.attrs.renderedListener}" layout="tabular">
+                    <composite:insertChildren/>
+                    <f:facet name="footer">
+                        <div class="float-end">
+                            <p:commandButton id="btnProceed" icon="pi pi-check-circle" styleClass="ui-button-help"
+                                             actionListener="#{cc.attrs.proceedActionListener}"
+                                             value="#{messages.buttonKaydet}"
+                                             update="display,:#{cc.attrs.listForm}:datalist:datalist,:growl"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                            <p:commandButton icon="pi pi-check" styleClass="ui-button-success"
+                                             actionListener="#{cc.attrs.actionListener}"
+                                             value="#{messages.buttonKaydetKapat}"
+                                             update="display,:#{cc.attrs.listForm}:datalist:datalist,:growl"
+                                             oncomplete="handleSubmit(xhr,status,args,PF('#{cc.attrs.widgetVar}'));"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                            <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                             value="#{messages.buttonKapat}"
+                                             onclick="PF('#{cc.attrs.widgetVar}').hide()" immediate="true"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()">
+                                <p:resetInput target="@form"/>
+                            </p:commandButton>
+                            <p:defaultCommand target="btnProceed"/>
+                        </div>
+                    </f:facet>
+                </p:panelGrid>
+            </h:panelGroup>
+        </h:form>
+    </p:dialog>
+</composite:implementation>
+</html>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:p="primefaces"
+                xmlns:pt="jakarta.faces.passthrough"
+                xmlns:coco="jakarta.faces.composite/ui">
+
+    <h:form id="HfFirmaListForm" styleClass="form-height">
+
+        <p:contextMenu id="HfFirmaDataTableContextMenu" for="datalist:datalist">
+            <p:menuitem value="#{messages.buttonEkle}" onclick="document.getElementById('HfFirmaListForm:datalist:datalist:createButton').click();"
+                        icon="pi pi-plus" rendered="#{syKullaniciController.hasPermission('hffirma:ekle')}"/>
+            <p:menuitem value="#{messages.buttonGuncelle}" onclick="document.getElementById('HfFirmaListForm:datalist:datalist:editButton').click();"
+                        icon="pi pi-pencil" rendered="#{syKullaniciController.hasPermission('hffirma:guncelle')}"/>
+            <p:menuitem value="#{messages.buttonDetay}" onclick="document.getElementById('HfFirmaListForm:datalist:datalist:viewButton').click();"
+                        icon="pi pi-search"/>
+            <p:menuitem value="#{messages.buttonSil}" onclick="document.getElementById('HfFirmaListForm:datalist:datalist:deleteButton').click();"
+                        icon="pi pi-trash" rendered="#{syKullaniciController.hasPermission('hffirma:sil')}"/>
+        </p:contextMenu>
+        <coco:datatable id="datalist"
+                        value="#{hfFirmaController.lazyItems}"
+                        rowKey="#{item.id}"
+                        selection="#{hfFirmaController.selected}"
+                        filtered="#{hfFirmaController.filtered}"
+                        rowselect=":HfFirmaListForm:datalist:datalist:createButton,:HfFirmaListForm:datalist:datalist:viewButton,:HfFirmaListForm:datalist:datalist:editButton,:HfFirmaListForm:datalist:datalist:deleteButton,:HfFirmaListForm:HfFirmaDataTableContextMenu"
+                        rowDblselect="document.getElementById('HfFirmaListForm:datalist:datalist:editButton').click()"
+                        contextMenu=":HfFirmaListForm:datalist:datalist:createButton :HfFirmaListForm:datalist:datalist:viewButton :HfFirmaListForm:datalist:datalist:editButton :HfFirmaListForm:datalist:datalist:deleteButton"
+                        selectListener="#{hfFirmaController.resetParents}"
+                        controller="#{hfFirmaController}"
+                        header="#{messages.firmaListesi}">
+
+            <p:ajax event="colResize" listener="#{hfFirmaController.onResize}"/>
+
+            <f:facet name="paginatorBottomLeft">
+
+                <p:commandButton id="createButton" styleClass="ui-button-primary" icon="pi pi-plus" pt:data-tooltip="#{messages.buttonEkle}"
+                                 actionListener="#{hfFirmaController.prepareCreate}" update=":HfFirmaCreateForm:HfFirmaCreateForm"
+                                 oncomplete="PF('HfFirmaCreateDialog').show()" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('hffirma:ekle')}"/>
+                <p:commandButton id="editButton" styleClass="ui-button-success" icon="pi pi-pencil" pt:data-tooltip="#{messages.buttonGuncelle}"
+                                 update=":HfFirmaEditForm:HfFirmaEditForm" oncomplete="PF('HfFirmaEditDialog').show()"
+                                 disabled="#{empty hfFirmaController.selected}" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('hffirma:guncelle')}"/>
+                <p:commandButton id="viewButton" styleClass="ui-button-info" icon="pi pi-search" pt:data-tooltip="#{messages.buttonDetay}"
+                                 update=":HfFirmaViewForm:HfFirmaViewForm" oncomplete="PF('HfFirmaViewDialog').show()"
+                                 disabled="#{empty hfFirmaController.selected}" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                <p:commandButton id="deleteButton" styleClass="ui-button-danger" icon="pi pi-trash" pt:data-tooltip="#{messages.buttonSil}"
+                                 actionListener="#{hfFirmaController.delete}" update=":growl,datalist" disabled="#{empty hfFirmaController.selected}"
+                                 rendered="#{syKullaniciController.hasPermission('hffirma:sil')}">
+                    <p:confirm header="#{messages.ConfirmationHeader}" message="#{messages.ConfirmDeleteMessage}" icon="pi pi-exclamation-circle"/>
+                </p:commandButton>
+
+            </f:facet>
+
+        </coco:datatable>
+
+
+        <ui:include src="/confirmation.xhtml"/>
+
+    </h:form>
+
+</ui:composition>

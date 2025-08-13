@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:p="primefaces"
+>
+
+<ui:composition>
+
+    <p:dialog widgetVar="AyKisiEditDialog"
+              modal="true"
+              resizable="false"
+              closeOnEscape="true"
+              header="#{messages.dialogYeniKayit}"
+              appendTo="@(body)"
+              responsive="true"
+              onShow="PF('AyKisiEditDialog').initPosition();"
+              fitViewport="true">
+
+        <h:form id="AyKisiEditForm">
+            <h:panelGroup id="display">
+                <p:focus context="display"/>
+                <div class="card">
+                    <div class="card-header align-items-center d-flex">
+                        <div class="flex-shrink-0 ms-2">
+                            <ul class="nav justify-content-end nav-tabs-custom rounded card-header-tabs border-bottom-0" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" data-bs-toggle="tab" href="#kisiBilgileriEditTab" role="tab">
+                                        <i class="ri-user-fill nav-icon nav-tab-position"></i>
+                                        Kişi Bilgileri
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-bs-toggle="tab" href="#detayBilgileriEditTab" role="tab">
+                                        <i class="ri-function-fill nav-icon nav-tab-position"></i>
+                                        Detay Bilgileri
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-bs-toggle="tab" href="#gelirDurumuEditTab" role="tab">
+                                        <i class="ri-funds-box-fill nav-icon nav-tab-position"></i>
+                                        Gelir Durumu
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-bs-toggle="tab" href="#evDurumuEditTab" role="tab">
+                                        <i class="ri-user-fill nav-icon nav-tab-position"></i>
+                                        Ev Durumu
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-bs-toggle="tab" href="#yasamsalAktiviteEditTab" role="tab">
+                                        <i class="ri-user-fill nav-icon nav-tab-position"></i>
+                                        Yaşamsal Aktiviteler
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-bs-toggle="tab" href="#aranacakKisiEditTab" role="tab">
+                                        <i class="ri-user-fill nav-icon nav-tab-position"></i>
+                                        Aranacak Kişiler
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-bs-toggle="tab" href="#saglikBilgileriEditTab" role="tab">
+                                        <i class="ri-heart-fill nav-icon nav-tab-position"></i>
+                                        Sağlık Bilgileri
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-bs-toggle="tab" href="#adresBilgileriEditTab" role="tab">
+                                        <i class="ri-user-fill nav-icon nav-tab-position"></i>
+                                        Adres Bilgileri
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-bs-toggle="tab" href="#durumBilgileriEditTab" role="tab">
+                                        <i class="ri-user-fill nav-icon nav-tab-position"></i>
+                                        Durum Bilgileri
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="tab-content text-muted">
+                            <div class="tab-pane active" id="kisiBilgileriEditTab" role="tabpanel">
+                                <p:panelGrid id="kisiPanel" columns="2" styleClass="w-100" rendered="#{ayKisiController.selected!=null}"
+                                             layout="tabular">
+
+                                    <ui:include src="KisiBilgileriTab.xhtml"/>
+
+                                </p:panelGrid>
+                            </div>
+                            <div class="tab-pane" id="detayBilgileriEditTab" role="tabpanel">
+                                <p:panelGrid id="detayPanel" columns="2" styleClass="w-100" rendered="#{ayKisiController.selected!=null}"
+                                             layout="tabular">
+
+                                    <ui:include src="DetayBilgileriTab.xhtml"/>
+
+                                </p:panelGrid>
+                            </div>
+                            <div class="tab-pane" id="gelirDurumuEditTab" role="tabpanel">
+                                <p:panelGrid id="gelirDurumuPanel" columns="2" styleClass="w-100" rendered="#{ayKisiController.selected!=null}"
+                                             layout="tabular">
+
+                                    <ui:include src="GelirDurumuTab.xhtml"/>
+
+                                </p:panelGrid>
+                            </div>
+                            <div class="tab-pane" id="evDurumuEditTab" role="tabpanel">
+                                <p:panelGrid id="evDurumuPanel" columns="2" styleClass="w-100" rendered="#{ayKisiController.selected!=null}"
+                                             layout="tabular">
+
+                                    <ui:include src="EvDurumuTab.xhtml"/>
+
+                                </p:panelGrid>
+                            </div>
+                            <div class="tab-pane" id="yasamsalAktiviteEditTab" role="tabpanel">
+                                <p:panelGrid id="yasamsalAktivitePanel" columns="2" styleClass="w-100" rendered="#{ayKisiController.selected!=null}"
+                                             layout="tabular">
+
+                                    <ui:include src="YasamsalAktiviteTab.xhtml"/>
+
+                                </p:panelGrid>
+                            </div>
+                            <div class="tab-pane" id="aranacakKisiEditTab" role="tabpanel">
+                                <p:panelGrid id="aranacakKisiPanel" columns="1" styleClass="w-100" rendered="#{ayKisiController.selected!=null}"
+                                             layout="tabular">
+
+                                    <ui:include src="AranacakKisiTab.xhtml"/>
+
+                                </p:panelGrid>
+                            </div>
+                            <div class="tab-pane" id="saglikBilgileriEditTab" role="tabpanel">
+                                <p:panelGrid id="saglikBilgileriPanel" columns="2" styleClass="w-100" rendered="#{ayKisiController.selected!=null}"
+                                             layout="tabular">
+
+                                    <ui:include src="SaglikBilgileriTab.xhtml"/>
+
+                                </p:panelGrid>
+                            </div>
+                            <div class="tab-pane" id="adresBilgileriEditTab" role="tabpanel">
+                                <p:panelGrid id="adresBilgileriPanel" columns="2" styleClass="w-100" rendered="#{ayKisiController.selected!=null}"
+                                             layout="tabular">
+
+                                    <ui:include src="AdresBilgileriTab.xhtml"/>
+
+                                </p:panelGrid>
+                            </div>
+                            <div class="tab-pane" id="durumBilgileriEditTab" role="tabpanel">
+                                <p:panelGrid id="durumBilgileriPanel" columns="2" styleClass="w-100" rendered="#{ayKisiController.selected!=null}"
+                                             layout="tabular">
+
+                                    <ui:include src="DurumBilgileriTab.xhtml"/>
+
+                                </p:panelGrid>
+                            </div>
+                        </div>
+                    </div><!-- end card-body -->
+                    <div class="card-footer">
+                        <div class="pull-right">
+                            <p:commandButton icon="pi pi-check" styleClass="ui-button-success"
+                                             actionListener="#{ayKisiController.save}"
+                                             value="#{messages.buttonKaydet}"
+                                             update="display,:AyKisiListForm:datalist:datalist,:growl"
+                                             oncomplete="handleSubmit(xhr,status,args,PF('AyKisiEditDialog'));"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                            <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                             value="#{messages.buttonIptal}" onclick="PF('AyKisiEditDialog').hide()"
+                                             immediate="true" onstart="PF('Loading').show()"
+                                             onsuccess="PF('Loading').hide()"/>
+                        </div>
+                    </div>
+                </div>
+            </h:panelGroup>
+        </h:form>
+
+    </p:dialog>
+
+</ui:composition>
+
+</html>

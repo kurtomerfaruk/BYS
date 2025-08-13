@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces">
+<ui:composition>
+    <p:dialog widgetVar="TaleplerCreateDialog"
+              modal="true"
+              resizable="false"
+              closeOnEscape="true"
+              header="#{messages.dialogYeniKayit}"
+              appendTo="@(body)"
+              responsive="true"
+              fitViewport="true">
+
+        <h:form id="TaleplerCreateForm">
+            <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlTalepTuru" var="enumTalepTuru"/>
+            <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlTalepTipi" var="enumTalepTipi"/>
+            <h:panelGroup id="display">
+                <p:focus context="display"/>
+                <p:panelGrid columns="2" columnClasses="column" rendered="#{eyKisiController.eyTalep != null}" layout="tabular">
+
+                    <p:outputLabel value="#{messages.tcKimlikNoLabel}" for="@next"/>
+                    <h:panelGroup>
+                        <p:inputText id="tcKimlikNo" value="#{eyKisiController.eyTalep.eyKisi.gnlKisi.tcKimlikNo}" title="#{messages.tcKimlikNoText}"
+                                     size="14" maxlength="11" readonly="#{facesContext.renderResponse}" required="true"/>
+                    </h:panelGroup>
+
+                    <h:outputText value="#{messages.adLabel}"/>
+                    <p:inputText id="ad" value="#{eyKisiController.eyTalep.eyKisi.gnlKisi.ad}" required="true" readonly="#{facesContext.renderResponse}"
+                                 title="#{messages.adText}" size="50"/>
+
+                    <h:outputText value="#{messages.soyadLabel}"/>
+                    <p:inputText id="soyad" value="#{eyKisiController.eyTalep.eyKisi.gnlKisi.soyad}" required="true"
+                                 readonly="#{facesContext.renderResponse}" title="#{messages.soyadText}"/>
+
+                    <p:outputLabel value="#{messages.tarihLabel}" for="@next"/>
+                    <p:datePicker id="tarih" value="#{eyKisiController.eyTalep.tarih}" title="#{messages.tarihText}" mask="true"
+                                  pattern="#{messages.tarihFormat}" size="20" monthNavigator="true" yearNavigator="true" showIcon="true" showButtonBar="true"
+                                  required="true" showOnFocus="false"/>
+
+                    <p:outputLabel value="#{messages.talepTuruLabel}" for="@next"/>
+                    <p:selectOneMenu id="talepTuru" value="#{eyKisiController.eyTalep.talepTuru}" required="true">
+                        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+                        <f:selectItems value="#{enumTalepTuru.ALL_VALUES}"
+                                       var="talepTurus"
+                                       itemValue="#{talepTurus}"
+                                       itemLabel="#{talepTurus.displayValue}"/>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel value="#{messages.talepTipiLabel}" for="@next"/>
+                    <p:selectOneMenu id="talepTipi" value="#{eyKisiController.eyTalep.talepTipi}" required="true">
+                        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+                        <f:selectItems value="#{enumTalepTipi.ALL_VALUES}"
+                                       var="talepTipis"
+                                       itemValue="#{talepTipis}"
+                                       itemLabel="#{talepTipis.displayValue}"/>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel value="#{messages.konuLabel}" for="@next"/>
+                    <p:selectOneMenu id="engelsizTalepKonuId" value="#{eyKisiController.eyTalep.eyTalepKonu}" required="true"
+                                     converter="omnifaces.SelectItemsConverter" filter="true">
+                        <f:selectItem itemLabel="#{messages.seciniz}"/>
+                        <f:selectItems value="#{eyTalepKonuController.items}"
+                                       var="engelsizTalepKonuIdItem"
+                                       itemValue="#{engelsizTalepKonuIdItem}"
+                                       itemLabel="#{engelsizTalepKonuIdItem.tanim.toString()}"/>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel value="#{messages.aciklamaLabel}" for="@next"/>
+                    <p:inputTextarea rows="4" id="aciklama" value="#{eyKisiController.eyTalep.aciklama}"
+                                     title="#{messages.aciklamaText}" required="true" styleClass="w-100"/>
+
+                    <f:facet name="footer">
+                        <div class="float-end">
+                            <p:commandButton icon="pi pi-check" styleClass="ui-button-success"
+                                             actionListener="#{eyKisiController.addTalep}"
+                                             value="#{messages.buttonKaydet}"
+                                             update="display,:growl,:EyKisiEditForm:talepDt"
+                                             oncomplete="handleSubmit(xhr,status,args,PF('TaleplerCreateDialog'));"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                            <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                             value="#{messages.buttonIptal}" onclick="PF('TaleplerCreateDialog').hide()"
+                                             immediate="true" onstart="PF('Loading').show()"
+                                             onsuccess="PF('Loading').hide()"/>
+                        </div>
+                    </f:facet>
+                </p:panelGrid>
+            </h:panelGroup>
+        </h:form>
+
+    </p:dialog>
+</ui:composition>
+</html>

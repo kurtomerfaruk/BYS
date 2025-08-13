@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+>
+<ui:composition>
+
+    <p:remoteCommand name="rc" actionListener="#{meEtkinlikController.changeActiveIndex}" update="custom" oncomplete="PF('galleriaCustom').show()"/>
+
+
+    <p:galleria id="galleria" widgetVar="galleriaWidget" value="#{meEtkinlikController.selected.meEtkinlikResimList}" var="image" numVisible="5"
+                responsiveOptions="#{meEtkinlikController.responsiveOptions}" style="max-width: 640px" autoPlay="true" transitionInterval="5000"
+                circular="true" varStatus="status">
+
+        <div class="form_image_gallery">
+            <p:graphicImage id="#{image.id}" value="/images/dynamic/?file=#{image.resimYolu}" style="width: 100%;cursor:pointer"
+                            onclick="rc([{'name': 'index', 'value': #{status.index} }])"/>
+            <div class="form_image_buttons" style="position: absolute; width: 100%;">
+                <p:commandButton id="deleteButton" styleClass="form_image_remove ui-button-danger w-100" icon="pi pi-trash"
+                                 actionListener="#{meEtkinlikController.confirmDelete(image)}" update=":growl,MeEtkinlikEditForm:galleria"
+                                 oncomplete="PF('galleriaWidget').render();">
+                    <p:confirm header="#{messages.ConfirmationHeader}" message="#{messages.ConfirmDeleteMessage}" icon="pi pi-warning"/>
+                </p:commandButton>
+            </div>
+        </div>
+        <f:facet name="thumbnail">
+            <p:graphicImage value="/images/dynamic/?file=#{image.resimYolu}" style="width:80px;height:60px"/>
+        </f:facet>
+    </p:galleria>
+
+    <p:galleria id="custom" widgetVar="galleriaCustom" value="#{meEtkinlikController.selected.meEtkinlikResimList}" var="image"
+                activeIndex="#{meEtkinlikController.activeIndex}"
+                numVisible="7" responsiveOptions="#{meEtkinlikController.responsiveOptions}"
+                circular="true" fullScreen="true" showItemNavigators="true" showThumbnails="false" style="max-width: 850px">
+        <p:graphicImage value="/images/dynamic/?file=#{image.resimYolu}" alt="#{image.resimAdi}" style="width: 100%; display: block"/>
+    </p:galleria>
+
+    <p:fileUpload listener="#{meEtkinlikController.uploadImage}"
+                  mode="advanced"
+                  fileLimit="10"
+                  multiple="true"
+                  uploadLabel="#{messages.buttonYukle}"
+                  cancelLabel="#{messages.buttonIptal}"
+                  label="#{messages.buttonSec}"
+                  allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
+                  update=":growl,galleria,custom"/>
+
+    <script type="text/javascript">
+        //<![CDATA[
+        $(document).on('shown.bs.tab', 'button[data-bs-toggle="tab"]', function (e) {
+            setTimeout(function () {
+                PF('galleriaWidget').render();
+                PF('galleriaCustom').render();
+            }, 100);
+
+        });
+
+        function openFullscreen(elem) {
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.webkitRequestFullscreen) { // Safari
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) { // IE11
+                elem.msRequestFullscreen();
+            }
+        }
+
+        //]]>
+    </script>
+
+
+</ui:composition>
+</html>

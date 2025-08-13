@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:editpage id="EyAracTamirEditForm"
+                   widgetVar="EyAracTamirEditDialog"
+                   actionListener="#{eyAracTamirController.update}"
+                   listForm="EyAracTamirListForm"
+                   model="#{eyAracTamirController.selected}">
+
+        <p:outputLabel value="#{messages.tcKimlikNoLabel}" for="@next"/>
+        <coco:inputWithButton id="inputWithButtonEyKisi" inputId="eyKisiId"
+                              inputValue="#{eyAracTamirController.selected.eyKisi.gnlKisi.tcKimlikNo}"
+                              inputTitle="#{messages.tcKimlikNoText}"
+                              actionListener="#{bysController.openCommonDialog('eyKisiSec')}"
+                              ajaxListener="#{eyAracTamirController.secilenEyKisi}"
+                              buttonTitle="#{messages.kisiSecmelisiniz}"
+                              size="50"
+                              dialogId="EyAracTamirEditDialogId"/>
+
+        <p:outputLabel value="#{messages.adLabel}" for="@next"/>
+        <p:inputText id="ad" value="#{eyAracTamirController.selected.eyKisi.gnlKisi.ad}"
+                     title="#{messages.adText}" size="50" maxlength="50" readonly="true" styleClass="inputUpdate"/>
+
+        <p:outputLabel value="#{messages.soyadLabel}" for="@next"/>
+        <p:inputText id="soyad" value="#{eyAracTamirController.selected.eyKisi.gnlKisi.soyad}"
+                     title="#{messages.soyadText}" size="50" maxlength="50" readonly="true" styleClass="inputUpdate"/>
+
+        <p:outputLabel value="#{messages.adresLabel}" for="@next"/>
+        <p:inputTextarea id="adres" value="#{eyAracTamirController.selected.eyKisi.gnlKisi.adres}"
+                         autoResize="false" styleClass="w-100 inputUpdate" rows="4" readonly="true"/>
+
+        <p:outputLabel value="#{messages.telefonLabel}" for="@next"/>
+        <p:inputMask id="telefon" value="#{eyAracTamirController.selected.eyKisi.gnlKisi.telefon}"
+                     mask="(999) 999 99 99" required="true" title="#{messages.telefonText}"
+                     size="14" styleClass="inputUpdate"/>
+
+
+        <h:outputText value="#{messages.kayitTarihiLabel}"/>
+        <h:outputText value="#{eyAracTamirController.selected.kayitTarihi}">
+            <f:convertDateTime pattern="#{messages.tarihFormat}" type="localDate"/>
+        </h:outputText>
+
+        <p:outputLabel value="#{messages.aracBilgisiLabel}" for="@next"/>
+        <p:selectOneMenu id="aracBilgisi" value="#{eyAracTamirController.selected.aracBilgisi}" required="true"
+                         converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{enumAracBilgisi.ALL_VALUES}"
+                           var="aracBilgisis"
+                           itemLabel="#{aracBilgisis.displayValue}"
+                           itemValue="#{aracBilgisis}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.markaLabel}" for="@next"/>
+        <p:inputText id="marka" value="#{eyAracTamirController.selected.marka}" title="#{messages.markaText}"
+                     size="50" maxlength="50"/>
+
+        <p:outputLabel value="#{messages.modelLabel}" for="@next"/>
+        <p:inputText id="model" value="#{eyAracTamirController.selected.model}" title="#{messages.modelText}"
+                     size="50" maxlength="50"/>
+
+        <p:outputLabel value="#{messages.arizaTuruLabel}" for="@next"/>
+        <p:selectManyCheckbox id="arizaTuru" value="#{eyAracTamirController.arizaTurus}"
+                              converter="omnifaces.SelectItemsConverter" layout="responsive" columns="2">
+            <f:selectItems value="#{enumArizaTuru.ALL_VALUES}"
+                           var="arizaTurus"
+                           itemValue="#{arizaTurus}"
+                           itemLabel="#{arizaTurus.displayValue}"/>
+        </p:selectManyCheckbox>
+
+        <h:outputText/>
+        <h:panelGroup>
+            <p:selectBooleanCheckbox id="garanti" value="#{eyAracTamirController.selected.garanti}" itemLabel="#{messages.garantiText}"
+                                     style="margin-left:6px !important"/>
+            <p:selectBooleanCheckbox id="uygunluk" value="#{eyAracTamirController.selected.uygunluk}" itemLabel="#{messages.tamireUygunText}"/>
+        </h:panelGroup>
+
+        <p:outputLabel value="#{messages.toTeslimAlanLabel}" for="@next"/>
+        <p:selectOneMenu id="tamirOncesiTeslimAlan" value="#{eyAracTamirController.selected.tamirOncesiTeslimAlanGnlPersonel}"
+                         filter="true" required="true" converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{gnlPersonelController.items}"
+                           var="personels"
+                           itemLabel="#{personels.gnlKisi.adSoyad}"
+                           itemValue="#{personels}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.toTeslimEdenLabel}" for="@next"/>
+        <p:inputText id="tamirOncesiTeslimEden" value="#{eyAracTamirController.selected.tamirOncesiTeslimEden}"
+                     title="#{messages.toTeslimEdenText}" size="50" maxlength="50"/>
+
+        <p:outputLabel value="#{messages.aracArizasiLabel}" for="@next"/>
+        <p:inputTextarea id="aracProblemi" value="#{eyAracTamirController.selected.aracProblemi}"  title="#{messages.aracArizasiText}" autoResize="false"
+                         styleClass="w-100" rows="4" required="true"/>
+
+        <p:outputLabel value="#{messages.yapilanIslemlerLabel}" for="@next"/>
+        <p:selectManyCheckbox id="yapilanIslemler" value="#{eyAracTamirController.yapilanIslems}"
+                              converter="omnifaces.SelectItemsConverter" layout="responsive" columns="3">
+            <f:selectItems value="#{enumYapilanIslem.ALL_VALUES}"
+                           var="yapilanIslemlers"
+                           itemValue="#{yapilanIslemlers}"
+                           itemLabel="#{yapilanIslemlers.displayValue}"/>
+        </p:selectManyCheckbox>
+
+        <p:outputLabel value="#{messages.notlarLabel}" for="@next"/>
+        <p:inputTextarea id="notlar" value="#{eyAracTamirController.selected.notlar}"
+                         title="#{messages.aracArizasiText}" autoResize="false" styleClass="w-100" rows="4"/>
+
+        <p:outputLabel value="#{messages.teslimTarihiLabel}" for="@next"/>
+        <p:datePicker id="teslimTarihi" locale="tr" pattern="#{messages.tarihFormat}"
+                      value="#{eyAracTamirController.selected.teslimTarihi}" title="#{messages.teslimTarihiText}"
+                      mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"/>
+
+        <p:outputLabel value="#{messages.tsTeslimAlanLabel}" for="@next"/>
+        <p:inputText id="tamirSonrasiTeslimAlan" value="#{eyAracTamirController.selected.tamirSonrasiTeslimAlan}"
+                     title="#{messages.tsTeslimAlanText}" size="50" maxlength="50"/>
+
+        <p:outputLabel value="#{messages.tsTeslimEdenLabel}" for="@next"/>
+        <p:selectOneMenu id="tamirSonrasiTeslimEden" value="#{eyAracTamirController.selected.tamirSonrasiTeslimEdenGnlPersonel}"
+                         filter="true" required="true" converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{gnlPersonelController.items}"
+                           var="teslimEdens"
+                           itemLabel="#{teslimEdens.gnlKisi.adSoyad}"
+                           itemValue="#{teslimEdens}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.durumuLabel}" for="@next"/>
+        <p:selectOneMenu id="durum" value="#{eyAracTamirController.selected.durum}" required="true"
+                         converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{enumDurum.ALL_VALUES}"
+                           var="durums"
+                           itemLabel="#{durums.displayValue}"
+                           itemValue="#{durums}"/>
+        </p:selectOneMenu>
+
+    </coco:editpage>
+
+</ui:composition>
+
+</html>

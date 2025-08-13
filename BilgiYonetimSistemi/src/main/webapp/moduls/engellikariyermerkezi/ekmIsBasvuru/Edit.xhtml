@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="primefaces"
+      xmlns:h="jakarta.faces.html"
+>
+
+<ui:composition>
+
+    <p:dialog widgetVar="EkmIsBasvuruEditDialog"
+              id="EkmIsBasvuruEditDialogId"
+              modal="true"
+              resizable="false"
+              closeOnEscape="true"
+              header="#{messages.dialogYeniKayit}"
+              appendTo="@(body)"
+              responsive="true"
+              onShow="PF('EkmIsBasvuruEditDialog').initPosition();;fitTabWidth('ekmKisiBilgileriEditTabPane')"
+              fitViewport="true"
+              position="top">
+
+        <h:form id="EkmIsBasvuruEditForm">
+
+
+            <h:panelGroup id="display">
+                <p:focus context="display"/>
+                <div class="card">
+                    <div class="card-body">
+                        <ul class="nav nav-tabs mb-3 tab-style-8 scaleX" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="ekmKisiBilgileriEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#ekmKisiBilgileriEditTabPane" type="button" role="tab"
+                                        aria-controls="ekmKisiBilgileriEditTabPane" aria-selected="true">Kişi Bilgileri
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="ekmEgitimBilgileriEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#ekmEgitimBilgileriEditTabPane" type="button" role="tab"
+                                        aria-controls="ekmEgitimBilgileriEditTabPane" aria-selected="true">Eğitim Bilgileri
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="ekmYabanciDilEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#ekmYabanciDilEditTabPane" type="button" role="tab"
+                                        aria-controls="ekmYabanciDilEditTabPane" aria-selected="true">Yabancı Dil
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="ekmKullandigiProgramEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#ekmKullandigiProgramEditTabPane" type="button" role="tab"
+                                        aria-controls="ekmKullandigiProgramEditTabPane" aria-selected="true">Kullandığı Programlar
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="ekmIsTecrubesiEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#ekmIsTecrubesiEditTabPane" type="button" role="tab"
+                                        aria-controls="ekmIsTecrubesiEditTabPane" aria-selected="true">İş Tecrübesi
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="ekmKursSeminerEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#ekmKursSeminerEditTabPane" type="button" role="tab"
+                                        aria-controls="ekmKursSeminerEditTabPane" aria-selected="true">Kurslar / Seminerler
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="ekmReferanslarEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#ekmReferanslarEditTabPane" type="button" role="tab"
+                                        aria-controls="ekmReferanslarEditTabPane" aria-selected="true">Referanslar
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="ekmDigerBilgilerEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#ekmDigerBilgilerEditTabPane" type="button" role="tab"
+                                        aria-controls="ekmDigerBilgilerEditTabPane" aria-selected="true">Diğer Bilgiler
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="ekmUzmanGorusuEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#ekmUzmanGorusuEditTabPane" type="button" role="tab"
+                                        aria-controls="ekmUzmanGorusuEditTabPane" aria-selected="true">Uzman Görüşü
+                                </button>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+
+                            <div class="tab-pane overflow-hidden active show" id="ekmKisiBilgileriEditTabPane" role="tabpanel"
+                                 aria-labelledby="ekmKisiBilgileriEditTab" tabindex="0">
+                                <p:panelGrid id="kisiPanel" columns="2" styleClass="w-100" rendered="#{ekmIsBasvuruController.selected!=null}" layout="tabular">
+
+                                    <ui:include src="KisiBilgileriTab.xhtml"/>
+
+                                </p:panelGrid>
+                            </div>
+                            <div class="tab-pane overflow-hidden" id="ekmEgitimBilgileriEditTabPane" role="tabpanel"
+                                 aria-labelledby="ekmEgitimBilgileriEditTab" tabindex="0">
+                                <p:panelGrid id="egitimPanel" columns="1" styleClass="w-100" rendered="#{ekmIsBasvuruController.selected!=null}"
+                                             layout="tabular">
+
+                                    <ui:include src="EgitimBilgileriTab.xhtml"/>
+
+                                </p:panelGrid>
+                            </div>
+                            <div class="tab-pane overflow-hidden" id="ekmYabanciDilEditTabPane" role="tabpanel"
+                                 aria-labelledby="ekmYabanciDilEditTab" tabindex="0">
+                                <p:panelGrid id="yabanciDilPanel" columns="1" styleClass="w-100" rendered="#{ekmIsBasvuruController.selected!=null}"
+                                             layout="tabular">
+
+                                    <ui:include src="YabanciDilTab.xhtml"/>
+
+                                </p:panelGrid>
+                            </div>
+                            <div class="tab-pane overflow-hidden" id="ekmKullandigiProgramEditTabPane" role="tabpanel"
+                                 aria-labelledby="ekmKullandigiProgramEditTab" tabindex="0">
+                                <p:panelGrid id="kullandigiProgramPanel" columns="1" styleClass="w-100"
+                                             rendered="#{ekmIsBasvuruController.selected!=null}" layout="tabular">
+
+                                    <ui:include src="KullandigiProgramlarTab.xhtml"/>
+
+                                </p:panelGrid>
+                            </div>
+                            <div class="tab-pane overflow-hidden" id="ekmIsTecrubesiEditTabPane" role="tabpanel"
+                                 aria-labelledby="ekmIsTecrubesiEditTab" tabindex="0">
+                                <p:panelGrid id="isTecrubesiPanel" columns="1" styleClass="w-100" rendered="#{ekmIsBasvuruController.selected!=null}"
+                                             layout="tabular">
+
+                                    <ui:include src="IsTecrubesiTab.xhtml"/>
+
+                                </p:panelGrid>
+                            </div>
+                            <div class="tab-pane overflow-hidden" id="ekmKursSeminerEditTabPane" role="tabpanel"
+                                 aria-labelledby="ekmKursSeminerEditTab" tabindex="0">
+                                <p:panelGrid id="kursSeminerPanel" columns="1" styleClass="w-100" rendered="#{ekmIsBasvuruController.selected!=null}"
+                                             layout="tabular">
+
+                                    <ui:include src="KursSeminerTab.xhtml"/>
+
+                                </p:panelGrid>
+                            </div>
+                            <div class="tab-pane overflow-hidden" id="ekmReferanslarEditTabPane" role="tabpanel"
+                                 aria-labelledby="ekmReferanslarEditTab" tabindex="0">
+                                <p:panelGrid id="referanslarPanel" columns="1" styleClass="w-100" rendered="#{ekmIsBasvuruController.selected!=null}"
+                                             layout="tabular">
+
+                                    <ui:include src="ReferansTab.xhtml"/>
+
+                                </p:panelGrid>
+                            </div>
+                            <div class="tab-pane overflow-hidden" id="ekmDigerBilgilerEditTabPane" role="tabpanel"
+                                 aria-labelledby="ekmDigerBilgilerEditTab" tabindex="0">
+                                <p:panelGrid id="digerBilgiler" columns="2" styleClass="w-100" rendered="#{ekmIsBasvuruController.selected!=null}"
+                                             layout="tabular">
+                                    <p:outputLabel value="#{messages.saglikProblemiVarMiLabel}" for="saglikProblemiVarMi"/>
+                                    <p:selectBooleanCheckbox id="saglikProblemiVarMi" value="#{ekmIsBasvuruController.selected.saglikProblemiVarMi}"/>
+
+                                    <p:outputLabel value="#{messages.aciklamaLabel}" for="saglikAciklama"/>
+                                    <p:inputTextarea id="saglikAciklama" value="#{ekmIsBasvuruController.selected.saglikAciklama}" rows="4" autoResize="false"
+                                                     styleClass="w-100"/>
+
+                                </p:panelGrid>
+                            </div>
+                            <div class="tab-pane overflow-hidden" id="ekmUzmanGorusuEditTabPane" role="tabpanel"
+                                 aria-labelledby="ekmUzmanGorusuEditTab" tabindex="0">
+                                <p:panelGrid id="uzmanGorusuPanel" columns="2" styleClass="w-100" rendered="#{ekmIsBasvuruController.selected!=null}"
+                                             layout="tabular">
+                                    <p:outputLabel value="#{messages.uzmanGorusuLabel}" for="uzmanGorusu"/>
+                                    <p:inputTextarea id="uzmanGorusu" value="#{ekmIsBasvuruController.selected.uzmanGorusu}" rows="4" autoResize="false"
+                                                     styleClass="w-100"
+                                                     title="#{messages.uzmanGorusuText}"/>
+                                </p:panelGrid>
+                            </div>
+
+                        </div>
+                    </div><!-- end card-body -->
+                    <div class="card-footer">
+                        <div class="float-end">
+                            <p:commandButton icon="pi pi-check" styleClass="ui-button-success"
+                                             actionListener="#{ekmIsBasvuruController.update}"
+                                             value="#{messages.buttonKaydet}"
+                                             update="display,:EkmIsBasvuruListForm:datalist:datalist,:growl"
+                                             oncomplete="handleSubmit(xhr,status,args,PF('EkmIsBasvuruEditDialog'));"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                            <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                             value="#{messages.buttonIptal}" onclick="PF('EkmIsBasvuruEditDialog').hide()"
+                                             immediate="true" onstart="PF('Loading').show()"
+                                             onsuccess="PF('Loading').hide()"/>
+                        </div>
+                    </div>
+                </div>
+            </h:panelGroup>
+        </h:form>
+
+    </p:dialog>
+
+</ui:composition>
+
+</html>

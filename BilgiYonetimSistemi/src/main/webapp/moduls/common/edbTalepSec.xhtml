@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:p="primefaces"
+      xmlns:f="jakarta.faces.core">
+
+<h:head>
+    <h:outputScript library="primefaces" name="jquery/jquery.js"/>
+    <h:outputScript library="primefaces" name="jquery/jquery-plugins.js"/>
+    <h:outputStylesheet library="css" name="pfcrud.css"/>
+</h:head>
+<h:body>
+
+    <h:form id="EdbTalepSec">
+        <p:dataTable id="datalist"
+                     value="#{edbTalepController.lazyItems}"
+                     var="item"
+                     rowKey="#{item.id}"
+                     paginator="true"
+                     rows="10"
+                     selection="#{edbTalepController.selected}"
+                     paginatorPosition="bottom"
+                     lazy="true"
+                     pageLinks="5"
+                     filteredValue="#{edbTalepController.filtered}"
+                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                     currentPageReportTemplate="#{messages.currentPageTemplate}"
+                     emptyMessage="#{messages.kayitBulunamadi}"
+                     size="small"
+                     styleClass="w-100">
+
+            <f:facet name="header">
+                <div class="products-table-header">
+                    <span style="font-weight: bold">#{messages.talepListesi}</span>
+                </div>
+            </f:facet>
+
+            <p:ajax event="rowDblselect" listener="#{edbTalepController.onRowDblSelect}"  />
+
+            <p:column sortBy="#{item.id}" filterBy="#{item.id}">
+                <f:facet name="header">
+                    <h:outputText value="#{messages.hizmetTalepNoText}"/>
+                </f:facet>
+                <h:outputText value="#{item.id}"/>
+            </p:column>
+
+            <p:column sortBy="#{item.edbBasvuru.gnlKisi.tcKimlikNo}" filterBy="#{item.edbBasvuru.gnlKisi.tcKimlikNo}">
+                <f:facet name="header">
+                    <h:outputText value="#{messages.tcKimlikNoText}"/>
+                </f:facet>
+                <h:outputText value="#{item.edbBasvuru.gnlKisi.tcKimlikNo}"/>
+            </p:column>
+
+            <p:column sortBy="#{item.edbBasvuru.gnlKisi.ad}" filterBy="#{item.edbBasvuru.gnlKisi.ad}">
+                <f:facet name="header">
+                    <h:outputText value="#{messages.adText}"/>
+                </f:facet>
+                <h:outputText value="#{item.edbBasvuru.gnlKisi.ad}"/>
+            </p:column>
+
+            <p:column sortBy="#{item.edbBasvuru.gnlKisi.soyad}" filterBy="#{item.edbBasvuru.gnlKisi.soyad}">
+                <f:facet name="header">
+                    <h:outputText value="#{messages.soyadText}"/>
+                </f:facet>
+                <h:outputText value="#{item.edbBasvuru.gnlKisi.soyad}"/>
+            </p:column>
+
+            <p:column sortBy="#{item.edbBasvuru.gnlKisi.telefon}" filterBy="#{item.edbBasvuru.gnlKisi.telefon}">
+                <f:facet name="header">
+                    <h:outputText value="#{messages.telefonText}"/>
+                </f:facet>
+                <h:outputText value="#{item.edbBasvuru.gnlKisi.telefon}"/>
+            </p:column>
+
+            <p:column sortBy="#{item.edbBasvuru.gnlKisi.gnlIlce.tanim}" filterBy="#{item.edbBasvuru.gnlKisi.gnlIlce.tanim}">
+                <f:facet name="header">
+                    <h:outputText value="#{messages.ilceText}"/>
+                </f:facet>
+                <h:outputText value="#{item.edbBasvuru.gnlKisi.gnlIlce.tanim}"/>
+            </p:column>
+
+            <p:column sortBy="#{item.edbBasvuru.gnlKisi.gnlMahalle.tanim}" filterBy="#{item.edbBasvuru.gnlKisi.gnlMahalle.tanim}">
+                <f:facet name="header">
+                    <h:outputText value="#{messages.mahalleText}"/>
+                </f:facet>
+                <h:outputText value="#{item.edbBasvuru.gnlKisi.gnlMahalle.tanim}"/>
+            </p:column>
+
+            <p:column headerText="#{messages.buttonSec}" style="width: 70px;text-align: center">
+                <p:commandButton icon="pi pi-check" actionListener="#{edbTalepController.edbTalepSecKapat(item)}"
+                                 style="width: 20px !important; height: 20px !important;"/>
+            </p:column>
+
+        </p:dataTable>
+    </h:form>
+
+
+</h:body>
+</html>
+
+

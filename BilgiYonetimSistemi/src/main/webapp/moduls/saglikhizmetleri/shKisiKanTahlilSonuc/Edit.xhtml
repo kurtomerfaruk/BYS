@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:editpage id="ShKisiKanTahlilSonucEditForm"
+                   widgetVar="ShKisiKanTahlilSonucEditDialog"
+                   actionListener="#{shKisiKanTahlilSonucController.save}"
+                   listForm="ShKisiKanTahlilSonucListForm"
+                   model="#{shKisiKanTahlilSonucController.selected}">
+
+
+        <p:outputLabel value="#{messages.tcKimlikNoLabel}" for="@next"/>
+        <coco:inputWithButton id="inputWithButtonShKisi" inputId="shKisiId"
+                              inputValue="#{shKisiKanTahlilSonucController.selected.shKisi.gnlKisi.tcKimlikNo}"
+                              inputTitle="#{messages.tcKimlikNoText}"
+                              actionListener="#{bysController.openCommonDialog('shKisiSec')}"
+                              ajaxListener="#{shKisiKanTahlilSonucController.secilenShKisi}"
+                              buttonTitle="#{messages.kisiSecmelisiniz}"
+                              size="50"
+                              dialogId="ShKisiKanTahlilSonucEditDialogId"/>
+
+        <p:outputLabel value="#{messages.adSoyadLabel}" for="@next"/>
+        <p:inputText id="adSoyad" value="#{shKisiKanTahlilSonucController.selected.shKisi.gnlKisi.adSoyad}" title="#{messages.adSoyadText}" size="50"
+                     required="true" readonly="#{facesContext.renderResponse}" styleClass="inputUpdate"/>
+
+        <p:outputLabel value="#{messages.tarihLabel}" for="@next"/>
+        <p:datePicker id="tarih" locale="tr" pattern="#{messages.tarihFormat}" value="#{shKisiKanTahlilSonucController.selected.tarih}"
+                      title="#{messages.tarihText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
+                      showOnFocus="false" required="true"/>
+
+        <p:outputLabel value="#{messages.glikozAclikLabel}" for="@next"/>
+        <p:inputText id="glikozAclik" value="#{shKisiKanTahlilSonucController.selected.glikozAclik}" title="#{messages.glikozAclikText}"/>
+
+        <p:outputLabel value="#{messages.insulinLabel}" for="@next"/>
+        <p:inputText id="insulin" value="#{shKisiKanTahlilSonucController.selected.insulin}" title="#{messages.insulinText}"/>
+
+        <p:outputLabel value="#{messages.totalKolesterolLabel}" for="@next"/>
+        <p:inputText id="totalKolesterol" value="#{shKisiKanTahlilSonucController.selected.totalKolesterol}" title="#{messages.totalKolesterolText}"/>
+
+        <p:outputLabel value="#{messages.ldlLabel}" for="@next"/>
+        <p:inputText id="ldl" value="#{shKisiKanTahlilSonucController.selected.ldl}" title="#{messages.ldlText}"/>
+
+        <p:outputLabel value="#{messages.trigliseridLabel}" for="@next"/>
+        <p:inputText id="trigliserid" value="#{shKisiKanTahlilSonucController.selected.trigliserid}" title="#{messages.trigliseridText}"/>
+
+        <p:outputLabel value="#{messages.demirLabel}" for="@next"/>
+        <p:inputText id="demir" value="#{shKisiKanTahlilSonucController.selected.demir}" title="#{messages.demirText}"/>
+
+        <p:outputLabel value="#{messages.b12VitaminiLabel}" for="@next"/>
+        <p:inputText id="b12Vitamini" value="#{shKisiKanTahlilSonucController.selected.b12Vitamini}" title="#{messages.b12VitaminiText}"/>
+
+        <p:outputLabel value="#{messages.tshLabel}" for="@next"/>
+        <p:inputText id="tsh" value="#{shKisiKanTahlilSonucController.selected.tsh}" title="#{messages.tshText}"/>
+
+        <p:outputLabel value="#{messages.t3Label}" for="@next"/>
+        <p:inputText id="t3" value="#{shKisiKanTahlilSonucController.selected.t3}" title="#{messages.t3Text}"/>
+
+        <p:outputLabel value="#{messages.t4Label}" for="@next"/>
+        <p:inputText id="t4" value="#{shKisiKanTahlilSonucController.selected.t4}" title="#{messages.t4Text}"/>
+
+        <p:outputLabel value="#{messages.dvitaminiLabel}" for="@next"/>
+        <p:inputText id="DVitamini" value="#{shKisiKanTahlilSonucController.selected.DVitamini}" title="#{messages.dvitaminiText}"/>
+
+    </coco:editpage>
+
+</ui:composition>
+
+</html>

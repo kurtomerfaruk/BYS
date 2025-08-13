@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:editpage id="SyKolonEditForm"
+                   model="#{syKolonController.selected}"
+                   widgetVar="SyKolonEditDialog"
+                   actionListener="#{syKolonController.save}"
+                   listForm="SyKolonListForm">
+
+        <p:outputLabel value="#{messages.tabloLabel}" for="@next"/>
+        <p:selectOneMenu id="tabloId" value="#{syKolonController.selected.syTablo}" required="true" filter="true" converter="omnifaces.SelectItemsConverter"
+                         filterMatchMode="contains">
+            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{syTabloController.items}"
+                           var="tabloIdItem"
+                           itemValue="#{tabloIdItem}"
+                           itemLabel="#{tabloIdItem.tabloAdi.toString()}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.baslikLabel}" for="@next"/>
+        <p:inputText id="baslik" value="#{syKolonController.selected.baslik}" title="#{messages.baslikText}" required="true" size="50" maxlength="150"/>
+
+        <p:outputLabel value="#{messages.columnPropertyLabel}" for="@next"/>
+        <p:inputText id="columnProperty" value="#{syKolonController.selected.columnProperty}" title="#{messages.columnPropertyText}" size="50" maxlength="150">
+            <p:ajax event="keyup" update="sortProperty,filterProperty" listener="#{syKolonController.updateColumn()}" process="@this"/>
+        </p:inputText>
+
+        <p:outputLabel value="#{messages.sortPropertyLabel}" for="@next"/>
+        <p:inputText id="sortProperty" value="#{syKolonController.selected.sortProperty}" title="#{messages.sortPropertyText}" size="50" maxlength="150"/>
+
+        <p:outputLabel value="#{messages.filterPropertyLabel}" for="@next"/>
+        <p:inputText id="filterProperty" value="#{syKolonController.selected.filterProperty}" title="#{messages.filterPropertyText}" size="50" maxlength="150"/>
+
+
+        <p:outputLabel value="#{messages.filtreTuruLabel}" for="@next"/>
+        <p:selectOneMenu id="filtreTuru" value="#{syKolonController.selected.filtreTuru}" required="true" filter="true"
+                         converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{enumFiltreTuru.ALL_VALUES}"
+                           var="filtreTurs"
+                           itemValue="#{filtreTurs}"
+                           itemLabel="#{filtreTurs.displayValue}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.filtreAnahtariLabel}" for="@next"/>
+        <p:selectOneMenu id="filtreAnahtari" value="#{syKolonController.selected.filtreAnahtari}" filter="true"
+                         converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{enumFiltreAnahtari.ALL_VALUES}"
+                           var="filtreAnahtars"
+                           itemValue="#{filtreAnahtars}"
+                           itemLabel="#{filtreAnahtars.displayValue}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.veriTipiLabel}" for="@next"/>
+        <p:selectOneMenu id="tip" value="#{syKolonController.selected.tip}" required="true" filter="true"
+                         converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{enumVeriTipi.ALL_VALUES}"
+                           var="veriTips"
+                           itemValue="#{veriTips}"
+                           itemLabel="#{veriTips.displayValue}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.filtreEslesmeModuLabel}" for="@next"/>
+        <p:selectOneMenu id="filtreEslesmeModu" value="#{syKolonController.selected.filtreEslesmeModu}" required="true" filter="true"
+                         converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{enumMatchMode.ALL_VALUES}"
+                           var="matchModes"
+                           itemValue="#{matchModes}"
+                           itemLabel="#{matchModes.displayValue}"/>
+        </p:selectOneMenu>
+
+    </coco:editpage>
+
+</ui:composition>
+
+</html>

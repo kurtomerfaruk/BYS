@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="jakarta.faces.facelets"
+                xmlns:p="primefaces">
+
+    <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.hafriyat.EnumHfIsTuru" var="enumIsTuru" allSuffix="ALL_VALUES"/>
+    <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.hafriyat.EnumHfAtikCinsi" var="enumAtikCinsi" allSuffix="ALL_VALUES"/>
+    <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlBelediye" var="enumBelediye" allSuffix="ALL_VALUES"/>
+
+    <ui:include src="/moduls/hafriyat/hfHafriyatIs/List.xhtml"/>
+    <ui:include src="/moduls/hafriyat/hfHafriyatIs/View.xhtml"/>
+    <ui:include src="/moduls/hafriyat/hfHafriyatIs/Edit.xhtml"/>
+    <ui:include src="/moduls/hafriyat/hfHafriyatIs/Create.xhtml"/>
+
+</ui:composition>

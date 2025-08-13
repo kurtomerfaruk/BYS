@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces">
+<ui:composition>
+    <p:outputLabel value="#{messages.kiraBedeliLabel}" for="@next"/>
+    <p:inputNumber id="kiraBedeli" value="#{edbBasvuruController.selected.gnlKisi.kiraBedeli}" styleClass="text-end"  decimalSeparator=","
+                   thousandSeparator="." emptyValue="zero"/>
+
+    <p:outputLabel value="#{messages.evDurumuLabel}" for="@next"/>
+    <p:selectOneRadio id="evDurumu" value="#{edbBasvuruController.selected.gnlKisi.evinDurumu}"
+                      layout="responsive" columns="3">
+        <f:selectItems value="#{enumEvinDurumu.ALL_VALUES}"
+                       var="evDurumus"
+                       itemValue="#{evDurumus}"
+                       itemLabel="#{evDurumus.displayValue}"/>
+    </p:selectOneRadio>
+
+    <p:outputLabel value="#{messages.isinmaDurumuLabel}" for="@next"/>
+    <p:selectOneRadio id="isinmaDurumu" value="#{edbBasvuruController.selected.gnlKisi.isinmaDurumu}"
+                      layout="responsive" columns="3">
+        <f:selectItems value="#{enumIsinmaDurumu.ALL_VALUES}"
+                       var="isinmaDurumus"
+                       itemValue="#{isinmaDurumus}"
+                       itemLabel="#{isinmaDurumus.displayValue}"/>
+    </p:selectOneRadio>
+
+    <p:outputLabel value="#{messages.evinAlaniLabel}" for="@next"/>
+    <p:inputText id="evinAlani" value="#{edbBasvuruController.selected.evinAlani}" title="#{messages.evinAlaniText}">
+        <p:keyFilter mask="num"/>
+    </p:inputText>
+
+    <p:outputLabel value="#{messages.balkonluLabel}" for="@next"/>
+    <p:selectBooleanCheckbox id="balkonlu" value="#{edbBasvuruController.selected.balkonlu}" title="#{messages.balkonluText}"/>
+
+    <p:outputLabel value="#{messages.bahceliLabel}" for="@next"/>
+    <p:selectBooleanCheckbox id="bahceli" value="#{edbBasvuruController.selected.bahceli}"    title="#{messages.bahceliText}"/>
+
+    <p:outputLabel value="#{messages.odaSayisiLabel}" for="@next"/>
+    <p:inputText id="odaSayisi" value="#{edbBasvuruController.selected.odaSayisi}"   title="#{messages.odaSayisiText}" size="50" maxlength="30"/>
+
+    <p:outputLabel value="#{messages.evinGenelDurumuLabel}" for="@next"/>
+    <p:selectOneRadio id="evinGenelDurumu"
+                      value="#{edbBasvuruController.selected.evinGenelDurumu}">
+        <f:selectItems value="#{enumPuanlama.ALL_VALUES}"
+                       var="evinGenelDurumus"
+                       itemValue="#{evinGenelDurumus}"
+                       itemLabel="#{evinGenelDurumus.displayValue}"/>
+    </p:selectOneRadio>
+
+    <p:outputLabel value="#{messages.esyalarinGenelDurumuLabel}" for="@next"/>
+    <p:selectOneRadio id="esyalarinGenelDurumu"   value="#{edbBasvuruController.selected.esyalarinGenelDurumu}">
+        <f:selectItems value="#{enumPuanlama.ALL_VALUES}"
+                       var="esyalarinGenelDurumus"
+                       itemValue="#{esyalarinGenelDurumus}"
+                       itemLabel="#{esyalarinGenelDurumus.displayValue}"/>
+    </p:selectOneRadio>
+
+    <p:outputLabel value="#{messages.hanedeYasayanlarinKiyafetDurumuLabel}"  for="@next"/>
+    <p:selectOneRadio id="hanedeYasayanlarinKiyafetDurumu" value="#{edbBasvuruController.selected.hanedeYasayanlarinKiyafetDurumu}">
+        <f:selectItems value="#{enumPuanlama.ALL_VALUES}"
+                       var="hanedeYasayanlarinKiyafetDurumus"
+                       itemValue="#{hanedeYasayanlarinKiyafetDurumus}"
+                       itemLabel="#{hanedeYasayanlarinKiyafetDurumus.displayValue}"/>
+    </p:selectOneRadio>
+
+    <p:outputLabel value="#{messages.hanedeYasayanlarinPsikolojikDurumuLabel}"  for="@next"/>
+    <p:selectOneRadio id="hanedeYasayanlarinPsikolojikDurumu"  value="#{edbBasvuruController.selected.hanedeYasayanlarinPsikolojikDurumu}">
+        <f:selectItems value="#{enumPuanlama.ALL_VALUES}"
+                       var="hanedeYasayanlarinPsikolojikDurumus"
+                       itemValue="#{hanedeYasayanlarinPsikolojikDurumus}"
+                       itemLabel="#{hanedeYasayanlarinPsikolojikDurumus.displayValue}"/>
+    </p:selectOneRadio>
+</ui:composition>
+</html>

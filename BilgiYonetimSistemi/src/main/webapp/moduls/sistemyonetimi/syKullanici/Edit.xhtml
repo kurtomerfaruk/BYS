@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:editpage id="SyKullaniciEditForm"
+                   widgetVar="SyKullaniciEditDialog"
+                   actionListener="#{syKullaniciController.update()}"
+                   listForm="SyKullaniciListForm"
+                   model="#{syKullaniciController.selected}">
+
+
+        <p:outputLabel value="#{messages.personelLabel}" for="@next"/>
+        <coco:inputWithButton id="inputWithButtonPersonel" inputId="gnlKisiId"
+                              inputValue="#{syKullaniciController.selected.gnlPersonel.gnlKisi.adSoyad}"
+                              inputTitle="#{messages.personelText}"
+                              actionListener="#{bysController.openCommonDialog('gnlPersonelSec')}"
+                              ajaxListener="#{syKullaniciController.secilenPersonel}"
+                              buttonTitle="#{messages.personelSecmelisiniz}"
+                              size="50"
+                              dialogId="SyKullaniciCreateDialogId"/>
+
+        <p:outputLabel value="#{messages.kullaniciAdiLabel}" for="@next"/>
+        <p:inputText id="kullaniciAdi" value="#{syKullaniciController.selected.kullaniciAdi}" title="#{messages.kullaniciAdiText}" required="true" size="50"
+                     maxlength="50"/>
+
+        <p:outputLabel value="#{messages.parolaLabel}" for="@next"/>
+        <p:password id="parola" value="#{syKullaniciController.selected.parola}" title="#{messages.parolaText}" required="true" feedback="true"
+                    promptLabel="#{messages.lutfenSifreGiriniz}" weakLabel="#{messages.zayif}" goodLabel="#{messages.ortaSeviye}"
+                    strongLabel="#{messages.guclu}"/>
+
+        <p:outputLabel value="#{messages.kullaniciTuruLabel}" for="@next"/>
+        <p:selectOneMenu id="kullaniciTuru" value="#{syKullaniciController.selected.kullaniciTuru}" converter="omnifaces.SelectItemsConverter"
+                         required="true">
+            <f:selectItems value="#{enumKullaniciTuru.ALL_VALUES}"
+                           var="kullaniciTurus"
+                           itemValue="#{kullaniciTurus}"
+                           itemLabel="#{kullaniciTurus.displayValue}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.unvanLabel}" for="@next"/>
+        <p:inputText id="unvan" value="#{syKullaniciController.selected.gnlPersonel.gnlUnvan.tanim}" readonly="true" size="50"
+                     styleClass="inputUpdate"/>
+
+        <p:outputLabel value="#{messages.rolText}" for="@next"/>
+        <p:autoComplete id="rols" multiple="true" value="#{syKullaniciController.selectedRols}"
+                        completeMethod="#{syKullaniciController.completeRols}" showEmptyMessage="false"
+                        var="item" itemLabel="#{item.rolAdi}" itemValue="#{item}"
+                        converter="#{rolConverter}" forceSelection="false" scrollHeight="250" unique="true">
+            <p:ajax event="itemSelect" listener="#{syKullaniciController.onItemSelect}" update=":growl"/>
+            <p:ajax event="itemUnselect" listener="#{syKullaniciController.onItemUnSelect}" update=":growl"/>
+            <p:column>
+                <h:outputText value="#{item.rolAdi}"/>
+            </p:column>
+        </p:autoComplete>
+
+    </coco:editpage>
+
+</ui:composition>
+
+</html>

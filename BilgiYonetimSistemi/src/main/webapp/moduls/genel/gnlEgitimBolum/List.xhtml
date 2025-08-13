@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:p="primefaces"
+                xmlns:pt="jakarta.faces.passthrough"
+                xmlns:coco="jakarta.faces.composite/ui">
+
+    <h:form id="GnlEgitimBolumListForm" styleClass="form-height">
+
+        <p:contextMenu id="GnlEgitimBolumDataTableContextMenu" for="datalist:datalist">
+            <p:menuitem value="#{messages.buttonEkle}" onclick="document.getElementById('GnlEgitimBolumListForm:datalist:datalist:createButton').click();"
+                        icon="pi pi-plus" rendered="#{syKullaniciController.hasPermission('gnlegitimbolum:ekle')}"/>
+            <p:menuitem value="#{messages.buttonGuncelle}" onclick="document.getElementById('GnlEgitimBolumListForm:datalist:datalist:editButton').click();"
+                        icon="pi pi-pencil" rendered="#{syKullaniciController.hasPermission('gnlegitimbolum:guncelle')}"/>
+            <p:menuitem value="#{messages.buttonDetay}" onclick="document.getElementById('GnlEgitimBolumListForm:datalist:datalist:viewButton').click();"
+                        icon="pi pi-search"/>
+            <p:menuitem value="#{messages.buttonSil}" onclick="document.getElementById('GnlEgitimBolumListForm:datalist:datalist:deleteButton').click();"
+                        icon="pi pi-trash" rendered="#{syKullaniciController.hasPermission('gnlegitimbolum:sil')}"/>
+        </p:contextMenu>
+        <coco:datatable id="datalist"
+                        value="#{gnlEgitimBolumController.lazyItems}"
+                        rowKey="#{item.id}"
+                        selection="#{gnlEgitimBolumController.selected}"
+                        filtered="#{gnlEgitimBolumController.filtered}"
+                        rowselect=":GnlEgitimBolumListForm:datalist:datalist:createButton,:GnlEgitimBolumListForm:datalist:datalist:viewButton,:GnlEgitimBolumListForm:datalist:datalist:editButton,:GnlEgitimBolumListForm:datalist:datalist:deleteButton"
+                        rowDblselect="document.getElementById('GnlEgitimBolumListForm:datalist:datalist:editButton').click()"
+                        contextMenu=":GnlEgitimBolumListForm:datalist:datalist:createButton :GnlEgitimBolumListForm:datalist:datalist:viewButton :GnlEgitimBolumListForm:datalist:datalist:editButton :GnlEgitimBolumListForm:datalist:datalist:deleteButton"
+                        selectListener="#{gnlEgitimBolumController.resetParents}"
+                        controller="#{gnlEgitimBolumController}"
+        header="#{messages.egitimBolumListesi}">
+
+            <p:ajax event="colResize" listener="#{gnlEgitimBolumController.onResize}"/>
+
+            <f:facet name="paginatorBottomLeft">
+
+                <p:commandButton id="createButton" styleClass="ui-button-primary" icon="pi pi-plus" pt:data-tooltip="#{messages.buttonEkle}"
+                                 actionListener="#{gnlEgitimBolumController.prepareCreate}" update=":GnlEgitimBolumCreateForm:GnlEgitimBolumCreateForm"
+                                 oncomplete="PF('GnlEgitimBolumCreateDialog').show()" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('gnlegitimbolum:ekle')}"/>
+                <p:commandButton id="editButton" styleClass="ui-button-success" icon="pi pi-pencil" pt:data-tooltip="#{messages.buttonGuncelle}"
+                                 update=":GnlEgitimBolumEditForm:GnlEgitimBolumEditForm" oncomplete="PF('GnlEgitimBolumEditDialog').show()"
+                                 disabled="#{empty gnlEgitimBolumController.selected}" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('gnlegitimbolum:guncelle')}"/>
+                <p:commandButton id="viewButton" styleClass="ui-button-info" icon="pi pi-search" pt:data-tooltip="#{messages.buttonDetay}"
+                                 update=":GnlEgitimBolumViewForm:GnlEgitimBolumViewForm" oncomplete="PF('GnlEgitimBolumViewDialog').show()"
+                                 disabled="#{empty gnlEgitimBolumController.selected}" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                <p:commandButton id="deleteButton" styleClass="ui-button-danger" icon="pi pi-trash" pt:data-tooltip="#{messages.buttonSil}"
+                                 actionListener="#{gnlEgitimBolumController.delete}" update=":growl,datalist"
+                                 disabled="#{empty gnlEgitimBolumController.selected}"
+                                 rendered="#{syKullaniciController.hasPermission('gnlegitimbolum:sil')}">
+                    <p:confirm header="#{messages.ConfirmationHeader}" message="#{messages.ConfirmDeleteMessage}" icon="pi pi-warning"/>
+                </p:commandButton>
+
+            </f:facet>
+
+        </coco:datatable>
+
+
+        <ui:include src="/confirmation.xhtml"/>
+
+    </h:form>
+
+</ui:composition>

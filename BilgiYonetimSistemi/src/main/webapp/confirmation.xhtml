@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:p="primefaces">
+
+    <p:confirmDialog global="true">
+        <p:commandButton value="#{messages.evet}" type="button" styleClass="ui-confirmdialog-yes btn-success" icon="pi pi-check"/>
+        <p:commandButton value="#{messages.hayir}" type="button" styleClass="ui-confirmdialog-no btn-danger" icon="pi pi-remove"/>
+    </p:confirmDialog>
+
+</ui:composition>

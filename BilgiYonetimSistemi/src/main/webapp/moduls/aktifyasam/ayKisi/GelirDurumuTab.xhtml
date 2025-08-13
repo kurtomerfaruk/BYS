@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+>
+
+<ui:composition>
+    <p:outputLabel value="#{messages.aylikGeliriLabel}" for="@next"/>
+    <p:inputNumber id="aylikGeliri" value="#{ayKisiController.selected.gnlKisi.aylikGeliri}" styleClass="text-end"  decimalSeparator="," thousandSeparator="."
+                   emptyValue="zero"/>
+
+    <p:outputLabel value="#{messages.sosyalGuvenceLabel}" for="@next"/>
+    <p:selectOneMenu id="sosyalGuvence" value="#{ayKisiController.selected.gnlKisi.sosyalGuvence}" filter="true" converter="omnifaces.SelectItemsConverter">
+        <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+        <f:selectItems value="#{enumSosyalGuvence.ALL_VALUES}"
+                       var="sosyalGuvences"
+                       itemValue="#{sosyalGuvences}"
+                       itemLabel="#{sosyalGuvences.displayValue}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.aracVarMiLabel}" for="@next"/>
+    <p:selectBooleanCheckbox id="aracVarMi" value="#{ayKisiController.selected.gnlKisi.aracVarMi}"/>
+
+    <p:outputLabel value="#{messages.malVarligiLabel}" for="@next"/>
+    <p:inputText id="malVarligi" value="#{ayKisiController.selected.gnlKisi.malVarligi}"
+                 title="#{messages.malVarligiText}" size="50" maxlength="50"/>
+</ui:composition>
+</html>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:p="primefaces"
+      xmlns:f="jakarta.faces.core">
+
+<h:head>
+    <h:outputScript library="primefaces" name="jquery/jquery.js"/>
+    <h:outputScript library="primefaces" name="jquery/jquery-plugins.js"/>
+    <h:outputStylesheet library="css" name="pfcrud.css"/>
+    <style type="text/css">
+        html {
+            font-size: 12px;
+        }
+
+    </style>
+</h:head>
+<h:body>
+
+    <h:form id="GnlPersonelSec">
+<!--        <p:toolbar>-->
+<!--            <p:toolbarGroup>-->
+<!--                <p:commandButton value="#{messages.buttonEkle}" pt:data-tooltip="#{messages.buttonEkle}" icon="pi pi-plus"-->
+<!--                                 actionListener="#{gnlPersonelController.prepareCreate}" update=":OrtakGnlPersonelCreateForm"-->
+<!--                                 oncomplete="PF('OrtakGnlPersonelCreateDialog').show();" styleClass="ui-button-success"/>-->
+<!--            </p:toolbarGroup>-->
+<!--        </p:toolbar>-->
+
+        <p:dataTable id="datalist"
+                     value="#{gnlPersonelController.lazyItems}"
+                     var="item"
+                     rowKey="#{item.id}"
+                     paginator="true"
+                     rows="10"
+                     selection="#{gnlPersonelController.selected}"
+                     paginatorPosition="bottom"
+                     lazy="true"
+                     pageLinks="5"
+                     filteredValue="#{gnlPersonelController.filtered}"
+                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                     currentPageReportTemplate="#{messages.currentPageTemplate}"
+                     emptyMessage="#{messages.kayitBulunamadi}" size="small">
+
+            <f:facet name="header">
+                <div class="products-table-header">
+                    <span style="font-weight: bold">#{messages.personelListesi}</span>
+                </div>
+            </f:facet>
+
+            <p:ajax event="rowDblselect" listener="#{gnlPersonelController.onRowDblSelect}"  />
+
+            <p:column sortBy="#{item.gnlKisi.tcKimlikNo}" filterBy="#{item.gnlKisi.tcKimlikNo}">
+                <f:facet name="header">
+                    <h:outputText value="#{messages.tcKimlikNoText}"/>
+                </f:facet>
+                <h:outputText value="#{item.gnlKisi.tcKimlikNo}"/>
+            </p:column>
+
+            <p:column sortBy="#{item.gnlKisi.ad}" filterBy="#{item.gnlKisi.ad}">
+                <f:facet name="header">
+                    <h:outputText value="#{messages.adText}"/>
+                </f:facet>
+                <h:outputText value="#{item.gnlKisi.ad}"/>
+            </p:column>
+
+            <p:column sortBy="#{item.gnlKisi.soyad}" filterBy="#{item.gnlKisi.soyad}">
+                <f:facet name="header">
+                    <h:outputText value="#{messages.soyadText}"/>
+                </f:facet>
+                <h:outputText value="#{item.gnlKisi.soyad}"/>
+            </p:column>
+
+            <p:column headerText="#{messages.buttonSec}" style="width: 70px;text-align: center">
+                <p:commandButton icon="pi pi-check" actionListener="#{gnlPersonelController.personelSecKapat(item)}"
+                                 style="width: 20px !important; height: 20px !important;"/>
+            </p:column>
+
+        </p:dataTable>
+    </h:form>
+
+
+</h:body>
+</html>
+
+

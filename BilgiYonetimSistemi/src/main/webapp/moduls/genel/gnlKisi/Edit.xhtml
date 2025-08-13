@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <p:dialog widgetVar="GnlKisiEditDialog"
+              modal="true"
+              resizable="false"
+              closeOnEscape="true"
+              header="#{messages.dialogKayitGuncelle}"
+              appendTo="@(body)"
+              responsive="true"
+              onShow="PF('GnlKisiEditDialog').initPosition();"
+              fitViewport="true">
+
+        <h:form id="GnlKisiEditForm">
+            <h:panelGroup id="display">
+                <p:focus context="display"/>
+                <div class="card custom-card">
+
+                    <div class="card-body">
+                        <ul class="nav nav-tabs mb-3 tab-style-8 scaleX" id="myTab4" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="kisiBilgileriEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#kisiBilgileriEditTabPane" type="button" role="tab"
+                                        aria-controls="kisiBilgileriEditTabPane" aria-selected="true">Kişi Bilgileri
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="adresBilgileriEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#adresBilgileriEditTabPane" type="button" role="tab"
+                                        aria-controls="adresBilgileriEditTab" aria-selected="false">Adres Bilgileri
+                                </button>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content" id="tabContent">
+                            <div class="tab-pane show active overflow-hidden" id="kisiBilgileriEditTabPane"
+                                 role="tabpanel" aria-labelledby="kisiBilgileriEditTab" tabindex="0">
+                                <p:panelGrid id="kisiPanel" columns="2" styleClass="w-100" layout="tabular">
+
+                                    <p:outputLabel value="#{messages.uyrukLabel}" for="@next"/>
+                                    <p:selectOneMenu id="uyruk" value="#{gnlKisiController.selected.uyruk}"
+                                                     required="true" converter="omnifaces.SelectItemsConverter">
+                                        <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+                                        <f:selectItems value="#{enumUyruk.ALL_VALUES}"
+                                                       var="enumUyruks"
+                                                       itemLabel="#{enumUyruks.displayValue}"
+                                                       itemValue="#{enumUyruks}"/>
+                                    </p:selectOneMenu>
+
+                                    <p:outputLabel value="#{messages.tcKimlikNoLabel}" for="@next"/>
+                                    <coco:tcKimlikNoDogumTarihi actionListener="#{gnlKisiController.getTcKimlik()}"
+                                                                update=":growl,@(.tcUpdate)"
+                                                                value="#{gnlKisiController.selected.tcKimlikNo}"
+                                                                dateValue="#{gnlKisiController.selected.dogumTarihi}"/>
+
+                                    <p:outputLabel value="#{messages.adLabel}" for="@next"/>
+                                    <p:inputText id="ad" value="#{gnlKisiController.selected.ad}"
+                                                 title="#{messages.adText}"
+                                                 required="true"
+                                                 readonly="#{facesContext.renderResponse}" styleClass="tcUpdate"/>
+
+                                    <p:outputLabel value="#{messages.soyadLabel}" for="@next"/>
+                                    <p:inputText id="soyad" value="#{gnlKisiController.selected.soyad}"
+                                                 title="#{messages.soyadText}"
+                                                 required="true" readonly="#{facesContext.renderResponse}"
+                                                 styleClass="tcUpdate"/>
+
+                                    <p:outputLabel value="#{messages.dogumYeriLabel}" for="@next"/>
+                                    <p:inputText id="dogumYeri" value="#{gnlKisiController.selected.dogumYeri}"
+                                                 required="true"
+                                                 readonly="#{facesContext.renderResponse}" styleClass="tcUpdate"/>
+
+                                    <p:outputLabel value="#{messages.cinsiyetLabel}" for="@next"/>
+                                    <p:inputText id="cinsiyet" value="#{gnlKisiController.selected.cinsiyet}" required="true"
+                                                 readonly="#{facesContext.renderResponse}" styleClass="tcUpdate"/>
+
+                                    <p:outputLabel value="#{messages.medeniDurumLabel}" for="@next"/>
+                                    <p:inputText id="medeniDurum" value="#{gnlKisiController.selected.medeniDurum}"
+                                                 title="#{messages.medeniDurumText}" required="true"
+                                                 readonly="#{facesContext.renderResponse}"
+                                                 styleClass="tcUpdate"/>
+
+                                    <p:outputLabel value="#{messages.egitimDurumuLabel}" for="@next"/>
+                                    <p:selectOneMenu id="egitimDurumu" value="#{gnlKisiController.selected.egitimDurumu}"
+                                                     converter="omnifaces.SelectItemsConverter">
+                                        <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+                                        <f:selectItems value="#{enumEgitimDurumu.ALL_VALUES}"
+                                                       var="enumEgitimDurumus"
+                                                       itemLabel="#{enumEgitimDurumus.displayValue}"
+                                                       itemValue="#{enumEgitimDurumus}"/>
+                                    </p:selectOneMenu>
+
+                                    <p:outputLabel value="#{messages.anaAdiLabel}" for="@next"/>
+                                    <p:inputText id="anaAdi" value="#{gnlKisiController.selected.anaAdi}"
+                                                 title="#{messages.anaAdiText}"
+                                                 required="true" readonly="#{facesContext.renderResponse}"
+                                                 styleClass="tcUpdate"/>
+
+                                    <p:outputLabel value="#{messages.babaAdiLabel}" for="@next"/>
+                                    <p:inputText id="babaAdi" value="#{gnlKisiController.selected.babaAdi}"
+                                                 title="#{messages.babaAdiText}"
+                                                 required="true" readonly="#{facesContext.renderResponse}"
+                                                 styleClass="tcUpdate"/>
+
+                                    <p:outputLabel value="#{messages.telefonLabel}" for="telefon"/>
+                                    <p:inputMask id="telefon" value="#{gnlKisiController.selected.telefon}"
+                                                 mask="(999) 999 99 99"
+                                                 required="true"
+                                                 title="#{messages.telefonText}" size="14"/>
+
+                                    <p:outputLabel value="#{messages.telefonLabel}" for="telefon2"/>
+                                    <p:inputMask id="telefon2" value="#{gnlKisiController.selected.telefon2}"
+                                                 mask="(999) 999 99 99" title="#{messages.telefonText}" size="14"/>
+
+                                    <p:outputLabel value="#{messages.cocukSayisiLabel}" for="@next"/>
+                                    <p:inputText id="cocukSayisi" value="#{gnlKisiController.selected.cocukSayisi}"
+                                                 title="#{messages.cocukSayisiText}"/>
+
+                                    <p:outputLabel value="#{messages.durumuLabel}" for="@next"/>
+                                    <p:inputText id="durum" value="#{gnlKisiController.selected.durum}"
+                                                 title="#{messages.durumuText}" size="50"
+                                                 maxlength="50" styleClass="tcUpdate"/>
+
+                                    <h:outputText value="#{messages.mernisGuncellemeTarihiLabel}"/>
+                                    <p:inputText id="mernisGuncellemeTarihi" value="#{gnlKisiController.selected.mernisGuncellemeTarihi}"
+                                                 styleClass="tcUpdate" readonly="true">
+                                        <f:convertDateTime pattern="#{messages.tarihSaatFormat}" type="localDateTime"/>
+                                    </p:inputText>
+
+                                    <h:outputText value="#{messages.olumTarihiLabel}"/>
+                                    <h:outputText value="#{gnlKisiController.selected.olumTarihi}" styleClass="tcUpdate">
+                                        <f:convertDateTime pattern="#{messages.tarihFormat}" type="localDate"/>
+                                    </h:outputText>
+
+                                </p:panelGrid>
+                            </div>
+                            <div class="tab-pane overflow-hidden" id="adresBilgileriEditTabPane" role="tabpanel"
+                                 aria-labelledby="adresBilgileriEditTab" tabindex="0">
+                                <p:panelGrid id="adresBilgileriPanel" columns="2" styleClass="w-100" layout="tabular">
+
+                                    <p:outputLabel value="#{messages.adresNoLabel}" for="@next"/>
+                                    <p:inputText id="adresNo" value="#{gnlKisiController.selected.adresNo}"
+                                                 title="#{messages.adresNoText}"
+                                                 readonly="true" styleClass="tcUpdate"/>
+
+                                    <p:outputLabel value="#{messages.adresLabel}" for="@next"/>
+                                    <p:inputTextarea rows="4" id="adres" value="#{gnlKisiController.selected.adres}"
+                                                     title="#{messages.adresText}"
+                                                     styleClass="w-100 tcUpdate" autoResize="false"
+                                                     readonly="true"/>
+
+                                    <p:outputLabel value="#{messages.binaNoLabel}" for="@next"/>
+                                    <p:inputText id="binaNo" value="#{gnlKisiController.selected.binaNo}" size="50"
+                                                 title="#{messages.binaNoText}" readonly="true" styleClass="tcUpdate"/>
+
+                                    <p:outputLabel value="#{messages.binaKoduLabel}" for="@next"/>
+                                    <p:inputText id="binaKodu" value="#{gnlKisiController.selected.binaKodu}"
+                                                 title="#{messages.binaKoduText}" readonly="true"
+                                                 styleClass="tcUpdate"/>
+
+                                    <p:outputLabel value="#{messages.sehirLabel}" for="@next"/>
+                                    <p:inputText id="gnlilId" value="#{gnlKisiController.selected.gnlIl.tanim}"
+                                                 styleClass="tcUpdate" readonly="true" size="50"/>
+
+                                    <p:outputLabel value="#{messages.ilceLabel}" for="@next"/>
+                                    <p:inputText id="gnlilceId" value="#{gnlKisiController.selected.gnlIlce.tanim}"
+                                                 styleClass="tcUpdate" readonly="true" size="50"/>
+
+                                    <p:outputLabel value="#{messages.mahalleLabel}" for="@next"/>
+                                    <p:inputText id="gnlmahalleId"
+                                                 value="#{gnlKisiController.selected.gnlMahalle.tanim}"
+                                                 styleClass="tcUpdate" readonly="true" size="50"/>
+                                </p:panelGrid>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="card-footer">
+                        <div class="float-end">
+                            <p:commandButton icon="pi pi-check" styleClass="ui-button-success"
+                                             actionListener="#{gnlKisiController.save}"
+                                             value="#{messages.buttonKaydet}"
+                                             update="display,:GnlKisiListForm:datalist:datalist,:growl"
+                                             oncomplete="handleSubmit(xhr,status,args,PF('GnlKisiEditDialog'));"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                            <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                             value="#{messages.buttonIptal}" onclick="PF('GnlKisiEditDialog').hide()"
+                                             immediate="true" onstart="PF('Loading').show()"
+                                             onsuccess="PF('Loading').hide()"/>
+                        </div>
+                    </div>
+                </div>
+            </h:panelGroup>
+        </h:form>
+    </p:dialog>
+
+</ui:composition>
+
+</html>

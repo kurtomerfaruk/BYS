@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:p="primefaces"
+                xmlns:pt="jakarta.faces.passthrough"
+                xmlns:coco="jakarta.faces.composite/ui">
+
+    <h:form id="MeKisiListForm" styleClass="form-height">
+
+
+
+        <p:contextMenu id="MeKisiDataTableContextMenu" for="datalist:datalist">
+            <p:menuitem value="#{messages.buttonEkle}" onclick="document.getElementById('MeKisiListForm:datalist:datalist:createButton').click();"
+                        icon="pi pi-plus" rendered="#{syKullaniciController.hasPermission('mekisi:ekle')}"/>
+            <p:menuitem value="#{messages.buttonGuncelle}" onclick="document.getElementById('MeKisiListForm:datalist:datalist:editButton').click();"
+                        icon="pi pi-pencil" rendered="#{syKullaniciController.hasPermission('mekisi:guncelle')}"/>
+            <p:menuitem value="#{messages.buttonDetay}" onclick="document.getElementById('MeKisiListForm:datalist:datalist:viewButton').click();"
+                        icon="pi pi-search"/>
+            <p:menuitem value="#{messages.buttonSil}" onclick="document.getElementById('MeKisiListForm:datalist:datalist:deleteButton').click();"
+                        icon="pi pi-trash" rendered="#{syKullaniciController.hasPermission('mekisi:sil')}"/>
+        </p:contextMenu>
+        <coco:datatable id="datalist"
+                        value="#{meKisiController.lazyItems}"
+                        rowKey="#{item.id}"
+                        selection="#{meKisiController.selected}"
+                        filtered="#{meKisiController.filtered}"
+                        rowselect=":MeKisiListForm:datalist:datalist:createButton,:MeKisiListForm:datalist:datalist:viewButton,:MeKisiListForm:datalist:datalist:editButton,:MeKisiListForm:datalist:datalist:deleteButton,:MeKisiListForm:datalist:datalist:nviUpdateButton,:MeKisiListForm:MeKisiDataTableContextMenu"
+                        rowDblselect="document.getElementById('MeKisiListForm:datalist:datalist:editButton').click()"
+                        contextMenu=":MeKisiListForm:datalist:datalist:createButton :MeKisiListForm:datalist:datalist:viewButton :MeKisiListForm:datalist:datalist:editButton :MeKisiListForm:datalist:datalist:deleteButton :MeKisiListForm:datalist:datalist:nviUpdateButton"
+                        selectListener="#{meKisiController.resetParents}"
+                        controller="#{meKisiController}"
+                        header="#{messages.kisiListesi}">
+
+
+            <p:ajax event="colResize" listener="#{meKisiController.onResize}"/>
+
+            <f:facet name="paginatorBottomLeft">
+
+                <p:commandButton id="createButton" styleClass="ui-button-primary" icon="pi pi-plus" pt:data-tooltip="#{messages.buttonEkle}"
+                                 actionListener="#{meKisiController.prepareCreate}" update=":MeKisiCreateForm"
+                                 oncomplete="PF('MeKisiCreateDialog').show()" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('mekisi:ekle')}"/>
+                <p:commandButton id="editButton" styleClass="ui-button-success" icon="pi pi-pencil" pt:data-tooltip="#{messages.buttonGuncelle}"
+                                 update=":MeKisiEditForm" oncomplete="PF('MeKisiEditDialog').show()" disabled="#{empty meKisiController.selected}"
+                                 onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()" actionListener="#{meKisiController.readInfo()}"
+                                 rendered="#{syKullaniciController.hasPermission('mekisi:guncelle')}"/>
+                <p:commandButton id="viewButton" styleClass="ui-button-info" icon="pi pi-search" pt:data-tooltip="#{messages.buttonDetay}"
+                                 update=":MeKisiViewForm:MeKisiViewForm" oncomplete="PF('MeKisiViewDialog').show()"
+                                 disabled="#{empty meKisiController.selected}" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                <p:commandButton id="deleteButton" styleClass="ui-button-danger" icon="pi pi-trash" pt:data-tooltip="#{messages.buttonSil}"
+                                 actionListener="#{meKisiController.delete}" update=":growl,datalist" disabled="#{empty meKisiController.selected}"
+                                 rendered="#{syKullaniciController.hasPermission('mekisi:sil')}">
+                    <p:confirm header="#{messages.ConfirmationHeader}" message="#{messages.ConfirmDeleteMessage}" icon="pi pi-warning"/>
+                </p:commandButton>
+                <p:commandButton id="nviUpdateButton" icon="pi pi-refresh" styleClass="ui-button-secondary"
+                                 pt:data-tooltip="#{messages.buttonNvidenGuncelle}" update="datalist,:growl"
+                                 actionListener="#{meKisiController.nviUpdate}" disabled="#{empty meKisiController.selected}"
+                                 onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('mekisi:nviupdate')}"/>
+
+            </f:facet>
+
+        </coco:datatable>
+
+
+        <ui:include src="/confirmation.xhtml"/>
+
+    </h:form>
+
+</ui:composition>

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+>
+<ui:composition>
+
+    <p:panelGrid columns="2" styleClass="w-100" layout="tabular">
+        <p:outputLabel value="#{messages.firmaLabel}" for="@next"/>
+        <p:inputText id="firma"
+                     value="#{ekmIsBasvuruController.ekmIsBasvuruTecrube.firma}"
+                     title="#{messages.firmaText}" size="50"/>
+
+        <p:outputLabel value="#{messages.gorevLabel}" for="@next"/>
+        <p:inputText id="gorev"
+                     value="#{ekmIsBasvuruController.ekmIsBasvuruTecrube.gorev}"
+                     title="#{messages.gorevText}" size="50"/>
+
+        <p:outputLabel value="#{messages.girisTarihiLabel}" for="@next"/>
+        <p:datePicker id="girisTarihi" locale="tr" pattern="#{messages.tarihFormat}" value="#{ekmIsBasvuruController.ekmIsBasvuruTecrube.girisTarihi}"
+                      title="#{messages.tarihText}"  mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
+                      showOnFocus="false"/>
+
+        <p:outputLabel value="#{messages.cikisTarihiLabel}" for="@next"/>
+        <p:datePicker id="cikisTarihi" locale="tr" pattern="#{messages.tarihFormat}" value="#{ekmIsBasvuruController.ekmIsBasvuruTecrube.cikisTarihi}"
+                      title="#{messages.tarihText}"  mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
+                      showOnFocus="false"/>
+
+        <p:outputLabel value="#{messages.ayrilmaSebebiLabel}" for="@next"/>
+        <p:inputText id="ayrilmaSebebi"
+                     value="#{ekmIsBasvuruController.ekmIsBasvuruTecrube.ayrilmaSebebi}"
+                     title="#{messages.ayrilmaSebebiText}" size="50"/>
+
+        <p:outputLabel value="#{messages.ucretLabel}" for="@next"/>
+        <p:inputText id="ucret" value="#{ekmIsBasvuruController.ekmIsBasvuruTecrube.ucret}" title="#{messages.ucretText}" size="50"/>
+
+        <f:facet name="footer">
+            <div class="float-end">
+                <p:commandButton value="#{messages.buttonEkle}" icon="pi pi-plus"
+                                 styleClass="btn btn-success"
+                                 actionListener="#{ekmIsBasvuruController.addExperience()}"
+                                 process="isTecrubesiPanel"
+                                 update=":growl,isTecrubesiPanel"/>
+            </div>
+        </f:facet>
+
+    </p:panelGrid>
+
+    <p:panelGrid columns="1" styleClass="w-100">
+        <p:dataTable id="tecrubeId"
+                     value="#{ekmIsBasvuruController.selected.ekmIsBasvuruTecrubeList}"
+                     var="tecrubeVar"
+                     emptyMessage="#{messages.kayitBulunamadi}"
+                     paginator="true"
+                     rows="5"
+                     paginatorPosition="bottom">
+
+            <p:column>
+                <f:facet name="header">
+                    <h:outputText value="#{messages.firmaText}"/>
+                </f:facet>
+                #{tecrubeVar.firma}
+            </p:column>
+
+            <p:column>
+                <f:facet name="header">
+                    <h:outputText value="#{messages.gorevText}"/>
+                </f:facet>
+                #{tecrubeVar.gorev}
+            </p:column>
+
+            <p:column>
+                <f:facet name="header">
+                    <h:outputText value="#{messages.girisTarihiText}"/>
+                </f:facet>
+                <h:outputText value="#{tecrubeVar.girisTarihi}">
+                    <f:convertDateTime pattern="#{messages.tarihFormat}" type="localDate"/>
+                </h:outputText>
+            </p:column>
+
+            <p:column>
+                <f:facet name="header">
+                    <h:outputText value="#{messages.cikisTarihiText}"/>
+                </f:facet>
+                <h:outputText value="#{tecrubeVar.cikisTarihi}">
+                    <f:convertDateTime pattern="#{messages.tarihFormat}" type="localDate"/>
+                </h:outputText>
+            </p:column>
+
+            <p:column>
+                <f:facet name="header">
+                    <h:outputText value="#{messages.ayrilmaSebebiText}"/>
+                </f:facet>
+                #{tecrubeVar.ayrilmaSebebi}
+            </p:column>
+
+            <p:column>
+                <f:facet name="header">
+                    <h:outputText value="#{messages.ucretText}"/>
+                </f:facet>
+                #{tecrubeVar.ucret}
+            </p:column>
+
+
+            <p:column width="60" headerText="#{messages.buttonSil}">
+                <p:commandButton icon="pi pi-trash"
+                                 title="#{messages.buttonSil}"
+                                 actionListener="#{ekmIsBasvuruController.removeExperience(tecrubeVar)}"
+                                 update="tecrubeId,:growl"
+                                 process="tecrubeId"/>
+            </p:column>
+
+        </p:dataTable>
+
+    </p:panelGrid>
+
+</ui:composition>
+</html>

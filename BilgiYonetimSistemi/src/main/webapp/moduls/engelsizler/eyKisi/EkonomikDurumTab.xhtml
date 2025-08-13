@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces">
+<ui:composition>
+
+    <p:outputLabel value="#{messages.calismaDurumuLabel}" for="@next"/>
+    <p:selectOneMenu id="calismaDurumu" value="#{eyKisiController.selected.gnlKisi.calismaDurumu}" converter="omnifaces.SelectItemsConverter">
+        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+        <f:selectItems value="#{enumCalismaDurumu.ALL_VALUES}"
+                       var="calismaDurums"
+                       itemValue="#{calismaDurums}"
+                       itemLabel="#{calismaDurums.displayValue}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.anneDurumLabel}" for="@next"/>
+    <p:selectOneMenu id="anneDurum" value="#{eyKisiController.selected.anneDurum}" converter="omnifaces.SelectItemsConverter">
+        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+        <f:selectItems value="#{enumGnlDurum.ALL_VALUES}"
+                       var="durums"
+                       itemValue="#{durums}"
+                       itemLabel="#{durums.displayValue}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.anneCalismaDurumuLabel}" for="@next"/>
+    <p:selectOneMenu id="anneCalismaDurumu"
+                     value="#{eyKisiController.selected.anneCalismaDurumu}" converter="omnifaces.SelectItemsConverter">
+        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+        <f:selectItems value="#{enumCalismaDurumu.ALL_VALUES}"
+                       var="calismaDurumus"
+                       itemValue="#{calismaDurumus}"
+                       itemLabel="#{calismaDurumus.displayValue}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.babaDurumLabel}" for="@next"/>
+    <p:selectOneMenu id="babaDurum" value="#{eyKisiController.selected.babaDurum}" converter="omnifaces.SelectItemsConverter">
+        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+        <f:selectItems value="#{enumGnlDurum.ALL_VALUES}"
+                       var="durums"
+                       itemValue="#{durums}"
+                       itemLabel="#{durums.displayValue}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.babaCalismaDurumuLabel}" for="@next"/>
+    <p:selectOneMenu id="babaCalismaDurumu" value="#{eyKisiController.selected.babaCalismaDurumu}" converter="omnifaces.SelectItemsConverter">
+        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+        <f:selectItems value="#{enumCalismaDurumu.ALL_VALUES}"
+                       var="calismaDurumus"
+                       itemValue="#{calismaDurumus}"
+                       itemLabel="#{calismaDurumus.displayValue}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.cocukCalismaDurumuLabel}" for="@next"/>
+    <p:selectOneMenu id="cocukCalismaDurumu" value="#{eyKisiController.selected.cocukCalismaDurumu}">
+        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+        <f:selectItems value="#{enumCalismaDurumu.ALL_VALUES}"
+                       var="calismaDurumus"
+                       itemValue="#{calismaDurumus}"
+                       itemLabel="#{calismaDurumus.displayValue}"/>
+        <p:ajax event="change" update="cocukCalismaDurumuAciklama"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.cocukCalismaDurumuAciklamaLabel}"
+                   for="@next"/>
+    <p:inputText id="cocukCalismaDurumuAciklama"
+                 value="#{eyKisiController.selected.cocukCalismaDurumuAciklama}"
+                 disabled="#{eyKisiController.selected.cocukCalismaDurumu.displayValue ne 'Çalışıyor'}"/>
+
+    <p:outputLabel value="#{messages.aileninSosyalGuvencesiLabel}" for="@next"/>
+    <p:selectOneMenu id="aileSosyalGuvence"
+                     value="#{eyKisiController.selected.gnlKisi.sosyalGuvence}">
+        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+        <f:selectItems value="#{enumSosyalGuvence.ALL_VALUES}"
+                       var="sosyalGuvences"
+                       itemValue="#{sosyalGuvences}"
+                       itemLabel="#{sosyalGuvences.displayValue}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.aileninNetGeliriLabel}" for="@next"/>
+    <p:inputNumber id="aylikGeliri" value="#{eyKisiController.selected.gnlKisi.aylikGeliri}" styleClass="text-end" decimalSeparator=","
+                   thousandSeparator="." emptyValue="zero"/>
+
+    <p:outputLabel value="#{messages.aileninGelirKaynagiLabel}" for="@next"/>
+    <p:selectCheckboxMenu id="aileninGelirKaynagi"
+                          value="#{eyKisiController.aileninGelirKaynagis}"
+                          label="#{messages.aileninGelirKaynagiText}"
+                          multiple="true"
+                          filter="true"
+                          filterMatchMode="startsWith"
+                          styleClass="checkboxMenu">
+        <f:selectItems value="#{enumAileninGelirKaynagi.ALL_VALUES}"
+                       var="aileninGelirKaynagis"
+                       itemValue="#{aileninGelirKaynagis}"
+                       itemLabel="#{aileninGelirKaynagis.displayValue}"/>
+        <f:converter converterId="omnifaces.GenericEnumConverter"/>
+    </p:selectCheckboxMenu>
+
+    <p:outputLabel value="#{messages.aileninGelirKaynagiAciklamaLabel}" for="@next"/>
+    <p:inputText id="aileninGelirKaynagiAciklama" value="#{eyKisiController.selected.gnlKisi.gelirKaynagiAciklama}"/>
+
+</ui:composition>
+</html>

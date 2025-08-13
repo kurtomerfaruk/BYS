@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="primefaces"
+      xmlns:composite="jakarta.faces.composite"
+      xmlns:f="jakarta.faces.core"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:fn="jakarta.tags.functions"
+      xmlns:h="jakarta.faces.html">
+
+<composite:interface>
+    <composite:attribute name="id"/>
+    <composite:attribute name="value"/>
+    <composite:attribute name="rowKey" default="#{item.id}"/>
+    <composite:attribute name="selection"/>
+    <composite:attribute name="paginatorPosition" default="bottom"/>
+    <composite:attribute name="rowselect"/>
+    <composite:attribute name="contextMenu"/>
+    <composite:attribute name="rowDblselect"/>
+    <composite:attribute name="rowStyleClass" required="false"/>
+    <composite:attribute name="filtered"/>
+    <composite:attribute name="lazy" default="true"/>
+    <composite:attribute name="styleClass"/>
+    <composite:attribute name="selectListener" method-signature="void listener()"/>
+    <composite:attribute name="filterDelay" required="false" default="3000"/>
+    <composite:attribute name="filterBy"/>
+    <composite:attribute name="sortMode" default="multiple"/>
+    <composite:facet name="footer"/>
+    <composite:clientBehavior name="colResize" targets="#{cc.attrs.id}" event="colResize"/>
+    <composite:attribute name="controller" required="true"/>
+    <composite:attribute name="header" required="true"/>
+    <composite:attribute name="editable" default="false"/>
+    <composite:attribute name="editMode"/>
+    <composite:attribute name="frozenColumns"/>
+    <composite:attribute name="scrollWidth" default="auto"/>
+    <composite:attribute name="widgetVar" default="datalistWidget"/>
+</composite:interface>
+
+
+<composite:implementation>
+    <script type="text/javascript">
+        $(function () {
+            var windowH = $(window).height();
+            windowH -= 94;
+            $('.form-height').css({'height': windowH + 'px'});
+            $(window).trigger('resize');
+
+            $(window).resize(function () {
+                var windowH = $(window).height();
+                windowH -= 94;
+                $('.form-height').css({'height': windowH + 'px'});
+
+            });
+        });
+    </script>
+
+
+    <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.EnumSyFiltreEslesmeModu" var="enumFilterMatch"/>
+    <p:dataTable id="#{cc.attrs.id}"
+                 value="#{cc.attrs.value}"
+                 var="item"
+                 rowKey="#{cc.attrs.rowKey}"
+                 paginator="true"
+                 rows="50"
+                 emptyMessage="#{messages.kayitBulunamadi}"
+                 rowsPerPageTemplate="50,100,200,500"
+                 selectionMode="single"
+                 selection="#{cc.attrs.selection}"
+                 rowSelectMode="new"
+                 paginatorPosition="#{cc.attrs.paginatorPosition}"
+                 lazy="#{cc.attrs.lazy}"
+                 widgetVar="#{cc.attrs.widgetVar}"
+                 scrollable="true"
+                 scrollHeight="100%"
+                 scrollWidth="#{cc.attrs.scrollWidth}"
+                 resizableColumns="true"
+                 resizeMode="expand"
+                 pageLinks="5"
+                 reflow="true"
+                 rowHover="true"
+                 size="small"
+                 disableContextMenuIfEmpty="false"
+                 rowStyleClass="#{cc.attrs.rowStyleClass}"
+                 filteredValue="#{cc.attrs.filtered}"
+                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                 currentPageReportTemplate="#{messages.currentPageTemplate}"
+                 stripedRows="true"
+                 sortMode="#{cc.attrs.sortMode}"
+                 filterBy="#{cc.attrs.filterBy}"
+                 styleClass="#{cc.attrs.styleClass}"
+                 editable="#{cc.attrs.editable}"
+                 editMode="#{cc.attrs.editMode}"
+                 frozenColumns="#{cc.attrs.frozenColumns}"
+                 showGridlines="true"
+                 draggableColumns="true"
+                 reorderableColumns="true">
+
+        <p:ajax event="rowSelect" update="#{cc.attrs.rowselect}" listener="#{cc.attrs.selectListener}"/>
+        <p:ajax event="contextMenu" update="#{cc.attrs.contextMenu}" listener="#{cc.attrs.selectListener}"/>
+        <p:ajax event="rowDblselect" onsuccess="#{cc.attrs.rowDblselect}"/>
+        <p:ajax event="colReorder" listener="#{cc.attrs.controller.onReorder}" update=":growl"/>
+
+        <f:facet name="header">
+            <div class="row">
+                <div class="col-lg-3">
+                </div>
+                <div class="col-lg-6 text-center">
+                    <h:outputText value="#{cc.attrs.header}"/>
+                </div>
+                <div class="col-lg-3">
+                    <div class="float-end">
+                        <p:columnToggler datasource="datalist" trigger="toggler">
+                            <p:ajax event="toggle" listener="#{cc.attrs.controller.onToggle}"/>
+                        </p:columnToggler>
+                        <p:commandButton id="toggler" type="button" class="ui-button-secondary" icon="pi pi-list"
+                                         title="#{messages.kolonlar}"/>
+                        <p:commandButton actionListener="#{cc.attrs.controller.saveColumns()}"
+                                         title="#{messages.buttonKaydet}" styleClass="ui-button-success" icon="pi pi-pencil"
+                                         update=":growl,@this"/>
+                        <p:commandButton actionListener="#{cc.attrs.controller.resetColumns()}"
+                                         title="#{messages.buttonSifirla}" styleClass="ui-button-help" icon="pi pi-eraser"
+                                         update=":growl,@form"/>
+                    </div>
+                </div>
+            </div>
+        </f:facet>
+
+
+        <f:facet name="paginatorBottomRight">
+
+            <h:commandLink>
+                <p:graphicImage name="images/excel.png" width="24"/>
+                <p:dataExporter type="xls" target="datalist" fileName="DataExport" encoding="CP1254" visibleOnly="true"
+                                options="#{cc.attrs.controller.excelOpt}"/>
+            </h:commandLink>
+            <h:commandLink>
+                <p:graphicImage name="images/csv.png" width="24"/>
+                <p:dataExporter type="csv" target="datalist" fileName="DataExport" encoding="CP1254" visibleOnly="true"/>
+            </h:commandLink>
+
+            <h:commandLink>
+                <p:graphicImage name="images/xml.png" width="24"/>
+                <p:dataExporter type="xml" target="datalist" fileName="DataExport" encoding="CP1254" visibleOnly="true"/>
+            </h:commandLink>
+
+        </f:facet>
+
+        <p:columns value="#{cc.attrs.controller.kullaniciKolons}"
+                   var="column"
+                   columnIndexVar="colIndex"
+                   sortBy="#{item[column.syKolon.sortProperty]}"
+                   filterBy="#{item[column.syKolon.filterProperty]}"
+                   width="#{column.genislik}"
+                   visible="#{column.gorunurluk}"
+                   filterMatchMode="#{column.syKolon.filtreEslesmeModu.displayValue}"
+                   styleClass="#{column.syKolon.tip eq 'DECIMAL' ? 'text-end':''}">
+
+
+            <f:facet name="header">
+                <h:outputText value="#{column.syKolon.baslik}"/>
+            </f:facet>
+
+            <ui:fragment rendered="#{column.syKolon.tip eq 'ID'}">
+                <h:outputText value="#{cc.attrs.controller.getResolvedValue(item,column.syKolon.columnProperty)}"
+                              rendered="#{fn:contains(column.syKolon.columnProperty,'.')}">
+                    <f:convertNumber pattern="#{messages.sayiFormat}"/>
+                </h:outputText>
+                <h:outputText value="#{item[column.syKolon.columnProperty]}" rendered="#{!fn:contains(column.syKolon.columnProperty,'.')}">
+                    <f:convertNumber pattern="#{messages.sayiFormat}"/>
+                </h:outputText>
+            </ui:fragment>
+
+            <ui:fragment rendered="#{column.syKolon.filtreTuru eq 'RATING'}">
+                <p:rating value="#{cc.attrs.controller.getResolvedValue(item,column.syKolon.columnProperty)}"
+                          rendered="#{fn:contains(column.syKolon.columnProperty,'.')}" readonly="true"/>
+                <p:rating value="#{item[column.syKolon.columnProperty]}" rendered="#{!fn:contains(column.syKolon.columnProperty,'.')}" readonly="true"/>
+            </ui:fragment>
+
+            <ui:fragment rendered="#{column.syKolon.tip eq 'DATE_TIME'}">
+                <h:outputText value="#{item[column.syKolon.columnProperty]}">
+                    <f:convertDateTime pattern="#{messages.tarihSaatFormat}" type="localDateTime"/>
+                </h:outputText>
+            </ui:fragment>
+
+            <ui:fragment rendered="#{column.syKolon.tip eq 'DATE'}">
+                <h:outputText value="#{cc.attrs.controller.getResolvedValue(item,column.syKolon.columnProperty)}"
+                              rendered="#{fn:contains(column.syKolon.columnProperty,'.')}">
+                    <f:convertDateTime pattern="#{messages.tarihFormat}" type="localDate"/>
+                </h:outputText>
+                <h:outputText value="#{item[column.syKolon.columnProperty]}" rendered="#{!fn:contains(column.syKolon.columnProperty,'.')}">
+                    <f:convertDateTime pattern="#{messages.tarihFormat}" type="localDate"/>
+                </h:outputText>
+            </ui:fragment>
+
+            <ui:fragment rendered="#{column.syKolon.tip eq 'BOOLEAN'}">
+                <h:outputText value="#{item[column.syKolon.columnProperty] ? 'Evet' : 'Hayır'}" styleClass="status-#{item[column.syKolon.columnProperty]}"
+                              rendered="#{!fn:contains(column.syKolon.columnProperty,'.')}"/>
+                <h:outputText value="#{cc.attrs.controller.getResolvedValue(item,column.syKolon.columnProperty) ? 'Evet' : 'Hayır'}"
+                              styleClass="status-#{cc.attrs.controller.getResolvedValue(item,column.syKolon.columnProperty)}"
+                              rendered="#{fn:contains(column.syKolon.columnProperty,'.')}"/>
+            </ui:fragment>
+
+            <ui:fragment rendered="#{column.syKolon.tip eq 'STRING'}">
+                <h:outputText value="#{cc.attrs.controller.getResolvedValue(item,column.syKolon.columnProperty)}"
+                              rendered="#{fn:contains(column.syKolon.columnProperty,'.')}"/>
+                <h:outputText value="#{item[column.syKolon.columnProperty]}" rendered="#{!fn:contains(column.syKolon.columnProperty,'.')}"/>
+            </ui:fragment>
+
+            <ui:fragment rendered="#{column.syKolon.tip eq 'ENUM'}">
+                <h:outputText value="#{cc.attrs.controller.getResolvedValue(item,column.syKolon.columnProperty).displayValue}"
+                              rendered="#{fn:contains(column.syKolon.columnProperty,'.')}"/>
+                <h:outputText value="#{item[column.syKolon.columnProperty].displayValue}" rendered="#{!fn:contains(column.syKolon.columnProperty,'.')}"/>
+            </ui:fragment>
+
+            <ui:fragment rendered="#{column.syKolon.tip eq 'INTEGER' and column.syKolon.filtreTuru ne 'RATING'}">
+                <h:outputText value="#{cc.attrs.controller.getResolvedValue(item,column.syKolon.columnProperty)}"
+                              rendered="#{fn:contains(column.syKolon.columnProperty,'.')}"/>
+                <h:outputText value="#{item[column.syKolon.columnProperty]}" rendered="#{!fn:contains(column.syKolon.columnProperty,'.')}"/>
+            </ui:fragment>
+
+            <ui:fragment rendered="#{column.syKolon.tip eq 'DECIMAL'}">
+                <h:outputText value="#{item[column.syKolon.columnProperty]}">
+                    <f:convertNumber minFractionDigits="2" maxFractionDigits="2"/>
+                </h:outputText>
+            </ui:fragment>
+
+            <f:facet name="filter">
+                <ui:fragment rendered="#{column.syKolon.tip eq 'DATE' or column.syKolon.tip eq 'DATE_TIME'}">
+                    <p:datePicker pattern="#{messages.tarihFormat}" locale="tr" mask="true" onkeyup="PF('#{cc.attrs.widgetVar}').filter()" monthNavigator="true"
+                                  yearNavigator="true" showButtonBar="true" selectionMode="range" styleClass="w-100" inputstyleClass="w-100">
+                        <p:ajax event="dateSelect" oncomplete="PF('#{cc.attrs.widgetVar}').filter()"/>
+                    </p:datePicker>
+                </ui:fragment>
+                <ui:fragment rendered="#{column.syKolon.filtreTuru eq 'SELECT_ONE_MENU'}">
+                    <p:selectOneMenu onchange="PF('#{cc.attrs.widgetVar}').filter()" converter="omnifaces.SelectItemsConverter">
+                        <f:selectItem itemLabel="#{messages.tumuText}" itemValue="#{null}" noSelectionOption="true"/>
+                        <f:selectItems value="#{cc.attrs.controller.getFilterOptions(column.syKolon.filtreAnahtari)}" var="option"
+                                       itemValue="#{option.value}" itemLabel="#{option.label}"/>
+                    </p:selectOneMenu>
+                </ui:fragment>
+                <ui:fragment rendered="#{column.syKolon.tip eq 'DECIMAL' or column.syKolon.tip eq 'INTEGER'}">
+                    <div class="filter-container">
+                        <!-- Operatör Seçimi -->
+                        <p:selectOneMenu value="#{cc.attrs.controller.filterMap[column.syKolon.filterProperty].matchMode}"
+                                         styleClass="filter-operator"
+                                         onchange="PF('#{cc.attrs.widgetVar}').filter()">
+                            <f:selectItem itemLabel="=" itemValue="EQUALS"/>
+                            <f:selectItem itemLabel="&#8800;" itemValue="NOT_EQUALS"/>
+                            <f:selectItem itemLabel="&gt;" itemValue="GREATER_THAN"/>
+                            <f:selectItem itemLabel="≥" itemValue="GREATER_THAN_EQUALS"/>
+                            <f:selectItem itemLabel="&lt;" itemValue="LESS_THAN"/>
+                            <f:selectItem itemLabel="≤" itemValue="LESS_THAN_EQUALS"/>
+                        </p:selectOneMenu>
+
+                        <p:inputText value="#{cc.attrs.controller.getFilter(column.syKolon.filterProperty).filterValue}"
+                                     styleClass="filter-value"
+                                     onkeyup="PF('#{cc.attrs.widgetVar}').filter()">
+                            <p:keyFilter mask="int"/>
+                        </p:inputText>
+
+                    </div>
+                </ui:fragment>
+
+            </f:facet>
+
+        </p:columns>
+
+        <composite:insertFacet name="paginatorBottomLeft"/>
+        <composite:insertFacet name="header"/>
+        <composite:insertFacet name="filter"/>
+    </p:dataTable>
+
+</composite:implementation>
+</html>

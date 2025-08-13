@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces">
+
+<ui:composition>
+    <p:outputLabel value="#{messages.hobileriLabel}" for="@next"/>
+    <p:inputTextarea id="hobileri" value="#{ayKisiController.selected.hobileri}" rows="4" class="w-100"/>
+
+    <p:outputLabel value="#{messages.yaslininBeklentileriLabel}" for="@next"/>
+    <p:inputTextarea id="yaslininBeklentileri" value="#{ayKisiController.selected.yaslininBeklentileri}" rows="4" class="w-100"/>
+
+    <p:outputLabel value="#{messages.sosyoPsikolojikDestekLabel}" for="@next"/>
+    <p:selectBooleanCheckbox id="sosyoPsikolojikDestek" value="#{ayKisiController.selected.sosyoPsikolojikDestek}"/>
+
+    <p:outputLabel value="#{messages.sosyalAktiviteIstegiLabel}" for="@next"/>
+    <p:selectBooleanCheckbox id="sosyalAktiviteIstegi"   value="#{ayKisiController.selected.sosyalAktiviteIstegi}"/>
+
+    <p:outputLabel value="#{messages.aktivitelerLabel}" for="@next"/>
+    <p:selectManyCheckbox id="aktiviteler" value="#{ayKisiController.ayAktivites}" layout="responsive" columns="3"
+                          valueChangeListener="#{ayKisiController.valueChangeAktivite}">
+        <f:selectItems value="#{ayAktiviteController.items}"
+                       var="aktivites"
+                       itemValue="#{aktivites}"
+                       itemLabel="#{aktivites.tanim}"/>
+    </p:selectManyCheckbox>
+
+    <p:outputLabel value="#{messages.sanatsalBecerilerLabel}" for="@next"/>
+    <p:selectManyCheckbox id="sanatsalBeceriler" value="#{ayKisiController.aySanatsalBeceris}" layout="responsive" columns="3"
+                          converter="omnifaces.SelectItemsConverter"
+                          valueChangeListener="#{ayKisiController.valueChangeSanatsalBeceri}">
+        <f:selectItems value="#{aySanatsalBeceriController.items}"
+                       var="sanatsals"
+                       itemValue="#{sanatsals}"
+                       itemLabel="#{sanatsals.tanim}"/>
+    </p:selectManyCheckbox>
+</ui:composition>
+</html>

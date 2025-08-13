@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="jakarta.faces.facelets"
+                xmlns:p="primefaces">
+
+    <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.EnumSyFiltreTuru" var="enumFiltreTuru"/>
+    <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.EnumSyFiltreAnahtari" var="enumFiltreAnahtari"/>
+    <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.EnumSyVeriTipi" var="enumVeriTipi"/>
+    <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.EnumSyFiltreEslesmeModu" var="enumMatchMode"/>
+
+    <ui:include src="/moduls/sistemyonetimi/syKolon/List.xhtml"/>
+    <ui:include src="/moduls/sistemyonetimi/syKolon/View.xhtml"/>
+    <ui:include src="/moduls/sistemyonetimi/syKolon/Edit.xhtml"/>
+    <ui:include src="/moduls/sistemyonetimi/syKolon/Create.xhtml"/>
+
+</ui:composition>

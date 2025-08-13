@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="primefaces"
+      xmlns:h="jakarta.faces.html">
+
+<ui:composition>
+
+    <p:dialog widgetVar="EyKisiEditDialog"
+              id="EyKisiEditDlg"
+              modal="true"
+              resizable="false"
+              closeOnEscape="true"
+              header="#{messages.dialogKayitGuncelle}"
+              appendTo="@(body)"
+              responsive="true"
+              onShow="PF('EyKisiEditDialog').initPosition();adjustMenuWidth();"
+              fitViewport="true"
+              position="top">
+
+        <h:form id="EyKisiEditForm" enctype="multipart/form-data">
+            <h:panelGroup id="display">
+                <p:focus context="display"/>
+                <div class="card custom-card">
+
+                    <div class="card-body">
+
+                        <ul class="nav nav-tabs mb-3 tab-style-8 scaleX" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="kisiBilgileriEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#kisiBilgileriEditTabPane" type="button" role="tab"
+                                        aria-controls="kisiBilgileriEditTabPane" aria-selected="true">Kişi Bilgileri
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="aileDurumuEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#aileDurumuEditTabPane" type="button" role="tab"
+                                        aria-controls="aileDurumuEditTabPane" aria-selected="false">Aile Durumu
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="ekonomomikDurumEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#ekonomomikDurumEditTabPane" type="button" role="tab"
+                                        aria-controls="ekonomomikDurumEditTabPane" aria-selected="false">Ekonomik Durum
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="sosyalYardimEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#sosyalYardimEditTabPane" type="button" role="tab"
+                                        aria-controls="sosyalYardimEditTabPane" aria-selected="false">Sosyal Yardım Durumu
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="engellilikEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#engellilikEditTabPane" type="button" role="tab"
+                                        aria-controls="engellilikEditTabPane" aria-selected="false">Engellilik Durumu
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="talepEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#talepEditTabPane" type="button" role="tab"
+                                        aria-controls="talepEditTabPane" aria-selected="false">Talepler
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="dosyalarEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#dosyalarEditTabPane" type="button" role="tab"
+                                        aria-controls="dosyalarEditTabPane" aria-selected="false">Dosyalar
+                                </button>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content text-muted">
+                            <div class="tab-pane show active" id="kisiBilgileriEditTabPane">
+                                <p:panelGrid id="kisiPanel" columns="2" styleClass="w-100"
+                                             rendered="#{eyKisiController.selected!=null}" layout="tabular">
+
+                                    <ui:include src="/moduls/engelsizler/eyKisi/KisiBilgileriTab.xhtml"/>
+                                </p:panelGrid>
+                            </div>
+                            <div class="tab-pane" id="aileDurumuEditTabPane">
+
+                                <p:panelGrid id="aileDurumuPanel" columns="2" styleClass="w-100"
+                                             rendered="#{eyKisiController.selected!=null}" layout="tabular">
+
+                                    <ui:include src="/moduls/engelsizler/eyKisi/AileDurumuTab.xhtml"/>
+
+                                </p:panelGrid>
+                            </div>
+                            <div class="tab-pane" id="ekonomomikDurumEditTabPane">
+                                <p:panelGrid id="ekonomikDurumPanel" columns="2" styleClass="w-100"
+                                             rendered="#{eyKisiController.selected!=null}" layout="tabular">
+
+                                    <ui:include src="/moduls/engelsizler/eyKisi/EkonomikDurumTab.xhtml"/>
+
+                                </p:panelGrid>
+                            </div>
+                            <div class="tab-pane" id="sosyalYardimEditTabPane">
+                                <p:panelGrid id="sosyalYardimPanel" columns="2" styleClass="w-100" rendered="#{eyKisiController.selected!=null}"
+                                             layout="tabular">
+                                    <ui:include src="/moduls/engelsizler/eyKisi/SosyalYardimTab.xhtml"/>
+
+                                </p:panelGrid>
+                            </div>
+                            <div class="tab-pane" id="engellilikEditTabPane">
+                                <p:panelGrid id="engellilikPanel" columns="2" styleClass="w-100" rendered="#{eyKisiController.selected!=null}" layout="tabular">
+                                    <ui:include src="/moduls/engelsizler/eyKisi/EngellilikTab.xhtml"/>
+                                </p:panelGrid>
+                            </div>
+                            <div class="tab-pane" id="talepEditTabPane">
+                                <ui:include src="/moduls/engelsizler/eyKisi/TalepListesiTab.xhtml"/>
+                            </div>
+                            <div class="tab-pane" id="dosyalarEditTabPane">
+                                <ui:include src="/moduls/engelsizler/eyKisi/DosyalarTab.xhtml"/>
+                            </div>
+                        </div>
+                    </div><!-- end card-body -->
+                    <div class="card-footer">
+                        <div class="float-end">
+                            <p:commandButton icon="pi pi-check" styleClass="ui-button-success"
+                                             actionListener="#{eyKisiController.update}"
+                                             value="#{messages.buttonKaydet}"
+                                             update="display,:EyKisiListForm:datalist:datalist,:growl"
+                                             oncomplete="handleSubmit(xhr,status,args,PF('EyKisiEditDialog'));"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                            <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                             value="#{messages.buttonIptal}" onclick="PF('EyKisiEditDialog').hide()"
+                                             immediate="true" onstart="PF('Loading').show()"
+                                             onsuccess="PF('Loading').hide()"/>
+                        </div>
+                    </div>
+                </div>
+            </h:panelGroup>
+        </h:form>
+
+    </p:dialog>
+
+    <script type="text/javascript">
+        function adjustMenuWidth() {
+            var dialog = PF('EyKisiEditDialog');
+            var menu = $(".checkboxMenu");
+
+            if (dialog &amp;&amp; menu) {
+                var dialogWidth = dialog.jq.innerWidth();
+                var menuContainer = $(menu).closest('.ui-selectcheckboxmenu');
+                menuContainer.width(dialogWidth - 30);
+            }
+        }
+    </script>
+
+</ui:composition>
+
+</html>

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:p="primefaces"
+                xmlns:f="jakarta.faces.core">
+
+
+    <!-- Start::row-1 -->
+    <div class="row mb-5">
+        <div class="col-xl-12">
+            <div class="card custom-card">
+                <div class="card-header">
+                    <ul class="nav nav-tabs nav-tabs-header mb-0 mailsettings-nav d-flex gap-2" role="tablist">
+                        <li class="nav-item m-1">
+                            <a class="nav-link active" data-bs-toggle="tab" role="tab" aria-current="page"
+                               href="#personal-info" aria-selected="true">
+                                Personel Bilgileri
+                            </a>
+                        </li>
+                        <li class="nav-item m-1">
+                            <a class="nav-link" data-bs-toggle="tab" role="tab" aria-current="page"
+                               href="#password-change" aria-selected="true">
+                                Parola Güncelle
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-body">
+                    <div class="tab-content">
+                        <div class="tab-pane show active" id="personal-info" role="tabpanel">
+                            <h:form>
+                                <div class="p-sm-3 p-0">
+                                    <h6 class="fw-medium mb-3">
+                                        Bilgilerim
+                                    </h6>
+                                    <div class="row gy-4 mb-4">
+                                        <div class="col-xl-6">
+                                            <p:outputLabel value="#{messages.adText}" for="@next"/>
+                                            <p:inputText id="ad" value="#{syKullanici.gnlPersonel.gnlKisi.ad}" readonly="true"/>
+
+                                        </div>
+                                        <div class="col-xl-6">
+                                            <p:outputLabel value="#{messages.soyadText}" for="@next"/>
+                                            <p:inputText id="soyad" value="#{syKullanici.gnlPersonel.gnlKisi.soyad}" readonly="true"/>
+                                        </div>
+                                        <div class="col-xl-6">
+                                            <p:outputLabel value="#{messages.kullaniciAdiText}" for="@next"/>
+                                            <p:inputText id="kullaniciAdi" value="#{syKullanici.kullaniciAdi}" readonly="true"/>
+                                        </div>
+                                        <div class="col-xl-6">
+                                            <p:outputLabel value="#{messages.epostaAdresiText}" for="@next"/>
+                                            <p:inputText id="epostaAdresi" value="#{syKullanici.gnlPersonel.gnlKisi.epostaAdresi}" readonly="true"/>
+                                        </div>
+
+                                        <div class="col-xl-6">
+                                            <p:outputLabel value="#{messages.unvanText}" for="@next"/>
+                                            <p:inputText id="unvan" value="#{syKullanici.gnlPersonel.gnlUnvan.tanim}" readonly="true"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </h:form>
+                        </div>
+                        <div class="tab-pane" id="password-change" role="tabpanel">
+                           <h:form>
+                               <div class="row gy-3">
+                                   <div class="col-xxl-7">
+                                       <div class="card custom-card shadow-none mb-0 border">
+                                           <div class="card-body">
+                                               <div class="d-flex align-items-top justify-content-between">
+                                                   <div>
+                                                       <p class="fs-14 mb-1 fw-medium">Parolanızı güncelleyin</p>
+                                                       <p class="fs-13 text-muted mb-2">Şifrenizi değiştirmek için lütfen yeni bir şifre girin.</p>
+                                                       <div class="mb-2">
+                                                           <p:outputLabel value="#{messages.eskiParolaLabel}" for="@next"/>
+                                                           <p:password id="currentPassword" value="#{syKullaniciController.currentPassword}"
+                                                                       title="#{messages.eskiParolaText}" required="true"
+                                                                       feedback="true" promptLabel="#{messages.lutfenSifreGiriniz}"
+                                                                       weakLabel="#{messages.zayif}"
+                                                                       goodLabel="#{messages.ortaSeviye}"
+                                                                       strongLabel="#{messages.guclu}" styleClass="form-control parola"/>
+                                                       </div>
+                                                       <div class="mb-2">
+                                                           <p:outputLabel value="#{messages.yeniParolaLabel}" for="@next"/>
+                                                           <p:password id="newPassword" value="#{syKullaniciController.newPassword}"
+                                                                       title="#{messages.yeniParolaText}" required="true"
+                                                                       feedback="true" promptLabel="#{messages.lutfenSifreGiriniz}"
+                                                                       weakLabel="#{messages.zayif}"
+                                                                       goodLabel="#{messages.ortaSeviye}"
+                                                                       strongLabel="#{messages.guclu}" styleClass="form-control parola" >
+                                                               <f:validateBean>
+                                                                   <f:attribute name="jakarta.faces.validator" value="true"/>
+                                                               </f:validateBean>
+                                                               <p:clientValidator type="StrongPassword" />
+                                                           </p:password>
+                                                       </div>
+                                                       <div class="mb-0">
+                                                           <p:outputLabel value="#{messages.yeniParolaLabel}" for="@next"/>
+                                                           <p:password id="newPasswordRepeat" value="#{syKullaniciController.newPasswordRepeat}"
+                                                                       title="#{messages.yeniParolaText}" required="true"
+                                                                       feedback="true" promptLabel="#{messages.lutfenSifreGiriniz}"
+                                                                       weakLabel="#{messages.zayif}"
+                                                                       goodLabel="#{messages.ortaSeviye}"
+                                                                       strongLabel="#{messages.guclu}" styleClass="form-control parola">
+                                                               <f:validateLength minimum="8"/>
+                                                           </p:password>
+                                                       </div>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                       </div>
+                                       <div class="card-footer">
+                                           <div class="float-start">
+                                               <p:commandButton icon="pi pi-check" styleClass="ui-button-success"
+                                                                actionListener="#{syKullaniciController.profilePasswordUpdate}"
+                                                                value="#{messages.buttonKaydet}" update=":growl"
+                                                                onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                                           </div>
+                                       </div>
+                                   </div>
+                               </div>
+                           </h:form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!--End::row-1 -->
+</ui:composition>

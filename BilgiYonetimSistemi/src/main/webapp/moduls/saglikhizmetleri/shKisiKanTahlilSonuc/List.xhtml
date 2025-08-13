@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:p="primefaces"
+                xmlns:pt="jakarta.faces.passthrough"
+                xmlns:coco="jakarta.faces.composite/ui">
+
+    <h:form id="ShKisiKanTahlilSonucListForm" styleClass="form-height">
+
+        <p:contextMenu id="ShKisiKanTahlilSonucDataTableContextMenu" for="datalist:datalist">
+            <p:menuitem value="#{messages.buttonEkle}" onclick="document.getElementById('ShKisiKanTahlilSonucListForm:datalist:datalist:createButton').click();"
+                        icon="pi pi-plus" rendered="#{syKullaniciController.hasPermission('shkisikantahlilsonuc:ekle')}"/>
+            <p:menuitem value="#{messages.buttonGuncelle}"
+                        onclick="document.getElementById('ShKisiKanTahlilSonucListForm:datalist:datalist:editButton').click();"
+                        icon="pi pi-pencil" rendered="#{syKullaniciController.hasPermission('shkisikantahlilsonuc:guncelle')}"/>
+            <p:menuitem value="#{messages.buttonDetay}" onclick="document.getElementById('ShKisiKanTahlilSonucListForm:datalist:datalist:viewButton').click();"
+                        icon="pi pi-search"/>
+            <p:menuitem value="#{messages.buttonSil}" onclick="document.getElementById('ShKisiKanTahlilSonucListForm:datalist:datalist:deleteButton').click();"
+                        icon="pi pi-trash" rendered="#{syKullaniciController.hasPermission('shkisikantahlilsonuc:sil')}"/>
+        </p:contextMenu>
+
+        <coco:datatable id="datalist"
+                        value="#{shKisiKanTahlilSonucController.lazyItems}"
+                        rowKey="#{item.id}"
+                        selection="#{shKisiKanTahlilSonucController.selected}"
+                        filtered="#{shKisiKanTahlilSonucController.filtered}"
+                        rowselect=":ShKisiKanTahlilSonucListForm:datalist:datalist:createButton,:ShKisiKanTahlilSonucListForm:datalist:datalist:viewButton,:ShKisiKanTahlilSonucListForm:datalist:datalist:editButton,:ShKisiKanTahlilSonucListForm:datalist:datalist:deleteButton,:ShKisiKanTahlilSonucListForm:ShKisiKanTahlilSonucDataTableContextMenu"
+                        rowDblselect="document.getElementById('ShKisiKanTahlilSonucListForm:datalist:datalist:editButton').click()"
+                        contextMenu=":ShKisiKanTahlilSonucListForm:datalist:datalist:createButton :ShKisiKanTahlilSonucListForm:datalist:datalist:viewButton :ShKisiKanTahlilSonucListForm:datalist:datalist:editButton :ShKisiKanTahlilSonucListForm:datalist:datalist:deleteButton"
+                        selectListener="#{shKisiKanTahlilSonucController.resetParents}"
+                        controller="#{shKisiKanTahlilSonucController}"
+                        header="#{messages.kanTahlilSonucListesi}">
+
+
+            <p:ajax event="colResize" listener="#{shKisiKanTahlilSonucController.onResize}"/>
+
+            <f:facet name="paginatorBottomLeft">
+
+                <p:commandButton id="createButton" styleClass="ui-button-primary" icon="pi pi-plus" pt:data-tooltip="#{messages.buttonEkle}"
+                                 actionListener="#{shKisiKanTahlilSonucController.prepareCreate}"
+                                 update=":ShKisiKanTahlilSonucCreateForm:ShKisiKanTahlilSonucCreateForm"
+                                 oncomplete="PF('ShKisiKanTahlilSonucCreateDialog').show()" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('shkisikantahlilsonuc:ekle')}"/>
+                <p:commandButton id="editButton" styleClass="ui-button-success" icon="pi pi-pencil" pt:data-tooltip="#{messages.buttonGuncelle}"
+                                 update=":ShKisiKanTahlilSonucEditForm:ShKisiKanTahlilSonucEditForm" oncomplete="PF('ShKisiKanTahlilSonucEditDialog').show()"
+                                 disabled="#{empty shKisiKanTahlilSonucController.selected}" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('shkisikantahlilsonuc:guncelle')}"/>
+                <p:commandButton id="viewButton" styleClass="ui-button-info" icon="pi pi-search" pt:data-tooltip="#{messages.buttonDetay}"
+                                 update=":ShKisiKanTahlilSonucViewForm:ShKisiKanTahlilSonucViewForm" oncomplete="PF('ShKisiKanTahlilSonucViewDialog').show()"
+                                 disabled="#{empty shKisiKanTahlilSonucController.selected}" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                <p:commandButton id="deleteButton" styleClass="ui-button-danger" icon="pi pi-trash" pt:data-tooltip="#{messages.buttonSil}"
+                                 actionListener="#{shKisiKanTahlilSonucController.delete}" update=":growl,datalist"
+                                 disabled="#{empty shKisiKanTahlilSonucController.selected}"
+                                 rendered="#{syKullaniciController.hasPermission('shkisikantahlilsonuc:sil')}">
+                    <p:confirm header="#{messages.ConfirmationHeader}" message="#{messages.ConfirmDeleteMessage}" icon="pi pi-warning"/>
+                </p:commandButton>
+
+            </f:facet>
+
+        </coco:datatable>
+
+
+        <ui:include src="/confirmation.xhtml"/>
+
+    </h:form>
+
+</ui:composition>

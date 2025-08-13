@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:createpage id="ShObeziteAnketCreateForm"
+                     renderedListener="#{shObeziteAnketController.selected != null}"
+                     widgetVar="ShObeziteAnketCreateDialog"
+                     actionListener="#{shObeziteAnketController.saveNew}"
+                     listForm="ShObeziteAnketListForm"
+                     position="top">
+
+        <p:outputLabel value="#{messages.tcKimlikNoLabel}" for="@next"/>
+        <coco:inputWithButton id="inputWithButtonShKisi" inputId="shKisiId"
+                              inputValue="#{shObeziteAnketController.selected.shKisi.gnlKisi.tcKimlikNo}"
+                              inputTitle="#{messages.tcKimlikNoText}"
+                              actionListener="#{bysController.openCommonDialog('shKisiSec')}"
+                              ajaxListener="#{shObeziteAnketController.secilenShKisi}"
+                              buttonTitle="#{messages.kisiSecmelisiniz}"
+                              size="50"
+                              dialogId="ShObeziteAnketCreateDialogId"/>
+
+        <p:outputLabel value="#{messages.adSoyadLabel}" for="@next"/>
+        <p:inputText id="adSoyad" value="#{shObeziteAnketController.selected.shKisi.gnlKisi.adSoyad}" title="#{messages.adSoyadText}" size="50"
+                     required="true" readonly="#{facesContext.renderResponse}" styleClass="inputUpdate"/>
+
+        <p:outputLabel value="#{messages.dogumTarihiLabel}" for="@next"/>
+        <p:datePicker id="dogumTarihi" locale="tr" pattern="#{messages.tarihFormat}" value="#{shObeziteAnketController.selected.shKisi.gnlKisi.dogumTarihi}"
+                      title="#{messages.dogumTarihiText}" readonly="true" styleClass="inputUpdate"/>
+
+        <p:outputLabel value="#{messages.boyLabel}" for="boy"/>
+        <p:inputText id="boy" value="#{shObeziteAnketController.selected.boy}"
+                     title="#{messages.boyText}">
+            <p:keyFilter regEx="/[\d]/"/>
+            <p:ajax event="change" listener="#{shObeziteAnketController.calculateBki()}" update="@(.bki)"/>
+        </p:inputText>
+
+        <p:outputLabel value="#{messages.kiloLabel}" for="kilo"/>
+        <p:inputText id="kilo" value="#{shObeziteAnketController.selected.kilo}" title="#{messages.kiloText}">
+            <p:keyFilter regEx="/[\d]/"/>
+            <p:ajax event="change" listener="#{shObeziteAnketController.calculateBki()}" update="@(.bki)"/>
+        </p:inputText>
+
+        <p:outputLabel value="#{messages.bkiLabel}" for="bki"/>
+        <p:inputText id="bki" value="#{shObeziteAnketController.selected.bki}" styleClass="bki" title="#{messages.bkiText}" readonly="true">
+            <f:convertNumber maxFractionDigits="2"/>
+        </p:inputText>
+
+        <p:outputLabel value="#{messages.katilimSonucuLabel}" for="bki"/>
+        <p:inputText id="katilimSonucu" value="#{shObeziteAnketController.selected.katilimSonucu}" styleClass="bki" title="#{messages.bkiText}"
+                     readonly="true"/>
+
+        <p:outputLabel value="#{messages.danismanlikHizmetiVerenLabel}" for="@next"/>
+        <p:selectOneRadio id="danismanlikHizmetiVeren" value="#{shObeziteAnketController.selected.danismanlikHizmetiVeren}" layout="responsive" columns="5"
+                          required="true">
+            <f:selectItems value="#{enumDanismanlikHizmeti.ALL_VALUES}" var="enumItem" itemLabel="#{enumItem.displayValue}" itemValue="#{enumItem}"/>
+        </p:selectOneRadio>
+
+        <p:outputLabel value="#{messages.verilenHizmetLabel}" for="@next"/>
+        <p:selectOneRadio id="verilenHizmet" value="#{shObeziteAnketController.selected.verilenHizmet}" layout="responsive" columns="5" required="true">
+            <f:selectItems value="#{enumObeziteHizmet.ALL_VALUES}" var="enumItem" itemLabel="#{enumItem.displayValue}" itemValue="#{enumItem}"/>
+        </p:selectOneRadio>
+
+        <p:outputLabel value="#{messages.sigaraAlkolKullanimDurumuLabel}" for="@next"/>
+        <p:selectOneRadio id="sigaraAlkolKullanimDurumu" value="#{shObeziteAnketController.selected.sigaraAlkolKullanimDurumu}" layout="responsive" columns="5"
+                          required="true">
+            <f:selectItems value="#{enumSigaraAlkol.ALL_VALUES}" var="enumItem" itemLabel="#{enumItem.displayValue}" itemValue="#{enumItem}"/>
+        </p:selectOneRadio>
+
+        <p:outputLabel value="#{messages.cocuklukCagindaSismanlikDurumuLabel}" for="@next"/>
+        <p:selectOneRadio id="cocuklukCagindaSismanlikDurumu" value="#{shObeziteAnketController.selected.cocuklukCagindaSismanlikDurumu}" layout="responsive"
+                          columns="5" required="true">
+            <f:selectItems value="#{enumEvetHayir.ALL_VALUES}" var="enumItem" itemLabel="#{enumItem.displayValue}" itemValue="#{enumItem}"/>
+        </p:selectOneRadio>
+
+        <p:outputLabel value="#{messages.duzenliSuTuketimiLabel}" for="@next"/>
+        <p:selectOneRadio id="duzenliSuTuketimiDurumu" value="#{shObeziteAnketController.selected.duzenliSuTuketimiDurumu}" layout="responsive"
+                          columns="5" required="true">
+            <f:selectItems value="#{enumEvetHayir.ALL_VALUES}" var="enumItem" itemLabel="#{enumItem.displayValue}" itemValue="#{enumItem}"/>
+        </p:selectOneRadio>
+
+        <p:outputLabel value="#{messages.kronikRahatsizlikDurumuLabel}" for="@next"/>
+        <p:selectOneRadio id="kronikRahatsizlikDurumu" value="#{shObeziteAnketController.selected.kronikRahatsizlikDurumu}" layout="responsive"
+                          columns="5" required="true">
+            <f:selectItems value="#{enumKronikRahatsizlik.ALL_VALUES}" var="enumItem" itemLabel="#{enumItem.displayValue}" itemValue="#{enumItem}"/>
+        </p:selectOneRadio>
+
+        <p:outputLabel value="#{messages.duzenliBeslenmeDurumuLabel}" for="@next"/>
+        <p:selectOneRadio id="duzenliBeslenmeDurumu" value="#{shObeziteAnketController.selected.duzenliBeslenmeDurumu}" layout="responsive"
+                          columns="5" required="true">
+            <f:selectItems value="#{enumEvetHayir.ALL_VALUES}" var="enumItem" itemLabel="#{enumItem.displayValue}" itemValue="#{enumItem}"/>
+        </p:selectOneRadio>
+
+        <p:outputLabel value="#{messages.besinAlerjiDurumuLabel}" for="@next"/>
+        <p:selectOneRadio id="besinAlerjiDurumu" value="#{shObeziteAnketController.selected.besinAlerjiDurumu}" layout="responsive"
+                          columns="5" required="true">
+            <f:selectItems value="#{enumVarYok.ALL_VALUES}" var="enumItem" itemLabel="#{enumItem.displayValue}" itemValue="#{enumItem}"/>
+        </p:selectOneRadio>
+
+        <p:outputLabel value="#{messages.anemiLabel}" for="@next"/>
+        <p:selectOneRadio id="anemiDurumu" value="#{shObeziteAnketController.selected.anemiDurumu}" layout="responsive"
+                          columns="5" required="true">
+            <f:selectItems value="#{enumVarYok.ALL_VALUES}" var="enumItem" itemLabel="#{enumItem.displayValue}" itemValue="#{enumItem}"/>
+        </p:selectOneRadio>
+
+        <p:outputLabel value="#{messages.aileObeziteDurumuLabel}" for="@next"/>
+        <p:selectOneRadio id="aileObeziteDurumu" value="#{shObeziteAnketController.selected.aileObeziteDurumu}" layout="responsive"
+                          columns="5" required="true">
+            <f:selectItems value="#{enumVarYok.ALL_VALUES}" var="enumItem" itemLabel="#{enumItem.displayValue}" itemValue="#{enumItem}"/>
+        </p:selectOneRadio>
+
+        <p:outputLabel value="#{messages.gidaTakviyesiDurumuLabel}" for="@next"/>
+        <p:selectOneRadio id="gidaTakviyesiDurumu" value="#{shObeziteAnketController.selected.gidaTakviyesiDurumu}" layout="responsive"
+                          columns="5" required="true">
+            <f:selectItems value="#{enumEvetHayir.ALL_VALUES}" var="enumItem" itemLabel="#{enumItem.displayValue}" itemValue="#{enumItem}"/>
+        </p:selectOneRadio>
+
+        <p:outputLabel value="#{messages.siddetliFizikselAktiviteDurumuLabel}" for="@next"/>
+        <p:selectOneRadio id="siddetliFizikselAktiviteDurumu" value="#{shObeziteAnketController.selected.siddetliFizikselAktiviteDurumu}" layout="responsive"
+                          columns="5" required="true">
+            <f:selectItems value="#{enumEvetHayir.ALL_VALUES}" var="enumItem" itemLabel="#{enumItem.displayValue}" itemValue="#{enumItem}"/>
+        </p:selectOneRadio>
+
+        <p:outputLabel value="#{messages.ortaDereceliAktiviteDurumuLabel}" for="@next"/>
+        <p:selectOneRadio id="ortaDereceliAktiviteDurumu" value="#{shObeziteAnketController.selected.ortaDereceliAktiviteDurumu}" layout="responsive"
+                          columns="5" required="true">
+            <f:selectItems value="#{enumEvetHayir.ALL_VALUES}" var="enumItem" itemLabel="#{enumItem.displayValue}" itemValue="#{enumItem}"/>
+        </p:selectOneRadio>
+
+        <p:outputLabel value="#{messages.anketiYapanPersonelLabel}" for="bki"/>
+        <p:inputText id="anketiYapanGnlPersonel" value="#{shObeziteAnketController.selected.anketiYapanGnlPersonel.gnlKisi.adSoyad}"
+                     title="#{messages.anketiYapanPersonelText}" readonly="true"/>
+
+    </coco:createpage>
+
+</ui:composition>
+
+</html>

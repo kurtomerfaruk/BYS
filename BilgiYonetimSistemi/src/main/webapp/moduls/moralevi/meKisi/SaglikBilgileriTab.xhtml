@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces">
+<ui:composition>
+
+    <p:outputLabel value="#{messages.raporTarihiLabel}" for="@next"/>
+    <p:datePicker id="raporTarihi" locale="tr" pattern="#{messages.tarihFormat}" value="#{meKisiController.selected.eyKisi.raporTarihi}"
+                  title="#{messages.raporTarihiText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
+                  showOnFocus="false" styleClass="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.hastahaneLabel}" for="@next"/>
+    <p:inputText id="hastahane" value="#{meKisiController.selected.eyKisi.hastahane}" title="#{messages.hastahaneText}" size="50" styleClass="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.anamnezRaporuLabel}" for="@next"/>
+    <p:inputTextarea id="anamnezRaporu" value="#{meKisiController.selected.anamnezRaporu}" title="#{messages.anamnezRaporuText}" size="50" rows="4"
+                     autoResize="false" styleClass="w-100"/>
+
+    <p:outputLabel value="#{messages.surekliLabel}" for="@next"/>
+    <h:panelGroup>
+        <div class="ui-inputgroup">
+            <div class="ui-inputgroup-addon">
+                <p:selectBooleanCheckbox id="surekli" value="#{meKisiController.selected.eyKisi.surekli}" styleClass="tcUpdate">
+                    <p:ajax event="change" update="surekliAciklama" listener="#{meKisiController.selected.eyKisi.setSurekliAciklama('')}"/>
+                </p:selectBooleanCheckbox>
+            </div>
+            <p:inputText id="surekliAciklama"
+                         value="#{meKisiController.selected.eyKisi.surekliAciklama}"
+                         title="#{messages.surekliAciklamaText}"
+                         required="#{meKisiController.selected.eyKisi.surekli}"
+                         disabled="#{!meKisiController.selected.eyKisi.surekli}" styleClass="tcUpdate"/>
+        </div>
+    </h:panelGroup>
+
+    <p:outputLabel value="#{messages.engelGrubuLabel}" for="@next"/>
+    <p:selectCheckboxMenu id="engelGrubu" value="#{meKisiController.engelGrubus}"
+                          label="Kişi Engel Grubu" multiple="true" styleClass="checkboxMenu tcUpdate" filter="true"
+                          filterMatchMode="startsWith">
+        <f:selectItems value="#{eyEngelGrubuController.items}"
+                       var="engelGrubus"
+                       itemValue="#{engelGrubus}"
+                       itemLabel="#{engelGrubus.tanim.toString()}"/>
+    </p:selectCheckboxMenu>
+
+    <p:outputLabel value="#{messages.toplamVucutKayipOraniLabel}" for="@next"/>
+    <p:inputText id="toplamVucutKayipOrani" value="#{meKisiController.selected.eyKisi.toplamVucutKayipOrani}" title="#{messages.toplamVucutKayipOraniText}"
+                 styleClass="tcUpdate">
+        <p:keyFilter mask="num"/>
+    </p:inputText>
+
+    <p:outputLabel value="#{messages.izlemeYapanKisiGorusuLabel}" for="@next"/>
+    <p:inputTextarea id="izlemeYapaninGorusu" value="#{meKisiController.selected.izlemeYapaninGorusu}" title="#{messages.izlemeYapanKisiGorusuText}" size="50"
+                     rows="4" autoResize="false" styleClass="w-100"/>
+
+    <p:outputLabel value="#{messages.hizmetlerdenMemnunMuLabel}" for="@next"/>
+    <p:selectOneMenu id="hizmetlerdenMemnunMu" value="#{meKisiController.selected.eyKisi.hizmetlerdenMemnunMu}">
+        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+        <f:selectItems value="#{enumHizmetlerdenMemnun.ALL_VALUES}"
+                       var="hizmetlerdenMemnunMus"
+                       itemValue="#{hizmetlerdenMemnunMus}"
+                       itemLabel="#{hizmetlerdenMemnunMus.displayValue}"/>
+    </p:selectOneMenu>
+
+</ui:composition>
+</html>

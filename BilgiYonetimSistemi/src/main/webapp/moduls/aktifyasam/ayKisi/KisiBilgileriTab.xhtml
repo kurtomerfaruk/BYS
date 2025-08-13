@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+<ui:composition>
+
+    <h:outputText value="#{messages.eklemeYeriLabel}"/>
+    <h:outputText value="#{ayKisiController.selected.gnlKisi.eklemeYeri.displayValue}"/>
+
+    <p:outputLabel value="#{messages.kayitTarihiLabel}" for="@next"/>
+    <p:datePicker id="kayitTarihi" locale="tr" pattern="#{messages.tarihFormat}" value="#{ayKisiController.selected.gnlKisi.kayitTarihi}"
+                  title="#{messages.kayitTarihiText}"
+                  mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true" showOnFocus="false"/>
+
+    <p:outputLabel value="#{messages.birimLabel}" for="@next"/>
+    <p:selectOneMenu id="birim" value="#{ayKisiController.selected.ayBirim}" required="true" converter="omnifaces.SelectItemsConverter">
+        <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+        <f:selectItems value="#{ayBirimController.items}"
+                       var="birims"
+                       itemLabel="#{birims.tanim}"
+                       itemValue="#{birims}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.devamDurumuLabel}" for="@next"/>
+    <p:selectOneMenu id="devamDurumu" value="#{ayKisiController.selected.devamDurumu}" required="true"
+                     converter="omnifaces.SelectItemsConverter">
+        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+        <f:selectItems value="#{enumDevamDurumu.ALL_VALUES}"
+                       var="devamDurumus"
+                       itemValue="#{devamDurumus}"
+                       itemLabel="#{devamDurumus.displayValue}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.tcKimlikNoLabel}" for="@next"/>
+    <coco:tcKimlikNoDogumTarihi actionListener="#{ayKisiController.getTcKimlik()}" update=":growl,@(.tcUpdate)"
+                                value="#{ayKisiController.selected.gnlKisi.tcKimlikNo}"
+                                dateValue="#{ayKisiController.selected.gnlKisi.dogumTarihi}"/>
+
+    <p:outputLabel value="#{messages.adLabel}" for="@next"/>
+    <p:inputText id="ad" value="#{ayKisiController.selected.gnlKisi.ad}" title="#{messages.adText}" required="true" readonly="#{facesContext.renderResponse}"
+                 styleClass="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.soyadLabel}" for="@next"/>
+    <p:inputText id="soyad" value="#{ayKisiController.selected.gnlKisi.soyad}" title="#{messages.soyadText}" required="true"
+                 readonly="#{facesContext.renderResponse}"
+                 styleClass="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.medeniDurumLabel}" for="@next"/>
+    <p:inputText id="medeniDurum" value="#{ayKisiController.selected.gnlKisi.medeniDurum}" title="#{messages.medeniDurumText}" required="true"
+                 readonly="#{facesContext.renderResponse}" styleClass="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.anaAdiLabel}" for="anaAdi"/>
+    <p:inputText id="anaAdi" value="#{ayKisiController.selected.gnlKisi.anaAdi}" title="#{messages.anaAdiLabel}" required="true" class="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.babaAdiLabel}" for="babaAdi"/>
+    <p:inputText id="babaAdi" value="#{ayKisiController.selected.gnlKisi.babaAdi}" title="#{messages.babaAdiLabel}" required="true" class="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.dogumYeriLabel}" for="dogumYeri"/>
+    <p:inputText id="dogumYeri" value="#{ayKisiController.selected.gnlKisi.dogumYeri}" title="#{messages.dogumYeriText}" required="true" class="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.cinsiyetLabel}" for="@next"/>
+    <p:inputText id="cinsiyet" value="#{ayKisiController.selected.gnlKisi.cinsiyet}" required="true" readonly="#{facesContext.renderResponse}"
+                 styleClass="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.telefonLabel}" for="telefon"/>
+    <p:inputMask id="telefon" value="#{ayKisiController.selected.gnlKisi.telefon}" mask="(999) 999 99 99" required="true" title="#{messages.telefonText}"
+                 size="14"
+                 styleClass="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.telefonLabel}" for="telefon2"/>
+    <p:inputMask id="telefon2" value="#{ayKisiController.selected.gnlKisi.telefon2}" mask="(999) 999 99 99" title="#{messages.telefonText}" size="14"
+                 styleClass="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.aciklamaLabel}" for="@next"/>
+    <p:inputTextarea rows="4" id="aciklama" value="#{ayKisiController.selected.aciklama}" title="#{messages.aciklamaText}" styleClass="w-100 tcUpdate"
+                     autoResize="false"/>
+
+</ui:composition>
+</html>

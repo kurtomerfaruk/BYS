@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:createpage id="EyCozgerCreateForm"
+                     renderedListener="#{eyCozgerController.selected != null}"
+                     widgetVar="EyCozgerCreateDialog"
+                     actionListener="#{eyCozgerController.saveNew}"
+                     listForm="EyCozgerListForm">
+
+        <p:outputLabel value="#{messages.kodLabel}" for="@next"/>
+        <p:inputText id="kod" value="#{eyCozgerController.selected.kod}" title="#{messages.kodText}" required="true"/>
+
+        <p:outputLabel value="#{messages.duzeyLabel}" for="@next"/>
+        <p:inputText id="duzey" value="#{eyCozgerController.selected.duzey}" title="#{messages.duzeyText}"
+                     required="true" size="50" maxlength="100"/>
+
+        <p:outputLabel value="#{messages.engelOraniLabel}" for="@next"/>
+        <p:inputText id="engelOrani" value="#{eyCozgerController.selected.engelOrani}"
+                     title="#{messages.engelOraniText}" required="true" size="20" maxlength="20"/>
+
+        <p:outputLabel value="#{messages.derecesiLabel}" for="@next"/>
+        <p:inputText id="derecesi" value="#{eyCozgerController.selected.derecesi}" title="#{messages.derecesiText}"
+                     size="10" maxlength="10"/>
+
+    </coco:createpage>
+
+</ui:composition>
+
+</html>

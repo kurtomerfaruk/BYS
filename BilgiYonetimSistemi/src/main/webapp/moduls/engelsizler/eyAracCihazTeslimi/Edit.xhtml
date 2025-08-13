@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:editpage id="EyAracCihazTeslimiEditForm"
+                   widgetVar="EyAracCihazTeslimiEditDialog"
+                   actionListener="#{eyAracCihazTeslimiController.save}"
+                   listForm="EyAracCihazTeslimiListForm"
+                   model="#{eyAracCihazTeslimiController.selected}">
+
+        <p:outputLabel value="#{messages.tcKimlikNoLabel}" for="@next"/>
+        <coco:inputWithButton id="inputWithButtonEyKisi" inputId="eyKisiId"
+                              inputValue="#{eyAracCihazTeslimiController.selected.eyKisi.gnlKisi.tcKimlikNo}"
+                              inputTitle="#{messages.tcKimlikNoText}"
+                              actionListener="#{bysController.openCommonDialog('eyKisiSec')}"
+                              ajaxListener="#{eyAracCihazTeslimiController.secilenEyKisi}"
+                              buttonTitle="#{messages.kisiSecmelisiniz}"
+                              size="50"
+                              dialogId="EyAracCihazTeslimiEditDialogId"/>
+
+        <p:outputLabel value="#{messages.adLabel}" for="@next"/>
+        <p:inputText id="ad" value="#{eyAracCihazTeslimiController.selected.eyKisi.gnlKisi.ad}"
+                     title="#{messages.adText}" size="50" maxlength="50" readonly="true" styleClass="tcUpdate"/>
+
+        <p:outputLabel value="#{messages.soyadLabel}" for="@next"/>
+        <p:inputText id="soyad" value="#{eyAracCihazTeslimiController.selected.eyKisi.gnlKisi.soyad}"
+                     title="#{messages.soyadText}" size="50" maxlength="50" readonly="true" styleClass="tcUpdate"/>
+
+        <p:outputLabel value="#{messages.aracCihazLabel}" for="@next"/>
+        <p:selectOneMenu id="eyaracId" value="#{eyAracCihazTeslimiController.selected.eyKisi}" required="true"
+                         filter="true" converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{eyAracController.items}"
+                           var="eyaracIdItem"
+                           itemValue="#{eyaracIdItem}"
+                           itemLabel="#{eyaracIdItem.tanim.toString()}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.aciklamaLabel}" for="@next"/>
+        <p:inputTextarea rows="4" id="aciklama" value="#{eyAracCihazTeslimiController.selected.aciklama}"
+                         title="#{messages.aciklamaText}" styleClass="w-100" autoResize="false"/>
+
+        <p:outputLabel value="#{messages.verilisTarihiLabel}" for="@next"/>
+        <p:datePicker id="verilisTarihi" locale="tr" pattern="#{messages.tarihSaatFormat}"
+                      value="#{eyAracCihazTeslimiController.selected.verilisTarihi}"
+                      title="#{messages.verilisTarihiText}" mask="true" monthNavigator="true" yearNavigator="true"
+                      showButtonBar="true" showIcon="true"/>
+
+    </coco:editpage>
+
+</ui:composition>
+
+</html>

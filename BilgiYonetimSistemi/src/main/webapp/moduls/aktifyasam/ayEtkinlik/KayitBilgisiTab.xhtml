@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+>
+<ui:composition>
+
+    <h:outputText value="#{messages.kayitNoLabel}"/>
+    <h:outputText id="id" value="#{ayEtkinlikController.selected.id}">
+        <f:convertNumber pattern="#{messages.sayiFormat}"/>
+    </h:outputText>
+
+    <p:outputLabel value="#{messages.tarihLabel}" for="@next"/>
+    <p:datePicker id="tarih" locale="tr" pattern="#{messages.tarihFormat}" value="#{ayEtkinlikController.selected.tarih}" title="#{messages.tarihText}"
+                  mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true" showOnFocus="false" required="true"/>
+
+    <p:outputLabel value="#{messages.konuLabel}" for="@next"/>
+    <p:inputTextarea rows="4" id="konu" value="#{ayEtkinlikController.selected.konu}" title="#{messages.konuText}" styleClass="w-100"
+                     autoResize="false" required="true"/>
+
+    <p:outputLabel value="#{messages.aciklamaLabel}" for="@next"/>
+    <p:inputTextarea rows="4" id="aciklama" value="#{ayEtkinlikController.selected.aciklama}" title="#{messages.aciklamaText}" styleClass="w-100"
+                     autoResize="false"/>
+
+</ui:composition>
+</html>

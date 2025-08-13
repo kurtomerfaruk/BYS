@@ -1,0 +1,66 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="primefaces"
+      xmlns:composite="jakarta.faces.composite"
+      xmlns:f="jakarta.faces.core"
+      xmlns:h="jakarta.faces.html">
+
+<composite:interface>
+    <composite:attribute name="id"/>
+    <composite:attribute name="widgetVar"/>
+    <composite:attribute name="columns" default="2"/>
+    <composite:attribute name="model"/>
+</composite:interface>
+
+
+<composite:implementation>
+    <p:dialog widgetVar="#{cc.attrs.widgetVar}"
+              modal="true"
+              resizable="false"
+              closeOnEscape="true"
+              header="#{messages.dialogKayitBilgisi}"
+              appendTo="@(body)"
+              responsive="true"
+              style="overflow: auto;max-height: 500px;">
+
+        <h:form id="#{cc.id}">
+            <h:panelGroup id="display">
+                <p:panelGrid columns="#{cc.attrs.columns}" columnClasses="column" rendered="#{cc.attrs.model !=null}" layout="tabular">
+
+                    <h:outputText value="#{messages.kayitNoLabel}"/>
+                    <h:outputText value="#{cc.attrs.model.id}">
+                        <f:convertNumber pattern="#{messages.sayiFormat}"/>
+                    </h:outputText>
+
+                    <h:outputText value="#{messages.ekleyenLabel}"/>
+                    <h:outputText value="#{cc.attrs.model.ekleyen.gnlPersonel.gnlKisi.adSoyad}"/>
+
+                    <h:outputText value="#{messages.eklemeTarihiLabel}"/>
+                    <h:outputText value="#{cc.attrs.model.eklemeTarihi}">
+                        <f:convertDateTime pattern="#{messages.tarihSaatFormat}" type="localDateTime"/>
+                    </h:outputText>
+
+                    <h:outputText value="#{messages.guncelleyenLabel}"/>
+                    <h:outputText value="#{cc.attrs.model.guncelleyen.gnlPersonel.gnlKisi.adSoyad}"/>
+
+                    <h:outputText value="#{messages.guncellemeTarihiLabel}"/>
+                    <h:outputText value="#{cc.attrs.model.guncellemeTarihi}">
+                        <f:convertDateTime pattern="#{messages.tarihSaatFormat}" type="localDateTime"/>
+                    </h:outputText>
+
+                    <h:outputText value="#{messages.aktifLabel}"/>
+                    <p:selectBooleanCheckbox value="#{cc.attrs.model.aktif}" disabled="true"/>
+                    <f:facet name="footer">
+                        <div class="float-end">
+                            <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                             value="#{messages.buttonKapat}"
+                                             onclick="PF('#{cc.attrs.widgetVar}').hide()" onstart="PF('Loading').show()"
+                                             onsuccess="PF('Loading').hide()"/>
+                        </div>
+                    </f:facet>
+                </p:panelGrid>
+            </h:panelGroup>
+        </h:form>
+
+    </p:dialog>
+</composite:implementation>
+</html>

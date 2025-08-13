@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:p="primefaces"
+      xmlns:f="jakarta.faces.core">
+
+<h:head>
+    <h:outputScript library="primefaces" name="jquery/jquery.js"/>
+    <h:outputScript library="primefaces" name="jquery/jquery-plugins.js"/>
+    <h:outputStylesheet library="css" name="pfcrud.css"/>
+</h:head>
+<h:body>
+
+    <h:form id="HfHafriyatIsSec">
+        <p:dataTable id="datalist"
+                     value="#{hfHafriyatIsController.lazyItems}"
+                     var="item"
+                     rowKey="#{item.id}"
+                     paginator="true"
+                     rows="10"
+                     selection="#{hfHafriyatIsController.selected}"
+                     paginatorPosition="bottom"
+                     lazy="true"
+                     pageLinks="5"
+                     filteredValue="#{hfHafriyatIsController.filtered}"
+                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                     currentPageReportTemplate="#{messages.currentPageTemplate}"
+                     emptyMessage="#{messages.kayitBulunamadi}"
+                     size="small"
+                     styleClass="w-100">
+
+            <f:facet name="header">
+                <div class="products-table-header">
+                    <span style="font-weight: bold">#{messages.hafriyatIsListesi}</span>
+                </div>
+            </f:facet>
+
+            <p:ajax event="rowDblselect" listener="#{hfHafriyatIsController.onRowDblSelect}"  />
+
+            <p:column sortBy="#{item.sozlesmeNo}" filterBy="#{item.sozlesmeNo}">
+                <f:facet name="header">
+                    <h:outputText value="#{messages.sozlesmeNoText}"/>
+                </f:facet>
+                <h:outputText value="#{item.sozlesmeNo}"/>
+            </p:column>
+
+            <p:column sortBy="#{item.ureticiHfFirma.firmaUnvani}" filterBy="#{item.ureticiHfFirma.firmaUnvani}">
+                <f:facet name="header">
+                    <h:outputText value="#{messages.ureticiText} #{messages.firmaUnvaniText}"/>
+                </f:facet>
+                <h:outputText value="#{item.ureticiHfFirma.firmaUnvani}"/>
+            </p:column>
+
+            <p:column headerText="#{messages.buttonSec}" style="width: 70px;text-align: center">
+                <p:commandButton icon="pi pi-check" actionListener="#{hfHafriyatIsController.hfHafriyatIsSecKapat(item)}"
+                                 style="width: 20px !important; height: 20px !important;"/>
+            </p:column>
+
+        </p:dataTable>
+    </h:form>
+
+
+</h:body>
+</html>
+
+

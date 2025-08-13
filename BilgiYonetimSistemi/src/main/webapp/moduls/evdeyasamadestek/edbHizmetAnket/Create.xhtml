@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:createpage id="EdbHizmetAnketCreateForm"
+                     renderedListener="#{edbHizmetAnketController.selected != null}"
+                     widgetVar="EdbHizmetAnketCreateDialog"
+                     actionListener="#{edbHizmetAnketController.saveNew}"
+                     listForm="EdbHizmetAnketListForm">
+
+        <p:outputLabel value="#{messages.verilenHizmetNoLabel}" for="@next"/>
+        <h:panelGroup>
+            <div class="ui-inputgroup">
+                <p:inputText id="verilecekHizmet" value="#{edbHizmetAnketController.selected.edbVerilecekHizmet.id}"
+                             title="#{messages.verilenHizmetNoText}" label="#{messages.verilenHizmetNoText}" size="50" required="true"
+                             readonly="#{facesContext.renderResponse}" styleClass="hizmet">
+                    <f:convertNumber pattern="#{messages.sayiFormat}"/>
+                </p:inputText>
+                <p:commandButton icon="pi pi-search" actionListener="#{bysController.openCommonDialog('edbVerilecekHizmetSec')}"
+                                 process="@this" update=":growl"
+                                 title="Anketi kayıt edebilmeniz için Verilen Hizmeti seçmeliniz...">
+                    <p:resetInput target=":EdbHizmetAnketCreateDialogId,verilecekHizmet"/>
+                    <p:ajax event="dialogReturn" listener="#{edbHizmetAnketController.secilenVerilecekHizmet}" update=":growl,@(.hizmet)"/>
+
+                </p:commandButton>
+            </div>
+        </h:panelGroup>
+
+        <p:outputLabel value="#{messages.tcKimlikNoLabel}" for="@next"/>
+        <p:inputText id="tcKimlikNo" value="#{edbHizmetAnketController.selected.edbVerilecekHizmet.edbHizmetPlanlama.edbTalep.edbBasvuru.gnlKisi.tcKimlikNo}"
+                     title="#{messages.tcKimlikNoText}" styleClass="hizmet" readonly="true" size="50"/>
+
+        <p:outputLabel value="#{messages.adLabel}" for="@next"/>
+        <p:inputText id="ad" value="#{edbHizmetAnketController.selected.edbVerilecekHizmet.edbHizmetPlanlama.edbTalep.edbBasvuru.gnlKisi.ad}"
+                     title="#{messages.adText}" styleClass="hizmet" readonly="true"/>
+
+        <p:outputLabel value="#{messages.soyadLabel}" for="@next"/>
+        <p:inputText id="soyad" value="#{edbHizmetAnketController.selected.edbVerilecekHizmet.edbHizmetPlanlama.edbTalep.edbBasvuru.gnlKisi.soyad}"
+                     title="#{messages.soyadText}" styleClass="hizmet" readonly="true"/>
+
+        <p:outputLabel value="#{messages.tarihLabel}" for="@next"/>
+        <p:datePicker id="tarih" locale="tr" pattern="#{messages.tarihFormat}" value="#{edbHizmetAnketController.selected.tarih}" title="#{messages.tarihText}"
+                      mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true" showOnFocus="false"/>
+
+        <p:outputLabel value="#{messages.genelGorusLabel}" for="@next"/>
+        <p:inputTextarea rows="4" id="genelGorus" value="#{edbHizmetAnketController.selected.genelGorus}" title="#{messages.genelGorusText}"
+                         styleClass="w-100" autoResize="false"/>
+
+        <p:outputLabel value="#{messages.gorusmeyiYapanPersonelLabel}" for="@next"/>
+        <p:selectOneMenu id="gorusmeyiYapanPersonel"
+                         value="#{edbHizmetAnketController.selected.gorusmeyiYapanEdbPersonel}"
+                         converter="omnifaces.SelectItemsConverter" filter="true" required="true">
+            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}" noSelectionOption="true"/>
+            <f:selectItems value="#{edbPersonelController.items}"
+                           var="gorusmeyiYapanPersonelItem"
+                           itemValue="#{gorusmeyiYapanPersonelItem}"
+                           itemLabel="#{gorusmeyiYapanPersonelItem.syKullanici.gnlPersonel.gnlKisi.adSoyad.toString()}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.personelMemnuniyetLabel}" for="@next"/>
+        <p:rating value="#{edbHizmetAnketController.selected.personeldenMemnun}" required="true"/>
+
+        <p:outputLabel value="#{messages.hizmetMemnuniyetLabel}" for="@next"/>
+        <p:rating value="#{edbHizmetAnketController.selected.hizmettenMemnun}" required="true"/>
+
+        <p:outputLabel value="#{messages.hizmetZamanindaVerildiMiLabel}" for="@next"/>
+        <p:selectBooleanCheckbox id="hizmetZamanindaVerildiMi" value="#{edbHizmetAnketController.selected.hizmetZamanindaVerildiMi}"/>
+
+
+    </coco:createpage>
+
+</ui:composition>
+
+</html>

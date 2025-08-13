@@ -1,0 +1,80 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:composite="jakarta.faces.composite"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:ac="http://kurtomerfaruk.com/amchartfaces"
+      xmlns:h="jakarta.faces.html">
+
+<composite:interface>
+    <composite:attribute name="listModel" required="true"/>
+    <composite:attribute name="height" default="500px"/>
+</composite:interface>
+
+
+<composite:implementation>
+    <ui:repeat value="#{cc.attrs.listModel}" var="item" varStatus="status">
+        <div class="col-xl-#{(status.last and status.first) or (status.last and (status.index-1)%2 ==1) ? '12' :'6'} ">
+            <div class="card border card-border-info card-height-100">
+                <div class="card-header align-items-center d-flex">
+                    <h4 class="card-title mb-0 flex-grow-1"><h:outputText value="#{item.syGrafik.baslik}"/></h4>
+                </div>
+                <div class="card-body p-0">
+                    <ui:fragment rendered="#{item.syGrafik.grafikTuru eq 'COLUMN3D'}">
+                        <ac:column3d style="height: #{cc.attrs.height};" widgetVar="chartVar_#{status==null ? 0 : status.index}"
+                                     model="#{item.chartModel}" x="value" y="label" theme="#{kullanici.grafikTema.toString()}"
+                                     exportable="#{item.syGrafik.disaAktar}" categoryLabelDegree="#{item.syGrafik.yonlendirme}"
+                                     useScrollBar="#{item.syGrafik.kaydirmaCubugu}"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{item.syGrafik.grafikTuru eq 'COLUMN_AXIS_BREAK'}">
+                        <ac:columnAxisBreak style="height: #{cc.attrs.height};" widgetVar="chartVar_#{status==null ? 0 : status.index}"
+                                            model="#{item.chartModel}" x="value" y="label" theme="#{kullanici.grafikTema.toString()}"
+                                            startValue="#{item.maxValue/9}"
+                                            endValue="#{item.maxValue/3}" maxValue="#{item.maxValue+100}"
+                                            categoryLabelDegree="#{item.syGrafik.yonlendirme}" exportable="#{item.syGrafik.disaAktar}"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{item.syGrafik.grafikTuru eq 'CYLINDER3D'}">
+                        <ac:cylinder3d style="height: #{cc.attrs.height};" widgetVar="chartVar_#{status==null ? 0 : status.index}"
+                                       model="#{item.chartModel}" x="value" y="label" theme="#{kullanici.grafikTema.toString()}"
+                                       exportable="#{item.syGrafik.disaAktar}" useScrollBar="#{item.syGrafik.kaydirmaCubugu}"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{item.syGrafik.grafikTuru eq 'HORIZONTAL_BAR'}">
+                        <ac:horizontalBar style="height: #{cc.attrs.height};" widgetVar="chartVar_#{status==null ? 0 : status.index}"
+                                          model="#{item.chartModel}" x="value" y="label" theme="#{kullanici.grafikTema.toString()}"
+                                          exportable="#{item.syGrafik.disaAktar}" useScrollBar="#{item.syGrafik.kaydirmaCubugu}"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{item.syGrafik.grafikTuru eq 'PIE'}">
+                        <ac:pie style="height: #{cc.attrs.height};" widgetVar="chartVar_#{status==null ? 0 : status.index}" model="#{item.chartModel}"
+                                x="value" y="label" theme="#{kullanici.grafikTema.toString()}" exportable="#{item.syGrafik.disaAktar}"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{item.syGrafik.grafikTuru eq 'RADAR_AXIS_BREAK'}">
+                        <ac:radarAxisBreak style="height: #{cc.attrs.height};" widgetVar="chartVar_#{status==null ? 0 : status.index}"
+                                           model="#{item.chartModel}" x="value" y="label" theme="#{kullanici.grafikTema.toString()}"
+                                           exportable="#{item.syGrafik.disaAktar}"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{item.syGrafik.grafikTuru eq 'SEMI_CIRCLE_DONUT'}">
+                        <ac:semiCircleDonut style="height: #{cc.attrs.height};" widgetVar="chartVar_#{status==null ? 0 : status.index}"
+                                            model="#{item.chartModel}" x="value" y="label" theme="#{kullanici.grafikTema.toString()}"
+                                            exportable="#{item.syGrafik.disaAktar}" useScrollBar="#{item.syGrafik.kaydirmaCubugu}"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{item.syGrafik.grafikTuru eq 'VERTICAL_BAR'}">
+                        <ac:verticalBar style="height: #{cc.attrs.height};" widgetVar="chartVar_#{status==null ? 0 : status.index}"
+                                        model="#{item.chartModel}" x="value" y="label" theme="#{kullanici.grafikTema.toString()}"
+                                        exportable="#{item.syGrafik.disaAktar}" useScrollBar="#{item.syGrafik.kaydirmaCubugu}"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{item.syGrafik.grafikTuru eq 'PARETO_DIAGRAM'}">
+                        <ac:paretoDiagram style="height: #{cc.attrs.height};" widgetVar="chartVar_#{status==null ? 0 : status.index}"
+                                          model="#{item.chartModel}" x="value" y="label" theme="#{kullanici.grafikTema.toString()}"
+                                          exportable="#{item.syGrafik.disaAktar}"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{item.syGrafik.grafikTuru eq 'LINE_CHART'}">
+                        <ac:lineChart style="height: #{cc.attrs.height};" widgetVar="chartVar_#{status==null ? 0 : status.index}"
+                                      model="#{item.chartModel}" x="value" y="label" theme="#{kullanici.grafikTema.toString()}"
+                                      exportable="#{item.syGrafik.disaAktar}" useScrollBar="#{item.syGrafik.kaydirmaCubugu}"/>
+                    </ui:fragment>
+                </div>
+            </div>
+        </div>
+
+
+    </ui:repeat>
+</composite:implementation>
+</html>

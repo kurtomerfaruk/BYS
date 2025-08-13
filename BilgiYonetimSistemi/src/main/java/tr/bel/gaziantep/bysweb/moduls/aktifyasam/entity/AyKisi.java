@@ -1,0 +1,123 @@
+package tr.bel.gaziantep.bysweb.moduls.aktifyasam.entity;
+
+import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Nationalized;
+import org.hibernate.annotations.SQLRestriction;
+import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
+import tr.bel.gaziantep.bysweb.core.enums.aktifyasam.EnumAyDevamDurumu;
+import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
+
+import java.io.Serial;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "AYKISI")
+@NamedQuery(name = "AyKisi.findByLatLngIsNull", query = "SELECT a FROM AyKisi a WHERE a.aktif=true AND a.gnlKisi.latLng IS NULL  AND " +
+        "a.gnlKisi.binaNo IS NOT NULL")
+public class AyKisi extends BaseEntity {
+    @Serial
+    private static final long serialVersionUID = 668865374558285865L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID", nullable = false)
+    private Integer id;
+
+    @Column(name = "KAYIT_TARIHI")
+    private LocalDateTime kayitTarihi;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "GNLKISI_ID")
+    private GnlKisi gnlKisi;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "AYBIRIM_ID")
+    private AyBirim ayBirim;
+
+    @Column(name = "DEVAM_DURUMU")
+    @Enumerated(EnumType.STRING)
+    private EnumAyDevamDurumu devamDurumu;
+
+    @Nationalized
+    @Lob
+    @Column(name = "ACIKLAMA")
+    private String aciklama;
+
+    @Nationalized
+    @Lob
+    @Column(name = "HOBILERI")
+    private String hobileri;
+
+    @Nationalized
+    @Lob
+    @Column(name = "YASLININ_BEKLENTILERI")
+    private String yaslininBeklentileri;
+
+    @ColumnDefault("0")
+    @Column(name = "SOSYO_PSIKOLOJIK_DESTEK")
+    private boolean sosyoPsikolojikDestek;
+
+    @ColumnDefault("0")
+    @Column(name = "SOSYAL_AKTIVITE_ISTEGI")
+    private boolean sosyalAktiviteIstegi;
+
+    @ColumnDefault("0")
+    @Column(name = "AILEDEKI_HUKUMLU_DURUMU")
+    private boolean ailedekiHukumluDurumu;
+
+    @Nationalized
+    @Lob
+    @Column(name = "AILEDEKI_HUKUMLU_DURUMU_ACIKLAMA")
+    private String ailedekiHukumluDurumuAciklama;
+
+    @ColumnDefault("0")
+    @Column(name = "AILEDEKI_ASKER_DURUMU")
+    private boolean ailedekiAskerDurumu;
+
+    @ColumnDefault("0")
+    @Column(name = "AILEDEKI_GAZI_DURUMU")
+    private boolean ailedekiGaziDurumu;
+
+    @ColumnDefault("0")
+    @Column(name = "AILEDEKI_SEHIT_DURUMU")
+    private boolean ailedekiSehitDurumu;
+
+
+
+    @OneToMany(mappedBy = "ayKisi", fetch = FetchType.LAZY)
+    @SQLRestriction("AKTIF=true")
+    private List<AyKisiAranacakKisi> ayAranacakKisiList = new ArrayList<>();
+    @OneToMany(mappedBy = "ayKisi", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    private List<AyKisiSaglikBilgi> ayKisiSaglikBilgileriList = new ArrayList<>();
+    @OneToMany(mappedBy = "ayKisi", fetch = FetchType.LAZY)
+    private List<AyGirisCikis> ayGirisCikisList = new ArrayList<>();
+    @OneToMany(mappedBy = "ayKisi", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    private List<AyKisiAktivite> ayKisiAktiviteList = new ArrayList<>();
+    @OneToMany(mappedBy = "ayKisi", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    private List<AyKisiSanatsalBeceri> ayKisiSanatsalBeceriList = new ArrayList<>();
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (!(object instanceof AyKisi other)) {
+            return false;
+        }
+        return (this.id != null || other.id == null) && (this.id == null || this.id.equals(other.id));
+    }
+
+}

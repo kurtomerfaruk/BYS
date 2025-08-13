@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces">
+<ui:composition>
+
+    <p:panelGrid columns="1" class="w-100" id="talepPanel" rendered="#{eyKisiController.selected !=null}" layout="tabular">
+        <p:dataTable value="#{eyKisiController.selected.eyTalepList}"
+                     var="talep"
+                     id="talepDt"
+                     scrollable="true"
+                     paginator="true"
+                     rows="3"
+                     emptyMessage="#{messages.kayitBulunamadi}"
+                     paginatorPosition="bottom"
+                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                     currentPageReportTemplate="#{messages.currentPageTemplate}">
+
+            <p:column sortBy="#{talep.talepTuru}">
+                <f:facet name="header">
+                    <h:outputText value="#{messages.talepTuruText}"/>
+                </f:facet>
+                <h:outputText value="#{talep.talepTuru.displayValue}"/>
+            </p:column>
+
+            <p:column sortBy="#{talep.talepTipi}">
+                <f:facet name="header">
+                    <h:outputText value="#{messages.talepTipiText}"/>
+                </f:facet>
+                <h:outputText value="#{talep.talepTipi.displayValue}"/>
+            </p:column>
+
+            <p:column sortBy="#{talep.eyTalepKonu.tanim}">
+                <f:facet name="header">
+                    <h:outputText value="#{messages.konuText}"/>
+                </f:facet>
+                <h:outputText value="#{talep.eyTalepKonu.tanim}"/>
+            </p:column>
+
+            <p:column sortBy="#{talep.aciklama}">
+                <f:facet name="header">
+                    <h:outputText value="#{messages.aciklamaText}"/>
+                </f:facet>
+                <h:outputText value="#{talep.aciklama}"/>
+            </p:column>
+
+            <p:column sortBy="#{talep.durum}">
+                <f:facet name="header">
+                    <h:outputText value="#{messages.durumuText}"/>
+                </f:facet>
+                <h:outputText value="#{talep.durum}"/>
+            </p:column>
+
+            <p:column sortBy="#{talep.durumAciklama}">
+                <f:facet name="header">
+                    <h:outputText value="#{messages.durumAciklamaText}"/>
+                </f:facet>
+                <h:outputText value="#{talep.durumAciklama}"/>
+            </p:column>
+
+        </p:dataTable>
+
+        <f:facet name="footer">
+            <div class="float-end">
+                <p:commandButton id="createButton" styleClass="btn btn-primary" icon="pi pi-plus"
+                                 value="#{messages.buttonEkle}"
+                                 actionListener="#{eyKisiController.prepareCreateTalep}"
+                                 process="@this" update=":TaleplerCreateForm"
+                                 oncomplete="PF('TaleplerCreateDialog').show()"/>
+            </div>
+
+        </f:facet>
+    </p:panelGrid>
+
+    <script type="text/javascript">
+        $(function () {
+            var windowW = $("#EyKisiEditForm").width();
+            // windowW -= 94;
+            $("#EyKisiEditForm").css({'width': windowW + 'px'});
+            $(window).trigger('resize');
+
+            $(window).resize(function () {
+                var windowW = $("#EyKisiEditForm").width();
+                // windowW -= 94;
+                $('#EyKisiEditForm').css({'width': windowW + 'px'});
+
+            });
+        });
+    </script>
+
+</ui:composition>
+</html>

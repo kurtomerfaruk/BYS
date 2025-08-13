@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:editpage id="EyAracCihazTeslimiVefatEdenEditForm"
+                   widgetVar="EyAracCihazTeslimiVefatEdenEditDialog"
+                   actionListener="#{eyAracCihazTeslimiVefatEdenController.save}"
+                   listForm="EyAracCihazTeslimiVefatEdenListForm"
+                   model="#{eyAracCihazTeslimiVefatEdenController.selected}">
+
+        <h:outputText value="#{messages.tcKimlikNoLabel}"/>
+        <h:outputText value="#{eyAracCihazTeslimiVefatEdenController.selected.eyKisi.gnlKisi.tcKimlikNo}"/>
+
+        <h:outputText value="#{messages.adSoyadLabel}"/>
+        <h:outputText value="#{eyAracCihazTeslimiVefatEdenController.selected.eyKisi.gnlKisi.adSoyad}"/>
+
+        <p:outputLabel value="#{messages.geriAlimTarihiLabel}" for="geriAlimTarihi"/>
+        <p:datePicker id="geriAlimTarihi" locale="tr" pattern="#{messages.tarihSaatFormat}"
+                      value="#{eyAracCihazTeslimiVefatEdenController.selected.geriAlimTarihi}"
+                      title="#{messages.geriAlimTarihiText}" mask="true" monthNavigator="true" yearNavigator="true"
+                      showButtonBar="true" showIcon="true"/>
+
+        <p:outputLabel value="#{messages.aciklamaLabel}" for="aciklama"/>
+        <p:inputTextarea rows="4" id="aciklama" value="#{eyAracCihazTeslimiVefatEdenController.selected.geriAlimAciklamasi}" required="true"
+                         styleClass="w-100"/>
+
+        <p:outputLabel value="#{messages.durumuLabel}" for="durum"/>
+        <p:selectOneMenu id="durum" value="#{eyAracCihazTeslimiVefatEdenController.selected.cihazDurum}" required="true"
+                         converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{durums.ALL_VALUES}"
+                           var="cihazDurums"
+                           itemValue="#{cihazDurums}"
+                           itemLabel="#{cihazDurums.displayValue}"/>
+        </p:selectOneMenu>
+
+    </coco:editpage>
+
+</ui:composition>
+
+</html>

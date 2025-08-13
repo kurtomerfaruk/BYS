@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+>
+<ui:composition>
+    <div class="ui-grid ui-grid-responsive">
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-1">
+                <p:outputLabel value="#{messages.plakaLabel}" for="plaka"/>
+            </div>
+            <div class="ui-grid-col-9">
+                <p:selectOneMenu id="plaka" value="#{hfHafriyatIsController.arac}" filter="true"
+                                 converter="omnifaces.SelectItemsConverter">
+                    <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+                    <f:selectItems value="#{hfAracController.items}"
+                                   var="aracItem"
+                                   itemValue="#{aracItem}"
+                                   itemLabel="#{aracItem.plaka.toString()}"/>
+                </p:selectOneMenu>
+            </div>
+            <div class="ui-grid-col-2">
+                <p:commandButton value="#{messages.buttonEkle}" icon="pi pi-plus white fa-plus"
+                                 style="margin-top:-10px;margin-left: 10px"
+                                 styleClass="btn-success"
+                                 actionListener="#{hfHafriyatIsController.addCar}"
+                                 update="aracPanel,:growl" onstart="PF('Loading').show()"
+                                 onsuccess="PF('Loading').hide()"/>
+            </div>
+        </div>
+
+        <div class="ui-grid-row" style="margin-top:10px">
+            <div class="ui-grid-col-12">
+                <p:dataTable id="araclarID"
+                             value="#{hfHafriyatIsController.selectedAracs}"
+                             var="araclarItem"
+                             style="width: 599px"
+                             emptyMessage="#{messages.kayitBulunamadi}"
+                             paginator="true"
+                             rows="5"
+                             paginatorPosition="bottom"
+                             scrollable="true"
+                             scrollHeight="250px">
+
+
+                    <p:column headerText="#{messages.plakaText}">
+                        #{araclarItem.plaka}
+                    </p:column>
+
+                    <p:column width="60" headerText="#{messages.buttonSil}">
+                        <p:commandButton icon="pi pi-trash white fa-lg"
+                                         styleClass="btn-danger"
+                                         title="#{messages.buttonSil}"
+                                         actionListener="#{hfHafriyatIsController.removeCar(araclarItem)}"
+                                         update="araclarID,:growl"/>
+                    </p:column>
+
+                </p:dataTable>
+            </div>
+        </div>
+    </div>
+</ui:composition>
+</html>

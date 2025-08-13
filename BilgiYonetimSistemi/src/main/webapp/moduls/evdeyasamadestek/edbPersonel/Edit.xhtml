@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:editpage id="EdbPersonelEditForm"
+                   model="#{edbPersonelController.selected}"
+                   widgetVar="EdbPersonelEditDialog"
+                   actionListener="#{edbPersonelController.save}"
+                   listForm="EdbPersonelListForm">
+
+        <p:outputLabel value="#{messages.kullaniciLabel}" for="@next"/>
+        <p:selectOneMenu id="sykullaniciId" value="#{edbPersonelController.selected.syKullanici}" filter="true" converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{syKullaniciController.items}"
+                           var="sykullaniciIdItem"
+                           itemValue="#{sykullaniciIdItem}"
+                           itemLabel="#{sykullaniciIdItem.gnlPersonel.gnlKisi.adSoyad.toString()}"/>
+            <p:ajax event="change" update="gorevi"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.gorevLabel}" for="@next"/>
+        <p:inputText id="gorevi" value="#{edbPersonelController.selected.syKullanici.gnlPersonel.gnlUnvan.tanim}" title="#{messages.gorevText}"
+                     size="50" maxlength="50" readonly="true"/>
+
+        <p:outputLabel value="#{messages.birimLabel}" for="@next"/>
+        <p:selectOneMenu id="birimi" value="#{edbPersonelController.selected.ayBirim}" required="true" converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{ayBirimController.items}"
+                           var="ayBirims"
+                           itemValue="#{ayBirims}"
+                           itemLabel="#{ayBirims.tanim.toString()}"/>
+        </p:selectOneMenu>
+
+
+        <p:outputLabel value="#{messages.ekipLabel}" for="@next"/>
+        <p:selectOneMenu id="edbekipId" value="#{edbPersonelController.selected.edbEkip}" filter="true" converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{edbEkipController.items}"
+                           var="edbekipIdItem"
+                           itemValue="#{edbekipIdItem}"
+                           itemLabel="#{edbekipIdItem.tanim.toString()}"/>
+        </p:selectOneMenu>
+
+    </coco:editpage>
+
+</ui:composition>
+
+</html>

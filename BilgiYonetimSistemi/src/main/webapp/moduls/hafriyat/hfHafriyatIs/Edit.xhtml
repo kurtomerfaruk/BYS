@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:p="primefaces">
+
+<ui:composition>
+
+    <p:dialog widgetVar="HfHafriyatIsEditDialog"
+              id="HfHafriyatIsEditDialogId"
+              modal="true"
+              resizable="false"
+              closeOnEscape="true"
+              header="#{messages.dialogKayitGuncelle}"
+              appendTo="@(body)"
+              responsive="true"
+              onShow="PF('HfHafriyatIsEditDialog').initPosition();"
+              fitViewport="true"
+              position="top">
+
+        <h:form id="HfHafriyatIsEditForm">
+            <h:panelGroup id="display">
+                <p:focus context="display"/>
+                <div class="card">
+                    <div class="card-body">
+
+                        <ul class="nav nav-tabs mb-3 tab-style-8 scaleX">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="hfKayitEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#hfKayitEditTabPane" type="button" role="tab"
+                                        aria-controls="hfKayitEditTabPane" aria-selected="true">Kayıt
+                                </button>
+                            </li>
+                            <li class="nav-item">
+                                <button class="nav-link" id="hfUcretEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#hfUcretEditTabPane" type="button" role="tab"
+                                        aria-controls="hfUcretEditTabPane" aria-selected="true">Ücretler
+                                </button>
+                            </li>
+                            <li class="nav-item">
+                                <button class="nav-link" id="hfAracEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#hfAracEditTabPane" type="button" role="tab"
+                                        aria-controls="hfAracEditTabPane" aria-selected="true">Araçlar
+                                </button>
+                            </li>
+                            <li class="nav-item">
+                                <button class="nav-link" id="hfMuhasebeEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#hfMuhasebeEditTabPane" type="button" role="tab"
+                                        aria-controls="hfMuhasebeEditTabPane" aria-selected="true">Muhasebe
+                                </button>
+                            </li>
+                            <li class="nav-item">
+                                <button class="nav-link" id="hfAciklamaEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#hfAciklamaEditTabPane" type="button" role="tab"
+                                        aria-controls="hfAciklamaEditTabPane" aria-selected="true">Açıklama
+                                </button>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content" id="tabContent">
+                            <div class="tab-pane show active overflow-hidden" id="hfKayitEditTabPane"
+                                 role="tabpanel" aria-labelledby="hfKayitEditTab" tabindex="0">
+                                <p:panelGrid id="kayitPanel" columns="2" styleClass="w-100" rendered="#{hfHafriyatIsController.selected!=null}"
+                                             layout="tabular">
+
+                                    <ui:include src="/moduls/hafriyat/hfHafriyatIs/KayitTab.xhtml"/>
+                                </p:panelGrid>
+                            </div>
+
+                            <div class="tab-pane overflow-hidden" id="hfUcretEditTabPane"
+                                 role="tabpanel" aria-labelledby="hfUcretEditTab" tabindex="0">
+
+                                <p:panelGrid id="ucretPanel" columns="2" styleClass="w-100" rendered="#{hfHafriyatIsController.selected!=null}"
+                                             layout="tabular">
+
+                                    <ui:include src="/moduls/hafriyat/hfHafriyatIs/UcretTab.xhtml"/>
+
+                                </p:panelGrid>
+                            </div>
+
+                            <div class="tab-pane overflow-hidden" id="hfAracEditTabPane"
+                                 role="tabpanel" aria-labelledby="hfAracEditTab" tabindex="0">
+                                <p:panelGrid id="aracPanel" columns="1" styleClass="w-100" rendered="#{hfHafriyatIsController.selected!=null}" layout="tabular">
+
+                                    <ui:include src="/moduls/hafriyat/hfHafriyatIs/AracTab.xhtml"/>
+
+                                </p:panelGrid>
+                            </div>
+
+                            <div class="tab-pane overflow-hidden" id="hfMuhasebeEditTabPane"
+                                 role="tabpanel" aria-labelledby="hfMuhasebeEditTab" tabindex="0">
+                                <p:panelGrid id="muhasebePanel" columns="1" styleClass="w-100" rendered="#{hfHafriyatIsController.selected!=null}"
+                                             layout="tabular">
+                                    <ui:include src="/moduls/hafriyat/hfHafriyatIs/MuhasebeTab.xhtml"/>
+
+                                </p:panelGrid>
+                            </div>
+
+                            <div class="tab-pane overflow-hidden" id="hfAciklamaEditTabPane"
+                                 role="tabpanel" aria-labelledby="hfAciklamaEditTab" tabindex="0">
+                                <p:panelGrid id="aciklamaPanel" columns="2" styleClass="w-100" rendered="#{hfHafriyatIsController.selected!=null}"
+                                             layout="tabular">
+
+                                    <p:outputLabel value="#{messages.aciklamaLabel}" for="@next"/>
+                                    <p:inputTextarea id="aciklama" value="#{hfHafriyatIsController.selected.aciklama}" title="#{messages.aciklamaText}"
+                                                     styleClass="w-100" rows="4" autoResize="false"/>
+
+                                </p:panelGrid>
+                            </div>
+                        </div>
+                    </div><!-- end card-body -->
+                    <div class="card-footer">
+                        <div class="float-end">
+                            <p:commandButton icon="pi pi-check" styleClass="ui-button-success"
+                                             actionListener="#{hfHafriyatIsController.save}"
+                                             value="#{messages.buttonKaydet}"
+                                             update="display,:HfHafriyatIsListForm:datalist:datalist,:growl"
+                                             oncomplete="handleSubmit(xhr,status,args,PF('HfHafriyatIsEditDialog'));"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                            <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                             value="#{messages.buttonIptal}" onclick="PF('HfHafriyatIsEditDialog').hide()"
+                                             immediate="true" onstart="PF('Loading').show()"
+                                             onsuccess="PF('Loading').hide()"/>
+                        </div>
+                    </div>
+                </div>
+            </h:panelGroup>
+        </h:form>
+
+    </p:dialog>
+</ui:composition>
+
+</html>

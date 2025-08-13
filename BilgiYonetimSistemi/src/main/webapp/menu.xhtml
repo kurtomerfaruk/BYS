@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+>
+
+<ui:composition>
+    <aside class="app-sidebar sticky" id="sidebar">
+
+        <!-- Start::main-sidebar-header -->
+        <div class="main-sidebar-header">
+            <a href="#{request.contextPath}/index.xhtml" class="header-logo">
+                <h:graphicImage library="images" name="brand-logos/desktop-logo.png" alt="logo" styleClass="desktop-logo"/>
+                <h:graphicImage library="images" name="brand-logos/toggle-logo.png" alt="logo" styleClass="toggle-logo"/>
+                <h:graphicImage library="images" name="brand-logos/desktop-dark.png" alt="logo" styleClass="desktop-dark"/>
+                <h:graphicImage library="images" name="brand-logos/toggle-dark.png" alt="logo" styleClass="toggle-dark"/>
+            </a>
+        </div>
+        <!-- End::main-sidebar-header -->
+
+        <div class="main-sidebar" id="sidebar-scroll">
+
+            <nav class="main-menu-container nav nav-pills flex-column sub-open">
+                <div class="slide-left" id="slide-left">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191" width="24" height="24" viewBox="0 0 24 24"> <path d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z"></path> </svg>
+                </div>
+                <ul class="main-menu">
+
+                    <!-- Aktif Yasam -->
+                    <ui:include src="menus/aktifYasamMenu.xhtml"/>
+                    <!-- Aktif Yasam -->
+
+                    <!-- Engelli Kariyer Merkezi -->
+                    <ui:include src="menus/engelliKariyerMerkeziMenu.xhtml"/>
+                    <!-- Engelli Kariyer Merkezi -->
+
+                    <!-- Engelsizler -->
+                    <ui:include src="menus/engelsizlerMenu.xhtml"/>
+                    <!-- Engelsizler -->
+
+                    <!-- Evde Yasama Destek -->
+                    <ui:include src="menus/evdeYasamaDestekMenu.xhtml"/>
+                    <!-- Evde Yasama Destek -->
+
+                    <!-- Genel -->
+                    <ui:include src="menus/genelMenu.xhtml"/>
+                    <!-- Genel -->
+
+                    <!-- Hafriyat -->
+                    <ui:include src="menus/hafriyatMenu.xhtml"/>
+                    <!-- Hafriyat -->
+
+                    <!-- Moral Evi -->
+                    <ui:include src="menus/moralEviMenu.xhtml"/>
+                    <!-- Moral Evi -->
+
+                    <!-- Saglik Hizmetleri -->
+                    <ui:include src="menus/saglikHizmetleriMenu.xhtml"/>
+                    <!-- Saglik Hizmetleri -->
+
+                    <!-- Sistem Yonetimi -->
+                    <ui:include src="menus/sistemYonetimiMenu.xhtml"/>
+                    <!-- Sistem Yonetimi -->
+
+                </ul>
+                <div class="slide-right" id="slide-right"><svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191" width="24" height="24" viewBox="0 0 24 24"> <path d="M10.707 17.707 16.414 12l-5.707-5.707-1.414 1.414L13.586 12l-4.293 4.293z"></path> </svg></div>
+            </nav>
+
+        </div>
+    </aside>
+
+</ui:composition>
+
+</html>
+

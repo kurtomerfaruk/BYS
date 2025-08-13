@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:pe="primefaces.extensions"
+      dir="ltr"
+      lang="tr"
+      data-nav-layout="vertical" data-vertical-style="overlay" data-theme-mode="light" data-header-styles="light" data-menu-styles="light"
+      data-toggled="close">
+<h:head>
+    <meta charset="UTF-8"/>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport"/>
+
+    <f:facet name="first">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <meta name="viewport"
+              content="user-scalable=no,
+                  width=device-width,
+                  initial-scale=1.0,
+                  maximum-scale=1.0"/>
+    </f:facet>
+
+    <title>#{messages.AppNameFull}</title>
+
+    <!-- FAVICON -->
+    <link rel="icon" href="assets/images/brand-logos/favicon.ico" type="image/x-icon"/>
+
+    <!-- BOOTSTRAP CSS -->
+    <h:outputStylesheet library="libs" name="bootstrap/css/bootstrap.min.css"/>
+
+    <!-- STYLES CSS -->
+    <h:outputStylesheet library="css" name="styles.css"/>
+
+    <!-- ICONS CSS -->
+    <h:outputStylesheet library="icon-fonts" name="icons.css"/>
+
+    <!-- MAIN JS -->
+    <!--    <script src="assets/js/authentication-main.js"></script>-->
+
+    <h:outputStylesheet library="css" name="pfcrud.css"/>
+</h:head>
+<h:body class="authenticationcover-background bg-primary-transparent position-relative" id="particles-js">
+    <h:form prependId="false">
+        <p:growl id="growlLogin" life="3000"/>
+        <p:focus for="kullaniciAdi"/>
+        <pe:blockUI/>
+
+        <div class="d-flex align-items-center justify-content-center authentication">
+            <div class="col-xl-9 col-md-6 col-11">
+                <div class="row  authentication-cover-main mx-0 border rounded bg-white">
+                    <div class="col-xxl-6 col-xl-5 col-lg-12 d-xl-block d-none px-0">
+                        <div class="authentication-cover overflow-hidden">
+                            <div class="authentication-cover-logo">
+                                <a href="#{request.contextPath}/index.xhtml">
+                                    <h:graphicImage library="images" name="brand-logos/desktop-dark.png" alt="" styleClass="authentication-brand desktop-dark"/>
+                                </a>
+                            </div>
+                            <div class="aunthentication-cover-content d-flex align-items-center justify-content-center">
+                                <div class="row justify-content-center align-items-center">
+                                    <div class="col-xl-10">
+                                        <div class="rounded bg-white-transparent authentication-sub-content">
+                                            <div class="d-flex align-items-center justify-content-center">
+                                                <h:graphicImage library="images" name="media/media-80.png" alt="img"/>
+                                            </div>
+
+                                            <h2 class="fs-4 mt-3 text-fixed-white fw-semibold text-center">"Photography is a way of feeling, of touching, of loving. What you have caught on film is captured forever."</h2>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xxl-6 col-xl-7">
+                        <div class="row justify-content-center align-items-center h-100">
+                            <div class="col-xxl-8 col-xl-9 col-lg-10 col-md-10 col-sm-10 col-12">
+                                <div class="card custom-card shadow-none my-auto">
+                                    <div class="card-body p-5">
+                                        <p class="h4 fw-semibold mb-0 text-center">#{messages.AppNameFull}</p>
+                                        <p class="mb-0 text-muted fw-normal text-center">Giriş yapmak için kullanıcı bilgilerini giriniz...</p>
+                                        <p></p>
+                                        <div class="row gy-3">
+                                            <div class="col-xl-12">
+                                                <label class="form-label text-default" for="kullaniciAdi">#{messages.kullaniciAdiText}</label>
+                                                <div class="position-relative">
+                                                    <p:inputText id="kullaniciAdi" styleClass="form-control"
+                                                                 value="#{loginController.kullaniciAdi}" required="true"
+                                                                 label="#{messages.kullaniciAdiText}"/>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-12 mb-2">
+                                                <label for="password" class="form-label text-default d-block">#{messages.parolaText}</label>
+                                                <div class="position-relative">
+                                                    <p:password id="password" value="#{loginController.parola}" required="true"
+                                                                styleClass="form-control" label="#{messages.parolaText}"/>
+                                                    <a href="javascript:void(0);" class="show-password-button text-muted"
+                                                       style="height: 40px;margin-top: -5px;margin-right: -5px"
+                                                       onclick="createpassword('password',this)" id="button-addon2">
+                                                        <i class="ri-eye-off-line align-middle"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="d-grid mt-4">
+                                            <p:defaultCommand target="loginButton"/>
+                                            <p:commandLink ajax="false" id="loginButton"
+                                                           styleClass="btn btn-primary btn-lg"
+                                                           action="#{loginController.login}"
+                                                           update="growlLogin">
+                                                <h:outputText style="color: #ffffff"
+                                                              value="#{messages.buttonGirisYap}"/>
+                                            </p:commandLink>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </h:form>
+    <!-- SCRIPTS -->
+
+    <h:outputScript library="primefaces" name="jquery/jquery.js"/>
+
+    <!-- BOOTSTRAP JS -->
+    <h:outputScript library="libs" name="bootstrap/js/bootstrap.bundle.min.js"/>
+
+
+    <!-- Particles JS -->
+    <h:outputScript library="libs" name="particles.js/particles.js"/>
+
+    <h:outputScript library="js" name="pfcrud.js"/>
+
+    <!--    <script type="text/javascript">-->
+    <!--        $(".toggle-password").click(function () {-->
+    <!--            var input = $("#password");-->
+    <!--            input.attr("type") === "password" ? input.attr("type", "text") : input.attr("type", "password");-->
+    <!--            if (input.attr("type") === "text") {-->
+    <!--                $(this).removeClass("ri-eye-off-line align-middle");-->
+    <!--                $(this).addClass("ri-eye-line align-middle");-->
+    <!--            } else {-->
+    <!--                $(this).addClass("ri-eye-off-line align-middle");-->
+    <!--                $(this).removeClass("ri-eye-line align-middle");-->
+    <!--            }-->
+    <!--        });-->
+    <!--        $(".toggle-password").css("cursor", "pointer");-->
+    <!--    </script>-->
+
+    <!--    &lt;!&ndash; Cover Password JS &ndash;&gt;-->
+    <!--    <script src="assets/js/cover-password.js"></script>-->
+
+    <!--    &lt;!&ndash; Show Password JS &ndash;&gt;-->
+    <!--    <script src="assets/js/show-password.js"></script>-->
+
+
+    <!-- END SCRIPTS -->
+</h:body>
+</html>
