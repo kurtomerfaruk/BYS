@@ -7,13 +7,18 @@ import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
 import tr.bel.gaziantep.bysweb.moduls.engelsizler.entity.EyKisi;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKurs;
 
+import java.io.Serial;
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "EKMGIRIS_CIKIS")
+@NamedQuery(name = "EkmGirisCikis.findByGnlKisi", query = "SELECT a FROM EkmGirisCikis a WHERE a.aktif=true AND " +
+        "a.eyKisi.gnlKisi=:gnlKisi ORDER BY a.cikisTarihi DESC,a.girisTarihi DESC")
 public class EkmGirisCikis extends BaseEntity {
+    @Serial
+    private static final long serialVersionUID = -3436919824962421321L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID", nullable = false)

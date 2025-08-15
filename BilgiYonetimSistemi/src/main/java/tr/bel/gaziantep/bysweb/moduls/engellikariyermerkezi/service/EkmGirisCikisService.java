@@ -5,7 +5,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import tr.bel.gaziantep.bysweb.core.service.AbstractService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
-import tr.bel.gaziantep.bysweb.moduls.engellikariyermerkezi.entity.EkmIsBasvuru;
+import tr.bel.gaziantep.bysweb.moduls.engellikariyermerkezi.entity.EkmGirisCikis;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
 
 import java.io.Serial;
@@ -14,16 +14,15 @@ import java.util.List;
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
  * @version 1.0.0
- * @since 4.07.2025 11:32
+ * @since 15.08.2025 15:24
  */
 @Stateless
-public class EkmIsBasvuruService extends AbstractService<EkmIsBasvuru> {
-
+public class EkmGirisCikisService extends AbstractService<EkmGirisCikis>     {
     @Serial
-    private static final long serialVersionUID = -3126066674044862373L;
+    private static final long serialVersionUID = 7436165278378884429L;
 
-    public EkmIsBasvuruService() {
-        super(EkmIsBasvuru.class);
+    public EkmGirisCikisService() {
+        super(EkmGirisCikis.class);
     }
 
     @PersistenceContext(unitName = Constants.UNIT_NAME)
@@ -34,7 +33,7 @@ public class EkmIsBasvuruService extends AbstractService<EkmIsBasvuru> {
         return em;
     }
 
-    public List<EkmIsBasvuru> findByGnlKisi(GnlKisi kisi) {
-        return getEntityManager().createNamedQuery("EkmIsBasvuru.findByGnlKisi").setParameter("gnlKisi", kisi).getResultList();
+    public List<EkmGirisCikis> findByGnlKisi(GnlKisi kisi) {
+        return getEntityManager().createNamedQuery("EkmGirisCikis.findByGnlKisi").setParameter("gnlKisi",kisi).getResultList();
     }
 }

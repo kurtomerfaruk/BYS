@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pt="jakarta.faces.passthrough"
+                xmlns:coco="jakarta.faces.composite/ui">
+
+    <h:form id="GnlKisiIncelemeListForm" styleClass="form-height">
+
+        <p:contextMenu id="GnlKisiIncelemeDataTableContextMenu" for="datalist:datalist">
+            <p:menuitem value="#{messages.buttonDetay}"
+                        onclick="document.getElementById('GnlKisiIncelemeListForm:datalist:datalist:viewButton').click();"
+                        icon="pi pi-search"/>
+        </p:contextMenu>
+
+        <coco:datatable id="datalist"
+                        value="#{gnlKisiIncelemeController.lazyItems}"
+                        rowKey="#{item.id}"
+                        selection="#{gnlKisiIncelemeController.selected}"
+                        filtered="#{gnlKisiIncelemeController.filtered}"
+                        rowselect=":GnlKisiIncelemeListForm:datalist:datalist:viewButton"
+                        rowDblselect="document.getElementById('GnlKisiIncelemeListForm:datalist:datalist:viewButton').click()"
+                        contextMenu=":GnlKisiIncelemeListForm:datalist:datalist:viewButton"
+                        selectListener="#{gnlKisiIncelemeController.resetParents}"
+                        controller="#{gnlKisiIncelemeController}"
+                        header="#{messages.kisiIncelemeListesi}">
+
+            <p:ajax event="colResize" listener="#{gnlKisiIncelemeController.onResize}"/>
+
+
+
+<!--            <p:column id="sorgulananKisiTc" sortBy="#{item.sorgulananGnlKisi.tcKimlikNo}"-->
+<!--                      filterBy="#{item.sorgulananGnlKisi.tcKimlikNo}"-->
+<!--                      width="#{gnlKisiIncelemeController.kolons[1].genislik}"-->
+<!--                      visible="#{gnlKisiIncelemeController.kolons[1].gorunurluk}">-->
+<!--                <f:facet name="header">-->
+<!--                    <h:outputText value="#{messages.sorgulananTcKimlikNoText}"/>-->
+<!--                </f:facet>-->
+<!--                <h:outputText value="#{item.sorgulananGnlKisi.tcKimlikNo}"/>-->
+<!--            </p:column>-->
+
+<!--            <p:column id="sorgulananKisiAd" sortBy="#{item.sorgulananGnlKisi.ad}"-->
+<!--                      filterBy="#{item.sorgulananGnlKisi.ad}"-->
+<!--                      width="#{gnlKisiIncelemeController.kolons[2].genislik}"-->
+<!--                      visible="#{gnlKisiIncelemeController.kolons[2].gorunurluk}">-->
+<!--                <f:facet name="header">-->
+<!--                    <h:outputText value="#{messages.sorgulananAdText}"/>-->
+<!--                </f:facet>-->
+<!--                <h:outputText value="#{item.sorgulananGnlKisi.ad}"/>-->
+<!--            </p:column>-->
+
+<!--            <p:column id="sorgulananKisiSoyad" sortBy="#{item.sorgulananGnlKisi.soyad}"-->
+<!--                      filterBy="#{item.sorgulananGnlKisi.soyad}"-->
+<!--                      width="#{gnlKisiIncelemeController.kolons[3].genislik}"-->
+<!--                      visible="#{gnlKisiIncelemeController.kolons[3].gorunurluk}">-->
+<!--                <f:facet name="header">-->
+<!--                    <h:outputText value="#{messages.sorgulananSoyadText}"/>-->
+<!--                </f:facet>-->
+<!--                <h:outputText value="#{item.sorgulananGnlKisi.soyad}"/>-->
+<!--            </p:column>-->
+
+<!--            <p:column id="sorgulayanKisiAd" sortBy="#{item.sorgulayanGnlKisi.ad}"-->
+<!--                      filterBy="#{item.sorgulayanGnlKisi.ad}"-->
+<!--                      width="#{gnlKisiIncelemeController.kolons[4].genislik}"-->
+<!--                      visible="#{gnlKisiIncelemeController.kolons[4].gorunurluk}">-->
+<!--                <f:facet name="header">-->
+<!--                    <h:outputText value="#{messages.sorgulayanAdText}"/>-->
+<!--                </f:facet>-->
+<!--                <h:outputText value="#{item.sorgulayanGnlKisi.ad}"/>-->
+<!--            </p:column>-->
+
+<!--            <p:column id="sorgulayanKisiSoyad" sortBy="#{item.sorgulayanGnlKisi.soyad}"-->
+<!--                      filterBy="#{item.sorgulayanGnlKisi.soyad}"-->
+<!--                      width="#{gnlKisiIncelemeController.kolons[5].genislik}"-->
+<!--                      visible="#{gnlKisiIncelemeController.kolons[5].gorunurluk}">-->
+<!--                <f:facet name="header">-->
+<!--                    <h:outputText value="#{messages.sorgulayanAdText}"/>-->
+<!--                </f:facet>-->
+<!--                <h:outputText value="#{item.sorgulayanGnlKisi.soyad}"/>-->
+<!--            </p:column>-->
+
+<!--            <p:column id="tarih" sortBy="#{item.eklemeTarihi}" filterBy="#{item.eklemeTarihi}"-->
+<!--                      width="#{gnlKisiIncelemeController.kolons[6].genislik}"-->
+<!--                      visible="#{gnlKisiIncelemeController.kolons[6].gorunurluk}">-->
+<!--                <f:facet name="header">-->
+<!--                    <h:outputText value="#{messages.tarihText}"/>-->
+<!--                </f:facet>-->
+<!--                <f:facet name="filter">-->
+<!--                    <p:datePicker pattern="#{messages.tarihFormat}" locale="tr" mask="true"-->
+<!--                                  onkeyup="PF('datalistWidget').filter()" monthNavigator="true" yearNavigator="true"-->
+<!--                                  showButtonBar="true">-->
+<!--                        <p:ajax event="dateSelect" oncomplete="PF('datalistWidget').filter()"/>-->
+<!--                    </p:datePicker>-->
+<!--                </f:facet>-->
+<!--                <h:outputText value="#{item.eklemeTarihi}">-->
+<!--                    <f:convertDateTime pattern="#{messages.tarihSaatFormat}" type="localDateTime"/>-->
+<!--                </h:outputText>-->
+<!--            </p:column>-->
+
+<!--            <p:column id="sorgulamaGerekcesi" sortBy="#{item.sorgulamaGerekcesi}" filterBy="#{item.sorgulamaGerekcesi}"-->
+<!--                      width="#{gnlKisiIncelemeController.kolons[7].genislik}"-->
+<!--                      visible="#{gnlKisiIncelemeController.kolons[7].gorunurluk}">-->
+<!--                <f:facet name="header">-->
+<!--                    <h:outputText value="#{messages.sorgulamaGerekcesiText}"/>-->
+<!--                </f:facet>-->
+<!--                <h:outputText value="#{item.sorgulamaGerekcesi}"/>-->
+<!--            </p:column>-->
+
+            <f:facet name="paginatorBottomLeft">
+
+                <p:commandButton id="viewButton" styleClass="ui-button-info" icon="pi pi-search"
+                                 pt:data-tooltip="#{messages.buttonDetay}"
+                                 update=":GnlKisiIncelemeListViewForm:GnlKisiIncelemeListViewForm"
+                                 oncomplete="PF('GnlKisiIncelemeListViewDialog').show()"
+                                 disabled="#{empty gnlKisiIncelemeController.selected}" onstart="PF('Loading').show()"
+                                 onsuccess="PF('Loading').hide()"/>
+
+            </f:facet>
+
+        </coco:datatable>
+
+
+        <ui:include src="/confirmation.xhtml"/>
+
+    </h:form>
+
+    <ui:include src="/moduls/genel/gnlKisiInceleme/ViewKisi.xhtml"/>
+
+</ui:composition>

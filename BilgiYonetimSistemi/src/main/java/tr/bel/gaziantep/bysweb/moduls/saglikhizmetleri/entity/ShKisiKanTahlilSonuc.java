@@ -13,6 +13,8 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 @Table(name = "SHKISI_KAN_TAHLIL_SONUC")
+@NamedQuery(name = "ShKisiKanTahlilSonuc.findByGnlKisi", query = "SELECT s FROM ShKisiKanTahlilSonuc s " +
+        "WHERE s.aktif=true AND s.shKisi.gnlKisi=:gnlKisi ORDER BY s.id DESC")
 public class ShKisiKanTahlilSonuc extends BaseEntity {
     @Serial
     private static final long serialVersionUID = -5899903853413872950L;

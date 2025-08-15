@@ -320,6 +320,13 @@ public class EyKisiService extends AbstractService<EyKisi> {
                 .orElse(null);
     }
 
+    public List<EyKisi> findByKisiList(GnlKisi kisi) {
+        return getEntityManager()
+                .createNamedQuery("EyKisi.findByKisi")
+                .setParameter("gnlKisi", kisi)
+                .getResultList();
+    }
+
 //    @TransactionAttribute(TransactionAttributeType.REQUIRED)
 //    public void update(EyKisi eyKisi,
 //                       List<EyEngelGrubu> engelGrubus,

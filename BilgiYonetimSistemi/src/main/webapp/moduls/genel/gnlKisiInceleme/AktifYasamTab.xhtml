@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="jakarta.faces.html">
+
+<ui:composition>
+    <p:accordionPanel widgetVar="ayEtkinlikWidget">
+        <p:tab title="Kayıt Durumu">
+            <p:outputLabel value="Kayıt Var mı?:" for="@next"/>
+            <p:toggleSwitch value="#{gnlKisiIncelemeController.aktifYasam}" onIcon="pi pi-check" offIcon="pi pi-times" styleClass="toggle-switch"
+                            disabled="true"/>
+        </p:tab>
+        <p:tab title="#{messages.etkinlikListesi}">
+            <p:dataTable id="ayEtkinlikId"
+                         value="#{gnlKisiIncelemeController.ayEtkinlikKisiList}"
+                         var="ayEtkinlikVar"
+                         emptyMessage="#{messages.kayitBulunamadi}"
+                         paginator="true"
+                         rows="10"
+                         pageLinks="5"
+                         paginatorPosition="bottom"
+                         size="small">
+
+                <p:column width="100">
+                    <f:facet name="header">
+                        <h:outputText value="#{messages.tarihText}"/>
+                    </f:facet>
+                    <h:outputText value="#{ayEtkinlikVar.ayEtkinlik.tarih}">
+                        <f:convertDateTime pattern="#{messages.tarihFormat}" type="localDate"/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column width="150">
+                    <f:facet name="header">
+                        <h:outputText value="#{messages.konuText}"/>
+                    </f:facet>
+                    <h:outputText value="#{ayEtkinlikVar.ayEtkinlik.konu}"/>
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{messages.aciklamaText}"/>
+                    </f:facet>
+                    <h:outputText value="#{ayEtkinlikVar.ayetkinlikId.aciklama}"/>
+                </p:column>
+
+
+            </p:dataTable>
+        </p:tab>
+        <p:tab title="#{messages.girisCikisListesi}">
+            <p:dataTable id="ayGirisCikisId"
+                         value="#{gnlKisiIncelemeController.ayGirisCikisList}"
+                         var="ayGirisCikisVar"
+                         emptyMessage="#{messages.kayitBulunamadi}"
+                         paginator="true"
+                         rows="10"
+                         pageLinks="5"
+                         paginatorPosition="bottom"
+                         size="small">
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{messages.girisTarihiText}"/>
+                    </f:facet>
+                    <h:outputText value="#{ayGirisCikisVar.girisTarihi}">
+                        <f:convertDateTime pattern="#{messages.tarihFormat}" type="localDateTime"/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{messages.cikisTarihiText}"/>
+                    </f:facet>
+                    <h:outputText value="#{ayGirisCikisVar.cikisTarihi}">
+                        <f:convertDateTime pattern="#{messages.tarihFormat}" type="localDateTime"/>
+                    </h:outputText>
+                </p:column>
+
+            </p:dataTable>
+        </p:tab>
+    </p:accordionPanel>
+
+</ui:composition>
+</html>

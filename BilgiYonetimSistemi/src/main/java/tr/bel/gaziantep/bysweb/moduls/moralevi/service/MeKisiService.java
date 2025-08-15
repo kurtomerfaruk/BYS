@@ -15,6 +15,7 @@ import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.moduls.engelsizler.entity.EyEngelGrubu;
 import tr.bel.gaziantep.bysweb.moduls.engelsizler.entity.EyKisi;
 import tr.bel.gaziantep.bysweb.moduls.engelsizler.service.EyKisiService;
+import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
 import tr.bel.gaziantep.bysweb.moduls.moralevi.entity.MeKisi;
 
 import java.io.Serial;
@@ -58,5 +59,9 @@ public class MeKisiService extends AbstractService<MeKisi> {
         eyKisi = getEntityManager().merge(eyKisi);
         meKisi.setEyKisi(eyKisi);
         edit(meKisi);
+    }
+
+    public List<MeKisi> findByGnlKisi(GnlKisi kisi) {
+        return getEntityManager().createNamedQuery("MeKisi.findByGnlKisi").setParameter("gnlKisi",kisi).getResultList();
     }
 }

@@ -18,6 +18,8 @@ import java.time.LocalDateTime;
 @Table(name = "AYGIRIS_CIKIS")
 @NamedQuery(name = "AyGirisCikis.findGirisYapanlar", query = "SELECT g.ayKisi FROM AyGirisCikis g WHERE g.cikisTarihi IS NULL ORDER BY g.ayKisi.gnlKisi.ad," +
         "g.ayKisi.gnlKisi.soyad")
+@NamedQuery(name = "AyGirisCikis.findByGnlKisi", query = "SELECT a FROM AyGirisCikis a WHERE a.aktif=true " +
+        "AND a.ayKisi.gnlKisi=:gnlKisi ORDER BY a.cikisTarihi DESC,a.girisTarihi DESC")
 public class AyGirisCikis extends BaseEntity {
     @Serial
     private static final long serialVersionUID = 8320326071911868361L;

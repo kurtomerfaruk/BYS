@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+
+    <p:outputLabel value="#{messages.adresNoLabel}" for="@next"/>
+    <p:inputText id="adresNo" value="#{gnlKisiIncelemeController.gnlKisi.adresNo}" title="#{messages.adresNoText}"
+                 readonly="true"/>
+
+    <p:outputLabel value="#{messages.adresLabel}" for="@next"/>
+    <p:inputTextarea rows="4" id="adres" value="#{gnlKisiIncelemeController.gnlKisi.adres}"
+                     title="#{messages.adresText}" styleClass="w-100 tcUpdate"
+                     autoResize="false" readonly="true"/>
+
+    <p:outputLabel value="#{messages.binaNoLabel}" for="@next"/>
+    <p:inputText id="binaNo" value="#{gnlKisiIncelemeController.gnlKisi.binaNo}" size="50"
+                 title="#{messages.binaNoText}" readonly="true"/>
+
+    <p:outputLabel value="#{messages.binaKoduLabel}" for="@next"/>
+    <p:inputText id="binaKodu" value="#{gnlKisiIncelemeController.gnlKisi.binaKodu}" title="#{messages.binaKoduText}"
+                 readonly="true"/>
+
+    <p:outputLabel value="#{messages.sehirLabel}" for="@next"/>
+    <p:inputText id="gnlilId" value="#{gnlKisiIncelemeController.gnlKisi.gnlIl.tanim}" readonly="true" size="50"/>
+
+    <p:outputLabel value="#{messages.ilceLabel}" for="@next"/>
+    <p:inputText id="gnlilceId" value="#{gnlKisiIncelemeController.gnlKisi.gnlIlce.tanim}" readonly="true" size="50"/>
+
+    <p:outputLabel value="#{messages.mahalleLabel}" for="@next"/>
+    <p:inputText id="gnlmahalleId" value="#{gnlKisiIncelemeController.gnlKisi.gnlMahalle.tanim}" readonly="true"
+                 size="50"/>
+
+</ui:composition>
+</html>

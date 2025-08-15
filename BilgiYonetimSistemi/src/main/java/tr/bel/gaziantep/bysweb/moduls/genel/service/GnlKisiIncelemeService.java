@@ -1,27 +1,27 @@
-package tr.bel.gaziantep.bysweb.moduls.aktifyasam.service;
+package tr.bel.gaziantep.bysweb.moduls.genel.service;
 
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import tr.bel.gaziantep.bysweb.core.service.AbstractService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
-import tr.bel.gaziantep.bysweb.moduls.aktifyasam.entity.AyEtkinlikResim;
+import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisiInceleme;
 
 import java.io.Serial;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
  * @version 1.0.0
- * @since 3.07.2025 10:52
+ * @since 15.08.2025 14:28
  */
 @Stateless
-public class AyEtkinlikResimService extends AbstractService<AyEtkinlikResim> {
+public class GnlKisiIncelemeService extends AbstractService<GnlKisiInceleme> {
 
     @Serial
-    private static final long serialVersionUID = -8544156472203940291L;
+    private static final long serialVersionUID = -1656557802332868907L;
 
-    public AyEtkinlikResimService() {
-        super(AyEtkinlikResim.class);
+    public GnlKisiIncelemeService() {
+        super(GnlKisiInceleme.class);
     }
 
     @PersistenceContext(unitName = Constants.UNIT_NAME)
@@ -30,5 +30,10 @@ public class AyEtkinlikResimService extends AbstractService<AyEtkinlikResim> {
     @Override
     protected EntityManager getEntityManager() {
         return em;
+    }
+
+    @Override
+    public String getSortCol() {
+        return "id";
     }
 }

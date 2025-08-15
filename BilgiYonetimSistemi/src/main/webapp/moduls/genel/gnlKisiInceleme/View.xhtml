@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:p="http://primefaces.org/ui"
+>
+
+    <ui:composition>
+
+        <h:form id="GnlKisiIncelemeForm">
+            <h:panelGroup id="display">
+                <p:focus context="display"/>
+                <div class="card">
+                    <div class="card-header">
+                        <ul class="nav nav-tabs mb-3 tab-style-8 scaleX" id="myTab4" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="kisiBilgileriViewTab" data-bs-toggle="tab"
+                                        data-bs-target="#kisiBilgileriViewTabPane" type="button" role="tab"
+                                        aria-controls="kisiBilgileriViewTabPane" aria-selected="true">Kişi Bilgileri
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="adresBilgileriViewTab" data-bs-toggle="tab"
+                                        data-bs-target="#adresBilgileriViewTabPane" type="button" role="tab"
+                                        aria-controls="adresBilgileriViewTabPane" aria-selected="true">Adres Bilgileri
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="aktifYasamViewTab" data-bs-toggle="tab"
+                                        data-bs-target="#aktifYasamViewTabPane" type="button" role="tab"
+                                        aria-controls="aktifYasamViewTabPane" aria-selected="true">Aktif Yaşam
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="engelliKoordinasyonMerkeziViewTab" data-bs-toggle="tab"
+                                        data-bs-target="#engelliKoordinasyonMerkeziViewTabPane" type="button" role="tab"
+                                        aria-controls="engelliKoordinasyonMerkeziViewTabPane" aria-selected="true"> Engelli Koordinasyon Merkezi
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="engelsizlerViewTab" data-bs-toggle="tab"
+                                        data-bs-target="#engelsizlerViewTabPane" type="button" role="tab"
+                                        aria-controls="engelsizlerViewTabPane" aria-selected="true"> Engelsizler
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="moralEviViewTab" data-bs-toggle="tab"
+                                        data-bs-target="#moralEviViewTabPane" type="button" role="tab"
+                                        aria-controls="moralEviViewTabPane" aria-selected="true"> Moral Evi
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="saglikHizmetleriViewTab" data-bs-toggle="tab"
+                                        data-bs-target="#saglikHizmetleriViewTabPane" type="button" role="tab"
+                                        aria-controls="saglikHizmetleriViewTabPane" aria-selected="true"> Sağlık Hizmetleri
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-body">
+                        <div class="tab-content">
+                            <div class="tab-pane overflow-hidden show active" id="kisiBilgileriViewTabPane" role="tabpanel"
+                                 aria-labelledby="kisiBilgileriViewTab"  tabindex="0">
+                                <p:panelGrid id="kisiPanel" columns="1" styleClass="w-100" layout="tabular">
+                                    <ui:include src="/moduls/genel/gnlKisiInceleme/KisiBilgileriTab.xhtml"/>
+                                </p:panelGrid>
+                            </div>
+                            <div class="tab-pane overflow-hidden" id="adresBilgileriViewTabPane" role="tabpanel"
+                                 aria-labelledby="adresBilgileriViewTab"  tabindex="0">
+                                <p:panelGrid id="adresBilgileriPanel" columns="2" styleClass="w-100" layout="tabular">
+                                    <ui:include src="/moduls/genel/gnlKisiInceleme/AdresBilgileriTab.xhtml"/>
+                                </p:panelGrid>
+                            </div>
+                            <div class="tab-pane overflow-hidden" id="aktifYasamViewTabPane" role="tabpanel"
+                                 aria-labelledby="aktifYasamViewTab"  tabindex="0">
+                                <p:panelGrid id="aktifYasamPanel" columns="1" styleClass="w-100" layout="tabular">
+                                    <ui:include src="/moduls/genel/gnlKisiInceleme/AktifYasamTab.xhtml"/>
+                                </p:panelGrid>
+                            </div>
+                            <div class="tab-pane overflow-hidden" id="engelliKoordinasyonMerkeziViewTabPane" role="tabpanel"
+                                 aria-labelledby="engelliKoordinasyonMerkeziViewTab"  tabindex="0">
+                                <p:panelGrid id="engelliKoordinasyonMerkeziPanel" columns="1" styleClass="w-100" layout="tabular">
+                                    <ui:include src="/moduls/genel/gnlKisiInceleme/EngelliKoordinasyonMerkeziTab.xhtml"/>
+                                </p:panelGrid>
+                            </div>
+                            <div class="tab-pane overflow-hidden" id="engelsizlerViewTabPane" role="tabpanel"
+                                 aria-labelledby="engelsizlerViewTab"  tabindex="0">
+                                <p:panelGrid id="engelsizlerPanel" columns="1" styleClass="w-100" layout="tabular">
+                                    <ui:include src="/moduls/genel/gnlKisiInceleme/EngelsizlerTab.xhtml"/>
+                                </p:panelGrid>
+                            </div>
+                            <div class="tab-pane overflow-hidden" id="moralEviViewTabPane" role="tabpanel"
+                                 aria-labelledby="moralEviViewTab"  tabindex="0">
+                                <p:panelGrid id="moralEviPanel" columns="1" styleClass="w-100" layout="tabular">
+                                    <ui:include src="/moduls/genel/gnlKisiInceleme/MoralEviTab.xhtml"/>
+                                </p:panelGrid>
+                            </div>
+                            <div class="tab-pane overflow-hidden" id="saglikHizmetleriViewTabPane" role="tabpanel"
+                                 aria-labelledby="saglikHizmetleriViewTab"  tabindex="0">
+                                <p:panelGrid id="saglikHizmetleriPanel" columns="1" styleClass="w-100" layout="tabular">
+                                    <ui:include src="/moduls/genel/gnlKisiInceleme/SaglikHizmetleriTab.xhtml"/>
+                                </p:panelGrid>
+                            </div>
+                        </div>
+                    </div><!-- end card-body -->
+                </div>
+            </h:panelGroup>
+        </h:form>
+
+    </ui:composition>
+
+</html>
+

@@ -18,6 +18,8 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 @Table(name = "METALEP")
+@NamedQuery(name = "MeTalep.findByGnlKisi", query = "SELECT m FROM MeTalep m WHERE m.aktif=true " +
+        "AND m.meKisi.eyKisi.gnlKisi=:gnlKisi ORDER BY m.tarih DESC")
 public class MeTalep extends BaseEntity {
 
     @Serial

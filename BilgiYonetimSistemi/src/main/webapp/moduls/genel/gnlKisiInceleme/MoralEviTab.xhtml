@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="jakarta.faces.html">
+
+<ui:composition>
+    <p:accordionPanel widgetVar="moralEviWidget">
+        <p:tab title="Kayıt Durumu">
+            <p:outputLabel value="Kayıt Var mı?:" for="@next"/>
+            <p:toggleSwitch value="#{gnlKisiIncelemeController.moralEvi}" onIcon="pi pi-check" offIcon="pi pi-times" styleClass="toggle-switch"
+                            disabled="true"/>
+        </p:tab>
+        <p:tab title="#{messages.etkinlikListesi}">
+            <p:dataTable id="meEtkinlikId"
+                         value="#{gnlKisiIncelemeController.meEtkinlikKisiList}"
+                         var="meEtkinlikVar"
+                         emptyMessage="#{messages.kayitBulunamadi}"
+                         paginator="true"
+                         rows="10"
+                         pageLinks="5"
+                         paginatorPosition="bottom"
+                         size="small">
+
+                <p:column width="100">
+                    <f:facet name="header">
+                        <h:outputText value="#{messages.tarihText}"/>
+                    </f:facet>
+                    <h:outputText value="#{meEtkinlikVar.meEtkinlik.tarih}">
+                        <f:convertDateTime pattern="#{messages.tarihFormat}" type="localDate"/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column width="150">
+                    <f:facet name="header">
+                        <h:outputText value="#{messages.konuText}"/>
+                    </f:facet>
+                    <h:outputText value="#{meEtkinlikVar.meEtkinlik.konu}"/>
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{messages.aciklamaText}"/>
+                    </f:facet>
+                    <h:outputText value="#{meEtkinlikVar.meetkinlikId.aciklama}"/>
+                </p:column>
+
+
+            </p:dataTable>
+        </p:tab>
+        <p:tab title="#{messages.talepListesi}">
+            <p:dataTable id="meTalepId"
+                         value="#{gnlKisiIncelemeController.meTalepList}"
+                         var="meTalepVar"
+                         emptyMessage="#{messages.kayitBulunamadi}"
+                         paginator="true"
+                         rows="10"
+                         pageLinks="5"
+                         paginatorPosition="bottom"
+                         size="small">
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{messages.tarihText}"/>
+                    </f:facet>
+                    <h:outputText value="#{meTalepVar.tarih}">
+                        <f:convertDateTime pattern="#{messages.tarihFormat}" type="localDateTime"/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{messages.talepTuruText}"/>
+                    </f:facet>
+                    <h:outputText value="#{meTalepVar.talepTuru}"/>
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{messages.konuText}"/>
+                    </f:facet>
+                    <h:outputText value="#{meTalepVar.metalepKonuId.tanim}"/>
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{messages.aciklamaText}"/>
+                    </f:facet>
+                    <h:outputText value="#{meTalepVar.aciklama}"/>
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{messages.durumText}"/>
+                    </f:facet>
+                    <h:outputText value="#{meTalepVar.durum}"/>
+                </p:column>
+
+            </p:dataTable>
+        </p:tab>
+    </p:accordionPanel>
+
+</ui:composition>
+</html>

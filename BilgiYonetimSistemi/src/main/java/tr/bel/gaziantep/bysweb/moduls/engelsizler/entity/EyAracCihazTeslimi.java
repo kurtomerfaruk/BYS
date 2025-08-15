@@ -15,6 +15,8 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 @Table(name = "EYARAC_CIHAZ_TESLIMI")
+@NamedQuery(name = "EyAracCihazTeslimi.findByGnlKisi", query = "SELECT e FROM EyAracCihazTeslimi e WHERE e.aktif=true " +
+        "AND e.eyKisi.gnlKisi=:gnlKisi ORDER BY e.verilisTarihi DESC")
 public class EyAracCihazTeslimi extends BaseEntity {
     @Serial
     private static final long serialVersionUID = 5393561827846136033L;

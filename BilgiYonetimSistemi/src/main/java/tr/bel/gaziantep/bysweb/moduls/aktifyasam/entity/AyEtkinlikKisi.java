@@ -13,6 +13,8 @@ import java.io.Serial;
 @AllArgsConstructor
 @Entity
 @Table(name = "AYETKINLIK_KISI")
+@NamedQuery(name = "AyEtkinlikKisi.findByGnlKisi", query = "SELECT a FROM AyEtkinlikKisi a WHERE a.aktif=true AND " +
+        "a.ayKisi.gnlKisi=:gnlKisi ORDER BY a.ayEtkinlik.tarih DESC")
 public class AyEtkinlikKisi extends BaseEntity {
     @Serial
     private static final long serialVersionUID = 3568802958557509832L;

@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="jakarta.faces.html">
+
+<ui:composition>
+    <p:accordionPanel widgetVar="saglikHizmetleriWidget">
+        <p:tab title="Kayıt Durumu">
+            <p:outputLabel value="Kayıt Var mı?:" for="@next"/>
+            <p:toggleSwitch value="#{gnlKisiIncelemeController.saglikHizmetleri}" onIcon="pi pi-check" offIcon="pi pi-times" styleClass="toggle-switch"
+                            disabled="true"/>
+        </p:tab>
+        <p:tab title="#{messages.kanTahliliListesi}">
+            <p:dataTable id="kanTahliliId"
+                         value="#{gnlKisiIncelemeController.shKanTahlilSonucList}"
+                         var="kanTahliliVar"
+                         emptyMessage="#{messages.kayitBulunamadi}"
+                         paginator="true"
+                         rows="10"
+                         pageLinks="5"
+                         paginatorPosition="bottom"
+                         size="small">
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{messages.glikozAclikText}"/>
+                    </f:facet>
+                    <h:outputText value="#{kanTahliliVar.glikozAclik}"/>
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{messages.insulinText}"/>
+                    </f:facet>
+                    <h:outputText value="#{kanTahliliVar.insulin}"/>
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{messages.totalKolesterolText}"/>
+                    </f:facet>
+                    <h:outputText value="#{kanTahliliVar.totalKolesterol}"/>
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{messages.ldlText}"/>
+                    </f:facet>
+                    <h:outputText value="#{kanTahliliVar.ldl}"/>
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{messages.trigliseridText}"/>
+                    </f:facet>
+                    <h:outputText value="#{kanTahliliVar.trigliserid}"/>
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{messages.demirText}"/>
+                    </f:facet>
+                    <h:outputText value="#{kanTahliliVar.demir}"/>
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{messages.b12VitaminiText}"/>
+                    </f:facet>
+                    <h:outputText value="#{kanTahliliVar.b12Vitamini}"/>
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{messages.tshText}"/>
+                    </f:facet>
+                    <h:outputText value="#{kanTahliliVar.tsh}"/>
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{messages.t3Text}"/>
+                    </f:facet>
+                    <h:outputText value="#{kanTahliliVar.t3}"/>
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{messages.t4Text}"/>
+                    </f:facet>
+                    <h:outputText value="#{kanTahliliVar.t4}"/>
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{messages.dvitaminiText}"/>
+                    </f:facet>
+                    <h:outputText value="#{kanTahliliVar.DVitamini}"/>
+                </p:column>
+
+            </p:dataTable>
+        </p:tab>
+        <p:tab title="#{messages.kisiKontrolListesi}">
+            <p:dataTable id="kisiKontrolId"
+                         value="#{gnlKisiIncelemeController.shKisiKontrolList}"
+                         var="kisiKontrolVar"
+                         emptyMessage="#{messages.kayitBulunamadi}"
+                         paginator="true"
+                         rows="10"
+                         pageLinks="5"
+                         paginatorPosition="bottom"
+                         size="small">
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{messages.tarihText}"/>
+                    </f:facet>
+                    <h:outputText value="#{kisiKontrolVar.tarih}">
+                        <f:convertDateTime pattern="#{messages.tarihFormat}" type="localDateTime"/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{messages.boyText}"/>
+                    </f:facet>
+                    <h:outputText value="#{kisiKontrolVar.boy}"/>
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{messages.kiloText}"/>
+                    </f:facet>
+                    <h:outputText value="#{kisiKontrolVar.kilo}"/>
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{messages.belCevresiText}"/>
+                    </f:facet>
+                    <h:outputText value="#{kisiKontrolVar.belCevresi}"/>
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{messages.bkiText}"/>
+                    </f:facet>
+                    <h:outputText value="#{kisiKontrolVar.bki}">
+                            <f:convertNumber maxFractionDigits="2"/>
+                    </h:outputText>
+                </p:column>
+
+            </p:dataTable>
+        </p:tab>
+    </p:accordionPanel>
+
+</ui:composition>
+</html>

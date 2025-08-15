@@ -24,6 +24,8 @@ import java.util.stream.Collectors;
 @Setter
 @Entity
 @Table(name = "EYARAC_TAMIR")
+@NamedQuery(name = "EyAracTamir.findByGnlKisi", query = "SELECT e FROM EyAracTamir e WHERE e.aktif=true " +
+        "AND e.eyKisi.gnlKisi=:gnlKisi ORDER BY e.kayitTarihi DESC")
 public class EyAracTamir extends BaseEntity {
     @Serial
     private static final long serialVersionUID = 3174809549249637970L;

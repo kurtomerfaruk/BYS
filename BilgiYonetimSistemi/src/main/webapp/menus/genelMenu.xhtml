@@ -20,6 +20,29 @@
                     <a href="javascript:void(0)">Engelsizler</a>
                 </li>
 
+                <!--    Islemler    -->
+                <ui:fragment rendered="#{syKullaniciController.hasPermission('genel_islemler:goster')}">
+                    <li class="slide has-sub">
+                        <a href="javascript:void(0);" class="side-menu__item sublevel1">İşlemler
+                            <i class="ri-arrow-right-s-line side-menu__angle"></i></a>
+                        <ul class="slide-menu child2">
+
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('gnlkisiinceleme:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/genel/gnlKisiInceleme/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="Genel Kişi İnceleme Listesi"/>
+                                </li>
+                            </ui:fragment>
+
+                        </ul>
+                    </li>
+                </ui:fragment>
+                <!--    Islemler    -->
+
                 <!--    Tanimlamalar    -->
                 <ui:fragment rendered="#{syKullaniciController.hasPermission('genel_tanimlamalar:goster')}">
                     <li class="slide has-sub">

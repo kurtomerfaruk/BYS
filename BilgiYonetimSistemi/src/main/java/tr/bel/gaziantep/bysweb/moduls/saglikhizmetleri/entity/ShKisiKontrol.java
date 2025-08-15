@@ -15,6 +15,8 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Entity
 @Table(name = "SHKISI_KONTROL")
+@NamedQuery(name = "ShKisiKontrol.findByGnlKisi", query = "SELECT s FROM ShKisiKontrol s WHERE s.aktif=true " +
+        "AND s.shKisi.gnlKisi=:gnlKisi ORDER BY s.tarih DESC")
 public class ShKisiKontrol extends BaseEntity {
     @Serial
     private static final long serialVersionUID = -2142134099026046341L;

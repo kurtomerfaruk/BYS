@@ -5,9 +5,11 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import tr.bel.gaziantep.bysweb.core.service.AbstractService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
+import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
 import tr.bel.gaziantep.bysweb.moduls.saglikhizmetleri.entity.ShKisiKontrol;
 
 import java.io.Serial;
+import java.util.List;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
@@ -30,5 +32,9 @@ public class ShKisiKontrolService extends AbstractService<ShKisiKontrol> {
     @Override
     protected EntityManager getEntityManager() {
         return em;
+    }
+
+    public List<ShKisiKontrol> findByGnlKisi(GnlKisi kisi) {
+        return  getEntityManager().createNamedQuery("ShKisiKontrol.findByGnlKisi").setParameter("gnlKisi",kisi).getResultList();
     }
 }

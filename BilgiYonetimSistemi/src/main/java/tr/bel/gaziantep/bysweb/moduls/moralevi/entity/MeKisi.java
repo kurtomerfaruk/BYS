@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Entity
 @Table(name = "MEKISI")
+@NamedQuery(name = "MeKisi.findByGnlKisi", query = "SELECT m FROM MeKisi m WHERE m.aktif=true AND m.eyKisi.gnlKisi =:gnlKisi")
 public class MeKisi extends BaseEntity {
     @Serial
     private static final long serialVersionUID = -2516657658087328999L;

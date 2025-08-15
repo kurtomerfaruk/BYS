@@ -6,8 +6,10 @@ import jakarta.persistence.PersistenceContext;
 import tr.bel.gaziantep.bysweb.core.service.AbstractService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.moduls.engelsizler.entity.EyAracCihazTeslimi;
+import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
 
 import java.io.Serial;
+import java.util.List;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
@@ -30,5 +32,9 @@ public class EyAracCihazTeslimiService extends AbstractService<EyAracCihazTeslim
     @Override
     protected EntityManager getEntityManager() {
         return em;
+    }
+
+    public List<EyAracCihazTeslimi> findByGnlKisi(GnlKisi kisi) {
+        return getEntityManager().createNamedQuery("EyAracCihazTeslimi.findByGnlKisi").setParameter("gnlKisi",kisi).getResultList();
     }
 }

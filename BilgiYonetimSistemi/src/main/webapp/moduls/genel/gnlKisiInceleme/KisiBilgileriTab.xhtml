@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="jakarta.faces.html">
+
+<ui:composition>
+
+        <p:panelGrid columns="2" layout="grid" styleClass="w-100"
+                     columnClasses="col-8 md:col-2 xl:col-2, col-8 md:col-6 xl:col-6"
+                     contentStyleClass="align-items-baseline ui-fluid">
+
+            <p:outputLabel value="#{messages.sorgulamaGerekcesiLabel}" for="@next"/>
+            <p:inputTextarea id="sorgulamaGerekcesi" value="#{gnlKisiIncelemeController.gnlKisiInceleme.sorgulamaGerekcesi}"
+                             rows="4" autoResize="false" styleClass="w-100" title="#{messages.sorgulamaGerekcesiText}"
+                             required="true"/>
+
+            <p:outputLabel value="#{messages.tcKimlikNoLabel}" for="@next"/>
+            <h:panelGroup>
+                <div class="ui-inputgroup">
+                    <p:inputMask id="tcKimlikNo" style="width: 15% !important;min-width: 100px !important;"
+                                 value="#{gnlKisiIncelemeController.gnlKisi.tcKimlikNo}" label="#{messages.tcKimlikNoText}"
+                                 required="true" title="#{messages.tcKimlikNoText}" mask="99999999999"/>
+                    <p:commandButton icon="pi pi-search" process="@parent,:growl,sorgulamaGerekcesi"
+                                     update=":growl,@(.tcUpdate),@form"
+                                     actionListener="#{gnlKisiIncelemeController.getTcKimlik()}"
+                                     styleClass="ui-button-info" onstart="PF('Loading').show()"
+                                     onsuccess="PF('Loading').hide()"/>
+                    <p:commandButton icon="pi pi-times"
+                                     styleClass="ui-button-warning"
+                                     actionListener="#{gnlKisiIncelemeController.clearSelect()}"
+                                     process="@this"
+                                     update=":growl,@form"
+                                     title="Seçimi Temizle"/>
+                </div>
+            </h:panelGroup>
+
+
+        </p:panelGrid>
+
+
+
+    <p:panelGrid columns="4" styleClass="w-100" layout="tabular">
+
+        <p:outputLabel value="#{messages.uyrukLabel}" for="@next"/>
+        <p:inputText id="uyruk" value="#{gnlKisiIncelemeController.gnlKisi.uyruk}" title="#{messages.uyrukText}"
+                     readonly="true"/>
+
+        <p:outputLabel value="#{messages.kimlikSeriNoLabel}" for="@next"/>
+        <p:inputText id="kimlikSeriNo" value="#{gnlKisiIncelemeController.gnlKisi.kimlikSeriNo}"
+                     title="#{messages.kimlikSeriNoText}" readonly="true"/>
+
+        <p:outputLabel value="#{messages.sonGecerlilikTarihiLabel}" for="@next"/>
+        <p:inputText id="sonGecerlilikTarihi" value="#{gnlKisiIncelemeController.gnlKisi.sonGecerlilikTarihi}"
+                     title="#{messages.sonGecerlilikTarihiText}"
+                     readonly="true">
+            <f:convertDateTime pattern="#{messages.tarihFormat}" type="localDate"/>
+        </p:inputText>
+
+        <p:outputLabel value="#{messages.adLabel}" for="@next"/>
+        <p:inputText id="ad" value="#{gnlKisiIncelemeController.gnlKisi.ad}" title="#{messages.adText}"
+                     readonly="true"/>
+
+        <p:outputLabel value="#{messages.soyadLabel}" for="@next"/>
+        <p:inputText id="soyad" value="#{gnlKisiIncelemeController.gnlKisi.soyad}" title="#{messages.soyadText}"
+                     readonly="true"/>
+
+        <p:outputLabel value="#{messages.cinsiyetLabel}" for="@next"/>
+        <p:inputText id="cinsiyet" value="#{gnlKisiIncelemeController.gnlKisi.cinsiyet.displayValue}"
+                     title="#{messages.cinsiyetText}" readonly="true"/>
+
+        <p:outputLabel value="#{messages.medeniDurumLabel}" for="@next"/>
+        <p:inputText id="medeniDurum" value="#{gnlKisiIncelemeController.gnlKisi.medeniDurum.displayValue}"
+                     title="#{messages.medeniDurumText}" readonly="true"/>
+
+        <p:outputLabel value="#{messages.dogumTarihiLabel}" for="@next"/>
+        <p:inputText id="dogumTarihi" value="#{gnlKisiIncelemeController.gnlKisi.dogumTarihi}"
+                     title="#{messages.dogumTarihiText}" readonly="true">
+            <f:convertDateTime pattern="#{messages.tarihFormat}" type="localDate"/>
+        </p:inputText>
+
+        <p:outputLabel value="#{messages.dogumYeriLabel}" for="@next"/>
+        <p:inputText id="dogumYeri" value="#{gnlKisiIncelemeController.gnlKisi.dogumYeri}"
+                     title="#{messages.dogumYeriText}" readonly="true"/>
+
+        <p:outputLabel value="#{messages.egitimDurumuLabel}" for="@next"/>
+        <p:inputText id="egitimDurumu" value="#{gnlKisiIncelemeController.gnlKisi.egitimDurumu.displayValue}"
+                     title="#{messages.egitimDurumuText}"
+                     readonly="true"/>
+
+        <p:outputLabel value="#{messages.anaAdiLabel}" for="@next"/>
+        <p:inputText id="anaAdi" value="#{gnlKisiIncelemeController.gnlKisi.anaAdi}" title="#{messages.anaAdiText}"
+                     readonly="true" styleClass="tcUpdate"/>
+
+        <p:outputLabel value="#{messages.babaAdiLabel}" for="@next"/>
+        <p:inputText id="babaAdi" value="#{gnlKisiIncelemeController.gnlKisi.babaAdi}" title="#{messages.babaAdiText}"
+                     readonly="true"/>
+
+        <p:outputLabel value="#{messages.telefonLabel}" for="telefon"/>
+        <p:inputMask id="telefon" value="#{gnlKisiIncelemeController.gnlKisi.telefon}" mask="(999) 999 99 99"
+                     title="#{messages.telefonText}"
+                     readonly="true"/>
+
+        <p:outputLabel value="#{messages.telefonLabel}" for="telefon2"/>
+        <p:inputMask id="telefon2" value="#{gnlKisiIncelemeController.gnlKisi.telefon2}" mask="(999) 999 99 99"
+                     title="#{messages.telefonText}"
+                     readonly="true"/>
+
+        <p:outputLabel value="#{messages.epostaAdresiLabel}" for="@next"/>
+        <p:inputText id="epostaAdresi" value="#{gnlKisiIncelemeController.gnlKisi.epostaAdresi}"
+                     title="#{messages.epostaAdresiText}" readonly="true"/>
+
+        <p:outputLabel value="#{messages.cocukSayisiLabel}" for="@next"/>
+        <p:inputText id="cocukSayisi" value="#{gnlKisiIncelemeController.gnlKisi.cocukSayisi}"
+                     title="#{messages.cocukSayisiText}" readonly="true"/>
+
+        <p:outputLabel value="#{messages.durumLabel}" for="@next"/>
+        <p:inputText id="durum" value="#{gnlKisiIncelemeController.gnlKisi.durum.displayValue}"
+                     title="#{messages.durumText}" readonly="true"/>
+
+        <p:outputLabel value="#{messages.olumTarihiLabel}" for="@next"/>
+        <p:inputText id="olumTarihi" value="#{gnlKisiIncelemeController.gnlKisi.olumTarihi}"
+                     title="#{messages.olumTarihiText}" readonly="true">
+            <f:convertDateTime pattern="#{messages.tarihFormat}" type="localDate"/>
+        </p:inputText>
+
+        <p:outputLabel value="#{messages.mernisGuncellemeTarihiLabel}" for="@next"/>
+        <p:inputText id="mernisGuncellemeTarihi" value="#{gnlKisiIncelemeController.gnlKisi.mernisGuncellemeTarihi}"
+                     title="#{messages.mernisGuncellemeTarihiText}" readonly="true">
+            <f:convertDateTime pattern="#{messages.tarihSaatFormat}" type="localDateTime"/>
+        </p:inputText>
+    </p:panelGrid>
+
+</ui:composition>
+</html>

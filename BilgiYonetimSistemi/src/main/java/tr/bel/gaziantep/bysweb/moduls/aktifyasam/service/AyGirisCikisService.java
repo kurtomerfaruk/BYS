@@ -7,6 +7,7 @@ import tr.bel.gaziantep.bysweb.core.service.AbstractService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.moduls.aktifyasam.entity.AyGirisCikis;
 import tr.bel.gaziantep.bysweb.moduls.aktifyasam.entity.AyKisi;
+import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
 
 import java.io.Serial;
 import java.util.List;
@@ -36,5 +37,9 @@ public class AyGirisCikisService extends AbstractService<AyGirisCikis> {
 
     public List<AyKisi> getEntrants() {
         return getEntityManager().createNamedQuery("AyGirisCikis.findGirisYapanlar").getResultList();
+    }
+
+    public List<AyGirisCikis> findByGnlKisi(GnlKisi kisi) {
+        return getEntityManager().createNamedQuery("AyGirisCikis.findByGnlKisi").setParameter("gnlKisi",kisi).getResultList();
     }
 }
