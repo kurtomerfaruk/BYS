@@ -9428,8 +9428,8 @@ caption {
 }
 .authentication .desktop-logo,
 .authentication .desktop-dark {
-  height: 1.5rem;
-  line-height: 1.5rem;
+  height: 2.5rem;
+  line-height: 2.5rem;
 }
 /* Start:: coming soon */
 .coming-soon-main {
@@ -9494,7 +9494,7 @@ caption {
 .authenticationcover-background .authentication .authentication-cover:before {
   position: absolute;
   content: "";
-  background-image: url(../images/media/svg/pattren-3.svg);
+  background-image: url(../images/pattren-3.svg);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -14737,7 +14737,7 @@ ul.available-doctors-list li:last-child {
 .dropdown-item-close1 {
   display: none;
 }
-#header-notification-scroll1 .dropdown-item:hover .dropdown-item-close1, #header-notification-scroll2 .dropdown-item:hover .dropdown-item-close1, #header-notification-scroll3 .dropdown-item:hover .dropdown-item-close1, #active-users .dropdown-item:hover .dropdown-item-close1 {
+#header-notification-scroll1 .dropdown-item:hover .dropdown-item-close1, #header-notification-scroll2 .dropdown-item:hover .dropdown-item-close1, #header-notification-scroll3 .dropdown-item:hover .dropdown-item-close1, #active-users .dropdown-item:hover .dropdown-item-close1, #active-notifications .dropdown-item:hover .dropdown-item-close1 {
   display: block;
 }
 #header-notification-scroll1, #header-notification-scroll2, #header-notification-scroll3 {
@@ -14808,7 +14808,8 @@ ul.available-doctors-list li:last-child {
 /* Start:header dropdowns scroll */
 #header-notification-scroll,
 #header-cart-items-scroll,
-#active-users{
+#active-users,
+#active-notifications{
   max-height: 22.8rem;
 }
 /* End:header dropdowns scroll */
@@ -17094,8 +17095,8 @@ div:where(.swal2-container) input:where(.swal2-input), div:where(.swal2-containe
 .swiper-button-prev {
   width: 1.563rem !important;
   height: 1.563rem !important;
-  color: #fff !important;
-  background-color: rgba(255, 255, 255, 0.3);
+  color: #ffffff !important;
+  background-color: rgb(115,93,255) !important;
   border-radius: 0.25rem;
 }
 .swiper-button-next:after,

@@ -79,6 +79,9 @@ public class SyKullanici extends BaseEntityNoVersion {
     @OneToMany(mappedBy = "syKullanici")
     private Set<SyKullaniciRol> syKullaniciRols = new LinkedHashSet<>();
 
+    @OneToMany(mappedBy = "syKullanici")
+    private List<SyDuyuruKullanici> syDuyuruKullaniciList = new ArrayList<>();
+
     @Override
     public int hashCode() {
         int hash = 0;

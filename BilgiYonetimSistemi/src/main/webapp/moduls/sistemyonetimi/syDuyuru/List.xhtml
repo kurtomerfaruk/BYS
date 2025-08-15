@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:p="primefaces"
+                xmlns:pt="jakarta.faces.passthrough"
+                xmlns:coco="jakarta.faces.composite/ui">
+
+    <h:form id="SyDuyuruListForm" class="form-height">
+
+        <p:contextMenu id="SyDuyuruDataTableContextMenu" for="datalist:datalist">
+            <p:menuitem value="#{messages.buttonEkle}"
+                        onclick="document.getElementById('SyDuyuruListForm:datalist:datalist:createButton').click();"
+                        icon="pi-plus" rendered="#{syKullaniciController.hasPermission('syduyuru:ekle')}"/>
+            <p:menuitem value="#{messages.buttonGuncelle}"
+                        onclick="document.getElementById('SyDuyuruListForm:datalist:datalist:editButton').click();"
+                        icon="pi-pencil" rendered="#{syKullaniciController.hasPermission('syduyuru:guncelle')}"/>
+            <p:menuitem value="#{messages.buttonDetay}"
+                        onclick="document.getElementById('SyDuyuruListForm:datalist:datalist:viewButton').click();"
+                        icon="pi-search"/>
+            <p:menuitem value="#{messages.buttonSil}"
+                        onclick="document.getElementById('SyDuyuruListForm:datalist:datalist:deleteButton').click();"
+                        icon="pi-trash" rendered="#{syKullaniciController.hasPermission('syduyuru:sil')}"/>
+            <p:menuitem value="#{messages.buttonOnayla}"
+                        onclick="document.getElementById('SyDuyuruListForm:datalist:datalist:confirmButton').click();"
+                        icon="pi pi-check" rendered="#{syKullaniciController.hasPermission('syduyuru:onayla')}"/>
+        </p:contextMenu>
+        <coco:datatable id="datalist"
+                        value="#{syDuyuruController.lazyItems}"
+                        rowKey="#{item.id}"
+                        selection="#{syDuyuruController.selected}"
+                        filtered="#{syDuyuruController.filtered}"
+                        rowselect=":SyDuyuruListForm:datalist:datalist:createButton,:SyDuyuruListForm:datalist:datalist:viewButton,:SyDuyuruListForm:datalist:datalist:editButton,:SyDuyuruListForm:datalist:datalist:deleteButton,:SyDuyuruListForm:datalist:datalist:confirmButton,:SyDuyuruListForm:SyDuyuruDataTableContextMenu"
+                        rowDblselect="document.getElementById('SyDuyuruListForm:datalist:datalist:editButton').click()"
+                        contextMenu=":SyDuyuruListForm:datalist:datalist:createButton :SyDuyuruListForm:datalist:datalist:viewButton :SyDuyuruListForm:datalist:datalist:editButton :SyDuyuruListForm:datalist:datalist:deleteButton :SyDuyuruListForm:datalist:datalist:confirmButton"
+                        selectListener="#{syDuyuruController.resetParents}"
+                        controller="#{syDuyuruController}"
+                        header="#{messages.duyuruListesi}">
+
+            <p:ajax event="colResize" listener="#{syDuyuruController.onResize}"/>
+
+
+            <f:facet name="paginatorBottomLeft">
+                <p:commandButton id="createButton" styleClass="ui-button-primary" icon="pi pi-plus"
+                                 pt:data-tooltip="#{messages.buttonEkle}"
+                                 actionListener="#{syDuyuruController.prepareCreate}"
+                                 update=":SyDuyuruCreateForm:SyDuyuruCreateForm"
+                                 oncomplete="PF('SyDuyuruCreateDialog').show()" onstart="PF('Loading').show()"
+                                 onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('syduyuru:ekle')}"/>
+                <p:commandButton id="editButton" styleClass="ui-button-success" icon="pi pi-pencil"
+                                 pt:data-tooltip="#{messages.buttonGuncelle}"
+                                 update=":SyDuyuruEditForm:SyDuyuruEditForm"
+                                 oncomplete="PF('SyDuyuruEditDialog').show()"
+                                 disabled="#{empty syDuyuruController.selected or syDuyuruController.selected.onaylandi}"
+                                 onstart="PF('Loading').show()"
+                                 onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('syduyuru:guncelle')}"/>
+                <p:commandButton id="viewButton" styleClass="ui-button-info" icon="pi pi-search"
+                                 pt:data-tooltip="#{messages.buttonDetay}"
+                                 update=":SyDuyuruViewForm:SyDuyuruViewForm"
+                                 oncomplete="PF('SyDuyuruViewDialog').show()"
+                                 disabled="#{empty syDuyuruController.selected}" onstart="PF('Loading').show()"
+                                 onsuccess="PF('Loading').hide()"/>
+                <p:commandButton id="deleteButton" styleClass="ui-button-danger" icon="pi pi-trash"
+                                 pt:data-tooltip="#{messages.buttonSil}"
+                                 actionListener="#{syDuyuruController.delete}"
+                                 update=":growl,datalist"
+                                 disabled="#{empty syDuyuruController.selected or syDuyuruController.selected.onaylandi}"
+                                 rendered="#{syKullaniciController.hasPermission('syduyuru:sil')}">
+                    <p:confirm header="#{messages.ConfirmationHeader}" message="#{messages.ConfirmDeleteMessage}"
+                               icon="pi-warning"/>
+                </p:commandButton>
+                <p:commandButton id="confirmButton" styleClass="ui-button-warning" icon="pi pi-check"
+                                 pt:data-tooltip="#{messages.buttonOnayla}"
+                                 actionListener="#{syDuyuruController.confirm}"
+                                 update="datalist"
+                                 disabled="#{empty syDuyuruController.selected or syDuyuruController.selected.onaylandi}"
+                                 process="@this"
+                                 rendered="#{syKullaniciController.hasPermission('syduyuru:onayla')}">
+                    <p:confirm header="Kayıt Onayla"
+                               message="Seçmiş olduğunuz kayıdını onaylamak istediğinizden emin misiniz?"
+                               icon="pi-warning"/>
+                </p:commandButton>
+            </f:facet>
+
+        </coco:datatable>
+
+
+        <ui:include src="/confirmation.xhtml"/>
+
+    </h:form>
+
+</ui:composition>

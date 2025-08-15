@@ -43,7 +43,8 @@ public enum EnumSyFiltreAnahtari implements BaseEnum {
     HFFIRMA_TURU("Hafriyat Firma Türü"),
     HFMAL_CINSI("Hafriyat Mal Cinsi"),
     BELEDIYE("Belediye"),
-    HFTAHSILAT_TURU("Hafriyat Tahsilat Türü");
+    HFTAHSILAT_TURU("Hafriyat Tahsilat Türü"),
+    DUYURU_TUR("Duyuru Tür");
 
     private final String label;
 

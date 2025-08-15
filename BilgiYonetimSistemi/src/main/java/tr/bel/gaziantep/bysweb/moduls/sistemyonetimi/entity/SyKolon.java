@@ -12,6 +12,11 @@ import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.EnumSyVeriTipi;
 
 import java.io.Serial;
 
+/**
+ * @author Omer Faruk KURT kurtomerfaruk@gmail.com
+ * @version 1.0.0
+ * @since 14.08.2025 08:57
+ */
 @Getter
 @Setter
 @Builder

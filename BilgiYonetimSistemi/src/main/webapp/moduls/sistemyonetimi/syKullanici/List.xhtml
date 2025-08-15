@@ -72,7 +72,7 @@
                 <p:commandButton id="passwordButton" styleClass="ui-button-help" icon="pi pi-key"
                                  pt:data-tooltip="#{messages.buttonParolaSifirla}"
                                  update=":SyKullaniciParolaForm:SyKullaniciParolaForm"
-                                 oncomplete="PF('KullaniciParolaDialog').show()"
+                                 oncomplete="PF('SyKullaniciParolaDialog').show()"
                                  disabled="#{empty syKullaniciController.selected}" onstart="PF('Loading').show()"
                                  onsuccess="PF('Loading').hide()"
                                  rendered="#{syKullaniciController.hasPermission('sykullanici:parolaSifirla')}"/>

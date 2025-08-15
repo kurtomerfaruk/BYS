@@ -6,6 +6,7 @@
       xmlns:h="jakarta.faces.html"
       xmlns:f="jakarta.faces.core"
       xmlns:p="primefaces"
+      xmlns:pe="primefaces.extensions"
       xmlns:o="omnifaces"
       lang="tr"
       data-nav-layout="vertical"
@@ -70,6 +71,20 @@
             })
             updateKullanici();
         }
+
+        function notificationMessage(data) {
+            console.log(data);
+            // PF('growlWidget').add({
+            //     "detail": data.detail,
+            //     "severity": "info"
+            // })
+            PF('growlWidget').add({
+                severity: 'info',
+                summary: 'Bilgi',
+                detail: data.detail
+            });
+            updateNotification();
+        }
     </script>
 
 </h:head>
@@ -78,7 +93,12 @@
 
     <o:socket channel="syKullaniciChannel" onmessage="syKullaniciMessage" user="#{syKullanici.id}"/>
     <p:remoteCommand name="updateKullanici" update="userSize,userForm:userPanelGroup"/>
-    <p:growl id="growl" life="3000" widgetVar="growlWidget"/>
+
+    <p:remoteCommand name="updateNotification" update="NotificationForm,notificationSize"
+                     actionListener="#{syDuyuruController.getDuyurus()}"/>
+
+    <o:socket channel="notificationChannel" onmessage="notificationMessage" user="#{syKullanici.id}"/>
+    <p:growl id="growl" life="3000" widgetVar="growlWidget" keepAlive="true"/>
     <p:tooltip/>
 
     <p:idleMonitor timeout="#{session.maxInactiveInterval*900}" onidle="PF('bar').show();">
@@ -229,7 +249,8 @@
                                     <label class="form-check-label" for="switcher-ltr">
                                         LTR
                                     </label>
-                                    <input class="form-check-input" type="radio" name="direction" id="switcher-ltr" checked="checked"/>
+                                    <input class="form-check-input" type="radio" name="direction" id="switcher-ltr"
+                                           checked="checked"/>
                                 </div>
                             </div>
                             <div class="col-4">
@@ -373,7 +394,8 @@
                                     <label class="form-check-label" for="switcher-regular">
                                         Regular
                                     </label>
-                                    <input class="form-check-input" type="radio" name="page-styles" id="switcher-regular"
+                                    <input class="form-check-input" type="radio" name="page-styles"
+                                           id="switcher-regular"
                                            checked="checked"/>
                                 </div>
                             </div>
@@ -382,7 +404,8 @@
                                     <label class="form-check-label" for="switcher-classic">
                                         Classic
                                     </label>
-                                    <input class="form-check-input" type="radio" name="page-styles" id="switcher-classic"/>
+                                    <input class="form-check-input" type="radio" name="page-styles"
+                                           id="switcher-classic"/>
                                 </div>
                             </div>
                             <div class="col-4">
@@ -390,7 +413,8 @@
                                     <label class="form-check-label" for="switcher-modern">
                                         Modern
                                     </label>
-                                    <input class="form-check-input" type="radio" name="page-styles" id="switcher-modern"/>
+                                    <input class="form-check-input" type="radio" name="page-styles"
+                                           id="switcher-modern"/>
                                 </div>
                             </div>
                         </div>
@@ -421,7 +445,8 @@
                                     <label class="form-check-label" for="switcher-boxed">
                                         Boxed
                                     </label>
-                                    <input class="form-check-input" type="radio" name="layout-width" id="switcher-boxed"/>
+                                    <input class="form-check-input" type="radio" name="layout-width"
+                                           id="switcher-boxed"/>
                                 </div>
                             </div>
                         </div>
@@ -523,8 +548,10 @@
                                            id="switcher-menu-gradient"/>
                                 </div>
                                 <div class="form-check switch-select me-3">
-                                    <input class="form-check-input color-input color-transparent" data-bs-toggle="tooltip"
-                                           data-bs-placement="top" title="Transparent Menu" type="radio" name="menu-colors"
+                                    <input class="form-check-input color-input color-transparent"
+                                           data-bs-toggle="tooltip"
+                                           data-bs-placement="top" title="Transparent Menu" type="radio"
+                                           name="menu-colors"
                                            id="switcher-menu-transparent"/>
                                 </div>
                             </div>
@@ -537,7 +564,8 @@
                             <div class="d-flex switcher-style pb-2">
                                 <div class="form-check switch-select me-3">
                                     <input class="form-check-input color-input color-white" data-bs-toggle="tooltip"
-                                           data-bs-placement="top" title="Light Header" type="radio" name="header-colors"
+                                           data-bs-placement="top" title="Light Header" type="radio"
+                                           name="header-colors"
                                            id="switcher-header-light" checked="checked"/>
                                 </div>
                                 <div class="form-check switch-select me-3">
@@ -547,17 +575,21 @@
                                 </div>
                                 <div class="form-check switch-select me-3">
                                     <input class="form-check-input color-input color-primary" data-bs-toggle="tooltip"
-                                           data-bs-placement="top" title="Color Header" type="radio" name="header-colors"
+                                           data-bs-placement="top" title="Color Header" type="radio"
+                                           name="header-colors"
                                            id="switcher-header-primary"/>
                                 </div>
                                 <div class="form-check switch-select me-3">
                                     <input class="form-check-input color-input color-gradient" data-bs-toggle="tooltip"
-                                           data-bs-placement="top" title="Gradient Header" type="radio" name="header-colors"
+                                           data-bs-placement="top" title="Gradient Header" type="radio"
+                                           name="header-colors"
                                            id="switcher-header-gradient"/>
                                 </div>
                                 <div class="form-check switch-select me-3">
-                                    <input class="form-check-input color-input color-transparent" data-bs-toggle="tooltip"
-                                           data-bs-placement="top" title="Transparent Header" type="radio" name="header-colors"
+                                    <input class="form-check-input color-input color-transparent"
+                                           data-bs-toggle="tooltip"
+                                           data-bs-placement="top" title="Transparent Header" type="radio"
+                                           name="header-colors"
                                            id="switcher-header-transparent"/>
                                 </div>
                             </div>
@@ -682,10 +714,14 @@
                     <div class="header-element">
                         <div class="horizontal-logo">
                             <a href="#{request.contextPath}/index.xhtml" class="header-logo">
-                                <h:graphicImage library="images" name="brand-logos/desktop-logo.png" alt="logo" styleClass="desktop-logo"/>
-                                <h:graphicImage library="images" name="brand-logos/toggle-logo.png" alt="logo" styleClass="toggle-logo"/>
-                                <h:graphicImage library="images" name="brand-logos/desktop-dark.png" alt="logo" styleClass="desktop-dark"/>
-                                <h:graphicImage library="images" name="brand-logos/toggle-dark.png" alt="logo" styleClass="toggle-dark"/>
+                                <h:graphicImage library="images" name="brand-logos/desktop-logo.png" alt="logo"
+                                                styleClass="desktop-logo"/>
+                                <h:graphicImage library="images" name="brand-logos/toggle-logo.png" alt="logo"
+                                                styleClass="toggle-logo"/>
+                                <h:graphicImage library="images" name="brand-logos/desktop-dark.png" alt="logo"
+                                                styleClass="desktop-dark"/>
+                                <h:graphicImage library="images" name="brand-logos/toggle-dark.png" alt="logo"
+                                                styleClass="toggle-dark"/>
                             </a>
                         </div>
                     </div>
@@ -727,11 +763,136 @@
                     <!--                        <span class="header-icon-pulse bg-secondary rounded pulse pulse-secondary"></span>-->
                     <!--                    </a>-->
 
+
+                    <!--                     Start::header-element-->
+                    <li class="header-element dropdown" style="margin-right:10px;">
+                        <!-- Start::header-link|dropdown-toggle -->
+                        <a href="javascript:void(0);" class="header-link dropdown-toggle"
+                           data-bs-auto-close="outside"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="ri-notification-line ri-lg"></i>
+                            <h:panelGroup id="notificationSize">
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">
+                                    #{syDuyuruController.getDuyurus().size()}
+                                </span>
+                            </h:panelGroup>
+                        </a>
+                        <!-- End::header-link|dropdown-toggle -->
+
+                        <!-- Start::main-header-dropdown -->
+                        <h:form id="NotificationForm">
+                            <div class="main-header-dropdown dropdown-menu dropdown-menu-end"
+                                 data-popper-placement="none" style="min-width:310px
+                                !important;">
+                                <div class="p-3">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <p class="mb-0 fs-16">Duyurular</p>
+                                        <a href="javascript:void(0);" class="badge bg-success-transparent"
+                                           id="notification-data">#{syDuyuruController.getDuyurus().size()}</a>
+                                    </div>
+                                </div>
+                                <div class="dropdown-divider"></div>
+
+
+                                <ul class="list-unstyled mb-0" id="active-notifications">
+
+                                    <h:panelGroup id="notificationPanelGroup">
+                                        <ui:repeat value="#{syDuyuruController.getDuyurus()}" var="notification">
+                                            <li class="dropdown-item">
+                                                <!--                                                <div class="d-flex align-items-start">-->
+                                                <!--                                                    <div class="pe-2 lh-1">-->
+                                                <!--                                                        <span class="avatar avatar-md avatar-rounded bg-primary-transparent">-->
+                                                <!--                                                            <i class="ri-check-line"></i>-->
+                                                <!--                                                        </span>-->
+                                                <!--                                                    </div>-->
+                                                <!--                                                    <div class="d-flex align-items-center  gap-3 mb-2">-->
+                                                <!--                                                        <div>-->
+                                                <!--                                                            <h6 class="mt-0 lh-base duyuru-baslik">-->
+                                                <!--                                                                <h:outputText value="#{notification.syDuyuru.baslik}"/>-->
+                                                <!--                                                            </h6>-->
+                                                <!--                                                            <p class="duyuru-icerik">-->
+                                                <!--                                                                <h:outputText value="#{notification.syDuyuru.icerik}"/>-->
+                                                <!--                                                            </p>-->
+                                                <!--                                                            <p class="mb-0 fs-11 fw-medium text-muted">-->
+                                                <!--                                                                    <span class="duyuru-zaman">-->
+                                                <!--                                                                        <i class="mdi mdi-clock-outline"/>-->
+                                                <!--                                                                        <pe:timeAgo value="#{notification.syDuyuru.onaylanmaTarihi}" locale="tr"-->
+                                                <!--                                                                                    style="font-weight:bold"/>.-->
+                                                <!--                                                                    </span>-->
+                                                <!--                                                            </p>-->
+                                                <!--                                                        </div>-->
+                                                <!--                                                        <div>-->
+                                                <!--&lt;!&ndash;                                                            <ui:fragment&ndash;&gt;-->
+                                                <!--&lt;!&ndash;                                                                    rendered="#{users.kullaniciTuru ne 'SISTEM_YONETICISI'}">&ndash;&gt;-->
+                                                <!--&lt;!&ndash;                                                                <p:commandLink&ndash;&gt;-->
+                                                <!--&lt;!&ndash;                                                                        styleClass="min-w-fit-content text-muted dropdown-item-close1"&ndash;&gt;-->
+                                                <!--&lt;!&ndash;                                                                        actionListener="#{loginController.destroySessionById(users.sessionId)}"&ndash;&gt;-->
+                                                <!--&lt;!&ndash;                                                                        update=":growl,userForm:userPanelGroup,userSize">&ndash;&gt;-->
+                                                <!--&lt;!&ndash;                                                                    <i class="ri-close-line fs-5"/>&ndash;&gt;-->
+                                                <!--&lt;!&ndash;                                                                </p:commandLink>&ndash;&gt;-->
+                                                <!--&lt;!&ndash;                                                            </ui:fragment>&ndash;&gt;-->
+                                                <!--                                                            <p:selectBooleanCheckbox value="#{notification.okundu}" disabled="#{notification.okundu}">-->
+                                                <!--                                                                <p:ajax event="change"-->
+                                                <!--                                                                        update=":growl,NotificationForm:notificationPanelGroup,notificationSize,notification-data"-->
+                                                <!--                                                                        listener="#{syDuyuruKullaniciController.updateAnnouncement(notification)}"/>-->
+                                                <!--                                                            </p:selectBooleanCheckbox>-->
+                                                <!--                                                        </div>-->
+                                                <!--                                                    </div>-->
+                                                <!--                                                </div>-->
+
+                                                <div class="cart-dropdown-item">
+                                                    <div class="d-flex align-items-start">
+                                                        <div class="pe-2 lh-1">
+                                                            <span class="avatar avatar-xl p-1 bg-primary-transparent">
+                                                                <i class="ri-message-2-line ri-lg"></i>
+                                                            </span>
+                                                        </div>
+                                                        <div class="flex-grow-1 d-flex align-items-start justify-content-between">
+                                                            <div>
+                                                                <p class="fs-11 fw-medium mb-0 text-muted">
+                                                                    <h:outputText
+                                                                            value="#{notification.syDuyuru.baslik}"/>
+                                                                </p>
+                                                                <h:outputText value="#{notification.syDuyuru.icerik}"/>
+                                                                <div class="d-flex align-items-center justify-content-between">
+                                                                <span class="text-muted">
+                                                                    <i class="ri-time-line"></i>
+                                                                    <pe:timeAgo
+                                                                            value="#{notification.syDuyuru.onaylanmaTarihi}"
+                                                                            locale="tr" style="font-weight:bold"/>
+                                                                </span>
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                <p:commandLink
+                                                                        styleClass="min-w-fit-content text-muted dropdown-item-close1"
+                                                                        actionListener="#{syDuyuruKullaniciController.updateAnnouncement(notification)}"
+                                                                        update=":growl,NotificationForm:notificationPanelGroup,notificationSize,notification-data">
+                                                                    <i class="ri-mail-check-line ri-lg"></i>
+                                                                </p:commandLink>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </li>
+                                        </ui:repeat>
+                                    </h:panelGroup>
+
+                                </ul>
+                            </div>
+                        </h:form>
+                        <!-- End::main-header-dropdown -->
+                    </li>
+                    <!-- End::header-element-->
+
                     <!--                     Start::header-element-->
                     <ui:fragment rendered="#{syKullanici.kullaniciTuru eq 'SISTEM_YONETICISI'}">
                         <li class="header-element dropdown" style="margin-right:10px;">
                             <!-- Start::header-link|dropdown-toggle -->
-                            <a href="javascript:void(0);" class="header-link dropdown-toggle" data-bs-auto-close="outside"
+                            <a href="javascript:void(0);" class="header-link dropdown-toggle"
+                               data-bs-auto-close="outside"
                                data-bs-toggle="dropdown">
                                 <i class="ri-group-line ri-lg"></i>
                                 <h:panelGroup id="userSize">
@@ -741,7 +902,8 @@
                             <!-- End::header-link|dropdown-toggle -->
                             <!-- Start::main-header-dropdown -->
                             <h:form id="userForm">
-                                <div class="main-header-dropdown dropdown-menu dropdown-menu-end" data-popper-placement="none" style="min-width:310px
+                                <div class="main-header-dropdown dropdown-menu dropdown-menu-end"
+                                     data-popper-placement="none" style="min-width:310px
                                 !important;">
                                     <div class="p-3">
                                         <div class="d-flex align-items-center justify-content-between">
@@ -773,21 +935,26 @@
                                                                 <div class="fw-normal fs-13 header-notification-text text-truncate">
                                                                     Son Giriş Zamanı :
                                                                     <h:outputText value="#{users.sonGirisZamani}">
-                                                                        <f:convertDateTime pattern="#{messages.tarihSaatFormat}" type="localDateTime"/>
+                                                                        <f:convertDateTime
+                                                                                pattern="#{messages.tarihSaatFormat}"
+                                                                                type="localDateTime"/>
                                                                     </h:outputText>
                                                                 </div>
                                                                 <div class="fw-normal fs-13 header-notification-text text-truncate">
-                                                                    <h:outputText value="#{users.gnlPersonel.gnlKisi.telefon}"/>
+                                                                    <h:outputText
+                                                                            value="#{users.gnlPersonel.gnlKisi.telefon}"/>
                                                                 </div>
                                                                 <div class="fw-normal fs-13 header-notification-text text-truncate">
                                                                     <h:outputText value="#{users.sonGirilenIp}"/>
                                                                 </div>
                                                             </div>
                                                             <div>
-                                                                <ui:fragment rendered="#{users.kullaniciTuru ne 'SISTEM_YONETICISI'}">
-                                                                    <p:commandLink styleClass="min-w-fit-content text-muted dropdown-item-close1"
-                                                                                   actionListener="#{loginController.destroySessionById(users.sessionId)}"
-                                                                                   update=":growl,userForm:userPanelGroup,userSize">
+                                                                <ui:fragment
+                                                                        rendered="#{users.kullaniciTuru ne 'SISTEM_YONETICISI'}">
+                                                                    <p:commandLink
+                                                                            styleClass="min-w-fit-content text-muted dropdown-item-close1"
+                                                                            actionListener="#{loginController.destroySessionById(users.sessionId)}"
+                                                                            update=":growl,userForm:userPanelGroup,userSize">
                                                                         <i class="ri-close-line fs-5"/>
                                                                     </p:commandLink>
                                                                 </ui:fragment>
@@ -804,7 +971,8 @@
                                             <!--                                        <a href="checkout.html" class="text-primary text-decoration-underline">Proceed to checkout-->
                                             <!--                                            <i class="ri-arrow-right-line"></i></a>-->
                                             <h:form>
-                                                <p:commandButton value="Tümü" icon="pi pi-times" styleClass="ui-button-danger w-100"
+                                                <p:commandButton value="Tümü" icon="pi pi-times"
+                                                                 styleClass="ui-button-danger w-100"
                                                                  actionListener="#{loginController.destroySession()}"
                                                                  update=":growl,userForm:userPanelGroup,userSize"/>
                                             </h:form>
@@ -833,7 +1001,8 @@
                            data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
                             <div class="d-flex align-items-center">
                                 <div class="me-xl-2 me-0">
-                                    <h:graphicImage library="images" name="faces/21.jpg" alt="img" styleClass="avatar avatar-sm avatar-rounded"/>
+                                    <h:graphicImage library="images" name="faces/21.jpg" alt="img"
+                                                    styleClass="avatar avatar-sm avatar-rounded"/>
                                 </div>
                                 <div class="d-xl-block d-none lh-1">
                                     <span class="fw-medium lh-1">#{syKullanici.gnlPersonel.gnlKisi.ad}
@@ -886,7 +1055,8 @@
                             <!--                            </li>-->
                             <li class="py-2 px-3">
                                 <h:form>
-                                    <h:commandLink styleClass="btn btn-primary btn-sm w-100" actionListener="#{loginController.logout()}">
+                                    <h:commandLink styleClass="btn btn-primary btn-sm w-100"
+                                                   actionListener="#{loginController.logout()}">
                                         #{messages.buttonCikisYap}
                                     </h:commandLink>
                                 </h:form>
@@ -922,7 +1092,8 @@
 
         </header>
 
-        <div class="modal fade" id="header-responsive-search" tabindex="-1" aria-labelledby="header-responsive-search" aria-hidden="true">
+        <div class="modal fade" id="header-responsive-search" tabindex="-1" aria-labelledby="header-responsive-search"
+             aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-body">

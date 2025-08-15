@@ -273,3 +273,9 @@ body .ui-datepicker .ui-datepicker-calendar td {
 .ui-helper-hidden-accessible{
     position: fixed !important;
 }
+
+.ui-growl {
+    top: auto !important;
+    bottom: 20px !important;
+    right: 20px !important;
+}

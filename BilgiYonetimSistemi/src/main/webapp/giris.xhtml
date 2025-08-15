@@ -2,13 +2,15 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
       xmlns:h="jakarta.faces.html"
       xmlns:f="jakarta.faces.core"
       xmlns:p="primefaces"
       xmlns:pe="primefaces.extensions"
       dir="ltr"
       lang="tr"
-      data-nav-layout="vertical" data-vertical-style="overlay" data-theme-mode="light" data-header-styles="light" data-menu-styles="light"
+      data-nav-layout="vertical" data-vertical-style="overlay" data-theme-mode="light" data-header-styles="light"
+      data-menu-styles="light"
       data-toggled="close">
 <h:head>
     <meta charset="UTF-8"/>
@@ -37,6 +39,9 @@
     <!-- ICONS CSS -->
     <h:outputStylesheet library="icon-fonts" name="icons.css"/>
 
+    <!-- Swiper Css -->
+    <h:outputStylesheet library="libs" name="swiper/swiper-bundle.min.css"/>
+
     <!-- MAIN JS -->
     <!--    <script src="assets/js/authentication-main.js"></script>-->
 
@@ -52,23 +57,45 @@
             <div class="col-xl-9 col-md-6 col-11">
                 <div class="row  authentication-cover-main mx-0 border rounded bg-white">
                     <div class="col-xxl-6 col-xl-5 col-lg-12 d-xl-block d-none px-0">
-                        <div class="authentication-cover overflow-hidden">
-                            <div class="authentication-cover-logo">
-                                <a href="#{request.contextPath}/index.xhtml">
-                                    <h:graphicImage library="images" name="brand-logos/desktop-dark.png" alt="" styleClass="authentication-brand desktop-dark"/>
-                                </a>
-                            </div>
-                            <div class="aunthentication-cover-content d-flex align-items-center justify-content-center">
-                                <div class="row justify-content-center align-items-center">
-                                    <div class="col-xl-10">
-                                        <div class="rounded bg-white-transparent authentication-sub-content">
-                                            <div class="d-flex align-items-center justify-content-center">
-                                                <h:graphicImage library="images" name="media/media-80.png" alt="img"/>
-                                            </div>
-
-                                            <h2 class="fs-4 mt-3 text-fixed-white fw-semibold text-center">"Photography is a way of feeling, of touching, of loving. What you have caught on film is captured forever."</h2>
-                                        </div>
+                        <div class="card custom-card card-bg-primary" style="height: 100% !important;">
+                            <div class="card-header justify-content-between">
+                                <div class="card-title">
+                                   <h2 class="text-light">Duyurular</h2>
+                                </div>
+                                <div>
+                                    <div class="authentication-cover-logo">
+                                        <a href="#{request.contextPath}/index.xhtml">
+                                            <h:graphicImage library="images" name="gbb_logo.png" alt="" styleClass="authentication-brand desktop-dark"/>
+                                        </a>
                                     </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="swiper pagination-fraction" style="height: 100% !important;">
+                                    <div class="swiper-wrapper">
+                                        <ui:repeat value="#{syDuyuruController.topFivePublic}" var="duyuru"
+                                                   varStatus="duyuruStatus">
+                                            <div class="swiper-slide">
+                                                <div class="card custom-card card-bg-primary">
+                                                    <div class="card-header">
+                                                        <div class="card-title">
+                                                            <h:outputText value="#{duyuru.baslik}"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="card-body" style="min-height: 200px !important;">
+                                                        <h6 class="card-title fw-medium"></h6>
+                                                        <p class="card-text" style="margin:0px 40px !important;">
+                                                            <h:outputText value="#{duyuru.icerik}"/>
+                                                        </p>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </ui:repeat>
+                                    </div>
+                                    <div class="swiper-button-next"></div>
+                                    <div class="swiper-button-prev"></div>
+                                    <div class="swiper-pagination"></div>
                                 </div>
                             </div>
                         </div>
@@ -83,7 +110,8 @@
                                         <p></p>
                                         <div class="row gy-3">
                                             <div class="col-xl-12">
-                                                <label class="form-label text-default" for="kullaniciAdi">#{messages.kullaniciAdiText}</label>
+                                                <label class="form-label text-default"
+                                                       for="kullaniciAdi">#{messages.kullaniciAdiText}</label>
                                                 <div class="position-relative">
                                                     <p:inputText id="kullaniciAdi" styleClass="form-control"
                                                                  value="#{loginController.kullaniciAdi}" required="true"
@@ -91,11 +119,15 @@
                                                 </div>
                                             </div>
                                             <div class="col-xl-12 mb-2">
-                                                <label for="password" class="form-label text-default d-block">#{messages.parolaText}</label>
+                                                <label for="password"
+                                                       class="form-label text-default d-block">#{messages.parolaText}</label>
                                                 <div class="position-relative">
-                                                    <p:password id="password" value="#{loginController.parola}" required="true"
-                                                                styleClass="form-control" label="#{messages.parolaText}"/>
-                                                    <a href="javascript:void(0);" class="show-password-button text-muted"
+                                                    <p:password id="password" value="#{loginController.parola}"
+                                                                required="true"
+                                                                styleClass="form-control"
+                                                                label="#{messages.parolaText}"/>
+                                                    <a href="javascript:void(0);"
+                                                       class="show-password-button text-muted"
                                                        style="height: 40px;margin-top: -5px;margin-right: -5px"
                                                        onclick="createpassword('password',this)" id="button-addon2">
                                                         <i class="ri-eye-off-line align-middle"></i>
@@ -133,28 +165,11 @@
     <!-- Particles JS -->
     <h:outputScript library="libs" name="particles.js/particles.js"/>
 
+    <!-- Swiper JS -->
+    <h:outputScript library="libs" name="swiper/swiper-bundle.min.js"/>
+
+    <h:outputScript library="js" name="login.js"/>
     <h:outputScript library="js" name="pfcrud.js"/>
-
-    <!--    <script type="text/javascript">-->
-    <!--        $(".toggle-password").click(function () {-->
-    <!--            var input = $("#password");-->
-    <!--            input.attr("type") === "password" ? input.attr("type", "text") : input.attr("type", "password");-->
-    <!--            if (input.attr("type") === "text") {-->
-    <!--                $(this).removeClass("ri-eye-off-line align-middle");-->
-    <!--                $(this).addClass("ri-eye-line align-middle");-->
-    <!--            } else {-->
-    <!--                $(this).addClass("ri-eye-off-line align-middle");-->
-    <!--                $(this).removeClass("ri-eye-line align-middle");-->
-    <!--            }-->
-    <!--        });-->
-    <!--        $(".toggle-password").css("cursor", "pointer");-->
-    <!--    </script>-->
-
-    <!--    &lt;!&ndash; Cover Password JS &ndash;&gt;-->
-    <!--    <script src="assets/js/cover-password.js"></script>-->
-
-    <!--    &lt;!&ndash; Show Password JS &ndash;&gt;-->
-    <!--    <script src="assets/js/show-password.js"></script>-->
 
 
     <!-- END SCRIPTS -->

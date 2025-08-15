@@ -406,6 +406,11 @@
     new SimpleBar(activeUser, { autoHide: false });
   }
 
+  var activeNotifications = document.getElementById("active-notifications");
+  if(activeNotifications){
+    new SimpleBar(activeNotifications,{autoHide: false});
+  }
+
   /* header dropdowns scroll */
 
 })();

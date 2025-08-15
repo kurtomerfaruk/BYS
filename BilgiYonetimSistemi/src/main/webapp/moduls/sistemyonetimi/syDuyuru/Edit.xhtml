@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:editpage id="SyDuyuruEditForm"
+                   widgetVar="SyDuyuruEditDialog"
+                   actionListener="#{syDuyuruController.save}"
+                   listForm="SyDuyuruListForm"
+                   model="#{syDuyuruController.selected}">
+
+
+        <p:outputLabel value="#{messages.duyuruTurLabel}" for="@next"/>
+        <p:selectOneMenu id="duyuruTur" value="#{syDuyuruController.selected.duyuruTur}" required="true"
+                         converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{enumDuyuruTur.ALL_VALUES}"
+                           var="turs"
+                           itemLabel="#{turs.displayValue}"
+                           itemValue="#{turs}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.baslikLabel}" for="@next"/>
+        <p:inputText id="baslik" value="#{syDuyuruController.selected.baslik}" title="#{messages.baslikText}"
+                     required="true" size="50" maxlength="150"/>
+
+        <p:outputLabel value="#{messages.icerikLabel}" for="@next"/>
+        <p:inputTextarea rows="4" id="icerik" value="#{syDuyuruController.selected.icerik}"
+                         title="#{messages.icerikText}" required="true" styleClass="w-100" autoResize="false"/>
+
+        <p:outputLabel value="#{messages.yayinlanmaTarihiLabel}" for="@next"/>
+        <p:datePicker id="yayinlanmaTarihi" locale="tr" pattern="#{messages.tarihSaatFormat}"
+                      value="#{syDuyuruController.selected.yayinlanmaTarihi}" title="#{messages.yayinlanmaTarihiText}"
+                      required="true" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true"
+                      showIcon="true" showTime="true"/>
+
+    </coco:editpage>
+
+</ui:composition>
+
+</html>
