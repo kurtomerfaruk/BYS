@@ -60,12 +60,13 @@
                         <div class="card custom-card card-bg-primary" style="height: 100% !important;">
                             <div class="card-header justify-content-between">
                                 <div class="card-title">
-                                   <h2 class="text-light">Duyurular</h2>
+                                    <h2 class="text-light">Duyurular</h2>
                                 </div>
                                 <div>
                                     <div class="authentication-cover-logo">
                                         <a href="#{request.contextPath}/index.xhtml">
-                                            <h:graphicImage library="images" name="gbb_logo.png" alt="" styleClass="authentication-brand desktop-dark"/>
+                                            <h:graphicImage library="images" name="gbb_logo.png" alt=""
+                                                            styleClass="authentication-brand desktop-dark"/>
                                         </a>
                                     </div>
                                 </div>
@@ -135,7 +136,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="d-grid mt-4">
+                                        <div class="d-grid mt-4 mb-4">
                                             <p:defaultCommand target="loginButton"/>
                                             <p:commandLink ajax="false" id="loginButton"
                                                            styleClass="btn btn-primary btn-lg"
@@ -144,6 +145,48 @@
                                                 <h:outputText style="color: #ffffff"
                                                               value="#{messages.buttonGirisYap}"/>
                                             </p:commandLink>
+                                        </div>
+                                        <!--                                        <div class="d-flex align-items-end justify-content-end gap-3 mb-2 flex-wrap float-end">-->
+                                        <!--                                            Versiyon-->
+                                        <!--                                            <span class="badge bg-success">#{initApp.version}</span>-->
+                                        <!--                                        </div>-->
+                                        <!--                                        <div class="float-end">-->
+                                        <!--                                            Oluşturma Zamanı-->
+                                        <!--                                            <span class="badge bg-success">#{initApp.buildTime}</span>-->
+                                        <!--                                        </div>-->
+<!--                                        <div class="row float-end">-->
+<!--                                            <label class="col-sm-8 col-form-label" style="margin-top: -6px">Versiyon</label>-->
+<!--                                            <div class="col-sm-4">-->
+<!--                                                <span class="badge bg-success">#{initApp.version}</span>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                        <div class="row float-end">-->
+<!--                                            <label class="col-sm-8 col-form-label" style="margin-top: -6px">Oluşturma Zamanı</label>-->
+<!--                                            <div class="col-sm-4">-->
+<!--                                                <span class="badge bg-success">#{initApp.buildTime}</span>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+                                        <div class="row">
+                                            <div class="table-responsive">
+                                                <table class="table table-borderless">
+                                                    <tbody>
+                                                    <tr>
+                                                        <td class="text-end">
+                                                            <div class="fw-semibold">Versiyon</div>
+                                                        </td>
+                                                        <td class="text-end"><span class="badge bg-success">#{initApp.version}</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-end">
+                                                            <div class="fw-semibold">Oluşturma Zamanı</div>
+                                                        </td>
+                                                        <td class="text-end">
+                                                            <span class="badge bg-success">#{initApp.buildTime}</span>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
