@@ -38,7 +38,7 @@ public class GnlKisiSchedule implements java.io.Serializable{
     }
 
     private void listUpdate() throws Exception {
-        List<GnlKisi> gnlKisiList =gnlKisiService.getByMernisGuncellemeTarihi(1);
+        List<GnlKisi> gnlKisiList =gnlKisiService.getByMernisGuncellemeTarihi(1000);
 
         for (GnlKisi gnlKisi : gnlKisiList) {
             GnlKisi kisi = kpsController.findByTcKimlikNoSchedule(gnlKisi, EnumModul.GENEL);
