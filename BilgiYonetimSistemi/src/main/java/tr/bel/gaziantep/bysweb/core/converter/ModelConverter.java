@@ -64,7 +64,10 @@ public class ModelConverter implements java.io.Serializable {
     public GnlKisi convertKpsModelToGnlKisi(GnlKisi kisi, KpsModel kpsModel, EnumModul modul) throws Exception {
         if (kisi == null) kisi = new GnlKisi();
         if (kpsModel.getKutukModel() != null) {
-            kisi.setUyruk(EnumGnlUyruk.fromValue(kpsModel.getKutukModel().getUyruk()));
+            if(!StringUtil.isBlank(kpsModel.getKutukModel().getUyruk())){
+                kisi.setUyruk(EnumGnlUyruk.fromValue(kpsModel.getKutukModel().getUyruk()));
+            }
+
             kisi.setTcKimlikNo(kpsModel.getKutukModel().getTcKimlikNo().toString());
             kisi.setAd(kpsModel.getKutukModel().getAd());
             kisi.setSoyad(kpsModel.getKutukModel().getSoyad());
