@@ -31,6 +31,10 @@ import java.util.List;
         "LENGTH(g.tcKimlikNo)=11 AND g.dogumTarihi IS NOT NULL ORDER BY g.mernisGuncellemeTarihi ASC")
 @NamedQuery(name = "GnlKisi.findByTckimlikNoByDogumTarihi", query = "SELECT g FROM GnlKisi g WHERE g.tcKimlikNo = :tcKimlikNo AND " +
         "g.dogumTarihi=:dogumTarihi")
+@NamedQuery(name = "GnlKisi.getByMernisGuncellemeTarihi", query = "SELECT g FROM GnlKisi g WHERE g.aktif=true " +
+        "AND g.dogumTarihi IS NOT NULL AND g.tcKimlikNo IS NOT NULL " +
+        "AND g.durum=tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlDurum.SAG " +
+        "ORDER BY g.mernisGuncellemeTarihi")
 public class GnlKisi extends BaseEntity {
     @Serial
     private static final long serialVersionUID = -4297582255151551064L;
