@@ -52,4 +52,23 @@ public class KpsController implements java.io.Serializable{
         kisi.setMernisGuncellemeTarihi(LocalDateTime.now());
         return kisi;
     }
+
+    public GnlKisi findByTcKimlikNoSchedule(GnlKisi kisi,  EnumModul modul) throws Exception {
+        String tcKimlikNo = kisi.getTcKimlikNo();
+
+        KisiParameter parameter = KpsUtil.setDate(kisi.getDogumTarihi());
+        parameter.setTcKimlikNo(Long.parseLong(tcKimlikNo));
+        KpsService kpsService = new KpsService();
+        KpsModel kpsModel = kpsService.kpsFullSorgula(initApp.getProperty("webServisLink"), initApp.getProperty("webServisToken"), parameter);
+
+        if (kpsModel == null) return null;
+
+        if (!StringUtil.isBlank(kpsModel.getKutukModel().getHataBilgisi())) {
+            return null;
+        }
+        kisi = converter.convertKpsModelToGnlKisi(kisi, kpsModel, modul);
+        kisi.setMernisGuncellemeTarihi(LocalDateTime.now());
+        return kisi;
+    }
+
 }
