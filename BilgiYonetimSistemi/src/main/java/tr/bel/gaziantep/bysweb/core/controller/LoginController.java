@@ -87,19 +87,29 @@ public class LoginController implements java.io.Serializable {
     @Getter
     @Setter
     private String theme="saga-blue";
+    @Getter
+    @Setter
+    private String captchaInput;
 
     public LoginController() {
     }
 
     public void login() {
         try {
+            HttpSession session = Util.getSession();
+            String captcha = (String) session.getAttribute("captcha");
+
+            if (captcha == null || !captcha.equals(captchaInput)) {
+                Util.getFacesContext().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Doğrulama Kodunu hatalı girdiniz", null));
+                return;
+            }
 
             if (StringUtil.isNotBlank(kullaniciAdi) && StringUtil.isNotBlank(parola)) {
                 syKullanici = syKullaniciService.findByKullaniciAdiByParola(kullaniciAdi, parola);
             }
 
 
-            HttpSession session = Util.getSession();
+
             HttpServletRequest request = Util.getRequest();
 
             String ipAddress = request.getHeader("X-FORWARDED-FOR");
