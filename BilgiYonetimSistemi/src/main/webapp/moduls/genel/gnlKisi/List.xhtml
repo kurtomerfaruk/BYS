@@ -27,7 +27,8 @@
                         icon="pi pi-trash" rendered="#{syKullaniciController.hasPermission('gnlkisi:sil')}"/>
             <p:menuitem value="#{messages.buttonNvidenGuncelle}"
                         onclick="document.getElementById('GnlKisiListForm:datalist:datalist:nviUpdateButton').click();"
-                        icon="pi pi-refresh" rendered="#{syKullaniciController.hasPermission('gnlkisi:nvidenGuncelle')}"/>
+                        icon="pi pi-refresh"
+                        rendered="#{syKullaniciController.hasPermission('gnlkisi:nvidenGuncelle')}"/>
             <p:menuitem value="#{messages.buttonListeyiGuncelle}"
                         onclick="document.getElementById('GnlKisiListForm:datalist:datalist:updateListButton').click();"
                         icon="pi pi-list" rendered="#{syKullaniciController.hasPermission('gnlkisi:listeGuncelle')}"/>
@@ -53,46 +54,47 @@
             <p:ajax event="colResize" listener="#{gnlKisiController.onResize}"/>
 
             <f:facet name="paginatorBottomLeft">
-                    <p:commandButton id="createButton" styleClass="ui-button-primary" icon="pi pi-plus"
-                                     pt:data-tooltip="#{messages.buttonEkle}"
-                                     actionListener="#{gnlKisiController.prepareCreate}"
-                                     update=":GnlKisiCreateForm"
-                                     oncomplete="PF('GnlKisiCreateDialog').show()" onstart="PF('Loading').show()"
-                                     onsuccess="PF('Loading').hide()"
-                                     rendered="#{syKullaniciController.hasPermission('gnlkisi:ekle')}"/>
-                    <p:commandButton id="editButton" styleClass="ui-button-success" icon="pi pi-pencil"
-                                     pt:data-tooltip="#{messages.buttonGuncelle}" update=":GnlKisiEditForm"
-                                     oncomplete="PF('GnlKisiEditDialog').show()"
-                                     disabled="#{empty gnlKisiController.selected}" onstart="PF('Loading').show()"
-                                     onsuccess="PF('Loading').hide()"
-                                     rendered="#{syKullaniciController.hasPermission('gnlkisi:guncelle')}"/>
-                    <p:commandButton id="viewButton" styleClass="ui-button-info" icon="pi pi-search"
-                                     pt:data-tooltip="#{messages.buttonDetay}" update=":GnlKisiViewForm"
-                                     oncomplete="PF('GnlKisiViewDialog').show()"
-                                     disabled="#{empty gnlKisiController.selected}" onstart="PF('Loading').show()"
-                                     onsuccess="PF('Loading').hide()"/>
-                    <p:commandButton id="deleteButton" styleClass="ui-button-danger" icon="pi pi-trash"
-                                     pt:data-tooltip="#{messages.buttonSil}"
-                                     actionListener="#{gnlKisiController.delete}"
-                                     update=":growl,datalist" disabled="#{empty gnlKisiController.selected}"
-                                     rendered="#{syKullaniciController.hasPermission('gnlkisi:sil')}">
-                        <p:confirm header="#{messages.ConfirmationHeader}" message="#{messages.ConfirmDeleteMessage}"
-                                   icon="pi pi-warning"/>
-                    </p:commandButton>
-                    <p:commandButton id="nviUpdateButton" styleClass="ui-button-success" icon="pi pi-refresh"
-                                     pt:data-tooltip="#{messages.buttonNvidenGuncelle}" update="datalist,:growl"
-                                     actionListener="#{gnlKisiController.nviUpdate}"
-                                     disabled="#{empty gnlKisiController.selected}" onstart="PF('Loading').show()"
-                                     onsuccess="PF('Loading').hide()"
-                                     rendered="#{syKullaniciController.hasPermission('gnlkisi:nvidenGuncelle')}"/>
-                    <p:commandButton id="updateListButton" styleClass="ui-button-info" icon="pi pi-list"
-                                     pt:data-tooltip="#{messages.buttonListeyiGuncelle}" update=":ListeGuncelleForm"
-                                     onsuccess="PF('ListeGuncelleDialog').show()"
-                                     rendered="#{syKullaniciController.hasPermission('gnlkisi:listeGuncelle')}"/>
-                    <p:commandButton id="addressUpdateButton" icon="pi pi-sync" pt:data-tooltip="#{messages.buttonAdresGuncelle}"
-                                     update=":AdresListeGuncelleForm" onsuccess="PF('AdresListeGuncelleDialog').show()"
-                                     rendered="#{syKullaniciController.hasPermission('gnlkisi:adresGuncelle')}"/>
-                <p:commandButton id="updateDeadsButton" styleClass="ui-button-info" icon="pi pi-list"
+                <p:commandButton id="createButton" styleClass="ui-button-primary" icon="pi pi-plus"
+                                 pt:data-tooltip="#{messages.buttonEkle}"
+                                 actionListener="#{gnlKisiController.prepareCreate}"
+                                 update=":GnlKisiCreateForm"
+                                 oncomplete="PF('GnlKisiCreateDialog').show()" onstart="PF('Loading').show()"
+                                 onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('gnlkisi:ekle')}"/>
+                <p:commandButton id="editButton" styleClass="ui-button-success" icon="pi pi-pencil"
+                                 pt:data-tooltip="#{messages.buttonGuncelle}" update=":GnlKisiEditForm"
+                                 oncomplete="PF('GnlKisiEditDialog').show()"
+                                 disabled="#{empty gnlKisiController.selected}" onstart="PF('Loading').show()"
+                                 onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('gnlkisi:guncelle')}"/>
+                <p:commandButton id="viewButton" styleClass="ui-button-info" icon="pi pi-search"
+                                 pt:data-tooltip="#{messages.buttonDetay}" update=":GnlKisiViewForm"
+                                 oncomplete="PF('GnlKisiViewDialog').show()"
+                                 disabled="#{empty gnlKisiController.selected}" onstart="PF('Loading').show()"
+                                 onsuccess="PF('Loading').hide()"/>
+                <p:commandButton id="deleteButton" styleClass="ui-button-danger" icon="pi pi-trash"
+                                 pt:data-tooltip="#{messages.buttonSil}"
+                                 actionListener="#{gnlKisiController.delete}"
+                                 update=":growl,datalist" disabled="#{empty gnlKisiController.selected}"
+                                 rendered="#{syKullaniciController.hasPermission('gnlkisi:sil')}">
+                    <p:confirm header="#{messages.ConfirmationHeader}" message="#{messages.ConfirmDeleteMessage}"
+                               icon="pi pi-warning"/>
+                </p:commandButton>
+                <p:commandButton id="nviUpdateButton" styleClass="ui-button-success" icon="pi pi-refresh"
+                                 pt:data-tooltip="#{messages.buttonNvidenGuncelle}" update="datalist,:growl"
+                                 actionListener="#{gnlKisiController.nviUpdate}"
+                                 disabled="#{empty gnlKisiController.selected}" onstart="PF('Loading').show()"
+                                 onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('gnlkisi:nvidenGuncelle')}"/>
+                <p:commandButton id="updateListButton" styleClass="ui-button-teal" icon="pi pi-list"
+                                 pt:data-tooltip="#{messages.buttonListeyiGuncelle}" update=":ListeGuncelleForm"
+                                 onsuccess="PF('ListeGuncelleDialog').show()"
+                                 rendered="#{syKullaniciController.hasPermission('gnlkisi:listeGuncelle')}"/>
+                <p:commandButton id="addressUpdateButton" icon="pi pi-sync" styleClass="ui-button-pink"
+                                 pt:data-tooltip="#{messages.buttonAdresGuncelle}"
+                                 update=":AdresListeGuncelleForm" onsuccess="PF('AdresListeGuncelleDialog').show()"
+                                 rendered="#{syKullaniciController.hasPermission('gnlkisi:adresGuncelle')}"/>
+                <p:commandButton id="updateDeadsButton" styleClass="ui-button-orange" icon="pi pi-hammer"
                                  pt:data-tooltip="#{messages.buttonOluleriGuncelle}" update=":OlumListeGuncelleForm"
                                  onsuccess="PF('OlumListeGuncelleDialog').show()"
                                  rendered="#{syKullaniciController.hasPermission('gnlkisi:oluleriGuncelle')}"/>
