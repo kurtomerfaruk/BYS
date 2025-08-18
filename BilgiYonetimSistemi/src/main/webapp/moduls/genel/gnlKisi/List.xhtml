@@ -34,6 +34,9 @@
             <p:menuitem value="#{messages.buttonAdresGuncelle}"
                         onclick="document.getElementById('GnlKisiListForm:datalist:datalist:addressUpdateButton').click();"
                         icon="pi pi-sync" rendered="#{syKullaniciController.hasPermission('gnlkisi:adresGuncelle')}"/>
+            <p:menuitem value="#{messages.buttonOluleriGuncelle}"
+                        onclick="document.getElementById('GnlKisiListForm:datalist:datalist:updateDeadsButton').click();"
+                        icon="pi pi-sync" rendered="#{syKullaniciController.hasPermission('gnlkisi:oluleriGuncelle')}"/>
         </p:contextMenu>
         <coco:datatable id="datalist"
                         value="#{gnlKisiController.lazyItems}"
@@ -89,6 +92,10 @@
                     <p:commandButton id="addressUpdateButton" icon="pi pi-sync" pt:data-tooltip="#{messages.buttonAdresGuncelle}"
                                      update=":AdresListeGuncelleForm" onsuccess="PF('AdresListeGuncelleDialog').show()"
                                      rendered="#{syKullaniciController.hasPermission('gnlkisi:adresGuncelle')}"/>
+                <p:commandButton id="updateDeadsButton" styleClass="ui-button-info" icon="pi pi-list"
+                                 pt:data-tooltip="#{messages.buttonOluleriGuncelle}" update=":OlumListeGuncelleForm"
+                                 onsuccess="PF('OlumListeGuncelleDialog').show()"
+                                 rendered="#{syKullaniciController.hasPermission('gnlkisi:oluleriGuncelle')}"/>
             </f:facet>
 
         </coco:datatable>

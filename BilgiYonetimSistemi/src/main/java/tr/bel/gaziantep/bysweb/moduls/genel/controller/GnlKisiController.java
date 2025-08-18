@@ -1,15 +1,14 @@
 package tr.bel.gaziantep.bysweb.moduls.genel.controller;
 
-import jakarta.enterprise.inject.Produces;
 import jakarta.faces.event.ActionEvent;
 import jakarta.faces.model.SelectItem;
-import jakarta.faces.push.Push;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.omnifaces.cdi.Push;
 import org.omnifaces.cdi.PushContext;
 import org.primefaces.PrimeFaces;
 import tr.bel.gaziantep.bysweb.core.controller.AbstractController;
@@ -17,23 +16,31 @@ import tr.bel.gaziantep.bysweb.core.controller.InitApp;
 import tr.bel.gaziantep.bysweb.core.controller.KpsController;
 import tr.bel.gaziantep.bysweb.core.converter.ModelConverter;
 import tr.bel.gaziantep.bysweb.core.enums.bys.EnumModul;
+import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlDurum;
 import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.EnumSyFiltreAnahtari;
 import tr.bel.gaziantep.bysweb.core.service.FilterOptionService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
+import tr.bel.gaziantep.bysweb.core.utils.DateUtil;
 import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
 import tr.bel.gaziantep.bysweb.core.utils.StringUtil;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
+import tr.bel.gaziantep.bysweb.moduls.genel.entity.VefatEdenKisi;
 import tr.bel.gaziantep.bysweb.moduls.genel.service.GnlKisiService;
 import tr.bel.gaziantep.bysweb.webservice.kps.controller.KpsService;
 import tr.bel.gaziantep.bysweb.webservice.kps.model.KpsModel;
 import tr.bel.gaziantep.bysweb.webservice.kps.model.parameters.KisiParameter;
 import tr.bel.gaziantep.bysweb.webservice.kps.model.parameters.KisiParameters;
+import tr.bel.gaziantep.bysweb.webservice.mezarlik.controller.MezarlikSorgulaService;
+import tr.bel.gaziantep.bysweb.webservice.mezarlik.model.VefatEden;
+import tr.bel.gaziantep.bysweb.webservice.mezarlik.model.VefatEdenRoot;
 
 import java.io.Serial;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
@@ -58,8 +65,8 @@ public class GnlKisiController extends AbstractController<GnlKisi> {
     private ModelConverter converter;
     @Inject
     private InitApp initApp;
+    @Inject
     @Push(channel = "gnlKisiChannel")
-    @Produces
     private PushContext pushContext;
 
     @Getter
@@ -68,6 +75,12 @@ public class GnlKisiController extends AbstractController<GnlKisi> {
     @Getter
     @Setter
     private int count;
+    @Getter
+    @Setter
+    private LocalDate startDate = LocalDate.now().minusDays(7);
+    @Getter
+    @Setter
+    private LocalDate endDate = LocalDate.now();
 
     public GnlKisiController() {
         super(GnlKisi.class);
@@ -189,7 +202,7 @@ public class GnlKisiController extends AbstractController<GnlKisi> {
             FacesUtil.successMessage(Constants.KAYIT_GUNCELLENDI);
             PrimeFaces.current().executeScript("PF('ListeGuncelleDialog').hide()");
         } catch (Exception ex) {
-            log.error(null,ex);
+            log.error(null, ex);
             FacesUtil.errorMessage(Constants.HATA_OLUSTU);
         } finally {
             PrimeFaces.current().executeScript("PF('KisiMernisListeGuncelle').hide()");
@@ -232,6 +245,59 @@ public class GnlKisiController extends AbstractController<GnlKisi> {
             kisiParameters.getKisiler().add(parameter);
         }
         return kisiParameters;
+    }
+
+    public void updateDeads() {
+        try {
+            if (startDate != null && endDate != null) {
+                MezarlikSorgulaService mezarlikSorgulaService = new MezarlikSorgulaService();
+                VefatEdenRoot vefatEdenRoot = mezarlikSorgulaService.vefatEdenSorgula(initApp.getProperty("webServisLink"),
+                        initApp.getProperty("webServisToken"),
+                        DateUtil.localdateToString(startDate, "dd.MM.yyyy"),
+                        DateUtil.localdateToString(endDate, "dd.MM.yyyy")
+                );
+
+                List<VefatEdenKisi> vefatEdenKisiList = new ArrayList<>();
+                if (vefatEdenRoot.getHata() == null) {
+                    for (VefatEden vefatEden : vefatEdenRoot.getListe()) {
+                        LocalDate tarih = vefatEden.getOlumTarihi() == null ? vefatEden.getDefinTarihi().toLocalDate() : vefatEden.getOlumTarihi().toLocalDate();
+                        vefatEdenKisiList.add(new VefatEdenKisi(vefatEden.getTcKimlikNo(), tarih));
+                    }
+                }
+
+                if (vefatEdenKisiList.size() > 2100) {
+                    throw new Exception("Liste Boyutu büyük tarih aralığını değiştirerek yeniden deneyiniz");
+                }
+
+                if (!vefatEdenKisiList.isEmpty()) {
+                    List<String> tcList = vefatEdenKisiList.stream().map(VefatEdenKisi::getTcKimlikNo).collect(Collectors.toList());
+                    List<GnlKisi> kisilers = service.findByTcKimlikNoListToList(tcList);
+                    int guncellenenKayitSayisi = 0;
+                    String post;
+                    for (GnlKisi kisi : kisilers) {
+
+                        VefatEdenKisi vefatEdenKisi =
+                                vefatEdenKisiList.stream().filter(x -> x.getTcKimlikNo().equals(kisi.getTcKimlikNo())).findFirst().orElse(null);
+                        if (vefatEdenKisi == null) continue;
+                        kisi.setOlumTarihi(vefatEdenKisi.getOlumTarihi());
+                        kisi.setDurum(EnumGnlDurum.OLU);
+                        service.edit(kisi);
+                        guncellenenKayitSayisi++;
+                        post = kisi.getTcKimlikNo() + "," + kisi.getAdSoyad() + "," + guncellenenKayitSayisi + "," + kisilers.size();
+                        pushContext.send(post);
+                    }
+
+                    FacesUtil.successMessage("islemTamamlandi");
+                } else {
+                    FacesUtil.warningMessage("kayitBulunamadigindanGuncellemeYapilmadi");
+                }
+
+                PrimeFaces.current().executeScript("PF('KisiMernisListeGuncelle').hide()");
+            }
+        } catch (Exception ex) {
+            log.error(null);
+            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+        }
     }
 
 

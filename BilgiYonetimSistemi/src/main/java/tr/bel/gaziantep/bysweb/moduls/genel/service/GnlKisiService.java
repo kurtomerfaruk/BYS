@@ -81,4 +81,12 @@ public class GnlKisiService extends AbstractService<GnlKisi> {
                 .findFirst()
                 .orElse(null);
     }
+
+    public List<GnlKisi> getByMernisGuncellemeTarihi(int count) {
+        return getEntityManager().createNamedQuery("GnlKisi.getByMernisGuncellemeTarihi").setMaxResults(count).getResultList();
+    }
+
+    public List<GnlKisi> findByTcKimlikNoListToList(List<String> tcList) {
+        return getEntityManager().createNamedQuery("GnlKisi.findByTcKimlikNoListToList").setParameter("tcList",tcList).getResultList();
+    }
 }
