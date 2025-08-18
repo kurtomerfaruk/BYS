@@ -81,7 +81,9 @@ public class ModelConverter implements java.io.Serializable {
             if (kisi.getEklemeYeri() == null) {
                 kisi.setEklemeYeri(modul);
             }
-            kisi.setKayitTarihi(LocalDate.now());
+            if (kisi.getKayitTarihi() == null) {
+                kisi.setKayitTarihi(LocalDate.now());
+            }
         }
 
         if (kpsModel.getAdresModel() != null) {
@@ -138,7 +140,8 @@ public class ModelConverter implements java.io.Serializable {
                 initApp.getProperty("webServisToken"), binaNo);
         if (koordinatModel == null) return null;
         if (koordinatModel.getHata() != null) return null;
-        if (StringUtil.isBlank(koordinatModel.getLatitude()) && StringUtil.isBlank(koordinatModel.getLongitude())) return null;
+        if (StringUtil.isBlank(koordinatModel.getLatitude()) && StringUtil.isBlank(koordinatModel.getLongitude()))
+            return null;
         return koordinatModel.getLatitude() + "," + koordinatModel.getLongitude();
     }
 
