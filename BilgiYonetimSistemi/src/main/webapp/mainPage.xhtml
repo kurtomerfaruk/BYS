@@ -246,7 +246,7 @@
                                                         <div class="d-flex align-items-center flex-wrap gap-3">
                                                             <div class="avatar avatar-lg bg-info-transparent">
                                                                 <div class="avatar avatar-md bg-info">
-                                                                    <i class="ti ti-disabled fs-25"></i>
+                                                                    <i class="ti ti-user-pin fs-25"></i>
                                                                 </div>
                                                             </div>
                                                             <div class="flex-fill">
@@ -277,7 +277,125 @@
                                 rendered="#{syKullaniciController.hasPermission('saglik_hizmetleri_dashboard:goster')}">
                             <div class="tab-pane overflow-hidden" id="saglik-hizmetleri-tab-pane" role="tabpanel"
                                  aria-labelledby="saglik-hizmetleri-tab" tabindex="0">
-                                There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet.
+                                <ul class="nav nav-tabs mb-3 tab-style-8 scaleX" id="saglikHizmetleriTab" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link active" id="saglikHizmetleri-kayit-ozeti-tab"
+                                                data-bs-toggle="tab"
+                                                data-bs-target="#saglikHizmetleri-kayit-ozeti-tab-pane" type="button"
+                                                role="tab"
+                                                aria-controls="saglikHizmetleri-kayit-ozeti-tab-pane"
+                                                aria-selected="true">Kayıt Özeti
+                                        </button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="saglikHizmetleri-grafik-tab" data-bs-toggle="tab"
+                                                data-bs-target="#saglikHizmetleri-grafik-tab-pane" type="button" role="tab"
+                                                aria-controls="saglikHizmetleri-grafik-tab-pane" aria-selected="false">Grafik
+                                        </button>
+                                    </li>
+                                </ul>
+                                <div class="tab-content" id="saglikHizmetleriTabContent">
+                                    <div class="tab-pane show active overflow-hidden"
+                                         id="saglikHizmetleri-kayit-ozeti-tab-pane"
+                                         role="tabpanel" aria-labelledby="saglikHizmetleri-kayit-ozeti-tab" tabindex="0">
+                                        <div class="row">
+                                            <div class="col-xl-3">
+                                                <div class="card custom-card">
+                                                    <div class="card-body">
+                                                        <div class="d-flex align-items-center flex-wrap gap-3">
+                                                            <div class="avatar avatar-lg bg-info-transparent">
+                                                                <div class="avatar avatar-md bg-info">
+                                                                    <i class="ti ti-user-check fs-25"></i>
+                                                                </div>
+                                                            </div>
+                                                            <div class="flex-fill">
+                                                                <h3 class="fw-semibold mb-1">
+                                                                    <h:outputText
+                                                                            value="#{saglikDashboardController.totalPerson}">
+                                                                        <f:convertNumber type="number"/>
+                                                                    </h:outputText>
+                                                                </h3>
+                                                                <span class="">Kayıtlı Kişi Sayısı</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-3">
+                                                <div class="card custom-card">
+                                                    <div class="card-body">
+                                                        <div class="d-flex align-items-center flex-wrap gap-3">
+                                                            <div class="avatar avatar-lg bg-success-transparent">
+                                                                <div class="avatar avatar-md bg-success">
+                                                                    <i class="ti ti-checklist fs-25"></i>
+                                                                </div>
+                                                            </div>
+                                                            <div class="flex-fill">
+                                                                <h3 class="fw-semibold mb-1">
+                                                                    <h:outputText
+                                                                            value="#{saglikDashboardController.totalPersonCheck}">
+                                                                        <f:convertNumber type="number"/>
+                                                                    </h:outputText>
+                                                                </h3>
+                                                                <span class="">Kişi Kontrol Sayısı</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-3">
+                                                <div class="card custom-card">
+                                                    <div class="card-body">
+                                                        <div class="d-flex align-items-center flex-wrap gap-3">
+                                                            <div class="avatar avatar-lg bg-danger-transparent">
+                                                                <div class="avatar avatar-md bg-danger">
+                                                                    <i class="ti ti-list-search fs-25"></i>
+                                                                </div>
+                                                            </div>
+                                                            <div class="flex-fill">
+                                                                <h3 class="fw-semibold mb-1">
+                                                                    <h:outputText
+                                                                            value="#{saglikDashboardController.totalBloodTest}">
+                                                                        <f:convertNumber type="number"/>
+                                                                    </h:outputText>
+                                                                </h3>
+                                                                <span class="">Kan Tahlil Sonuç Sayısı</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-3">
+                                                <div class="card custom-card">
+                                                    <div class="card-body">
+                                                        <div class="d-flex align-items-center flex-wrap gap-3">
+                                                            <div class="avatar avatar-lg bg-purple-transparent">
+                                                                <div class="avatar avatar-md bg-purple">
+                                                                    <i class="ti ti-augmented-reality fs-25"></i>
+                                                                </div>
+                                                            </div>
+                                                            <div class="flex-fill">
+                                                                <h3 class="fw-semibold mb-1">
+                                                                    <h:outputText
+                                                                            value="#{saglikDashboardController.totalObesitySurvey}">
+                                                                        <f:convertNumber type="number"/>
+                                                                    </h:outputText>
+                                                                </h3>
+                                                                <span class="">Obezite Anket Sayısı</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="tab-pane overflow-hidden" id="saglikHizmetleri-grafik-tab-pane"
+                                         role="tabpanel"
+                                         aria-labelledby="saglikHizmetleri-grafik-tab" tabindex="0">
+                                        Sağlık Hizmetleri Grafik
+                                    </div>
+                                </div>
                             </div>
                         </ui:fragment>
                     </div>
