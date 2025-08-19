@@ -63,17 +63,35 @@
             <component-type>com.kurtomerfaruk.leafmap.component.LRoute</component-type>
             <renderer-type>com.kurtomerfaruk.leafmap.renderer.LRouteRenderer</renderer-type>
         </component>
+    </tag>
+
+    <tag>
+        <tag-name>choropleth</tag-name>
+        <component>
+            <component-type>com.kurtomerfaruk.leafmap.component.LChoropleth</component-type>
+            <renderer-type>com.kurtomerfaruk.leafmap.renderer.LChoroplethRenderer</renderer-type>
+        </component>
         <attribute>
-            <name>lat</name>
-        </attribute>
-        <attribute>
-            <name>lng</name>
+            <name>data</name>
+            <type>java.lang.String</type>
         </attribute>
         <attribute>
             <name>title</name>
+            <type>java.lang.String</type>
         </attribute>
         <attribute>
-            <name>draggable</name>
+            <name>info</name>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>values</name>
+            <required>true</required>
+            <type>java.util.List</type>
+        </attribute>
+
+        <attribute>
+            <name>click</name>
+            <type>java.lang.String</type>
         </attribute>
     </tag>
 </facelet-taglib>

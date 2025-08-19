@@ -20,7 +20,8 @@ import java.io.IOException;
 @FacesRenderer(componentFamily = LeafMap.COMPONENT_FAMILY, rendererType = LeafMap.RENDERER_FAMILY)
 @ResourceDependencies({
         @ResourceDependency(library = "leafmap", name = "leaflet.css"),
-        @ResourceDependency(library = "leafmap", name = "leaflet.js")
+        @ResourceDependency(library = "leafmap", name = "leaflet.js"),
+        @ResourceDependency(library = "leafmap", name = "leaf-utils.js")
 })
 public class LMapRenderer extends Renderer {
 
@@ -42,15 +43,15 @@ public class LMapRenderer extends Renderer {
         StringBuilder styleBuilder = new StringBuilder();
         styleBuilder.append("z-index:0;");
 
-        if(map.getWidth()!=null && !map.getWidth().isEmpty()){
+        if (map.getWidth() != null && !map.getWidth().isEmpty()) {
             styleBuilder.append("width:").append(map.getWidth()).append(";");
-        }else{
+        } else {
             styleBuilder.append("width:100%;");
         }
 
-        if(map.getHeight()!=null && !map.getHeight().isEmpty()){
+        if (map.getHeight() != null && !map.getHeight().isEmpty()) {
             styleBuilder.append("height:").append(map.getHeight()).append(";");
-        }else{
+        } else {
             styleBuilder.append("height:100%");
         }
 
@@ -63,9 +64,8 @@ public class LMapRenderer extends Renderer {
 
         String id = map.getId().replace(":", "\\\\:");
 
-        // JavaScript kodu
         writer.startElement("script", map);
-        writer.writeText("var "+map.getWidgetVar()+"=null;",null);
+        writer.writeText("var " + map.getWidgetVar() + "=null;", null);
         writer.writeText("(function() {", null);
         writer.writeText("  var initMap = function() {", null);
         writer.writeText("    var mapElement = document.getElementById('" + clientId + "');", null);
@@ -73,25 +73,24 @@ public class LMapRenderer extends Renderer {
         writer.writeText("    var parent = mapElement.parentNode;", null);
         writer.writeText("    if (!parent) return;", null);
 
-        // Parent div'in boyutunu kontrol et ve ayarla
         writer.writeText("    if (parent.clientHeight <= 0) {", null);
         writer.writeText("      parent.style.height = '100vh';", null);
         writer.writeText("      parent.style.overflow = 'hidden';", null);
         writer.writeText("    }", null);
 
-        writer.writeText("     "+map.getWidgetVar()+" = L.map(mapElement).setView([" +
+        writer.writeText("     " + map.getWidgetVar() + " = L.map(mapElement).setView([" +
                 map.getCenter() + "], " +
                 map.getZoom() + ");", null);
-        writer.writeText(map.getWidgetVar()+".invalidateSize();", null);
+        writer.writeText(map.getWidgetVar() + ".invalidateSize();", null);
 
         // Window resize event'i
         writer.writeText("    window.addEventListener('resize', function() {", null);
-        writer.writeText(map.getWidgetVar()+".invalidateSize();", null);
+        writer.writeText(map.getWidgetVar() + ".invalidateSize();", null);
         writer.writeText("    });", null);
 
         writer.writeText("    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {", null);
         writer.writeText("      attribution: '&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors'", null);
-        writer.writeText("    }).addTo("+map.getWidgetVar()+");", null);
+        writer.writeText("    }).addTo(" + map.getWidgetVar() + ");", null);
         writer.writeText("  };", null);
 
         // DOM yüklendikten sonra ve AJAX sonrası çalıştır
@@ -112,27 +111,5 @@ public class LMapRenderer extends Renderer {
         writer.writeText("})();", null);
         writer.endElement("script");
 
-//        // JavaScript kodu
-//        writer.startElement("script", map);
-//
-//
-//
-////        writer.writeText("document.addEventListener('DOMContentLoaded', function() {", null);
-//        writer.writeText("var map = L.map('" + clientId + "').setView([" +
-//                map.getCenter() + "], " +
-//                map.getZoom() + ");", null);
-//
-//
-//        writer.writeText("L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {", null);
-//        writer.writeText("attribution: '&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors'", null);
-//        writer.writeText("}).addTo(map);", null);
-////        writer.writeText("});", null);
-//        String fitToPageDiv = "$(document).ready(function () { var windowH = $(window).height();"
-//                + "windowH -= " + map.getRemoveDiv() + ";"
-//                + "$('#" + id + "').css({'height': windowH + 'px'});"
-//                +"alert('test'); });";
-//        writer.writeText(fitToPageDiv,null);
-//        writer.writeText("setTimeout(function(){map.invalidateSize()}, 400);",null);
-//        writer.endElement("script");
     }
 }
