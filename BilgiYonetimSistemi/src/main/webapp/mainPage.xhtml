@@ -4,182 +4,234 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="jakarta.faces.facelets"
       xmlns:h="jakarta.faces.html"
->
+      xmlns:f="jakarta.faces.core">
 
 <ui:composition>
 
-
-
     <h:form id="MapForm" prependId="false">
-<!--        <div style="position: relative; height: calc(100vh - 100px);">-->
-<!--            <l:map id="generalMap" center="37.069387, 37.374620" zoom="13" widgetVar="mapVar">-->
-<!--                <l:marker lat="37.067949" lng="37.348871" title="İstanbul"/>-->
-<!--                <l:marker lat="41.015" lng="28.985" title="Başka bir konum"/>-->
-<!--                <l:route/>-->
-<!--            </l:map>-->
-<!--        </div>-->
-<!--        <div class="col-xl-12">-->
-<!--            <div class="card custom-card">-->
-<!--                <div class="card-body">-->
-<!--                    <ul class="nav nav-tabs mb-3 tab-style-8 scaleX" id="mainTab" role="tablist">-->
-<!--                        <li class="nav-item" role="presentation">-->
-<!--                            <button class="nav-link active" id="engelsizler-tab" data-bs-toggle="tab"-->
-<!--                                    data-bs-target="#engelsizler-tab-pane" type="button" role="tab"-->
-<!--                                    aria-controls="engelsizler-tab-pane" aria-selected="true">Engelsizler</button>-->
-<!--                        </li>-->
-<!--                        <li class="nav-item" role="presentation">-->
-<!--                            <button class="nav-link" id="genel-tab" data-bs-toggle="tab"-->
-<!--                                    data-bs-target="#genel-tab-pane" type="button" role="tab"-->
-<!--                                    aria-controls="genel-tab-pane" aria-selected="false">Genel</button>-->
-<!--                        </li>-->
-<!--                        <li class="nav-item" role="presentation">-->
-<!--                            <button class="nav-link" id="saglik-hizmetleri-tab" data-bs-toggle="tab"-->
-<!--                                    data-bs-target="#saglik-hizmetleri-tab-pane" type="button" role="tab"-->
-<!--                                    aria-controls="saglik-hizmetleri-tab-pane" aria-selected="false">Sağlık Hizmetleri</button>-->
-<!--                        </li>-->
-<!--                    </ul>-->
-<!--                    <div class="tab-content" id="mainTabContent">-->
-<!--                        <div class="tab-pane show active overflow-hidden" id="engelsizler-tab-pane"-->
-<!--                             role="tabpanel" aria-labelledby="engelsizler-tab" tabindex="0">-->
-<!--                            <ul class="nav nav-tabs mb-3 tab-style-8 scaleX" id="engelsizlerTab" role="tablist">-->
-<!--                                <li class="nav-item" role="presentation">-->
-<!--                                    <button class="nav-link active" id="engelsizler-kayit-ozeti-tab" data-bs-toggle="tab"-->
-<!--                                            data-bs-target="#engelsizler-kayit-ozeti-tab-pane" type="button" role="tab"-->
-<!--                                            aria-controls="engelsizler-kayit-ozeti-tab-pane" aria-selected="true">Kayıt Özeti</button>-->
-<!--                                </li>-->
-<!--                                <li class="nav-item" role="presentation">-->
-<!--                                    <button class="nav-link" id="engelsizler-grafik-tab" data-bs-toggle="tab"-->
-<!--                                            data-bs-target="#engelsizler-grafik-tab-pane" type="button" role="tab"-->
-<!--                                            aria-controls="engelsizler-grafik-tab-pane" aria-selected="false">Grafik</button>-->
-<!--                                </li>-->
-<!--                            </ul>-->
-<!--                            <div class="tab-content" id="engelsizTabContent">-->
-<!--                                <div class="tab-pane show active overflow-hidden" id="engelsizler-kayit-ozeti-tab-pane"-->
-<!--                                     role="tabpanel" aria-labelledby="engelsizler-kayit-ozeti-tab" tabindex="0">-->
-<!--                                    <div class="row">-->
-<!--                                        <div class="col-xl-4">-->
-<!--                                            <div class="card custom-card">-->
-<!--                                                <div class="card-body">-->
-<!--                                                    <div class="d-flex align-items-center flex-wrap gap-3">-->
-<!--                                                        <div class="avatar avatar-lg bg-info-transparent">-->
-<!--                                                            <div class="avatar avatar-md bg-info">-->
-<!--                                                                <i class="ti ti-disabled fs-25"></i>-->
-<!--                                                            </div>-->
-<!--                                                        </div>-->
-<!--                                                        <div class="flex-fill">-->
-<!--                                                            <h3 class="fw-semibold mb-1">256</h3>-->
-<!--                                                            <span class="">Kayıtlı Kişi Sayısı</span>-->
-<!--                                                        </div>-->
-<!--                                                    </div>-->
-<!--                                                </div>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                        <div class="col-xl-4">-->
-<!--                                            <div class="card custom-card">-->
-<!--                                                <div class="card-body">-->
-<!--                                                    <div class="d-flex align-items-center flex-wrap gap-3">-->
-<!--                                                        <div class="avatar avatar-lg bg-success-transparent">-->
-<!--                                                            <div class="avatar avatar-md bg-success">-->
-<!--                                                                <i class="ti ti-disabled-2 fs-25"></i>-->
-<!--                                                            </div>-->
-<!--                                                        </div>-->
-<!--                                                        <div class="flex-fill">-->
-<!--                                                            <h3 class="fw-semibold mb-1">256</h3>-->
-<!--                                                            <span class="">Yaşayan Kişi Sayısı</span>-->
-<!--                                                        </div>-->
-<!--                                                    </div>-->
-<!--                                                </div>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                        <div class="col-xl-4">-->
-<!--                                            <div class="card custom-card">-->
-<!--                                                <div class="card-body">-->
-<!--                                                    <div class="d-flex align-items-center flex-wrap gap-3">-->
-<!--                                                        <div class="avatar avatar-lg bg-danger-transparent">-->
-<!--                                                            <div class="avatar avatar-md bg-danger">-->
-<!--                                                                <i class="ti ti-wheelchair-off fs-25"></i>-->
-<!--                                                            </div>-->
-<!--                                                        </div>-->
-<!--                                                        <div class="flex-fill">-->
-<!--                                                            <h3 class="fw-semibold mb-1">256</h3>-->
-<!--                                                            <span class="">Ölen Kişi Sayısı</span>-->
-<!--                                                        </div>-->
-<!--                                                    </div>-->
-<!--                                                </div>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                        <div class="col-xl-4">-->
-<!--                                            <div class="card custom-card">-->
-<!--                                                <div class="card-body">-->
-<!--                                                    <div class="d-flex align-items-center flex-wrap gap-3">-->
-<!--                                                        <div class="avatar avatar-lg bg-purple-transparent">-->
-<!--                                                            <div class="avatar avatar-md bg-purple">-->
-<!--                                                                <i class="ti ti-settings-cog fs-25"></i>-->
-<!--                                                            </div>-->
-<!--                                                        </div>-->
-<!--                                                        <div class="flex-fill">-->
-<!--                                                            <h3 class="fw-semibold mb-1">256</h3>-->
-<!--                                                            <span class="">Toplam Tamir Sayısı</span>-->
-<!--                                                        </div>-->
-<!--                                                    </div>-->
-<!--                                                </div>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                        <div class="col-xl-4">-->
-<!--                                            <div class="card custom-card">-->
-<!--                                                <div class="card-body">-->
-<!--                                                    <div class="d-flex align-items-center flex-wrap gap-3">-->
-<!--                                                        <div class="avatar avatar-lg bg-orange-transparent">-->
-<!--                                                            <div class="avatar avatar-md bg-orange">-->
-<!--                                                                <i class="ti ti-wheelchair fs-25"></i>-->
-<!--                                                            </div>-->
-<!--                                                        </div>-->
-<!--                                                        <div class="flex-fill">-->
-<!--                                                            <h3 class="fw-semibold mb-1">256</h3>-->
-<!--                                                            <span class="">Toplam Cihaz Teslim Sayısı</span>-->
-<!--                                                        </div>-->
-<!--                                                    </div>-->
-<!--                                                </div>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                        <div class="col-xl-4">-->
-<!--                                            <div class="card custom-card">-->
-<!--                                                <div class="card-body">-->
-<!--                                                    <div class="d-flex align-items-center flex-wrap gap-3">-->
-<!--                                                        <div class="avatar avatar-lg bg-indigo-transparent">-->
-<!--                                                            <div class="avatar avatar-md bg-indigo">-->
-<!--                                                                <i class="ti ti-checklist fs-25"></i>-->
-<!--                                                            </div>-->
-<!--                                                        </div>-->
-<!--                                                        <div class="flex-fill">-->
-<!--                                                            <h3 class="fw-semibold mb-1">256</h3>-->
-<!--                                                            <span class="">Toplam Talep Sayısı</span>-->
-<!--                                                        </div>-->
-<!--                                                    </div>-->
-<!--                                                </div>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
+        <!--        <div style="position: relative; height: calc(100vh - 100px);">-->
+        <!--            <l:map id="generalMap" center="37.069387, 37.374620" zoom="13" widgetVar="mapVar">-->
+        <!--                <l:marker lat="37.067949" lng="37.348871" title="İstanbul"/>-->
+        <!--                <l:marker lat="41.015" lng="28.985" title="Başka bir konum"/>-->
+        <!--                <l:route/>-->
+        <!--            </l:map>-->
+        <!--        </div>-->
+        <div class="col-xl-12">
+            <div class="card custom-card">
+                <div class="card-body">
+                    <ul class="nav nav-tabs mb-3 tab-style-8 scaleX" id="mainTab" role="tablist">
+                        <ui:fragment rendered="#{syKullaniciController.hasPermission('engelsizler_dashboard:goster')}">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="engelsizler-tab" data-bs-toggle="tab"
+                                        data-bs-target="#engelsizler-tab-pane" type="button" role="tab"
+                                        aria-controls="engelsizler-tab-pane" aria-selected="true">Engelsizler
+                                </button>
+                            </li>
+                        </ui:fragment>
+                        <ui:fragment rendered="#{syKullaniciController.hasPermission('genel_dashboard:goster')}">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="genel-tab" data-bs-toggle="tab"
+                                        data-bs-target="#genel-tab-pane" type="button" role="tab"
+                                        aria-controls="genel-tab-pane" aria-selected="false">Genel
+                                </button>
+                            </li>
+                        </ui:fragment>
+                        <ui:fragment
+                                rendered="#{syKullaniciController.hasPermission('saglik_hizmetleri_dashboard:goster')}">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="saglik-hizmetleri-tab" data-bs-toggle="tab"
+                                        data-bs-target="#saglik-hizmetleri-tab-pane" type="button" role="tab"
+                                        aria-controls="saglik-hizmetleri-tab-pane"
+                                        aria-selected="false">Sağlık Hizmetleri
+                                </button>
+                            </li>
+                        </ui:fragment>
+                    </ul>
+                    <div class="tab-content" id="mainTabContent">
+                        <ui:fragment rendered="#{syKullaniciController.hasPermission('engelsizler_dashboard:goster')}">
+                            <div class="tab-pane show active overflow-hidden" id="engelsizler-tab-pane"
+                                 role="tabpanel" aria-labelledby="engelsizler-tab" tabindex="0">
+                                <ul class="nav nav-tabs mb-3 tab-style-8 scaleX" id="engelsizlerTab" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link active" id="engelsizler-kayit-ozeti-tab"
+                                                data-bs-toggle="tab"
+                                                data-bs-target="#engelsizler-kayit-ozeti-tab-pane" type="button"
+                                                role="tab"
+                                                aria-controls="engelsizler-kayit-ozeti-tab-pane"
+                                                aria-selected="true">Kayıt Özeti
+                                        </button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="engelsizler-grafik-tab" data-bs-toggle="tab"
+                                                data-bs-target="#engelsizler-grafik-tab-pane" type="button" role="tab"
+                                                aria-controls="engelsizler-grafik-tab-pane" aria-selected="false">Grafik
+                                        </button>
+                                    </li>
+                                </ul>
+                                <div class="tab-content" id="engelsizTabContent">
+                                    <div class="tab-pane show active overflow-hidden"
+                                         id="engelsizler-kayit-ozeti-tab-pane"
+                                         role="tabpanel" aria-labelledby="engelsizler-kayit-ozeti-tab" tabindex="0">
+                                        <div class="row">
+                                            <div class="col-xl-4">
+                                                <div class="card custom-card">
+                                                    <div class="card-body">
+                                                        <div class="d-flex align-items-center flex-wrap gap-3">
+                                                            <div class="avatar avatar-lg bg-info-transparent">
+                                                                <div class="avatar avatar-md bg-info">
+                                                                    <i class="ti ti-disabled fs-25"></i>
+                                                                </div>
+                                                            </div>
+                                                            <div class="flex-fill">
+                                                                <h3 class="fw-semibold mb-1">
+                                                                    <h:outputText
+                                                                            value="#{engelsizDashboardController.totalPerson}">
+                                                                        <f:convertNumber type="number"/>
+                                                                    </h:outputText>
+                                                                </h3>
+                                                                <span class="">Kayıtlı Kişi Sayısı</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-4">
+                                                <div class="card custom-card">
+                                                    <div class="card-body">
+                                                        <div class="d-flex align-items-center flex-wrap gap-3">
+                                                            <div class="avatar avatar-lg bg-success-transparent">
+                                                                <div class="avatar avatar-md bg-success">
+                                                                    <i class="ti ti-disabled-2 fs-25"></i>
+                                                                </div>
+                                                            </div>
+                                                            <div class="flex-fill">
+                                                                <h3 class="fw-semibold mb-1">
+                                                                    <h:outputText
+                                                                            value="#{engelsizDashboardController.activePerson}">
+                                                                        <f:convertNumber type="number"/>
+                                                                    </h:outputText>
+                                                                </h3>
+                                                                <span class="">Yaşayan Kişi Sayısı</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-4">
+                                                <div class="card custom-card">
+                                                    <div class="card-body">
+                                                        <div class="d-flex align-items-center flex-wrap gap-3">
+                                                            <div class="avatar avatar-lg bg-danger-transparent">
+                                                                <div class="avatar avatar-md bg-danger">
+                                                                    <i class="ti ti-wheelchair-off fs-25"></i>
+                                                                </div>
+                                                            </div>
+                                                            <div class="flex-fill">
+                                                                <h3 class="fw-semibold mb-1">
+                                                                    <h:outputText
+                                                                            value="#{engelsizDashboardController.deadPerson}">
+                                                                        <f:convertNumber type="number"/>
+                                                                    </h:outputText></h3>
+                                                                <span class="">Ölen Kişi Sayısı</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-4">
+                                                <div class="card custom-card">
+                                                    <div class="card-body">
+                                                        <div class="d-flex align-items-center flex-wrap gap-3">
+                                                            <div class="avatar avatar-lg bg-purple-transparent">
+                                                                <div class="avatar avatar-md bg-purple">
+                                                                    <i class="ti ti-settings-cog fs-25"></i>
+                                                                </div>
+                                                            </div>
+                                                            <div class="flex-fill">
+                                                                <h3 class="fw-semibold mb-1">
+                                                                    <h:outputText
+                                                                            value="#{engelsizDashboardController.repairedVehicle}">
+                                                                        <f:convertNumber type="number"/>
+                                                                    </h:outputText>
+                                                                </h3>
+                                                                <span class="">Toplam Tamir Sayısı</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-4">
+                                                <div class="card custom-card">
+                                                    <div class="card-body">
+                                                        <div class="d-flex align-items-center flex-wrap gap-3">
+                                                            <div class="avatar avatar-lg bg-orange-transparent">
+                                                                <div class="avatar avatar-md bg-orange">
+                                                                    <i class="ti ti-wheelchair fs-25"></i>
+                                                                </div>
+                                                            </div>
+                                                            <div class="flex-fill">
+                                                                <h3 class="fw-semibold mb-1">
+                                                                    <h:outputText
+                                                                            value="#{engelsizDashboardController.deliveredVehicle}">
+                                                                        <f:convertNumber type="number"/>
+                                                                    </h:outputText>
+                                                                </h3>
+                                                                <span class="">Toplam Cihaz Teslim Sayısı</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-4">
+                                                <div class="card custom-card">
+                                                    <div class="card-body">
+                                                        <div class="d-flex align-items-center flex-wrap gap-3">
+                                                            <div class="avatar avatar-lg bg-indigo-transparent">
+                                                                <div class="avatar avatar-md bg-indigo">
+                                                                    <i class="ti ti-checklist fs-25"></i>
+                                                                </div>
+                                                            </div>
+                                                            <div class="flex-fill">
+                                                                <h3 class="fw-semibold mb-1">
+                                                                    <h:outputText
+                                                                            value="#{engelsizDashboardController.request}">
+                                                                        <f:convertNumber type="number"/>
+                                                                    </h:outputText>
+                                                                </h3>
+                                                                <span class="">Toplam Talep Sayısı</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
 
-<!--                                </div>-->
-<!--                                <div class="tab-pane overflow-hidden" id="engelsizler-grafik-tab-pane" role="tabpanel"-->
-<!--                                     aria-labelledby="engelsizler-grafik-tab" tabindex="0">-->
-<!--                                    Engelsizler Grafik-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <div class="tab-pane overflow-hidden" id="genel-tab-pane" role="tabpanel"-->
-<!--                             aria-labelledby="genel-tab" tabindex="0">-->
-<!--                            The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).-->
-<!--                        </div>-->
-<!--                        <div class="tab-pane overflow-hidden" id="saglik-hizmetleri-tab-pane" role="tabpanel"-->
-<!--                             aria-labelledby="saglik-hizmetleri-tab" tabindex="0">-->
-<!--                            There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet.-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
+                                    </div>
+                                    <div class="tab-pane overflow-hidden" id="engelsizler-grafik-tab-pane"
+                                         role="tabpanel"
+                                         aria-labelledby="engelsizler-grafik-tab" tabindex="0">
+                                        Engelsizler Grafik
+                                    </div>
+                                </div>
+                            </div>
+                        </ui:fragment>
+                        <ui:fragment rendered="#{syKullaniciController.hasPermission('genel_dashboard:goster')}">
+                            <div class="tab-pane overflow-hidden" id="genel-tab-pane" role="tabpanel"
+                                 aria-labelledby="genel-tab" tabindex="0">
+                                The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
+                            </div>
+                        </ui:fragment>
+                        <ui:fragment
+                                rendered="#{syKullaniciController.hasPermission('saglik_hizmetleri_dashboard:goster')}">
+                            <div class="tab-pane overflow-hidden" id="saglik-hizmetleri-tab-pane" role="tabpanel"
+                                 aria-labelledby="saglik-hizmetleri-tab" tabindex="0">
+                                There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet.
+                            </div>
+                        </ui:fragment>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </h:form>
 </ui:composition>

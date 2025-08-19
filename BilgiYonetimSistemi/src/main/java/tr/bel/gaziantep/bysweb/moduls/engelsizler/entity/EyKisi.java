@@ -35,6 +35,11 @@ import java.util.List;
         "e.gnlKisi.durum=tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlDurum.SAG ORDER BY e.gnlKisi.mernisGuncellemeTarihi ASC")
 @NamedQuery(name = "EyKisi.findByKisiTcKimlikNo", query = "SELECT e FROM EyKisi e WHERE e.aktif=true AND e.gnlKisi.tcKimlikNo = :tcKimlikNo")
 @NamedQuery(name = "EyKisi.findByKisi", query = "SELECT e FROM EyKisi e WHERE e.gnlKisi = :gnlKisi")
+@NamedQuery(name = "EyKisi.getTotalDeadCount", query = "SELECT COUNT(e.id) FROM EyKisi e WHERE e.aktif=true AND " +
+        "e.gnlKisi.durum IN (tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlDurum.OLU,tr.bel.gaziantep.bysweb.core.enums.genel" +
+        ".EnumGnlDurum.OLUM,tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlDurum.OLUMUN_TESPITI)")
+@NamedQuery(name = "EyKisi.getTotalActiveCount", query = "SELECT COUNT(e.id) FROM EyKisi e WHERE e.aktif=true AND " +
+        "e.gnlKisi.durum=tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlDurum.SAG")
 public class EyKisi extends BaseEntity {
     @Serial
     private static final long serialVersionUID = 6659959936794498821L;

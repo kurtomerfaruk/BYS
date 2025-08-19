@@ -327,6 +327,14 @@ public class EyKisiService extends AbstractService<EyKisi> {
                 .getResultList();
     }
 
+    public int getTotalDeadCount() {
+        return ((Long) getEntityManager().createNamedQuery("EyKisi.getTotalDeadCount").getSingleResult()).intValue();
+    }
+
+    public int getTotalActiveCount() {
+        return ((Long) getEntityManager().createNamedQuery("EyKisi.getTotalActiveCount").getSingleResult()).intValue();
+    }
+
 //    @TransactionAttribute(TransactionAttributeType.REQUIRED)
 //    public void update(EyKisi eyKisi,
 //                       List<EyEngelGrubu> engelGrubus,
