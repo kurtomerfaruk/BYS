@@ -56,4 +56,24 @@
             <name>draggable</name>
         </attribute>
     </tag>
+
+    <tag>
+        <tag-name>route</tag-name>
+        <component>
+            <component-type>com.kurtomerfaruk.leafmap.component.LRoute</component-type>
+            <renderer-type>com.kurtomerfaruk.leafmap.renderer.LRouteRenderer</renderer-type>
+        </component>
+        <attribute>
+            <name>lat</name>
+        </attribute>
+        <attribute>
+            <name>lng</name>
+        </attribute>
+        <attribute>
+            <name>title</name>
+        </attribute>
+        <attribute>
+            <name>draggable</name>
+        </attribute>
+    </tag>
 </facelet-taglib>

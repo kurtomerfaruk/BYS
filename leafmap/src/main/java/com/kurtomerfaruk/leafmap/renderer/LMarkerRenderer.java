@@ -33,15 +33,15 @@ public class LMarkerRenderer extends Renderer {
         if (mapId != null && marker.getLat() != null && marker.getLng() != null) {
             writer.startElement("script", component);
             writer.writeText("document.addEventListener('DOMContentLoaded', function() {", null);
-            writer.writeText("var defaultIcon = L.icon({\n" +
-                    "    iconUrl: 'jakarta.faces.resource/images/marker-icon.png.xhtml?ln=leafmap',\n" +
-                    "    shadowUrl: 'jakarta.faces.resource/images/marker-shadow.png.xhtml?ln=leafmap',\n" +
-                    "    iconSize: [25, 41],\n" +
-                    "    iconAnchor: [12, 41],\n" +
-                    "    popupAnchor: [1, -34],\n" +
-                    "    shadowSize: [41, 41]\n" +
-                    "});",null);
-            writer.writeText("var marker = L.marker([" + marker.getLat() + ", " + marker.getLng() + "], { icon: defaultIcon })", null);
+//            writer.writeText("var defaultIcon = L.icon({\n" +
+//                    "    iconUrl: 'jakarta.faces.resource/images/marker-icon.png.xhtml?ln=leafmap',\n" +
+//                    "    shadowUrl: 'jakarta.faces.resource/images/marker-shadow.png.xhtml?ln=leafmap',\n" +
+//                    "    iconSize: [25, 41],\n" +
+//                    "    iconAnchor: [12, 41],\n" +
+//                    "    popupAnchor: [1, -34],\n" +
+//                    "    shadowSize: [41, 41]\n" +
+//                    "});",null);
+            writer.writeText("var marker = L.marker([" + marker.getLat() + ", " + marker.getLng() + "])", null);
 
             if (marker.getDraggable() != null) {
                 writer.writeText(".setDraggable(" + marker.getDraggable() + ")", null);

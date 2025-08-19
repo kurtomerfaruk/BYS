@@ -35,7 +35,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <jakartaee.version>11.0.0</jakartaee.version>
-        <primefaces.version>15.0.5</primefaces.version>
+        <primefaces.version>15.0.6</primefaces.version>
         <omnifaces.version>5.0-M4</omnifaces.version>
         <jackson.version>2.19.0</jackson.version>
         <slf4j.version>2.0.12</slf4j.version>
