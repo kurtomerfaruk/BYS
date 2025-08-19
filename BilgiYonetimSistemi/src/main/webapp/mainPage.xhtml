@@ -20,7 +20,7 @@
             <div class="card custom-card">
                 <div class="card-body">
                     <ul class="nav nav-tabs mb-3 tab-style-8 scaleX" id="mainTab" role="tablist">
-                        <ui:fragment rendered="#{syKullaniciController.hasPermission('engelsizler_dashboard:goster')}">
+                        <ui:fragment rendered="#{syKullaniciController.hasPermission('engelsiz_dashboard:goster')}">
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link active" id="engelsizler-tab" data-bs-toggle="tab"
                                         data-bs-target="#engelsizler-tab-pane" type="button" role="tab"
@@ -48,7 +48,7 @@
                         </ui:fragment>
                     </ul>
                     <div class="tab-content" id="mainTabContent">
-                        <ui:fragment rendered="#{syKullaniciController.hasPermission('engelsizler_dashboard:goster')}">
+                        <ui:fragment rendered="#{syKullaniciController.hasPermission('engelsiz_dashboard:goster')}">
                             <div class="tab-pane show active overflow-hidden" id="engelsizler-tab-pane"
                                  role="tabpanel" aria-labelledby="engelsizler-tab" tabindex="0">
                                 <ul class="nav nav-tabs mb-3 tab-style-8 scaleX" id="engelsizlerTab" role="tablist">
@@ -218,7 +218,59 @@
                         <ui:fragment rendered="#{syKullaniciController.hasPermission('genel_dashboard:goster')}">
                             <div class="tab-pane overflow-hidden" id="genel-tab-pane" role="tabpanel"
                                  aria-labelledby="genel-tab" tabindex="0">
-                                The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
+                                <ul class="nav nav-tabs mb-3 tab-style-8 scaleX" id="genelTab" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link active" id="genel-kayit-ozeti-tab"
+                                                data-bs-toggle="tab"
+                                                data-bs-target="#genel-kayit-ozeti-tab-pane" type="button"
+                                                role="tab"
+                                                aria-controls="genel-kayit-ozeti-tab-pane"
+                                                aria-selected="true">Kayıt Özeti
+                                        </button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="genel-grafik-tab" data-bs-toggle="tab"
+                                                data-bs-target="#genel-grafik-tab-pane" type="button" role="tab"
+                                                aria-controls="genel-grafik-tab-pane" aria-selected="false">Grafik
+                                        </button>
+                                    </li>
+                                </ul>
+                                <div class="tab-content" id="genelTabContent">
+                                    <div class="tab-pane show active overflow-hidden"
+                                         id="genel-kayit-ozeti-tab-pane"
+                                         role="tabpanel" aria-labelledby="genel-kayit-ozeti-tab" tabindex="0">
+                                        <div class="row">
+                                            <div class="col-xl-4">
+                                                <div class="card custom-card">
+                                                    <div class="card-body">
+                                                        <div class="d-flex align-items-center flex-wrap gap-3">
+                                                            <div class="avatar avatar-lg bg-info-transparent">
+                                                                <div class="avatar avatar-md bg-info">
+                                                                    <i class="ti ti-disabled fs-25"></i>
+                                                                </div>
+                                                            </div>
+                                                            <div class="flex-fill">
+                                                                <h3 class="fw-semibold mb-1">
+                                                                    <h:outputText
+                                                                            value="#{genelDashboardController.totalPerson}">
+                                                                        <f:convertNumber type="number"/>
+                                                                    </h:outputText>
+                                                                </h3>
+                                                                <span class="">Kayıtlı Kişi Sayısı</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="tab-pane overflow-hidden" id="genel-grafik-tab-pane"
+                                         role="tabpanel"
+                                         aria-labelledby="genel-grafik-tab" tabindex="0">
+                                        Genel Grafik
+                                    </div>
+                                </div>
                             </div>
                         </ui:fragment>
                         <ui:fragment
