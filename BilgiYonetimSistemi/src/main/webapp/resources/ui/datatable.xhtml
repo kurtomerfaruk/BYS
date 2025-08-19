@@ -145,6 +145,7 @@
         </f:facet>
 
         <p:columns value="#{cc.attrs.controller.kullaniciKolons}"
+                   headerText="#{column.syKolon.baslik}"
                    var="column"
                    columnIndexVar="colIndex"
                    sortBy="#{item[column.syKolon.sortProperty]}"
@@ -153,11 +154,6 @@
                    visible="#{column.gorunurluk}"
                    filterMatchMode="#{column.syKolon.filtreEslesmeModu.displayValue}"
                    styleClass="#{column.syKolon.tip eq 'DECIMAL' ? 'text-end':''}">
-
-
-            <f:facet name="header">
-                <h:outputText value="#{column.syKolon.baslik}"/>
-            </f:facet>
 
             <ui:fragment rendered="#{column.syKolon.tip eq 'ID'}">
                 <h:outputText value="#{cc.attrs.controller.getResolvedValue(item,column.syKolon.columnProperty)}"
