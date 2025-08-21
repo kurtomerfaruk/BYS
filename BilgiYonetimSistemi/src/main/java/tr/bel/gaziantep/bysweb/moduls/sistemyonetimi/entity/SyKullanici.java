@@ -78,7 +78,7 @@ public class SyKullanici extends BaseEntityNoVersion {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "syKullanici", fetch = FetchType.LAZY)
     private List<SyKullaniciGiris> syKullaniciGirisList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "syKullanici")
+    @OneToMany(mappedBy = "syKullanici",cascade = CascadeType.ALL)
     private Set<SyKullaniciRol> syKullaniciRols = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "syKullanici")
