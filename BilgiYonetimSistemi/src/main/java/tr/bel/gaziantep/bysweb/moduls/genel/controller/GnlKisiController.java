@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.omnifaces.cdi.Push;
 import org.omnifaces.cdi.PushContext;
 import org.primefaces.PrimeFaces;
+import org.primefaces.event.SelectEvent;
 import tr.bel.gaziantep.bysweb.core.controller.AbstractController;
 import tr.bel.gaziantep.bysweb.core.controller.InitApp;
 import tr.bel.gaziantep.bysweb.core.controller.KpsController;
@@ -298,6 +299,15 @@ public class GnlKisiController extends AbstractController<GnlKisi> {
             log.error(null);
             FacesUtil.errorMessage(Constants.HATA_OLUSTU);
         }
+    }
+
+    public void gnlKisiSecKapat(GnlKisi gnlKisi) {
+        PrimeFaces.current().dialog().closeDynamic(gnlKisi);
+    }
+
+    public void onRowDblSelect(SelectEvent<GnlKisi> event) {
+        GnlKisi gnlKisi = event.getObject();
+        gnlKisiSecKapat(gnlKisi);
     }
 
 
