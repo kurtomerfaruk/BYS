@@ -228,7 +228,10 @@ public abstract class AbstractService<T> implements java.io.Serializable {
             filterCondition = cb.and(filterCondition, applyMatchMode(cb, path, value, filter, matchMode));
         }
 
-        filterCondition = cb.and(filterCondition, cb.equal(root.get(Constants.AKTIF), true));
+        if(!"SyKullanici".equals(entityClass.getSimpleName())){
+            filterCondition = cb.and(filterCondition, cb.equal(root.get(Constants.AKTIF), true));
+        }
+
         return filterCondition;
     }
 

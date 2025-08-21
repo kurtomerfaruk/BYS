@@ -86,7 +86,7 @@ public class LoginController implements java.io.Serializable {
     private String yeniSifre;
     @Getter
     @Setter
-    private String theme="saga-blue";
+    private String theme = "saga-blue";
     @Getter
     @Setter
     private String captchaInput;
@@ -101,13 +101,13 @@ public class LoginController implements java.io.Serializable {
 
             if (captcha == null || !captcha.equals(captchaInput)) {
                 Util.getFacesContext().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Doğrulama Kodunu hatalı girdiniz", null));
+                captchaInput = "";
                 return;
             }
 
             if (StringUtil.isNotBlank(kullaniciAdi) && StringUtil.isNotBlank(parola)) {
                 syKullanici = syKullaniciService.findByKullaniciAdiByParola(kullaniciAdi, parola);
             }
-
 
 
             HttpServletRequest request = Util.getRequest();
@@ -121,6 +121,11 @@ public class LoginController implements java.io.Serializable {
 
                 if (!syKullanici.isAktif()) {
                     FacesUtil.warningMessage("girisYapanKullaniciPasif");
+                    return;
+                }
+
+                if (syKullanici.isKilitli()) {
+                    FacesUtil.warningMessage("girisYapanKullaniciKilitli");
                     return;
                 }
 
@@ -224,7 +229,7 @@ public class LoginController implements java.io.Serializable {
             SyKullanici user = initApp.getSyKullanicis().stream().filter(x -> x.getSessionId().equals(id)).findFirst().orElse(null);
             if (user != null) {
                 sessionManager.invalidateSession(id);
-                pushContext.send("oturum kapatildi",user.getId().longValue());
+                pushContext.send("oturum kapatildi", user.getId().longValue());
                 FacesUtil.successMessage("kullaniciOturumuKapatildi");
             }
 

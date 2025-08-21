@@ -1,6 +1,7 @@
 package tr.bel.gaziantep.bysweb.core.utils;
 
 import java.io.Serial;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -42,5 +43,14 @@ public class DateUtil implements java.io.Serializable{
         LocalDateTime date = LocalDateTime.now();
         date = date.plusDays(value);
         return date;
+    }
+
+    public static long dateDifferenceDays(LocalDate dateTime) {
+        LocalDate today = LocalDate.now();
+        if (dateTime != null) {
+            return Duration.between(dateTime.atStartOfDay(), today.atStartOfDay()).toDays();
+        } else {
+            return 0;
+        }
     }
 }

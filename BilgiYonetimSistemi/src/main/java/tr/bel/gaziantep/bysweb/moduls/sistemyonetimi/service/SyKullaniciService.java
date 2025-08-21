@@ -77,4 +77,8 @@ public class SyKullaniciService extends AbstractService<SyKullanici> {
         }
         edit(syKullanici);
     }
+
+    public List<SyKullanici> findByKilitli() {
+        return getEntityManager().createNamedQuery("SyKullanici.findByKilitli").getResultList();
+    }
 }

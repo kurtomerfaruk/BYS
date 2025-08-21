@@ -23,6 +23,7 @@ import java.util.Set;
 @Table(name = "SYKULLANICI")
 @NamedQuery(name = "SyKullanici.findByKullaniciAdiByParola", query = "SELECT s FROM SyKullanici s WHERE s.kullaniciAdi=:kullaniciAdi AND s.parola=:parola")
 @NamedQuery(name = "SyKullanici.findByKullaniciAdi", query = "SELECT s FROM SyKullanici s WHERE s.kullaniciAdi=:kullaniciAdi")
+@NamedQuery(name = "SyKullanici.findByKilitli", query = "SELECT s FROM SyKullanici s WHERE s.aktif=true AND s.kilitli=false")
 public class SyKullanici extends BaseEntityNoVersion {
     @Serial
     private static final long serialVersionUID = -9216898786963405162L;
@@ -65,13 +66,14 @@ public class SyKullanici extends BaseEntityNoVersion {
     private LocalDateTime sonGirisZamani;
 
     @Size(max = 50)
-
     @Column(name = "TEMA", length = 50)
     private String tema;
 
     @Column(name = "PAROLA_DEGISTIRILSIN")
-
     private boolean parolaDegistirilsin;
+
+    @Column(name = "KILITLI")
+    private boolean kilitli;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "syKullanici", fetch = FetchType.LAZY)
     private List<SyKullaniciGiris> syKullaniciGirisList = new ArrayList<>();
