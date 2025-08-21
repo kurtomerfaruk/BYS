@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="jakarta.faces.facelets"
       xmlns:f="jakarta.faces.core"
@@ -12,7 +13,8 @@
                    widgetVar="GnlPersonelEditDialog"
                    actionListener="#{gnlPersonelController.save}"
                    listForm="GnlPersonelListForm"
-                   model="#{gnlPersonelController.selected}">
+                   model="#{gnlPersonelController.selected}"
+                   onShow="adjustMenuWidth();">
 
         <p:outputLabel value="#{messages.kisiLabel}" for="inputWithButtonKisiId"/>
         <coco:inputWithButton id="inputWithButtonKisiId" inputId="kisiId"
@@ -25,7 +27,8 @@
                               dialogId="GnlPersonelEditDialogId"/>
 
         <p:outputLabel value="#{messages.unvanLabel}" for="@next"/>
-        <p:selectOneMenu id="gnlunvanId" value="#{gnlPersonelController.selected.gnlUnvan}" filter="true" converter="omnifaces.SelectItemsConverter">
+        <p:selectOneMenu id="gnlunvanId" value="#{gnlPersonelController.selected.gnlUnvan}" filter="true"
+                         converter="omnifaces.SelectItemsConverter">
             <f:selectItem itemLabel="#{messages.seciniz}"/>
             <f:selectItems value="#{gnlUnvanController.items}"
                            var="gnlunvanIdItem"
@@ -35,7 +38,8 @@
 
         <p:outputLabel value="#{messages.birimLabel}" for="@next"/>
         <p:selectCheckboxMenu id="gnlBirim" value="#{gnlPersonelController.gnlBirims}" label="Birim" multiple="true"
-                              converter="omnifaces.SelectItemsConverter" filter="true" filterMatchMode="startsWith">
+                              converter="omnifaces.SelectItemsConverter" filter="true" filterMatchMode="startsWith"
+                              styleClass="checkboxMenu">
             <f:selectItems value="#{gnlBirimController.items}"
                            var="birims"
                            itemValue="#{birims}"
@@ -43,6 +47,19 @@
         </p:selectCheckboxMenu>
 
     </coco:editpage>
+
+    <script type="text/javascript">
+        function adjustMenuWidth() {
+            var dialog = PF('GnlPersonelEditDialog');
+            var menu = $(".checkboxMenu");
+
+            if (dialog &amp;&amp; menu) {
+                var dialogWidth = dialog.jq.innerWidth();
+                var menuContainer = $(menu).closest('.ui-selectcheckboxmenu');
+                menuContainer.width(dialogWidth - 30);
+            }
+        }
+    </script>
 
 </ui:composition>
 
