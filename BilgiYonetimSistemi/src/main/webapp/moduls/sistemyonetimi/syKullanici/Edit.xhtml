@@ -30,11 +30,6 @@
         <p:inputText id="kullaniciAdi" value="#{syKullaniciController.selected.kullaniciAdi}" title="#{messages.kullaniciAdiText}" required="true" size="50"
                      maxlength="50"/>
 
-        <p:outputLabel value="#{messages.parolaLabel}" for="@next"/>
-        <p:password id="parola" value="#{syKullaniciController.selected.parola}" title="#{messages.parolaText}" required="true" feedback="true"
-                    promptLabel="#{messages.lutfenSifreGiriniz}" weakLabel="#{messages.zayif}" goodLabel="#{messages.ortaSeviye}"
-                    strongLabel="#{messages.guclu}"/>
-
         <p:outputLabel value="#{messages.kullaniciTuruLabel}" for="@next"/>
         <p:selectOneMenu id="kullaniciTuru" value="#{syKullaniciController.selected.kullaniciTuru}" converter="omnifaces.SelectItemsConverter"
                          required="true">
