@@ -54,6 +54,29 @@
                 </ui:fragment>
                 <!--    Islemler    -->
 
+                <!--    Ayarlar    -->
+                <ui:fragment rendered="#{syKullaniciController.hasPermission('sistem_yonetimi_ayarlar:goster')}">
+                    <li class="slide has-sub">
+                        <a href="javascript:void(0);" class="side-menu__item sublevel1">Ayarlar
+                            <i class="ri-arrow-right-s-line side-menu__angle"></i></a>
+                        <ul class="slide-menu child2">
+
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('syAyar:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/sistemyonetimi/syAyar/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="Ayarlar"/>
+                                </li>
+                            </ui:fragment>
+
+                        </ul>
+                    </li>
+                </ui:fragment>
+                <!--    Islemler    -->
+
                 <!--    Tanimlamalar    -->
                 <ui:fragment rendered="#{syKullaniciController.hasPermission('sistem_yonetimi_tanimlamalar:goster')}">
                     <li class="slide has-sub">
