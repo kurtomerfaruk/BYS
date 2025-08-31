@@ -95,6 +95,22 @@
         <mime-type>image/svg+xml</mime-type>
     </mime-mapping>
     <mime-mapping>
+        <extension>svg#lineawesome</extension>
+        <mime-type>image/svg+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>svg#boxicons</extension>
+        <mime-type>image/svg+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>svg#remixicon</extension>
+        <mime-type>image/svg+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>eot#iefix</extension>
+        <mime-type>image/svg+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
         <extension>less</extension>
         <mime-type>text/css</mime-type>
     </mime-mapping>
