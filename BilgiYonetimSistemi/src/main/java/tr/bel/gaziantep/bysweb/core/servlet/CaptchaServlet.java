@@ -26,7 +26,7 @@ public class CaptchaServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int width = 150;
+        int width = 200;
         int height = 50;
         String captchaText = CaptchaUtil.generateCaptchaText(6);
 
