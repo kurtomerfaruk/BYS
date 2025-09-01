@@ -53,4 +53,10 @@ public class DateUtil implements java.io.Serializable{
             return 0;
         }
     }
+
+    public static LocalDateTime addYear(int year) {
+        LocalDateTime date = LocalDateTime.now();
+        date = date.plusYears(year);
+        return date;
+    }
 }
