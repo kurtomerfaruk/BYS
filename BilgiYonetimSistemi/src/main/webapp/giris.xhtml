@@ -128,7 +128,7 @@
                                                                 styleClass="form-control"
                                                                 label="#{messages.parolaText}"/>
                                                     <a href="javascript:void(0);"
-                                                       class="show-password-button text-muted"
+                                                       class="show-password-button text-muted" tabindex="-1"
                                                        style="height: 40px;margin-top: -5px;margin-right: -5px"
                                                        onclick="createpassword('password',this)" id="button-addon2">
                                                         <i class="ri-eye-off-line align-middle"></i>
@@ -137,8 +137,15 @@
                                             </div>
 
                                             <div class="col-xl-12 mb-2">
-                                                <h:graphicImage value="/captcha" alt="CAPTCHA Image"
-                                                                styleClass="text-center"/>
+
+                                                <div class="ui-inputgroup w-100">
+                                                    <h:graphicImage id="captchaImg" value="/captcha" alt="CAPTCHA Image"
+                                                                    styleClass="text-center" tabindex="-1"/>
+                                                    <div class="ui-inputgroup-addon">
+                                                        <p:commandButton icon="pi pi-refresh" type="button" tabindex="-1"
+                                                                         onclick="document.getElementById('captchaImg').src='#{request.contextPath}/captcha?ts=' + new Date().getTime();" />
+                                                    </div>
+                                                </div>
                                                 <p:inputText id="captchaInput" value="#{loginController.captchaInput}"
                                                              styleClass="form-control" required="true"
                                                              label="Doğrulama Kodu"/>
@@ -154,29 +161,6 @@
                                                               value="#{messages.buttonGirisYap}"/>
                                             </p:commandLink>
                                         </div>
-                                        <!--                                        <div class="row">-->
-                                        <!--                                            <div class="table-responsive">-->
-                                        <!--                                                <table class="table table-borderless">-->
-                                        <!--                                                    <tbody>-->
-                                        <!--                                                    <tr>-->
-                                        <!--                                                        <td class="text-end">-->
-                                        <!--                                                            <div class="fw-semibold">Versiyon</div>-->
-                                        <!--                                                        </td>-->
-                                        <!--                                                        <td class="text-end"><span-->
-                                        <!--                                                                class="badge bg-success">#{initApp.version}</span></td>-->
-                                        <!--                                                    </tr>-->
-                                        <!--                                                    <tr>-->
-                                        <!--                                                        <td class="text-end">-->
-                                        <!--                                                            <div class="fw-semibold">Oluşturma Zamanı</div>-->
-                                        <!--                                                        </td>-->
-                                        <!--                                                        <td class="text-end">-->
-                                        <!--                                                            <span class="badge bg-success">#{initApp.buildTime}</span>-->
-                                        <!--                                                        </td>-->
-                                        <!--                                                    </tr>-->
-                                        <!--                                                    </tbody>-->
-                                        <!--                                                </table>-->
-                                        <!--                                            </div>-->
-                                        <!--                                        </div>-->
                                         <div class="d-flex align-items-center justify-content-between mb-2">
                                             <div class="flex-grow-1">
                                                 <div class="d-flex align-items-center gap-2 card-style-6-avatar">
