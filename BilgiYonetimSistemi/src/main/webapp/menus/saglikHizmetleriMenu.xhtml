@@ -3,129 +3,133 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
       xmlns:p="primefaces">
 
 <ui:composition>
 
-    <!-- Saglik Hizmetleri -->
-    <ui:fragment rendered="#{syKullaniciController.hasPermission('saglik_hizmetleri:goster')}">
-        <li class="slide has-sub">
-            <a href="javascript:void(0);" class="side-menu__item main_menu">
-                <i class="ti ti-health-recognition side-menu__icon"></i>
-                <span class="side-menu__label">Sağlık Hizmetleri</span>
-                <i class="ri-arrow-right-s-line side-menu__angle"></i>
-            </a>
-            <ul class="slide-menu child1">
-                <li class="slide side-menu__label1">
-                    <a href="javascript:void(0)">Sağlık Hizmetleri</a>
-                </li>
-
-                <!--    Islemler    -->
-                <ui:fragment rendered="#{syKullaniciController.hasPermission('saglik_hizmetleri_islemler:goster')}">
-                    <li class="slide has-sub">
-                        <a href="javascript:void(0);" class="side-menu__item sublevel1">İşlemler
-                            <i class="ri-arrow-right-s-line side-menu__angle"></i></a>
-                        <ul class="slide-menu child2">
-
-                            <ui:fragment rendered="#{syKullaniciController.hasPermission('shkisi:goster')}">
-                                <li class="slide">
-                                    <p:commandLink styleClass="side-menu__item sublevel2"
-                                                   actionListener="#{menuController.setPageLink('/moduls/saglikhizmetleri/shKisi/index')}"
-                                                   update="myPanel,:growl"
-                                                   onstart="PF('Loading').show()"
-                                                   onsuccess="PF('Loading').hide()"
-                                                   value="Kişiler"/>
-                                </li>
-                            </ui:fragment>
-
-                            <ui:fragment rendered="#{syKullaniciController.hasPermission('shkisikontrol:goster')}">
-                                <li class="slide">
-                                    <p:commandLink styleClass="side-menu__item sublevel2"
-                                                   actionListener="#{menuController.setPageLink('/moduls/saglikhizmetleri/shKisiKontrol/index')}"
-                                                   update="myPanel,:growl"
-                                                   onstart="PF('Loading').show()"
-                                                   onsuccess="PF('Loading').hide()"
-                                                   value="Kişi Kontrolleri"/>
-                                </li>
-                            </ui:fragment>
-
-                            <ui:fragment rendered="#{syKullaniciController.hasPermission('shkisikantahlilsonuc:goster')}">
-                                <li class="slide">
-                                    <p:commandLink styleClass="side-menu__item sublevel2"
-                                                   actionListener="#{menuController.setPageLink('/moduls/saglikhizmetleri/shKisiKanTahlilSonuc/index')}"
-                                                   update="myPanel,:growl"
-                                                   onstart="PF('Loading').show()"
-                                                   onsuccess="PF('Loading').hide()"
-                                                   value="Kah Tahlil Sonuçları"/>
-                                </li>
-                            </ui:fragment>
-
-                            <ui:fragment rendered="#{syKullaniciController.hasPermission('shobeziteanket:goster')}">
-                                <li class="slide">
-                                    <p:commandLink styleClass="side-menu__item sublevel2"
-                                                   actionListener="#{menuController.setPageLink('/moduls/saglikhizmetleri/shObeziteAnket/index')}"
-                                                   update="myPanel,:growl"
-                                                   onstart="PF('Loading').show()"
-                                                   onsuccess="PF('Loading').hide()"
-                                                   value="Obezite Anketleri"/>
-                                </li>
-                            </ui:fragment>
-
-                        </ul>
+    <h:form id="SaglikHizmetleriMenuForm">
+        <!-- Saglik Hizmetleri -->
+        <ui:fragment rendered="#{syKullaniciController.hasPermission('saglik_hizmetleri:goster')}">
+            <li class="slide has-sub">
+                <a href="javascript:void(0);" class="side-menu__item main_menu">
+                    <i class="ti ti-health-recognition side-menu__icon"></i>
+                    <span class="side-menu__label">Sağlık Hizmetleri</span>
+                    <i class="ri-arrow-right-s-line side-menu__angle"></i>
+                </a>
+                <ul class="slide-menu child1">
+                    <li class="slide side-menu__label1">
+                        <a href="javascript:void(0)">Sağlık Hizmetleri</a>
                     </li>
-                </ui:fragment>
-                <!--    Islemler    -->
 
-                <!--    Tanimlamalar    -->
-<!--                <ui:fragment rendered="#{syKullaniciController.hasPermission('saglik_hizmetleri_tanimlamalar:goster')}">-->
-<!--                    <li class="slide has-sub">-->
-<!--                        <a href="javascript:void(0);" class="side-menu__item sublevel1">Tanımlamalar-->
-<!--                            <i class="ri-arrow-right-s-line side-menu__angle"></i></a>-->
-<!--                        <ul class="slide-menu child2">-->
+                    <!--    Islemler    -->
+                    <ui:fragment rendered="#{syKullaniciController.hasPermission('saglik_hizmetleri_islemler:goster')}">
+                        <li class="slide has-sub">
+                            <a href="javascript:void(0);" class="side-menu__item sublevel1">İşlemler
+                                <i class="ri-arrow-right-s-line side-menu__angle"></i></a>
+                            <ul class="slide-menu child2">
 
-<!--                            <ui:fragment rendered="#{syKullaniciController.hasPermission('shanket:goster')}">-->
-<!--                                <li class="slide">-->
-<!--                                    <p:commandLink styleClass="side-menu__item sublevel2"-->
-<!--                                                   actionListener="#{menuController.setPageLink('/moduls/saglikhizmetleri/shAnket/index')}"-->
-<!--                                                   update="myPanel,:growl"-->
-<!--                                                   onstart="PF('Loading').show()"-->
-<!--                                                   onsuccess="PF('Loading').hide()"-->
-<!--                                                   value="Anket Listesi"/>-->
-<!--                                </li>-->
-<!--                            </ui:fragment>-->
+                                <ui:fragment rendered="#{syKullaniciController.hasPermission('shkisi:goster')}">
+                                    <li class="slide">
+                                        <p:commandLink styleClass="side-menu__item sublevel2"
+                                                       actionListener="#{menuController.setPageLink('/moduls/saglikhizmetleri/shKisi/index')}"
+                                                       update="myPanel,:growl"
+                                                       onstart="PF('Loading').show()"
+                                                       onsuccess="PF('Loading').hide()"
+                                                       value="Kişiler"/>
+                                    </li>
+                                </ui:fragment>
 
-<!--                            <ui:fragment rendered="#{syKullaniciController.hasPermission('shanketsoru:goster')}">-->
-<!--                                <li class="slide">-->
-<!--                                    <p:commandLink styleClass="side-menu__item sublevel2"-->
-<!--                                                   actionListener="#{menuController.setPageLink('/moduls/saglikhizmetleri/shAnketSoru/index')}"-->
-<!--                                                   update="myPanel,:growl"-->
-<!--                                                   onstart="PF('Loading').show()"-->
-<!--                                                   onsuccess="PF('Loading').hide()"-->
-<!--                                                   value="Anket Soruları"/>-->
-<!--                                </li>-->
-<!--                            </ui:fragment>-->
+                                <ui:fragment rendered="#{syKullaniciController.hasPermission('shkisikontrol:goster')}">
+                                    <li class="slide">
+                                        <p:commandLink styleClass="side-menu__item sublevel2"
+                                                       actionListener="#{menuController.setPageLink('/moduls/saglikhizmetleri/shKisiKontrol/index')}"
+                                                       update="myPanel,:growl"
+                                                       onstart="PF('Loading').show()"
+                                                       onsuccess="PF('Loading').hide()"
+                                                       value="Kişi Kontrolleri"/>
+                                    </li>
+                                </ui:fragment>
 
-<!--                            <ui:fragment rendered="#{syKullaniciController.hasPermission('shanketsorusecenek:goster')}">-->
-<!--                                <li class="slide">-->
-<!--                                    <p:commandLink styleClass="side-menu__item sublevel2"-->
-<!--                                                   actionListener="#{menuController.setPageLink('/moduls/saglikhizmetleri/shAnketSoruSecenek/index')}"-->
-<!--                                                   update="myPanel,:growl"-->
-<!--                                                   onstart="PF('Loading').show()"-->
-<!--                                                   onsuccess="PF('Loading').hide()"-->
-<!--                                                   value="Soru Seçenekleri"/>-->
-<!--                                </li>-->
-<!--                            </ui:fragment>-->
+                                <ui:fragment
+                                        rendered="#{syKullaniciController.hasPermission('shkisikantahlilsonuc:goster')}">
+                                    <li class="slide">
+                                        <p:commandLink styleClass="side-menu__item sublevel2"
+                                                       actionListener="#{menuController.setPageLink('/moduls/saglikhizmetleri/shKisiKanTahlilSonuc/index')}"
+                                                       update="myPanel,:growl"
+                                                       onstart="PF('Loading').show()"
+                                                       onsuccess="PF('Loading').hide()"
+                                                       value="Kah Tahlil Sonuçları"/>
+                                    </li>
+                                </ui:fragment>
 
-<!--                        </ul>-->
-<!--                    </li>-->
-<!--                </ui:fragment>-->
-                <!--    Tanimlamalar    -->
+                                <ui:fragment rendered="#{syKullaniciController.hasPermission('shobeziteanket:goster')}">
+                                    <li class="slide">
+                                        <p:commandLink styleClass="side-menu__item sublevel2"
+                                                       actionListener="#{menuController.setPageLink('/moduls/saglikhizmetleri/shObeziteAnket/index')}"
+                                                       update="myPanel,:growl"
+                                                       onstart="PF('Loading').show()"
+                                                       onsuccess="PF('Loading').hide()"
+                                                       value="Obezite Anketleri"/>
+                                    </li>
+                                </ui:fragment>
+
+                            </ul>
+                        </li>
+                    </ui:fragment>
+                    <!--    Islemler    -->
+
+                    <!--    Tanimlamalar    -->
+                    <!--                <ui:fragment rendered="#{syKullaniciController.hasPermission('saglik_hizmetleri_tanimlamalar:goster')}">-->
+                    <!--                    <li class="slide has-sub">-->
+                    <!--                        <a href="javascript:void(0);" class="side-menu__item sublevel1">Tanımlamalar-->
+                    <!--                            <i class="ri-arrow-right-s-line side-menu__angle"></i></a>-->
+                    <!--                        <ul class="slide-menu child2">-->
+
+                    <!--                            <ui:fragment rendered="#{syKullaniciController.hasPermission('shanket:goster')}">-->
+                    <!--                                <li class="slide">-->
+                    <!--                                    <p:commandLink styleClass="side-menu__item sublevel2"-->
+                    <!--                                                   actionListener="#{menuController.setPageLink('/moduls/saglikhizmetleri/shAnket/index')}"-->
+                    <!--                                                   update="myPanel,:growl"-->
+                    <!--                                                   onstart="PF('Loading').show()"-->
+                    <!--                                                   onsuccess="PF('Loading').hide()"-->
+                    <!--                                                   value="Anket Listesi"/>-->
+                    <!--                                </li>-->
+                    <!--                            </ui:fragment>-->
+
+                    <!--                            <ui:fragment rendered="#{syKullaniciController.hasPermission('shanketsoru:goster')}">-->
+                    <!--                                <li class="slide">-->
+                    <!--                                    <p:commandLink styleClass="side-menu__item sublevel2"-->
+                    <!--                                                   actionListener="#{menuController.setPageLink('/moduls/saglikhizmetleri/shAnketSoru/index')}"-->
+                    <!--                                                   update="myPanel,:growl"-->
+                    <!--                                                   onstart="PF('Loading').show()"-->
+                    <!--                                                   onsuccess="PF('Loading').hide()"-->
+                    <!--                                                   value="Anket Soruları"/>-->
+                    <!--                                </li>-->
+                    <!--                            </ui:fragment>-->
+
+                    <!--                            <ui:fragment rendered="#{syKullaniciController.hasPermission('shanketsorusecenek:goster')}">-->
+                    <!--                                <li class="slide">-->
+                    <!--                                    <p:commandLink styleClass="side-menu__item sublevel2"-->
+                    <!--                                                   actionListener="#{menuController.setPageLink('/moduls/saglikhizmetleri/shAnketSoruSecenek/index')}"-->
+                    <!--                                                   update="myPanel,:growl"-->
+                    <!--                                                   onstart="PF('Loading').show()"-->
+                    <!--                                                   onsuccess="PF('Loading').hide()"-->
+                    <!--                                                   value="Soru Seçenekleri"/>-->
+                    <!--                                </li>-->
+                    <!--                            </ui:fragment>-->
+
+                    <!--                        </ul>-->
+                    <!--                    </li>-->
+                    <!--                </ui:fragment>-->
+                    <!--    Tanimlamalar    -->
 
 
-            </ul>
-        </li>
-    </ui:fragment>
-    <!-- Saglik Hizmetleri -->
+                </ul>
+            </li>
+        </ui:fragment>
+        <!-- Saglik Hizmetleri -->
+    </h:form>
 
 </ui:composition>
 

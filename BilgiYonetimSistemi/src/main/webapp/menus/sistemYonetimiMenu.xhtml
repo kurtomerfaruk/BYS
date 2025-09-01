@@ -3,139 +3,142 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
       xmlns:p="primefaces">
 
 <ui:composition>
 
-    <!-- Sistem Yonetimi -->
-    <ui:fragment rendered="#{syKullaniciController.hasPermission('sistem_yonetimi:goster')}">
-        <li class="slide has-sub">
-            <a href="javascript:void(0);" class="side-menu__item main_menu">
-                <i class="ri-settings-2-line side-menu__icon"></i>
-                <span class="side-menu__label">Sistem Yönetimi</span>
-                <i class="ri-arrow-right-s-line side-menu__angle"></i>
-            </a>
-            <ul class="slide-menu child1">
-                <li class="slide side-menu__label1">
-                    <a href="javascript:void(0)">Sistem Yönetimi</a>
-                </li>
-
-                <!--    Islemler    -->
-                <ui:fragment rendered="#{syKullaniciController.hasPermission('sistem_yonetimi_yonetim:goster')}">
-                    <li class="slide has-sub">
-                        <a href="javascript:void(0);" class="side-menu__item sublevel1">İşlemler
-                            <i class="ri-arrow-right-s-line side-menu__angle"></i></a>
-                        <ul class="slide-menu child2">
-
-                            <ui:fragment rendered="#{syKullaniciController.hasPermission('syduyuru:goster')}">
-                                <li class="slide">
-                                    <p:commandLink styleClass="side-menu__item sublevel2"
-                                                   actionListener="#{menuController.setPageLink('/moduls/sistemyonetimi/syDuyuru/index')}"
-                                                   update="myPanel,:growl"
-                                                   onstart="PF('Loading').show()"
-                                                   onsuccess="PF('Loading').hide()"
-                                                   value="Duyurular"/>
-                                </li>
-                            </ui:fragment>
-
-                            <ui:fragment rendered="#{syKullaniciController.hasPermission('sykullanici:goster')}">
-                                <li class="slide">
-                                    <p:commandLink styleClass="side-menu__item sublevel2"
-                                                   actionListener="#{menuController.setPageLink('/moduls/sistemyonetimi/syKullanici/index')}"
-                                                   update="myPanel,:growl"
-                                                   onstart="PF('Loading').show()"
-                                                   onsuccess="PF('Loading').hide()"
-                                                   value="Kullanıcılar"/>
-                                </li>
-                            </ui:fragment>
-
-                        </ul>
+    <h:form id="SistemYonetimiMenuForm">
+        <!-- Sistem Yonetimi -->
+        <ui:fragment rendered="#{syKullaniciController.hasPermission('sistem_yonetimi:goster')}">
+            <li class="slide has-sub">
+                <a href="javascript:void(0);" class="side-menu__item main_menu">
+                    <i class="ri-settings-2-line side-menu__icon"></i>
+                    <span class="side-menu__label">Sistem Yönetimi</span>
+                    <i class="ri-arrow-right-s-line side-menu__angle"></i>
+                </a>
+                <ul class="slide-menu child1">
+                    <li class="slide side-menu__label1">
+                        <a href="javascript:void(0)">Sistem Yönetimi</a>
                     </li>
-                </ui:fragment>
-                <!--    Islemler    -->
 
-                <!--    Ayarlar    -->
-                <ui:fragment rendered="#{syKullaniciController.hasPermission('sistem_yonetimi_ayarlar:goster')}">
-                    <li class="slide has-sub">
-                        <a href="javascript:void(0);" class="side-menu__item sublevel1">Ayarlar
-                            <i class="ri-arrow-right-s-line side-menu__angle"></i></a>
-                        <ul class="slide-menu child2">
+                    <!--    Islemler    -->
+                    <ui:fragment rendered="#{syKullaniciController.hasPermission('sistem_yonetimi_yonetim:goster')}">
+                        <li class="slide has-sub">
+                            <a href="javascript:void(0);" class="side-menu__item sublevel1">İşlemler
+                                <i class="ri-arrow-right-s-line side-menu__angle"></i></a>
+                            <ul class="slide-menu child2">
 
-                            <ui:fragment rendered="#{syKullaniciController.hasPermission('syAyar:goster')}">
-                                <li class="slide">
-                                    <p:commandLink styleClass="side-menu__item sublevel2"
-                                                   actionListener="#{menuController.setPageLink('/moduls/sistemyonetimi/syAyar/index')}"
-                                                   update="myPanel,:growl"
-                                                   onstart="PF('Loading').show()"
-                                                   onsuccess="PF('Loading').hide()"
-                                                   value="Ayarlar"/>
-                                </li>
-                            </ui:fragment>
+                                <ui:fragment rendered="#{syKullaniciController.hasPermission('syduyuru:goster')}">
+                                    <li class="slide">
+                                        <p:commandLink styleClass="side-menu__item sublevel2"
+                                                       actionListener="#{menuController.setPageLink('/moduls/sistemyonetimi/syDuyuru/index')}"
+                                                       update="myPanel,:growl"
+                                                       onstart="PF('Loading').show()"
+                                                       onsuccess="PF('Loading').hide()"
+                                                       value="Duyurular"/>
+                                    </li>
+                                </ui:fragment>
 
-                        </ul>
-                    </li>
-                </ui:fragment>
-                <!--    Islemler    -->
+                                <ui:fragment rendered="#{syKullaniciController.hasPermission('sykullanici:goster')}">
+                                    <li class="slide">
+                                        <p:commandLink styleClass="side-menu__item sublevel2"
+                                                       actionListener="#{menuController.setPageLink('/moduls/sistemyonetimi/syKullanici/index')}"
+                                                       update="myPanel,:growl"
+                                                       onstart="PF('Loading').show()"
+                                                       onsuccess="PF('Loading').hide()"
+                                                       value="Kullanıcılar"/>
+                                    </li>
+                                </ui:fragment>
 
-                <!--    Tanimlamalar    -->
-                <ui:fragment rendered="#{syKullaniciController.hasPermission('sistem_yonetimi_tanimlamalar:goster')}">
-                    <li class="slide has-sub">
-                        <a href="javascript:void(0);" class="side-menu__item sublevel1">Tanımlamalar
-                            <i class="ri-arrow-right-s-line side-menu__angle"></i></a>
-                        <ul class="slide-menu child2">
-                            <ui:fragment rendered="#{syKullaniciController.hasPermission('syrol:goster')}">
-                                <li class="slide">
-                                    <p:commandLink styleClass="side-menu__item sublevel2"
-                                                   actionListener="#{menuController.setPageLink('/moduls/sistemyonetimi/syRol/index')}"
-                                                   update="myPanel,:growl"
-                                                   onstart="PF('Loading').show()"
-                                                   onsuccess="PF('Loading').hide()"
-                                                   value="Roller"/>
-                                </li>
-                            </ui:fragment>
+                            </ul>
+                        </li>
+                    </ui:fragment>
+                    <!--    Islemler    -->
 
-                            <ui:fragment rendered="#{syKullaniciController.hasPermission('syyetki:goster')}">
-                                <li class="slide">
-                                    <p:commandLink styleClass="side-menu__item sublevel2"
-                                                   actionListener="#{menuController.setPageLink('/moduls/sistemyonetimi/syYetki/index')}"
-                                                   update="myPanel,:growl"
-                                                   onstart="PF('Loading').show()"
-                                                   onsuccess="PF('Loading').hide()"
-                                                   value="Yetkiler"/>
-                                </li>
-                            </ui:fragment>
+                    <!--    Ayarlar    -->
+                    <ui:fragment rendered="#{syKullaniciController.hasPermission('sistem_yonetimi_ayarlar:goster')}">
+                        <li class="slide has-sub">
+                            <a href="javascript:void(0);" class="side-menu__item sublevel1">Ayarlar
+                                <i class="ri-arrow-right-s-line side-menu__angle"></i></a>
+                            <ul class="slide-menu child2">
 
-                            <ui:fragment rendered="#{syKullaniciController.hasPermission('sytablo:goster')}">
-                                <li class="slide">
-                                    <p:commandLink styleClass="side-menu__item sublevel2"
-                                                   actionListener="#{menuController.setPageLink('/moduls/sistemyonetimi/syTablo/index')}"
-                                                   update="myPanel,:growl"
-                                                   onstart="PF('Loading').show()"
-                                                   onsuccess="PF('Loading').hide()"
-                                                   value="Tablolar"/>
-                                </li>
-                            </ui:fragment>
+                                <ui:fragment rendered="#{syKullaniciController.hasPermission('syAyar:goster')}">
+                                    <li class="slide">
+                                        <p:commandLink styleClass="side-menu__item sublevel2"
+                                                       actionListener="#{menuController.setPageLink('/moduls/sistemyonetimi/syAyar/index')}"
+                                                       update="myPanel,:growl"
+                                                       onstart="PF('Loading').show()"
+                                                       onsuccess="PF('Loading').hide()"
+                                                       value="Ayarlar"/>
+                                    </li>
+                                </ui:fragment>
 
-                            <ui:fragment rendered="#{syKullaniciController.hasPermission('sykolon:goster')}">
-                                <li class="slide">
-                                    <p:commandLink styleClass="side-menu__item sublevel2"
-                                                   actionListener="#{menuController.setPageLink('/moduls/sistemyonetimi/syKolon/index')}"
-                                                   update="myPanel,:growl"
-                                                   onstart="PF('Loading').show()"
-                                                   onsuccess="PF('Loading').hide()"
-                                                   value="Kolonlar"/>
-                                </li>
-                            </ui:fragment>
-                        </ul>
-                    </li>
-                </ui:fragment>
-                <!--    Tanimlamalar    -->
+                            </ul>
+                        </li>
+                    </ui:fragment>
+                    <!--    Islemler    -->
 
-            </ul>
-        </li>
-    </ui:fragment>
-    <!-- Sistem Yonetimi -->
+                    <!--    Tanimlamalar    -->
+                    <ui:fragment
+                            rendered="#{syKullaniciController.hasPermission('sistem_yonetimi_tanimlamalar:goster')}">
+                        <li class="slide has-sub">
+                            <a href="javascript:void(0);" class="side-menu__item sublevel1">Tanımlamalar
+                                <i class="ri-arrow-right-s-line side-menu__angle"></i></a>
+                            <ul class="slide-menu child2">
+                                <ui:fragment rendered="#{syKullaniciController.hasPermission('syrol:goster')}">
+                                    <li class="slide">
+                                        <p:commandLink styleClass="side-menu__item sublevel2"
+                                                       actionListener="#{menuController.setPageLink('/moduls/sistemyonetimi/syRol/index')}"
+                                                       update="myPanel,:growl"
+                                                       onstart="PF('Loading').show()"
+                                                       onsuccess="PF('Loading').hide()"
+                                                       value="Roller"/>
+                                    </li>
+                                </ui:fragment>
 
+                                <ui:fragment rendered="#{syKullaniciController.hasPermission('syyetki:goster')}">
+                                    <li class="slide">
+                                        <p:commandLink styleClass="side-menu__item sublevel2"
+                                                       actionListener="#{menuController.setPageLink('/moduls/sistemyonetimi/syYetki/index')}"
+                                                       update="myPanel,:growl"
+                                                       onstart="PF('Loading').show()"
+                                                       onsuccess="PF('Loading').hide()"
+                                                       value="Yetkiler"/>
+                                    </li>
+                                </ui:fragment>
+
+                                <ui:fragment rendered="#{syKullaniciController.hasPermission('sytablo:goster')}">
+                                    <li class="slide">
+                                        <p:commandLink styleClass="side-menu__item sublevel2"
+                                                       actionListener="#{menuController.setPageLink('/moduls/sistemyonetimi/syTablo/index')}"
+                                                       update="myPanel,:growl"
+                                                       onstart="PF('Loading').show()"
+                                                       onsuccess="PF('Loading').hide()"
+                                                       value="Tablolar"/>
+                                    </li>
+                                </ui:fragment>
+
+                                <ui:fragment rendered="#{syKullaniciController.hasPermission('sykolon:goster')}">
+                                    <li class="slide">
+                                        <p:commandLink styleClass="side-menu__item sublevel2"
+                                                       actionListener="#{menuController.setPageLink('/moduls/sistemyonetimi/syKolon/index')}"
+                                                       update="myPanel,:growl"
+                                                       onstart="PF('Loading').show()"
+                                                       onsuccess="PF('Loading').hide()"
+                                                       value="Kolonlar"/>
+                                    </li>
+                                </ui:fragment>
+                            </ul>
+                        </li>
+                    </ui:fragment>
+                    <!--    Tanimlamalar    -->
+
+                </ul>
+            </li>
+        </ui:fragment>
+        <!-- Sistem Yonetimi -->
+    </h:form>
 
 </ui:composition>
 

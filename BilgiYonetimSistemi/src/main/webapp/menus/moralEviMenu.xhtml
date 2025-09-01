@@ -3,10 +3,12 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
       xmlns:p="primefaces">
 
 <ui:composition>
 
+    <h:form id="MoralEviMenuForm">
     <!-- Moral Evi -->
     <ui:fragment rendered="#{syKullaniciController.hasPermission('moral_evi:goster')}">
         <li class="slide has-sub">
@@ -93,6 +95,7 @@
         </li>
     </ui:fragment>
     <!-- Moral Evi -->
+    </h:form>
 
 </ui:composition>
 

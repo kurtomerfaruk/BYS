@@ -3,129 +3,133 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
       xmlns:p="primefaces">
 
 <ui:composition>
 
-    <!-- Aktif Yasam -->
-    <ui:fragment rendered="#{syKullaniciController.hasPermission('aktif_yasam:goster')}">
-        <li class="slide has-sub">
-            <a href="javascript:void(0);" class="side-menu__item main_menu">
-                <i class="ri-home-heart-line side-menu__icon"></i>
-                <span class="side-menu__label">Aktif Yaşam</span>
-                <i class="ri-arrow-right-s-line side-menu__angle"></i>
-            </a>
-            <ul class="slide-menu child1">
-                <li class="slide side-menu__label1">
-                    <a href="javascript:void(0)">Aktif Yaşam</a>
-                </li>
-
-                <!--    Islemler    -->
-                <ui:fragment rendered="#{syKullaniciController.hasPermission('aktif_yasam_islemler:goster')}">
-                    <li class="slide has-sub">
-                        <a href="javascript:void(0);" class="side-menu__item sublevel1">İşlemler
-                            <i class="ri-arrow-right-s-line side-menu__angle"></i></a>
-                        <ul class="slide-menu child2">
-
-                            <ui:fragment rendered="#{syKullaniciController.hasPermission('ayetkinlik:goster')}">
-                                <li class="slide">
-                                    <p:commandLink styleClass="side-menu__item sublevel2"
-                                                   actionListener="#{menuController.setPageLink('/moduls/aktifyasam/ayEtkinlik/index')}"
-                                                   update="myPanel,:growl"
-                                                   onstart="PF('Loading').show()"
-                                                   onsuccess="PF('Loading').hide()"
-                                                   value="Etkinlik Listesi"/>
-                                </li>
-                            </ui:fragment>
-
-                            <ui:fragment rendered="#{syKullaniciController.hasPermission('aygiriscikis:goster')}">
-                                <li class="slide">
-                                    <p:commandLink styleClass="side-menu__item sublevel2"
-                                                   actionListener="#{menuController.setPageLink('/moduls/aktifyasam/ayGirisCikis/index')}"
-                                                   update="myPanel,:growl"
-                                                   onstart="PF('Loading').show()"
-                                                   onsuccess="PF('Loading').hide()"
-                                                   value="Giriş Çıkış Listesi"/>
-                                </li>
-                            </ui:fragment>
-
-                            <ui:fragment rendered="#{syKullaniciController.hasPermission('aykisi:goster')}">
-                                <li class="slide">
-                                    <p:commandLink styleClass="side-menu__item sublevel2"
-                                                   actionListener="#{menuController.setPageLink('/moduls/aktifyasam/ayKisi/index')}"
-                                                   update="myPanel,:growl"
-                                                   onstart="PF('Loading').show()"
-                                                   onsuccess="PF('Loading').hide()"
-                                                   value="Kişi Listesi"/>
-                                </li>
-                            </ui:fragment>
-
-                        </ul>
+    <h:form id="AktifYasamMenuForm">
+        <!-- Aktif Yasam -->
+        <ui:fragment rendered="#{syKullaniciController.hasPermission('aktif_yasam:goster')}">
+            <li class="slide has-sub">
+                <a href="javascript:void(0);" class="side-menu__item main_menu">
+                    <i class="ri-home-heart-line side-menu__icon"></i>
+                    <span class="side-menu__label">Aktif Yaşam</span>
+                    <i class="ri-arrow-right-s-line side-menu__angle"></i>
+                </a>
+                <ul class="slide-menu child1">
+                    <li class="slide side-menu__label1">
+                        <a href="javascript:void(0)">Aktif Yaşam</a>
                     </li>
-                </ui:fragment>
-                <!--    Islemler    -->
 
-                <!--    Tanimlamalar    -->
-                <ui:fragment rendered="#{syKullaniciController.hasPermission('aktif_yasam_tanimlamalar:goster')}">
-                    <li class="slide has-sub">
-                        <a href="javascript:void(0);" class="side-menu__item sublevel1">Tanımlamalar
-                            <i class="ri-arrow-right-s-line side-menu__angle"></i></a>
-                        <ul class="slide-menu child2">
+                    <!--    Islemler    -->
+                    <ui:fragment rendered="#{syKullaniciController.hasPermission('aktif_yasam_islemler:goster')}">
+                        <li class="slide has-sub">
+                            <a href="javascript:void(0);" class="side-menu__item sublevel1">İşlemler
+                                <i class="ri-arrow-right-s-line side-menu__angle"></i></a>
+                            <ul class="slide-menu child2">
 
-                            <ui:fragment rendered="#{syKullaniciController.hasPermission('ayaktivite:goster')}">
-                                <li class="slide">
-                                    <p:commandLink styleClass="side-menu__item sublevel2"
-                                                   actionListener="#{menuController.setPageLink('/moduls/aktifyasam/ayAktivite/index')}"
-                                                   update="myPanel,:growl"
-                                                   onstart="PF('Loading').show()"
-                                                   onsuccess="PF('Loading').hide()"
-                                                   value="Aktiviteler"/>
-                                </li>
-                            </ui:fragment>
+                                <ui:fragment rendered="#{syKullaniciController.hasPermission('ayetkinlik:goster')}">
+                                    <li class="slide">
+                                        <p:commandLink styleClass="side-menu__item sublevel2"
+                                                       actionListener="#{menuController.setPageLink('/moduls/aktifyasam/ayEtkinlik/index')}"
+                                                       update="myPanel,:growl"
+                                                       onstart="PF('Loading').show()"
+                                                       onsuccess="PF('Loading').hide()"
+                                                       value="Etkinlik Listesi"/>
+                                    </li>
+                                </ui:fragment>
 
-                            <ui:fragment rendered="#{syKullaniciController.hasPermission('aybirim:goster')}">
-                                <li class="slide">
-                                    <p:commandLink styleClass="side-menu__item sublevel2"
-                                                   actionListener="#{menuController.setPageLink('/moduls/aktifyasam/ayBirim/index')}"
-                                                   update="myPanel,:growl"
-                                                   onstart="PF('Loading').show()"
-                                                   onsuccess="PF('Loading').hide()"
-                                                   value="Birim Listesi"/>
-                                </li>
-                            </ui:fragment>
+                                <ui:fragment rendered="#{syKullaniciController.hasPermission('aygiriscikis:goster')}">
+                                    <li class="slide">
+                                        <p:commandLink styleClass="side-menu__item sublevel2"
+                                                       actionListener="#{menuController.setPageLink('/moduls/aktifyasam/ayGirisCikis/index')}"
+                                                       update="myPanel,:growl"
+                                                       onstart="PF('Loading').show()"
+                                                       onsuccess="PF('Loading').hide()"
+                                                       value="Giriş Çıkış Listesi"/>
+                                    </li>
+                                </ui:fragment>
 
-                            <ui:fragment rendered="#{syKullaniciController.hasPermission('aysaglikbilgi:goster')}">
-                                <li class="slide">
-                                    <p:commandLink styleClass="side-menu__item sublevel2"
-                                                   actionListener="#{menuController.setPageLink('/moduls/aktifyasam/aySaglikBilgi/index')}"
-                                                   update="myPanel,:growl"
-                                                   onstart="PF('Loading').show()"
-                                                   onsuccess="PF('Loading').hide()"
-                                                   value="Sağlık Bilgileri"/>
-                                </li>
-                            </ui:fragment>
+                                <ui:fragment rendered="#{syKullaniciController.hasPermission('aykisi:goster')}">
+                                    <li class="slide">
+                                        <p:commandLink styleClass="side-menu__item sublevel2"
+                                                       actionListener="#{menuController.setPageLink('/moduls/aktifyasam/ayKisi/index')}"
+                                                       update="myPanel,:growl"
+                                                       onstart="PF('Loading').show()"
+                                                       onsuccess="PF('Loading').hide()"
+                                                       value="Kişi Listesi"/>
+                                    </li>
+                                </ui:fragment>
 
-                            <ui:fragment rendered="#{syKullaniciController.hasPermission('aysanatsalbeceri:goster')}">
-                                <li class="slide">
-                                    <p:commandLink styleClass="side-menu__item sublevel2"
-                                                   actionListener="#{menuController.setPageLink('/moduls/aktifyasam/aySanatsalBeceri/index')}"
-                                                   update="myPanel,:growl"
-                                                   onstart="PF('Loading').show()"
-                                                   onsuccess="PF('Loading').hide()"
-                                                   value="Sanatsal Beceriler"/>
-                                </li>
-                            </ui:fragment>
+                            </ul>
+                        </li>
+                    </ui:fragment>
+                    <!--    Islemler    -->
 
-                        </ul>
-                    </li>
-                </ui:fragment>
-                <!--    Tanimlamalar    -->
+                    <!--    Tanimlamalar    -->
+                    <ui:fragment rendered="#{syKullaniciController.hasPermission('aktif_yasam_tanimlamalar:goster')}">
+                        <li class="slide has-sub">
+                            <a href="javascript:void(0);" class="side-menu__item sublevel1">Tanımlamalar
+                                <i class="ri-arrow-right-s-line side-menu__angle"></i></a>
+                            <ul class="slide-menu child2">
+
+                                <ui:fragment rendered="#{syKullaniciController.hasPermission('ayaktivite:goster')}">
+                                    <li class="slide">
+                                        <p:commandLink styleClass="side-menu__item sublevel2"
+                                                       actionListener="#{menuController.setPageLink('/moduls/aktifyasam/ayAktivite/index')}"
+                                                       update="myPanel,:growl"
+                                                       onstart="PF('Loading').show()"
+                                                       onsuccess="PF('Loading').hide()"
+                                                       value="Aktiviteler"/>
+                                    </li>
+                                </ui:fragment>
+
+                                <ui:fragment rendered="#{syKullaniciController.hasPermission('aybirim:goster')}">
+                                    <li class="slide">
+                                        <p:commandLink styleClass="side-menu__item sublevel2"
+                                                       actionListener="#{menuController.setPageLink('/moduls/aktifyasam/ayBirim/index')}"
+                                                       update="myPanel,:growl"
+                                                       onstart="PF('Loading').show()"
+                                                       onsuccess="PF('Loading').hide()"
+                                                       value="Birim Listesi"/>
+                                    </li>
+                                </ui:fragment>
+
+                                <ui:fragment rendered="#{syKullaniciController.hasPermission('aysaglikbilgi:goster')}">
+                                    <li class="slide">
+                                        <p:commandLink styleClass="side-menu__item sublevel2"
+                                                       actionListener="#{menuController.setPageLink('/moduls/aktifyasam/aySaglikBilgi/index')}"
+                                                       update="myPanel,:growl"
+                                                       onstart="PF('Loading').show()"
+                                                       onsuccess="PF('Loading').hide()"
+                                                       value="Sağlık Bilgileri"/>
+                                    </li>
+                                </ui:fragment>
+
+                                <ui:fragment
+                                        rendered="#{syKullaniciController.hasPermission('aysanatsalbeceri:goster')}">
+                                    <li class="slide">
+                                        <p:commandLink styleClass="side-menu__item sublevel2"
+                                                       actionListener="#{menuController.setPageLink('/moduls/aktifyasam/aySanatsalBeceri/index')}"
+                                                       update="myPanel,:growl"
+                                                       onstart="PF('Loading').show()"
+                                                       onsuccess="PF('Loading').hide()"
+                                                       value="Sanatsal Beceriler"/>
+                                    </li>
+                                </ui:fragment>
+
+                            </ul>
+                        </li>
+                    </ui:fragment>
+                    <!--    Tanimlamalar    -->
 
 
-            </ul>
-        </li>
-    </ui:fragment>
-    <!-- Aktif Yasam -->
+                </ul>
+            </li>
+        </ui:fragment>
+        <!-- Aktif Yasam -->
+    </h:form>
 
 </ui:composition>
 
