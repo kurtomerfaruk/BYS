@@ -86,10 +86,13 @@
 <h:body>
 
     <o:socket channel="syKullaniciChannel" onmessage="syKullaniciMessage" user="#{syKullanici.id}"/>
-    <p:remoteCommand name="updateKullanici" update="userSize,userForm:userPanelGroup"/>
+    <h:form>
+        <p:remoteCommand name="updateKullanici" update="userSize,userForm:userPanelGroup"/>
 
-    <p:remoteCommand name="updateNotification" update="NotificationForm,notificationSize"
-                     actionListener="#{syDuyuruController.getDuyurus()}"/>
+        <p:remoteCommand name="updateNotification" update="NotificationForm,notificationSize"
+                         actionListener="#{syDuyuruController.getDuyurus()}"/>
+    </h:form>
+
 
     <o:socket channel="notificationChannel" onmessage="notificationMessage" user="#{syKullanici.id}"/>
     <p:growl id="growl" life="3000" widgetVar="growlWidget" keepAlive="true"/>
@@ -106,42 +109,42 @@
                 style="font-size: 32px;color: #fff;text-decoration: none"/>
     </p:notificationBar>
 
-        <p:ajaxExceptionHandler type="jakarta.faces.application.ViewExpiredException"
-                                update="exceptionDialog"
-                                onexception="PF('exceptionDialog').show();"/>
-        <p:ajaxExceptionHandler type="java.lang.NullPointerException"
-                                update="exceptionDialog"
-                                onexception="PF('exceptionDialog').show();"/>
+    <p:ajaxExceptionHandler type="jakarta.faces.application.ViewExpiredException"
+                            update="exceptionDialog"
+                            onexception="PF('exceptionDialog').show();"/>
+    <p:ajaxExceptionHandler type="java.lang.NullPointerException"
+                            update="exceptionDialog"
+                            onexception="PF('exceptionDialog').show();"/>
     <p:ajaxExceptionHandler type="java.lang.Throwable"
                             update="exceptionDialog"
                             onexception="PF('exceptionDialog').show()"/>
-        <p:ajaxExceptionHandler type="jakarta.faces.view.facelets.FaceletException"
-                                update="exceptionDialog"
-                                onexception="PF('exceptionDialog').show()"/>
-        <p:ajaxExceptionHandler type="jakarta.el.PropertyNotFoundException"
-                                update="exceptionDialog"
-                                onexception="PF('exceptionDialog').show()"/>
-        <p:ajaxExceptionHandler type="org.jboss.weld.exceptions.WeldException"
-                                update="exceptionDialog"
-                                onexception="PF('exceptionDialog').show()"/>
-        <p:ajaxExceptionHandler type="java.lang.Exception"
-                                update="exceptionDialog"
-                                onexception="PF('exceptionDialog').show()"/>
-        <p:ajaxExceptionHandler type="jakarta.el.ELException"
-                                update="exceptionDialog"
-                                onexception="PF('exceptionDialog').show()"/>
-        <p:ajaxExceptionHandler type="java.lang.reflect.InvocationTargetException"
-                                update="exceptionDialog"
-                                onexception="PF('exceptionDialog').show()"/>
-        <p:ajaxExceptionHandler type="jakarta.faces.FacesException"
-                                update="exceptionDialog"
-                                onexception="PF('exceptionDialog').show()"/>
-        <p:ajaxExceptionHandler type="tr.bel.gaziantep.bysweb.core.exception.BysException"
-                                update="exceptionDialog"
-                                onexception="PF('exceptionDialog').show()"/>
-        <p:ajaxExceptionHandler type="jakarta.faces.FacesException"
-                                update="exceptionDialog"
-                                onexception="PF('exceptionDialog').show()"/>
+    <p:ajaxExceptionHandler type="jakarta.faces.view.facelets.FaceletException"
+                            update="exceptionDialog"
+                            onexception="PF('exceptionDialog').show()"/>
+    <p:ajaxExceptionHandler type="jakarta.el.PropertyNotFoundException"
+                            update="exceptionDialog"
+                            onexception="PF('exceptionDialog').show()"/>
+    <p:ajaxExceptionHandler type="org.jboss.weld.exceptions.WeldException"
+                            update="exceptionDialog"
+                            onexception="PF('exceptionDialog').show()"/>
+    <p:ajaxExceptionHandler type="java.lang.Exception"
+                            update="exceptionDialog"
+                            onexception="PF('exceptionDialog').show()"/>
+    <p:ajaxExceptionHandler type="jakarta.el.ELException"
+                            update="exceptionDialog"
+                            onexception="PF('exceptionDialog').show()"/>
+    <p:ajaxExceptionHandler type="java.lang.reflect.InvocationTargetException"
+                            update="exceptionDialog"
+                            onexception="PF('exceptionDialog').show()"/>
+    <p:ajaxExceptionHandler type="jakarta.faces.FacesException"
+                            update="exceptionDialog"
+                            onexception="PF('exceptionDialog').show()"/>
+    <p:ajaxExceptionHandler type="tr.bel.gaziantep.bysweb.core.exception.BysException"
+                            update="exceptionDialog"
+                            onexception="PF('exceptionDialog').show()"/>
+    <p:ajaxExceptionHandler type="jakarta.faces.FacesException"
+                            update="exceptionDialog"
+                            onexception="PF('exceptionDialog').show()"/>
 
     <p:dialog id="exceptionDialog" header="Hata Detayı"
               widgetVar="exceptionDialog"
@@ -758,9 +761,9 @@
                            data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="ri-notification-line ri-lg"></i>
                             <h:panelGroup id="notificationSize">
-                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">
-                                    #{syDuyuruController.getDuyurus().size()}
-                                </span>
+                                <h:outputText
+                                        styleClass="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success"
+                                        value="#{syDuyuruController.getDuyurus().size()}"/>
                             </h:panelGroup>
                         </a>
                         <!-- End::header-link|dropdown-toggle -->
@@ -768,8 +771,7 @@
                         <!-- Start::main-header-dropdown -->
                         <h:form id="NotificationForm">
                             <div class="main-header-dropdown dropdown-menu dropdown-menu-end"
-                                 data-popper-placement="none" style="min-width:310px
-                                !important;">
+                                 data-popper-placement="none" style="min-width:310px !important;">
                                 <div class="p-3">
                                     <div class="d-flex align-items-center justify-content-between">
                                         <p class="mb-0 fs-16">Duyurular</p>
@@ -841,7 +843,11 @@
                                data-bs-toggle="dropdown">
                                 <i class="ri-group-line ri-lg"></i>
                                 <h:panelGroup id="userSize">
-                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">#{initApp.syKullanicis.size()}</span>
+                                    <h:outputText
+                                            styleClass="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success"
+                                            value="#{initApp.syKullanicis.size()}">
+                                        <p:autoUpdate/>
+                                    </h:outputText>
                                 </h:panelGroup>
                             </a>
                             <!-- End::header-link|dropdown-toggle -->
@@ -849,12 +855,16 @@
                             <h:form id="userForm">
                                 <div class="main-header-dropdown dropdown-menu dropdown-menu-end"
                                      data-popper-placement="none" style="min-width:310px
-                                !important;">
+                                                            !important;">
                                     <div class="p-3">
                                         <div class="d-flex align-items-center justify-content-between">
                                             <p class="mb-0 fs-16">Aktif Kullanıcılar</p>
                                             <a href="javascript:void(0);" class="badge bg-success-transparent"
-                                               id="users-data">#{initApp.syKullanicis.size()}</a>
+                                               id="users-data">
+                                                <h:outputText value="#{initApp.syKullanicis.size()}">
+                                                    <p:autoUpdate/>
+                                                </h:outputText>
+                                            </a>
                                         </div>
                                     </div>
                                     <div class="dropdown-divider"></div>
@@ -867,9 +877,9 @@
                                                 <li class="dropdown-item">
                                                     <div class="d-flex align-items-start">
                                                         <div class="pe-2 lh-1">
-                                                <span class="avatar avatar-md avatar-rounded bg-primary-transparent">
-                                                            #{users.gnlPersonel.gnlKisi.ad.charAt(0)}
-                                                </span>
+                                                                            <span class="avatar avatar-md avatar-rounded bg-primary-transparent">
+                                                                                        #{users.gnlPersonel.gnlKisi.ad.charAt(0)}
+                                                                            </span>
                                                         </div>
                                                         <div class="flex-grow-1 d-flex align-items-start justify-content-between">
                                                             <div>
@@ -913,12 +923,10 @@
                                     </ul>
                                     <div class="p-3 empty-header-item border-top">
                                         <div class="text-center d-grid">
-                                            <h:form>
-                                                <p:commandButton value="Tümü" icon="pi pi-times"
-                                                                 styleClass="ui-button-danger w-100"
-                                                                 actionListener="#{loginController.destroySession()}"
-                                                                 update=":growl,userForm:userPanelGroup,userSize"/>
-                                            </h:form>
+                                            <p:commandButton value="Tümü" icon="pi pi-times"
+                                                             styleClass="ui-button-danger w-100"
+                                                             actionListener="#{loginController.destroySession()}"
+                                                             update=":growl,userForm:userPanelGroup,userSize"/>
                                         </div>
                                     </div>
                                 </div>
@@ -949,12 +957,12 @@
                                 </div>
                                 <div class="d-xl-block d-none lh-1">
                                     <span class="fw-medium lh-1">#{syKullanici.gnlPersonel.gnlKisi.ad}
-                                        <ui:fragment rendered="#{bysController.error}">
-                                            <span class="badge bg-outline-danger"><i class="ri-close-line"></i></span>
-                                        </ui:fragment>
-                                        <ui:fragment rendered="#{!bysController.error}">
-                                            <span class="badge bg-outline-success"><i class="ri-check-line"></i></span>
-                                        </ui:fragment>
+<!--                                        <ui:fragment rendered="#{bysController.error}">-->
+<!--                                            <span class="badge bg-outline-danger"><i class="ri-close-line"></i></span>-->
+<!--                                        </ui:fragment>-->
+<!--                                        <ui:fragment rendered="#{!bysController.error}">-->
+<!--                                            <span class="badge bg-outline-success"><i class="ri-check-line"></i></span>-->
+<!--                                        </ui:fragment>-->
                                         </span>
                                 </div>
                             </div>
