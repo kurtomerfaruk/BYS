@@ -13,11 +13,11 @@ import java.util.List;
  */
 @Getter
 @Setter
-public class ServisSonucu<T> implements java.io.Serializable{
+public class ServisSonucu implements java.io.Serializable{
     @Serial
     private static final long serialVersionUID = 4020072707888612725L;
 
     private String datetime;
     private int count;
-    private List<T> data;
+    private List<ServisModel> data;
 }

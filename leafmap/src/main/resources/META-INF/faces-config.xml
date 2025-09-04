@@ -25,6 +25,11 @@
         <component-class>com.kurtomerfaruk.leafmap.component.LChoropleth</component-class>
     </component>
 
+    <component>
+        <component-type>com.kurtomerfaruk.leafmap.component.LHeatMap</component-type>
+        <component-class>com.kurtomerfaruk.leafmap.component.LHeatMap</component-class>
+    </component>
+
     <render-kit>
         <renderer>
             <component-family>com.kurtomerfaruk.leafmap.component</component-family>
@@ -45,6 +50,11 @@
             <component-family>com.kurtomerfaruk.leafmap.component</component-family>
             <renderer-type>com.kurtomerfaruk.leafmap.renderer.LChoroplethRenderer</renderer-type>
             <renderer-class>com.kurtomerfaruk.leafmap.renderer.LChoroplethRenderer</renderer-class>
+        </renderer>
+        <renderer>
+            <component-family>com.kurtomerfaruk.leafmap.component</component-family>
+            <renderer-type>com.kurtomerfaruk.leafmap.renderer.LHeatMapRenderer</renderer-type>
+            <renderer-class>com.kurtomerfaruk.leafmap.renderer.LHeatMapRenderer</renderer-class>
         </renderer>
     </render-kit>
 

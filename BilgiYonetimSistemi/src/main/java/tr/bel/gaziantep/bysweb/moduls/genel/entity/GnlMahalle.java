@@ -17,7 +17,7 @@ import java.io.Serial;
 @Entity
 @Table(name = "GNLMAHALLE")
 @NamedQuery(name = "GnlMahalle.findByKod", query = "SELECT m FROM GnlMahalle m WHERE m.aktif=true AND m.kod=:kod")
-@NamedQuery(name = "GnlMahalle.findByIlce", query = "SELECT m FROM GnlMahalle m WHERE m.aktif=true AND m.gnlIlce=:gnlIlce")
+@NamedQuery(name = "GnlMahalle.findByIlce", query = "SELECT m FROM GnlMahalle m WHERE m.aktif=true AND m.gnlIlce=:gnlIlce ORDER BY m.tanim")
 public class GnlMahalle extends BaseEntity {
     @Serial
     private static final long serialVersionUID = 1820603637008975667L;

@@ -40,6 +40,7 @@ import java.util.List;
         ".EnumGnlDurum.OLUM,tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlDurum.OLUMUN_TESPITI)")
 @NamedQuery(name = "EyKisi.getTotalActiveCount", query = "SELECT COUNT(e.id) FROM EyKisi e WHERE e.aktif=true AND " +
         "e.gnlKisi.durum=tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlDurum.SAG")
+@NamedQuery(name = "EyKisi.getAllCoordinates", query = "SELECT e.gnlKisi.latLng FROM EyKisi e WHERE e.aktif=true AND e.gnlKisi.durum=tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlDurum.SAG AND e.gnlKisi.latLng IS NOT NULL")
 public class EyKisi extends BaseEntity {
     @Serial
     private static final long serialVersionUID = 6659959936794498821L;

@@ -2,6 +2,7 @@ package com.kurtomerfaruk.leafmap.renderer;
 
 import com.kurtomerfaruk.leafmap.component.LMap;
 import com.kurtomerfaruk.leafmap.component.LRoute;
+import com.kurtomerfaruk.leafmap.model.Point;
 import com.kurtomerfaruk.leafmap.utils.LeafMap;
 import jakarta.faces.application.ResourceDependencies;
 import jakarta.faces.application.ResourceDependency;
@@ -12,6 +13,8 @@ import jakarta.faces.render.FacesRenderer;
 import jakarta.faces.render.Renderer;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
@@ -28,7 +31,7 @@ import java.io.IOException;
 public class LRouteRenderer extends Renderer {
     @Override
     public void encodeEnd(FacesContext context, UIComponent component) throws IOException {
-        LRoute marker = (LRoute) component;
+        LRoute route = (LRoute) component;
         ResponseWriter writer = context.getResponseWriter();
         LMap map = (LMap) component.getParent();
 
@@ -36,14 +39,11 @@ public class LRouteRenderer extends Renderer {
             map = (LMap) component.getParent();
         }
 
+        String points = pointsToString(route.getPoints());
+
         writer.startElement("script", component);
-        writer.writeText("document.addEventListener('DOMContentLoaded', function() {", null);
         writer.writeText("var control = L.Routing.control({\n" +
-                "\twaypoints: [\n" +
-                "\t\tL.latLng(37.06684223875914, 37.37145685624316),\n" +
-                "\t\tL.latLng(37.067920903339896, 37.35351824432507),\n" +
-                "\t\tL.latLng(37.065147163425024, 37.362230058247015)\n" +
-                "\t],\n" +
+                "\twaypoints: "+points +"," +
                 "    language: 'tr',\n" +
                 "    routeWhileDragging: true,\n" +
                 "    reverseWaypoints: false,\n" +
@@ -58,7 +58,18 @@ public class LRouteRenderer extends Renderer {
                 "}).addTo("+map.getWidgetVar()+");", null);
 
 
-        writer.writeText("});", null);
         writer.endElement("script");
+    }
+
+    private String pointsToString(List<Point> points) {
+        if (points == null || points.isEmpty()) {
+            return "[]";
+        }
+
+        String result = points.stream()
+                .map(p -> "L.latLng(" + p.getLat() + ", " + p.getLng() + ")")
+                .collect(Collectors.joining(","));
+
+        return "[" + result + "]";
     }
 }

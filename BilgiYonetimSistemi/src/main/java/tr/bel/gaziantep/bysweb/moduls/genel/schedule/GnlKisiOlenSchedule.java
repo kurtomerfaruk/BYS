@@ -38,7 +38,7 @@ public class GnlKisiOlenSchedule implements java.io.Serializable {
     @Inject
     private InitApp initApp;
 
-    @Schedule(minute = "0", second = "0", dayOfMonth = "*", month = "*", year = "*", hour = "5", dayOfWeek = "*", persistent = false)
+    @Schedule(minute = "0", second = "0", dayOfMonth = "*", month = "*", year = "*", hour = "5", dayOfWeek = "Mon-Fri", persistent = false)
     public void updateGnlKisi() throws Exception {
         System.out.println("Mernis Kayit Guncelle baslama tarihi :" + new Date());
         listUpdate();

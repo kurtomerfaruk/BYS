@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:p="primefaces"
+                xmlns:l="http://kurtomerfaruk.com/ui">
+
+    <h:form id="EyRotaOlusturForm">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-xl-6">
+                        <p:panelGrid columns="2" styleClass="w-100">
+                            <p:outputLabel value="#{messages.tcKimlikNoLabel}" for="@next"/>
+                            <h:panelGroup>
+                                <div class="ui-inputgroup">
+                                    <p:inputText id="eyKisiId"
+                                                 value="#{eyRouteController.selectedEyKisi.gnlKisi.tcKimlikNo}"
+                                                 required="true"
+                                                 title="#{messages.tcKimlikNoText}" label="#{messages.tcKimlikNoText}"
+                                                 readonly="#{facesContext.currentPhaseId.ordinal eq 6}" size="50">
+                                    </p:inputText>
+                                    <p:commandButton icon="pi pi-search"
+                                                     action="#{bysController.openCommonDialog('eyKisiMultiSec')}"
+                                                     process="@this"
+                                                     update=":growl" title="#{messages.kisiSecmelisiniz}">
+                                        <p:ajax event="dialogReturn" process="@this"
+                                                listener="#{eyRouteController.onReturn}"
+                                                update=":growl,@(.inputUpdate),eyKisiId,datalist"/>
+                                    </p:commandButton>
+                                </div>
+                            </h:panelGroup>
+
+                            <p:outputLabel value="#{messages.adSoyadLabel}" for="@next"/>
+                            <p:inputText id="ad" value="#{eyRouteController.selectedEyKisi.gnlKisi.adSoyad}"
+                                         title="#{messages.adSoyadText}"
+                                         size="50" maxlength="50" readonly="true" styleClass="inputUpdate"/>
+
+                            <p:outputLabel value="#{messages.koordinatLabel}" for="@next"/>
+                            <p:inputText id="latLng" value="#{eyRouteController.selectedEyKisi.gnlKisi.latLng}"
+                                         title="#{messages.koordinatText}"
+                                         size="50" maxlength="50" readonly="true" styleClass="inputUpdate"/>
+
+                            <f:facet name="footer">
+                                <p:commandButton value="#{messages.buttonEkle}" icon="pi pi-plus"
+                                                 styleClass="ui-button-success"
+                                                 update="@form,:growl"
+                                                 actionListener="#{eyRouteController.addToList()}"/>
+                            </f:facet>
+
+                        </p:panelGrid>
+                        <p:dataTable id="datalist"
+                                     var="item"
+                                     value="#{eyRouteController.eyKisiList}"
+                                     scrollable="true"
+                                     scrollHeight="250"
+                                     showGridlines="true"
+                                     reflow="true"
+                                     size="small">
+
+                            <p:column headerText="#{messages.tcKimlikNoText}" width="100">
+                                <h:outputText value="#{item.gnlKisi.tcKimlikNo}"/>
+                            </p:column>
+
+                            <p:column headerText="#{messages.adSoyadText}">
+                                <h:outputText value="#{item.gnlKisi.adSoyad}"/>
+                            </p:column>
+
+                            <p:column headerText="#{messages.koordinatText}">
+                                <h:outputText value="#{item.gnlKisi.latLng}"/>
+                            </p:column>
+
+                            <p:column headerText="#{messages.buttonNvidenGuncelle}" width="100">
+                                <p:commandButton icon="pi pi-refresh"
+                                                 title="#{messages.buttonNvidenGuncelle}"
+                                                 actionListener="#{eyRouteController.removeFromList(item)}"
+                                                 update="datalist,:growl"
+                                                 process="datalist"
+                                                 rendered="#{item.gnlKisi.latLng==null}"/>
+                            </p:column>
+
+                            <p:column width="60" headerText="#{messages.buttonSil}">
+                                <p:commandButton icon="pi pi-trash"
+                                                 title="#{messages.buttonSil}"
+                                                 styleClass="ui-button-danger"
+                                                 actionListener="#{eyRouteController.removeFromList(item)}"
+                                                 update="datalist,:growl"
+                                                 process="datalist"/>
+                            </p:column>
+                        </p:dataTable>
+
+                        <p:commandButton value="Rotayı oluştur" actionListener="#{eyRouteController.createRoute()}"
+                                         update="@form,:growl" process="@this"/>
+                    </div>
+                    <div class="col-xl-6">
+                        <div style="position: relative; height: calc(100vh - 100px);">
+                            <l:map id="routeMap" center="37.069387, 37.374620" zoom="13" widgetVar="routeMapVar"
+                                   markers="#{markerModels}">
+                                <l:route points="#{eyRouteController.points}" showAlternatives="true"/>
+                            </l:map>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </h:form>
+
+</ui:composition>

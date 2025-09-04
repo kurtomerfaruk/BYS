@@ -32,12 +32,10 @@
                      styleClass="w-100">
 
             <f:facet name="header">
-                <div class="products-table-header">
-                    <span style="font-weight: bold">#{messages.kisiListesi}</span>
-                </div>
+                #{messages.kisiListesi}
             </f:facet>
 
-            <p:ajax event="rowDblselect" listener="#{eyKisiController.onRowDblSelect}"  />
+            <p:ajax event="rowDblselect" listener="#{eyKisiController.onRowDblSelect}"/>
 
             <p:column sortBy="#{item.gnlKisi.tcKimlikNo}" filterBy="#{item.gnlKisi.tcKimlikNo}">
                 <f:facet name="header">

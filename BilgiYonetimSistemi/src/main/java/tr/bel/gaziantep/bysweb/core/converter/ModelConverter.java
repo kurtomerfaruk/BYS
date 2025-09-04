@@ -5,7 +5,6 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import tr.bel.gaziantep.bysweb.core.controller.InitApp;
 import tr.bel.gaziantep.bysweb.core.enums.bys.EnumModul;
-import tr.bel.gaziantep.bysweb.core.enums.bys.EnumServisTur;
 import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlCinsiyet;
 import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlDurum;
 import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlMedeniDurum;
@@ -145,21 +144,22 @@ public class ModelConverter implements java.io.Serializable {
         if (koordinatModel.getHata() != null) return null;
         if (StringUtil.isBlank(koordinatModel.getLatitude()) && StringUtil.isBlank(koordinatModel.getLongitude()))
             return null;
+        if(koordinatModel.getLatitude().equals("null") || koordinatModel.getLongitude().equals("null")) return null;
         return koordinatModel.getLatitude() + "," + koordinatModel.getLongitude();
     }
 
-    public List<KisiParameter> servisModelToKisiParameters(List<ServisModel> models, EnumServisTur department) {
+    public List<KisiParameter> servisModelToKisiParameters(List<ServisModel> models, EnumModul department) {
         List<KisiParameter> result = new ArrayList<>();
         for (ServisModel model : models) {
-            if (department.equals(EnumServisTur.GAZIKART)) {
-                if (StringUtil.isBlank(model.getDISABLED_DEGREE())) {
+            if (department.equals(EnumModul.GAZIKART)) {
+                if (StringUtil.isBlank(model.getDisabledDegree())) {
                     continue;
                 }
-                if (result.stream().noneMatch(x -> x.getTcKimlikNo() == Long.parseLong(model.getIDENTITY_NO()))
-                        && !model.getDISABLED_DEGREE().equals("-")) {
-                    LocalDate date = DateUtil.stringToLocalDate(model.getBIRTH_DATE(), "dd.MM.yyyy");
+                if (result.stream().noneMatch(x -> x.getTcKimlikNo() == Long.parseLong(model.getIdentityNo()))
+                        && !model.getDisabledDegree().equals("-")) {
+                    LocalDate date = DateUtil.stringToLocalDate(model.getBirthDate(), "dd.MM.yyyy");
                     KisiParameter parameter = KpsUtil.setDate(date);
-                    parameter.setTcKimlikNo(Long.parseLong(model.getIDENTITY_NO()));
+                    parameter.setTcKimlikNo(Long.parseLong(model.getIdentityNo()));
                     result.add(parameter);
                 }
 

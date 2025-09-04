@@ -1,17 +1,18 @@
 package tr.bel.gaziantep.bysweb.webservice.gazikart.controller;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import tr.bel.gaziantep.bysweb.webservice.gazikart.model.ServisModel;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.cfg.CoercionAction;
+import com.fasterxml.jackson.databind.cfg.CoercionInputShape;
+import com.fasterxml.jackson.databind.type.LogicalType;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import kong.unirest.core.HttpResponse;
+import kong.unirest.core.JsonNode;
+import kong.unirest.core.Unirest;
 import tr.bel.gaziantep.bysweb.webservice.gazikart.model.ServisSonucu;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.Serial;
-import java.net.URL;
-import java.net.URLConnection;
-import java.nio.charset.StandardCharsets;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
@@ -22,21 +23,31 @@ public class GaziKartService implements java.io.Serializable{
     @Serial
     private static final long serialVersionUID = -2710217811364283386L;
 
-    public ServisSonucu<ServisModel> getList(String link, String baslangicTarihi, String bitisTarihi) {
-        try {
-            String format = "yyyyMMdd";
-            URL url = new URL(link+"startdate=" + baslangicTarihi + "&enddate=" + bitisTarihi);
-            URLConnection urlConnection = url.openConnection();
-            InputStream is = urlConnection.getInputStream();
-            InputStreamReader isr = new InputStreamReader(is, StandardCharsets.UTF_8);
+    public ServisSonucu getList(String link, String baslangicTarihi, String bitisTarihi) throws JsonProcessingException {
+//        try {
+//            String format = "yyyyMMdd";
+//            URL url = new URL(link+"startdate=" + baslangicTarihi + "&enddate=" + bitisTarihi);
+//            URLConnection urlConnection = url.openConnection();
+//            InputStream is = urlConnection.getInputStream();
+//            InputStreamReader isr = new InputStreamReader(is, StandardCharsets.UTF_8);
+//
+//            Gson gson = new Gson();
+//
+//            return gson.fromJson(isr, new TypeToken<ServisSonucu<ServisModel>>() {
+//            }.getType());
+//        } catch (IOException ex) {
+//            System.out.println(ex.getMessage());
+//        }
+//        return null;
+        Unirest.config().verifySsl(false);
+        String url = link  +"startdate=" + baslangicTarihi + "&enddate=" + bitisTarihi;
+        HttpResponse<JsonNode> postResult = Unirest.post(url)
+                .asJson();
 
-            Gson gson = new Gson();
-
-            return gson.fromJson(isr, new TypeToken<ServisSonucu<ServisModel>>() {
-            }.getType());
-        } catch (IOException ex) {
-            System.out.println(ex.getMessage());
-        }
-        return null;
+        ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        objectMapper.coercionConfigFor(LogicalType.POJO).setCoercion(CoercionInputShape.EmptyString, CoercionAction.AsEmpty);
+        String json = postResult.getBody().toString();
+        return objectMapper.readValue(json, ServisSonucu.class);
     }
 }

@@ -9,7 +9,7 @@
   src: url("#{resource['icon-fonts/tabler-icons/webfont/fonts/tabler-icons2d35.eot']}");
   src: url("#{resource['icon-fonts/tabler-icons/webfont/fonts/tabler-iconsd41d.eot?#iefix']}") format("embedded-opentype"),
   url("#{resource['icon-fonts/tabler-icons/webfont/fonts/tabler-icons2d35.woff2']}") format("woff2"),
-  url("#{resource['icon-fonts/tabler-icons/webfont/fonts/tabler-iconsd41d.woff?']}") format("woff"),
+  url("#{resource['icon-fonts/tabler-icons/webfont/fonts/tabler-iconsd41d.woff']}") format("woff"),
   url("#{resource['icon-fonts/tabler-icons/webfont/fonts/tabler-icons2d35.ttf']}") format("truetype");
 }
 .ti {

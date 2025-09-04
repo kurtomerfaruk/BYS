@@ -20,7 +20,7 @@
                      rowKey="#{item.id}"
                      paginator="true"
                      rows="10"
-                     selection="#{gnlKisiController.selected}"
+                     selection="#{gnlKisiController.selecteds}"
                      paginatorPosition="bottom"
                      lazy="true"
                      pageLinks="5"
@@ -32,12 +32,12 @@
                      styleClass="w-100">
 
             <f:facet name="header">
-                <div class="products-table-header">
-                    <span style="font-weight: bold">#{messages.kisiListesi}</span>
-                </div>
+                #{messages.kisiListesi}
             </f:facet>
 
             <p:ajax event="rowDblselect" listener="#{gnlKisiController.onRowDblSelect}"  />
+
+            <p:column selectionBox="true" style="width:16px;text-align:center"/>
 
             <p:column sortBy="#{item.tcKimlikNo}" filterBy="#{item.tcKimlikNo}">
                 <f:facet name="header">

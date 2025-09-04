@@ -3,6 +3,7 @@ package tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import tr.bel.gaziantep.bysweb.core.entity.BaseEntityNoVersion;
 import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.EnumSyKullaniciTuru;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlPersonel;
@@ -39,12 +40,10 @@ public class SyKullanici extends BaseEntityNoVersion {
     private GnlPersonel gnlPersonel;
 
     @Size(max = 50)
-
     @Column(name = "KULLANICI_ADI", length = 50)
     private String kullaniciAdi;
 
     @Size(max = 100)
-
     @Column(name = "PAROLA", length = 100)
     private String parola;
 
@@ -53,7 +52,6 @@ public class SyKullanici extends BaseEntityNoVersion {
     private EnumSyKullaniciTuru kullaniciTuru;
 
     @Size(max = 50)
-
     @Column(name = "SESSION_ID", length = 50)
     private String sessionId;
 
@@ -69,6 +67,7 @@ public class SyKullanici extends BaseEntityNoVersion {
     @Column(name = "TEMA", length = 50)
     private String tema;
 
+    @ColumnDefault("0")
     @Column(name = "PAROLA_DEGISTIRILSIN")
     private boolean parolaDegistirilsin;
 
@@ -76,12 +75,15 @@ public class SyKullanici extends BaseEntityNoVersion {
     private boolean kilitli;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "syKullanici", fetch = FetchType.LAZY)
+    @Builder.Default
     private List<SyKullaniciGiris> syKullaniciGirisList = new ArrayList<>();
 
     @OneToMany(mappedBy = "syKullanici",cascade = CascadeType.ALL)
+    @Builder.Default
     private Set<SyKullaniciRol> syKullaniciRols = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "syKullanici")
+    @Builder.Default
     private List<SyDuyuruKullanici> syDuyuruKullaniciList = new ArrayList<>();
 
     @Override

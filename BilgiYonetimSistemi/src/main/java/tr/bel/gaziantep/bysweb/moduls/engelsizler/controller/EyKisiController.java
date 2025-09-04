@@ -18,7 +18,6 @@ import tr.bel.gaziantep.bysweb.core.controller.InitApp;
 import tr.bel.gaziantep.bysweb.core.controller.KpsController;
 import tr.bel.gaziantep.bysweb.core.converter.ModelConverter;
 import tr.bel.gaziantep.bysweb.core.enums.bys.EnumModul;
-import tr.bel.gaziantep.bysweb.core.enums.bys.EnumServisTur;
 import tr.bel.gaziantep.bysweb.core.enums.engelsizler.EnumEyAnketDurumu;
 import tr.bel.gaziantep.bysweb.core.enums.engelsizler.EnumEyKullandigiCihaz;
 import tr.bel.gaziantep.bysweb.core.enums.engelsizler.EnumEyMaddeKullanimi;
@@ -46,9 +45,7 @@ import java.io.Serial;
 import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -135,8 +132,18 @@ public class EyKisiController extends AbstractController<EyKisi> {
     @Setter
     private EyTalep eyTalep;
 
+    private List<EyKisi> selecteds ;
+
     public EyKisiController() {
         super(EyKisi.class);
+    }
+
+    public List<EyKisi> getSelecteds() {
+        return selecteds;
+    }
+
+    public void setSelecteds(List<EyKisi> selecteds) {
+        this.selecteds = selecteds;
     }
 
     public List<SelectItem> getFilterOptions(EnumSyFiltreAnahtari key) {
@@ -195,7 +202,8 @@ public class EyKisiController extends AbstractController<EyKisi> {
             this.setSelected(newItem);
             initializeEmbeddableKey();
             return newItem;
-        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException ex) {
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException |
+                 InvocationTargetException ex) {
             log.error(null, ex);
         }
         return null;
@@ -324,13 +332,13 @@ public class EyKisiController extends AbstractController<EyKisi> {
             pushContext.send(post);
             GaziKartService gaziKartService = new GaziKartService();
             String format = "yyyyMMdd";
-            ServisSonucu<ServisModel> sonuc = gaziKartService.getList(initApp.getProperty("gazikart.webServisLink"), DateUtil.localdateToString(baslangicTarihi,
+            ServisSonucu sonuc = gaziKartService.getList(initApp.getProperty("gazikart.webServisLink"), DateUtil.localdateToString(baslangicTarihi,
                     format), DateUtil.localdateToString(bitisTarihi, format));
             if (sonuc != null && sonuc.getData() != null) {
                 post = ",,,,Servisten bilgiler okundu";
                 pushContext.send(post);
                 count = 0;
-                addTcKimlik(sonuc.getData(), EnumServisTur.GAZIKART);
+                addTcKimlik(sonuc.getData(), EnumModul.GAZIKART);
                 PrimeFaces.current().executeScript("PF('TarihSecDialog').hide()");
             }
             FacesUtil.successMessage(Constants.KAYIT_GUNCELLENDI);
@@ -342,7 +350,7 @@ public class EyKisiController extends AbstractController<EyKisi> {
         }
     }
 
-    private void addTcKimlik(List<ServisModel> servisModels, EnumServisTur department) throws Exception {
+    private void addTcKimlik(List<ServisModel> servisModels, EnumModul department) throws Exception {
         post = ",,,,Mernis için parametreler oluşturuluyor";
         pushContext.send(post);
         List<KisiParameter> kisiParameterList = converter.servisModelToKisiParameters(servisModels, department);
@@ -388,9 +396,9 @@ public class EyKisiController extends AbstractController<EyKisi> {
             ServisModel servisModel = isExistServisModel(eyKisi.getGnlKisi().getTcKimlikNo(), servisModels);
 
             if (servisModel != null) {
-                String phoneNumber = Function.phoneValidate(servisModel.getTEL_MOBILE());
+                String phoneNumber = Function.phoneValidate(servisModel.getTelMobile());
                 eyKisi.getGnlKisi().setTelefon(phoneNumber);
-                String[] disableGroups = servisModel.getDISABLED_DEGREE().split("-");
+                String[] disableGroups = servisModel.getDisabledDegree().split("-");
                 String disableGroupStr = "";
                 if (disableGroups.length == 2) {
                     Integer engelOrani = Integer.parseInt(disableGroups[1].replace("+", ""));
@@ -422,7 +430,7 @@ public class EyKisiController extends AbstractController<EyKisi> {
 
     private ServisModel isExistServisModel(String tcKimlikNo, List<ServisModel> servisModels) {
         return servisModels.stream()
-                .filter(servisModel -> StringUtil.isNotBlank(servisModel.getIDENTITY_NO()) && servisModel.getIDENTITY_NO().equals(tcKimlikNo))
+                .filter(servisModel -> StringUtil.isNotBlank(servisModel.getIdentityNo()) && servisModel.getIdentityNo().equals(tcKimlikNo))
                 .findFirst()
                 .orElse(null);
     }
@@ -540,7 +548,8 @@ public class EyKisiController extends AbstractController<EyKisi> {
             newItem.setDurum(EnumGnlTalepDurumu.BEKLIYOR);
             this.setEyTalep(newItem);
             return newItem;
-        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException ex) {
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException |
+                 InvocationTargetException ex) {
             log.error(null, ex);
             FacesUtil.errorMessage(Constants.HATA_OLUSTU);
         }
@@ -557,6 +566,12 @@ public class EyKisiController extends AbstractController<EyKisi> {
 
     public void eyKisiSecKapat(EyKisi eyKisi) {
         PrimeFaces.current().dialog().closeDynamic(eyKisi);
+    }
+
+    public void selectAndClose() {
+        Map<String, Object> params = new HashMap<>();
+        params.put("selectedList", selecteds);
+        PrimeFaces.current().dialog().closeDynamic(params);
     }
 
     public void onRowDblSelect(SelectEvent<EyKisi> event) {

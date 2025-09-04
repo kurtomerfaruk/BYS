@@ -13,8 +13,9 @@ public enum EnumModul implements BaseEnum {
 
     AKTIF_YASAM("Aktif Yaşam"),
     EDB("Evim Dünyalara Bedel"),
-    EKM("Engelsiz Eğitim ve Kariyer Merkezi"),
+    EKM("EKM"),
     ENGELSIZLER("Engelsizler"),
+    GAZIKART("GaziKart"),
     GENEL("Genel"),
     ILERI_YAS("İleri Yaş"),
     MORAL_EVI("Moral Evi"),

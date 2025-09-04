@@ -3,12 +3,10 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="jakarta.faces.facelets"
-      xmlns:h="jakarta.faces.html"
       xmlns:p="primefaces">
 
 <ui:composition>
 
-    <h:form id="SistemYonetimiMenuForm">
         <!-- Sistem Yonetimi -->
         <ui:fragment rendered="#{syKullaniciController.hasPermission('sistem_yonetimi:goster')}">
             <li class="slide has-sub">
@@ -138,7 +136,6 @@
             </li>
         </ui:fragment>
         <!-- Sistem Yonetimi -->
-    </h:form>
 
 </ui:composition>
 

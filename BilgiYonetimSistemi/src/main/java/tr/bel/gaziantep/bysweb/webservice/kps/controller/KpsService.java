@@ -48,6 +48,7 @@ public class KpsService {
             KpsModel model = new KpsModel();
             model.setKutukModel(this.kutukServis.tcKimlikNoSorgula(link, token, parameter));
             model.setAdresModel(this.adresSorgulaServis.adresSorgula(link, token, parameter));
+            model.setKisiAdresModel(this.kisiAdresSorgulaServis.kisiAdresSorgula(link,token,parameter));
             models.add(model);
         }
 

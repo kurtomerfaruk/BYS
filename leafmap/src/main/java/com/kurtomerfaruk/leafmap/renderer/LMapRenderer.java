@@ -1,6 +1,7 @@
 package com.kurtomerfaruk.leafmap.renderer;
 
 import com.kurtomerfaruk.leafmap.component.LMap;
+import com.kurtomerfaruk.leafmap.model.Point;
 import com.kurtomerfaruk.leafmap.utils.LeafMap;
 import jakarta.faces.application.ResourceDependencies;
 import jakarta.faces.application.ResourceDependency;
@@ -11,6 +12,7 @@ import jakarta.faces.render.FacesRenderer;
 import jakarta.faces.render.Renderer;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
@@ -21,7 +23,13 @@ import java.io.IOException;
 @ResourceDependencies({
         @ResourceDependency(library = "leafmap", name = "leaflet.css"),
         @ResourceDependency(library = "leafmap", name = "leaflet.js"),
-        @ResourceDependency(library = "leafmap", name = "leaf-utils.js")
+        @ResourceDependency(library = "leafmap", name = "loading/loading.css"),
+        @ResourceDependency(library = "leafmap", name = "loading/loading.js"),
+        @ResourceDependency(library = "leafmap", name = "Leaflet.fullscreen.css"),
+        @ResourceDependency(library = "leafmap", name = "Leaflet.fullscreen.min.js"),
+        @ResourceDependency(library = "leafmap", name = "leaf-utils.js"),
+        @ResourceDependency(library = "leafmap", name = "main.js", target = "body"),
+        @ResourceDependency(library = "primefaces", name = "jquery/jquery.js")
 })
 public class LMapRenderer extends Renderer {
 
@@ -34,12 +42,10 @@ public class LMapRenderer extends Renderer {
         writer.startElement("div", map);
         writer.writeAttribute("id", clientId, null);
 
-        // Style ve class özellikleri
         if (map.getStyleClass() != null) {
             writer.writeAttribute("class", map.getStyleClass(), null);
         }
 
-        // Özel stil veya genişlik/yükseklik
         StringBuilder styleBuilder = new StringBuilder();
         styleBuilder.append("z-index:0;");
 
@@ -78,10 +84,17 @@ public class LMapRenderer extends Renderer {
         writer.writeText("      parent.style.overflow = 'hidden';", null);
         writer.writeText("    }", null);
 
-        writer.writeText("     " + map.getWidgetVar() + " = L.map(mapElement).setView([" +
+        writer.writeText("     " + map.getWidgetVar() + " = L.map(mapElement,{" +
+                "loadingControl:" +map.getLoadingControl() +
+                "}).setView([" +
                 map.getCenter() + "], " +
                 map.getZoom() + ");", null);
         writer.writeText(map.getWidgetVar() + ".invalidateSize();", null);
+        if(map.getFullScreen()){
+            writer.writeText("var fsControl = L.control.fullscreen();" +
+                    map.getWidgetVar()+".addControl(fsControl);",null);
+        }
+
 
         // Window resize event'i
         writer.writeText("    window.addEventListener('resize', function() {", null);
@@ -92,6 +105,13 @@ public class LMapRenderer extends Renderer {
         writer.writeText("      attribution: '&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors'", null);
         writer.writeText("    }).addTo(" + map.getWidgetVar() + ");", null);
         writer.writeText("  };", null);
+
+        List<Point> markers = map.getMarkers();
+        if (markers != null) {
+            for (Point m : markers) {
+                writer.write("L.marker([" + m.getLat() + ", " + m.getLng() + "]).addTo("+map.getWidgetVar()+").bindPopup('" + m.getName() + "');\n");
+            }
+        }
 
         // DOM yüklendikten sonra ve AJAX sonrası çalıştır
         writer.writeText("  if (document.readyState !== 'loading') {", null);

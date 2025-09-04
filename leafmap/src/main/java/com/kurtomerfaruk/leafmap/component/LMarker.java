@@ -10,11 +10,6 @@ import jakarta.faces.component.UIComponentBase;
  */
 public class LMarker extends UIComponentBase {
 
-//    private Double lat;
-//    private Double lng;
-//    private String title;
-//    private Boolean draggable;
-
     public enum PropertyKeys {
 
         lat,

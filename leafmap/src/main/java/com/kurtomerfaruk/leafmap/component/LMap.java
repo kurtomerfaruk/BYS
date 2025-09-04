@@ -1,7 +1,10 @@
 package com.kurtomerfaruk.leafmap.component;
 
+import com.kurtomerfaruk.leafmap.model.Point;
 import com.kurtomerfaruk.leafmap.utils.LeafMap;
 import jakarta.faces.component.UIComponentBase;
+
+import java.util.List;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
@@ -18,7 +21,10 @@ public class LMap extends UIComponentBase {
         styleClass,
         style,
         width,
-        height
+        height,
+        loadingControl,
+        fullScreen,
+        markers
     }
 
     @Override
@@ -78,6 +84,30 @@ public class LMap extends UIComponentBase {
 
     public void setHeight(String height) {
         getStateHelper().put(PropertyKeys.height, height);
+    }
+
+    public boolean getLoadingControl() {
+        return (Boolean) getStateHelper().eval(PropertyKeys.loadingControl, true);
+    }
+
+    public void setLoadingControl(boolean loadingControl) {
+        getStateHelper().put(PropertyKeys.loadingControl, loadingControl);
+    }
+
+    public boolean getFullScreen() {
+        return (Boolean) getStateHelper().eval(PropertyKeys.fullScreen, true);
+    }
+
+    public void setFullScreen(boolean fullScreen) {
+        getStateHelper().put(PropertyKeys.fullScreen, fullScreen);
+    }
+
+    public List<Point> getMarkers() {
+        return (List<Point>) getStateHelper().eval(PropertyKeys.markers);
+    }
+
+    public void setMarkers(final List<Point> markers) {
+        getStateHelper().put(PropertyKeys.markers, markers);
     }
 
 }

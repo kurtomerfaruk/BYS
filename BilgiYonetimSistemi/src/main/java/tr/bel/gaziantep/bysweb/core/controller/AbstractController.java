@@ -56,6 +56,7 @@ public abstract class AbstractController<T> implements Serializable {
 
     private Class<T> itemClass;
     @Getter
+    @Setter
     private T selected;
     @Setter
     private Collection<T> items;
@@ -101,10 +102,6 @@ public abstract class AbstractController<T> implements Serializable {
 
     public Class<T> getItemClass() {
         return itemClass;
-    }
-
-    public void setSelected(T selected) {
-        this.selected = selected;
     }
 
     protected void setEmbeddableKeys() {

@@ -846,7 +846,7 @@
                                     <h:outputText
                                             styleClass="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success"
                                             value="#{initApp.syKullanicis.size()}">
-                                        <p:autoUpdate/>
+<!--                                        <p:autoUpdate/>-->
                                     </h:outputText>
                                 </h:panelGroup>
                             </a>
@@ -1025,7 +1025,9 @@
         <!-- SIDEBAR -->
 
         <h:panelGroup id="menuGroup">
-            <ui:include src="menu.xhtml"/>
+            <h:form>
+                <ui:include src="menu.xhtml"/>
+            </h:form>
         </h:panelGroup>
         <!-- END SIDEBAR -->
 

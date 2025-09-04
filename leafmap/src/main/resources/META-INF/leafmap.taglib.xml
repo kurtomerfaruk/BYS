@@ -35,6 +35,18 @@
         <attribute>
             <name>styleClass</name>
         </attribute>
+        <attribute>
+            <name>loadingControl</name>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        <attribute>
+            <name>fullScreen</name>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        <attribute>
+            <name>markers</name>
+            <type>java.util.List</type>
+        </attribute>
     </tag>
 
     <tag>
@@ -63,6 +75,23 @@
             <component-type>com.kurtomerfaruk.leafmap.component.LRoute</component-type>
             <renderer-type>com.kurtomerfaruk.leafmap.renderer.LRouteRenderer</renderer-type>
         </component>
+        <attribute>
+            <name>points</name>
+            <required>true</required>
+            <type>java.util.List</type>
+        </attribute>
+        <attribute>
+            <name>routeWhileDragging</name>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        <attribute>
+            <name>reverseWaypoints</name>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        <attribute>
+            <name>showAlternatives</name>
+            <type>java.lang.Boolean</type>
+        </attribute>
     </tag>
 
     <tag>
@@ -92,6 +121,40 @@
         <attribute>
             <name>click</name>
             <type>java.lang.String</type>
+        </attribute>
+    </tag>
+
+    <tag>
+        <tag-name>heatmap</tag-name>
+        <component>
+            <component-type>com.kurtomerfaruk.leafmap.component.LHeatMap</component-type>
+            <renderer-type>com.kurtomerfaruk.leafmap.renderer.LHeatMapRenderer</renderer-type>
+        </component>
+        <attribute>
+            <name>models</name>
+            <required>true</required>
+            <type>java.util.List</type>
+        </attribute>
+        <attribute>
+            <name>points</name>
+            <required>true</required>
+            <type>java.util.List</type>
+        </attribute>
+        <attribute>
+            <name>blur</name>
+            <type>java.lang.Integer</type>
+        </attribute>
+        <attribute>
+            <name>radius</name>
+            <type>java.lang.Integer</type>
+        </attribute>
+        <attribute>
+            <name>maxZoom</name>
+            <type>java.lang.Integer</type>
+        </attribute>
+        <attribute>
+            <name>max</name>
+            <type>java.lang.Double</type>
         </attribute>
     </tag>
 </facelet-taglib>

@@ -5,16 +5,15 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import tr.bel.gaziantep.bysweb.core.enums.engelsizler.EnumEyKullandigiCihaz;
 import tr.bel.gaziantep.bysweb.core.enums.engelsizler.EnumEyMaddeKullanimi;
-import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlFaydalandigiHak;
-import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlGelirKaynagi;
-import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlYardimAlinanYerler;
-import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlYardimTuru;
+import tr.bel.gaziantep.bysweb.core.enums.genel.*;
 import tr.bel.gaziantep.bysweb.core.service.AbstractService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
+import tr.bel.gaziantep.bysweb.core.utils.DateUtil;
 import tr.bel.gaziantep.bysweb.moduls.engelsizler.entity.*;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.*;
 
 import java.io.Serial;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -333,6 +332,79 @@ public class EyKisiService extends AbstractService<EyKisi> {
 
     public int getTotalActiveCount() {
         return ((Long) getEntityManager().createNamedQuery("EyKisi.getTotalActiveCount").getSingleResult()).intValue();
+    }
+
+    public List<String> getAllCoordinates() {
+        return getEntityManager().createNamedQuery("EyKisi.getAllCoordinates").getResultList();
+    }
+
+    public List<String> getAllCoordinates(EnumGnlCinsiyet cinsiyet, int yasBaslangic, int yasBitis, GnlIlce gnlIlce, GnlMahalle gnlMahalle,
+                                          int engelOraniBaslangic, int engelOraniBitis, EyEngelGrubu eyEngelGrubu) {
+//        LocalDate startDate =  DateUtil.addYear(-yasBitis).toLocalDate();
+//        LocalDate endDate = DateUtil.addYear(-yasBaslangic).toLocalDate();
+//        String inner = eyEngelGrubu == null ? "" : ".eykisiId";
+//        String from = eyEngelGrubu == null ? "EyKisi" : "EyKisiEngelgrubu";
+//        String sql = "SELECT e" + inner + ".gnlKisi.latLng " +
+//                "FROM " + from + " e " +
+//                "WHERE e" + inner + ".aktif=true " +
+//                "AND e" + inner + ".gnlKisi.durum=tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlDurum.SAG " +
+//                "AND e" + inner + ".gnlKisi.latLng IS NOT NULL " +
+//                "AND (e" + inner + ".gnlKisi.dogumTarihi IS NOT NULL AND (e"+inner+".gnlKisi.dogumTarihi BETWEEN '"+startDate+"' AND '"+endDate+"')) " +
+//                "AND (e" + inner + ".toplamVucutKayipOrani BETWEEN " + engelOraniBaslangic + " AND " + engelOraniBitis + ") ";
+//        if (gnlIlce != null) {
+//            sql += " AND e" + inner + ".gnlKisi.gnlIlce.id=" + gnlIlce.getId();
+//        }
+//        if (gnlMahalle != null) {
+//            sql += " AND e" + inner + ".gnlKisi.gnlMahalle.id=" + gnlMahalle.getId();
+//        }
+//        if (cinsiyet != null) {
+//            sql += " AND e" + inner + ".gnlKisi.cinsiyet=tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlCinsiyet." + cinsiyet;
+//        }
+//        if (eyEngelGrubu != null) {
+//            sql += " AND e.eyEngelGrubu.id= " + eyEngelGrubu.getId();
+//        }
+//        return getEntityManager().createQuery(sql).getResultList();
+        LocalDate startDate = DateUtil.addYear(-yasBitis).toLocalDate();
+        LocalDate endDate = DateUtil.addYear(-yasBaslangic).toLocalDate();
+
+        String inner = eyEngelGrubu == null ? "" : ".eykisiId";
+        String from = eyEngelGrubu == null ? "EyKisi" : "EyKisiEngelgrubu";
+
+        StringBuilder sql = new StringBuilder();
+        sql.append("SELECT e").append(inner).append(".gnlKisi.latLng ")
+                .append("FROM ").append(from).append(" e ")
+                .append("WHERE e").append(inner).append(".aktif=true ")
+                .append("AND e").append(inner).append(".gnlKisi.durum=tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlDurum.SAG ")
+                .append("AND e").append(inner).append(".gnlKisi.latLng IS NOT NULL ")
+                .append("AND e").append(inner).append(".gnlKisi.dogumTarihi IS NOT NULL ")
+                .append("AND e").append(inner).append(".gnlKisi.dogumTarihi BETWEEN :startDate AND :endDate ")
+                .append("AND e").append(inner).append(".toplamVucutKayipOrani BETWEEN :engelOraniBaslangic AND :engelOraniBitis ");
+
+        if (gnlIlce != null) {
+            sql.append(" AND e").append(inner).append(".gnlKisi.gnlIlce.id = :ilceId");
+        }
+        if (gnlMahalle != null) {
+            sql.append(" AND e").append(inner).append(".gnlKisi.gnlMahalle.id = :mahalleId");
+        }
+        if (cinsiyet != null) {
+            sql.append(" AND e").append(inner).append(".gnlKisi.cinsiyet = :cinsiyet");
+        }
+        if (eyEngelGrubu != null) {
+            sql.append(" AND e.eyEngelGrubu.id = :eyEngelGrubuId");
+        }
+
+        var query = getEntityManager().createQuery(sql.toString(), String.class);
+        query.setParameter("startDate", startDate);
+        query.setParameter("endDate", endDate);
+        query.setParameter("engelOraniBaslangic", engelOraniBaslangic);
+        query.setParameter("engelOraniBitis", engelOraniBitis);
+
+        if (gnlIlce != null) query.setParameter("ilceId", gnlIlce.getId());
+        if (gnlMahalle != null) query.setParameter("mahalleId", gnlMahalle.getId());
+        if (cinsiyet != null) query.setParameter("cinsiyet", cinsiyet);
+        if (eyEngelGrubu != null) query.setParameter("eyEngelGrubuId", eyEngelGrubu.getId());
+
+        return query.getResultList();
     }
 
 //    @TransactionAttribute(TransactionAttributeType.REQUIRED)

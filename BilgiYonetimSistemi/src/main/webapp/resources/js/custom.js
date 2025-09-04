@@ -410,6 +410,11 @@
   if(activeNotifications){
     new SimpleBar(activeNotifications,{autoHide: false});
   }
+  
+  var searchCriteria = document.getElementById("search-criteria");
+  if(searchCriteria){
+    new SimpleBar(searchCriteria,{autoHide: false});
+  }
 
   /* header dropdowns scroll */
 
