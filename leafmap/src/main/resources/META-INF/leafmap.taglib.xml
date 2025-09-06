@@ -153,4 +153,31 @@
             <type>java.lang.Double</type>
         </attribute>
     </tag>
+    <tag>
+        <tag-name>route</tag-name>
+        <component>
+            <component-type>com.kurtomerfaruk.leafmap.component.LRoute</component-type>
+        </component>
+        <attribute>
+            <name>points</name>
+            <required>true</required>
+            <type>java.util.List</type>
+        </attribute>
+        <attribute>
+            <name>routeWhileDragging</name>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        <attribute>
+            <name>reverseWaypoints</name>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        <attribute>
+            <name>showAlternatives</name>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        <attribute>
+            <name>draggableWaypoints</name>
+            <type>java.lang.Boolean</type>
+        </attribute>
+    </tag>
 </facelet-taglib>

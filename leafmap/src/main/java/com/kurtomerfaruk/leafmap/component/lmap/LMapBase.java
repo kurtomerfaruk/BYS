@@ -4,6 +4,7 @@ import jakarta.faces.component.UIComponentBase;
 import jakarta.faces.component.behavior.ClientBehaviorHolder;
 import org.primefaces.component.api.PrimeClientBehaviorHolder;
 import org.primefaces.component.api.Widget;
+import org.primefaces.model.map.MapModel;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
@@ -38,11 +39,11 @@ public abstract class LMapBase extends UIComponentBase implements Widget, Client
         getStateHelper().put(PropertyKeys.widgetVar, widgetVar);
     }
 
-    public com.kurtomerfaruk.leafmap.model.map.MapModel getModel() {
-        return (com.kurtomerfaruk.leafmap.model.map.MapModel) getStateHelper().eval(PropertyKeys.model, null);
+    public MapModel getModel() {
+        return (MapModel) getStateHelper().eval(PropertyKeys.model, null);
     }
 
-    public void setModel(com.kurtomerfaruk.leafmap.model.map.MapModel model) {
+    public void setModel(MapModel model) {
         getStateHelper().put(PropertyKeys.model, model);
     }
 

@@ -1,8 +1,7 @@
 package com.kurtomerfaruk.leafmap.component.lmap;
 
 import com.kurtomerfaruk.leafmap.component.lheatmap.LHeatMap;
-import com.kurtomerfaruk.leafmap.model.map.MapModel;
-import com.kurtomerfaruk.leafmap.model.map.Route;
+import com.kurtomerfaruk.leafmap.component.lroute.LRoute;
 import jakarta.faces.FacesException;
 import jakarta.faces.component.UIComponent;
 import jakarta.faces.context.FacesContext;
@@ -107,6 +106,8 @@ public class LMapRenderer extends CoreRenderer {
         for (UIComponent child : map.getChildren()) {
             if (child instanceof LHeatMap heatmap) {
                 encodeHeatMap(context, heatmap);
+            } else if (child instanceof LRoute route) {
+                encodeRoutes(context,route);
             }
         }
 
@@ -168,9 +169,6 @@ public class LMapRenderer extends CoreRenderer {
             }
             if (!model.getRectangles().isEmpty()) {
                 encodeRectangles(context, map);
-            }
-            if (!model.getRoutes().isEmpty()) {
-                encodeRoutes(context, map);
             }
         }
     }
@@ -364,17 +362,16 @@ public class LMapRenderer extends CoreRenderer {
         writer.write("]");
     }
 
-    protected void encodeRoutes(FacesContext context, LMap map) throws IOException {
+    protected void encodeRoutes(FacesContext context, LRoute route) throws IOException {
         ResponseWriter writer = context.getResponseWriter();
-        MapModel model = map.getModel();
 
-        writer.write(",routes:[");
+        writer.write(",routes:{waypoints:[");
 
-        for (Iterator<Route> iterator = model.getRoutes().iterator(); iterator.hasNext(); ) {
-            Route route = iterator.next();
+        for (Iterator<Point> iterator = route.getPoints().iterator(); iterator.hasNext(); ) {
+            Point point = iterator.next();
 
             writer.write("L.latLng(");
-            writer.write(route.getLatlng().getLat() + ", " + route.getLatlng().getLng());
+            writer.write(point.getX() + ", " + point.getY());
             writer.write(")");
 
             if (iterator.hasNext()) {
@@ -382,16 +379,13 @@ public class LMapRenderer extends CoreRenderer {
             }
         }
         writer.write("]");
+        writer.write(",routeWhileDragging:"+route.isRouteWhileDragging());
+        writer.write(",reverseWaypoints:"+route.isReverseWaypoints());
+        writer.write(",showAlternatives:"+route.isShowAlternatives());
+        writer.write(",draggableWaypoints:"+route.isDraggableWaypoints());
+        writer.write("}");
 
     }
-
-//    private void encodeRoute(FacesContext context, Route route) throws IOException {
-//        ResponseWriter writer = context.getResponseWriter();
-//
-//        writer.write("L.latLng(");
-//        writer.write(route.getLatlng().getLat() + ", " + route.getLatlng().getLng());
-//        writer.write(")");
-//    }
 
     protected void encodePaths(FacesContext context, List<LatLng> paths) throws IOException {
         ResponseWriter writer = context.getResponseWriter();

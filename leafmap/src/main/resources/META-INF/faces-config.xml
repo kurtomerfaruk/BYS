@@ -22,6 +22,10 @@
         <component-type>com.kurtomerfaruk.leafmap.component.LHeatMap</component-type>
         <component-class>com.kurtomerfaruk.leafmap.component.lheatmap.LHeatMap</component-class>
     </component>
+    <component>
+        <component-type>com.kurtomerfaruk.leafmap.component.LRoute</component-type>
+        <component-class>com.kurtomerfaruk.leafmap.component.lroute.LRoute</component-class>
+    </component>
     <render-kit>
         <renderer>
             <component-family>com.kurtomerfaruk.leafmap.component</component-family>

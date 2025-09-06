@@ -102,9 +102,10 @@
                             <!--&lt;!&ndash;                                <l:route points="#{eyRouteController.points}"/>&ndash;&gt;-->
                             <!--                                <p:ajax event="pointSelect" listener="#{eyRouteController.onPointSelect}" update=":growl"/>-->
                             <!--                            </l:map>-->
-                            <l:map center="37.069387, 37.374620" zoom="13" widgetVar="routeMapVar" model="#{eyRouteController.mapModel}">
-                                <p:ajax event="pointSelect" listener="#{eyRouteController.onPointSelect}"
-                                        update=":growl"/>
+                            <l:map center="37.069387, 37.374620" zoom="13" widgetVar="routeMapVar">
+                                <l:route points="#{eyRouteController.points}" showAlternatives="true" routeWhileDragging="true"/>
+<!--                                <p:ajax event="pointSelect" listener="#{eyRouteController.onPointSelect}"-->
+<!--                                        update=":growl"/>-->
                             </l:map>
                         </div>
                     </div>

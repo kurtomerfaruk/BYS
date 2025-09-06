@@ -1,5 +1,6 @@
 package com.kurtomerfaruk.leafmap.component.lmap;
 
+import com.kurtomerfaruk.leafmap.utils.Constants;
 import jakarta.faces.FacesException;
 import jakarta.faces.application.ResourceDependency;
 import jakarta.faces.context.FacesContext;
@@ -24,17 +25,17 @@ import java.util.Map;
  * @version 1.0.0
  * @since 5.09.2025 13:35
  */
-@ResourceDependency(library = "leafmap", name = "leaflet.css")
-@ResourceDependency(library = "leafmap", name = "leaflet.js")
-@ResourceDependency(library = "leafmap", name = "loading/loading.css")
-@ResourceDependency(library = "leafmap", name = "loading/loading.js")
-@ResourceDependency(library = "leafmap", name = "Leaflet.fullscreen.css")
-@ResourceDependency(library = "leafmap", name = "Leaflet.fullscreen.min.js")
-@ResourceDependency(library = "leafmap", name = "routemachine/leaflet-routing-machine.css")
-@ResourceDependency(library = "leafmap", name = "routemachine/leaflet-routing-machine.js")
-@ResourceDependency(library = "leafmap", name = "routemachine/Control.Geocoder.js")
-@ResourceDependency(library = "leafmap", name = "routemachine/config.js")
-@ResourceDependency(library = "leafmap", name = "leafmap.js")
+@ResourceDependency(library = Constants.LIBRARY, name = "leaflet.css")
+@ResourceDependency(library = Constants.LIBRARY, name = "leaflet.js")
+@ResourceDependency(library = Constants.LIBRARY, name = "loading/loading.css")
+@ResourceDependency(library = Constants.LIBRARY, name = "loading/loading.js")
+@ResourceDependency(library = Constants.LIBRARY, name = "Leaflet.fullscreen.css")
+@ResourceDependency(library = Constants.LIBRARY, name = "Leaflet.fullscreen.min.js")
+@ResourceDependency(library = Constants.LIBRARY, name = "routemachine/leaflet-routing-machine.css")
+@ResourceDependency(library = Constants.LIBRARY, name = "routemachine/leaflet-routing-machine.js")
+@ResourceDependency(library = Constants.LIBRARY, name = "routemachine/Control.Geocoder.js")
+@ResourceDependency(library = Constants.LIBRARY, name = "routemachine/config.js")
+@ResourceDependency(library = Constants.LIBRARY, name = "leafmap.js")
 public class LMap extends LMapBase {
 
     private static final Map<String, Class<? extends BehaviorEvent>> BEHAVIOR_EVENT_MAPPING = MapBuilder.<String, Class<? extends BehaviorEvent>>builder()

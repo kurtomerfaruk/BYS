@@ -140,15 +140,14 @@ PrimeFaces.widget.LMap = class extends PrimeFaces.widget.BaseWidget {
     }
 
     configureRoutes() {
-        var $this = this;
-
+        console.log(this.cfg.routes);
         L.Routing.control({
-            waypoints: this.cfg.routes,
+            waypoints: this.cfg.routes.waypoints,
             language: 'tr',
-            routeWhileDragging: false,
-            reverseWaypoints: false,
-            showAlternatives: true,
-            draggableWaypoints: false,
+            routeWhileDragging: this.cfg.routes.routeWhileDragging,
+            reverseWaypoints: this.cfg.routes.reverseWaypoints,
+            showAlternatives: this.cfg.routes.showAlternatives,
+            draggableWaypoints: this.cfg.routes.draggableWaypoints,
             altLineOptions: {
                 styles: [
                     {color: 'black', opacity: 0.15, weight: 9},

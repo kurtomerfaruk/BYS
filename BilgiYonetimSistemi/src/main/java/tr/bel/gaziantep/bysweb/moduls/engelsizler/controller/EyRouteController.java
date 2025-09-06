@@ -1,9 +1,5 @@
 package tr.bel.gaziantep.bysweb.moduls.engelsizler.controller;
 
-import com.kurtomerfaruk.leafmap.model.map.DefaultMapModel;
-import com.kurtomerfaruk.leafmap.model.map.MapModel;
-import com.kurtomerfaruk.leafmap.model.map.Route;
-import jakarta.annotation.PostConstruct;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
@@ -50,14 +46,6 @@ public class EyRouteController implements Serializable {
     @Getter
     @Setter
     private List<Point> markerModels = new ArrayList<>();
-    @Getter
-    @Setter
-    private MapModel<Long> mapModel;
-
-    @PostConstruct
-    public void init() {
-        mapModel=new DefaultMapModel<>();
-    }
 
     public void addToList() {
         if (!eyKisiList.contains(selectedEyKisi)) {
@@ -79,7 +67,6 @@ public class EyRouteController implements Serializable {
         try {
             points = new ArrayList<>();
             markerModels = new ArrayList<>();
-            mapModel=new DefaultMapModel<>();
             for (EyKisi eyKisi : eyKisiList) {
                 if(StringUtil.isNotBlank(eyKisi.getGnlKisi().getLatLng())){
                     String[] parts = eyKisi.getGnlKisi().getLatLng().split(",");
@@ -91,11 +78,7 @@ public class EyRouteController implements Serializable {
             Point start = new Point( 37.06591759577603, 37.37354309665679);
             List<Point> route = GeoUtil.nearestNeighbor(start, points);
             route = GeoUtil.twoOpt(route);
-
-            for (Point point : route) {
-                mapModel.addOverlay(new Route<>(new LatLng(point.getX(),point.getY())));
-            }
-//            points = route;
+            points = route;
         }catch (Exception e){
             log.error(e.getMessage());
         }
