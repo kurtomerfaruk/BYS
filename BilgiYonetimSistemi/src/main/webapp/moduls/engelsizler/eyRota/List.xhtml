@@ -97,9 +97,14 @@
                     </div>
                     <div class="col-xl-6">
                         <div style="position: relative; height: calc(100vh - 100px);">
-                            <l:map id="routeMap" center="37.069387, 37.374620" zoom="13" widgetVar="routeMapVar"
-                                   markers="#{markerModels}">
-                                <l:route points="#{eyRouteController.points}" showAlternatives="true"/>
+                            <!--                            <l:map id="routeMap" center="37.069387, 37.374620" zoom="13" widgetVar="routeMapVar"-->
+                            <!--                                   markers="#{eyRouteController.markerModels}" loadingControl="false">-->
+                            <!--&lt;!&ndash;                                <l:route points="#{eyRouteController.points}"/>&ndash;&gt;-->
+                            <!--                                <p:ajax event="pointSelect" listener="#{eyRouteController.onPointSelect}" update=":growl"/>-->
+                            <!--                            </l:map>-->
+                            <l:map center="37.069387, 37.374620" zoom="13" widgetVar="routeMapVar" model="#{eyRouteController.mapModel}">
+                                <p:ajax event="pointSelect" listener="#{eyRouteController.onPointSelect}"
+                                        update=":growl"/>
                             </l:map>
                         </div>
                     </div>

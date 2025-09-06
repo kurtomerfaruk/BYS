@@ -1,26 +1,36 @@
-package com.kurtomerfaruk.leafmap.component;
+package com.kurtomerfaruk.leafmap.component.lheatmap;
 
 import com.kurtomerfaruk.leafmap.model.heatmap.HeatmapModel;
-import com.kurtomerfaruk.leafmap.utils.LeafMap;
 import jakarta.faces.component.UIComponentBase;
+import jakarta.faces.component.behavior.ClientBehaviorHolder;
+import org.primefaces.component.api.PrimeClientBehaviorHolder;
+import org.primefaces.component.api.Widget;
 
 import java.util.List;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
  * @version 1.0.0
- * @since 25.08.2025 11:19
+ * @since 6.09.2025 21:50
  */
-public class LHeatMap extends UIComponentBase {
+public abstract class LHeatMapBase extends UIComponentBase implements Widget, ClientBehaviorHolder, PrimeClientBehaviorHolder {
+
+    public static final String COMPONENT_FAMILY = "com.kurtomerfaruk.leafmap.component.lheatmap";
+
+    public static final String DEFAULT_RENDERER = "com.kurtomerfaruk.leafmap.component.lheatmap.LHeatMapRenderer";
 
     protected enum PropertyKeys {
 
         points, blur, radius, maxZoom, max,models
     }
 
+    public LHeatMapBase() {
+        setRendererType(DEFAULT_RENDERER);
+    }
+
     @Override
     public String getFamily() {
-        return LeafMap.COMPONENT_FAMILY;
+        return COMPONENT_FAMILY;
     }
 
     public List<HeatmapModel> getModels(){
@@ -28,14 +38,6 @@ public class LHeatMap extends UIComponentBase {
     }
     public void setModels(final List<HeatmapModel> models){
         getStateHelper().put(PropertyKeys.models,models);
-    }
-
-    public List<String> getPoints() {
-        return (List<String>) getStateHelper().eval(PropertyKeys.points);
-    }
-
-    public void setPoints(final List<String> points) {
-        getStateHelper().put(PropertyKeys.points, points);
     }
 
     public int getRadius() {

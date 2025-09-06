@@ -7,136 +7,133 @@
     <namespace>http://kurtomerfaruk.com/ui</namespace>
 
     <tag>
+        <description><![CDATA[Open Street Map using leaflet https://leafletjs.com/]]></description>
         <tag-name>map</tag-name>
         <component>
-            <component-type>com.kurtomerfaruk.leafmap.component.LMap</component-type>
-            <renderer-type>com.kurtomerfaruk.leafmap.renderer.LMapRenderer</renderer-type>
+            <component-type>com.kurtomerfaruk.leafmap.component.lmap.LMap</component-type>
+            <renderer-type>com.kurtomerfaruk.leafmap.component.lmap.LMapRenderer</renderer-type>
         </component>
         <attribute>
+            <description>
+                <![CDATA[Name of the client side widget.]]>
+            </description>
             <name>widgetVar</name>
             <required>true</required>
             <type>java.lang.String</type>
         </attribute>
         <attribute>
-            <name>center</name>
+            <description>
+                <![CDATA[An org.primefaces.model.MapModel instance.]]>
+            </description>
+            <name>model</name>
+            <required>false</required>
+            <type>org.primefaces.model.map.MapModel</type>
         </attribute>
         <attribute>
-            <name>zoom</name>
-        </attribute>
-        <attribute>
-            <name>width</name>
-        </attribute>
-        <attribute>
-            <name>height</name>
-        </attribute>
-        <attribute>
+            <description>
+                <![CDATA[Inline style of the map container.]]>
+            </description>
             <name>style</name>
+            <required>false</required>
+            <type>java.lang.String</type>
         </attribute>
         <attribute>
+            <description>
+                <![CDATA[Style class of the map container.]]>
+            </description>
             <name>styleClass</name>
+            <required>false</required>
+            <type>java.lang.String</type>
         </attribute>
         <attribute>
-            <name>loadingControl</name>
+            <description>
+                <![CDATA[Center point of the map. Required.]]>
+            </description>
+            <name>center</name>
+            <required>true</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Defines the initial zoom level. Default is 8.]]>
+            </description>
+            <name>zoom</name>
+            <required>true</required>
+            <type>java.lang.Integer</type>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Display zoom control on a map. Default is true.]]>
+            </description>
+            <name>zoomControl</name>
+            <required>false</required>
             <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
-            <name>fullScreen</name>
-            <type>java.lang.Boolean</type>
+            <description>
+                <![CDATA[When using OpenStreetMap data, you are required to provide credit and display copyright notice.]]>
+            </description>
+            <name>attribution</name>
+            <required>false</required>
+            <type>java.lang.String</type>
         </attribute>
         <attribute>
-            <name>markers</name>
-            <type>java.util.List</type>
-        </attribute>
-    </tag>
-
-    <tag>
-        <tag-name>marker</tag-name>
-        <component>
-            <component-type>com.kurtomerfaruk.leafmap.component.LMarker</component-type>
-            <renderer-type>com.kurtomerfaruk.leafmap.renderer.LMarkerRenderer</renderer-type>
-        </component>
-        <attribute>
-            <name>lat</name>
+            <description>
+                <![CDATA[Url of a custom tile provider.]]>
+            </description>
+            <name>tileUrl</name>
+            <required>false</required>
+            <type>java.lang.String</type>
         </attribute>
         <attribute>
-            <name>lng</name>
-        </attribute>
-        <attribute>
-            <name>title</name>
-        </attribute>
-        <attribute>
+            <description>
+                <![CDATA[Defines draggability of map. Default is true.]]>
+            </description>
             <name>draggable</name>
-        </attribute>
-    </tag>
-
-    <tag>
-        <tag-name>route</tag-name>
-        <component>
-            <component-type>com.kurtomerfaruk.leafmap.component.LRoute</component-type>
-            <renderer-type>com.kurtomerfaruk.leafmap.renderer.LRouteRenderer</renderer-type>
-        </component>
-        <attribute>
-            <name>points</name>
-            <required>true</required>
-            <type>java.util.List</type>
-        </attribute>
-        <attribute>
-            <name>routeWhileDragging</name>
+            <required>false</required>
             <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
-            <name>reverseWaypoints</name>
+            <description>
+                <![CDATA[Javascript callback to execute when a point on map is clicked.]]>
+            </description>
+            <name>onPointClick</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Controls scrollwheel zooming on the map. Default is true.]]>
+            </description>
+            <name>scrollWheel</name>
+            <required>false</required>
             <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
-            <name>showAlternatives</name>
+            <description>
+                <![CDATA[When zooming in on the map, it adds a loading icon to the map. The default value is true.]]>
+            </description>
+            <name>loadingControl</name>
+            <required>false</required>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[The control used to make the map full screen. The default value is true.]]>
+            </description>
+            <name>fullScreen</name>
+            <required>false</required>
             <type>java.lang.Boolean</type>
         </attribute>
     </tag>
-
-    <tag>
-        <tag-name>choropleth</tag-name>
-        <component>
-            <component-type>com.kurtomerfaruk.leafmap.component.LChoropleth</component-type>
-            <renderer-type>com.kurtomerfaruk.leafmap.renderer.LChoroplethRenderer</renderer-type>
-        </component>
-        <attribute>
-            <name>data</name>
-            <type>java.lang.String</type>
-        </attribute>
-        <attribute>
-            <name>title</name>
-            <type>java.lang.String</type>
-        </attribute>
-        <attribute>
-            <name>info</name>
-            <type>java.lang.String</type>
-        </attribute>
-        <attribute>
-            <name>values</name>
-            <required>true</required>
-            <type>java.util.List</type>
-        </attribute>
-
-        <attribute>
-            <name>click</name>
-            <type>java.lang.String</type>
-        </attribute>
-    </tag>
-
     <tag>
         <tag-name>heatmap</tag-name>
         <component>
-            <component-type>com.kurtomerfaruk.leafmap.component.LHeatMap</component-type>
-            <renderer-type>com.kurtomerfaruk.leafmap.renderer.LHeatMapRenderer</renderer-type>
+            <component-type>com.kurtomerfaruk.leafmap.component.lheatmap.LHeatMap</component-type>
+            <renderer-type>com.kurtomerfaruk.leafmap.component.lheatmap.LHeatMapRenderer</renderer-type>
         </component>
         <attribute>
             <name>models</name>
-            <required>true</required>
-            <type>java.util.List</type>
-        </attribute>
-        <attribute>
-            <name>points</name>
             <required>true</required>
             <type>java.util.List</type>
         </attribute>

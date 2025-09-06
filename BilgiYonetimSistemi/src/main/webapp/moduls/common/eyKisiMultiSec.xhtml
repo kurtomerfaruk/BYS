@@ -31,10 +31,12 @@
                      size="small"
                      styleClass="w-100"
                      selectionMode="multiple"
-        selectionRowMode="true">
+                     selectionRowMode="true">
 
             <p:ajax event="rowSelect" process="@this" update="datalist"/>
             <p:ajax event="rowUnselect" process="@this" update="datalist"/>
+            <p:ajax event="toggleSelect" process="@this" update="datalist"/>
+            <p:ajax event="rowUnselectCheckbox" process="@this" update="datalist"/>
 
             <f:facet name="header">
                 #{messages.kisiListesi}

@@ -1,7 +1,8 @@
 package tr.bel.gaziantep.bysweb.core.utils;
 
 
-import com.kurtomerfaruk.leafmap.model.Point;
+
+import org.primefaces.model.map.Point;
 
 import java.util.*;
 
@@ -38,8 +39,8 @@ public class GeoUtil {
             Point finalCurrent = current;
             Point nearest = remaining.stream()
                     .min(Comparator.comparingDouble(p -> GeoUtil.haversine(
-                            finalCurrent.getLat(), finalCurrent.getLng(),
-                            p.getLat(), p.getLng())))
+                            finalCurrent.getX(), finalCurrent.getY(),
+                            p.getX(), p.getY())))
                     .orElseThrow();
 
             route.add(nearest);
@@ -64,8 +65,8 @@ public class GeoUtil {
             Point finalCurrent = current;
             Point nearest = remaining.stream()
                     .min(Comparator.comparingDouble(p -> GeoUtil.haversine(
-                            finalCurrent.getLat(), finalCurrent.getLng(),
-                            p.getLat(), p.getLng())))
+                            finalCurrent.getX(), finalCurrent.getY(),
+                            p.getX(), p.getY())))
                     .orElseThrow();
 
             route.add(nearest);
@@ -114,8 +115,8 @@ public class GeoUtil {
         double distance = 0;
         for (int i = 0; i < route.size() - 1; i++) {
             distance += haversine(
-                    route.get(i).getLat(), route.get(i).getLng(),
-                    route.get(i + 1).getLat(), route.get(i + 1).getLng());
+                    route.get(i).getX(), route.get(i).getY(),
+                    route.get(i + 1).getX(), route.get(i + 1).getY());
         }
         return distance;
     }

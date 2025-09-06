@@ -1,12 +1,20 @@
 package tr.bel.gaziantep.bysweb.moduls.engelsizler.controller;
 
-import com.kurtomerfaruk.leafmap.model.Point;
+import com.kurtomerfaruk.leafmap.model.map.DefaultMapModel;
+import com.kurtomerfaruk.leafmap.model.map.MapModel;
+import com.kurtomerfaruk.leafmap.model.map.Route;
+import jakarta.annotation.PostConstruct;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.primefaces.event.SelectEvent;
+import org.primefaces.event.map.PointSelectEvent;
+import org.primefaces.model.map.LatLng;
+import org.primefaces.model.map.Point;
 import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
 import tr.bel.gaziantep.bysweb.core.utils.GeoUtil;
 import tr.bel.gaziantep.bysweb.core.utils.StringUtil;
@@ -42,6 +50,14 @@ public class EyRouteController implements Serializable {
     @Getter
     @Setter
     private List<Point> markerModels = new ArrayList<>();
+    @Getter
+    @Setter
+    private MapModel<Long> mapModel;
+
+    @PostConstruct
+    public void init() {
+        mapModel=new DefaultMapModel<>();
+    }
 
     public void addToList() {
         if (!eyKisiList.contains(selectedEyKisi)) {
@@ -63,18 +79,23 @@ public class EyRouteController implements Serializable {
         try {
             points = new ArrayList<>();
             markerModels = new ArrayList<>();
+            mapModel=new DefaultMapModel<>();
             for (EyKisi eyKisi : eyKisiList) {
                 if(StringUtil.isNotBlank(eyKisi.getGnlKisi().getLatLng())){
                     String[] parts = eyKisi.getGnlKisi().getLatLng().split(",");
-                    Point point = new Point(eyKisi.getGnlKisi().getAdSoyad(),Double.parseDouble(parts[1]),Double.parseDouble(parts[0]));
+                    Point point = new Point(Double.parseDouble(parts[1]),Double.parseDouble(parts[0]));
                     points.add(point);
                     markerModels.add(point);
                 }
             }
-            Point start = new Point("Merkez", 37.06591759577603, 37.37354309665679);
+            Point start = new Point( 37.06591759577603, 37.37354309665679);
             List<Point> route = GeoUtil.nearestNeighbor(start, points);
             route = GeoUtil.twoOpt(route);
-            points = route;
+
+            for (Point point : route) {
+                mapModel.addOverlay(new Route<>(new LatLng(point.getX(),point.getY())));
+            }
+//            points = route;
         }catch (Exception e){
             log.error(e.getMessage());
         }
@@ -84,5 +105,12 @@ public class EyRouteController implements Serializable {
         Map<String, Object> data = event.getObject();
         eyKisiList = (List<EyKisi>) data.get("selectedList");
 
+    }
+
+    public void onPointSelect(PointSelectEvent event) {
+       LatLng latLng=event.getLatLng();
+
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Point Selected",
+                "Lat:" + latLng.getLat() + ", Lng:" + latLng.getLng()));
     }
 }

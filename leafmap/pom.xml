@@ -10,6 +10,8 @@
     <groupId>com.kurtomerfaruk</groupId>
     <artifactId>leafmap</artifactId>
     <version>1.0.0</version>
+    <packaging>jar</packaging>
+
     <name>leafmap</name>
 
     <dependencies>
@@ -26,6 +28,11 @@
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.primefaces</groupId>
+            <artifactId>primefaces</artifactId>
+            <classifier>jakarta</classifier>
         </dependency>
     </dependencies>
 

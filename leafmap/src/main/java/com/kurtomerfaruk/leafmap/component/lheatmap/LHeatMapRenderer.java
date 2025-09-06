@@ -1,18 +1,13 @@
-package com.kurtomerfaruk.leafmap.renderer;
+package com.kurtomerfaruk.leafmap.component.lheatmap;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.kurtomerfaruk.leafmap.component.LHeatMap;
-import com.kurtomerfaruk.leafmap.component.LMap;
+import com.kurtomerfaruk.leafmap.component.lmap.LMap;
 import com.kurtomerfaruk.leafmap.model.heatmap.HeatmapModel;
-import com.kurtomerfaruk.leafmap.utils.LeafMap;
-import jakarta.faces.application.ResourceDependencies;
-import jakarta.faces.application.ResourceDependency;
 import jakarta.faces.component.UIComponent;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.context.ResponseWriter;
-import jakarta.faces.render.FacesRenderer;
-import jakarta.faces.render.Renderer;
+import org.primefaces.renderkit.CoreRenderer;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,25 +16,24 @@ import java.util.List;
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
  * @version 1.0.0
- * @since 25.08.2025 11:20
+ * @since 6.09.2025 21:49
  */
-@FacesRenderer(componentFamily = LeafMap.COMPONENT_FAMILY, rendererType = LeafMap.RENDERER_FAMILY)
-@ResourceDependencies({
-        @ResourceDependency(library = "leafmap", name = "heatmap/heatmap.min.js"),
-        @ResourceDependency(library = "leafmap", name = "heatmap/leaflet-heatmap.js")
-})
-public class LHeatMapRenderer extends Renderer {
+public class LHeatMapRenderer extends CoreRenderer {
+    @Override
+    public void decode(FacesContext context, UIComponent component) {
+        decodeBehaviors(context, component);
+    }
 
     @Override
-    public void encodeBegin(FacesContext context, UIComponent component) throws IOException {
-        LHeatMap heatMap = (LHeatMap) component;
-        ResponseWriter writer = context.getResponseWriter();
+    public void encodeEnd(FacesContext facesContext, UIComponent component) throws IOException {
         LMap map = (LMap) component.getParent();
+        LHeatMap heatMap =(LHeatMap) component;
 
-        while (map == null) {
-            map = (LMap) component.getParent();
-        }
+        encodeScript(facesContext,map, heatMap);
+    }
 
+    protected void encodeScript(FacesContext context, LMap map, LHeatMap heatMap) throws IOException {
+        ResponseWriter writer = context.getResponseWriter();
         List<HeatmapModel> models = heatMap.getModels();
         Gson gson = new Gson();
         String dataJson = gson.toJson(
@@ -47,7 +41,7 @@ public class LHeatMapRenderer extends Renderer {
                 new TypeToken<ArrayList<HeatmapModel>>() {}.getType());
 
         if (heatMap.getModels() != null) {
-            writer.startElement("script", component);
+            writer.startElement("script", heatMap);
             String data = "var heatMapData = {\n" +
                     "          max: "+models.size()+",\n" +
                     "data:"+dataJson+
@@ -69,7 +63,7 @@ public class LHeatMapRenderer extends Renderer {
 
             writer.writeText(data,null);
 
-                writer.endElement("script");
+            writer.endElement("script");
         }
     }
 }

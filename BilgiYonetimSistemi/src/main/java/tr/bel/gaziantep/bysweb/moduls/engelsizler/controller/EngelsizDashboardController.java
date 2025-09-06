@@ -1,8 +1,6 @@
 package tr.bel.gaziantep.bysweb.moduls.engelsizler.controller;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.kurtomerfaruk.leafmap.model.cluster.ClusterModel;
 import com.kurtomerfaruk.leafmap.model.heatmap.HeatmapModel;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.view.ViewScoped;
@@ -11,7 +9,6 @@ import jakarta.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.primefaces.PrimeFaces;
 import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlCinsiyet;
 import tr.bel.gaziantep.bysweb.moduls.engelsizler.entity.EyEngelGrubu;
 import tr.bel.gaziantep.bysweb.moduls.engelsizler.service.EyAracCihazTeslimiService;
@@ -67,9 +64,9 @@ public class EngelsizDashboardController implements java.io.Serializable {
     @Getter
     @Setter
     private List<HeatmapModel> heatmapModels;
-    @Getter
-    @Setter
-    private List<ClusterModel> clusterModels;
+//    @Getter
+//    @Setter
+//    private List<ClusterModel> clusterModels;
     @Getter
     @Setter
     private EnumGnlCinsiyet cinsiyet;
@@ -99,7 +96,7 @@ public class EngelsizDashboardController implements java.io.Serializable {
     @PostConstruct
     public void init() {
         heatmapModels = new ArrayList<>();
-        clusterModels = new ArrayList<>();
+//        clusterModels = new ArrayList<>();
         gson = new Gson();
         getAddress();
         totalPerson = getTotalCount();
@@ -142,10 +139,10 @@ public class EngelsizDashboardController implements java.io.Serializable {
             String[] parts = coordinate.split("\\s*,\\s*");
             HeatmapModel heatmapModel = new HeatmapModel(Double.parseDouble(parts[1]), Double.parseDouble(parts[0]), 1);
             heatmapModels.add(heatmapModel);
-            if (count < 100) {
-                ClusterModel clusterModel = new ClusterModel(Double.parseDouble(parts[1]), Double.parseDouble(parts[0]), coordinate);
-                clusterModels.add(clusterModel);
-            }
+//            if (count < 100) {
+//                ClusterModel clusterModel = new ClusterModel(Double.parseDouble(parts[1]), Double.parseDouble(parts[0]), coordinate);
+//                clusterModels.add(clusterModel);
+//            }
             count++;
         }
     }
@@ -153,18 +150,18 @@ public class EngelsizDashboardController implements java.io.Serializable {
     public void getReport() {
         List<String> coordinates = eyKisiService.getAllCoordinates(cinsiyet, yasBaslangic, yasBitis, gnlIlce, gnlMahalle, engelOraniBaslangic, engelOraniBitis,
                 eyEngelGrubu);
-        heatmapModels = new ArrayList<>();
-        for (String coordinate : coordinates) {
-            String[] parts = coordinate.split("\\s*,\\s*");
-            HeatmapModel heatmapModel = new HeatmapModel(Double.parseDouble(parts[1]), Double.parseDouble(parts[0]), 1);
-            heatmapModels.add(heatmapModel);
-        }
-
-        String dataJson = gson.toJson(heatmapModels, new TypeToken<ArrayList<HeatmapModel>>() {
-        }.getType());
-        ;
-        String newScript = "refreshHeatMap(" + heatmapModels.size() + "," + dataJson + ")";
-        PrimeFaces.current().executeScript(newScript);
+//        heatmapModels = new ArrayList<>();
+//        for (String coordinate : coordinates) {
+//            String[] parts = coordinate.split("\\s*,\\s*");
+//            HeatmapModel heatmapModel = new HeatmapModel(Double.parseDouble(parts[1]), Double.parseDouble(parts[0]), 1);
+//            heatmapModels.add(heatmapModel);
+//        }
+//
+//        String dataJson = gson.toJson(heatmapModels, new TypeToken<ArrayList<HeatmapModel>>() {
+//        }.getType());
+//        ;
+//        String newScript = "refreshHeatMap(" + heatmapModels.size() + "," + dataJson + ")";
+//        PrimeFaces.current().executeScript(newScript);
 
     }
 
