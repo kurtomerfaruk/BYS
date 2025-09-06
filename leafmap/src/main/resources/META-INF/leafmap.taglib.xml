@@ -130,12 +130,27 @@
         <tag-name>heatmap</tag-name>
         <component>
             <component-type>com.kurtomerfaruk.leafmap.component.LHeatMap</component-type>
-            <renderer-type>com.kurtomerfaruk.leafmap.component.LHeatMapRenderer</renderer-type>
         </component>
         <attribute>
             <name>points</name>
             <required>true</required>
             <type>java.util.List</type>
+        </attribute>
+        <attribute>
+            <name>blur</name>
+            <type>java.lang.Integer</type>
+        </attribute>
+        <attribute>
+            <name>radius</name>
+            <type>java.lang.Integer</type>
+        </attribute>
+        <attribute>
+            <name>maxZoom</name>
+            <type>java.lang.Integer</type>
+        </attribute>
+        <attribute>
+            <name>max</name>
+            <type>java.lang.Double</type>
         </attribute>
     </tag>
 </facelet-taglib>

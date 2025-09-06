@@ -123,9 +123,9 @@ public class LMapRenderer extends CoreRenderer {
     private void encodeHeatMap(FacesContext context, LHeatMap heatMap) throws IOException {
         ResponseWriter writer = context.getResponseWriter();
 
-        writer.write(",heatmap:[");
+        writer.write(",heatmap:{points:[");
 
-        for (Iterator<LatLng> iterator =heatMap.getPoints().iterator(); iterator.hasNext(); ) {
+        for (Iterator<LatLng> iterator = heatMap.getPoints().iterator(); iterator.hasNext(); ) {
             LatLng latLng = iterator.next();
 
             writer.write("[");
@@ -137,6 +137,11 @@ public class LMapRenderer extends CoreRenderer {
             }
         }
         writer.write("]");
+        writer.write(",blur:" + heatMap.getBlur());
+        writer.write(",radius:" + heatMap.getRadius());
+        writer.write(",maxZoom:" + heatMap.getMaxZoom()) ;
+        writer.write(",max:" + heatMap.getMax()) ;
+        writer.write("}");
     }
 
     private void encodeFullScreen(FacesContext context, LMap map) throws IOException {

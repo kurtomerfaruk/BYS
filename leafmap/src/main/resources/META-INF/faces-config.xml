@@ -28,11 +28,6 @@
             <renderer-type>com.kurtomerfaruk.leafmap.component.LMapRenderer</renderer-type>
             <renderer-class>com.kurtomerfaruk.leafmap.component.lmap.LMapRenderer</renderer-class>
         </renderer>
-        <renderer>
-            <component-family>com.kurtomerfaruk.leafmap.component</component-family>
-            <renderer-type>com.kurtomerfaruk.leafmap.component.LHeatMapRenderer</renderer-type>
-            <renderer-class>com.kurtomerfaruk.leafmap.component.lheatmap.LHeatMapRenderer</renderer-class>
-        </renderer>
     </render-kit>
 
 </faces-config>

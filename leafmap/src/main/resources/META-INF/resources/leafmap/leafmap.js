@@ -43,9 +43,16 @@ PrimeFaces.widget.LMap = class extends PrimeFaces.widget.BaseWidget {
             this.configureRoutes();
         }
 
-        if(this.cfg.heatmap){
+        if (this.cfg.heatmap) {
+            console.log(this.cfg);
             console.log(this.cfg.heatmap)
-            L.heatLayer(this.cfg.heatmap).addTo(this.cfg.map);
+            L.heatLayer(this.cfg.heatmap.points,
+                {
+                    radius: this.cfg.heatmap.radius,
+                    blur: this.cfg.heatmap.blur,
+                    maxZoom: this.cfg.heatmap.maxZoom,
+                    max: this.cfg.heatmap.max,
+                }).addTo(this.cfg.map);
         }
 
         //general map events
@@ -143,7 +150,7 @@ PrimeFaces.widget.LMap = class extends PrimeFaces.widget.BaseWidget {
             routeWhileDragging: false,
             reverseWaypoints: false,
             showAlternatives: true,
-            draggableWaypoints:false,
+            draggableWaypoints: false,
             altLineOptions: {
                 styles: [
                     {color: 'black', opacity: 0.15, weight: 9},
