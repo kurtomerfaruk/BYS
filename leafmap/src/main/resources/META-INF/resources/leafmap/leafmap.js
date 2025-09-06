@@ -40,8 +40,12 @@ PrimeFaces.widget.LMap = class extends PrimeFaces.widget.BaseWidget {
 
         //add routes
         if (this.cfg.routes) {
-            console.log("routes")
             this.configureRoutes();
+        }
+
+        if(this.cfg.heatmap){
+            console.log(this.cfg.heatmap)
+            L.heatLayer(this.cfg.heatmap).addTo(this.cfg.map);
         }
 
         //general map events

@@ -1,7 +1,6 @@
 package tr.bel.gaziantep.bysweb.moduls.engelsizler.controller;
 
 import com.google.gson.Gson;
-import com.kurtomerfaruk.leafmap.model.heatmap.HeatmapModel;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
@@ -9,6 +8,7 @@ import jakarta.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.primefaces.model.map.LatLng;
 import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlCinsiyet;
 import tr.bel.gaziantep.bysweb.moduls.engelsizler.entity.EyEngelGrubu;
 import tr.bel.gaziantep.bysweb.moduls.engelsizler.service.EyAracCihazTeslimiService;
@@ -63,7 +63,7 @@ public class EngelsizDashboardController implements java.io.Serializable {
     private int request;
     @Getter
     @Setter
-    private List<HeatmapModel> heatmapModels;
+    private List<LatLng> heatmapModels;
 //    @Getter
 //    @Setter
 //    private List<ClusterModel> clusterModels;
@@ -137,7 +137,7 @@ public class EngelsizDashboardController implements java.io.Serializable {
         for (String coordinate : coordinates) {
             if(coordinate.equals("null,null")) continue;
             String[] parts = coordinate.split("\\s*,\\s*");
-            HeatmapModel heatmapModel = new HeatmapModel(Double.parseDouble(parts[1]), Double.parseDouble(parts[0]), 1);
+            LatLng heatmapModel = new LatLng(Double.parseDouble(parts[1]), Double.parseDouble(parts[0]));
             heatmapModels.add(heatmapModel);
 //            if (count < 100) {
 //                ClusterModel clusterModel = new ClusterModel(Double.parseDouble(parts[1]), Double.parseDouble(parts[0]), coordinate);

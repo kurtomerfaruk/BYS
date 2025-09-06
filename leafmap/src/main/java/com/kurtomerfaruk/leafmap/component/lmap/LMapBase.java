@@ -11,9 +11,9 @@ import org.primefaces.component.api.Widget;
  * @since 5.09.2025 13:35
  */
 public abstract class LMapBase extends UIComponentBase implements Widget, ClientBehaviorHolder, PrimeClientBehaviorHolder {
-    public static final String COMPONENT_FAMILY = "com.kurtomerfaruk.leafmap.component.lmap";
+    public static final String COMPONENT_FAMILY = "com.kurtomerfaruk.leafmap.component";
 
-    public static final String DEFAULT_RENDERER = "com.kurtomerfaruk.leafmap.component.lmap.LMapRenderer";
+    public static final String DEFAULT_RENDERER = "com.kurtomerfaruk.leafmap.component.LMapRenderer";
 
     public enum PropertyKeys {
 

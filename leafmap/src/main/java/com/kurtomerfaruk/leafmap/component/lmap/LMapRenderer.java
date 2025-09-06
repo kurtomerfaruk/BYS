@@ -1,5 +1,6 @@
 package com.kurtomerfaruk.leafmap.component.lmap;
 
+import com.kurtomerfaruk.leafmap.component.lheatmap.LHeatMap;
 import com.kurtomerfaruk.leafmap.model.map.MapModel;
 import com.kurtomerfaruk.leafmap.model.map.Route;
 import jakarta.faces.FacesException;
@@ -34,9 +35,9 @@ public class LMapRenderer extends CoreRenderer {
 
         encodeScript(facesContext, map);
 
-        for (UIComponent child : component.getChildren()) {
-            child.encodeAll(facesContext);
-        }
+//        for (UIComponent child : component.getChildren()) {
+//            child.encodeAll(facesContext);
+//        }
     }
 
     protected void encodeMarkup(FacesContext context, LMap map) throws IOException {
@@ -103,6 +104,12 @@ public class LMapRenderer extends CoreRenderer {
 
         encodeOverlays(context, map);
 
+        for (UIComponent child : map.getChildren()) {
+            if (child instanceof LHeatMap heatmap) {
+                encodeHeatMap(context, heatmap);
+            }
+        }
+
         // Client events
         if (map.getOnPointClick() != null) {
             wb.callback("onPointClick", "function(event)", map.getOnPointClick() + ";");
@@ -111,6 +118,25 @@ public class LMapRenderer extends CoreRenderer {
         encodeClientBehaviors(context, map);
 
         wb.finish();
+    }
+
+    private void encodeHeatMap(FacesContext context, LHeatMap heatMap) throws IOException {
+        ResponseWriter writer = context.getResponseWriter();
+
+        writer.write(",heatmap:[");
+
+        for (Iterator<LatLng> iterator =heatMap.getPoints().iterator(); iterator.hasNext(); ) {
+            LatLng latLng = iterator.next();
+
+            writer.write("[");
+            writer.write(latLng.getLat() + ", " + latLng.getLng());
+            writer.write("]");
+
+            if (iterator.hasNext()) {
+                writer.write(",");
+            }
+        }
+        writer.write("]");
     }
 
     private void encodeFullScreen(FacesContext context, LMap map) throws IOException {
