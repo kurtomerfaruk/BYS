@@ -51,7 +51,7 @@ public class GaziKartSchedule implements java.io.Serializable{
     @Inject
     private ModelConverter converter;
 
-    @Schedule(minute = "0",second = "0",dayOfMonth = "*",month = "*",year = "*",hour = "*/1",dayOfWeek = "Mon-Fri",persistent = false)
+    @Schedule(minute = "0",second = "0",dayOfMonth = "*",month = "*",year = "*",hour = "1",dayOfWeek = "Mon-Fri",persistent = false)
     public void updateGnlKisi() throws Exception {
         System.out.println("Gazikart baslama tarihi :"+new Date());
         listUpdate();

@@ -45,7 +45,9 @@ import java.io.Serial;
 import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -132,19 +134,19 @@ public class EyKisiController extends AbstractController<EyKisi> {
     @Setter
     private EyTalep eyTalep;
 
-    private List<EyKisi> selecteds ;
-
-    public EyKisiController() {
-        super(EyKisi.class);
-    }
-
-    public List<EyKisi> getSelecteds() {
-        return selecteds;
-    }
-
-    public void setSelecteds(List<EyKisi> selecteds) {
-        this.selecteds = selecteds;
-    }
+//    private List<EyKisi> selecteds ;
+//
+//    public EyKisiController() {
+//        super(EyKisi.class);
+//    }
+//
+//    public List<EyKisi> getSelecteds() {
+//        return selecteds;
+//    }
+//
+//    public void setSelecteds(List<EyKisi> selecteds) {
+//        this.selecteds = selecteds;
+//    }
 
     public List<SelectItem> getFilterOptions(EnumSyFiltreAnahtari key) {
         switch (key) {
@@ -176,6 +178,7 @@ public class EyKisiController extends AbstractController<EyKisi> {
     @Override
     public void init() {
         syKullanici = Util.getSyKullanici();
+        this.setTableName("EyKisi");
         readColumns(syKullanici);
         maxDate = LocalDate.now();
     }
@@ -568,11 +571,11 @@ public class EyKisiController extends AbstractController<EyKisi> {
         PrimeFaces.current().dialog().closeDynamic(eyKisi);
     }
 
-    public void selectAndClose() {
-        Map<String, Object> params = new HashMap<>();
-        params.put("selectedList", selecteds);
-        PrimeFaces.current().dialog().closeDynamic(params);
-    }
+//    public void selectAndClose() {
+//        Map<String, Object> params = new HashMap<>();
+//        params.put("selectedList", selecteds);
+//        PrimeFaces.current().dialog().closeDynamic(params);
+//    }
 
     public void onRowDblSelect(SelectEvent<EyKisi> event) {
         EyKisi eyKisi = event.getObject();

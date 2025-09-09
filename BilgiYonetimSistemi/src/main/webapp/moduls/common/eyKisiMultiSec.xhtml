@@ -15,16 +15,16 @@
 
     <h:form id="EyKisiMultiSec">
         <p:dataTable id="datalist"
-                     value="#{eyKisiController.lazyItems}"
+                     value="#{eyKisiMultiController.lazyItems}"
                      var="item"
                      rowKey="#{item.id}"
                      paginator="true"
                      rows="10"
-                     selection="#{eyKisiController.selecteds}"
+                     selection="#{eyKisiMultiController.selecteds}"
                      paginatorPosition="bottom"
                      lazy="true"
                      pageLinks="5"
-                     filteredValue="#{eyKisiController.filtered}"
+                     filteredValue="#{eyKisiMultiController.filtered}"
                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                      currentPageReportTemplate="#{messages.currentPageTemplate}"
                      emptyMessage="#{messages.kayitBulunamadi}"
@@ -36,6 +36,7 @@
             <p:ajax event="rowSelect" process="@this" update="datalist"/>
             <p:ajax event="rowUnselect" process="@this" update="datalist"/>
             <p:ajax event="toggleSelect" process="@this" update="datalist"/>
+            <p:ajax event="rowSelectCheckbox" process="@this" update="datalist"/>
             <p:ajax event="rowUnselectCheckbox" process="@this" update="datalist"/>
 
             <f:facet name="header">
@@ -94,7 +95,7 @@
             </p:column>
 
         </p:dataTable>
-        <p:commandButton value="Seç" action="#{eyKisiController.selectAndClose}" process="@this" update="@form"/>
+        <p:commandButton value="Seç" action="#{eyKisiMultiController.selectAndClose}" process="@this" update="@form"/>
     </h:form>
 
 

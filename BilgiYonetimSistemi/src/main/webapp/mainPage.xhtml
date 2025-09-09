@@ -12,13 +12,13 @@
     <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlCinsiyet" var="enumCinsiyet"/>
 
     <h:form id="MapForm" prependId="false">
-<!--                <div style="position: relative; height: calc(100vh - 100px);">-->
-<!--                    <l:map id="generalMap1" center="37.069387, 37.374620" zoom="13" widgetVar="mapVar1">-->
-<!--                        <l:marker lat="37.067949" lng="37.348871" title="İstanbul"/>-->
-<!--                        <l:marker lat="41.015" lng="28.985" title="Başka bir konum"/>-->
-<!--                        <l:route/>-->
-<!--                    </l:map>-->
-<!--                </div>-->
+        <!--                <div style="position: relative; height: calc(100vh - 100px);">-->
+        <!--                    <l:map id="generalMap1" center="37.069387, 37.374620" zoom="13" widgetVar="mapVar1">-->
+        <!--                        <l:marker lat="37.067949" lng="37.348871" title="İstanbul"/>-->
+        <!--                        <l:marker lat="41.015" lng="28.985" title="Başka bir konum"/>-->
+        <!--                        <l:route/>-->
+        <!--                    </l:map>-->
+        <!--                </div>-->
         <div class="col-xl-12">
             <div class="card custom-card">
                 <div class="card-body">
@@ -89,7 +89,8 @@
                                             <i class="ti ti-search"></i>
                                         </button>
 
-                                        <p:sidebar widgetVar="rightBar" position="right" style="min-width:500px !important">
+                                        <p:sidebar widgetVar="rightBar" position="right"
+                                                   style="min-width:500px !important">
                                             <div id="search-criteria">
                                                 <div class="card">
                                                     <div class="card-header">
@@ -98,10 +99,13 @@
                                                     <div class="card-body">
                                                         <div class="row">
                                                             <div class="col-12">
-                                                                <p:outputLabel value="#{messages.cinsiyetText}" for="@next"/>
-                                                                <p:selectOneMenu id="cinsiyet" value="#{engelsizDashboardController.cinsiyet}"
+                                                                <p:outputLabel value="#{messages.cinsiyetText}"
+                                                                               for="@next"/>
+                                                                <p:selectOneMenu id="cinsiyet"
+                                                                                 value="#{engelsizDashboardController.cinsiyet}"
                                                                                  converter="omnifaces.SelectItemsConverter">
-                                                                    <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+                                                                    <f:selectItem itemLabel="#{messages.seciniz}"
+                                                                                  itemValue="#{null}"/>
                                                                     <f:selectItems value="#{enumCinsiyet.ALL_VALUES}"
                                                                                    var="cinsiyets"
                                                                                    itemLabel="#{cinsiyets.displayValue}"
@@ -109,56 +113,75 @@
                                                                 </p:selectOneMenu>
                                                             </div>
                                                             <div class="col-12">
-                                                                <p:outputLabel value="#{messages.ilceText}" for="@next"/>
-                                                                <p:selectOneMenu id="gnlIlce" value="#{engelsizDashboardController.gnlIlce}" filter="true"
+                                                                <p:outputLabel value="#{messages.ilceText}"
+                                                                               for="@next"/>
+                                                                <p:selectOneMenu id="gnlIlce"
+                                                                                 value="#{engelsizDashboardController.gnlIlce}"
+                                                                                 filter="true"
                                                                                  converter="omnifaces.SelectItemsConverter">
-                                                                    <f:selectItem itemLabel="#{messages.tumuText}" itemValue="#{null}"/>
-                                                                    <f:selectItems value="#{gnlIlceController.getIlceByIl()}"
-                                                                                   var="ilces"
-                                                                                   itemValue="#{ilces}"
-                                                                                   itemLabel="#{ilces.tanim.toString()}"/>
+                                                                    <f:selectItem itemLabel="#{messages.tumuText}"
+                                                                                  itemValue="#{null}"/>
+                                                                    <f:selectItems
+                                                                            value="#{gnlIlceController.getIlceByIl()}"
+                                                                            var="ilces"
+                                                                            itemValue="#{ilces}"
+                                                                            itemLabel="#{ilces.tanim.toString()}"/>
                                                                     <p:ajax event="change" update="gnlmahalle"/>
                                                                 </p:selectOneMenu>
                                                             </div>
                                                             <div class="col-12">
-                                                                <p:outputLabel value="#{messages.mahalleText}" for="@next"/>
-                                                                <p:selectOneMenu id="gnlmahalle" value="#{engelsizDashboardController.gnlMahalle}" filter="true"
+                                                                <p:outputLabel value="#{messages.mahalleText}"
+                                                                               for="@next"/>
+                                                                <p:selectOneMenu id="gnlmahalle"
+                                                                                 value="#{engelsizDashboardController.gnlMahalle}"
+                                                                                 filter="true"
                                                                                  converter="omnifaces.SelectItemsConverter">
-                                                                    <f:selectItem itemLabel="#{messages.tumuText}" itemValue="#{null}"/>
-                                                                    <f:selectItems value="#{gnlMahalleController.getMahalleByIlce(engelsizDashboardController.gnlIlce)}"
-                                                                                   var="ilces"
-                                                                                   itemValue="#{ilces}"
-                                                                                   itemLabel="#{ilces.tanim.toString()}"/>
+                                                                    <f:selectItem itemLabel="#{messages.tumuText}"
+                                                                                  itemValue="#{null}"/>
+                                                                    <f:selectItems
+                                                                            value="#{gnlMahalleController.getMahalleByIlce(engelsizDashboardController.gnlIlce)}"
+                                                                            var="ilces"
+                                                                            itemValue="#{ilces}"
+                                                                            itemLabel="#{ilces.tanim.toString()}"/>
                                                                 </p:selectOneMenu>
                                                             </div>
                                                             <div class="col-12">
                                                                 <p:outputLabel value="#{messages.yasText}" for="@next"/>
                                                                 <h:panelGroup>
                                                                     <div class="ui-inputgroup">
-                                                                        <p:spinner id="yasBaslangic" value="#{engelsizDashboardController.yasBaslangic}"/>
-                                                                        <p:spinner id="yasBitis" value="#{engelsizDashboardController.yasBitis}"/>
+                                                                        <p:spinner id="yasBaslangic"
+                                                                                   value="#{engelsizDashboardController.yasBaslangic}"/>
+                                                                        <p:spinner id="yasBitis"
+                                                                                   value="#{engelsizDashboardController.yasBitis}"/>
                                                                     </div>
                                                                 </h:panelGroup>
                                                             </div>
                                                             <div class="col-12">
-                                                                <p:outputLabel value="#{messages.engelOraniLabel}" for="@next"/>
+                                                                <p:outputLabel value="#{messages.engelOraniLabel}"
+                                                                               for="@next"/>
                                                                 <h:panelGroup>
                                                                     <div class="ui-inputgroup">
                                                                         <p:spinner id="engelOraniBaslangic"
                                                                                    value="#{engelsizDashboardController.engelOraniBaslangic}"/>
-                                                                        <p:spinner id="engelOraniBitis" value="#{engelsizDashboardController.engelOraniBitis}"/>
+                                                                        <p:spinner id="engelOraniBitis"
+                                                                                   value="#{engelsizDashboardController.engelOraniBitis}"/>
                                                                     </div>
                                                                 </h:panelGroup>
                                                             </div>
                                                             <div class="col-12">
-                                                                <p:outputLabel value="#{messages.engelGrubuLabel}" for="@next"/>
-                                                                <p:selectOneMenu id="engelGrubu" value="#{engelsizDashboardController.eyEngelGrubu}" filter="true"
+                                                                <p:outputLabel value="#{messages.engelGrubuLabel}"
+                                                                               for="@next"/>
+                                                                <p:selectOneMenu id="engelGrubu"
+                                                                                 value="#{engelsizDashboardController.eyEngelGrubu}"
+                                                                                 filter="true"
                                                                                  converter="omnifaces.SelectItemsConverter">
-                                                                    <f:selectItem itemLabel="#{messages.tumuText}" itemValue="#{null}"/>
-                                                                    <f:selectItems value="#{eyEngelGrubuController.items}"
-                                                                                   var="grubus"
-                                                                                   itemValue="#{grubus}"
-                                                                                   itemLabel="#{grubus.tanim.toString()}"/>
+                                                                    <f:selectItem itemLabel="#{messages.tumuText}"
+                                                                                  itemValue="#{null}"/>
+                                                                    <f:selectItems
+                                                                            value="#{eyEngelGrubuController.items}"
+                                                                            var="grubus"
+                                                                            itemValue="#{grubus}"
+                                                                            itemLabel="#{grubus.tanim.toString()}"/>
                                                                 </p:selectOneMenu>
                                                             </div>
                                                         </div>
@@ -182,9 +205,11 @@
                                             <div class="col-xl-12">
                                                 <h:panelGroup id="mapGroup">
                                                     <div style="position: relative; height: calc(100vh - 235px);">
-                                                        <l:map id="generalMap" center="37.069387, 37.374620" zoom="13"
+                                                        <l:map id="generalMap" center="37.069387, 37.374620" zoom="12"
                                                                widgetVar="mapVar">
-                                                            <l:heatmap points="#{engelsizDashboardController.heatmapModels}" radius="25" blur="10"/>
+                                                            <l:heatmap
+                                                                    points="#{engelsizDashboardController.heatmapModels}"
+                                                                    radius="25" blur="10"/>
                                                         </l:map>
                                                     </div>
                                                 </h:panelGroup>

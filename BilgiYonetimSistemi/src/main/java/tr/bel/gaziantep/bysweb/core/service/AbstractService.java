@@ -245,6 +245,8 @@ public abstract class AbstractService<T> implements java.io.Serializable {
                 return cb.like(path.as(String.class), "%" + value + "%");
             case IN:
                 return handleIn(cb, path, filter);
+            case NOT_IN:
+                return  handleNotIn(cb,path,filter);
             case BETWEEN:
                 return handleBetween(cb, path, filter);
             case GREATER_THAN_EQUALS, GREATER_THAN, LESS_THAN, LESS_THAN_EQUALS:
@@ -330,6 +332,19 @@ public abstract class AbstractService<T> implements java.io.Serializable {
             return inClause;
         } else {
             return path.in(valueList);
+        }
+    }
+
+    private Predicate handleNotIn(CriteriaBuilder cb, Path<?> path, FilterMeta filter) {
+        List<?> valueList = (List<?>) filter.getFilterValue();
+        if (valueList.get(0).getClass().isEnum()) {
+            CriteriaBuilder.In<Object> inClause = cb.in(path);
+            for (Object value : valueList) {
+                inClause.value(value);
+            }
+            return cb.not(inClause);
+        } else {
+            return cb.not(path.in(valueList));
         }
     }
 
