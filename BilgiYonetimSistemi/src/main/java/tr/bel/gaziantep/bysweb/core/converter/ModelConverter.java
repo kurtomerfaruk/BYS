@@ -123,7 +123,10 @@ public class ModelConverter implements java.io.Serializable {
 
         if (kpsModel.getKisiAdresModel() != null) {
             KisiAdresModel model = kpsModel.getKisiAdresModel();
-            kisi.setLatLng(model.getX() + "," + model.getY());
+            if(StringUtil.isNotBlank(model.getX()) && StringUtil.isNotBlank(model.getY())) {
+                kisi.setLatLng(model.getX() + "," + model.getY());
+            }
+            
         }
 
         kisi.setMernisGuncellemeTarihi(LocalDateTime.now());

@@ -76,7 +76,7 @@
                             <p:column headerText="#{messages.buttonNvidenGuncelle}" width="100">
                                 <p:commandButton icon="pi pi-refresh"
                                                  title="#{messages.buttonNvidenGuncelle}"
-                                                 actionListener="#{eyRouteController.removeFromList(item)}"
+                                                 actionListener="#{eyRouteController.getTcKimlik(item)}"
                                                  update="datalist,:growl"
                                                  process="datalist"
                                                  rendered="#{item.gnlKisi.latLng==null}"/>

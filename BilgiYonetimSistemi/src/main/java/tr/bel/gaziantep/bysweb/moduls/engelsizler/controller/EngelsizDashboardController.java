@@ -150,12 +150,14 @@ public class EngelsizDashboardController implements java.io.Serializable {
     public void getReport() {
         List<String> coordinates = eyKisiService.getAllCoordinates(cinsiyet, yasBaslangic, yasBitis, gnlIlce, gnlMahalle, engelOraniBaslangic, engelOraniBitis,
                 eyEngelGrubu);
-//        heatmapModels = new ArrayList<>();
-//        for (String coordinate : coordinates) {
-//            String[] parts = coordinate.split("\\s*,\\s*");
-//            HeatmapModel heatmapModel = new HeatmapModel(Double.parseDouble(parts[1]), Double.parseDouble(parts[0]), 1);
-//            heatmapModels.add(heatmapModel);
-//        }
+        heatmapModels = new ArrayList<>();
+        for (String coordinate : coordinates) {
+            String[] parts = coordinate.split("\\s*,\\s*");
+            LatLng heatmapModel = new LatLng(Double.parseDouble(parts[1]), Double.parseDouble(parts[0]));
+            heatmapModels.add(heatmapModel);
+        }
+
+        //PrimeFaces.current().ajax().update("mapGroup");
 //
 //        String dataJson = gson.toJson(heatmapModels, new TypeToken<ArrayList<HeatmapModel>>() {
 //        }.getType());

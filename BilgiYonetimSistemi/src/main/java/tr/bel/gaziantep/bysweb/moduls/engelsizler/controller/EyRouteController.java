@@ -3,6 +3,7 @@ package tr.bel.gaziantep.bysweb.moduls.engelsizler.controller;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,10 +12,16 @@ import org.primefaces.event.SelectEvent;
 import org.primefaces.event.map.PointSelectEvent;
 import org.primefaces.model.map.LatLng;
 import org.primefaces.model.map.Point;
+import tr.bel.gaziantep.bysweb.core.controller.KpsController;
+import tr.bel.gaziantep.bysweb.core.enums.bys.EnumModul;
+import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlDurum;
+import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
 import tr.bel.gaziantep.bysweb.core.utils.GeoUtil;
 import tr.bel.gaziantep.bysweb.core.utils.StringUtil;
 import tr.bel.gaziantep.bysweb.moduls.engelsizler.entity.EyKisi;
+import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
+import tr.bel.gaziantep.bysweb.moduls.genel.service.GnlKisiService;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -33,6 +40,11 @@ import java.util.Map;
 public class EyRouteController implements Serializable {
     @Serial
     private static final long serialVersionUID = 6512723075883578836L;
+
+    @Inject
+    private KpsController kpsController;
+    @Inject
+    private GnlKisiService gnlKisiService;
 
     @Getter
     @Setter
@@ -95,5 +107,30 @@ public class EyRouteController implements Serializable {
 
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Point Selected",
                 "Lat:" + latLng.getLat() + ", Lng:" + latLng.getLng()));
+    }
+
+    public void getTcKimlik(EyKisi eyKisi) {
+        try {
+            if (eyKisi != null) {
+                String tcKimlikNo = eyKisi.getGnlKisi().getTcKimlikNo();
+                GnlKisi kisi = gnlKisiService.findByTckimlikNo(tcKimlikNo);
+                if (kisi == null) kisi = eyKisi.getGnlKisi();
+                kisi = kpsController.findByTcKimlikNo(kisi, EnumModul.ENGELSIZLER);
+                if (kisi != null) {
+                    eyKisi.setGnlKisi(kisi);
+                    if(kisi.getDurum() == EnumGnlDurum.SAG ){
+                        int index = eyKisiList.indexOf(eyKisi);
+                        eyKisiList.set(index,eyKisi);
+                    }else{
+                        eyKisiList.remove(eyKisi);
+                    }
+
+                }
+
+            }
+        } catch (Exception ex) {
+            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+            log.error(null, ex);
+        }
     }
 }

@@ -169,7 +169,7 @@
                                                                     value="#{messages.buttonRaporla}"
                                                                     styleClass="mr-2 ui-button-success"
                                                                     style="width: auto" icon="pi pi-check"
-                                                                    update="generalMap,:growl"
+                                                                    update="mapGroup,:growl"
                                                                     actionListener="#{engelsizDashboardController.getReport()}"
                                                                     onstart="PF('Loading').show()"
                                                                     onsuccess="PF('Loading').hide()"/>
@@ -180,12 +180,14 @@
                                         </p:sidebar>
                                         <div class="row">
                                             <div class="col-xl-12">
-                                                <div style="position: relative; height: calc(100vh - 235px);">
-                                                    <l:map id="generalMap" center="37.069387, 37.374620" zoom="13"
-                                                           widgetVar="mapVar">
-                                                        <l:heatmap points="#{engelsizDashboardController.heatmapModels}" radius="25" blur="10"/>
-                                                    </l:map>
-                                                </div>
+                                                <h:panelGroup id="mapGroup">
+                                                    <div style="position: relative; height: calc(100vh - 235px);">
+                                                        <l:map id="generalMap" center="37.069387, 37.374620" zoom="13"
+                                                               widgetVar="mapVar">
+                                                            <l:heatmap points="#{engelsizDashboardController.heatmapModels}" radius="25" blur="10"/>
+                                                        </l:map>
+                                                    </div>
+                                                </h:panelGroup>
                                             </div>
                                         </div>
 
