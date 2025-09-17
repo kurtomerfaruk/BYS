@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:p="primefaces"
+                xmlns:f="jakarta.faces.core"
+                xmlns:fn="jakarta.tags.functions"
+                xmlns:l="http://kurtomerfaruk.com/ui">
+
+    <h:form id="AyRotaOlusturForm">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-xl-6">
+                        <div class="text-start mb-2">
+                            <p:outputLabel value="Başlangıç Noktası :" for="@next"/>
+                            <p:inputText id="startPoint" value="#{ayRouteController.startPointStr}" readonly="true"/>
+                        </div>
+                        <div class="text-end mb-2">
+                            <p:commandButton icon="pi pi-plus" value="Kişileri Ekle"
+                                             action="#{bysController.openCommonDialog('ayKisiMultiSec')}"
+                                             process="@this"
+                                             update=":growl" title="#{messages.kisiSecmelisiniz}">
+                                <p:ajax event="dialogReturn" process="@this"
+                                        listener="#{ayRouteController.onReturn}"
+                                        update=":growl,@(.inputUpdate),datalist"/>
+                            </p:commandButton>
+                        </div>
+                        <p:dataTable id="datalist"
+                                     var="item"
+                                     value="#{ayRouteController.kisiList}"
+                                     scrollable="true"
+                                     scrollHeight="500"
+                                     showGridlines="true"
+                                     reflow="true"
+                                     size="small">
+
+                            <p:column headerText="#{messages.tcKimlikNoText}" width="100">
+                                <h:outputText value="#{item.gnlKisi.tcKimlikNo}"/>
+                            </p:column>
+
+                            <p:column headerText="#{messages.adSoyadText}">
+                                <h:outputText value="#{item.gnlKisi.adSoyad}"/>
+                            </p:column>
+
+                            <p:column headerText="#{messages.koordinatText}">
+                                <h:outputText value="#{item.gnlKisi.latLng}"/>
+                            </p:column>
+
+                            <p:column headerText="#{messages.buttonNvidenGuncelle}" width="100">
+                                <p:commandButton icon="pi pi-refresh"
+                                                 title="#{messages.buttonNvidenGuncelle}"
+                                                 actionListener="#{ayRouteController.getTcKimlik(item)}"
+                                                 update="datalist,:growl"
+                                                 process="datalist"
+                                                 rendered="#{item.gnlKisi.latLng==null}"/>
+                            </p:column>
+
+                            <p:column width="60" headerText="#{messages.buttonSil}">
+                                <p:commandButton icon="pi pi-trash"
+                                                 title="#{messages.buttonSil}"
+                                                 styleClass="ui-button-danger"
+                                                 actionListener="#{ayRouteController.removeFromList(item)}"
+                                                 update="datalist,:growl"
+                                                 process="datalist"/>
+                            </p:column>
+
+                            <f:facet name="footer">
+                                <span class="font-bold">Listede toplam #{fn:length(ayRouteController.kisiList)} kişi var.</span>
+                            </f:facet>
+                        </p:dataTable>
+
+                        <div class="d-flex align-items-center justify-content-between mt-2">
+                            <p:commandButton value="Rotayı oluştur" actionListener="#{ayRouteController.createRoute()}"
+                                             update="@form,:growl" process="@this" icon="pi pi-map-marker"/>
+                            <p:commandButton value="Listeyi Temizle" update="datalist,:growl" process="@this"
+                                             icon="pi pi-trash" styleClass="ui-button-danger"
+                                             actionListener="#{ayRouteController.clearList()}"/>
+                        </div>
+                    </div>
+                    <div class="col-xl-6">
+                        <div style="position: relative; height: calc(100vh - 100px);">
+                            <l:map center="37.069387, 37.374620" zoom="13" widgetVar="routeMapVar" model="#{ayRouteController.mapModel}">
+                                <l:route points="#{ayRouteController.points}" showAlternatives="true"
+                                         routeWhileDragging="true"/>
+                                <p:ajax event="markerDrag" listener="#{ayRouteController.onMarkerDrag}" update=":growl,startPoint"/>
+                            </l:map>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </h:form>
+
+</ui:composition>

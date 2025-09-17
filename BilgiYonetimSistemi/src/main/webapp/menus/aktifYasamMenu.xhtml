@@ -60,6 +60,17 @@
                                     </li>
                                 </ui:fragment>
 
+                                <ui:fragment rendered="#{syKullaniciController.hasPermission('ayrota:goster')}">
+                                    <li class="slide">
+                                        <p:commandLink styleClass="side-menu__item sublevel2"
+                                                       actionListener="#{menuController.setPageLink('/moduls/aktifyasam/ayRota/index')}"
+                                                       update="myPanel,:growl"
+                                                       onstart="PF('Loading').show()"
+                                                       onsuccess="PF('Loading').hide()"
+                                                       value="Rota Oluştur"/>
+                                    </li>
+                                </ui:fragment>
+
                             </ul>
                         </li>
                     </ui:fragment>
