@@ -2,6 +2,7 @@ package tr.bel.gaziantep.bysweb.core.controller;
 
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.ExternalContext;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.event.ActionEvent;
 import jakarta.inject.Inject;
@@ -13,6 +14,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.omnifaces.cdi.Push;
 import org.omnifaces.cdi.PushContext;
+import org.primefaces.PrimeFaces;
 import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.EnumSyKullaniciTuru;
 import tr.bel.gaziantep.bysweb.core.sessions.SessionManager;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
@@ -101,6 +103,9 @@ public class LoginController implements java.io.Serializable {
 
             if (captcha == null || !captcha.equals(captchaInput)) {
                 Util.getFacesContext().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Doğrulama Kodunu hatalı girdiniz", null));
+               // fc.validationFailed(); // <-- önemli: JSF'ye validation hatası olduğunu bildirir
+                Util.getFacesContext().validationFailed();
+                PrimeFaces.current().ajax().addCallbackParam("loggedIn", false);
                 captchaInput = "";
                 return;
             }
@@ -163,7 +168,7 @@ public class LoginController implements java.io.Serializable {
                 }
                 theme = syKullanici.getTema();
 
-                FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
+
                 List<SyKullanici> kullanicis = new ArrayList<>(initApp.getSyKullanicis());
 
                 Collection<Integer> kullaniciIds = kullanicis.stream()
@@ -172,6 +177,14 @@ public class LoginController implements java.io.Serializable {
                         .collect(Collectors.toList());
                 String message = syKullanici.getGnlPersonel().getGnlKisi().getAdSoyad() + " giriş yaptı.";
                 pushContext.send(new FacesMessage(message), kullaniciIds);
+                String param = Util.getParameter("surveyLogin");
+                ExternalContext externalContext = Util.getExternalContext();
+                if (StringUtil.isBlank(param)) {
+                    externalContext.redirect("index.xhtml");
+                }else{
+                    String viewId = FacesContext.getCurrentInstance().getViewRoot().getViewId();
+                    externalContext.redirect(viewId);
+                }
             } else {
                 syKullanici = syKullaniciService.findByKullaniciAdi(kullaniciAdi);
                 if (syKullanici != null) {
@@ -205,7 +218,13 @@ public class LoginController implements java.io.Serializable {
             String message = syKullanici.getGnlPersonel().getGnlKisi().getAdSoyad() + " çıkış yaptı.";
             pushContext.send(new FacesMessage(message), kullaniciIds);
             syKullanici = null;
-            FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
+            String param = Util.getParameter("surveyLogin");
+            ExternalContext context = Util.getExternalContext();
+            if (StringUtil.isBlank(param)) {
+                context.redirect("index.xhtml");
+            }else{
+                PrimeFaces.current().ajax().addCallbackParam("loggedOut", true);
+            }
         } catch (IOException ex) {
             Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
             FacesUtil.errorMessage(Constants.HATA_OLUSTU);

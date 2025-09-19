@@ -11,7 +11,11 @@ import jakarta.inject.Named;
 import jakarta.servlet.http.Cookie;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
+import org.primefaces.PrimeFaces;
 import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlAnketTuru;
+import tr.bel.gaziantep.bysweb.core.utils.Constants;
+import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
 import tr.bel.gaziantep.bysweb.core.utils.StringUtil;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlAnket;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlAnketSoru;
@@ -32,6 +36,7 @@ import java.util.*;
 @ViewScoped
 @Getter
 @Setter
+@Slf4j
 public class SurveyPublicController implements java.io.Serializable {
     @Serial
     private static final long serialVersionUID = 7263714441584443026L;
@@ -61,6 +66,7 @@ public class SurveyPublicController implements java.io.Serializable {
 
         if (gnlAnket == null) return;
 
+
         if (gnlAnket.getAnketTuru() == EnumGnlAnketTuru.GENEL) {
             Cookie cookie = getCookie("SURVEY_ANON_TOKEN");
             if (cookie != null && StringUtil.isNotBlank(cookie.getValue())) {
@@ -70,37 +76,53 @@ public class SurveyPublicController implements java.io.Serializable {
                 faces.getExternalContext().addResponseCookie("SURVEY_ANON_TOKEN", anonToken, Map.of("path", "/", "maxAge", 31536000));
             }
         }
-    }
-
-    public void submitAnswers() {
-        if (gnlAnket == null) {
-            faces.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Anket bulunamadı", null));
-            return;
-        }
 
         Integer loggedUserId = getLoggedUserIdOrNull();
         boolean can = service.canSubmit(gnlAnket, loggedUserId, tcKimlikNo, anonToken);
         if (!can) {
-            faces.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Bu anketi daha önce doldurmuşsunuz.", null));
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Uyarı", " Bu anketi daha önce doldurmuşsunuz.");
+            PrimeFaces.current().dialog().showMessageDynamic(message);
             return;
         }
 
-        for (GnlAnketSoru gnlAnketSoru : gnlAnket.getGnlAnketSoruList()) {
-            if (gnlAnketSoru.isZorunlu()) {
-                Object v = answers.get(gnlAnketSoru.getId());
-                boolean empty = (v == null) || (v instanceof String && ((String) v).isBlank())
-                        || (v instanceof Collection && ((Collection<?>) v).isEmpty());
-                if (empty) {
-                    faces.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
-                            "Lütfen tüm zorunlu alanları doldurun: " + gnlAnketSoru.getTanim(), null));
-                    return;
+    }
+
+    public void submitAnswers() {
+        try {
+            if (gnlAnket == null) {
+                faces.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Anket bulunamadı", null));
+                return;
+            }
+
+            Integer loggedUserId = getLoggedUserIdOrNull();
+            boolean can = service.canSubmit(gnlAnket, loggedUserId, tcKimlikNo, anonToken);
+            if (!can) {
+                faces.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Bu anketi daha önce doldurmuşsunuz.", null));
+                return;
+            }
+
+            for (GnlAnketSoru gnlAnketSoru : gnlAnket.getGnlAnketSoruList()) {
+                if (gnlAnketSoru.isZorunlu()) {
+                    Object v = answers.get(gnlAnketSoru.getId());
+                    boolean empty = (v == null) || (v instanceof String && ((String) v).isBlank())
+                            || (v instanceof Collection && ((Collection<?>) v).isEmpty());
+                    if (empty) {
+                        faces.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
+                                "Lütfen tüm zorunlu alanları doldurun: " + gnlAnketSoru.getTanim(), null));
+                        return;
+                    }
                 }
             }
+
+            gnlAnketCevapService.save(gnlAnket, loggedUserId, tcKimlikNo, dogumTarihi, anonToken, answers, otherAnswers);
+
+            faces.addMessage(null, new FacesMessage("Cevaplarınız kaydedildi. Teşekkürler!"));
+            gnlAnket=new GnlAnket();
+            PrimeFaces.current().ajax().update("fillForm");
+        } catch (Exception ex) {
+            log.error(null, ex);
+            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
         }
-
-        gnlAnketCevapService.save(gnlAnket, loggedUserId, tcKimlikNo, dogumTarihi, anonToken, answers, otherAnswers);
-
-        faces.addMessage(null, new FacesMessage("Cevaplarınız kaydedildi. Teşekkürler!"));
     }
 
     private Cookie getCookie(String name) {
@@ -149,9 +171,9 @@ public class SurveyPublicController implements java.io.Serializable {
 
     public boolean isOtherSelected(Integer questionId) {
         Object[] selected = (Object[]) answers.get(questionId); // Array alıyoruz
-        if(selected == null) return false;
-        for(Object o : selected) {
-            if("OTHER".equals(o)) return true;
+        if (selected == null) return false;
+        for (Object o : selected) {
+            if ("OTHER".equals(o)) return true;
         }
         return false;
     }

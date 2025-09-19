@@ -23,7 +23,7 @@ import java.util.List;
 @NamedQuery(name = "GnlAnketCevap.findByGnlAnketIdByTcKimlikNo",query = "SELECT c FROM GnlAnketCevap c " +
         "WHERE c.aktif=true AND c.syKullanici.gnlPersonel.gnlKisi.tcKimlikNo=:tcKimlikNo AND c.gnlAnket.id=:gnlAnketId")
 @NamedQuery(name = "GnlAnketCevap.findByGnlAnketIdByToken",query = "SELECT c FROM GnlAnketCevap c " +
-        "WHERE c.aktif=true AND c.gnlAnket.token=:token AND c.gnlAnket.id=:gnlAnketId")
+        "WHERE c.aktif=true AND c.token=:token AND c.gnlAnket.id=:gnlAnketId")
 public class GnlAnketCevap extends BaseEntity {
     @Serial
     private static final long serialVersionUID = 6358478616267998887L;
