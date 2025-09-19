@@ -25,12 +25,12 @@
                                              update=":growl" title="#{messages.kisiSecmelisiniz}">
                                 <p:ajax event="dialogReturn" process="@this"
                                         listener="#{eyRouteController.onReturn}"
-                                        update=":growl,@(.inputUpdate),eyKisiId,datalist"/>
+                                        update=":growl,@(.inputUpdate),datalist"/>
                             </p:commandButton>
                         </div>
                         <p:dataTable id="datalist"
                                      var="item"
-                                     value="#{eyRouteController.eyKisiList}"
+                                     value="#{eyRouteController.kisiList}"
                                      scrollable="true"
                                      scrollHeight="500"
                                      showGridlines="true"
@@ -68,7 +68,7 @@
                             </p:column>
 
                             <f:facet name="footer">
-                                <span class="font-bold">Listede toplam #{fn:length(eyRouteController.eyKisiList)} kişi var.</span>
+                                <span class="font-bold">Listede toplam #{fn:length(eyRouteController.kisiList)} kişi var.</span>
                             </f:facet>
                         </p:dataTable>
 

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:editpage id="GnlAnketEditForm"
+                   widgetVar="GnlAnketEditDialog"
+                   actionListener="#{gnlAnketController.save}"
+                   listForm="GnlAnketListForm"
+                   model="#{gnlAnketController.selected}">
+
+<!--        <p:outputLabel value="#{messages.kodLabel}" for="@next"/>-->
+<!--        <p:inputText id="kod" value="#{gnlBankaController.selected.kod}" title="#{messages.kodText}" size="50" maxlength="50"/>-->
+
+<!--        <p:outputLabel value="#{messages.bankaAdiLabel}" for="@next"/>-->
+<!--        <p:inputText id="bankaAdi" value="#{gnlBankaController.selected.bankaAdi}" title="#{messages.bankaAdiText}" size="50" maxlength="50" required="true"/>-->
+
+<!--        <p:outputLabel value="#{messages.subeLabel}" for="@next"/>-->
+<!--        <p:inputText id="sube" value="#{gnlBankaController.selected.sube}" title="#{messages.subeText}" size="50" maxlength="50"/>-->
+
+<!--        <p:outputLabel value="#{messages.subeKodLabel}" for="@next"/>-->
+<!--        <p:inputText id="subeKod" value="#{gnlBankaController.selected.subeKod}" title="#{messages.subeKodText}" size="50" maxlength="50"/>-->
+
+<!--        <p:outputLabel value="#{messages.adresLabel}" for="@next"/>-->
+<!--        <p:inputTextarea rows="4" id="adres" value="#{gnlBankaController.selected.adres}" title="#{messages.adresText}" styleClass="w-100"-->
+<!--                         autoResize="false"/>-->
+
+<!--        <p:outputLabel value="#{messages.telefonLabel}" for="@next"/>-->
+<!--        <p:inputMask id="telefon" value="#{gnlBankaController.selected.telefon}" title="#{messages.telefonText}" size="50" maxlength="50"-->
+<!--                     mask="(999) 999 99 99"/>-->
+
+<!--        <p:outputLabel value="#{messages.faksLabel}" for="@next"/>-->
+<!--        <p:inputMask id="faks" value="#{gnlBankaController.selected.faks}" title="#{messages.faksText}" size="50" maxlength="50" mask="(999) 999 99 99"/>-->
+
+<!--        <p:outputLabel value="#{messages.sehirLabel}" for="@next"/>-->
+<!--        <p:selectOneMenu id="gnlilId" value="#{gnlBankaController.selected.gnlIl}" filter="true" converter="omnifaces.SelectItemsConverter">-->
+<!--            <f:selectItem itemLabel="#{messages.seciniz}"/>-->
+<!--            <f:selectItems value="#{gnlIlController.items}"-->
+<!--                           var="gnlilIdItem"-->
+<!--                           itemValue="#{gnlilIdItem}"-->
+<!--                           itemLabel="#{gnlilIdItem.tanim.toString()}"/>-->
+<!--            <p:ajax event="change" update="gnlilceId"/>-->
+<!--        </p:selectOneMenu>-->
+
+<!--        <p:outputLabel value="#{messages.ilceLabel}" for="@next"/>-->
+<!--        <p:selectOneMenu id="gnlilceId" value="#{gnlBankaController.selected.gnlIlce}" filter="true" converter="omnifaces.SelectItemsConverter">-->
+<!--            <f:selectItem itemLabel="#{messages.seciniz}"/>-->
+<!--            <f:selectItems value="#{gnlIlceController.getIlceByIlId(gnlBankaController.selected.gnlIl)}"-->
+<!--                           var="gnlilceIdItem"-->
+<!--                           itemValue="#{gnlilceIdItem}"-->
+<!--                           itemLabel="#{gnlilceIdItem.tanim.toString()}"/>-->
+<!--        </p:selectOneMenu>-->
+
+    </coco:editpage>
+
+</ui:composition>
+
+</html>

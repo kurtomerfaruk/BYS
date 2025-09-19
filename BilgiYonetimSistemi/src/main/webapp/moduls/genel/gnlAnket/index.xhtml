@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="jakarta.faces.facelets"
+xmlns:p="primefaces">
+
+        <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlAnketTuru" var="enumAnketTuru"/>
+        <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.bys.EnumModul" var="enumModul"/>
+        <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlAnketSoruTuru" var="enumSoruTuru"/>
+
+
+        <ui:include src="/moduls/genel/gnlAnket/List.xhtml"/>
+        <ui:include src="/moduls/genel/gnlAnket/View.xhtml"/>
+        <ui:include src="/moduls/genel/gnlAnket/Edit.xhtml"/>
+        <ui:include src="/moduls/genel/gnlAnket/Create.xhtml"/>
+
+</ui:composition>

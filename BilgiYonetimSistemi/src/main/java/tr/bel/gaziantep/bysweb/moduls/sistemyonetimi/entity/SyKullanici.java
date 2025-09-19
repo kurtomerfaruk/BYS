@@ -86,6 +86,10 @@ public class SyKullanici extends BaseEntityNoVersion {
     @Builder.Default
     private List<SyDuyuruKullanici> syDuyuruKullaniciList = new ArrayList<>();
 
+    public SyKullanici(Integer id){
+        this.id = id;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;

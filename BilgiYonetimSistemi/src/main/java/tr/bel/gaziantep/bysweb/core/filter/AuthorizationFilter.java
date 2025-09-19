@@ -25,17 +25,23 @@ public class AuthorizationFilter implements Filter {
         String loginURI = req.getContextPath() + "/giris";
         String flushURI = req.getContextPath() + "/flush";
         String captchaURI = req.getContextPath() + "/captcha";
+        String surveyURI = req.getContextPath() + "/anket";
 
         boolean loggedIn = session != null && session.getAttribute("syKullanici") != null;
         boolean loginRequest = req.getRequestURI().equals(loginURI);
         boolean resourceRequest = Servlets.isFacesResourceRequest(req);
         boolean flushRequest = req.getRequestURI().equals(flushURI);
         boolean captchaRequest = req.getRequestURI().equals(captchaURI);
+        boolean surveyRequest = req.getRequestURI().equals(surveyURI);
 
         if (flushRequest) {
-            // Flush işlemi için hiçbir kontrol yapılmadan izin ver
             chain.doFilter(req, response);
-            return; // Diğer kontrolleri atla
+            return;
+        }
+
+        if(surveyRequest) {
+            chain.doFilter(req, response);
+            return;
         }
 
         if(captchaRequest) {

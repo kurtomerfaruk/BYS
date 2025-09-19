@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces">
+
+<ui:composition>
+
+    <p:dialog widgetVar="GnlAnketCreateDialog"
+              id="GnlAnketCreateDialogId"
+              modal="true"
+              resizable="false"
+              closeOnEscape="true"
+              header="#{messages.dialogYeniKayit}"
+              appendTo="@(body)"
+              responsive="true"
+              onShow="PF('GnlAnketCreateDialog').initPosition();"
+              fitViewport="true"
+              style="max-width:500px"
+              position="top">
+
+        <h:form id="GnlAnketCreateForm">
+            <!--            <h:panelGroup id="display">-->
+            <!--                <p:focus context="display"/>-->
+            <!--                <p:panelGrid columns="1" columnClasses="column" rendered="#{gnlAnketController.selected != null}" layout="tabular">-->
+
+            <!--                    <p:panelGrid columns="2" layout="tabular">-->
+            <!--                        <f:facet name="header">Anket</f:facet>-->
+
+            <!--                        <p:outputLabel value="#{messages.anketTuruLabel}" for="@next"/>-->
+            <!--                        <p:selectOneMenu id="anketTuru" value="#{gnlAnketController.selected.anketTuru}"-->
+            <!--                                         converter="omnifaces.SelectItemsConverter" required="true">-->
+            <!--                            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>-->
+            <!--                            <f:selectItems value="#{enumAnketTuru.ALL_VALUES}"-->
+            <!--                                           var="anketTurus"-->
+            <!--                                           itemLabel="#{anketTurus.displayValue}"-->
+            <!--                                           itemValue="#{anketTurus}"/>-->
+            <!--                        </p:selectOneMenu>-->
+
+            <!--                        <p:outputLabel value="#{messages.baslikLabel}" for="@next"/>-->
+            <!--                        <p:inputText id="baslik" value="#{gnlAnketController.selected.baslik}" title="#{messages.baslikText}" size="50" maxlength="50"/>-->
+
+            <!--                        <p:outputLabel value="#{messages.aciklamaLabel}" for="@next"/>-->
+            <!--                        <p:inputTextarea rows="4" id="aciklama" value="#{gnlAnketController.selected.baslik}" title="#{messages.baslikText}" styleClass="w-100"-->
+            <!--                                         autoResize="false"/>-->
+            <!--                    </p:panelGrid>-->
+
+            <!--                    <p:panelGrid columns="2" layout="tabular">-->
+            <!--                        <f:facet name="header">-->
+            <!--                            <div class="start">-->
+            <!--                                Sorular-->
+            <!--                            </div>-->
+            <!--                            <div class="float-end">-->
+            <!--                                <p:commandButton value="Soru Ekle" action="#{gnlAnketController.addQuestion}" update="@form,:growl"/>-->
+            <!--                            </div>-->
+            <!--                        </f:facet>-->
+            <!--                        <ui:repeat value="#{gnlAnketController.selected.gnlAnketSoruList}" var="question">-->
+            <!--                            <p:panel header="Soru">-->
+            <!--                                <p:inputText value="#{question.tanim}" placeholder="Soru metni"/>-->
+
+            <!--                                <p:selectOneMenu value="#{question.soruTuru}">-->
+            <!--                                    <f:selectItems value="#{enumSoruTuru.ALL_VALUES}" var="turs" itemLabel="#{turs.displayValue}" itemValue="#{turs}"/>-->
+            <!--                                </p:selectOneMenu>-->
+
+            <!--                                <p:commandButton value="Seçenek Ekle" action="#{gnlAnketController.addOption(question)}" update="@form"/>-->
+            <!--                                <ui:repeat value="#{question.gnlAnketSoruSecenekList}" var="o">-->
+            <!--                                    <p:inputText value="#{o.tanim}" placeholder="Seçenek metni" style="width:100px"/>-->
+            <!--                                </ui:repeat>-->
+            <!--                            </p:panel>-->
+            <!--                        </ui:repeat>-->
+            <!--                    </p:panelGrid>-->
+
+            <!--                    <f:facet name="footer">-->
+            <!--                        <div class="float-end">-->
+            <!--                            <p:commandButton icon="pi pi-check" styleClass="ui-button-success"-->
+            <!--                                             actionListener="#{gnlAnketController.saveNew}"-->
+            <!--                                             value="#{messages.buttonKaydet}"-->
+            <!--                                             update=":GnlAnketListForm:datalist:datalist,:growl,display"-->
+            <!--                                             oncomplete="handleSubmit(xhr,status,args,PF('GnlAnketCreateDialog'));"-->
+            <!--                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>-->
+            <!--                            <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"-->
+            <!--                                             value="#{messages.buttonIptal}"-->
+            <!--                                             onclick="PF('GnlAnketCreateDialog').hide()" immediate="true"-->
+            <!--                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()">-->
+            <!--                                <p:resetInput target="@form"/>-->
+            <!--                            </p:commandButton>-->
+            <!--                        </div>-->
+            <!--                    </f:facet>-->
+            <!--                </p:panelGrid>-->
+            <!--            </h:panelGroup>-->
+
+
+            <p:outputPanel id="cardContainer" style="height:500px; overflow-y:auto; border:1px solid #ccc; padding:10px;"
+                           rendered="#{gnlAnketController.selected!=null}">
+                <p:panelGrid columns="2" layout="tabular">
+                    <f:facet name="header">Anket</f:facet>
+
+                    <p:outputLabel value="#{messages.anketTuruLabel}" for="@next"/>
+                    <p:selectOneMenu id="anketTuru" value="#{gnlAnketController.selected.anketTuru}"
+                                     converter="omnifaces.SelectItemsConverter" required="true">
+                        <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+                        <f:selectItems value="#{enumAnketTuru.ALL_VALUES}"
+                                       var="anketTurus"
+                                       itemLabel="#{anketTurus.displayValue}"
+                                       itemValue="#{anketTurus}"/>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel value="#{messages.baslikLabel}" for="@next"/>
+                    <p:inputText id="baslik" value="#{gnlAnketController.selected.baslik}" title="#{messages.baslikText}" size="50" maxlength="50"/>
+
+                    <p:outputLabel value="#{messages.aciklamaLabel}" for="@next"/>
+                    <p:inputTextarea rows="4" id="aciklama" value="#{gnlAnketController.selected.baslik}" title="#{messages.baslikText}" styleClass="w-100"
+                                     autoResize="false" required="false"/>
+                </p:panelGrid>
+
+
+                <ui:repeat value="#{gnlAnketController.selected.gnlAnketSoruList}" var="q" varStatus="status">
+                    <p:card styleClass="m-2">
+                        <p:panelGrid columns="2"
+                                     columnClasses="ui-grid-col-6,ui-grid-col-6"
+                                     layout="grid"
+                                     styleClass="ui-panelgrid-blank ui-fluid"
+                                     style="border:0px none; background-color:transparent;">
+
+                            <p:inputText value="#{q.tanim}" placeholder="Soru #{status.index+1}" label="Soru #{status.index+1}" required="true"/>
+
+                            <p:selectOneMenu value="#{q.soruTuru}" style="width:90%">
+                                <f:selectItems value="#{enumSoruTuru.ALL_VALUES}" var="t" itemLabel="#{t.displayValue}" itemValue="#{t}"/>
+                                <p:ajax event="change" update="@parent" process="@this" oncomplete="scrollToBottom()"/>
+                            </p:selectOneMenu>
+
+                            <p:row>
+                                <ui:repeat value="#{q.gnlAnketSoruSecenekList}" var="o" varStatus="st">
+                                    <div style="display:flex; align-items:center; margin-bottom:5px;">
+                                        <ui:fragment rendered="#{q.soruTuru eq 'TEXT'}">
+                                            <p:inputText value="#{o.tanim}" title="Metin" placeholder="Metin" style="flex:1; margin-right:5px;"/>
+                                        </ui:fragment>
+                                        <ui:fragment rendered="#{q.soruTuru eq 'SELECT_ONE' or q.soruTuru eq 'SELECT_MANY'}">
+                                            <p:inputText value="#{o.tanim}" label="Seçenek #{st.index+1}" title="Seçenek #{st.index+1}"
+                                                         placeholder="Seçenek #{st.index+1}"
+                                                         style="flex:1; margin-right:5px;"/>
+                                            <p:commandButton icon="pi pi-times" styleClass="ui-button-danger ui-button-sm"
+                                                             action="#{gnlAnketController.removeOption(q, o)}"
+                                                             update="@form,:growl" title="Seçeneği Sil" oncomplete="scrollToBottom()"/>
+                                        </ui:fragment>
+
+                                        <!--                                            <p:selectOneRadio value="#{responseController.answers[q.id]}" layout="pageDirection" rendered="#{q.soruTuru eq 'SELECT_ONE'}">-->
+                                        <!--                                                <f:selectItem itemLabel="#{o.text}" itemValue="#{o.id}" />-->
+                                        <!--                                                <f:facet name="footer">-->
+                                        <!--                                                    <h:panelGroup rendered="#{q.allowOther}">-->
+                                        <!--                                                        <f:selectItem itemLabel="Diğer..." itemValue="OTHER"/>-->
+                                        <!--                                                        <p:inputText value="#{responseController.otherAnswers[q.id]}"-->
+                                        <!--                                                                     rendered="#{responseController.answers[q.id] eq 'OTHER'}"-->
+                                        <!--                                                                     placeholder="Lütfen belirtiniz"/>-->
+                                        <!--                                                    </h:panelGroup>-->
+                                        <!--                                                </f:facet>-->
+                                        <!--                                            </p:selectOneRadio>-->
+
+                                        <!-- Sil butonu -->
+
+                                    </div>
+                                </ui:repeat>
+                            </p:row>
+
+                            <!-- + Seçenek ekle linki -->
+                            <ui:fragment rendered="#{q.soruTuru eq 'SELECT_ONE' or q.soruTuru eq 'SELECT_MANY'}">
+                                <p:row>
+                                    <p:commandLink value="+ Seçenek ekle"
+                                                   action="#{gnlAnketController.addOption(q)}"
+                                                   update="@form,:growl"
+                                                   style="color:#1a73e8; font-weight:bold; margin-top:5px; display:inline-block;"/>
+                                </p:row>
+                            </ui:fragment>
+                        </p:panelGrid>
+                        <!--                            <h:outputLabel value="Zorunlu?"/>-->
+                        <!--                            -->
+
+                        <f:facet name="footer">
+                            <div class="float-end">
+                                <p:selectBooleanCheckbox value="#{q.zorunlu}" itemLabel="Zorunlu" label="Zorunlu"/>
+                                <p:selectBooleanCheckbox value="#{q.diger}" itemLabel="Diğer" label="Diğer"/>
+                            </div>
+                            <div class="clearfix"></div>
+                        </f:facet>
+                    </p:card>
+                </ui:repeat>
+            </p:outputPanel>
+
+            <div class="float-start">
+                <p:commandButton value="Soru Ekle"
+                                 actionListener="#{gnlAnketController.addQuestion()}"
+                                 update="cardContainer,:growl"
+                                 icon="pi pi-plus"
+                                 oncomplete="scrollToBottom()"/>
+            </div>
+            <div class="float-end">
+                <p:commandButton icon="pi pi-check" styleClass="ui-button-success"
+                                 actionListener="#{gnlAnketController.saveNew}"
+                                 value="#{messages.buttonKaydet}"
+                                 update=":GnlAnketListForm:datalist:datalist,:growl,display"
+                                 oncomplete="handleSubmit(xhr,status,args,PF('GnlAnketCreateDialog'));"
+                                 onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                 value="#{messages.buttonIptal}"
+                                 onclick="PF('GnlAnketCreateDialog').hide()" immediate="true"
+                                 onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()">
+                    <p:resetInput target="@form"/>
+                </p:commandButton>
+            </div>
+        </h:form>
+    </p:dialog>
+
+    <script type="text/javascript">
+        function scrollToBottom() {
+            var container = document.getElementById('GnlAnketCreateForm:cardContainer');
+            container.scrollTop = container.scrollHeight;
+        }
+    </script>
+
+</ui:composition>
+
+</html>

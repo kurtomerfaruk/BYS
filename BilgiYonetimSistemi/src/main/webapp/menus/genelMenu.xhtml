@@ -50,6 +50,17 @@
                             <a href="javascript:void(0);" class="side-menu__item sublevel1">Tanımlamalar
                                 <i class="ri-arrow-right-s-line side-menu__angle"></i></a>
                             <ul class="slide-menu child2">
+                                <ui:fragment rendered="#{syKullaniciController.hasPermission('gnlanket:goster')}">
+                                    <li class="slide">
+                                        <p:commandLink styleClass="side-menu__item sublevel2"
+                                                       actionListener="#{menuController.setPageLink('/moduls/genel/gnlAnket/index')}"
+                                                       update="myPanel,:growl"
+                                                       onstart="PF('Loading').show()"
+                                                       onsuccess="PF('Loading').hide()"
+                                                       value="Anketler"/>
+                                    </li>
+                                </ui:fragment>
+
                                 <ui:fragment rendered="#{syKullaniciController.hasPermission('gnlbanka:goster')}">
                                     <li class="slide">
                                         <p:commandLink styleClass="side-menu__item sublevel2"

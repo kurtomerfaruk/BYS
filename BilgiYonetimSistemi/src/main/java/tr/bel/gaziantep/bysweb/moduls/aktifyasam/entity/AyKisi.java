@@ -35,7 +35,7 @@ public class AyKisi extends BaseEntity {
     @Column(name = "KAYIT_TARIHI")
     private LocalDateTime kayitTarihi;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "GNLKISI_ID")
     private GnlKisi gnlKisi;
 

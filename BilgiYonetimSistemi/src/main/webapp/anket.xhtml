@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:pe="primefaces.extensions"
+      dir="ltr"
+      lang="tr"
+      data-nav-layout="vertical" data-vertical-style="overlay" data-theme-mode="light" data-header-styles="light"
+      data-menu-styles="light"
+      data-width="compact"
+      data-toggled="close">
+<h:head>
+    <meta charset="UTF-8"/>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport"/>
+
+    <f:facet name="first">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <meta name="viewport"
+              content="user-scalable=no,
+                  width=device-width,
+                  initial-scale=1.0,
+                  maximum-scale=1.0"/>
+    </f:facet>
+
+    <title>#{messages.AppNameFull}</title>
+
+    <!-- FAVICON -->
+    <link rel="icon" href="assets/images/brand-logos/favicon.ico" type="image/x-icon"/>
+
+    <!-- BOOTSTRAP CSS -->
+    <h:outputStylesheet library="libs" name="bootstrap/css/bootstrap.min.css"/>
+
+    <!-- STYLES CSS -->
+    <h:outputStylesheet library="css" name="styles.css"/>
+
+    <!-- ICONS CSS -->
+    <h:outputStylesheet library="icon-fonts" name="icons.css"/>
+
+    <h:outputStylesheet library="css" name="pfcrud.css"/>
+</h:head>
+<h:body>
+    <h:form id="fillForm">
+
+        <p:growl id="growl" showDetail="false"/>
+
+        <pe:tooltip/>
+
+        <div class="m-3">
+            <div class="d-flex justify-content-center">
+                <div class="p-4 bg-light" style="min-width:400px; max-width:600px;">
+                    <ui:fragment rendered="#{empty surveyPublicController.gnlAnket}">
+                        <div class="alert alert-secondary" role="alert">
+                            <h1 class="display-5 text-center">Erişmek istediğiniz anket kullanımda değil</h1>
+                        </div>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{not empty surveyPublicController.gnlAnket}">
+                        <ui:fragment rendered="#{surveyPublicController.gnlAnket.anketTuru.name() eq 'KULLANICI'}">
+                            <div class="alert alert-solid-secondary alert-dismissible fade show" role="alert">
+                                <h3 class="text-center text-white">Anketi tamamlamak için kullanıcı girişi yapmanız gerekir!!!</h3>
+                            </div>
+                        </ui:fragment>
+                        <ui:fragment rendered="#{surveyPublicController.gnlAnket.anketTuru.name() eq 'KISI'}">
+                            <div class="alert alert-solid-secondary alert-dismissible fade show" role="alert">
+                                <h3 class="text-center text-white">Anketi tamamlamak için T.C. Kimlik No ve Doğum Tarihi girişi yapmanız gerekir!!!</h3>
+                            </div>
+                        </ui:fragment>
+                        <ui:fragment rendered="#{surveyPublicController.gnlAnket.anketTuru.name() eq 'GENEL'}">
+                            <div class="alert alert-solid-primary alert-dismissible fade show">
+                                <h3 class="text-center text-white">Bu anket için herhangi bir kişisel veri toplanmayacaktır.</h3>
+                            </div>
+                        </ui:fragment>
+
+                        <div class="card custom-card">
+                            <div class="card-body">
+                                <div class="p-3 bg-primary border border-bottom-0">
+                                    <h5 class="fw-medium mb-0 d-flex align-items-center text-white">#{surveyPublicController.gnlAnket.baslik}</h5>
+                                </div>
+                                <div class="p-3 border">
+                                    <div class="d-flex align-items-center flex-wrap gap-3 mb-4">
+                                        <p class="mb-0 flex-grow-1">#{surveyPublicController.gnlAnket.aciklama}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <div style="color: red">
+                                    * Zorunlu soruyu belirtir
+                                </div>
+                            </div>
+                        </div>
+
+                        <ui:repeat value="#{surveyPublicController.gnlAnket.gnlAnketSoruList}" var="q">
+                            <div class="card custom-card">
+                                <div class="card-header">
+                                    <div class="card-title">
+                                        #{q.tanim}
+                                        <h:outputText value="*" rendered="#{q.zorunlu}" style="color: red"/>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <p:inputText rendered="#{q.soruTuru.name() eq 'TEXT'}"
+                                                 value="#{surveyPublicController.answers[q.id]}" label="#{q.tanim}"
+                                                 required="#{q.zorunlu}"/>
+
+                                    <ui:fragment rendered="#{q.soruTuru.name() eq 'SELECT_ONE'}">
+                                        <p:selectOneRadio value="#{surveyPublicController.answers[q.id]}"
+                                                          layout="custom" label="#{q.tanim}"
+                                                          required="#{q.zorunlu}">
+
+                                            <f:selectItems value="#{q.gnlAnketSoruSecenekList}" var="o"
+                                                           itemLabel="#{o.tanim}" itemValue="#{o.id}"/>
+                                            <f:selectItem itemValue="OTHER" itemLabel="Diğer"/>
+                                            <p:ajax event="change" update="@parent" listener="#{surveyPublicController.deneme(q.id)}"/>
+                                        </p:selectOneRadio>
+
+                                        <ui:repeat value="#{q.gnlAnketSoruSecenekList}" var="o" varStatus="optionStatus">
+                                            <p:radioButton for="@parent:@previous" itemIndex="#{optionStatus.index}"/>
+                                            <p:outputLabel for="@previous" value=" #{o.tanim}" styleClass="p-1"/>
+                                            <br/>
+                                        </ui:repeat>
+
+                                        <h:panelGroup rendered="#{q.diger}">
+                                            <p:radioButton for="@parent:@previous:@previous" itemIndex="#{q.gnlAnketSoruSecenekList.size()}" styleClass="mb-1"/>
+                                            <p:outputLabel for="@previous" value="Diğer: " styleClass="p-1"/>
+                                            <p:inputText value="#{surveyPublicController.otherAnswers[q.id]}" style="width:85% !important"
+                                                         label="#{q.tanim} Diğer"
+                                                         required="#{surveyPublicController.answers[q.id] eq 'OTHER'}"/>
+                                        </h:panelGroup>
+
+
+                                    </ui:fragment>
+
+                                    <ui:fragment rendered="#{q.soruTuru.name() eq 'SELECT_MANY'}">
+                                        <p:selectManyCheckbox value="#{surveyPublicController.answers[q.id]}"
+                                                              required="#{q.zorunlu}"
+                                                              layout="custom" label="#{q.tanim}">
+                                            <f:selectItems value="#{q.gnlAnketSoruSecenekList}" var="o"
+                                                           itemLabel="#{o.tanim}" itemValue="#{o.id}"/>
+                                            <f:selectItem itemValue="OTHER" itemLabel="Diğer"/>
+                                            <p:ajax event="change" update="@parent" listener="#{surveyPublicController.deneme(q.id)}"/>
+
+                                        </p:selectManyCheckbox>
+
+                                        <!-- Normal seçenekler -->
+                                        <ui:repeat value="#{q.gnlAnketSoruSecenekList}" var="o" varStatus="vs">
+                                            <p:checkbox for="@parent:@previous" itemIndex="#{vs.index}" styleClass="mb-1"/>
+                                            <p:outputLabel for="@previous" value=" #{o.tanim}" style="padding-left:10px"/>
+                                            <br/>
+                                        </ui:repeat>
+
+                                        <!-- Diğer seçeneği -->
+                                        <h:panelGroup rendered="#{q.diger}">
+                                            <p:checkbox for="@parent:@previous:@previous" itemIndex="#{q.gnlAnketSoruSecenekList.size()}" styleClass="mb-1"/>
+                                            <p:outputLabel for="@previous" value="Diğer:" style="padding-left: 10px"/>
+                                            <p:inputText value="#{surveyPublicController.otherAnswers[q.id]}" style="margin-left:5px;width:85% !important"
+                                                         label="#{q.tanim} Diğer" required="#{surveyPublicController.isOtherSelected(q.id)}"/>
+                                        </h:panelGroup>
+                                    </ui:fragment>
+
+                                    <!--                                    <p:selectManyCheckbox rendered="#{q.soruTuru.name() eq 'SELECT_MANY'}"-->
+                                    <!--                                                          value="#{surveyPublicController.answers[q.id]}"-->
+                                    <!--                                                          converter="omnifaces.SelectItemsConverter"-->
+                                    <!--                                                          required="#{q.zorunlu}"-->
+                                    <!--                                                          layout="custom" label="#{q.tanim}">-->
+                                    <!--                                        <f:selectItems value="#{q.gnlAnketSoruSecenekList}" var="o"-->
+                                    <!--                                                       itemLabel="#{o.tanim}" itemValue="#{o.id}"/>-->
+                                    <!--                                        <f:selectItem itemValue="OTHER" itemLabel="Diğer"/>-->
+                                    <!--                                        <p:ajax event="change" update="@parent"/>-->
+
+                                    <!--                                        &lt;!&ndash; Normal seçenekler &ndash;&gt;-->
+                                    <!--                                        <ui:repeat value="#{q.gnlAnketSoruSecenekList}" var="o" varStatus="vs">-->
+                                    <!--                                            <p:checkbox id="chk_#{q.id}_#{vs.index}" for="@parent:@parent" itemIndex="#{vs.index}" styleClass="mb-1"/>-->
+                                    <!--                                            <p:outputLabel value=" #{o.tanim}" style="padding-left:10px"/>-->
+                                    <!--                                            <br/>-->
+                                    <!--                                        </ui:repeat>-->
+
+                                    <!--                                        &lt;!&ndash; Diğer seçeneği &ndash;&gt;-->
+                                    <!--                                        <h:panelGroup rendered="#{q.diger}">-->
+                                    <!--                                            <p:checkbox for="@parent:@parent" itemIndex="#{q.gnlAnketSoruSecenekList.size()}" styleClass="mb-1"/>-->
+                                    <!--                                            <p:outputLabel for="@previous" value="Diğer:" style="padding-left: 10px"/>-->
+                                    <!--                                            <p:inputText value="#{surveyPublicController.otherAnswers[q.id]}" style="margin-left:5px;width:85% !important"-->
+                                    <!--                                                         label="Diğer" required="#{surveyPublicController.answers[q.id] eq 'OTHER'}"/>-->
+                                    <!--                                        </h:panelGroup>-->
+                                    <!--                                    </p:selectManyCheckbox>-->
+
+                                </div>
+                            </div>
+                        </ui:repeat>
+
+                        <div class="card custom-card">
+
+                            <div class="card-footer">
+                                <div class="float-end">
+                                    <p:commandButton icon="pi pi-check" styleClass="ui-button-success" value="Anketi Bitir" update="@form,:growl"
+                                                     actionListener="#{surveyPublicController.submitAnswers()}"/>
+                                </div>
+                            </div>
+                        </div>
+
+                    </ui:fragment>
+                </div>
+            </div>
+        </div>
+
+
+    </h:form>
+    <!-- SCRIPTS -->
+
+    <h:outputScript library="primefaces" name="jquery/jquery.js"/>
+
+    <!-- BOOTSTRAP JS -->
+    <h:outputScript library="libs" name="bootstrap/js/bootstrap.bundle.min.js"/>
+
+    <h:outputScript library="js" name="pfcrud.js"/>
+
+
+    <!-- END SCRIPTS -->
+</h:body>
+</html>
