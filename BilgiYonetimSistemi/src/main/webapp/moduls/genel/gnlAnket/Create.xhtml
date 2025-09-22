@@ -5,7 +5,8 @@
       xmlns:ui="jakarta.faces.facelets"
       xmlns:h="jakarta.faces.html"
       xmlns:f="jakarta.faces.core"
-      xmlns:p="primefaces">
+      xmlns:p="primefaces"
+      xmlns:pe="primefaces.extensions">
 
 <ui:composition>
 
@@ -19,7 +20,7 @@
               responsive="true"
               onShow="PF('GnlAnketCreateDialog').initPosition();"
               fitViewport="true"
-              style="max-width:500px"
+              style="max-width:600px"
               position="top">
 
         <h:form id="GnlAnketCreateForm">
@@ -98,6 +99,16 @@
                 <p:panelGrid columns="2" layout="tabular">
                     <f:facet name="header">Anket</f:facet>
 
+                    <p:outputLabel value="#{messages.baslangicTarihiLabel}" for="@next"/>
+                    <p:datePicker id="baslamaTarihi" locale="tr" pattern="#{messages.tarihFormat}" value="#{gnlAnketController.selected.baslamaTarihi}"
+                                  title="#{messages.baslangicTarihiText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true"
+                                  showIcon="true" showOnFocus="false" required="true"/>
+
+                    <p:outputLabel value="#{messages.bitisTarihiLabel}" for="@next"/>
+                    <p:datePicker id="bitisTarihi" locale="tr" pattern="#{messages.tarihFormat}" value="#{gnlAnketController.selected.bitisTarihi}"
+                                  title="#{messages.bitisTarihiText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true"
+                                  showIcon="true" showOnFocus="false" required="true"/>
+
                     <p:outputLabel value="#{messages.anketTuruLabel}" for="@next"/>
                     <p:selectOneMenu id="anketTuru" value="#{gnlAnketController.selected.anketTuru}"
                                      converter="omnifaces.SelectItemsConverter" required="true">
@@ -112,8 +123,11 @@
                     <p:inputText id="baslik" value="#{gnlAnketController.selected.baslik}" title="#{messages.baslikText}" size="50" maxlength="50"/>
 
                     <p:outputLabel value="#{messages.aciklamaLabel}" for="@next"/>
-                    <p:inputTextarea rows="4" id="aciklama" value="#{gnlAnketController.selected.baslik}" title="#{messages.baslikText}" styleClass="w-100"
-                                     autoResize="false" required="false"/>
+                    <pe:sunEditor id="sunEditor" widgetVar="sunEditor" value="#{gnlAnketController.selected.aciklama}"
+                                  mode="balloon" dir="ltr"
+                                  locale="tr"
+                                  toolbar="[['font','fontSize','formatBlock'],['paragraphStyle','blockquote'], ['bold', 'underline', 'italic', 'strike', 'removeFormat'], '/' ,['align', 'list']]">
+                    </pe:sunEditor>
                 </p:panelGrid>
 
 

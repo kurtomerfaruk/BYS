@@ -349,7 +349,7 @@
                                                             styleClass="text-center" tabindex="-1"/>
                                             <div class="ui-inputgroup-addon">
                                                 <p:commandButton icon="pi pi-refresh" type="button" tabindex="-1"
-                                                                 onclick="document.getElementById('captchaImg').src='#{request.contextPath}/captcha?ts=' + new Date().getTime();"/>
+                                                                 onclick="document.getElementById('GirisYapForm:captchaImg').src='#{request.contextPath}/captcha?ts=' + new Date().getTime();"/>
                                             </div>
                                         </div>
                                         <p:inputText id="captchaInput" value="#{loginController.captchaInput}"

@@ -41,7 +41,7 @@
                                  oncomplete="PF('GnlAnketCreateDialog').show()" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
                                  rendered="#{syKullaniciController.hasPermission('gnlanket:ekle')}"/>
                 <p:commandButton id="editButton" styleClass="ui-button-success" icon="pi pi-pencil" pt:data-tooltip="#{messages.buttonGuncelle}"
-                                 update=":GnlAnketEditForm:GnlAnketEditForm" oncomplete="PF('GnlAnketEditDialog').show()"
+                                 update=":GnlAnketEditForm" oncomplete="PF('GnlAnketEditDialog').show()"
                                  disabled="#{empty gnlAnketController.selected}" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
                                  rendered="#{syKullaniciController.hasPermission('gnlanket:guncelle')}"/>
                 <p:commandButton id="viewButton" styleClass="ui-button-info" icon="pi pi-search" pt:data-tooltip="#{messages.buttonDetay}"
