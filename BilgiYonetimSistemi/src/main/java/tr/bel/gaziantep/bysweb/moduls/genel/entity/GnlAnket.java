@@ -3,12 +3,15 @@ package tr.bel.gaziantep.bysweb.moduls.genel.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
 import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlAnketDurum;
 import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlAnketTuru;
+import tr.bel.gaziantep.bysweb.core.utils.StringUtil;
+import tr.bel.gaziantep.bysweb.core.utils.Util;
 
 import java.io.Serial;
 import java.time.LocalDateTime;
@@ -19,7 +22,7 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "GNLANKET")
-@NamedQuery(name = "GnlAnket.findByToken",query = "SELECT a FROM GnlAnket a WHERE a.aktif=true AND a.token =:token")
+@NamedQuery(name = "GnlAnket.findByToken", query = "SELECT a FROM GnlAnket a WHERE a.aktif=true AND a.token =:token")
 public class GnlAnket extends BaseEntity {
     @Serial
     private static final long serialVersionUID = -2108404626152757578L;
@@ -56,11 +59,46 @@ public class GnlAnket extends BaseEntity {
 
     @Size(max = 150)
     @Nationalized
-    @Column(name = "TOKEN", length = 150,unique = true)
+    @Column(name = "TOKEN", length = 150, unique = true)
     private String token;
 
     @OneToMany(mappedBy = "gnlAnket", cascade = CascadeType.ALL)
     private List<GnlAnketSoru> gnlAnketSoruList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "gnlAnket")
+    private List<GnlAnketCevap> gnlAnketCevapList = new ArrayList<>();
+
+    @Transient
+    @Getter(AccessLevel.NONE)
+    private int katilimSayisi;
+
+    @Transient
+    @Getter(AccessLevel.NONE)
+    private String link;
+
+    public int getKatilimSayisi() {
+        return gnlAnketCevapList.size();
+    }
+
+    public String getLink() {
+        if (StringUtil.isBlank(token)) {
+            return "";
+        }
+        int serverPort = Util.getRequest().getServerPort();
+        String scheme = Util.getRequest().getScheme();
+        String port = "";
+
+        if (!("http".equals(scheme) && serverPort == 80) &&
+                !("https".equals(scheme) && serverPort == 443)) {
+            port = ":" + serverPort;
+        }
+        return Util.getRequest().getScheme() + "://"
+                + Util.getRequest().getServerName()
+                + port
+                + Util.getRequest().getContextPath()
+                + "/anket?token="
+                + token;
+    }
 
     @Override
     public int hashCode() {

@@ -24,6 +24,7 @@ public enum EnumSyFiltreAnahtari implements BaseEnum {
     MEDENI_DURUM("Medeni Durum"),
     KISI_DURUM("Kişi Durum"),
     EKLEME_YERI("Ekleme Yeri"),
+    GNLANKET_TURU("Genel Anket Türü"),
     ENGELSIZ_ANKET_DURUMU("Engelsiz Anket Durumu"),
     TALEP_TURU("Talep Türü"),
     TALEP_TIPI("Talep Tipi"),
@@ -44,7 +45,8 @@ public enum EnumSyFiltreAnahtari implements BaseEnum {
     HFMAL_CINSI("Hafriyat Mal Cinsi"),
     BELEDIYE("Belediye"),
     HFTAHSILAT_TURU("Hafriyat Tahsilat Türü"),
-    DUYURU_TUR("Duyuru Tür");
+    DUYURU_TUR("Duyuru Tür")
+    ;
 
     private final String label;
 

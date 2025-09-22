@@ -7,189 +7,190 @@
 
 <ui:composition>
 
-        <!-- Genel -->
-        <ui:fragment rendered="#{syKullaniciController.hasPermission('genel:goster')}">
-            <li class="slide has-sub">
-                <a href="javascript:void(0);" class="side-menu__item main_menu">
-                    <i class="ri-book-2-line side-menu__icon"></i>
-                    <span class="side-menu__label">Genel</span>
-                    <i class="ri-arrow-right-s-line side-menu__angle"></i>
-                </a>
-                <ul class="slide-menu child1">
-                    <li class="slide side-menu__label1">
-                        <a href="javascript:void(0)">Engelsizler</a>
+    <!-- Genel -->
+    <ui:fragment rendered="#{syKullaniciController.hasPermission('genel:goster')}">
+        <li class="slide has-sub">
+            <a href="javascript:void(0);" class="side-menu__item main_menu">
+                <i class="ri-book-2-line side-menu__icon"></i>
+                <span class="side-menu__label">Genel</span>
+                <i class="ri-arrow-right-s-line side-menu__angle"></i>
+            </a>
+            <ul class="slide-menu child1">
+                <li class="slide side-menu__label1">
+                    <a href="javascript:void(0)">Engelsizler</a>
+                </li>
+
+                <!--    Islemler    -->
+                <ui:fragment rendered="#{syKullaniciController.hasPermission('genel_islemler:goster')}">
+                    <li class="slide has-sub">
+                        <a href="javascript:void(0);" class="side-menu__item sublevel1">İşlemler
+                            <i class="ri-arrow-right-s-line side-menu__angle"></i></a>
+                        <ul class="slide-menu child2">
+
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('gnlanket:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/genel/gnlAnket/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="Anketler"/>
+                                </li>
+                            </ui:fragment>
+
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('gnlkisiinceleme:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/genel/gnlKisiInceleme/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="Genel Kişi İnceleme Listesi"/>
+                                </li>
+                            </ui:fragment>
+
+                        </ul>
                     </li>
+                </ui:fragment>
+                <!--    Islemler    -->
 
-                    <!--    Islemler    -->
-                    <ui:fragment rendered="#{syKullaniciController.hasPermission('genel_islemler:goster')}">
-                        <li class="slide has-sub">
-                            <a href="javascript:void(0);" class="side-menu__item sublevel1">İşlemler
-                                <i class="ri-arrow-right-s-line side-menu__angle"></i></a>
-                            <ul class="slide-menu child2">
+                <!--    Tanimlamalar    -->
+                <ui:fragment rendered="#{syKullaniciController.hasPermission('genel_tanimlamalar:goster')}">
+                    <li class="slide has-sub">
+                        <a href="javascript:void(0);" class="side-menu__item sublevel1">Tanımlamalar
+                            <i class="ri-arrow-right-s-line side-menu__angle"></i></a>
+                        <ul class="slide-menu child2">
 
-                                <ui:fragment
-                                        rendered="#{syKullaniciController.hasPermission('gnlkisiinceleme:goster')}">
-                                    <li class="slide">
-                                        <p:commandLink styleClass="side-menu__item sublevel2"
-                                                       actionListener="#{menuController.setPageLink('/moduls/genel/gnlKisiInceleme/index')}"
-                                                       update="myPanel,:growl"
-                                                       onstart="PF('Loading').show()"
-                                                       onsuccess="PF('Loading').hide()"
-                                                       value="Genel Kişi İnceleme Listesi"/>
-                                    </li>
-                                </ui:fragment>
 
-                            </ul>
-                        </li>
-                    </ui:fragment>
-                    <!--    Islemler    -->
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('gnlbanka:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/genel/gnlBanka/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="Bankalar"/>
+                                </li>
+                            </ui:fragment>
 
-                    <!--    Tanimlamalar    -->
-                    <ui:fragment rendered="#{syKullaniciController.hasPermission('genel_tanimlamalar:goster')}">
-                        <li class="slide has-sub">
-                            <a href="javascript:void(0);" class="side-menu__item sublevel1">Tanımlamalar
-                                <i class="ri-arrow-right-s-line side-menu__angle"></i></a>
-                            <ul class="slide-menu child2">
-                                <ui:fragment rendered="#{syKullaniciController.hasPermission('gnlanket:goster')}">
-                                    <li class="slide">
-                                        <p:commandLink styleClass="side-menu__item sublevel2"
-                                                       actionListener="#{menuController.setPageLink('/moduls/genel/gnlAnket/index')}"
-                                                       update="myPanel,:growl"
-                                                       onstart="PF('Loading').show()"
-                                                       onsuccess="PF('Loading').hide()"
-                                                       value="Anketler"/>
-                                    </li>
-                                </ui:fragment>
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('gnlbirim:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/genel/gnlBirim/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="Birimler"/>
+                                </li>
+                            </ui:fragment>
 
-                                <ui:fragment rendered="#{syKullaniciController.hasPermission('gnlbanka:goster')}">
-                                    <li class="slide">
-                                        <p:commandLink styleClass="side-menu__item sublevel2"
-                                                       actionListener="#{menuController.setPageLink('/moduls/genel/gnlBanka/index')}"
-                                                       update="myPanel,:growl"
-                                                       onstart="PF('Loading').show()"
-                                                       onsuccess="PF('Loading').hide()"
-                                                       value="Bankalar"/>
-                                    </li>
-                                </ui:fragment>
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('gnlegitimbolum:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/genel/gnlEgitimBolum/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="Eğitim Bölüm"/>
+                                </li>
+                            </ui:fragment>
 
-                                <ui:fragment rendered="#{syKullaniciController.hasPermission('gnlbirim:goster')}">
-                                    <li class="slide">
-                                        <p:commandLink styleClass="side-menu__item sublevel2"
-                                                       actionListener="#{menuController.setPageLink('/moduls/genel/gnlBirim/index')}"
-                                                       update="myPanel,:growl"
-                                                       onstart="PF('Loading').show()"
-                                                       onsuccess="PF('Loading').hide()"
-                                                       value="Birimler"/>
-                                    </li>
-                                </ui:fragment>
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('gnlil:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/genel/gnlIl/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="İller"/>
+                                </li>
+                            </ui:fragment>
 
-                                <ui:fragment rendered="#{syKullaniciController.hasPermission('gnlegitimbolum:goster')}">
-                                    <li class="slide">
-                                        <p:commandLink styleClass="side-menu__item sublevel2"
-                                                       actionListener="#{menuController.setPageLink('/moduls/genel/gnlEgitimBolum/index')}"
-                                                       update="myPanel,:growl"
-                                                       onstart="PF('Loading').show()"
-                                                       onsuccess="PF('Loading').hide()"
-                                                       value="Eğitim Bölüm"/>
-                                    </li>
-                                </ui:fragment>
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('gnlilce:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/genel/gnlIlce/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="İlçeler"/>
+                                </li>
+                            </ui:fragment>
 
-                                <ui:fragment rendered="#{syKullaniciController.hasPermission('gnlil:goster')}">
-                                    <li class="slide">
-                                        <p:commandLink styleClass="side-menu__item sublevel2"
-                                                       actionListener="#{menuController.setPageLink('/moduls/genel/gnlIl/index')}"
-                                                       update="myPanel,:growl"
-                                                       onstart="PF('Loading').show()"
-                                                       onsuccess="PF('Loading').hide()"
-                                                       value="İller"/>
-                                    </li>
-                                </ui:fragment>
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('gnlmahalle:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/genel/gnlMahalle/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="Mahalleler"/>
+                                </li>
+                            </ui:fragment>
 
-                                <ui:fragment rendered="#{syKullaniciController.hasPermission('gnlilce:goster')}">
-                                    <li class="slide">
-                                        <p:commandLink styleClass="side-menu__item sublevel2"
-                                                       actionListener="#{menuController.setPageLink('/moduls/genel/gnlIlce/index')}"
-                                                       update="myPanel,:growl"
-                                                       onstart="PF('Loading').show()"
-                                                       onsuccess="PF('Loading').hide()"
-                                                       value="İlçeler"/>
-                                    </li>
-                                </ui:fragment>
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('gnlkisi:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/genel/gnlKisi/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="Kişiler"/>
+                                </li>
+                            </ui:fragment>
 
-                                <ui:fragment rendered="#{syKullaniciController.hasPermission('gnlmahalle:goster')}">
-                                    <li class="slide">
-                                        <p:commandLink styleClass="side-menu__item sublevel2"
-                                                       actionListener="#{menuController.setPageLink('/moduls/genel/gnlMahalle/index')}"
-                                                       update="myPanel,:growl"
-                                                       onstart="PF('Loading').show()"
-                                                       onsuccess="PF('Loading').hide()"
-                                                       value="Mahalleler"/>
-                                    </li>
-                                </ui:fragment>
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('gnlkurs:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/genel/gnlKurs/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="Kurslar"/>
+                                </li>
+                            </ui:fragment>
 
-                                <ui:fragment rendered="#{syKullaniciController.hasPermission('gnlkisi:goster')}">
-                                    <li class="slide">
-                                        <p:commandLink styleClass="side-menu__item sublevel2"
-                                                       actionListener="#{menuController.setPageLink('/moduls/genel/gnlKisi/index')}"
-                                                       update="myPanel,:growl"
-                                                       onstart="PF('Loading').show()"
-                                                       onsuccess="PF('Loading').hide()"
-                                                       value="Kişiler"/>
-                                    </li>
-                                </ui:fragment>
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('gnlpersonel:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/genel/gnlPersonel/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="Personeller"/>
+                                </li>
+                            </ui:fragment>
 
-                                <ui:fragment rendered="#{syKullaniciController.hasPermission('gnlkurs:goster')}">
-                                    <li class="slide">
-                                        <p:commandLink styleClass="side-menu__item sublevel2"
-                                                       actionListener="#{menuController.setPageLink('/moduls/genel/gnlKurs/index')}"
-                                                       update="myPanel,:growl"
-                                                       onstart="PF('Loading').show()"
-                                                       onsuccess="PF('Loading').hide()"
-                                                       value="Kurslar"/>
-                                    </li>
-                                </ui:fragment>
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('gnlunvan:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/genel/gnlUnvan/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="Unvanlar"/>
+                                </li>
+                            </ui:fragment>
 
-                                <ui:fragment rendered="#{syKullaniciController.hasPermission('gnlpersonel:goster')}">
-                                    <li class="slide">
-                                        <p:commandLink styleClass="side-menu__item sublevel2"
-                                                       actionListener="#{menuController.setPageLink('/moduls/genel/gnlPersonel/index')}"
-                                                       update="myPanel,:growl"
-                                                       onstart="PF('Loading').show()"
-                                                       onsuccess="PF('Loading').hide()"
-                                                       value="Personeller"/>
-                                    </li>
-                                </ui:fragment>
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('gnlyabancidil:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/genel/gnlYabanciDil/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="Yabancı Diller"/>
+                                </li>
+                            </ui:fragment>
+                        </ul>
+                    </li>
+                </ui:fragment>
+                <!--    Tanimlamalar    -->
 
-                                <ui:fragment rendered="#{syKullaniciController.hasPermission('gnlunvan:goster')}">
-                                    <li class="slide">
-                                        <p:commandLink styleClass="side-menu__item sublevel2"
-                                                       actionListener="#{menuController.setPageLink('/moduls/genel/gnlUnvan/index')}"
-                                                       update="myPanel,:growl"
-                                                       onstart="PF('Loading').show()"
-                                                       onsuccess="PF('Loading').hide()"
-                                                       value="Unvanlar"/>
-                                    </li>
-                                </ui:fragment>
-
-                                <ui:fragment rendered="#{syKullaniciController.hasPermission('gnlyabancidil:goster')}">
-                                    <li class="slide">
-                                        <p:commandLink styleClass="side-menu__item sublevel2"
-                                                       actionListener="#{menuController.setPageLink('/moduls/genel/gnlYabanciDil/index')}"
-                                                       update="myPanel,:growl"
-                                                       onstart="PF('Loading').show()"
-                                                       onsuccess="PF('Loading').hide()"
-                                                       value="Yabancı Diller"/>
-                                    </li>
-                                </ui:fragment>
-                            </ul>
-                        </li>
-                    </ui:fragment>
-                    <!--    Tanimlamalar    -->
-
-                </ul>
-            </li>
-        </ui:fragment>
-        <!-- Genel -->
+            </ul>
+        </li>
+    </ui:fragment>
+    <!-- Genel -->
 
 </ui:composition>
 

@@ -10,56 +10,6 @@
 
 <ui:composition>
 
-<!--    <coco:editpage id="GnlAnketEditForm"-->
-<!--                   widgetVar="GnlAnketEditDialog"-->
-<!--                   actionListener="#{gnlAnketController.save}"-->
-<!--                   listForm="GnlAnketListForm"-->
-<!--                   model="#{gnlAnketController.selected}">-->
-
-<!--&lt;!&ndash;        <p:outputLabel value="#{messages.kodLabel}" for="@next"/>&ndash;&gt;-->
-<!--&lt;!&ndash;        <p:inputText id="kod" value="#{gnlBankaController.selected.kod}" title="#{messages.kodText}" size="50" maxlength="50"/>&ndash;&gt;-->
-
-<!--&lt;!&ndash;        <p:outputLabel value="#{messages.bankaAdiLabel}" for="@next"/>&ndash;&gt;-->
-<!--&lt;!&ndash;        <p:inputText id="bankaAdi" value="#{gnlBankaController.selected.bankaAdi}" title="#{messages.bankaAdiText}" size="50" maxlength="50" required="true"/>&ndash;&gt;-->
-
-<!--&lt;!&ndash;        <p:outputLabel value="#{messages.subeLabel}" for="@next"/>&ndash;&gt;-->
-<!--&lt;!&ndash;        <p:inputText id="sube" value="#{gnlBankaController.selected.sube}" title="#{messages.subeText}" size="50" maxlength="50"/>&ndash;&gt;-->
-
-<!--&lt;!&ndash;        <p:outputLabel value="#{messages.subeKodLabel}" for="@next"/>&ndash;&gt;-->
-<!--&lt;!&ndash;        <p:inputText id="subeKod" value="#{gnlBankaController.selected.subeKod}" title="#{messages.subeKodText}" size="50" maxlength="50"/>&ndash;&gt;-->
-
-<!--&lt;!&ndash;        <p:outputLabel value="#{messages.adresLabel}" for="@next"/>&ndash;&gt;-->
-<!--&lt;!&ndash;        <p:inputTextarea rows="4" id="adres" value="#{gnlBankaController.selected.adres}" title="#{messages.adresText}" styleClass="w-100"&ndash;&gt;-->
-<!--&lt;!&ndash;                         autoResize="false"/>&ndash;&gt;-->
-
-<!--&lt;!&ndash;        <p:outputLabel value="#{messages.telefonLabel}" for="@next"/>&ndash;&gt;-->
-<!--&lt;!&ndash;        <p:inputMask id="telefon" value="#{gnlBankaController.selected.telefon}" title="#{messages.telefonText}" size="50" maxlength="50"&ndash;&gt;-->
-<!--&lt;!&ndash;                     mask="(999) 999 99 99"/>&ndash;&gt;-->
-
-<!--&lt;!&ndash;        <p:outputLabel value="#{messages.faksLabel}" for="@next"/>&ndash;&gt;-->
-<!--&lt;!&ndash;        <p:inputMask id="faks" value="#{gnlBankaController.selected.faks}" title="#{messages.faksText}" size="50" maxlength="50" mask="(999) 999 99 99"/>&ndash;&gt;-->
-
-<!--&lt;!&ndash;        <p:outputLabel value="#{messages.sehirLabel}" for="@next"/>&ndash;&gt;-->
-<!--&lt;!&ndash;        <p:selectOneMenu id="gnlilId" value="#{gnlBankaController.selected.gnlIl}" filter="true" converter="omnifaces.SelectItemsConverter">&ndash;&gt;-->
-<!--&lt;!&ndash;            <f:selectItem itemLabel="#{messages.seciniz}"/>&ndash;&gt;-->
-<!--&lt;!&ndash;            <f:selectItems value="#{gnlIlController.items}"&ndash;&gt;-->
-<!--&lt;!&ndash;                           var="gnlilIdItem"&ndash;&gt;-->
-<!--&lt;!&ndash;                           itemValue="#{gnlilIdItem}"&ndash;&gt;-->
-<!--&lt;!&ndash;                           itemLabel="#{gnlilIdItem.tanim.toString()}"/>&ndash;&gt;-->
-<!--&lt;!&ndash;            <p:ajax event="change" update="gnlilceId"/>&ndash;&gt;-->
-<!--&lt;!&ndash;        </p:selectOneMenu>&ndash;&gt;-->
-
-<!--&lt;!&ndash;        <p:outputLabel value="#{messages.ilceLabel}" for="@next"/>&ndash;&gt;-->
-<!--&lt;!&ndash;        <p:selectOneMenu id="gnlilceId" value="#{gnlBankaController.selected.gnlIlce}" filter="true" converter="omnifaces.SelectItemsConverter">&ndash;&gt;-->
-<!--&lt;!&ndash;            <f:selectItem itemLabel="#{messages.seciniz}"/>&ndash;&gt;-->
-<!--&lt;!&ndash;            <f:selectItems value="#{gnlIlceController.getIlceByIlId(gnlBankaController.selected.gnlIl)}"&ndash;&gt;-->
-<!--&lt;!&ndash;                           var="gnlilceIdItem"&ndash;&gt;-->
-<!--&lt;!&ndash;                           itemValue="#{gnlilceIdItem}"&ndash;&gt;-->
-<!--&lt;!&ndash;                           itemLabel="#{gnlilceIdItem.tanim.toString()}"/>&ndash;&gt;-->
-<!--&lt;!&ndash;        </p:selectOneMenu>&ndash;&gt;-->
-
-<!--    </coco:editpage>-->
-
     <p:dialog widgetVar="GnlAnketEditDialog"
               id="GnlAnketEditDialogId"
               modal="true"
@@ -83,6 +33,9 @@
                     <h:outputText value="#{gnlAnketController.selected.id}">
                         <f:convertNumber pattern="#{messages.sayiFormat}"/>
                     </h:outputText>
+
+                    <h:outputText value="Link "/>
+                    <p:link  target="_blank" href="#{gnlAnketController.selected.link}" value="Ankete gitmek için tıklayın..."/>
 
                     <p:outputLabel value="#{messages.baslangicTarihiLabel}" for="@next"/>
                     <p:datePicker id="baslamaTarihi" locale="tr" pattern="#{messages.tarihFormat}" value="#{gnlAnketController.selected.baslamaTarihi}"
@@ -108,83 +61,78 @@
                     <p:inputText id="baslik" value="#{gnlAnketController.selected.baslik}" title="#{messages.baslikText}" size="50" maxlength="50"/>
 
                     <p:outputLabel value="#{messages.aciklamaLabel}" for="@next"/>
-                    <pe:sunEditor id="sunEditor" widgetVar="sunEditor" value="#{gnlAnketController.selected.aciklama}"
-                                  mode="balloon" dir="ltr"
-                                  locale="tr"
+                    <pe:sunEditor id="sunEditor" widgetVar="sunEditor" value="#{gnlAnketController.selected.aciklama}" style="height:300px;"
+                                  mode="balloon" dir="ltr" locale="tr"
                                   toolbar="[['font','fontSize','formatBlock'],['paragraphStyle','blockquote'], ['bold', 'underline', 'italic', 'strike', 'removeFormat'], '/' ,['align', 'list']]">
                     </pe:sunEditor>
                 </p:panelGrid>
 
 
                 <ui:repeat value="#{gnlAnketController.selected.gnlAnketSoruList}" var="q" varStatus="status">
-                    <p:card styleClass="m-2">
-                        <p:panelGrid columns="2"
-                                     columnClasses="ui-grid-col-6,ui-grid-col-6"
-                                     layout="grid"
-                                     styleClass="ui-panelgrid-blank ui-fluid"
-                                     style="border:0px none; background-color:transparent;">
+                    <div class="card border border-primary custom-card">
+                        <div class="card-header justify-content-between">
+                            <div class="card-title">
+                                <h:outputText value="#{q.tanim}"/>
+                            </div>
+                            <a href="javascript:void(0);">
+                                <i class="ri-fullscreen-line"></i>
+                            </a>
+                        </div>
+                        <div class="card-body">
+                            <p:panelGrid columns="2"
+                                         columnClasses="ui-grid-col-6,ui-grid-col-6"
+                                         layout="grid"
+                                         styleClass="ui-panelgrid-blank ui-fluid"
+                                         style="border:0px none; background-color:transparent;">
 
-                            <p:inputText value="#{q.tanim}" placeholder="Soru #{status.index+1}" label="Soru #{status.index+1}" required="true"/>
+                                <p:inputText value="#{q.tanim}" placeholder="Soru #{status.index+1}" label="Soru #{status.index+1}" required="true"/>
 
-                            <p:selectOneMenu value="#{q.soruTuru}" style="width:90%">
-                                <f:selectItems value="#{enumSoruTuru.ALL_VALUES}" var="t" itemLabel="#{t.displayValue}" itemValue="#{t}"/>
-                                <p:ajax event="change" update="@parent" process="@this" oncomplete="scrollToBottom()"/>
-                            </p:selectOneMenu>
+                                <p:selectOneMenu value="#{q.soruTuru}" style="width:90%">
+                                    <f:selectItems value="#{enumSoruTuru.ALL_VALUES}" var="t" itemLabel="#{t.displayValue}" itemValue="#{t}"/>
+                                    <p:ajax event="change" update="@parent" process="@this" oncomplete="scrollToBottom()"/>
+                                </p:selectOneMenu>
 
-                            <p:row>
-                                <ui:repeat value="#{q.gnlAnketSoruSecenekList}" var="o" varStatus="st">
-                                    <div style="display:flex; align-items:center; margin-bottom:5px;">
-                                        <ui:fragment rendered="#{q.soruTuru eq 'TEXT'}">
-                                            <p:inputText value="#{o.tanim}" title="Metin" placeholder="Metin" style="flex:1; margin-right:5px;"/>
-                                        </ui:fragment>
-                                        <ui:fragment rendered="#{q.soruTuru eq 'SELECT_ONE' or q.soruTuru eq 'SELECT_MANY'}">
-                                            <p:inputText value="#{o.tanim}" label="Seçenek #{st.index+1}" title="Seçenek #{st.index+1}"
-                                                         placeholder="Seçenek #{st.index+1}"
-                                                         style="flex:1; margin-right:5px;"/>
-                                            <p:commandButton icon="pi pi-times" styleClass="ui-button-danger ui-button-sm"
-                                                             action="#{gnlAnketController.removeOption(q, o)}"
-                                                             update="@form,:growl" title="Seçeneği Sil" oncomplete="scrollToBottom()"/>
-                                        </ui:fragment>
-
-                                        <!--                                            <p:selectOneRadio value="#{responseController.answers[q.id]}" layout="pageDirection" rendered="#{q.soruTuru eq 'SELECT_ONE'}">-->
-                                        <!--                                                <f:selectItem itemLabel="#{o.text}" itemValue="#{o.id}" />-->
-                                        <!--                                                <f:facet name="footer">-->
-                                        <!--                                                    <h:panelGroup rendered="#{q.allowOther}">-->
-                                        <!--                                                        <f:selectItem itemLabel="Diğer..." itemValue="OTHER"/>-->
-                                        <!--                                                        <p:inputText value="#{responseController.otherAnswers[q.id]}"-->
-                                        <!--                                                                     rendered="#{responseController.answers[q.id] eq 'OTHER'}"-->
-                                        <!--                                                                     placeholder="Lütfen belirtiniz"/>-->
-                                        <!--                                                    </h:panelGroup>-->
-                                        <!--                                                </f:facet>-->
-                                        <!--                                            </p:selectOneRadio>-->
-
-                                        <!-- Sil butonu -->
-
-                                    </div>
-                                </ui:repeat>
-                            </p:row>
-
-                            <!-- + Seçenek ekle linki -->
-                            <ui:fragment rendered="#{q.soruTuru eq 'SELECT_ONE' or q.soruTuru eq 'SELECT_MANY'}">
                                 <p:row>
-                                    <p:commandLink value="+ Seçenek ekle"
-                                                   action="#{gnlAnketController.addOption(q)}"
-                                                   update="@form,:growl"
-                                                   style="color:#1a73e8; font-weight:bold; margin-top:5px; display:inline-block;"/>
+                                    <ui:repeat value="#{q.gnlAnketSoruSecenekList}" var="o" varStatus="st">
+                                        <div style="display:flex; align-items:center; margin-bottom:5px;">
+                                            <ui:fragment rendered="#{q.soruTuru eq 'TEXT'}">
+                                                <p:inputText value="#{o.tanim}" title="Metin" placeholder="Metin" style="flex:1; margin-right:5px;"/>
+                                            </ui:fragment>
+                                            <ui:fragment rendered="#{q.soruTuru eq 'SELECT_ONE' or q.soruTuru eq 'SELECT_MANY'}">
+                                                <p:inputText value="#{o.tanim}" label="Seçenek #{st.index+1}" title="Seçenek #{st.index+1}"
+                                                             placeholder="Seçenek #{st.index+1}"
+                                                             style="flex:1; margin-right:5px;"/>
+                                                <p:commandButton icon="pi pi-times" styleClass="ui-button-danger ui-button-sm"
+                                                                 action="#{gnlAnketController.removeOption(q, o)}"
+                                                                 update="@form,:growl" title="Seçeneği Sil" oncomplete="scrollToBottom()"/>
+                                            </ui:fragment>
+                                        </div>
+                                    </ui:repeat>
                                 </p:row>
-                            </ui:fragment>
-                        </p:panelGrid>
-                        <!--                            <h:outputLabel value="Zorunlu?"/>-->
-                        <!--                            -->
 
-                        <f:facet name="footer">
+                                <!-- + Seçenek ekle linki -->
+                                <ui:fragment rendered="#{q.soruTuru eq 'SELECT_ONE' or q.soruTuru eq 'SELECT_MANY'}">
+                                    <p:row>
+                                        <p:commandLink value="+ Seçenek ekle"
+                                                       action="#{gnlAnketController.addOption(q)}"
+                                                       update="@form,:growl"
+                                                       style="color:#1a73e8; font-weight:bold; margin-top:5px; display:inline-block;"/>
+                                    </p:row>
+                                </ui:fragment>
+                            </p:panelGrid>
+
+                        </div>
+                        <div class="card-footer">
                             <div class="float-end">
                                 <p:selectBooleanCheckbox value="#{q.zorunlu}" itemLabel="Zorunlu" label="Zorunlu"/>
-                                <p:selectBooleanCheckbox value="#{q.diger}" itemLabel="Diğer" label="Diğer"/>
+                                <ui:fragment rendered="#{q.soruTuru eq 'SELECT_ONE' or q.soruTuru eq 'SELECT_MANY'}">
+                                    <p:selectBooleanCheckbox value="#{q.diger}" itemLabel="Diğer" label="Diğer"/>
+                                </ui:fragment>
                             </div>
                             <div class="clearfix"></div>
-                        </f:facet>
-                    </p:card>
+                        </div>
+                    </div>
+
                 </ui:repeat>
             </p:outputPanel>
 

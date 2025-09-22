@@ -1,20 +1,25 @@
 package tr.bel.gaziantep.bysweb.moduls.genel.controller;
 
 import jakarta.faces.event.ActionEvent;
+import jakarta.faces.model.SelectItem;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import lombok.extern.slf4j.Slf4j;
 import tr.bel.gaziantep.bysweb.core.controller.AbstractController;
 import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlAnketSoruTuru;
+import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.EnumSyFiltreAnahtari;
+import tr.bel.gaziantep.bysweb.core.service.FilterOptionService;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlAnket;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlAnketSoru;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlAnketSoruSecenek;
-import tr.bel.gaziantep.bysweb.moduls.genel.service.GnlAnketService;
 
 import java.io.Serial;
 import java.lang.reflect.InvocationTargetException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -31,13 +36,23 @@ public class GnlAnketController extends AbstractController<GnlAnket> {
     private static final long serialVersionUID = 503172173997319467L;
 
     @Inject
-    private GnlAnketService gnlAnketService;
+    private FilterOptionService filterOptionService;
 
 
     public GnlAnketController() {
         super(GnlAnket.class);
     }
 
+    public List<SelectItem> getFilterOptions(EnumSyFiltreAnahtari key) {
+        switch (key) {
+            case GNLANKET_TURU -> {
+                return filterOptionService.getGnlAnketTurus();
+            }
+            default -> {
+                return Collections.emptyList();
+            }
+        }
+    }
 
     @Override
     public GnlAnket prepareCreate(ActionEvent event) {
@@ -46,6 +61,8 @@ public class GnlAnketController extends AbstractController<GnlAnket> {
             newItem = GnlAnket.class.getDeclaredConstructor().newInstance();
             newItem.setGnlAnketSoruList(new ArrayList<>());
             newItem.setToken(UUID.randomUUID().toString().substring(0, 8));
+            newItem.setBaslamaTarihi(LocalDateTime.now());
+            newItem.setBitisTarihi(LocalDateTime.now());
             this.setSelected(newItem);
             initializeEmbeddableKey();
             return newItem;

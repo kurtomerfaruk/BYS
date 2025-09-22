@@ -90,7 +90,7 @@
         <h:panelGroup id="group">
 
             <p:remoteCommand name="rc" actionListener="#{edbVerilecekHizmetController.changeActiveIndex}" update="custom"
-                             oncomplete="PF('galleriaCustom').show();console.log('deneme');"/>
+                             oncomplete="PF('galleriaCustom').show();"/>
 
 
             <p:galleria id="galleria" widgetVar="galleriaWidget" value="#{edbVerilecekHizmetController.selected.edbVerilecekHizmetResimList}" var="image"

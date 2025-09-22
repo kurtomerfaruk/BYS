@@ -6,14 +6,10 @@ import jakarta.persistence.PersistenceContext;
 import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlAnketSoruTuru;
 import tr.bel.gaziantep.bysweb.core.service.AbstractService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
-import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlAnket;
-import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlAnketCevap;
-import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlAnketCevapDetay;
-import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlAnketSoru;
+import tr.bel.gaziantep.bysweb.moduls.genel.entity.*;
 import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.entity.SyKullanici;
 
 import java.io.Serial;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -71,14 +67,14 @@ public class GnlAnketCevapService extends AbstractService<GnlAnketCevap> {
         return !result.isEmpty();
     }
 
-    public void save(GnlAnket gnlAnket, Integer syKullaniciId, String tcKimlikNo, LocalDate dogumTarihi, String anonToken, Map<Integer, Object> answers, Map<Integer, Object> otherAnswers) {
+    public void save(GnlAnket gnlAnket, Integer syKullaniciId, GnlKisi gnlKisi, String anonToken, Map<Integer, Object> answers, Map<Integer, Object> otherAnswers) {
         GnlAnketCevap cevap = new GnlAnketCevap();
         cevap.setGnlAnket(gnlAnket);
         if (syKullaniciId != null) {
             cevap.setSyKullanici(new SyKullanici(syKullaniciId));
         }
-        cevap.setTcKimlikNo(tcKimlikNo);
-        cevap.setDogumTarihi(dogumTarihi);
+        cevap.setTcKimlikNo(gnlKisi.getTcKimlikNo());
+        cevap.setDogumTarihi(gnlKisi.getDogumTarihi());
         cevap.setToken(anonToken);
         cevap.setTarih(LocalDateTime.now());
 
