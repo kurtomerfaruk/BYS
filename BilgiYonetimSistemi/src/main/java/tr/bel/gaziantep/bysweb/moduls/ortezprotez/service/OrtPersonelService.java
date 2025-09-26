@@ -5,6 +5,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import tr.bel.gaziantep.bysweb.core.service.AbstractService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
+import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlPersonel;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtPersonel;
 
 import java.io.Serial;
@@ -30,5 +31,13 @@ public class OrtPersonelService extends AbstractService<OrtPersonel> {
     @Override
     protected EntityManager getEntityManager() {
         return em;
+    }
+
+    public OrtPersonel findByGnlPersonel(GnlPersonel gnlPersonel) {
+        return (OrtPersonel) getEntityManager().createNamedQuery("OrtPersonel.findByGnlPersonel")
+                .setParameter("gnlPersonel",gnlPersonel)
+                .getResultList()
+                .stream().findFirst()
+                .orElse(null);
     }
 }
