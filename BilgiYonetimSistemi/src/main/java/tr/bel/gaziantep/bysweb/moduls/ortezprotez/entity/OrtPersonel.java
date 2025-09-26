@@ -18,6 +18,7 @@ import java.io.Serial;
 @Setter
 @Entity
 @Table(name = "ORTPERSONEL")
+@NamedQuery(name = "OrtPersonel.findByGnlPersonel",query = "SELECT p FROM OrtPersonel p WHERE p.aktif=true AND p.gnlPersonel=:gnlPersonel")
 public class OrtPersonel extends BaseEntity {
     @Serial
     private static final long serialVersionUID = -3417766036430662668L;
