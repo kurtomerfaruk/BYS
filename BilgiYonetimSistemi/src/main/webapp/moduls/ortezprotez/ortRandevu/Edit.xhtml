@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="jakarta.faces.html"
+>
+
+<ui:composition>
+
+    <p:dialog widgetVar="OrtRandevuEditDialog"
+              modal="true"
+              resizable="false"
+              closeOnEscape="true"
+              header="#{messages.dialogYeniKayit}"
+              appendTo="@(body)"
+              responsive="true"
+              onShow="PF('OrtRandevuEditDialog').initPosition();"
+              fitViewport="true">
+
+        <h:form id="OrtRandevuEditForm">
+            <h:panelGroup id="display">
+                <p:focus context="display"/>
+                <p:panelGrid columns="2" columnClasses="column" rendered="#{ortRandevuController.selected!=null}" layout="tabular">
+
+                    <p:outputLabel value="#{messages.randevuTarihiLabel}" for="@next"/>
+                    <p:datePicker id="randevuTarihi" locale="tr" pattern="#{messages.tarihFormat}" value="#{ortRandevuController.selected.randevuTarihi}"
+                                  title="#{messages.randevuTarihiText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true"
+                                  showIcon="true" showOnFocus="false"/>
+
+                    <p:outputLabel value="#{messages.konuLabel}" for="@next"/>
+                    <p:inputText id="konu" value="#{ortRandevuController.selected.konu}" title="#{messages.konuText}" size="50" required="true"/>
+
+                    <p:outputLabel value="#{messages.icerikLabel}" for="@next"/>
+                    <p:inputTextarea id="aciklama" value="#{ortRandevuController.selected.aciklama}" title="#{messages.aciklamaText}" rows="4"
+                                     autoResize="false"
+                                     styleClass="w-100" required="true"/>
+
+                    <p:outputLabel value="#{messages.tumGunLabel}"/>
+                    <p:selectBooleanCheckbox id="tumGun" value="#{ortRandevuController.event.allDay}"/>
+
+                    <f:facet name="footer">
+                        <div class="float-end">
+                            <p:commandButton icon="pi pi-check" styleClass="ui-button-success" style="margin-right: 10px !important;"
+                                             actionListener="#{ortRandevuController.update}"
+                                             value="#{messages.buttonKaydet}"
+                                             update=":growl,display,:OrtRandevuListForm:schedule"
+                                             oncomplete="handleSubmit(xhr,status,args,PF('OrtRandevuEditDialog'));"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                            <p:commandButton icon="pi pi-trash" styleClass="ui-button-danger" style="margin-right: 10px !important;"
+                                             actionListener="#{ortRandevuController.delete}"
+                                             value="#{messages.buttonSil}" update="display,:EtkinlikPageForm:schedule,:growl"
+                                             oncomplete="handleSubmit(xhr,status,args,PF('OrtRandevuEditDialog'));" onstart="PF('Loading').show()"
+                                             onsuccess="PF('Loading').hide()"/>
+                            <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                             value="#{messages.buttonKapat}"
+                                             onclick="PF('OrtRandevuEditDialog').hide()" immediate="true"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()">
+                                <p:resetInput target="@form"/>
+                            </p:commandButton>
+                        </div>
+                    </f:facet>
+                </p:panelGrid>
+            </h:panelGroup>
+        </h:form>
+    </p:dialog>
+
+</ui:composition>
+
+</html>

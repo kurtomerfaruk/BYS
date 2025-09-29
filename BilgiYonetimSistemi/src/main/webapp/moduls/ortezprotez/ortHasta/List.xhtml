@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:p="primefaces"
+                xmlns:pt="jakarta.faces.passthrough"
+                xmlns:coco="jakarta.faces.composite/ui">
+
+    <h:form id="OrtHastaListForm" styleClass="form-height">
+
+        <p:contextMenu id="OrtHastaDataTableContextMenu" for="datalist:datalist">
+            <p:menuitem value="#{messages.buttonEkle}"
+                        onclick="document.getElementById('OrtHastaListForm:datalist:datalist:createButton').click();"
+                        icon="pi pi-plus" rendered="#{syKullaniciController.hasPermission('orthasta:ekle')}"/>
+            <p:menuitem value="#{messages.buttonGuncelle}"
+                        onclick="document.getElementById('OrtHastaListForm:datalist:datalist:editButton').click();"
+                        icon="pi pi-pencil" rendered="#{syKullaniciController.hasPermission('orthasta:guncelle')}"/>
+            <p:menuitem value="#{messages.buttonDetay}"
+                        onclick="document.getElementById('OrtHastaListForm:datalist:datalist:viewButton').click();"
+                        icon="pi pi-search"/>
+            <p:menuitem value="#{messages.buttonSil}"
+                        onclick="document.getElementById('OrtHastaListForm:datalist:datalist:deleteButton').click();"
+                        icon="pi pi-trash" rendered="#{syKullaniciController.hasPermission('orthasta:sil')}"/>
+        </p:contextMenu>
+        <coco:datatable id="datalist"
+                        value="#{ortHastaController.lazyItems}"
+                        rowKey="#{item.id}"
+                        selection="#{ortHastaController.selected}"
+                        filtered="#{ortHastaController.filtered}"
+                        rowselect=":OrtHastaListForm:datalist:datalist:createButton,:OrtHastaListForm:datalist:datalist:viewButton,:OrtHastaListForm:datalist:datalist:editButton,:OrtHastaListForm:datalist:datalist:deleteButton,:OrtHastaListForm:OrtHastaDataTableContextMenu"
+                        rowDblselect="document.getElementById('OrtHastaListForm:datalist:datalist:editButton').click()"
+                        contextMenu=":OrtHastaListForm:datalist:datalist:createButton :OrtHastaListForm:datalist:datalist:viewButton :OrtHastaListForm:datalist:datalist:editButton :OrtHastaListForm:datalist:datalist:deleteButton"
+                        selectListener="#{ortHastaController.resetParents}"
+                        controller="#{ortHastaController}"
+                        header="#{messages.hastaListesi}">
+
+
+            <p:ajax event="colResize" listener="#{ortHastaController.onResize}"/>
+
+
+            <f:facet name="paginatorBottomLeft">
+
+                <p:commandButton id="createButton" styleClass="ui-button-primary" icon="pi pi-plus"
+                                 pt:data-tooltip="#{messages.buttonEkle}"
+                                 actionListener="#{ortHastaController.prepareCreate}"
+                                 update=":OrtHastaCreateForm:OrtHastaCreateForm"
+                                 oncomplete="PF('OrtHastaCreateDialog').show()" onstart="PF('Loading').show()"
+                                 onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('orthasta:ekle')}"/>
+                <p:commandButton id="editButton" styleClass="ui-button-success" icon="pi pi-pencil"
+                                 pt:data-tooltip="#{messages.buttonGuncelle}" update=":OrtHastaEditForm:OrtHastaEditForm"
+                                 oncomplete="PF('OrtHastaEditDialog').show()"
+                                 disabled="#{empty ortHastaController.selected}" onstart="PF('Loading').show()"
+                                 onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('orthasta:guncelle')}"/>
+                <p:commandButton id="viewButton" styleClass="ui-button-info" icon="pi pi-search"
+                                 pt:data-tooltip="#{messages.buttonDetay}" update=":OrtHastaViewForm:OrtHastaViewForm"
+                                 oncomplete="PF('OrtHastaViewDialog').show()"
+                                 disabled="#{empty ortHastaController.selected}" onstart="PF('Loading').show()"
+                                 onsuccess="PF('Loading').hide()"/>
+                <p:commandButton id="deleteButton" styleClass="ui-button-danger" icon="pi pi-trash"
+                                 pt:data-tooltip="#{messages.buttonSil}" actionListener="#{ortHastaController.delete}"
+                                 update=":growl,datalist" disabled="#{empty ortHastaController.selected}"
+                                 rendered="#{syKullaniciController.hasPermission('orthasta:sil')}">
+                    <p:confirm header="#{messages.ConfirmationHeader}" message="#{messages.ConfirmDeleteMessage}"
+                               icon="pi pi-warning"/>
+                </p:commandButton>
+
+            </f:facet>
+
+        </coco:datatable>
+
+
+        <ui:include src="/confirmation.xhtml"/>
+
+    </h:form>
+
+</ui:composition>

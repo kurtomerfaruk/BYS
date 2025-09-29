@@ -38,6 +38,18 @@
                                                        value="Hasta Listesi"/>
                                     </li>
                                 </ui:fragment>
+
+                                <ui:fragment rendered="#{syKullaniciController.hasPermission('ortolcu:goster')}">
+                                    <li class="slide">
+                                        <p:commandLink styleClass="side-menu__item sublevel2"
+                                                       actionListener="#{menuController.setPageLink('/moduls/ortezprotez/ortOlcu/index')}"
+                                                       update="myPanel,:growl"
+                                                       onstart="PF('Loading').show()"
+                                                       onsuccess="PF('Loading').hide()"
+                                                       value="Ölçü Listesi"/>
+                                    </li>
+                                </ui:fragment>
+
                                 <ui:fragment rendered="#{syKullaniciController.hasPermission('ortrandevu:goster')}">
                                     <li class="slide">
                                         <p:commandLink styleClass="side-menu__item sublevel2"
@@ -69,6 +81,17 @@
                                                        onstart="PF('Loading').show()"
                                                        onsuccess="PF('Loading').hide()"
                                                        value="Personeller"/>
+                                    </li>
+                                </ui:fragment>
+
+                                <ui:fragment rendered="#{syKullaniciController.hasPermission('ortolcusablon:goster')}">
+                                    <li class="slide">
+                                        <p:commandLink styleClass="side-menu__item sublevel2"
+                                                       actionListener="#{menuController.setPageLink('/moduls/ortezprotez/ortOlcuSablon/index')}"
+                                                       update="myPanel,:growl"
+                                                       onstart="PF('Loading').show()"
+                                                       onsuccess="PF('Loading').hide()"
+                                                       value="Ölçü Şablon Listesi"/>
                                     </li>
                                 </ui:fragment>
 

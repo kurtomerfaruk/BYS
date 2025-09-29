@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:p="primefaces"
+>
+
+    <div class="card">
+        <h:form id="OrtRandevuListForm">
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-xl-3">
+                            <div class="border border-4">
+                                <h3 class="m-5 text-blue-900">Yaklaşan Randevular</h3>
+                                <div class="pe-2 me-n1 mb-3 event-list" data-simplebar="" style="height: 400px">
+                                    <div id="upcoming-event-list">
+
+                                        <ui:repeat value="#{ortRandevuController.incomingEvents}" var="incoming">
+                                            <div class="card border card-border-primary mb-3">
+                                                <div class="card-body">
+                                                    <div class="d-flex mb-3">
+                                                        <div class="flex-grow-1">
+                                                            <i class="mdi mdi-checkbox-blank-circle me-2 text-info"/>
+                                                            <span class="fw-medium">
+                                                                <h:outputText value="#{incoming.randevuTarihi}">
+                                                                    <f:convertDateTime pattern="dd MMM yyyy" type="localDateTime"/>
+                                                                </h:outputText>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <h6 class="card-title fs-16"> #{incoming.konu}</h6>
+                                                    <p class="text-muted text-truncate-two-lines mb-0"/>
+                                                </div>
+                                            </div>
+                                        </ui:repeat>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div> <!-- end col-->
+                        <div class="col-xl-9">
+                            <p:schedule id="schedule" value="#{ortRandevuController.lazyEventModel}" styleClass="scheduleWidget" aspectRatio="1.88"
+                                        rightHeaderTemplate="dayGridMonth,timeGridWeek,timeGridDay,listYear" allDaySlot="true"
+                                        timeZone="Asia/Istanbul" clientTimeZone="Asia/Istanbul" widgetVar="schedule" locale="tr">
+                                <p:ajax event="dateSelect" listener="#{ortRandevuController.onDateSelect}" update=":OrtRandevuCreateForm"
+                                        onstart="PF('Loading').show()"
+                                        onsuccess="PF('Loading').hide()"/>
+                                <p:ajax event="eventSelect" listener="#{ortRandevuController.onEventSelect}" update=":OrtRandevuEditForm"
+                                        oncomplete="PF('OrtRandevuEditDialog').show()" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                            </p:schedule>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </h:form>
+        <ui:include src="/moduls/ortezprotez/ortRandevu/Create.xhtml"/>
+        <ui:include src="/moduls/ortezprotez/ortRandevu/Edit.xhtml"/>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $(".event-list").height($(".scheduleWidget").height() - 100);
+            })
+            // document.addEventListener("DOMContentLoaded", (event) => {
+            //     setTimeout(function () {
+            //         $("body").addClass("twocolumn-panel")
+            //     }, 1000)
+            // });
+
+        </script>
+    </div>
+
+</ui:composition>

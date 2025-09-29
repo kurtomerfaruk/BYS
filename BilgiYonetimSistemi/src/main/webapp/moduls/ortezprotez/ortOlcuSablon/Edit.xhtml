@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+>
+
+<ui:composition>
+
+    <p:dialog widgetVar="OrtOlcuSablonEditDialog"
+              modal="true"
+              resizable="false"
+              closeOnEscape="true"
+              header="#{messages.dialogKayitGuncelle}"
+              appendTo="@(body)"
+              responsive="true"
+              onShow="PF('OrtOlcuSablonEditDialog').initPosition();"
+              fitViewport="true">
+
+        <h:form id="OrtOlcuSablonEditForm" enctype="multipart/form-data">
+            <h:panelGroup id="display">
+                <p:focus context="display"/>
+                <p:panelGrid columns="2" columnClasses="column" rendered="#{ortOlcuSablonController.selected !=null}" layout="tabular">
+
+                    <h:outputText value="#{messages.kayitNoLabel}"/>
+                    <h:outputText value="#{ortOlcuSablonController.selected.id}">
+                        <f:convertNumber pattern="#{messages.sayiFormat}"/>
+                    </h:outputText>
+
+                    <p:outputLabel value="#{messages.sablonLabel}" for="@next"/>
+                    <p:inputText id="sablon" value="#{ortOlcuSablonController.selected.tanim}" title="#{messages.sablonText}" size="50" maxlength="50"/>
+
+                    <p:outputLabel value="#{messages.resimLabel}" for="@next"/>
+                    <p:fileUpload id="fileUpload" value="#{ortOlcuSablonImageController.file}"
+                                  mode="advanced" skinSimple="true" auto="true"
+                                  process="@this" update=":growl image"
+                                  listener="#{ortOlcuSablonImageController.handleFileUpload}"
+                                  allowTypes="/(\.|\/)(gif|jpe?g|png|jpg)$/">
+                        <p:validateFile sizeLimit="10000000"/>
+                    </p:fileUpload>
+
+                    <p:outputLabel value="#{messages.onizleLabel}" for="@next"/>
+                    <p:graphicImage id="image" value="#{ortOlcuSablonImageController.image}" cache="false" style="width:30% !important;height:50% !important"/>
+
+
+                    <f:facet name="footer">
+                        <div class="float-end">
+                            <p:commandButton icon="pi pi-check" styleClass="ui-button-success"
+                                             actionListener="#{ortOlcuSablonController.save}"
+                                             value="#{messages.buttonKaydet}"
+                                             update="display,:OrtOlcuSablonListForm:datalist:datalist,:growl"
+                                             oncomplete="handleSubmit(xhr,status,args,PF('OrtOlcuSablonEditDialog'));"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                            <p:commandButton icon="pi pi-times" styleClass="btn-danger"
+                                             value="#{messages.buttonIptal}"
+                                             onclick="PF('OrtOlcuSablonEditDialog').hide()" immediate="true"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()">
+                                <p:resetInput target="@form"/>
+                            </p:commandButton>
+                        </div>
+                    </f:facet>
+                </p:panelGrid>
+            </h:panelGroup>
+        </h:form>
+
+    </p:dialog>
+
+</ui:composition>
+
+</html>

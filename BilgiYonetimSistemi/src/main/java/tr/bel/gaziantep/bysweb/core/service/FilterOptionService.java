@@ -13,6 +13,7 @@ import tr.bel.gaziantep.bysweb.core.enums.genel.*;
 import tr.bel.gaziantep.bysweb.core.enums.hafriyat.EnumHfFirmaTuru;
 import tr.bel.gaziantep.bysweb.core.enums.hafriyat.EnumHfMalCinsi;
 import tr.bel.gaziantep.bysweb.core.enums.hafriyat.EnumHfTahsilatTuru;
+import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtEngelOlusum;
 import tr.bel.gaziantep.bysweb.core.enums.saglikhizmetleri.EnumShDanismanlikHizmeti;
 import tr.bel.gaziantep.bysweb.core.enums.saglikhizmetleri.EnumShObeziteHizmet;
 import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.*;
@@ -307,6 +308,12 @@ public class FilterOptionService implements java.io.Serializable{
 
     public List<SelectItem> getGnlAnketTurus() {
         return Arrays.stream(EnumGnlAnketTuru.values())
+                .map(value -> new SelectItem(value, value.getDisplayValue()))
+                .collect(Collectors.toList());
+    }
+
+    public List<SelectItem> getOrtEngelOlusums() {
+        return Arrays.stream(EnumOrtEngelOlusum.values())
                 .map(value -> new SelectItem(value, value.getDisplayValue()))
                 .collect(Collectors.toList());
     }

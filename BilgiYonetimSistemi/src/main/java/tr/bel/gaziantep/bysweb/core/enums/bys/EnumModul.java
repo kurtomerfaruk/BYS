@@ -19,6 +19,7 @@ public enum EnumModul implements BaseEnum {
     GENEL("Genel"),
     ILERI_YAS("İleri Yaş"),
     MORAL_EVI("Moral Evi"),
+    ORTEZ_PROTEZ("Ortez - Protez"),
     PSIKIYATRI_KLINIGI("Psikiyatri Kliniği"),
     SAGLIK_HIZMETLERI("Sağlık Hizmetleri"),
     SISTEM_YONETIMI("Sistem Yönetimi");

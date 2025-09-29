@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="jakarta.faces.html"
+>
+
+<ui:composition>
+
+    <p:dialog widgetVar="OrtRandevuCreateDialog"
+              modal="true"
+              resizable="false"
+              closeOnEscape="true"
+              header="#{messages.dialogYeniKayit}"
+              appendTo="@(body)"
+              responsive="true"
+              onShow="PF('OrtRandevuCreateDialog').initPosition();"
+              fitViewport="true">
+
+        <h:form id="OrtRandevuCreateForm">
+            <h:panelGroup id="display">
+                <p:focus context="display"/>
+                <p:panelGrid columns="2" columnClasses="column" rendered="#{ortRandevuController.selected!=null}" layout="tabular">
+
+<!--                    <p:outputLabel value="#{messages.daireBaskanligiLabel}" for="@next"/>-->
+<!--                    <p:selectOneMenu id="daireBaskanligiId" value="#{etEtkinlikController.selected.daireBaskanligiId}" filter="true" required="true"-->
+<!--                                     converter="omnifaces.SelectItemsConverter">-->
+<!--                        <f:selectItem itemLabel="#{messages.seciniz}" value="#{null}"/>-->
+<!--                        <f:selectItems value="#{gnlBirimController.topUnits()}"-->
+<!--                                       var="topUnits"-->
+<!--                                       itemLabel="#{topUnits.tanim}"-->
+<!--                                       itemValue="#{topUnits}"/>-->
+<!--                        <p:ajax event="change" update="subeMudurluguId"/>-->
+<!--                    </p:selectOneMenu>-->
+
+<!--                    <p:outputLabel value="#{messages.subeMudurluguLabel}" for="@next"/>-->
+<!--                    <p:selectOneMenu id="subeMudurluguId" value="#{etEtkinlikController.selected.subeMudurluguId}" filter="true" required="true"-->
+<!--                                     converter="omnifaces.SelectItemsConverter">-->
+<!--                        <f:selectItem itemLabel="#{messages.seciniz}" value="#{null}"/>-->
+<!--                        <f:selectItems value="#{gnlBirimController.subUnits(etEtkinlikController.selected.daireBaskanligiId.id)}"-->
+<!--                                       var="subUnits"-->
+<!--                                       itemLabel="#{subUnits.tanim}"-->
+<!--                                       itemValue="#{subUnits}"/>-->
+<!--                        <p:ajax event="change" update="birimId"/>-->
+<!--                    </p:selectOneMenu>-->
+
+<!--                    <p:outputLabel value="#{messages.birimLabel}" for="@next"/>-->
+<!--                    <p:selectOneMenu id="birimId" value="#{etEtkinlikController.selected.birimId}" filter="true"-->
+<!--                                     converter="omnifaces.SelectItemsConverter">-->
+<!--                        <f:selectItem itemLabel="#{messages.seciniz}" value="#{null}"/>-->
+<!--                        <f:selectItems value="#{gnlBirimController.subUnits(etEtkinlikController.selected.subeMudurluguId.id)}"-->
+<!--                                       var="subUnits"-->
+<!--                                       itemLabel="#{subUnits.tanim}"-->
+<!--                                       itemValue="#{subUnits}"/>-->
+<!--                    </p:selectOneMenu>-->
+
+<!--                    <p:outputLabel value="#{messages.baslamaTarihiLabel}" for="@next"/>-->
+<!--                    <p:datePicker id="baslamaTarihi" locale="tr" pattern="#{messages.tarihFormat}" value="#{etEtkinlikController.selected.baslamaTarihi}"-->
+<!--                                  title="#{messages.baslamaTarihiText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true"-->
+<!--                                  showIcon="true" showOnFocus="false"/>-->
+
+                    <p:outputLabel value="#{messages.randevuTarihiLabel}" for="@next"/>
+                    <p:datePicker id="randevuTarihi" locale="tr" pattern="#{messages.tarihFormat}" value="#{ortRandevuController.selected.randevuTarihi}"
+                                  title="#{messages.randevuTarihiText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true"
+                                  showIcon="true" showOnFocus="false"/>
+
+                    <p:outputLabel value="#{messages.konuLabel}" for="@next"/>
+                    <p:inputText id="konu" value="#{ortRandevuController.selected.konu}" title="#{messages.konuText}" size="50" required="true"/>
+
+                    <p:outputLabel value="#{messages.icerikLabel}" for="@next"/>
+                    <p:inputTextarea id="aciklama" value="#{ortRandevuController.selected.aciklama}" title="#{messages.aciklamaText}" rows="4" autoResize="false"
+                                     styleClass="w-100" required="true"/>
+
+                    <p:outputLabel value="#{messages.tumGunLabel}"/>
+                    <p:selectBooleanCheckbox id="tumGun" value="#{ortRandevuController.event.allDay}"/>
+
+                    <f:facet name="footer">
+                        <div class="float-end">
+                            <p:commandButton icon="pi pi-check" styleClass="ui-button-success" style="margin-right: 10px"
+                                             actionListener="#{ortRandevuController.update}"
+                                             value="#{messages.buttonKaydet}"
+                                             update=":growl,display,:OrtRandevuListForm:schedule"
+                                             oncomplete="handleSubmit(xhr,status,args,PF('OrtRandevuCreateDialog'));"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                            <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                             value="#{messages.buttonIptal}"
+                                             onclick="PF('OrtRandevuCreateDialog').hide()" immediate="true"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()">
+                                <p:resetInput target="@form"/>
+                            </p:commandButton>
+                        </div>
+                    </f:facet>
+                </p:panelGrid>
+            </h:panelGroup>
+        </h:form>
+    </p:dialog>
+
+</ui:composition>
+
+</html>

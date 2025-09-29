@@ -12,6 +12,12 @@ import java.io.Serial;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+/**
+ * @author Omer Faruk KURT kurtomerfaruk@gmail.com
+ * @version 1.0.0
+ * @since 11.07.2025 14:09
+ */
+
 @Getter
 @Setter
 @Builder

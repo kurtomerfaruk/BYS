@@ -303,6 +303,20 @@
                 <version>2.10.1</version>
             </dependency>
 
+            <!-- https://mvnrepository.com/artifact/org.openpnp/opencv -->
+            <dependency>
+                <groupId>org.openpnp</groupId>
+                <artifactId>opencv</artifactId>
+                <version>4.9.0-0</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/org.webjars.npm/interactjs__interact -->
+            <dependency>
+                <groupId>org.webjars.npm</groupId>
+                <artifactId>interactjs__interact</artifactId>
+                <version>1.10.27</version>
+            </dependency>
+
             <dependency>
                 <groupId>com.kurtomerfaruk</groupId>
                 <artifactId>leafmap</artifactId>

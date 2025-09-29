@@ -15,6 +15,12 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * @author Omer Faruk KURT kurtomerfaruk@gmail.com
+ * @version 1.0.0
+ * @since 18.06.2025 10:42
+ */
+
 @Entity
 @Getter
 @Setter

@@ -41,7 +41,7 @@
 
     <p:outputLabel value="#{messages.dogumYeriLabel}" for="@next"/>
     <p:inputText id="dogumYeri" value="#{ekmIsBasvuruController.selected.eyKisi.gnlKisi.dogumYeri}" title="#{messages.dogumYeriText}" required="true"
-                 class="tcUpdate"/>
+                 styleClass="tcUpdate"/>
 
     <p:outputLabel value="#{messages.cinsiyetLabel}" for="@next"/>
     <p:inputText id="cinsiyet" value="#{ekmIsBasvuruController.selected.eyKisi.gnlKisi.cinsiyet}" required="true" readonly="#{facesContext.renderResponse}"

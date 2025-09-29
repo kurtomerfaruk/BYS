@@ -59,4 +59,8 @@ public class DateUtil implements java.io.Serializable{
         date = date.plusYears(year);
         return date;
     }
+
+    public static LocalDateTime lastOfMonth() {
+        return LocalDateTime.now().withDayOfMonth(1).plusMonths(1).minusDays(1).withHour(23).withMinute(59).withSecond(59);
+    }
 }

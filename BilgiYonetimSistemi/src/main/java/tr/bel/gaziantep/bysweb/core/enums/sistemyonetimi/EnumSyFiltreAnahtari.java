@@ -45,8 +45,8 @@ public enum EnumSyFiltreAnahtari implements BaseEnum {
     HFMAL_CINSI("Hafriyat Mal Cinsi"),
     BELEDIYE("Belediye"),
     HFTAHSILAT_TURU("Hafriyat Tahsilat Türü"),
-    DUYURU_TUR("Duyuru Tür")
-    ;
+    DUYURU_TUR("Duyuru Tür"),
+    ORTENGEL_OLUSUM("Ortez/Protez Engel Oluşum");
 
     private final String label;
 
