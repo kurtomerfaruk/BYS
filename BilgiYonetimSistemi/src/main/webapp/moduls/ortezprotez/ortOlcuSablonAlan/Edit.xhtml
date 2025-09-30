@@ -59,15 +59,14 @@
 
         <p:outputLabel value="#{messages.resimLabel}" for="@next"/>
         <h:panelGroup id="imageGroup" style="position:relative;display:inline-block;">
-            <p:graphicImage id="image" value="#{ortOlcuSablonImageController.image}" cache="false" style="width:100%;height:100%;border:2px solid blue">
-                <h:outputText id="preview" value="#{ortOlcuSablonAlanController.selected.tanim}"
-                              style="position:absolute;border:2px solid red;font-size:10px;
+            <p:graphicImage id="image" value="#{ortOlcuSablonImageController.image}" cache="false" style="width:100%;height:100%;border:2px solid blue"/>
+            <h:outputText id="preview" value="#{ortOlcuSablonAlanController.selected.tanim}"
+                          style="position:absolute;border:2px solid red;font-size:10px;
                          box-sizing:border-box;
                         top:#{(ortOlcuSablonAlanController.selected.y / ortOlcuSablonAlanController.selected.ortOlcuSablon.resimYukseklik) * 100}%;
                         left:#{(ortOlcuSablonAlanController.selected.x / ortOlcuSablonAlanController.selected.ortOlcuSablon.resimGenislik) * 100}%;
                         width:#{(ortOlcuSablonAlanController.selected.genislik / ortOlcuSablonAlanController.selected.ortOlcuSablon.resimGenislik) * 100}%;
                         height:#{(ortOlcuSablonAlanController.selected.yukseklik / ortOlcuSablonAlanController.selected.ortOlcuSablon.resimYukseklik) * 100}%;"/>
-            </p:graphicImage>
             <p:draggable for="preview" containment="parent" onStop="handleStop(event,ui)"/>
             <p:resizable for="preview" containment="true" onStop="handleResizeStop(event,ui)"/>
         </h:panelGroup>
@@ -81,17 +80,13 @@
         function handleStop(event, ui) {
             var x = ui.position.left;
             var y = ui.position.top;
-            console.log("X: " + x + ", Y: " + y);
-            console.log(ui);
 
-            // PrimeFaces.remoteCommand ile bean'e gönder
             updateXY([{name:'x', value:x}, {name:'y', value:y}]);
         }
 
         function handleResizeStop(event,ui){
             var width = ui.size.width;
             var height = ui.size.height;
-            console.log(ui);
             updateWH([{name:'width',value:width},{name:'height',value: height}]);
 
         }
