@@ -250,11 +250,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.webjars.npm</groupId>
-            <artifactId>interactjs__interact</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>com.kurtomerfaruk</groupId>
             <artifactId>leafmap</artifactId>
             <scope>compile</scope>
