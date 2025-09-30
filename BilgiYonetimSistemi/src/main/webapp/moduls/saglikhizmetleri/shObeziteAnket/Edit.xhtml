@@ -33,8 +33,7 @@
                       title="#{messages.dogumTarihiText}" readonly="true" styleClass="inputUpdate"/>
 
         <p:outputLabel value="#{messages.boyLabel}" for="boy"/>
-        <p:inputText id="boy" value="#{shObeziteAnketController.selected.boy}"
-                     title="#{messages.boyText}">
+        <p:inputText id="boy" value="#{shObeziteAnketController.selected.boy}" title="#{messages.boyText}">
             <p:keyFilter regEx="/[\d]/"/>
             <p:ajax event="change" listener="#{shObeziteAnketController.calculateBki()}" update="@(.bki)"/>
         </p:inputText>
