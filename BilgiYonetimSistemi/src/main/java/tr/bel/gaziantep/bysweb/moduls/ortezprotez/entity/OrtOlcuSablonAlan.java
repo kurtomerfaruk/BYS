@@ -9,6 +9,7 @@ import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
 import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtSablonAlanTuru;
 
 import java.io.Serial;
+import java.math.BigDecimal;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
@@ -21,6 +22,7 @@ import java.io.Serial;
 @Entity
 @Table(name = "ORTOLCU_SABLON_ALAN")
 @NamedQuery(name = "OrtOlcuSablonAlan.findByOrtOlcuSablonId",query = "SELECT o FROM OrtOlcuSablonAlan o WHERE o.aktif=true AND o.ortOlcuSablon.id =:ortOlcuSablonId")
+@NamedQuery(name = "OrtOlcuSablonAlan.findByXByY",query = "SELECT o FROM OrtOlcuSablonAlan o WHERE o.aktif=true AND o.x=:x AND o.y=:y")
 public class OrtOlcuSablonAlan extends BaseEntity {
 
     @Serial
@@ -41,16 +43,16 @@ public class OrtOlcuSablonAlan extends BaseEntity {
     private String tanim;
 
     @Column(name = "X")
-    private Integer x;
+    private BigDecimal x;
 
     @Column(name = "Y")
-    private Integer y;
+    private BigDecimal y;
 
     @Column(name = "GENISLIK")
-    private Integer genislik;
+    private BigDecimal genislik;
 
     @Column(name = "YUKSEKLIK")
-    private Integer yukseklik;
+    private BigDecimal yukseklik;
 
     @Column(name = "TUR")
     @Enumerated(EnumType.STRING)

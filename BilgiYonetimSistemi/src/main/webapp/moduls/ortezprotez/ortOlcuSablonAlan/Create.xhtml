@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:createpage id="OrtOlcuSablonAlanCreateForm"
+                     renderedListener="#{ortOlcuSablonAlanController.selected != null}"
+                     widgetVar="OrtOlcuSablonAlanCreateDialog"
+                     actionListener="#{ortOlcuSablonAlanController.save}"
+                     listForm="OrtOlcuSablonAlanListForm">
+
+        <p:outputLabel value="#{messages.olcuSablonLabel}" for="@next"/>
+        <p:selectOneMenu id="ortOlcuSablon" value="#{ortOlcuSablonAlanController.selected.ortOlcuSablon}" required="true" converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{ortOlcuSablonController.items}"
+                           var="olcuSablons"
+                           itemValue="#{olcuSablons}"
+                           itemLabel="#{olcuSablons.tanim}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.tanimLabel}" for="@next"/>
+        <p:inputText id="tanim" value="#{ortOlcuSablonAlanController.selected.tanim}" title="#{messages.tanimText}" required="true" size="50"/>
+
+        <p:outputLabel value="#{messages.xLabel}" for="@next"/>
+        <p:spinner id="x" value="#{ortOlcuSablonAlanController.selected.x}" inputStyleClass="text-right" required="true" stepFactor="0.25"/>
+
+        <p:outputLabel value="#{messages.yLabel}" for="@next"/>
+        <p:spinner id="y" value="#{ortOlcuSablonAlanController.selected.y}" inputStyleClass="text-right" required="true" stepFactor="0.25"/>
+
+        <p:outputLabel value="#{messages.genislikLabel}" for="@next"/>
+        <p:spinner id="genislik" value="#{ortOlcuSablonAlanController.selected.genislik}" inputStyleClass="text-right" required="true" stepFactor="1"/>
+
+        <p:outputLabel value="#{messages.yukseklikLabel}" for="@next"/>
+        <p:spinner id="yukseklik" value="#{ortOlcuSablonAlanController.selected.yukseklik}" inputStyleClass="text-right" required="true" stepFactor="1"/>
+
+        <p:outputLabel value="#{messages.sablonTuruLabel}" for="@next"/>
+        <p:selectOneMenu id="engelOlusmaDurumu" value="#{ortOlcuSablonAlanController.selected.tur}" required="true" converter="omnifaces.SelectItemsConverter">
+            <f:selectItems value="#{enumOrtSablonAlanTuru.ALL_VALUES}"
+                           var="alanTurs"
+                           itemValue="#{alanTurs}"
+                           itemLabel="#{alanTurs.displayValue}"/>
+        </p:selectOneMenu>
+
+    </coco:createpage>
+
+</ui:composition>
+
+</html>

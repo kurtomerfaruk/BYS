@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:h="jakarta.faces.html"
+      xmlns:coco="jakarta.faces.composite/ui"
+      xmlns:p="primefaces">
+
+<ui:composition>
+
+    <coco:editpage id="OrtOlcuSablonAlanEditForm"
+                   widgetVar="OrtOlcuSablonAlanEditDialog"
+                   actionListener="#{ortOlcuSablonAlanController.save}"
+                   listForm="OrtOlcuSablonAlanListForm"
+                   model="#{ortOlcuSablonAlanController.selected}"
+                   position="top">
+
+        <p:outputLabel value="#{messages.olcuSablonLabel}" for="@next"/>
+        <p:selectOneMenu id="ortOlcuSablon" value="#{ortOlcuSablonAlanController.selected.ortOlcuSablon}" required="true"
+                         converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{ortOlcuSablonController.items}"
+                           var="olcuSablons"
+                           itemValue="#{olcuSablons}"
+                           itemLabel="#{olcuSablons.tanim}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.tanimLabel}" for="@next"/>
+        <p:inputText id="tanim" value="#{ortOlcuSablonAlanController.selected.tanim}" title="#{messages.tanimText}" required="true" size="50"/>
+
+        <p:outputLabel value="#{messages.xLabel}" for="@next"/>
+        <p:spinner id="x" value="#{ortOlcuSablonAlanController.selected.x}" inputStyleClass="text-right" required="true"  stepFactor="0.25">
+            <p:ajax update="preview"/>
+        </p:spinner>
+
+        <p:outputLabel value="#{messages.yLabel}" for="@next"/>
+        <p:spinner id="y" value="#{ortOlcuSablonAlanController.selected.y}" inputStyleClass="text-right" required="true" stepFactor="0.25">
+            <p:ajax update="preview"/>
+        </p:spinner>
+
+        <p:outputLabel value="#{messages.genislikLabel}" for="@next"/>
+        <p:spinner id="genislik" value="#{ortOlcuSablonAlanController.selected.genislik}" inputStyleClass="text-right" required="true" stepFactor="0.25">
+            <p:ajax update="preview"/>
+        </p:spinner>
+
+        <p:outputLabel value="#{messages.yukseklikLabel}" for="@next"/>
+        <p:spinner id="yukseklik" value="#{ortOlcuSablonAlanController.selected.yukseklik}" inputStyleClass="text-right" required="true" stepFactor="0.25">
+            <p:ajax update="preview"/>
+        </p:spinner>
+
+        <p:outputLabel value="#{messages.sablonTuruLabel}" for="@next"/>
+        <p:selectOneMenu id="engelOlusmaDurumu" value="#{ortOlcuSablonAlanController.selected.tur}" required="true" converter="omnifaces.SelectItemsConverter">
+            <f:selectItems value="#{enumOrtSablonAlanTuru.ALL_VALUES}"
+                           var="alanTurs"
+                           itemValue="#{alanTurs}"
+                           itemLabel="#{alanTurs.displayValue}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.resimLabel}" for="@next"/>
+        <h:panelGroup id="imageGroup" style="position:relative;display:inline-block;">
+            <p:graphicImage id="image" value="#{ortOlcuSablonImageController.image}" cache="false" style="width:100%;height:100%;border:2px solid blue">
+                <h:outputText id="preview" value="#{ortOlcuSablonAlanController.selected.tanim}"
+                              style="position:absolute;border:2px solid red;font-size:10px;
+                         box-sizing:border-box;
+                        top:#{(ortOlcuSablonAlanController.selected.y / ortOlcuSablonAlanController.selected.ortOlcuSablon.resimYukseklik) * 100}%;
+                        left:#{(ortOlcuSablonAlanController.selected.x / ortOlcuSablonAlanController.selected.ortOlcuSablon.resimGenislik) * 100}%;
+                        width:#{(ortOlcuSablonAlanController.selected.genislik / ortOlcuSablonAlanController.selected.ortOlcuSablon.resimGenislik) * 100}%;
+                        height:#{(ortOlcuSablonAlanController.selected.yukseklik / ortOlcuSablonAlanController.selected.ortOlcuSablon.resimYukseklik) * 100}%;"/>
+            </p:graphicImage>
+            <p:draggable for="preview" containment="parent" onStop="handleStop(event,ui)"/>
+            <p:resizable for="preview" containment="true" onStop="handleResizeStop(event,ui)"/>
+        </h:panelGroup>
+
+        <p:remoteCommand name="updateXY" actionListener="#{ortOlcuSablonAlanController.updateXY}" update="x,y"/>
+        <p:remoteCommand name="updateWH" actionListener="#{ortOlcuSablonAlanController.updateWH}" update="genislik,yukseklik"/>
+
+    </coco:editpage>
+
+    <script type="text/javascript">
+        function handleStop(event, ui) {
+            var x = ui.position.left;
+            var y = ui.position.top;
+            console.log("X: " + x + ", Y: " + y);
+            console.log(ui);
+
+            // PrimeFaces.remoteCommand ile bean'e gönder
+            updateXY([{name:'x', value:x}, {name:'y', value:y}]);
+        }
+
+        function handleResizeStop(event,ui){
+            var width = ui.size.width;
+            var height = ui.size.height;
+            console.log(ui);
+            updateWH([{name:'width',value:width},{name:'height',value: height}]);
+
+        }
+    </script>
+
+</ui:composition>
+
+</html>

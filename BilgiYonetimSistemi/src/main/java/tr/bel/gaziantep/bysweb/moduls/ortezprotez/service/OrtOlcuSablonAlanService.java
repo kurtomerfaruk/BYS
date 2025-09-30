@@ -13,6 +13,7 @@ import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtOlcuSablon;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtOlcuSablonAlan;
 
 import java.io.Serial;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +42,16 @@ public class OrtOlcuSablonAlanService extends AbstractService<OrtOlcuSablonAlan>
 
     static {
         nu.pattern.OpenCV.loadLocally();
+    }
+
+    public OrtOlcuSablonAlan findByXByY(int x, int y) {
+        return (OrtOlcuSablonAlan) getEntityManager().createNamedQuery("OrtOlcuSablonAlan.findByXByY")
+                .setParameter("x",x)
+                .setParameter("y",y)
+                .getResultList()
+                .stream()
+                .findFirst()
+                .orElse(null);
     }
 
     public List<OrtOlcuSablonAlan> findByOrtOlcuSablonId(int ortOlcuSablonId) {
@@ -82,7 +93,10 @@ public class OrtOlcuSablonAlanService extends AbstractService<OrtOlcuSablonAlan>
 
             // Filtreleme (çok küçük/büyük kutuları alma)
             if (rect.width > 25 && rect.height > 15 && rect.width < imageWidth - 50 && rect.height < imageHeight - 50) {
-                OrtOlcuSablonAlan field = new OrtOlcuSablonAlan();
+                OrtOlcuSablonAlan field = findByXByY(rect.x, rect.y);
+                if(field == null) {
+                    field = new OrtOlcuSablonAlan();
+                }
                 if (rect.width < 40 && rect.height < 40) {
                     field.setTur(EnumOrtSablonAlanTuru.CHECKBOX);
                 } else  {
@@ -91,12 +105,12 @@ public class OrtOlcuSablonAlanService extends AbstractService<OrtOlcuSablonAlan>
 
                 field.setOrtOlcuSablon(template);
                 field.setTanim("kutucuk_" + counter++);
-                field.setX(rect.x);
-                field.setY(rect.y);
-                field.setGenislik(rect.width);
-                field.setYukseklik(rect.height);
+                field.setX(BigDecimal.valueOf(rect.x));
+                field.setY(BigDecimal.valueOf(rect.y));
+                field.setGenislik(BigDecimal.valueOf(rect.width));
+                field.setYukseklik(BigDecimal.valueOf(rect.height));
 
-                em.persist(field);
+                getEntityManager().merge(field);
                 detected.add(field);
             }
         }

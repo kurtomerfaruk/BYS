@@ -14,6 +14,7 @@ import tr.bel.gaziantep.bysweb.core.enums.hafriyat.EnumHfFirmaTuru;
 import tr.bel.gaziantep.bysweb.core.enums.hafriyat.EnumHfMalCinsi;
 import tr.bel.gaziantep.bysweb.core.enums.hafriyat.EnumHfTahsilatTuru;
 import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtEngelOlusum;
+import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtSablonAlanTuru;
 import tr.bel.gaziantep.bysweb.core.enums.saglikhizmetleri.EnumShDanismanlikHizmeti;
 import tr.bel.gaziantep.bysweb.core.enums.saglikhizmetleri.EnumShObeziteHizmet;
 import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.*;
@@ -25,6 +26,8 @@ import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlIl;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlIlce;
 import tr.bel.gaziantep.bysweb.moduls.genel.service.GnlIlService;
 import tr.bel.gaziantep.bysweb.moduls.genel.service.GnlIlceService;
+import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtOlcuSablon;
+import tr.bel.gaziantep.bysweb.moduls.ortezprotez.service.OrtOlcuSablonService;
 
 import java.io.Serial;
 import java.util.ArrayList;
@@ -50,6 +53,8 @@ public class FilterOptionService implements java.io.Serializable{
     private EyTalepKonuService eyTalepKonuService;
     @Inject
     private AyBirimService ayBirimService;
+    @Inject
+    private OrtOlcuSablonService ortOlcuSablonService;
 
     public List<SelectItem> getSyFilterTurs() {
         List<SelectItem> result = new ArrayList<>();
@@ -314,6 +319,21 @@ public class FilterOptionService implements java.io.Serializable{
 
     public List<SelectItem> getOrtEngelOlusums() {
         return Arrays.stream(EnumOrtEngelOlusum.values())
+                .map(value -> new SelectItem(value, value.getDisplayValue()))
+                .collect(Collectors.toList());
+    }
+
+    public List<SelectItem> getOrtOlcuSablons() {
+        List<SelectItem> result = new ArrayList<>();
+        List<OrtOlcuSablon> list = ortOlcuSablonService.findAll();
+        for (OrtOlcuSablon value : list) {
+            result.add(new SelectItem(value.getId(), value.getTanim()));
+        }
+        return result;
+    }
+
+    public List<SelectItem> getOrtOlcuSAblonAlanTurus() {
+        return Arrays.stream(EnumOrtSablonAlanTuru.values())
                 .map(value -> new SelectItem(value, value.getDisplayValue()))
                 .collect(Collectors.toList());
     }
