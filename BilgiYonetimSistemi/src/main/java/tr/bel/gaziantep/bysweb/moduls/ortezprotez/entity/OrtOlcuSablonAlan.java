@@ -2,8 +2,7 @@ package tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.Nationalized;
 import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
 import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtSablonAlanTuru;
@@ -19,6 +18,9 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "ORTOLCU_SABLON_ALAN")
 @NamedQuery(name = "OrtOlcuSablonAlan.findByOrtOlcuSablonId",query = "SELECT o FROM OrtOlcuSablonAlan o WHERE o.aktif=true AND o.ortOlcuSablon.id =:ortOlcuSablonId")

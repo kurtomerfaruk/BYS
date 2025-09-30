@@ -30,9 +30,9 @@
                         rowKey="#{item.id}"
                         selection="#{ortOlcuSablonAlanController.selected}"
                         filtered="#{ortOlcuSablonAlanController.filtered}"
-                        rowselect=":OrtOlcuSablonAlanListForm:datalist:datalist:createButton,:OrtOlcuSablonAlanListForm:datalist:datalist:viewButton,:OrtOlcuSablonAlanListForm:datalist:datalist:editButton,:OrtOlcuSablonAlanListForm:datalist:datalist:deleteButton,:OrtOlcuSablonAlanListForm:OrtOlcuSablonAlanDataTableContextMenu"
+                        rowselect=":OrtOlcuSablonAlanListForm:datalist:datalist:createButton,:OrtOlcuSablonAlanListForm:datalist:datalist:viewButton,:OrtOlcuSablonAlanListForm:datalist:datalist:editButton,:OrtOlcuSablonAlanListForm:datalist:datalist:deleteButton,:OrtOlcuSablonAlanListForm:datalist:datalist:copyButton"
                         rowDblselect="document.getElementById('OrtOlcuSablonAlanListForm:datalist:datalist:editButton').click()"
-                        contextMenu=":OrtOlcuSablonAlanListForm:datalist:datalist:createButton :OrtOlcuSablonAlanListForm:datalist:datalist:viewButton :OrtOlcuSablonAlanListForm:datalist:datalist:editButton :OrtOlcuSablonAlanListForm:datalist:datalist:deleteButton"
+                        contextMenu=":OrtOlcuSablonAlanListForm:datalist:datalist:createButton :OrtOlcuSablonAlanListForm:datalist:datalist:viewButton :OrtOlcuSablonAlanListForm:datalist:datalist:editButton :OrtOlcuSablonAlanListForm:datalist:datalist:deleteButton :OrtOlcuSablonAlanListForm:datalist:datalist:copyButton"
                         selectListener="#{ortOlcuSablonAlanController.resetParents}"
                         controller="#{ortOlcuSablonAlanController}"
                         header="#{messages.olcuSablonAlanListesi}">
@@ -62,6 +62,14 @@
                                  oncomplete="PF('OrtOlcuSablonAlanViewDialog').show()"
                                  disabled="#{empty ortOlcuSablonAlanController.selected}" onstart="PF('Loading').show()"
                                  onsuccess="PF('Loading').hide()"/>
+                <p:commandButton id="copyButton" styleClass="ui-button-warning" icon="pi pi-copy"
+                                 pt:data-tooltip="#{messages.buttonKopyala}" actionListener="#{ortOlcuSablonAlanController.copy}"
+                                 update=":growl,datalist" disabled="#{empty ortOlcuSablonAlanController.selected}"
+                                 rendered="#{syKullaniciController.hasPermission('ortolcusablonalan:kopyala')}">
+                    <p:confirm header="Öğeyi Kopyala" message="Seçmiş olduğunuz öğeyi kopyalamak istediğinizden emin misiniz?"
+                               icon="pi pi-warning"/>
+                </p:commandButton>
+
                 <p:commandButton id="deleteButton" styleClass="ui-button-danger" icon="pi pi-trash"
                                  pt:data-tooltip="#{messages.buttonSil}" actionListener="#{ortOlcuSablonAlanController.delete}"
                                  update=":growl,datalist" disabled="#{empty ortOlcuSablonAlanController.selected}"

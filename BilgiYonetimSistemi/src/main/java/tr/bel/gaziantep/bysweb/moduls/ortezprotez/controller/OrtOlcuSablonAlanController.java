@@ -1,6 +1,7 @@
 package tr.bel.gaziantep.bysweb.moduls.ortezprotez.controller;
 
 import jakarta.faces.context.FacesContext;
+import jakarta.faces.event.ActionEvent;
 import jakarta.faces.model.SelectItem;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
@@ -13,6 +14,7 @@ import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
 import tr.bel.gaziantep.bysweb.core.utils.Util;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtOlcuSablonAlan;
+import tr.bel.gaziantep.bysweb.moduls.ortezprotez.service.OrtOlcuSablonAlanService;
 
 import java.io.Serial;
 import java.math.BigDecimal;
@@ -34,6 +36,8 @@ public class OrtOlcuSablonAlanController extends AbstractController<OrtOlcuSablo
     private static final long serialVersionUID = 3372004433316853001L;
 
     @Inject
+    private OrtOlcuSablonAlanService service;
+    @Inject
     private FilterOptionService filterOptionService;
 
     public OrtOlcuSablonAlanController() {
@@ -43,7 +47,7 @@ public class OrtOlcuSablonAlanController extends AbstractController<OrtOlcuSablo
     public List<SelectItem> getFilterOptions(EnumSyFiltreAnahtari key) {
         switch (key) {
             case ORTOLCU_SABLON -> {
-                return filterOptionService.getAyDevamDurumus();
+                return filterOptionService.getOrtOlcuSablons();
             }
             case ORTOLCU_SABLON_ALAN_TURU -> {
                 return filterOptionService.getOrtOlcuSAblonAlanTurus();
@@ -75,6 +79,20 @@ public class OrtOlcuSablonAlanController extends AbstractController<OrtOlcuSablo
             this.getSelected().setYukseklik(height);
         } catch (Exception e) {
             log.error(e.getMessage());
+            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+        }
+    }
+
+    public void copy(ActionEvent event){
+        OrtOlcuSablonAlan selected = this.getSelected();
+        if (selected == null) {
+            return;
+        }
+        try {
+            service.copy(selected);
+            FacesUtil.successMessage("kayitKopyalandi");
+        } catch (Exception e) {
+            log.error("Kopyalama hatası", e);
             FacesUtil.errorMessage(Constants.HATA_OLUSTU);
         }
     }

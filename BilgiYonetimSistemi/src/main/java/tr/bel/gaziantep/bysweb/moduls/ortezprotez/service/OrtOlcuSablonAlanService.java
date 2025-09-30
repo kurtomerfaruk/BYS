@@ -9,6 +9,7 @@ import org.opencv.imgproc.Imgproc;
 import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtSablonAlanTuru;
 import tr.bel.gaziantep.bysweb.core.service.AbstractService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
+import tr.bel.gaziantep.bysweb.core.utils.StringUtil;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtOlcuSablon;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtOlcuSablonAlan;
 
@@ -131,5 +132,26 @@ public class OrtOlcuSablonAlanService extends AbstractService<OrtOlcuSablonAlan>
         MatOfPoint mop = new MatOfPoint();
         mop.fromArray(hullPts);
         return mop;
+    }
+
+    public void copy(OrtOlcuSablonAlan source) {
+        OrtOlcuSablon attachedSablon = getEntityManager().getReference(
+                OrtOlcuSablon.class,
+                source.getOrtOlcuSablon().getId()
+        );
+
+        OrtOlcuSablonAlan copy = OrtOlcuSablonAlan.builder()
+                .ortOlcuSablon(attachedSablon)
+                .tanim(StringUtil.incrementName(source.getTanim()))
+                .x(source.getX())
+                .y(source.getY())
+                .genislik(source.getGenislik())
+                .yukseklik(source.getYukseklik())
+                .tur(source.getTur())
+                .etiket(source.getEtiket())
+                .secenek(source.getSecenek())
+                .build();
+
+        getEntityManager().persist(copy);
     }
 }

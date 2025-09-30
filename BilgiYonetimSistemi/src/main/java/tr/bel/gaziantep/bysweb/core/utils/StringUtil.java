@@ -45,4 +45,19 @@ public class StringUtil {
     public static String removeBracket(String str){
         return str.replace("[","").replace("]","");
     }
+
+    public static String incrementName(String name) {
+        if (name == null || name.isBlank()) {
+            return name;
+        }
+        String prefix = name.replaceAll("\\d+$", "");
+        String numberPart = name.substring(prefix.length());
+
+        if (numberPart.isEmpty()) {
+            return name + "_1";
+        }
+
+        int num = Integer.parseInt(numberPart);
+        return prefix + (num + 1);
+    }
 }
