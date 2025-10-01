@@ -13,6 +13,8 @@ import tr.bel.gaziantep.bysweb.core.enums.genel.*;
 import tr.bel.gaziantep.bysweb.core.enums.hafriyat.EnumHfFirmaTuru;
 import tr.bel.gaziantep.bysweb.core.enums.hafriyat.EnumHfMalCinsi;
 import tr.bel.gaziantep.bysweb.core.enums.hafriyat.EnumHfTahsilatTuru;
+import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtBasvuruDurumu;
+import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtBasvuruHareketDurumu;
 import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtEngelOlusum;
 import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtSablonAlanTuru;
 import tr.bel.gaziantep.bysweb.core.enums.saglikhizmetleri.EnumShDanismanlikHizmeti;
@@ -334,6 +336,18 @@ public class FilterOptionService implements java.io.Serializable{
 
     public List<SelectItem> getOrtOlcuSAblonAlanTurus() {
         return Arrays.stream(EnumOrtSablonAlanTuru.values())
+                .map(value -> new SelectItem(value, value.getDisplayValue()))
+                .collect(Collectors.toList());
+    }
+
+    public List<SelectItem> getOrtBasvuruDurums() {
+        return Arrays.stream(EnumOrtBasvuruDurumu.values())
+                .map(value -> new SelectItem(value, value.getDisplayValue()))
+                .collect(Collectors.toList());
+    }
+
+    public List<SelectItem> getOrtBasvuruHareketDurums() {
+        return Arrays.stream(EnumOrtBasvuruHareketDurumu.values())
                 .map(value -> new SelectItem(value, value.getDisplayValue()))
                 .collect(Collectors.toList());
     }

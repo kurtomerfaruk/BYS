@@ -48,7 +48,9 @@ public enum EnumSyFiltreAnahtari implements BaseEnum {
     DUYURU_TUR("Duyuru Tür"),
     ORTENGEL_OLUSUM("Ortez/Protez Engel Oluşum"),
     ORTOLCU_SABLON("Ölçü Şablonları"),
-    ORTOLCU_SABLON_ALAN_TURU("Ortez/Protez Alan Türü");
+    ORTOLCU_SABLON_ALAN_TURU("Ortez/Protez Alan Türü"),
+    ORTBASVURU_DURUMU("Ortez/Protez Başvuru Durumu"),
+    ORTBASVURU_HAREKET_DURUMU("Ortez/Protez Başvuru Durumu");
 
     private final String label;
 
