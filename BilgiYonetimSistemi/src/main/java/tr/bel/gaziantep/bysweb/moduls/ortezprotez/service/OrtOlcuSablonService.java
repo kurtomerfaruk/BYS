@@ -31,4 +31,9 @@ public class OrtOlcuSablonService  extends AbstractService<OrtOlcuSablon> {
     protected EntityManager getEntityManager() {
         return em;
     }
+
+    @Override
+    public String getSortCol() {
+        return "tanim";
+    }
 }
