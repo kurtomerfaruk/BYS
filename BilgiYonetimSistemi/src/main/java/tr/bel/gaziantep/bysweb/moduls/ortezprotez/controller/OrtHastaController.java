@@ -1,6 +1,5 @@
 package tr.bel.gaziantep.bysweb.moduls.ortezprotez.controller;
 
-import jakarta.annotation.PostConstruct;
 import jakarta.faces.event.ActionEvent;
 import jakarta.faces.model.SelectItem;
 import jakarta.faces.view.ViewScoped;
@@ -9,22 +8,31 @@ import jakarta.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.primefaces.PrimeFaces;
+import org.primefaces.event.SelectEvent;
 import tr.bel.gaziantep.bysweb.core.controller.AbstractKisiController;
+import tr.bel.gaziantep.bysweb.core.enums.ErrorType;
 import tr.bel.gaziantep.bysweb.core.enums.bys.EnumModul;
 import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.EnumSyFiltreAnahtari;
+import tr.bel.gaziantep.bysweb.core.exception.BysBusinessException;
 import tr.bel.gaziantep.bysweb.core.service.FilterOptionService;
+import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
+import tr.bel.gaziantep.bysweb.core.utils.StringUtil;
+import tr.bel.gaziantep.bysweb.moduls.engelsizler.entity.EyEngelGrubu;
+import tr.bel.gaziantep.bysweb.moduls.engelsizler.entity.EyKisi;
+import tr.bel.gaziantep.bysweb.moduls.engelsizler.service.EyKisiEngelGrubuService;
+import tr.bel.gaziantep.bysweb.moduls.engelsizler.service.EyKisiService;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlIlce;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlMahalle;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtHasta;
-import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtPersonel;
-import tr.bel.gaziantep.bysweb.moduls.ortezprotez.service.OrtPersonelService;
+import tr.bel.gaziantep.bysweb.moduls.ortezprotez.service.OrtHastaService;
 
 import java.io.Serial;
 import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -42,13 +50,20 @@ public class OrtHastaController extends AbstractKisiController<OrtHasta> {
     private static final long serialVersionUID = 1669461090844928292L;
 
     @Inject
-    private OrtPersonelService personelService;
+    private OrtHastaService service;
+    @Inject
+    private EyKisiService eyKisiService;
+    @Inject
+    private EyKisiEngelGrubuService eyKisiEngelGrubuService;
     @Inject
     private FilterOptionService filterOptionService;
 
     @Getter
     @Setter
-    private OrtPersonel ortPersonel;
+    private List<EyEngelGrubu> eyEngelGrubus = new ArrayList<>();
+    @Getter
+    @Setter
+    private EyKisi eyKisi;
 
     public OrtHastaController() {
         super(OrtHasta.class);
@@ -60,6 +75,12 @@ public class OrtHastaController extends AbstractKisiController<OrtHasta> {
             case ORTENGEL_OLUSUM -> {
                 return filterOptionService.getOrtEngelOlusums();
             }
+            case ILCE -> {
+                return filterOptionService.getGnlIlces();
+            }
+            case IL -> {
+                return filterOptionService.getGnlIls();
+            }
             default -> {
                 return Collections.emptyList();
             }
@@ -67,15 +88,6 @@ public class OrtHastaController extends AbstractKisiController<OrtHasta> {
 
     }
 
-    @Override
-    @PostConstruct
-    public void init(){
-        super.init();
-        ortPersonel = personelService.findByGnlPersonel(this.getSyKullanici().getGnlPersonel());
-        if(ortPersonel==null){
-            FacesUtil.addErrorMessage("Sistem yöneticiniz ile görüşüp personel tanımı yaptırınız...");
-        }
-    }
 
     @Override
     public OrtHasta prepareCreate(ActionEvent event) {
@@ -88,8 +100,6 @@ public class OrtHastaController extends AbstractKisiController<OrtHasta> {
                     .gnlMahalle(new GnlMahalle())
                     .eklemeYeri(EnumModul.ORTEZ_PROTEZ).build();
             newItem.setGnlKisi(kisi);
-            newItem.setDegerlendirmeTarihi(LocalDateTime.now());
-            newItem.setMuayeneYapanOrtPersonel(ortPersonel);
             this.setSelected(newItem);
             initializeEmbeddableKey();
             return newItem;
@@ -97,6 +107,15 @@ public class OrtHastaController extends AbstractKisiController<OrtHasta> {
             log.error(null, ex);
         }
         return null;
+    }
+
+    public void hastaSecKapat(OrtHasta ortHasta) {
+        PrimeFaces.current().dialog().closeDynamic(ortHasta);
+    }
+
+    public void onRowDblSelect(SelectEvent<OrtHasta> event) {
+        OrtHasta ortHasta = event.getObject();
+        hastaSecKapat(ortHasta);
     }
 
     public void getTcKimlik() {
@@ -119,5 +138,43 @@ public class OrtHastaController extends AbstractKisiController<OrtHasta> {
                 OrtHasta::setGnlKisi,
                 EnumModul.ORTEZ_PROTEZ
         );
+    }
+
+    public void getDisabledInfo() {
+        if (this.getSelected() == null) {
+            throw new BysBusinessException(ErrorType.NESNE_SECILEMEDI);
+        }
+
+        if (this.getSelected().getGnlKisi() == null) {
+            throw new BysBusinessException(ErrorType.KISI_BILGILERI_OKUNAMADI);
+        }
+
+        if (!this.getSelected().isEngelli()) {
+            eyKisi = null;
+            eyEngelGrubus = new ArrayList<>();
+        }
+
+        if (!StringUtil.isBlank(this.getSelected().getGnlKisi().getTcKimlikNo())) {
+            eyKisi = eyKisiService.findByTcKimlikNo(this.getSelected().getGnlKisi().getTcKimlikNo());
+
+            if (eyKisi != null) {
+                eyEngelGrubus = eyKisiEngelGrubuService.getEyEngelGrubuByEyKisi(eyKisi);
+                this.getSelected().setEngelli(!eyEngelGrubus.isEmpty());
+            }
+        }
+    }
+
+    @Override
+    public void save(ActionEvent event) {
+        if (this.getSelected() == null) {
+            throw new BysBusinessException(ErrorType.NESNE_SECILEMEDI);
+        }
+        try {
+            service.save(this.getSelected(), eyKisi, eyEngelGrubus);
+            FacesUtil.successMessage(Constants.KAYIT_GUNCELLENDI);
+        } catch (Exception ex) {
+            log.error(null, ex);
+            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+        }
     }
 }

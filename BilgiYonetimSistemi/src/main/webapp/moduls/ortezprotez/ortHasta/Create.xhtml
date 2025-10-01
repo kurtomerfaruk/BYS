@@ -15,11 +15,6 @@
                      actionListener="#{ortHastaController.save}"
                      listForm="OrtHastaListForm">
 
-        <p:outputLabel value="#{messages.degerlendirmeTarihiLabel}" for="@next"/>
-        <p:datePicker id="degerlendirmeTarihi" locale="tr" pattern="#{messages.tarihFormat}" value="#{ortHastaController.selected.degerlendirmeTarihi}"
-                      title="#{messages.degerlendirmeTarihiText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
-                      showOnFocus="false"/>
-
         <p:outputLabel value="#{messages.kayitTarihiLabel}" for="@next"/>
         <p:datePicker id="kayitTarihi" locale="tr" pattern="#{messages.tarihFormat}" value="#{ortHastaController.selected.gnlKisi.kayitTarihi}"
                       title="#{messages.kayitTarihiText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
@@ -87,6 +82,24 @@
         <p:divider align="center" type="dashed">
             <b>Sağlık Durumu</b>
         </p:divider>
+
+        <p:outputLabel value="#{messages.engelliLabel}" for="@next"/>
+        <p:selectBooleanCheckbox id="engelli" value="#{ortHastaController.selected.engelli}">
+            <p:ajax event="change" update="engelGrubu" listener="#{ortHastaController.getDisabledInfo()}"/>
+        </p:selectBooleanCheckbox>
+
+
+        <p:outputLabel value="#{messages.engelGrubuLabel}" for="@next"/>
+        <p:selectManyCheckbox id="engelGrubu" value="#{ortHastaController.eyEngelGrubus}"
+                              layout="responsive" columns="3"
+                              disabled="#{!ortHastaController.selected.engelli}"
+                              required="#{ortHastaController.selected.engelli}"
+                              converter="omnifaces.SelectItemsConverter">
+            <f:selectItems value="#{eyEngelGrubuController.items}"
+                           var="engelGrubus"
+                           itemValue="#{engelGrubus}"
+                           itemLabel="#{engelGrubus.tanim}"/>
+        </p:selectManyCheckbox>
 
         <p:outputLabel value="#{messages.engelDurumuLabel}" for="@next"/>
         <p:selectOneRadio id="engelOlusmaDurumu" value="#{ortHastaController.selected.engelOlusmaDurumu}" layout="lineDirection">
@@ -180,27 +193,6 @@
         <p:outputLabel value="#{messages.hastaninOykusuVeTalebiLabel}" for="@next"/>
         <p:inputTextarea rows="4" id="hastaninOykusuTalebi" value="#{ortHastaController.selected.hastaninOykusuTalebi}"
                          title="#{messages.hastaninOykusuVeTalebiText}" styleClass="w-100" autoResize="false"/>
-
-        <p:outputLabel value="#{messages.kararGorusLabel}" for="@next"/>
-        <p:inputTextarea rows="4" id="kararGorus" value="#{ortHastaController.selected.kararGorus}"
-                         title="#{messages.kararGorusText}" styleClass="w-100" autoResize="false"/>
-
-        <p:outputLabel value="#{messages.basvuruDurumuLabel}" for="@next"/>
-        <p:selectOneMenu id="basvuruDurumu" value="#{ortHastaController.selected.basvuruDurumu}" required="true" converter="omnifaces.SelectItemsConverter">
-            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
-            <f:selectItems value="#{enumOrtBasvuruDurumu.ALL_VALUES}"
-                           var="basvuruDurums"
-                           itemValue="#{basvuruDurums}"
-                           itemLabel="#{basvuruDurums.displayValue}"/>
-        </p:selectOneMenu>
-
-        <p:outputLabel value="#{messages.muayeneYapanLabel}" for="@next"/>
-        <p:inputText id="muayeneYapan" value="#{ortHastaController.selected.muayeneYapanOrtPersonel.gnlPersonel.gnlKisi.adSoyad}"
-                     title="#{messages.muayeneYapanText}" readonly="true"/>
-
-        <p:outputLabel value="#{messages.aciklamaLabel}" for="@next"/>
-        <p:inputTextarea rows="4" id="aciklama" value="#{ortHastaController.selected.aciklama}" title="#{messages.aciklamaText}" styleClass="w-100"
-                         autoResize="false"/>
 
     </coco:createpage>
 

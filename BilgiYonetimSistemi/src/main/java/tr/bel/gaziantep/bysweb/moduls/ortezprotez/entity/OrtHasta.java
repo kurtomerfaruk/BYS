@@ -2,18 +2,15 @@ package tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Nationalized;
 import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
-import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtBasvuruDurumu;
 import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtEngelOlusum;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
 
 import java.io.Serial;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +22,9 @@ import java.util.List;
 
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "ORTHASTA")
 public class OrtHasta extends BaseEntity {
@@ -40,8 +40,9 @@ public class OrtHasta extends BaseEntity {
     @JoinColumn(name = "GNLKISI_ID")
     private GnlKisi gnlKisi;
 
-    @Column(name = "DEGERLENDIRME_TARIHI")
-    private LocalDateTime degerlendirmeTarihi;
+    @ColumnDefault("0")
+    @Column(name = "ENGELLI", nullable = false)
+    private boolean engelli;
 
     @Column(name = "ENGEL_OLUSMA_DURUMU")
     @Enumerated(EnumType.STRING)
@@ -98,29 +99,7 @@ public class OrtHasta extends BaseEntity {
     @Column(name = "HASTANIN_OYKUSU_TALEBI")
     private String hastaninOykusuTalebi;
 
-    @Nationalized
-    @Lob
-    @Column(name = "KARAR_GORUS")
-    private String kararGorus;
-
-    @Column(name = "BASVURU_DURUMU")
-    @Enumerated(EnumType.STRING)
-    private EnumOrtBasvuruDurumu basvuruDurumu;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "MUAYENE_YAPAN_ORTPERSONEL_ID")
-    private OrtPersonel muayeneYapanOrtPersonel;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "RAPORU_ONAYLAYAN_ORTPERSONEL_ID")
-    private OrtPersonel raporuOnaylayanOrtPersonel;
-
-    @Nationalized
-    @Lob
-    @Column(name = "ACIKLAMA")
-    private String aciklama;
-
-    @OneToMany(mappedBy = "OrtHasta")
+    @OneToMany(mappedBy = "ortHasta")
     private List<OrtRandevu> ortrandevus = new ArrayList<>();
 
     @Override
