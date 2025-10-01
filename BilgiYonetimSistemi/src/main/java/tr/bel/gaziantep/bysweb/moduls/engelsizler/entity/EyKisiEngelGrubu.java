@@ -1,16 +1,19 @@
 package tr.bel.gaziantep.bysweb.moduls.engelsizler.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
 
 import java.io.Serial;
 
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "EYKISI_ENGEL_GRUBU")
+@NamedQuery(name = "EyKisiEngelGrubu.getEyEngelGrubuByEyKisi",query = "SELECT e.eyEngelGrubu FROM EyKisiEngelGrubu e WHERE e.aktif=true AND e.secili=true AND e.eyKisi = :eyKisi")
 public class EyKisiEngelGrubu extends BaseEntity {
     @Serial
     private static final long serialVersionUID = -2182641467628477839L;

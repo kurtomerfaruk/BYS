@@ -32,7 +32,6 @@ import tr.bel.gaziantep.bysweb.moduls.engelsizler.service.EyTalepService;
 import tr.bel.gaziantep.bysweb.moduls.genel.controller.GnlKisiController;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.*;
 import tr.bel.gaziantep.bysweb.moduls.genel.service.GnlKisiService;
-import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.entity.SyKullanici;
 import tr.bel.gaziantep.bysweb.webservice.gazikart.controller.GaziKartService;
 import tr.bel.gaziantep.bysweb.webservice.gazikart.model.ServisModel;
 import tr.bel.gaziantep.bysweb.webservice.gazikart.model.ServisSonucu;
@@ -85,7 +84,7 @@ public class EyKisiController extends AbstractController<EyKisi> {
     @Push(channel = "eyKisiChannel")
     private PushContext pushContext;
 
-    private SyKullanici syKullanici;
+//    private SyKullanici syKullanici;
     @Getter
     @Setter
     private EyKisiRapor eyKisiRapor;
@@ -136,9 +135,9 @@ public class EyKisiController extends AbstractController<EyKisi> {
 
 //    private List<EyKisi> selecteds ;
 //
-//    public EyKisiController() {
-//        super(EyKisi.class);
-//    }
+    public EyKisiController() {
+        super(EyKisi.class);
+    }
 //
 //    public List<EyKisi> getSelecteds() {
 //        return selecteds;
@@ -177,9 +176,10 @@ public class EyKisiController extends AbstractController<EyKisi> {
     @PostConstruct
     @Override
     public void init() {
-        syKullanici = Util.getSyKullanici();
-        this.setTableName("EyKisi");
-        readColumns(syKullanici);
+//        syKullanici = Util.getSyKullanici();
+//        this.setTableName("EyKisi");
+//        readColumns(syKullanici);
+        super.init();
         maxDate = LocalDate.now();
     }
 
@@ -198,7 +198,7 @@ public class EyKisiController extends AbstractController<EyKisi> {
                     .gnlMahalle(new GnlMahalle())
                     .build();
             newItem.setGnlKisi(kisi);
-            newItem.setIrtibatKuranGnlPersonel(syKullanici.getGnlPersonel());
+            newItem.setIrtibatKuranGnlPersonel(this.getSyKullanici().getGnlPersonel());
             eyKisiRapor = new EyKisiRapor();
             eyKisiRapor.setEyKisi(newItem);
             clearList();
@@ -294,7 +294,7 @@ public class EyKisiController extends AbstractController<EyKisi> {
             kullandigiCihazs = Function.filterAndCollect(this.getSelected().getEyKisiKullandigiCihazList(), EyKisiKullandigiCihaz::isSecili, EyKisiKullandigiCihaz::getTanim);
 
             if (this.getSelected().getIrtibatKuranGnlPersonel() == null) {
-                this.getSelected().setIrtibatKuranGnlPersonel(syKullanici.getGnlPersonel());
+                this.getSelected().setIrtibatKuranGnlPersonel(this.getSyKullanici().getGnlPersonel());
             }
         }
     }
