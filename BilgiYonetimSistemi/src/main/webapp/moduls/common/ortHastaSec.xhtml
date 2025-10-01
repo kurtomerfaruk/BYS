@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:p="primefaces"
+      xmlns:f="jakarta.faces.core">
+
+<h:head>
+    <h:outputScript library="primefaces" name="jquery/jquery.js"/>
+    <h:outputScript library="primefaces" name="jquery/jquery-plugins.js"/>
+    <h:outputStylesheet library="css" name="pfcrud.css"/>
+</h:head>
+<h:body>
+
+    <h:form id="OrtHastaSec">
+        <p:dataTable id="datalist"
+                     value="#{ortHastaController.lazyItems}"
+                     var="item"
+                     rowKey="#{item.id}"
+                     paginator="true"
+                     rows="10"
+                     selection="#{ortHastaController.selected}"
+                     paginatorPosition="bottom"
+                     lazy="true"
+                     pageLinks="5"
+                     filteredValue="#{ortHastaController.filtered}"
+                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                     currentPageReportTemplate="#{messages.currentPageTemplate}"
+                     emptyMessage="#{messages.kayitBulunamadi}"
+                     size="small"
+                     styleClass="w-100">
+
+            <f:facet name="header">
+                #{messages.hastaListesi}
+            </f:facet>
+
+            <p:ajax event="rowDblselect" listener="#{ortHastaController.onRowDblSelect}"/>
+
+            <p:column sortBy="#{item.gnlKisi.tcKimlikNo}" filterBy="#{item.gnlKisi.tcKimlikNo}">
+                <f:facet name="header">
+                    <h:outputText value="#{messages.tcKimlikNoText}"/>
+                </f:facet>
+                <h:outputText value="#{item.gnlKisi.tcKimlikNo}"/>
+            </p:column>
+
+            <p:column sortBy="#{item.gnlKisi.ad}" filterBy="#{item.gnlKisi.ad}">
+                <f:facet name="header">
+                    <h:outputText value="#{messages.adText}"/>
+                </f:facet>
+                <h:outputText value="#{item.gnlKisi.ad}"/>
+            </p:column>
+
+            <p:column sortBy="#{item.gnlKisi.soyad}" filterBy="#{item.gnlKisi.soyad}">
+                <f:facet name="header">
+                    <h:outputText value="#{messages.soyadText}"/>
+                </f:facet>
+                <h:outputText value="#{item.gnlKisi.soyad}"/>
+            </p:column>
+
+            <p:column sortBy="#{item.gnlKisi.telefon}" filterBy="#{item.gnlKisi.telefon}">
+                <f:facet name="header">
+                    <h:outputText value="#{messages.telefonText}"/>
+                </f:facet>
+                <h:outputText value="#{item.gnlKisi.telefon}"/>
+            </p:column>
+
+            <p:column sortBy="#{item.gnlKisi.gnlIlce.tanim}" filterBy="#{item.gnlKisi.gnlIlce.tanim}">
+                <f:facet name="header">
+                    <h:outputText value="#{messages.ilceText}"/>
+                </f:facet>
+                <h:outputText value="#{item.gnlKisi.gnlIlce.tanim}"/>
+            </p:column>
+
+            <p:column sortBy="#{item.gnlKisi.gnlMahalle.tanim}" filterBy="#{item.gnlKisi.gnlMahalle.tanim}">
+                <f:facet name="header">
+                    <h:outputText value="#{messages.mahalleText}"/>
+                </f:facet>
+                <h:outputText value="#{item.gnlKisi.gnlMahalle.tanim}"/>
+            </p:column>
+
+            <p:column headerText="#{messages.buttonSec}" style="width: 70px;text-align: center">
+                <p:commandButton icon="pi pi-check" actionListener="#{ortHastaController.hastaSecKapat(item)}"
+                                 style="width: 20px !important; height: 20px !important;"/>
+            </p:column>
+
+        </p:dataTable>
+    </h:form>
+
+
+</h:body>
+</html>
+
+

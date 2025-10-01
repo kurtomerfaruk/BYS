@@ -43,6 +43,7 @@ public class AyEtkinlik extends BaseEntity {
     @OneToMany(mappedBy = "ayEtkinlik", fetch = FetchType.LAZY,cascade = {CascadeType.MERGE,CascadeType.PERSIST})
     @SQLRestriction("AKTIF=true")
     private List<AyEtkinlikResim> ayEtkinlikResimList = new ArrayList<>();
+
     @OneToMany(mappedBy = "ayEtkinlik", fetch = FetchType.LAZY,cascade = {CascadeType.MERGE,CascadeType.PERSIST})
     @SQLRestriction("AKTIF=true")
     private List<AyEtkinlikKisi> ayEtkinlikKisiList =new ArrayList<>();

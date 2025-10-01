@@ -24,6 +24,15 @@
                 <p:focus context="display"/>
                 <p:panelGrid columns="2" columnClasses="column" rendered="#{ortRandevuController.selected!=null}" layout="tabular">
 
+                    <h:outputText value="#{messages.tcKimlikNoLabel}"/>
+                    <h:outputText value="#{ortRandevuController.selected.ortHasta.gnlKisi.tcKimlikNo}"/>
+
+                    <h:outputText value="#{messages.adSoyadLabel}"/>
+                    <h:outputText value="#{ortRandevuController.selected.ortHasta.gnlKisi.adSoyad}"/>
+
+                    <h:outputText value="#{messages.telefonLabel}"/>
+                    <h:outputText value="#{ortRandevuController.selected.ortHasta.gnlKisi.telefon}"/>
+
                     <p:outputLabel value="#{messages.randevuTarihiLabel}" for="@next"/>
                     <p:datePicker id="randevuTarihi" locale="tr" pattern="#{messages.tarihFormat}" value="#{ortRandevuController.selected.randevuTarihi}"
                                   title="#{messages.randevuTarihiText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true"

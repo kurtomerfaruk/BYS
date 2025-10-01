@@ -33,9 +33,9 @@ public class OrtRandevu extends BaseEntity {
     @Column(name = "ID", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "OrtHasta_ID")
-    private OrtHasta OrtHasta;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ORTHASTA_ID")
+    private OrtHasta ortHasta;
 
     @Column(name = "RANDEVU_TARIHI")
     private LocalDateTime randevuTarihi;

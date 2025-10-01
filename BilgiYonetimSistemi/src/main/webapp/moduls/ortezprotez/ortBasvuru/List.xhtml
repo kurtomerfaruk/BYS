@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:p="primefaces"
+                xmlns:pt="jakarta.faces.passthrough"
+                xmlns:coco="jakarta.faces.composite/ui">
+
+    <h:form id="OrtBasvuruListForm" styleClass="form-height">
+
+        <p:contextMenu id="OrtBasvuruDataTableContextMenu" for="datalist:datalist">
+            <p:menuitem value="#{messages.buttonEkle}" onclick="document.getElementById('OrtBasvuruListForm:datalist:datalist:createButton').click();"
+                        icon="pi pi-plus" rendered="#{syKullaniciController.hasPermission('ortbasvuru:ekle')}"/>
+            <p:menuitem value="#{messages.buttonGuncelle}" onclick="document.getElementById('OrtBasvuruListForm:datalist:datalist:editButton').click();"
+                        icon="pi pi-pencil" rendered="#{syKullaniciController.hasPermission('ortbasvuru:guncelle')}"/>
+            <p:menuitem value="#{messages.buttonDetay}" onclick="document.getElementById('OrtBasvuruListForm:datalist:datalist:viewButton').click();"
+                        icon="pi pi-search"/>
+            <p:menuitem value="#{messages.buttonSil}" onclick="document.getElementById('OrtBasvuruListForm:datalist:datalist:deleteButton').click();"
+                        icon="pi pi-trash" rendered="#{syKullaniciController.hasPermission('ortbasvuru:sil')}"/>
+        </p:contextMenu>
+        <coco:datatable id="datalist"
+                        value="#{ortBasvuruController.lazyItems}"
+                        rowKey="#{item.id}"
+                        selection="#{ortBasvuruController.selected}"
+                        filtered="#{ortBasvuruController.filtered}"
+                        rowselect=":OrtBasvuruListForm:datalist:datalist:createButton,:OrtBasvuruListForm:datalist:datalist:viewButton,:OrtBasvuruListForm:datalist:datalist:editButton,:OrtBasvuruListForm:datalist:datalist:deleteButton"
+                        rowDblselect="document.getElementById('OrtBasvuruListForm:datalist:datalist:editButton').click()"
+                        contextMenu=":OrtBasvuruListForm:datalist:datalist:createButton :OrtBasvuruListForm:datalist:datalist:viewButton :OrtBasvuruListForm:datalist:datalist:editButton :OrtBasvuruListForm:datalist:datalist:deleteButton"
+                        selectListener="#{ortBasvuruController.resetParents}"
+                        controller="#{ortBasvuruController}"
+                        header="#{messages.basvuruListesi}">
+
+            <p:ajax event="colResize" listener="#{ortBasvuruController.onResize}"/>
+
+            <f:facet name="paginatorBottomLeft">
+
+                <p:commandButton id="createButton" styleClass="ui-button-primary" icon="pi pi-plus" pt:data-tooltip="#{messages.buttonEkle}"
+                                 actionListener="#{ortBasvuruController.prepareCreate}" update=":OrtBasvuruCreateForm:OrtBasvuruCreateForm"
+                                 oncomplete="PF('OrtBasvuruCreateDialog').show()" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('ortbasvuru:ekle')}"/>
+                <p:commandButton id="editButton" styleClass="ui-button-success" icon="pi pi-pencil" pt:data-tooltip="#{messages.buttonGuncelle}"
+                                 update=":OrtBasvuruEditForm:OrtBasvuruEditForm" oncomplete="PF('OrtBasvuruEditDialog').show()"
+                                 disabled="#{empty ortBasvuruController.selected}" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('ortbasvuru:guncelle')}"
+                                 actionListener="#{ortBasvuruController.getInfo()}"/>
+                <p:commandButton id="viewButton" styleClass="ui-button-info" icon="pi pi-search" pt:data-tooltip="#{messages.buttonDetay}"
+                                 update=":OrtBasvuruViewForm:OrtBasvuruViewForm" oncomplete="PF('OrtBasvuruViewDialog').show()"
+                                 disabled="#{empty ortBasvuruController.selected}" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                <p:commandButton id="deleteButton" styleClass="ui-button-danger" icon="pi pi-trash" pt:data-tooltip="#{messages.buttonSil}"
+                                 actionListener="#{ortBasvuruController.delete}" update=":growl,datalist" disabled="#{empty ortBasvuruController.selected}"
+                                 rendered="#{syKullaniciController.hasPermission('ortbasvuru:sil')}">
+                    <p:confirm header="#{messages.ConfirmationHeader}" message="#{messages.ConfirmDeleteMessage}" icon="pi pi-exclamation-circle"/>
+                </p:commandButton>
+
+            </f:facet>
+
+        </coco:datatable>
+
+
+        <ui:include src="/confirmation.xhtml"/>
+
+    </h:form>
+
+</ui:composition>

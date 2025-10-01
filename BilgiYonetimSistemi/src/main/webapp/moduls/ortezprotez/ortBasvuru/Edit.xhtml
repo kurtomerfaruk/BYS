@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:editpage id="OrtBasvuruEditForm"
+                   model="#{ortBasvuruController.selected}"
+                   widgetVar="OrtBasvuruEditDialog"
+                   actionListener="#{ortBasvuruController.save}"
+                   listForm="OrtBasvuruListForm">
+
+        <p:outputLabel value="#{messages.basvuruTarihiLabel}" for="@next"/>
+        <p:datePicker id="basvuruTarihi" locale="tr" pattern="#{messages.tarihFormat}" value="#{ortBasvuruController.selected.basvuruTarihi}"
+                      title="#{messages.basvuruTarihiText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true"
+                      showIcon="true" showOnFocus="false"/>
+
+        <p:outputLabel value="#{messages.hastaLabel}" for="@next"/>
+        <coco:inputWithButton id="inputWithButtonHastaiId" inputId="hastaId"
+                              inputValue="#{ortBasvuruController.selected.ortHasta.gnlKisi.tcKimlikNo}"
+                              inputTitle="#{messages.hastaText}"
+                              actionListener="#{bysController.openCommonDialog('ortHastaSec')}"
+                              ajaxListener="#{ortBasvuruController.secilenOrtHasta}"
+                              buttonTitle="#{messages.hastaSecmelisiniz}"
+                              size="50"
+                              dialogId="OrtBasvuruCreateDialogId"/>
+
+        <p:outputLabel value="#{messages.adSoyadLabel}" for="@next"/>
+        <p:inputText id="adSoyad" value="#{ortBasvuruController.selected.ortHasta.gnlKisi.adSoyad}" required="true" readonly="#{facesContext.renderResponse}"
+                     styleClass="inputUpdate"/>
+
+        <p:outputLabel value="#{messages.telefonLabel}" for="@next"/>
+        <p:inputText id="telefon" value="#{ortBasvuruController.selected.ortHasta.gnlKisi.telefon}" required="true" readonly="#{facesContext.renderResponse}"
+                     styleClass="inputUpdate"/>
+
+        <p:outputLabel value="#{messages.degerlendirmeTarihiLabel}" for="@next"/>
+        <p:datePicker id="degerlendirmeTarihi" locale="tr" pattern="#{messages.tarihFormat}" value="#{ortBasvuruController.selected.degerlendirmeTarihi}"
+                      title="#{messages.degerlendirmeTarihiText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
+                      showOnFocus="false"/>
+
+        <p:outputLabel value="#{messages.kararGorusLabel}" for="@next"/>
+        <p:inputTextarea rows="4" id="kararGorus" value="#{ortBasvuruController.selected.kararGorus}"
+                         title="#{messages.kararGorusText}" styleClass="w-100" autoResize="false"/>
+
+        <p:outputLabel value="#{messages.basvuruDurumuLabel}" for="@next"/>
+        <p:selectOneMenu id="basvuruDurumu" value="#{ortBasvuruController.selected.basvuruDurumu}" required="true" converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{enumOrtBasvuruDurumu.ALL_VALUES}"
+                           var="basvuruDurums"
+                           itemValue="#{basvuruDurums}"
+                           itemLabel="#{basvuruDurums.displayValue}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.muayeneYapanLabel}" for="@next"/>
+        <p:inputText id="muayeneYapan" value="#{ortBasvuruController.selected.muayeneYapanOrtPersonel.gnlPersonel.gnlKisi.adSoyad}"
+                     title="#{messages.muayeneYapanText}" readonly="true"/>
+
+        <p:outputLabel value="#{messages.raporuOnaylayanLabel}" for="@next"/>
+        <p:inputText id="raporuOnaylayan" value="#{ortBasvuruController.selected.raporuOnaylayanOrtPersonel.gnlPersonel.gnlKisi.adSoyad}"
+                     title="#{messages.raporuOnaylayanText}" readonly="true"/>
+
+        <p:outputLabel value="#{messages.aciklamaLabel}" for="@next"/>
+        <p:inputTextarea rows="4" id="aciklama" value="#{ortBasvuruController.selected.aciklama}" title="#{messages.aciklamaText}" styleClass="w-100"
+                         autoResize="false"/>
+
+        <p:outputLabel value="#{messages.randuvuyaEklensinMi}" for="@next"/>
+        <p:selectBooleanCheckbox value="#{ortBasvuruController.addAppointment}"/>
+
+        <p:outputLabel value="#{messages.randevuTarihiLabel}" for="@next"/>
+        <p:datePicker locale="tr" pattern="#{messages.tarihFormat}" value="#{ortBasvuruController.appointmentDate}" title="#{messages.randevuTarihiText}"
+                      mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true" showOnFocus="false"/>
+
+    </coco:editpage>
+
+</ui:composition>
+
+</html>

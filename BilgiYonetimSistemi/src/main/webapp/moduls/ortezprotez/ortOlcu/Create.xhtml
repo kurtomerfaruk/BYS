@@ -9,17 +9,6 @@
 
 <ui:composition>
 
-    <style type="text/css">
-        .overlay-input {
-            background: transparent;
-            border: 1px solid rgba(0, 0, 0, 0.15);
-            padding: 2px 4px;
-            font-size: 12px; /* Gerekirse ayarla */
-            line-height: 1;
-        }
-    </style>
-
-
     <p:dialog widgetVar="OrtOlcuCreateDialog"
               id="OrtOlcuCreateDialogId"
               modal="true"
@@ -46,18 +35,6 @@
                                     style="width:100%; height:auto;"/>
 
                     <ui:repeat value="#{ortOlcuController.ortOlcuSablonAlanList}" var="f">
-                        <!--                        <h:panelGroup   layout="block"-->
-                        <!--                                        style="position:absolute;-->
-                        <!--                                        top:#{(f.y / 1708) * 100}%;-->
-                        <!--                                        left:#{(f.x / 1201) * 100}%;-->
-                        <!--                                        width:#{(f.genislik / 1201) * 100}%;-->
-                        <!--                                        height:#{(f.yukseklik / 1708) * 100}%;">-->
-                        <!--                            <p:inputText value="#{ortOlcuController.values[f.tanim]}"-->
-                        <!--                                         style="width:100%; height:100%; font-size:0.8vw;"-->
-                        <!--                                         styleClass="overlay-input">-->
-                        <!--                                <f:attribute name="fieldId" value="#{f.id}"/>-->
-                        <!--                            </p:inputText>-->
-                        <!--                        </h:panelGroup>-->
                         <div id="field-#{f.id}"
                              class="editable-box"
                              data-id="#{f.id}"
@@ -67,13 +44,6 @@
                         left:#{(f.x / ortOlcuController.imageWidth) * 100}%;
                         width:#{(f.genislik / ortOlcuController.imageWidth) * 100}%;
                         height:#{(f.yukseklik / ortOlcuController.imageHeight) * 100}%;">
-                            <!--                            <ui:fragment rendered="#{f.tur eq 'CHECKBOX'}">-->
-                            <!--                                <p:selectBooleanCheckbox itemLabel="#{f.tanim}" style="font-size:10px;border: red solid 2px;width: 100% !important;height: 100% !important;display: flex"/>-->
-                            <!--                            </ui:fragment>-->
-                            <!--                            <ui:fragment rendered="#{f.tur eq 'TEXT'}">-->
-                            <!--                                <h:outputText value="#{f.tanim}"-->
-                            <!--                                              style="font-size:10px;border: red solid 2px;width: 100% !important;height: 100% !important;display: flex"/>-->
-                            <!--                            </ui:fragment>-->
                             <h:outputText value="#{f.tanim}"
                                           style="font-size:10px;border: red solid 2px;width: 100% !important;height: 100% !important;display: flex"/>
                         </div>
@@ -85,23 +55,6 @@
                                  action="#{ortOlcuController.save}"
                                  update="@form"/>
 
-                <!--                    <f:facet name="footer">-->
-                <!--                        <div class="float-end">-->
-                <!--                            <p:commandButton icon="pi pi-check" styleClass="ui-button-success"-->
-                <!--                                             actionListener="#{ortOlcuController.save}"-->
-                <!--                                             value="#{messages.buttonKaydet}"-->
-                <!--                                             update=":OrtOlcuListForm:datalist:datalist,:growl,display"-->
-                <!--                                             oncomplete="handleSubmit(xhr,status,args,PF('OrtOlcuCreateDialog'));"-->
-                <!--                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>-->
-                <!--                            <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"-->
-                <!--                                             value="#{messages.buttonIptal}"-->
-                <!--                                             onclick="PF('OrtOlcuCreateDialog').hide()" immediate="true"-->
-                <!--                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()">-->
-                <!--                                <p:resetInput target="@form"/>-->
-                <!--                            </p:commandButton>-->
-                <!--                        </div>-->
-                <!--                    </f:facet>-->
-                <!--                </p:panelGrid>-->
             </h:panelGroup>
 
             <p:dialog header="Alan Özellikleri"
@@ -113,27 +66,20 @@
                 <h:panelGrid columns="2" cellpadding="5">
 
 
-                                        <h:outputLabel for="label" value="Etiket:"/>
-                                        <p:inputText id="label"
-                                                     value="#{ortOlcuController.ortOlcuSablonAlan.etiket}"/>
+                    <h:outputLabel for="label" value="Etiket:"/>
+                    <p:inputText id="label"
+                                 value="#{ortOlcuController.ortOlcuSablonAlan.etiket}"/>
 
-                                        <h:outputLabel for="type" value="Tip:"/>
-                                        <p:selectOneMenu id="type"
-                                                         value="#{ortOlcuController.ortOlcuSablonAlan.tur}">
-                                            <f:selectItem itemLabel="Metin" itemValue="TEXT"/>
-                                            <f:selectItem itemLabel="Sayı" itemValue="NUMBER"/>
-                                            <f:selectItem itemLabel="Tarih" itemValue="DATE"/>
-                                            <f:selectItem itemLabel="Checkbox" itemValue="CHECKBOX"/>
-                                            <f:selectItem itemLabel="Select" itemValue="SELECT"/>
-                                        </p:selectOneMenu>
+                    <h:outputLabel for="type" value="Tip:"/>
+                    <p:selectOneMenu id="type"
+                                     value="#{ortOlcuController.ortOlcuSablonAlan.tur}">
+                        <f:selectItem itemLabel="Metin" itemValue="TEXT"/>
+                        <f:selectItem itemLabel="Sayı" itemValue="NUMBER"/>
+                        <f:selectItem itemLabel="Tarih" itemValue="DATE"/>
+                        <f:selectItem itemLabel="Checkbox" itemValue="CHECKBOX"/>
+                        <f:selectItem itemLabel="Select" itemValue="SELECT"/>
+                    </p:selectOneMenu>
 
-                    <!--                    <h:outputLabel for="options" value="Seçenekler:"/>-->
-                    <!--                    <p:inputTextarea id="options"-->
-                    <!--                                     value="#{ortOlcuController.ortOlcuSablonAlan.secenek}"-->
-                    <!--                                     autoResize="true"-->
-                    <!--                                     rows="3" cols="20"-->
-                    <!--                                     placeholder="Virgülle ayırın: Erkek,Kadın,Diğer"-->
-                    <!--                                     rendered="#{ortOlcuController.ortOlcuSablonAlan.tur eq 'select'}"/>-->
                 </h:panelGrid>
 
                 <p:commandButton value="Güncelle"

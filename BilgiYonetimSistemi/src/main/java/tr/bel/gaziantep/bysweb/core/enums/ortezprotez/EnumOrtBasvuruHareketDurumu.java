@@ -6,19 +6,17 @@ import tr.bel.gaziantep.bysweb.core.enums.BaseEnum;
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
  * @version 1.0.0
- * @since 25.09.2025 11:38
+ * @since 1.10.2025 10:53
  */
 @Getter
-public enum EnumOrtBasvuruDurumu implements BaseEnum {
-
-    BEKLEMEDE("Beklemede"),
+public enum EnumOrtBasvuruHareketDurumu implements BaseEnum {
     OLUMLU("Olumlu"),
-    OLUMSUZ("Olumsuz"),
-    IPTAL("İptal");
+    OLCU_ICIN_RANDEVU_VERILDI("Ölçü için randevu verildi"),
+    OLCU_ALINDI("Ölçü alındı");
 
     private final String label;
 
-    EnumOrtBasvuruDurumu(String label) {
+    EnumOrtBasvuruHareketDurumu(String label) {
         this.label = label;
     }
 
