@@ -23,7 +23,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Entity
 @Table(name = "ORTOLCU_SABLON_ALAN")
-@NamedQuery(name = "OrtOlcuSablonAlan.findByOrtOlcuSablonId",query = "SELECT o FROM OrtOlcuSablonAlan o WHERE o.aktif=true AND o.ortOlcuSablon.id =:ortOlcuSablonId")
+@NamedQuery(name = "OrtOlcuSablonAlan.findByOrtOlcuSablon",query = "SELECT o FROM OrtOlcuSablonAlan o WHERE o.aktif=true AND o.ortOlcuSablon =:ortOlcuSablon")
 @NamedQuery(name = "OrtOlcuSablonAlan.findByXByY",query = "SELECT o FROM OrtOlcuSablonAlan o WHERE o.aktif=true AND o.x=:x AND o.y=:y")
 public class OrtOlcuSablonAlan extends BaseEntity {
 

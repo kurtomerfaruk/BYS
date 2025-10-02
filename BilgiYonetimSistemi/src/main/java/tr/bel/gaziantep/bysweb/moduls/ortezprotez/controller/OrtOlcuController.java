@@ -1,22 +1,27 @@
 package tr.bel.gaziantep.bysweb.moduls.ortezprotez.controller;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.faces.context.FacesContext;
+import jakarta.faces.event.ActionEvent;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.primefaces.event.SelectEvent;
 import tr.bel.gaziantep.bysweb.core.controller.AbstractController;
-import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtOlcu;
-import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtOlcuSablonAlan;
-import tr.bel.gaziantep.bysweb.moduls.ortezprotez.service.OrtOlcuSablonAlanService;
+import tr.bel.gaziantep.bysweb.core.enums.ErrorType;
+import tr.bel.gaziantep.bysweb.core.exception.BysBusinessException;
+import tr.bel.gaziantep.bysweb.core.utils.Constants;
+import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
+import tr.bel.gaziantep.bysweb.core.utils.StringUtil;
+import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.*;
+import tr.bel.gaziantep.bysweb.moduls.ortezprotez.service.OrtOlcuService;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.Serial;
-import java.util.LinkedHashMap;
+import java.lang.reflect.InvocationTargetException;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,52 +39,103 @@ public class OrtOlcuController extends AbstractController<OrtOlcu> {
     private static final long serialVersionUID = -5791447196918662554L;
 
     @Inject
-    private OrtOlcuSablonAlanService ortOlcuSablonAlanService;
+    private OrtOlcuService service;
 
     @Getter
     @Setter
-    private List<OrtOlcuSablonAlan> ortOlcuSablonAlanList;
+    private OrtOlcuSablon ortOlcuSablon;
     @Getter
     @Setter
-    private OrtOlcuSablonAlan ortOlcuSablonAlan;
+    private List<OrtOlcuSablon> ortOlcuSablonList = new ArrayList<>();
     @Getter
     @Setter
-    private Map<String, String> values = new LinkedHashMap<>();
+    private OrtOlcuSablon selectedSablon;
     @Getter
     @Setter
-    private Integer imageWidth;
+    private List<OrtOlcuDeger> currentOlcuDegerList;
     @Getter
     @Setter
-    private Integer imageHeight;
-
-    @Getter
-    private Integer selectedId;
+    private Map<Integer, List<OrtOlcuDeger>> olcuMap = new HashMap<>();
 
     public OrtOlcuController() {
         super(OrtOlcu.class);
     }
 
-    public void setSelectedId(Integer selectedId) {
-        this.selectedId = selectedId;
-        this.ortOlcuSablonAlan = ortOlcuSablonAlanService.find(selectedId);
+
+
+    @Override
+    public OrtOlcu prepareCreate(ActionEvent event) {
+        OrtOlcu newItem;
+        try {
+            newItem = OrtOlcu.class.getDeclaredConstructor().newInstance();
+            ortOlcuSablon = new OrtOlcuSablon();
+            olcuMap = new HashMap<>();
+            selectedSablon = new OrtOlcuSablon();
+            ortOlcuSablonList = new ArrayList<>();
+            newItem.setOrtBasvuru(new OrtBasvuru());
+            newItem.setTarih(LocalDateTime.now());
+            this.setSelected(newItem);
+            initializeEmbeddableKey();
+            return newItem;
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException ex) {
+            log.error(null, ex);
+        }
+        return null;
+    }
+
+    public void secilenOrtBasvuru(SelectEvent<OrtBasvuru> event) {
+        OrtBasvuru ortBasvuru = event.getObject();
+        this.getSelected().setOrtBasvuru(ortBasvuru);
+    }
+
+    public void addTemplate() {
+        if (ortOlcuSablon == null || StringUtil.isBlank(ortOlcuSablon.getTanim())) {
+            return;
+        }
+
+        boolean alreadyExists = ortOlcuSablonList.stream().anyMatch(x -> x.getTanim().equals(ortOlcuSablon.getTanim()));
+        if (!alreadyExists) {
+            ortOlcuSablonList.add(ortOlcuSablon);
+            ortOlcuSablon = new OrtOlcuSablon();
+        }
+
+    }
+
+    public void removeTemplate(OrtOlcuSablon sablon) {
+        if (sablon != null) {
+            ortOlcuSablonList.removeIf(x -> x.getTanim().equals(sablon.getTanim()));
+        }
+    }
+
+
+    public void prepareOlcuDialog(OrtOlcuSablon sablon) {
+        this.selectedSablon = sablon;
+        if (!olcuMap.containsKey(sablon.getId())) {
+            List<OrtOlcuDeger> list = new ArrayList<>();
+            for (OrtOlcuSablonAlan alan : sablon.getOrtOlcuSablonAlanList()) {
+                OrtOlcuDeger deger = OrtOlcuDeger.builder()
+                        .ortOlcu(this.getSelected())
+                        .ortOlcuSablonAlan(alan)
+                        .build();
+                list.add(deger);
+            }
+            olcuMap.put(sablon.getId(), list);
+        }
+
+        this.currentOlcuDegerList = olcuMap.get(sablon.getId());
     }
 
     @Override
-    @PostConstruct
-    public void init() {
-        super.init();
-        ortOlcuSablonAlanList = ortOlcuSablonAlanService.findByOrtOlcuSablonId(1);
-
-        for (OrtOlcuSablonAlan ortOlcuSablonAlan : ortOlcuSablonAlanList) {
-            values.put(ortOlcuSablonAlan.getTanim(),"");
+    public void save(ActionEvent event) {
+        if (this.getSelected() == null) {
+            throw new BysBusinessException(ErrorType.NESNE_SECILEMEDI);
         }
         try {
-            BufferedImage img = ImageIO.read( FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("/resources/images/ayak_bilek.png"));
-            imageWidth = img.getWidth();
-            imageHeight = img.getHeight();
-            this.ortOlcuSablonAlan = ortOlcuSablonAlanService.find(1);
-        }catch (Exception ex){
-            log.error(ex.getMessage());
+            service.save(this.getSelected(),olcuMap);
+            FacesUtil.successMessage(Constants.KAYIT_EKLENDI);
+        } catch (Exception ex) {
+            log.error(null, ex);
+            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
         }
     }
 }

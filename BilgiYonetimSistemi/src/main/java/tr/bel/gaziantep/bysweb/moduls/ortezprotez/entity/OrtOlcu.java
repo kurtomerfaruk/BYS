@@ -6,6 +6,7 @@ import lombok.Setter;
 import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
 
 import java.io.Serial;
+import java.time.LocalDateTime;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
@@ -28,12 +29,11 @@ public class OrtOlcu extends BaseEntity {
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ORTHASTA_ID")
-    private OrtHasta ortHasta;
+    @JoinColumn(name = "ORTBASVURU_ID")
+    private OrtBasvuru ortBasvuru;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ORTOLCU_SABLON_ID")
-    private OrtOlcuSablon ortOlcuSablon;
+    @Column(name = "TARIH")
+    private LocalDateTime tarih;
 
     @Override
     public int hashCode() {

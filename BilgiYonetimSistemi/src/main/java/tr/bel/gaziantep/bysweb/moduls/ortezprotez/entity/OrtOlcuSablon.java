@@ -8,6 +8,8 @@ import org.hibernate.annotations.Nationalized;
 import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
 
 import java.io.Serial;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
@@ -44,6 +46,9 @@ public class OrtOlcuSablon extends BaseEntity {
 
     @Column(name = "RESIM_YUKSEKLIK")
     private Integer resimYukseklik;
+
+    @OneToMany(mappedBy = "ortOlcuSablon")
+    private List<OrtOlcuSablonAlan> ortOlcuSablonAlanList = new ArrayList<>();
 
 
     @Override

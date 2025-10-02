@@ -6,15 +6,11 @@
 
 <ui:composition>
 
-    <coco:editpage id="OrtOlcuEditForm"
-                   model="#{ortOlcuController.selected}"
-                   widgetVar="OrtOlcuEditDialog"
-                   actionListener="#{ortOlcuController.save}"
-                   listForm="OrtOlcuListForm">
-
-
-    </coco:editpage>
+    <coco:viewpage id="OrtOlcuViewForm"
+                   widgetVar="OrtOlcuViewDialog"
+                   model="#{ortOlcuController.selected}"/>
 
 </ui:composition>
 
 </html>
+

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:p="primefaces"
+      xmlns:f="jakarta.faces.core"
+>
+
+<ui:composition>
+
+    <p:dialog widgetVar="OrtOlcuCreateDialog"
+              id="OrtOlcuCreateDialogId"
+              modal="true"
+              resizable="false"
+              closeOnEscape="true"
+              header="#{messages.dialogYeniKayit}"
+              appendTo="@(body)"
+              responsive="true"
+              onShow="PF('OrtOlcuCreateDialog').initPosition();"
+              fitViewport="true"
+              position="top"
+              style="width:800px !important;height:800px !important"
+              maximizable="true">
+
+        <h:form id="OrtOlcuCreateForm">
+            <h:panelGroup id="display">
+                <p:focus context="display"/>
+                <!--                <p:panelGrid columns="1" columnClasses="column" rendered="#{ortOlcuController.selected != null}" layout="tabular">-->
+                <h:inputHidden id="selectedId" value="#{ortOlcuController.selectedId}"/>
+
+                <p:remoteCommand name="pfAjaxUpdate" update="selectedId"/>
+                <div style="position:relative; width:100%;max-width:800px;margin:auto;">
+                    <h:graphicImage library="images" name="ayak_bilek.png"
+                                    style="width:100%; height:auto;"/>
+
+                    <ui:repeat value="#{ortOlcuController.ortOlcuSablonAlanList}" var="f">
+                        <div id="field-#{f.id}"
+                             class="editable-box"
+                             data-id="#{f.id}"
+                             onclick="PF('dlg').show(); updateDialog(#{f.id});"
+                             style="position:absolute;
+                        top:#{(f.y / ortOlcuController.imageHeight) * 100}%;
+                        left:#{(f.x / ortOlcuController.imageWidth) * 100}%;
+                        width:#{(f.genislik / ortOlcuController.imageWidth) * 100}%;
+                        height:#{(f.yukseklik / ortOlcuController.imageHeight) * 100}%;">
+                            <h:outputText value="#{f.tanim}"
+                                          style="font-size:10px;border: red solid 2px;width: 100% !important;height: 100% !important;display: flex"/>
+                        </div>
+                    </ui:repeat>
+
+                </div>
+
+                <p:commandButton value="Kaydet"
+                                 action="#{ortOlcuController.save}"
+                                 update="@form"/>
+
+            </h:panelGroup>
+
+            <p:dialog header="Alan Özellikleri"
+                      widgetVar="dlg"
+                      modal="true"
+                      resizable="false"
+                      draggable="true"
+                      appendTo="@(body)">
+                <h:panelGrid columns="2" cellpadding="5">
+
+
+                    <h:outputLabel for="label" value="Etiket:"/>
+                    <p:inputText id="label"
+                                 value="#{ortOlcuController.ortOlcuSablonAlan.etiket}"/>
+
+                    <h:outputLabel for="type" value="Tip:"/>
+                    <p:selectOneMenu id="type"
+                                     value="#{ortOlcuController.ortOlcuSablonAlan.tur}">
+                        <f:selectItem itemLabel="Metin" itemValue="TEXT"/>
+                        <f:selectItem itemLabel="Sayı" itemValue="NUMBER"/>
+                        <f:selectItem itemLabel="Tarih" itemValue="DATE"/>
+                        <f:selectItem itemLabel="Checkbox" itemValue="CHECKBOX"/>
+                        <f:selectItem itemLabel="Select" itemValue="SELECT"/>
+                    </p:selectOneMenu>
+
+                </h:panelGrid>
+
+                <p:commandButton value="Güncelle"
+                                 action="#{ortOlcuController.save}"
+                                 update="OrtOlcuCreateForm"
+                                 oncomplete="PF('dlg').hide();"/>
+            </p:dialog>
+        </h:form>
+    </p:dialog>
+
+
+    <script type="text/javascript">
+        interact('.editable-box')
+            .draggable({
+                onmove: function (event) {
+                    var target = event.target;
+                    var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
+                    var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+
+                    target.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
+                    target.setAttribute('data-x', x);
+                    target.setAttribute('data-y', y);
+                }
+            })
+            .resizable({
+                edges: {left: true, right: true, bottom: true, top: true}
+            })
+            .on('resizemove', function (event) {
+                var target = event.target;
+                var w = event.rect.width;
+                var h = event.rect.height;
+                target.style.width = w + 'px';
+                target.style.height = h + 'px';
+            });
+
+
+        function updateDialog(id) {
+            var hidden = document.getElementById("OrtOlcuCreateForm:selectedId");
+            if (hidden) {
+                hidden.value = id;
+                pfAjaxUpdate(); // PrimeFaces remoteCommand ile bean’e güncelle
+            }
+        }
+    </script>
+
+</ui:composition>
+
+</html>

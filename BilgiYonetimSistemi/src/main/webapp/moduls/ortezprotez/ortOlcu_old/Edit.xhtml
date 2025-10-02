@@ -7,12 +7,14 @@
 <ui:composition>
 
     <coco:editpage id="OrtOlcuEditForm"
-                   model="#{ortOlcuController.selected}"
                    widgetVar="OrtOlcuEditDialog"
                    actionListener="#{ortOlcuController.save}"
-                   listForm="OrtOlcuListForm">
+                   listForm="OrtOlcuListForm"
+                   model="#{ortOlcuController.selected}">
 
-
+<!--        <p:outputLabel value="#{messages.birimLabel}" for="@next"/>-->
+<!--        <p:inputText id="tanim" value="#{OrtOlcuController.selected.tanim}" title="#{messages.birimText}" required="true" size="50"-->
+<!--                     maxlength="50"/>-->
     </coco:editpage>
 
 </ui:composition>

@@ -55,9 +55,9 @@ public class OrtOlcuSablonAlanService extends AbstractService<OrtOlcuSablonAlan>
                 .orElse(null);
     }
 
-    public List<OrtOlcuSablonAlan> findByOrtOlcuSablonId(int ortOlcuSablonId) {
-        return getEntityManager().createNamedQuery("OrtOlcuSablonAlan.findByOrtOlcuSablonId")
-                .setParameter("ortOlcuSablonId",ortOlcuSablonId)
+    public List<OrtOlcuSablonAlan> findByOrtOlcuSablon(OrtOlcuSablon ortOlcuSablon) {
+        return getEntityManager().createNamedQuery("OrtOlcuSablonAlan.findByOrtOlcuSablon")
+                .setParameter("ortOlcuSablon",ortOlcuSablon)
                 .getResultList();
     }
 

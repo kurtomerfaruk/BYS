@@ -1,8 +1,7 @@
 package tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.Nationalized;
 import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
 
@@ -16,6 +15,9 @@ import java.io.Serial;
 
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "ORTOLCU_DEGER")
 public class OrtOlcuDeger extends BaseEntity {
