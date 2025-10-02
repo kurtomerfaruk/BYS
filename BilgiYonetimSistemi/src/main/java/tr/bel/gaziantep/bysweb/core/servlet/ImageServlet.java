@@ -21,8 +21,7 @@ public class ImageServlet extends HttpServlet {
     private static final long serialVersionUID = -4049068210676827143L;
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String file = request.getParameter("file");
         if (StringUtil.isBlank(file)) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
