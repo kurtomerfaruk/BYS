@@ -9,7 +9,7 @@ import tr.bel.gaziantep.bysweb.core.exception.BaseErrorType;
  */
 public enum ErrorType implements BaseErrorType {
 
-    NESNE_SECILEMEDI("Nesne Seçilmedi"),
+    NESNE_OKUNAMADI("Nesne Okunamadı"),
     KISI_BILGILERI_OKUNAMADI("Kişi Bilgileri Okunamadı...");
 
     private String messageText;
