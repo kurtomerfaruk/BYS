@@ -142,7 +142,7 @@ public class OrtHastaController extends AbstractKisiController<OrtHasta> {
 
     public void getDisabledInfo() {
         if (this.getSelected() == null) {
-            throw new BysBusinessException(ErrorType.NESNE_SECILEMEDI);
+            throw new BysBusinessException(ErrorType.NESNE_OKUNAMADI);
         }
 
         if (this.getSelected().getGnlKisi() == null) {
@@ -167,7 +167,7 @@ public class OrtHastaController extends AbstractKisiController<OrtHasta> {
     @Override
     public void save(ActionEvent event) {
         if (this.getSelected() == null) {
-            throw new BysBusinessException(ErrorType.NESNE_SECILEMEDI);
+            throw new BysBusinessException(ErrorType.NESNE_OKUNAMADI);
         }
         try {
             service.save(this.getSelected(), eyKisi, eyEngelGrubus);
