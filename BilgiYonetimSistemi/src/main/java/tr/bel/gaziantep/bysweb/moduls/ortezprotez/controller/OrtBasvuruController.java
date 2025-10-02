@@ -116,7 +116,7 @@ public class OrtBasvuruController extends AbstractController<OrtBasvuru> {
     @Override
     public void save(ActionEvent event) {
         if (this.getSelected().getOrtHasta() == null) {
-            throw new BysBusinessException(ErrorType.NESNE_SECILEMEDI);
+            throw new BysBusinessException(ErrorType.NESNE_OKUNAMADI);
         }
 
         try {
@@ -130,7 +130,7 @@ public class OrtBasvuruController extends AbstractController<OrtBasvuru> {
 
     public void getInfo(){
         if (this.getSelected().getOrtHasta() == null) {
-            throw new BysBusinessException(ErrorType.NESNE_SECILEMEDI);
+            throw new BysBusinessException(ErrorType.NESNE_OKUNAMADI);
         }
         this.getSelected().setRaporuOnaylayanOrtPersonel(ortPersonel);
     }
