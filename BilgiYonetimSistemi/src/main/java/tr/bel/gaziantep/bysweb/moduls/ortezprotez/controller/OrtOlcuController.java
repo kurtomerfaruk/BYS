@@ -1,6 +1,7 @@
 package tr.bel.gaziantep.bysweb.moduls.ortezprotez.controller;
 
 import jakarta.faces.event.ActionEvent;
+import jakarta.faces.model.SelectItem;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -10,20 +11,21 @@ import lombok.extern.slf4j.Slf4j;
 import org.primefaces.event.SelectEvent;
 import tr.bel.gaziantep.bysweb.core.controller.AbstractController;
 import tr.bel.gaziantep.bysweb.core.enums.ErrorType;
+import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtOlcuDurum;
+import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.EnumSyFiltreAnahtari;
 import tr.bel.gaziantep.bysweb.core.exception.BysBusinessException;
+import tr.bel.gaziantep.bysweb.core.service.FilterOptionService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
 import tr.bel.gaziantep.bysweb.core.utils.StringUtil;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.*;
+import tr.bel.gaziantep.bysweb.moduls.ortezprotez.service.OrtOlcuDegerService;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.service.OrtOlcuService;
 
 import java.io.Serial;
 import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
@@ -40,6 +42,10 @@ public class OrtOlcuController extends AbstractController<OrtOlcu> {
 
     @Inject
     private OrtOlcuService service;
+    @Inject
+    private OrtOlcuDegerService ortOlcuDegerService;
+    @Inject
+    private FilterOptionService filterOptionService;
 
     @Getter
     @Setter
@@ -61,7 +67,22 @@ public class OrtOlcuController extends AbstractController<OrtOlcu> {
         super(OrtOlcu.class);
     }
 
-
+    public List<SelectItem> getFilterOptions(EnumSyFiltreAnahtari key) {
+        switch (key) {
+            case ORTOLCU_DURUM -> {
+                return filterOptionService.getOrtOlcuDurums();
+            }
+            case IL -> {
+                return filterOptionService.getGnlIls();
+            }
+            case ILCE -> {
+                return filterOptionService.getGnlIlces();
+            }
+            default -> {
+                return Collections.emptyList();
+            }
+        }
+    }
 
     @Override
     public OrtOlcu prepareCreate(ActionEvent event) {
@@ -74,6 +95,7 @@ public class OrtOlcuController extends AbstractController<OrtOlcu> {
             ortOlcuSablonList = new ArrayList<>();
             newItem.setOrtBasvuru(new OrtBasvuru());
             newItem.setTarih(LocalDateTime.now());
+            newItem.setDurum(EnumOrtOlcuDurum.BEKLEMEDE);
             this.setSelected(newItem);
             initializeEmbeddableKey();
             return newItem;
@@ -109,8 +131,26 @@ public class OrtOlcuController extends AbstractController<OrtOlcu> {
 
 
     public void prepareOlcuDialog(OrtOlcuSablon sablon) {
+//        this.selectedSablon = sablon;
+//        if (!olcuMap.containsKey(sablon.getId())) {
+//            List<OrtOlcuDeger> list = new ArrayList<>();
+//            for (OrtOlcuSablonAlan alan : sablon.getOrtOlcuSablonAlanList()) {
+//                OrtOlcuDeger deger = OrtOlcuDeger.builder()
+//                        .ortOlcu(this.getSelected())
+//                        .ortOlcuSablonAlan(alan)
+//                        .build();
+//                list.add(deger);
+//            }
+//            olcuMap.put(sablon.getId(), list);
+//        }
+//
+//        this.currentOlcuDegerList = olcuMap.get(sablon.getId());
+
         this.selectedSablon = sablon;
-        if (!olcuMap.containsKey(sablon.getId())) {
+
+        List<OrtOlcuDeger> olcuDegers = ortOlcuDegerService.findByOrtOlcuByOrtOlcuSablon(this.getSelected(), sablon);
+
+        if (olcuDegers.isEmpty()) {
             List<OrtOlcuDeger> list = new ArrayList<>();
             for (OrtOlcuSablonAlan alan : sablon.getOrtOlcuSablonAlanList()) {
                 OrtOlcuDeger deger = OrtOlcuDeger.builder()
@@ -120,6 +160,8 @@ public class OrtOlcuController extends AbstractController<OrtOlcu> {
                 list.add(deger);
             }
             olcuMap.put(sablon.getId(), list);
+        } else {
+            olcuMap.put(sablon.getId(), olcuDegers);
         }
 
         this.currentOlcuDegerList = olcuMap.get(sablon.getId());
@@ -128,12 +170,41 @@ public class OrtOlcuController extends AbstractController<OrtOlcu> {
     @Override
     public void save(ActionEvent event) {
         if (this.getSelected() == null) {
-            throw new BysBusinessException(ErrorType.NESNE_SECILEMEDI);
+            throw new BysBusinessException(ErrorType.NESNE_OKUNAMADI);
         }
         try {
-            service.save(this.getSelected(),olcuMap);
+            service.save(this.getSelected(), olcuMap);
             FacesUtil.successMessage(Constants.KAYIT_EKLENDI);
         } catch (Exception ex) {
+            log.error(null, ex);
+            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+        }
+    }
+
+    public void getInfo() {
+        if (this.getSelected() == null) {
+            throw new BysBusinessException(ErrorType.NESNE_OKUNAMADI);
+        }
+
+        currentOlcuDegerList = ortOlcuDegerService.findByOrtOlcu(this.getSelected());
+        ortOlcuSablonList = new ArrayList<>();
+        ortOlcuSablon = new OrtOlcuSablon();
+
+        for (OrtOlcuDeger ortOlcuDeger : currentOlcuDegerList) {
+            if (!ortOlcuSablonList.contains(ortOlcuDeger.getOrtOlcuSablonAlan().getOrtOlcuSablon())) {
+                ortOlcuSablonList.add(ortOlcuDeger.getOrtOlcuSablonAlan().getOrtOlcuSablon());
+            }
+        }
+    }
+
+    public void approve(ActionEvent event) {
+        if (this.getSelected() == null) {
+            throw new BysBusinessException(ErrorType.NESNE_OKUNAMADI);
+        }
+        try {
+            service.approve(this.getSelected());
+            FacesUtil.successMessage("kayitOnaylandi");
+        }catch (Exception ex) {
             log.error(null, ex);
             FacesUtil.errorMessage(Constants.HATA_OLUSTU);
         }
