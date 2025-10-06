@@ -18,6 +18,7 @@ import tr.bel.gaziantep.bysweb.core.exception.BysBusinessException;
 import tr.bel.gaziantep.bysweb.core.service.FilterOptionService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
+import tr.bel.gaziantep.bysweb.core.utils.StringUtil;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtBasvuru;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtHasta;
@@ -133,5 +134,19 @@ public class OrtBasvuruController extends AbstractController<OrtBasvuru> {
             throw new BysBusinessException(ErrorType.NESNE_OKUNAMADI);
         }
         this.getSelected().setRaporuOnaylayanOrtPersonel(ortPersonel);
+    }
+
+    public void paid(){
+        if (this.getSelected().getOrtHasta() == null) {
+            throw new BysBusinessException(ErrorType.NESNE_OKUNAMADI);
+        }
+        try {
+            this.getSelected().setOdendi(StringUtil.isNotBlank(this.getSelected().getMakbuzNo()));
+            ortBasvuruService.pay(this.getSelected());
+            FacesUtil.successMessage("odemeAlindi");
+        }catch (Exception ex) {
+            log.error(null, ex);
+            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+        }
     }
 }

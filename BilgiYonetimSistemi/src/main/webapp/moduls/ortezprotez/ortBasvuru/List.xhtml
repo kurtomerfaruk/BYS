@@ -25,9 +25,9 @@
                         rowKey="#{item.id}"
                         selection="#{ortBasvuruController.selected}"
                         filtered="#{ortBasvuruController.filtered}"
-                        rowselect=":OrtBasvuruListForm:datalist:datalist:createButton,:OrtBasvuruListForm:datalist:datalist:viewButton,:OrtBasvuruListForm:datalist:datalist:editButton,:OrtBasvuruListForm:datalist:datalist:deleteButton"
+                        rowselect=":OrtBasvuruListForm:datalist:datalist:createButton,:OrtBasvuruListForm:datalist:datalist:viewButton,:OrtBasvuruListForm:datalist:datalist:editButton,:OrtBasvuruListForm:datalist:datalist:deleteButton,:OrtBasvuruListForm:datalist:datalist:payButton"
                         rowDblselect="document.getElementById('OrtBasvuruListForm:datalist:datalist:editButton').click()"
-                        contextMenu=":OrtBasvuruListForm:datalist:datalist:createButton :OrtBasvuruListForm:datalist:datalist:viewButton :OrtBasvuruListForm:datalist:datalist:editButton :OrtBasvuruListForm:datalist:datalist:deleteButton"
+                        contextMenu=":OrtBasvuruListForm:datalist:datalist:createButton :OrtBasvuruListForm:datalist:datalist:viewButton :OrtBasvuruListForm:datalist:datalist:editButton :OrtBasvuruListForm:datalist:datalist:deleteButton :OrtBasvuruListForm:datalist:datalist:payButton"
                         selectListener="#{ortBasvuruController.resetParents}"
                         controller="#{ortBasvuruController}"
                         header="#{messages.basvuruListesi}">
@@ -48,6 +48,10 @@
                 <p:commandButton id="viewButton" styleClass="ui-button-info" icon="pi pi-search" pt:data-tooltip="#{messages.buttonDetay}"
                                  update=":OrtBasvuruViewForm:OrtBasvuruViewForm" oncomplete="PF('OrtBasvuruViewDialog').show()"
                                  disabled="#{empty ortBasvuruController.selected}" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                <p:commandButton id="payButton" styleClass="ui-button-teal" icon="pi pi-turkish-lira" pt:data-tooltip="#{messages.buttonOdeme}"
+                                 update=":OrtPayForm:OrtPayForm" oncomplete="PF('OrtPayDialog').show()"
+                                 disabled="#{empty ortBasvuruController.selected or !ortBasvuruController.selected.ucretli or ortBasvuruController.selected.odendi}"
+                                 onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
                 <p:commandButton id="deleteButton" styleClass="ui-button-danger" icon="pi pi-trash" pt:data-tooltip="#{messages.buttonSil}"
                                  actionListener="#{ortBasvuruController.delete}" update=":growl,datalist" disabled="#{empty ortBasvuruController.selected}"
                                  rendered="#{syKullaniciController.hasPermission('ortbasvuru:sil')}">

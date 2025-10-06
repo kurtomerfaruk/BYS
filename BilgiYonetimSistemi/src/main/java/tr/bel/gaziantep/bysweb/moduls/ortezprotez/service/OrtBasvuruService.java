@@ -1,14 +1,15 @@
 package tr.bel.gaziantep.bysweb.moduls.ortezprotez.service;
 
 import jakarta.ejb.*;
+import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtBasvuruDurumu;
 import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtBasvuruHareketDurumu;
 import tr.bel.gaziantep.bysweb.core.service.AbstractService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
+import tr.bel.gaziantep.bysweb.core.utils.StringUtil;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtBasvuru;
-import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtBasvuruHareket;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtRandevu;
 
 import java.io.Serial;
@@ -25,6 +26,9 @@ public class OrtBasvuruService extends AbstractService<OrtBasvuru> {
 
     @Serial
     private static final long serialVersionUID = 4259094003224116213L;
+
+    @Inject
+    private OrtBasvuruHareketService ortBasvuruHareketService;
 
     public OrtBasvuruService() {
         super(OrtBasvuru.class);
@@ -78,7 +82,7 @@ public class OrtBasvuruService extends AbstractService<OrtBasvuru> {
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void save(OrtBasvuru ortBasvuru, boolean addAppointment, LocalDateTime appointmentDate) {
         if (ortBasvuru.getBasvuruDurumu() == EnumOrtBasvuruDurumu.OLUMLU) {
-            addHistory(ortBasvuru, EnumOrtBasvuruHareketDurumu.OLUMLU);
+            ortBasvuruHareketService.addHistory(ortBasvuru, EnumOrtBasvuruHareketDurumu.OLUMLU);
         }
 
         if (addAppointment) {
@@ -90,23 +94,32 @@ public class OrtBasvuruService extends AbstractService<OrtBasvuru> {
                     .build();
             getEntityManager().persist(randevu);
 
-            addHistory(ortBasvuru, EnumOrtBasvuruHareketDurumu.OLCU_ICIN_RANDEVU_VERILDI);
+            ortBasvuruHareketService.addHistory(ortBasvuru, EnumOrtBasvuruHareketDurumu.OLCU_ICIN_RANDEVU_VERILDI);
             ortBasvuru.setBasvuruHareketDurumu(EnumOrtBasvuruHareketDurumu.OLCU_ICIN_RANDEVU_VERILDI);
         }
 
         edit(ortBasvuru);
     }
 
-    private void addHistory(OrtBasvuru ortBasvuru, EnumOrtBasvuruHareketDurumu durum) {
-        boolean alreadyExists = ortBasvuru.getOrtBasvuruHareketList().stream()
-                .anyMatch(x -> x.isAktif() && x.getDurum() == durum);
+//    private void addHistory(OrtBasvuru ortBasvuru, EnumOrtBasvuruHareketDurumu durum) {
+//        boolean alreadyExists = ortBasvuru.getOrtBasvuruHareketList().stream()
+//                .anyMatch(x -> x.isAktif() && x.getDurum() == durum);
+//
+//        if (!alreadyExists) {
+//            OrtBasvuruHareket hareket = OrtBasvuruHareket.builder()
+//                    .ortBasvuru(ortBasvuru)
+//                    .durum(durum)
+//                    .build();
+//            ortBasvuru.getOrtBasvuruHareketList().add(hareket);
+//        }
+//    }
 
-        if (!alreadyExists) {
-            OrtBasvuruHareket hareket = OrtBasvuruHareket.builder()
-                    .ortBasvuru(ortBasvuru)
-                    .durum(durum)
-                    .build();
-            ortBasvuru.getOrtBasvuruHareketList().add(hareket);
+    public void pay(OrtBasvuru ortBasvuru) {
+        if (StringUtil.isNotBlank(ortBasvuru.getMakbuzNo())) {
+            ortBasvuruHareketService.addHistory(ortBasvuru, EnumOrtBasvuruHareketDurumu.ODEME_ALINDI);
+            ortBasvuru.setBasvuruHareketDurumu(EnumOrtBasvuruHareketDurumu.ODEME_ALINDI);
         }
+        edit(ortBasvuru);
+
     }
 }

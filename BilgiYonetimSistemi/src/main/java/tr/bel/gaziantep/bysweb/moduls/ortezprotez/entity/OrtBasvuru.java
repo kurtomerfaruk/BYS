@@ -1,8 +1,10 @@
 package tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Nationalized;
 import org.hibernate.annotations.SQLRestriction;
 import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
@@ -10,6 +12,7 @@ import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtBasvuruDurumu;
 import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtBasvuruHareketDurumu;
 
 import java.io.Serial;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,6 +65,27 @@ public class OrtBasvuru extends BaseEntity {
     @Lob
     @Column(name = "ACIKLAMA")
     private String aciklama;
+
+    @ColumnDefault("0")
+    @Column(name = "UCRETLI")
+    private boolean ucretli;
+
+    @Column(name = "TUTAR")
+    private BigDecimal tutar;
+
+    @ColumnDefault("0")
+    @Column(name = "ODENDI")
+    private boolean odendi;
+
+    @Nationalized
+    @Size(max = 50)
+    @Column(name = "MAKBUZ_NO",length = 50)
+    private String makbuzNo;
+
+    @Nationalized
+    @Size(max = 50)
+    @Column(name = "SUT_KODU",length = 50)
+    private String sutKodu;
 
     @OneToMany(mappedBy = "ortBasvuru", fetch = FetchType.LAZY,cascade = {CascadeType.MERGE,CascadeType.PERSIST})
     @SQLRestriction("AKTIF=true")
