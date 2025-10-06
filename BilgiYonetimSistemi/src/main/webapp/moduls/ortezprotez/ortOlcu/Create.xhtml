@@ -52,6 +52,9 @@
                         <p:datePicker id="tarih" locale="tr" pattern="#{messages.tarihFormat}" value="#{ortOlcuController.selected.tarih}"
                                       title="#{messages.tarihText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
                                       showOnFocus="false"/>
+
+                        <h:outputText value="#{messages.durumLabel}"/>
+                        <h:outputText value="#{ortOlcuController.selected.durum.label}"/>
                     </p:panelGrid>
 
                     <p:panelGrid columns="1">
@@ -118,56 +121,6 @@
         </h:form>
     </p:dialog>
 
-    <p:dialog widgetVar="OlcuGirDialog"
-              id="OlcuGirDialogId"
-              modal="true"
-              resizable="false"
-              closeOnEscape="true"
-              header="Ölçü Gir"
-              appendTo="@(body)"
-              responsive="true"
-              onShow="PF('OrtOlcuCreateDialog').initPosition();"
-              fitViewport="true"
-              position="top"
-              style="max-width:#{ortOlcuController.selectedSablon.resimGenislik}px !important">
-
-        <h:form id="OlcuGirForm">
-            <div style="position: relative; display: inline-block;">
-                <!-- Şablon Resmi -->
-                <!--                <h:graphicImage value="#{ortOlcuController.selectedSablon.resimYolu}" style="max-width:800px; height:auto;"/>-->
-                <p:graphicImage value="/images/dynamic/?file=#{ortOlcuController.selectedSablon.resimYolu}" style="max-width:#{ortOlcuController.selectedSablon.resimGenislik}px; height:auto;"/>
-
-                <!-- Dinamik Kutucuklar -->
-                <ui:repeat value="#{ortOlcuController.currentOlcuDegerList}" var="d">
-                    <ui:fragment rendered="#{d.ortOlcuSablonAlan.tur eq 'TEXT'}">
-                        <p:inputText value="#{d.deger}"
-                                     style="position:absolute !important;
-                        top:#{(d.ortOlcuSablonAlan.y / ortOlcuController.selectedSablon.resimYukseklik) * 100}% !important;
-                        left:#{(d.ortOlcuSablonAlan.x /ortOlcuController.selectedSablon.resimGenislik) * 100}% !important;
-                        width:#{(d.ortOlcuSablonAlan.genislik /ortOlcuController.selectedSablon.resimGenislik) * 100}% !important;
-                        height:#{(d.ortOlcuSablonAlan.yukseklik / ortOlcuController.selectedSablon.resimYukseklik) * 100}% !important;"/>
-                    </ui:fragment>
-                    <ui:fragment rendered="#{d.ortOlcuSablonAlan.tur eq 'CHECKBOX'}">
-                        <p:selectBooleanCheckbox value="#{d.deger}"
-                                     style="position:absolute !important;
-                        top:#{(d.ortOlcuSablonAlan.y / ortOlcuController.selectedSablon.resimYukseklik) * 100}% !important;
-                        left:#{(d.ortOlcuSablonAlan.x /ortOlcuController.selectedSablon.resimGenislik) * 100}% !important;
-                        width:#{(d.ortOlcuSablonAlan.genislik /ortOlcuController.selectedSablon.resimGenislik) * 100}% !important;
-                        height:#{(d.ortOlcuSablonAlan.yukseklik / ortOlcuController.selectedSablon.resimYukseklik) * 100}% !important;"/>
-                    </ui:fragment>
-                </ui:repeat>
-
-            </div>
-
-            <p:commandButton value="Kaydet" process="@form" update="@form,:growl" oncomplete="PF('OlcuGirDialog').hide()"/>
-            <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
-                             value="#{messages.buttonIptal}"
-                             onclick="PF('OlcuGirDialog').hide()" immediate="true"
-                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()">
-                <p:resetInput target="@form"/>
-            </p:commandButton>
-        </h:form>
-    </p:dialog>
 
 </ui:composition>
 

@@ -2,18 +2,125 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="jakarta.faces.facelets"
-      xmlns:coco="jakarta.faces.composite/ui">
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:coco="jakarta.faces.composite/ui"
+xmlns:p="primefaces">
 
 <ui:composition>
 
-    <coco:editpage id="OrtOlcuEditForm"
-                   model="#{ortOlcuController.selected}"
-                   widgetVar="OrtOlcuEditDialog"
-                   actionListener="#{ortOlcuController.save}"
-                   listForm="OrtOlcuListForm">
+    <p:dialog widgetVar="OrtOlcuEditDialog"
+              id="OrtOlcuEditDialogId"
+              modal="true"
+              resizable="false"
+              closeOnEscape="true"
+              header="#{messages.dialogYeniKayit}"
+              appendTo="@(body)"
+              responsive="true"
+              onShow="PF('OrtOlcuEditDialog').initPosition();"
+              fitViewport="true"
+              position="top"
+              style="max-width:800px !important">
 
+        <h:form id="OrtOlcuEditForm">
+            <h:panelGroup id="display">
+                <p:focus context="display"/>
+                <p:panelGrid columns="1" columnClasses="column" rendered="#{ortOlcuController.selected != null}" layout="tabular">
 
-    </coco:editpage>
+                    <p:panelGrid columns="2">
+                        <p:outputLabel value="#{messages.hastaLabel}" for="@next"/>
+                        <coco:inputWithButton id="inputWithButtonHastaId" inputId="hastaId"
+                                              inputValue="#{ortOlcuController.selected.ortBasvuru.ortHasta.gnlKisi.tcKimlikNo}"
+                                              inputTitle="#{messages.hastaText}"
+                                              actionListener="#{bysController.openCommonDialog('ortBasvuruSec')}"
+                                              ajaxListener="#{ortOlcuController.secilenOrtBasvuru}"
+                                              buttonTitle="#{messages.hastaSecmelisiniz}"
+                                              size="50"
+                                              dialogId="OrtOlcuEditDialogId"/>
+
+                        <p:outputLabel value="#{messages.adSoyadLabel}" for="@next"/>
+                        <p:inputText id="adSoyad" value="#{ortOlcuController.selected.ortBasvuru.ortHasta.gnlKisi.adSoyad}" required="true"
+                                     readonly="#{facesContext.renderResponse}"
+                                     styleClass="inputUpdate"/>
+
+                        <p:outputLabel value="#{messages.telefonLabel}" for="@next"/>
+                        <p:inputText id="telefon" value="#{ortOlcuController.selected.ortBasvuru.ortHasta.gnlKisi.telefon}" required="true"
+                                     readonly="#{facesContext.renderResponse}"
+                                     styleClass="inputUpdate"/>
+
+                        <p:outputLabel value="#{messages.tarihLabel}" for="@next"/>
+                        <p:datePicker id="tarih" locale="tr" pattern="#{messages.tarihFormat}" value="#{ortOlcuController.selected.tarih}"
+                                      title="#{messages.tarihText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
+                                      showOnFocus="false"/>
+
+                        <h:outputText value="#{messages.durumLabel}"/>
+                        <h:outputText value="#{ortOlcuController.selected.durum.label}"/>
+                    </p:panelGrid>
+
+                    <p:panelGrid columns="1">
+                        <p:panelGrid id="panelGridSablon" columns="2">
+
+                            <p:outputLabel value="#{messages.sablonLabel}" for="@next"/>
+                            <p:selectOneMenu value="#{ortOlcuController.ortOlcuSablon}" converter="omnifaces.SelectItemsConverter">
+                                <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+                                <f:selectItems value="#{ortOlcuSablonController.items}"
+                                               var="sablons"
+                                               itemLabel="#{sablons.tanim}"
+                                               itemValue="#{sablons}"/>
+                            </p:selectOneMenu>
+
+                            <f:facet name="footer">
+                                <div class="float-end">
+                                    <p:commandButton icon="pi pi-check" styleClass="ui-button-success"
+                                                     actionListener="#{ortOlcuController.addTemplate()}"
+                                                     value="#{messages.buttonEkle}"
+                                                     update=":growl,panelGridSablon,panelGridSablonList"
+                                                     onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                                </div>
+                            </f:facet>
+                        </p:panelGrid>
+                        <p:panelGrid id="panelGridSablonList" columns="1">
+                            <p:dataTable id="sablonId" var="item" value="#{ortOlcuController.ortOlcuSablonList}">
+                                <p:column headerText="Şablon">
+                                    <h:outputText value="#{item.tanim}"/>
+                                </p:column>
+                                <p:column width="60" headerText="#{messages.buttonOlcu}">
+                                    <p:commandButton icon="pi pi-search" title="#{messages.buttonOlcu}"
+                                                     onstart="PF('Loading').show()"
+                                                     onsuccess="PF('Loading').hide()"
+                                                     oncomplete="PF('OlcuGirDialog').show()"
+                                                     actionListener="#{ortOlcuController.prepareOlcuDialog(item)}"
+                                                     update=":OlcuGirForm,:growl"/>
+                                </p:column>
+                                <p:column width="60" headerText="#{messages.buttonSil}">
+                                    <p:commandButton icon="pi pi-trash" title="#{messages.buttonSil}" actionListener="#{ortOlcuController.removeTemplate(item)}"
+                                                     styleClass="ui-button-danger" update="sablonId,:growl" process="sablonId"/>
+                                </p:column>
+                            </p:dataTable>
+                        </p:panelGrid>
+                    </p:panelGrid>
+
+                    <f:facet name="footer">
+                        <div class="float-end">
+                            <p:commandButton icon="pi pi-check" styleClass="ui-button-success"
+                                             actionListener="#{ortOlcuController.save}"
+                                             value="#{messages.buttonKaydet}"
+                                             update=":OrtOlcuListForm:datalist:datalist,:growl,display"
+                                             oncomplete="handleSubmit(xhr,status,args,PF('OrtOlcuEditDialog'));"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                            <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                             value="#{messages.buttonIptal}"
+                                             onclick="PF('OrtOlcuEditDialog').hide()" immediate="true"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()">
+                                <p:resetInput target="@form"/>
+                            </p:commandButton>
+                        </div>
+                    </f:facet>
+                </p:panelGrid>
+            </h:panelGroup>
+        </h:form>
+    </p:dialog>
+
 
 </ui:composition>
 
