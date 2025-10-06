@@ -20,6 +20,9 @@ import java.io.Serial;
 @NoArgsConstructor
 @Entity
 @Table(name = "ORTOLCU_DEGER")
+@NamedQuery(name = "OrtOlcuDeger.findByOrtOlcu",query = "SELECT o FROM OrtOlcuDeger o WHERE o.aktif=true AND o.ortOlcu =:ortOlcu")
+@NamedQuery(name = "OrtOlcuDeger.findByOrtOlcuByOrtOlcuSablon",query = "SELECT o FROM OrtOlcuDeger o WHERE o.aktif=true AND o.ortOlcu =:ortOlcu " +
+        "AND o.ortOlcuSablonAlan.ortOlcuSablon =:ortOlcuSablon")
 public class OrtOlcuDeger extends BaseEntity {
 
     @Serial
