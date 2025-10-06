@@ -1,12 +1,15 @@
 package tr.bel.gaziantep.bysweb.moduls.ortezprotez.service;
 
 import jakarta.ejb.*;
+import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtBasvuruHareketDurumu;
 import tr.bel.gaziantep.bysweb.core.service.AbstractService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtOlcu;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtOlcuDeger;
+import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtRandevu;
 
 import java.io.Serial;
 import java.util.List;
@@ -23,6 +26,9 @@ public class OrtOlcuService extends AbstractService<OrtOlcu> {
 
     @Serial
     private static final long serialVersionUID = -6216224428824408829L;
+
+    @Inject
+    private OrtBasvuruHareketService basvuruHareketService;
 
     public OrtOlcuService() {
         super(OrtOlcu.class);
@@ -45,5 +51,26 @@ public class OrtOlcuService extends AbstractService<OrtOlcu> {
                 getEntityManager().merge(d);
             }
         }
+       addHistory(ortOlcu);
+    }
+
+    private void addHistory(OrtOlcu ortOlcu){
+        basvuruHareketService.addHistory(ortOlcu.getOrtBasvuru(), EnumOrtBasvuruHareketDurumu.OLCU_SONRASI_RANDEVU_VERILDI);
+        ortOlcu.getOrtBasvuru().setBasvuruHareketDurumu(EnumOrtBasvuruHareketDurumu.OLCU_SONRASI_RANDEVU_VERILDI);
+        getEntityManager().merge(ortOlcu.getOrtBasvuru());
+    }
+
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void approve(OrtOlcu ortOlcu) {
+        edit(ortOlcu);
+        OrtRandevu randevu = OrtRandevu.builder()
+                .randevuTarihi(ortOlcu.getRandevuTarihi())
+                .ortHasta(ortOlcu.getOrtBasvuru().getOrtHasta())
+                .konu("Ölçü alındı.")
+                .aciklama("Ölçü alındıktan sonra uygun olmadığından dolayı yeni randevu verildi.")
+                .build();
+        getEntityManager().persist(randevu);
+
+       addHistory(ortOlcu);
     }
 }
