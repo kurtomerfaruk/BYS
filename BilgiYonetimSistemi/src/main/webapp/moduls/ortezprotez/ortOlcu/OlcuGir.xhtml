@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:p="primefaces"
+>
+
+<ui:composition>
+
+    <p:dialog widgetVar="OlcuGirDialog"
+              id="OlcuGirDialogId"
+              modal="true"
+              resizable="false"
+              closeOnEscape="true"
+              header="Ölçü Gir"
+              appendTo="@(body)"
+              responsive="true"
+              onShow="PF('OrtOlcuCreateDialog').initPosition();"
+              fitViewport="true"
+              position="top"
+              style="max-width:#{ortOlcuController.selectedSablon.resimGenislik}px !important">
+
+        <h:form id="OlcuGirForm">
+            <div style="position: relative; display: inline-block;">
+                <p:graphicImage value="/images/dynamic/?file=#{ortOlcuController.selectedSablon.resimYolu}" style="max-width:#{ortOlcuController.selectedSablon.resimGenislik}px; height:auto;"/>
+
+                <ui:repeat value="#{ortOlcuController.currentOlcuDegerList}" var="d">
+                    <ui:fragment rendered="#{d.ortOlcuSablonAlan.tur eq 'TEXT'}">
+                        <p:inputText value="#{d.deger}"
+                                     style="position:absolute !important;
+                        top:#{(d.ortOlcuSablonAlan.y / ortOlcuController.selectedSablon.resimYukseklik) * 100}% !important;
+                        left:#{(d.ortOlcuSablonAlan.x /ortOlcuController.selectedSablon.resimGenislik) * 100}% !important;
+                        width:#{(d.ortOlcuSablonAlan.genislik /ortOlcuController.selectedSablon.resimGenislik) * 100}% !important;
+                        height:#{(d.ortOlcuSablonAlan.yukseklik / ortOlcuController.selectedSablon.resimYukseklik) * 100}% !important;"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{d.ortOlcuSablonAlan.tur eq 'CHECKBOX'}">
+                        <p:selectBooleanCheckbox value="#{d.deger}"
+                                                 style="position:absolute !important;
+                        top:#{(d.ortOlcuSablonAlan.y / ortOlcuController.selectedSablon.resimYukseklik) * 100}% !important;
+                        left:#{(d.ortOlcuSablonAlan.x /ortOlcuController.selectedSablon.resimGenislik) * 100}% !important;
+                        width:#{(d.ortOlcuSablonAlan.genislik /ortOlcuController.selectedSablon.resimGenislik) * 100}% !important;
+                        height:#{(d.ortOlcuSablonAlan.yukseklik / ortOlcuController.selectedSablon.resimYukseklik) * 100}% !important;"/>
+                    </ui:fragment>
+                </ui:repeat>
+
+            </div>
+
+            <p:commandButton value="Kaydet" process="@form" update="@form,:growl" oncomplete="PF('OlcuGirDialog').hide()" styleClass="ui-button-success"/>
+            <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                             value="#{messages.buttonIptal}"
+                             onclick="PF('OlcuGirDialog').hide()" immediate="true"
+                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()">
+                <p:resetInput target="@form"/>
+            </p:commandButton>
+        </h:form>
+    </p:dialog>
+
+</ui:composition>
+
+</html>
