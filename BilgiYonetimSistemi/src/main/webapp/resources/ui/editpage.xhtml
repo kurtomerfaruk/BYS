@@ -16,6 +16,8 @@
     <composite:attribute name="maximizable" default="false"/>
     <composite:attribute name="position" default="#{null}"/>
     <composite:attribute name="model" required="true"/>
+    <composite:attribute name="dialogStyle" default="#{null}"/>
+    <composite:attribute name="panelGridStyle" default="#{null}"/>
 </composite:interface>
 
 
@@ -31,12 +33,14 @@
               responsive="true"
               onShow="PF('#{cc.attrs.widgetVar}').initPosition();#{cc.attrs.onShow}"
               fitViewport="true"
-              position="#{cc.attrs.position}">
+              position="#{cc.attrs.position}"
+              style="#{cc.attrs.dialogStyle}">
 
         <h:form id="#{cc.id}">
             <h:panelGroup id="display">
                 <p:focus context="display"/>
-                <p:panelGrid columns="#{cc.attrs.columns}" columnClasses="column" rendered="#{cc.attrs.model !=null}" layout="tabular">
+                <p:panelGrid columns="#{cc.attrs.columns}" columnClasses="column" rendered="#{cc.attrs.model !=null}" layout="tabular"
+                             style="#{cc.attrs.panelGridStyle}">
 
                     <h:outputText value="#{messages.kayitNoLabel}"/>
                     <h:outputText value="#{cc.attrs.model.id}">
