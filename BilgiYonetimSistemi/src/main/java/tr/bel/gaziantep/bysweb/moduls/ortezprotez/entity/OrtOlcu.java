@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
+import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtOlcuDurum;
 
 import java.io.Serial;
 import java.time.LocalDateTime;
@@ -34,6 +35,13 @@ public class OrtOlcu extends BaseEntity {
 
     @Column(name = "TARIH")
     private LocalDateTime tarih;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "DURUM")
+    private EnumOrtOlcuDurum durum;
+
+    @Column(name = "RANDEVU_TARIHI")
+    private LocalDateTime randevuTarihi;
 
     @Override
     public int hashCode() {
