@@ -13,7 +13,9 @@ public enum EnumOrtBasvuruHareketDurumu implements BaseEnum {
     OLUMLU("Olumlu"),
     OLCU_ICIN_RANDEVU_VERILDI("Ölçü için randevu verildi"),
     OLCU_ALINDI("Ölçü alındı"),
-    OLCU_SONRASI_RANDEVU_VERILDI("Ölçü sonrası randevu verildi");
+    OLCU_SONRASI_RANDEVU_VERILDI("Ölçü sonrası randevu verildi"),
+    ODEME_ALINDI("Ödeme Alındı"),
+    SUT_KODU_VERILDI("Şut kodu verildi");
 
     private final String label;
 
