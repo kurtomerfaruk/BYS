@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:editpage id="OrtStokEditForm"
+                   model="#{ortStokController.selected}"
+                   widgetVar="OrtStokEditDialog"
+                   actionListener="#{ortStokController.save}"
+                   listForm="OrtStokListForm">
+
+        <p:outputLabel value="#{messages.stokKoduLabel}" for="@next"/>
+        <p:inputText id="stokKodu" value="#{ortStokController.selected.stokKodu}" title="#{messages.stokKoduText}" size="50"/>
+
+        <p:outputLabel value="#{messages.stokAdiLabel}" for="@next"/>
+        <p:inputText id="stokAdi" value="#{ortStokController.selected.stokAdi}" title="#{messages.stokAdiText}" size="50" required="true"/>
+
+        <p:outputLabel value="#{messages.birimLabel}" for="@next"/>
+        <p:selectOneMenu id="birim" value="#{ortStokController.selected.birim}" required="true" converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{enumOrtStokBirim.ALL_VALUES}"
+                           var="birims"
+                           itemValue="#{birims}"
+                           itemLabel="#{birims.displayValue}"/>
+        </p:selectOneMenu>
+
+    </coco:editpage>
+
+</ui:composition>
+
+</html>

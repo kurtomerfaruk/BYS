@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:p="primefaces"
+                xmlns:pt="jakarta.faces.passthrough"
+                xmlns:coco="jakarta.faces.composite/ui">
+
+    <h:form id="OrtStokListForm" styleClass="form-height">
+
+        <p:contextMenu id="OrtStokDataTableContextMenu" for="datalist:datalist">
+            <p:menuitem value="#{messages.buttonEkle}" onclick="document.getElementById('OrtStokListForm:datalist:datalist:createButton').click();"
+                        icon="pi pi-plus" rendered="#{syKullaniciController.hasPermission('ortstok:ekle')}"/>
+            <p:menuitem value="#{messages.buttonGuncelle}" onclick="document.getElementById('OrtStokListForm:datalist:datalist:editButton').click();"
+                        icon="pi pi-pencil" rendered="#{syKullaniciController.hasPermission('ortstok:guncelle')}"/>
+            <p:menuitem value="#{messages.buttonDetay}" onclick="document.getElementById('OrtStokListForm:datalist:datalist:viewButton').click();"
+                        icon="pi pi-search"/>
+            <p:menuitem value="#{messages.buttonSil}" onclick="document.getElementById('OrtStokListForm:datalist:datalist:deleteButton').click();"
+                        icon="pi pi-trash" rendered="#{syKullaniciController.hasPermission('ortstok:sil')}"/>
+        </p:contextMenu>
+        <coco:datatable id="datalist"
+                        value="#{ortStokController.lazyItems}"
+                        rowKey="#{item.id}"
+                        selection="#{ortStokController.selected}"
+                        filtered="#{ortStokController.filtered}"
+                        rowselect=":OrtStokListForm:datalist:datalist:createButton,:OrtStokListForm:datalist:datalist:viewButton,:OrtStokListForm:datalist:datalist:editButton,:OrtStokListForm:datalist:datalist:deleteButton"
+                        rowDblselect="document.getElementById('OrtStokListForm:datalist:datalist:editButton').click()"
+                        contextMenu=":OrtStokListForm:datalist:datalist:createButton :OrtStokListForm:datalist:datalist:viewButton :OrtStokListForm:datalist:datalist:editButton :OrtStokListForm:datalist:datalist:deleteButton"
+                        selectListener="#{ortStokController.resetParents}"
+                        controller="#{ortStokController}"
+                        header="#{messages.personelListesi}">
+
+            <p:ajax event="colResize" listener="#{ortStokController.onResize}"/>
+
+            <f:facet name="paginatorBottomLeft">
+
+                <p:commandButton id="createButton" styleClass="ui-button-primary" icon="pi pi-plus" pt:data-tooltip="#{messages.buttonEkle}"
+                                 actionListener="#{ortStokController.prepareCreate}" update=":OrtStokCreateForm:OrtStokCreateForm"
+                                 oncomplete="PF('OrtStokCreateDialog').show()" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('ortstok:ekle')}"/>
+                <p:commandButton id="editButton" styleClass="ui-button-success" icon="pi pi-pencil" pt:data-tooltip="#{messages.buttonGuncelle}"
+                                 update=":OrtStokEditForm:OrtStokEditForm" oncomplete="PF('OrtStokEditDialog').show()"
+                                 disabled="#{empty ortStokController.selected}" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('ortstok:guncelle')}"/>
+                <p:commandButton id="viewButton" styleClass="ui-button-info" icon="pi pi-search" pt:data-tooltip="#{messages.buttonDetay}"
+                                 update=":OrtStokViewForm:OrtStokViewForm" oncomplete="PF('OrtStokViewDialog').show()"
+                                 disabled="#{empty ortStokController.selected}" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                <p:commandButton id="deleteButton" styleClass="ui-button-danger" icon="pi pi-trash" pt:data-tooltip="#{messages.buttonSil}"
+                                 actionListener="#{ortStokController.delete}" update=":growl,datalist" disabled="#{empty ortStokController.selected}"
+                                 rendered="#{syKullaniciController.hasPermission('ortstok:sil')}">
+                    <p:confirm header="#{messages.ConfirmationHeader}" message="#{messages.ConfirmDeleteMessage}" icon="pi pi-exclamation-circle"/>
+                </p:commandButton>
+
+            </f:facet>
+
+        </coco:datatable>
+
+
+        <ui:include src="/confirmation.xhtml"/>
+
+    </h:form>
+
+</ui:composition>

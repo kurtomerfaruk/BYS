@@ -117,11 +117,21 @@
                                     </li>
                                 </ui:fragment>
 
+                                <ui:fragment rendered="#{syKullaniciController.hasPermission('ortstok:goster')}">
+                                    <li class="slide">
+                                        <p:commandLink styleClass="side-menu__item sublevel2"
+                                                       actionListener="#{menuController.setPageLink('/moduls/ortezprotez/ortStok/index')}"
+                                                       update="myPanel,:growl"
+                                                       onstart="PF('Loading').show()"
+                                                       onsuccess="PF('Loading').hide()"
+                                                       value="Stok Listesi"/>
+                                    </li>
+                                </ui:fragment>
+
                             </ul>
                         </li>
                     </ui:fragment>
                     <!--    Tanimlamalar    -->
-
 
                 </ul>
             </li>
