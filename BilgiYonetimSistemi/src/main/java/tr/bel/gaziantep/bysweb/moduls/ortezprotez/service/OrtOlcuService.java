@@ -7,6 +7,7 @@ import jakarta.persistence.PersistenceContext;
 import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtBasvuruHareketDurumu;
 import tr.bel.gaziantep.bysweb.core.service.AbstractService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
+import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtHasta;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtOlcu;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtOlcuDeger;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtRandevu;
@@ -63,9 +64,10 @@ public class OrtOlcuService extends AbstractService<OrtOlcu> {
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void approve(OrtOlcu ortOlcu) {
         edit(ortOlcu);
+        OrtHasta hasta =getEntityManager().find(OrtHasta.class, ortOlcu.getOrtBasvuru().getOrtHasta().getId()) ;
         OrtRandevu randevu = OrtRandevu.builder()
                 .randevuTarihi(ortOlcu.getRandevuTarihi())
-                .ortHasta(ortOlcu.getOrtBasvuru().getOrtHasta())
+                .ortHasta(hasta)
                 .konu("Ölçü alındı.")
                 .aciklama("Ölçü alındıktan sonra uygun olmadığından dolayı yeni randevu verildi.")
                 .build();
