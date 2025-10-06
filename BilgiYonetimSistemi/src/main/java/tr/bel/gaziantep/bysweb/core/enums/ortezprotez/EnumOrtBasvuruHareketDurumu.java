@@ -12,7 +12,8 @@ import tr.bel.gaziantep.bysweb.core.enums.BaseEnum;
 public enum EnumOrtBasvuruHareketDurumu implements BaseEnum {
     OLUMLU("Olumlu"),
     OLCU_ICIN_RANDEVU_VERILDI("Ölçü için randevu verildi"),
-    OLCU_ALINDI("Ölçü alındı");
+    OLCU_ALINDI("Ölçü alındı"),
+    OLCU_SONRASI_RANDEVU_VERILDI("Ölçü sonrası randevu verildi");
 
     private final String label;
 
