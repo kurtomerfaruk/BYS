@@ -16,7 +16,8 @@
                    header="Ölçü Onayla"
                    panelGridStyle="min-width:400px !important;">
 
-        <p:outputLabel value="#{messages.personelLabel}" for="@next"/>
+
+        <p:outputLabel value="#{messages.durumLabel}" for="@next"/>
         <p:selectOneMenu id="durum" value="#{ortOlcuController.selected.durum}" filter="true" converter="omnifaces.SelectItemsConverter"
                          required="true">
             <f:selectItem itemLabel="#{messages.seciniz}"/>
@@ -26,6 +27,17 @@
                            itemLabel="#{olcus.displayValue}"/>
             <p:ajax event="change" update="@form"/>
         </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.ucretliLabel}" for="@next"/>
+        <p:selectOneMenu id="ucretli" value="#{ortOlcuController.selected.ortBasvuru.ucretli}">
+            <f:selectItem itemValue="#{false}" itemLabel="#{messages.hayir}"/>
+            <f:selectItem itemValue="#{true}" itemLabel="#{messages.evet}"/>
+            <p:ajax event="change" update="@form"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.tutarLabel}" for="@next" rendered="#{ortOlcuController.selected.ortBasvuru.ucretli}"/>
+        <p:inputNumber id="tutar" value="#{ortOlcuController.selected.ortBasvuru.tutar}" inputStyleClass="text-end" decimalPlaces="2" decimalSeparator=","
+                       thousandSeparator="." emptyValue="zero"/>
 
         <p:outputLabel value="#{messages.randevuTarihiLabel}" for="@next" rendered="#{ortOlcuController.selected.durum eq 'UYGUN_DEGIL'}"/>
         <p:datePicker id="randevuTarihi" locale="tr" pattern="#{messages.tarihFormat}" value="#{ortOlcuController.selected.randevuTarihi}"
