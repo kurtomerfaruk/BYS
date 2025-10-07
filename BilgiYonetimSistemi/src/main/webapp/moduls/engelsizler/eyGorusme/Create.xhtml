@@ -40,7 +40,7 @@
 
         <p:outputLabel value="#{messages.telefonLabel}" for="@next"/>
         <p:inputMask id="telefon" value="#{eyGorusmeController.selected.gnlKisi.telefon}" title="#{messages.telefonText}" required="true"
-                     mask="(999) 999 99 99" styleClass="tcUpdate"/>
+                     mask="#{messages.telefonFormat}" styleClass="tcUpdate"/>
 
         <p:outputLabel value="#{messages.gorusmeTarihiLabel}" for="@next"/>
         <p:datePicker id="gorusmeTarihi" locale="tr" pattern="#{messages.tarihFormat}"

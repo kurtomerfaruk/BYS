@@ -30,7 +30,7 @@
 
         <p:outputLabel value="#{messages.telefonLabel}" for="@next"/>
         <p:inputMask id="telefon" value="#{shKisiController.selected.gnlKisi.telefon}" title="#{messages.telefonText}" size="50" maxlength="50"
-                     mask="(999) 999 99 99" required="true" styleClass="tcUpdate"/>
+                     mask="#{messages.telefonFormat}" required="true" styleClass="tcUpdate"/>
 
         <p:outputLabel value="#{messages.cinsiyetLabel}" for="@next"/>
         <p:inputText id="cinsiyet" value="#{shKisiController.selected.gnlKisi.cinsiyet}" required="true" readonly="#{facesContext.renderResponse}"

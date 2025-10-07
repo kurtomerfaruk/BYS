@@ -27,10 +27,10 @@
 
             <p:outputLabel value="#{messages.telefonLabel}" for="@next"/>
             <p:inputMask id="telefon" value="#{hfFirmaController.selected.telefon}" title="#{messages.telefonText}" size="50" maxlength="50"
-                         mask="(999) 999 99 99"/>
+                         mask="#{messages.telefonFormat}"/>
 
             <p:outputLabel value="#{messages.faksLabel}" for="@next"/>
-            <p:inputMask id="faks" value="#{hfFirmaController.selected.faks}" title="#{messages.faksText}" size="50" maxlength="50" mask="(999) 999 99 99"/>
+            <p:inputMask id="faks" value="#{hfFirmaController.selected.faks}" title="#{messages.faksText}" size="50" maxlength="50" mask="#{messages.telefonFormat}"/>
 
             <p:outputLabel value="#{messages.adresLabel}" for="@next"/>
             <p:inputTextarea rows="4" id="adres" value="#{hfFirmaController.selected.adres}" title="#{messages.adresText}" styleClass="w-100"

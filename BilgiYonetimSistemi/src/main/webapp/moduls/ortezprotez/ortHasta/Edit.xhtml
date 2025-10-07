@@ -53,11 +53,11 @@
                      styleClass="tcUpdate"/>
 
         <p:outputLabel value="#{messages.telefonLabel}" for="@next"/>
-        <p:inputMask id="telefon" value="#{ortHastaController.selected.gnlKisi.telefon}" mask="(999) 999 99 99" required="true" title="#{messages.telefonText}"
+        <p:inputMask id="telefon" value="#{ortHastaController.selected.gnlKisi.telefon}" mask="#{messages.telefonFormat}" required="true" title="#{messages.telefonText}"
                      size="14" styleClass="tcUpdate"/>
 
         <p:outputLabel value="#{messages.telefonLabel}" for="@next"/>
-        <p:inputMask id="telefon2" value="#{ortHastaController.selected.gnlKisi.telefon2}" mask="(999) 999 99 99" title="#{messages.telefonText}" size="14"
+        <p:inputMask id="telefon2" value="#{ortHastaController.selected.gnlKisi.telefon2}" mask="#{messages.telefonFormat}" title="#{messages.telefonText}" size="14"
                      styleClass="tcUpdate"/>
 
         <p:outputLabel value="#{messages.cocukSayisiLabel}" for="@next"/>

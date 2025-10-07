@@ -73,12 +73,12 @@
                      styleClass="w-100 tcUpdate"/>
 
     <p:outputLabel value="#{messages.telefonLabel}" for="@next"/>
-    <p:inputMask id="telefon" value="#{ekmIsBasvuruController.selected.eyKisi.gnlKisi.telefon}" mask="(999) 999 99 99" required="true"
+    <p:inputMask id="telefon" value="#{ekmIsBasvuruController.selected.eyKisi.gnlKisi.telefon}" mask="#{messages.telefonFormat}" required="true"
                  title="#{messages.telefonText}" size="14"
                  styleClass="tcUpdate"/>
 
     <p:outputLabel value="#{messages.telefonLabel}" for="@next"/>
-    <p:inputMask id="telefon2" value="#{ekmIsBasvuruController.selected.eyKisi.gnlKisi.telefon2}" mask="(999) 999 99 99" title="#{messages.telefonText}"
+    <p:inputMask id="telefon2" value="#{ekmIsBasvuruController.selected.eyKisi.gnlKisi.telefon2}" mask="#{messages.telefonFormat}" title="#{messages.telefonText}"
                  size="14"
                  styleClass="tcUpdate"/>
 

@@ -87,12 +87,12 @@
 
     <p:outputLabel value="#{messages.telefonLabel}" for="@next"/>
     <p:inputMask id="telefon" value="#{edbBasvuruController.selected.gnlKisi.telefon}"
-                 mask="(999) 999 99 99" required="true" title="#{messages.telefonText}"
+                 mask="#{messages.telefonFormat}" required="true" title="#{messages.telefonText}"
                  size="14" styleClass="tcUpdate"/>
 
     <p:outputLabel value="#{messages.telefonLabel}" for="@next"/>
     <p:inputMask id="telefon2" value="#{edbBasvuruController.selected.gnlKisi.telefon2}"
-                 mask="(999) 999 99 99" title="#{messages.telefonText}" size="14"
+                 mask="#{messages.telefonFormat}" title="#{messages.telefonText}" size="14"
                  styleClass="tcUpdate"/>
 
     <p:outputLabel value="#{messages.adresLabel}" for="@next"/>

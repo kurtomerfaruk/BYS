@@ -79,12 +79,12 @@
 
     <p:outputLabel value="#{messages.telefonLabel}" for="telefon"/>
     <p:inputMask id="telefon" value="#{meKisiController.selected.eyKisi.gnlKisi.telefon}"
-                 mask="(999) 999 99 99" required="true" title="#{messages.telefonText}"
+                 mask="#{messages.telefonFormat}" required="true" title="#{messages.telefonText}"
                  size="14" styleClass="tcUpdate"/>
 
     <p:outputLabel value="#{messages.telefonLabel}" for="telefon2"/>
     <p:inputMask id="telefon2" value="#{meKisiController.selected.eyKisi.gnlKisi.telefon2}"
-                 mask="(999) 999 99 99" title="#{messages.telefonText}" size="14"
+                 mask="#{messages.telefonFormat}" title="#{messages.telefonText}" size="14"
                  styleClass="tcUpdate"/>
 
     <p:outputLabel value="#{messages.adresLabel}" for="@next"/>

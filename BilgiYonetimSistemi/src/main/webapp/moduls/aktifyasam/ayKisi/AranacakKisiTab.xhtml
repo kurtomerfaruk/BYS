@@ -28,7 +28,7 @@
         </p:selectOneMenu>
 
         <p:outputLabel value="#{messages.telefonLabel}" for="@next"/>
-        <p:inputMask id="aranacakTelefon" value="#{ayKisiController.ayKisiAranacakKisi.telefon}" mask="(999) 999 99 99" size="14"/>
+        <p:inputMask id="aranacakTelefon" value="#{ayKisiController.ayKisiAranacakKisi.telefon}" mask="#{messages.telefonFormat}" size="14"/>
 
         <f:facet name="footer">
             <div class="float-end">

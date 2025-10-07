@@ -100,12 +100,12 @@
                      readonly="true"/>
 
         <p:outputLabel value="#{messages.telefonLabel}" for="telefon"/>
-        <p:inputMask id="telefon" value="#{gnlKisiIncelemeController.gnlKisi.telefon}" mask="(999) 999 99 99"
+        <p:inputMask id="telefon" value="#{gnlKisiIncelemeController.gnlKisi.telefon}" mask="#{messages.telefonFormat}"
                      title="#{messages.telefonText}"
                      readonly="true"/>
 
         <p:outputLabel value="#{messages.telefonLabel}" for="telefon2"/>
-        <p:inputMask id="telefon2" value="#{gnlKisiIncelemeController.gnlKisi.telefon2}" mask="(999) 999 99 99"
+        <p:inputMask id="telefon2" value="#{gnlKisiIncelemeController.gnlKisi.telefon2}" mask="#{messages.telefonFormat}"
                      title="#{messages.telefonText}"
                      readonly="true"/>
 

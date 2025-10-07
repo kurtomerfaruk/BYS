@@ -33,10 +33,10 @@
 
         <p:outputLabel value="#{messages.telefonLabel}" for="@next"/>
         <p:inputMask id="telefon" value="#{gnlBankaController.selected.telefon}" title="#{messages.telefonText}" size="50" maxlength="50"
-                     mask="(999) 999 99 99"/>
+                     mask="#{messages.telefonFormat}"/>
 
         <p:outputLabel value="#{messages.faksLabel}" for="@next"/>
-        <p:inputMask id="faks" value="#{gnlBankaController.selected.faks}" title="#{messages.faksText}" size="50" maxlength="50" mask="(999) 999 99 99"/>
+        <p:inputMask id="faks" value="#{gnlBankaController.selected.faks}" title="#{messages.faksText}" size="50" maxlength="50" mask="#{messages.telefonFormat}"/>
 
         <p:outputLabel value="#{messages.sehirLabel}" for="@next"/>
         <p:selectOneMenu id="gnlilId" value="#{gnlBankaController.selected.gnlIl}" filter="true" converter="omnifaces.SelectItemsConverter">

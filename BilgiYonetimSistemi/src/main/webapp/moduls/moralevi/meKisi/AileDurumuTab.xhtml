@@ -36,7 +36,7 @@
                      styleClass="w-100 refekatci" autoResize="false" readonly="true"/>
 
     <p:outputLabel value="#{messages.telefonLabel}" for="@next"/>
-    <p:inputMask id="refekatciTelefon" value="#{meKisiController.selected.refakatciTelefon}" mask="(999) 999 99 99" title="#{messages.telefonText}"
+    <p:inputMask id="refekatciTelefon" value="#{meKisiController.selected.refakatciTelefon}" mask="#{messages.telefonFormat}" title="#{messages.telefonText}"
                  size="14" styleClass="refekatci"/>
 
     <p:outputLabel value="#{messages.yakinlikDerecesiLabel}" for="@next"/>

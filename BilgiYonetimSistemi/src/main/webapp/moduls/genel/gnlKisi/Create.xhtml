@@ -114,13 +114,13 @@
 
                                     <p:outputLabel value="#{messages.telefonLabel}" for="telefon"/>
                                     <p:inputMask id="telefon" value="#{gnlKisiController.selected.telefon}"
-                                                 mask="(999) 999 99 99"
+                                                 mask="#{messages.telefonFormat}"
                                                  required="true"
                                                  title="#{messages.telefonText}" size="14"/>
 
                                     <p:outputLabel value="#{messages.telefonLabel}" for="telefon2"/>
                                     <p:inputMask id="telefon2" value="#{gnlKisiController.selected.telefon2}"
-                                                 mask="(999) 999 99 99" title="#{messages.telefonText}" size="14"/>
+                                                 mask="#{messages.telefonFormat}" title="#{messages.telefonText}" size="14"/>
 
                                     <p:outputLabel value="#{messages.cocukSayisiLabel}" for="@next"/>
                                     <p:inputText id="cocukSayisi" value="#{gnlKisiController.selected.cocukSayisi}"

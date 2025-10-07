@@ -40,7 +40,7 @@
 
         <p:outputLabel value="#{messages.telefonLabel}" for="@next"/>
         <p:inputMask id="telefon" value="#{eyAracTamirController.selected.eyKisi.gnlKisi.telefon}"
-                     mask="(999) 999 99 99" readonly="true" title="#{messages.telefonText}"
+                     mask="#{messages.telefonFormat}" readonly="true" title="#{messages.telefonText}"
                      size="14" styleClass="inputUpdate"/>
 
         <p:outputLabel value="#{messages.kayitTarihiLabel}" for="@next"/>
