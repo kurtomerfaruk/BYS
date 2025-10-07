@@ -8,7 +8,6 @@ import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtBasvuruDurumu;
 import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtBasvuruHareketDurumu;
 import tr.bel.gaziantep.bysweb.core.service.AbstractService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
-import tr.bel.gaziantep.bysweb.core.utils.StringUtil;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtBasvuru;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtRandevu;
 
@@ -114,12 +113,24 @@ public class OrtBasvuruService extends AbstractService<OrtBasvuru> {
 //        }
 //    }
 
-    public void pay(OrtBasvuru ortBasvuru) {
-        if (StringUtil.isNotBlank(ortBasvuru.getMakbuzNo())) {
-            ortBasvuruHareketService.addHistory(ortBasvuru, EnumOrtBasvuruHareketDurumu.ODEME_ALINDI);
-            ortBasvuru.setBasvuruHareketDurumu(EnumOrtBasvuruHareketDurumu.ODEME_ALINDI);
-        }
-        edit(ortBasvuru);
+//    public void pay(OrtBasvuru ortBasvuru) {
+//        if (StringUtil.isNotBlank(ortBasvuru.getMakbuzNo())) {
+//            ortBasvuruHareketService.addHistory(ortBasvuru, EnumOrtBasvuruHareketDurumu.ODEME_ALINDI);
+//            ortBasvuru.setBasvuruHareketDurumu(EnumOrtBasvuruHareketDurumu.ODEME_ALINDI);
+//        }
+//        edit(ortBasvuru);
+//
+//    }
+//
+//    public void saveSutKodu(OrtBasvuru ortBasvuru) {
+//        ortBasvuruHareketService.addHistory(ortBasvuru, EnumOrtBasvuruHareketDurumu.SUT_KODU_VERILDI);
+//        ortBasvuru.setBasvuruHareketDurumu(EnumOrtBasvuruHareketDurumu.SUT_KODU_VERILDI);
+//        edit(ortBasvuru);
+//    }
 
+    public void saveDurum(OrtBasvuru ortBasvuru,EnumOrtBasvuruHareketDurumu durum) {
+        ortBasvuruHareketService.addHistory(ortBasvuru, durum);
+        ortBasvuru.setBasvuruHareketDurumu(durum);
+        edit(ortBasvuru);
     }
 }
