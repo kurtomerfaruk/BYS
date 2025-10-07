@@ -25,9 +25,9 @@
                         rowKey="#{item.id}"
                         selection="#{ortStokController.selected}"
                         filtered="#{ortStokController.filtered}"
-                        rowselect=":OrtStokListForm:datalist:datalist:createButton,:OrtStokListForm:datalist:datalist:viewButton,:OrtStokListForm:datalist:datalist:editButton,:OrtStokListForm:datalist:datalist:deleteButton,:OrtStokListForm:datalist:datalist:stokHistoryButton"
+                        rowselect=":OrtStokListForm:datalist:datalist:createButton,:OrtStokListForm:datalist:datalist:viewButton,:OrtStokListForm:datalist:datalist:editButton,:OrtStokListForm:datalist:datalist:deleteButton,:OrtStokListForm:datalist:datalist:stokHistoryButton :OrtStokListForm:datalist:datalist:stokHistoryPriceButton"
                         rowDblselect="document.getElementById('OrtStokListForm:datalist:datalist:editButton').click()"
-                        contextMenu=":OrtStokListForm:datalist:datalist:createButton :OrtStokListForm:datalist:datalist:viewButton :OrtStokListForm:datalist:datalist:editButton :OrtStokListForm:datalist:datalist:deleteButton :OrtStokListForm:datalist:datalist:stokHistoryButton"
+                        contextMenu=":OrtStokListForm:datalist:datalist:createButton :OrtStokListForm:datalist:datalist:viewButton :OrtStokListForm:datalist:datalist:editButton :OrtStokListForm:datalist:datalist:deleteButton :OrtStokListForm:datalist:datalist:stokHistoryButton :OrtStokListForm:datalist:datalist:stokHistoryPriceButton"
                         selectListener="#{ortStokController.resetParents}"
                         controller="#{ortStokController}"
                         header="#{messages.personelListesi}">
@@ -59,6 +59,13 @@
                                  actionListener="#{ortStokHareketController.getInfo(ortStokController.selected)}"
                                  onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
                                  rendered="#{syKullaniciController.hasPermission('ortstok:hareketgor')}"/>
+
+                <p:commandButton id="stokHistoryPriceButton" styleClass="ui-button-teal" icon="pi pi-list-check" pt:data-tooltip="#{messages.buttonFiyatHareket}"
+                                 update=":OrtStokFiyatHareketForm" oncomplete="PF('OrtStokFiyatHareketDialog').show()"
+                                 disabled="#{empty ortStokController.selected}"
+                                 actionListener="#{ortStokFiyatHareketController.getInfo(ortStokController.selected)}"
+                                 onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('ortstok:fiyathareketgor')}"/>
 
             </f:facet>
 

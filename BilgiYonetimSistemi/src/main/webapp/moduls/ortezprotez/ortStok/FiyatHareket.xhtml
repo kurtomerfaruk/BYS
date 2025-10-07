@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces">
+
+<ui:composition>
+
+
+    <script type="text/javascript">
+        $(function () {
+
+            $(window).trigger('resize');
+
+            $(window).resize(function () {
+                windowResize();
+
+            });
+        });
+
+        function windowResize() {
+            var windowH = $(window).height();
+            windowH -= 115;
+            $('.form-height-fiyat-ekstre').css({'height': windowH + 'px'});
+            $('#OrtStokFiyatHareketForm\\:ekstreId').css({'height': windowH - 121 + 'px'});
+            $('#OrtStokFiyatHareketForm\\:ekstreId .ui-datatable-scrollable-body').css({'height': windowH - 260 + 'px'});
+        }
+
+    </script>
+
+    <p:dialog widgetVar="OrtStokFiyatHareketDialog"
+              modal="true"
+              resizable="false"
+              closeOnEscape="true"
+              header="#{messages.dialogFiyatHareketler}"
+              appendTo="@(body)"
+              responsive="true"
+              onShow="PF('OrtStokFiyatHareketDialog').initPosition();PF('OrtStokFiyatHareketDialog').toggleMaximize();windowResize()"
+              onHide="PF('OrtStokFiyatHareketDialog').toggleMaximize();windowResize()"
+              style="overflow: auto;"
+              fitViewport="true"
+              position="top">
+
+        <h:form id="OrtStokFiyatHareketForm" styleClass="form-height-fiyat-ekstre">
+            <div class="row align-items-center g-3">
+                <div class="col">
+                    <div class="p-1 py-2 h-auto bg-light rounded-3 border-50">
+                        <h:outputText value="#{ortStokController.selected.stokAdi}" styleClass="fw-semibold fs-36 "/>
+                    </div>
+                </div>
+            </div>
+
+            <p:dataTable id="ekstreId"
+                         value="#{ortStokFiyatHareketController.lazyItems}"
+                         var="item"
+                         lazy="true"
+                         rowKey="#{item.id}"
+                         paginator="true"
+                         rows="30"
+                         emptyMessage="#{messages.kayitBulunamadi}"
+                         paginatorPosition="bottom"
+                         rowsPerPageTemplate="30,50,100,200,500"
+                         widgetVar="ekstreWidget"
+                         pageLinks="5"
+                         reflow="true"
+                         rowHover="true"
+                         size="small"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         currentPageReportTemplate="#{messages.currentPageTemplate}"
+                         stripedRows="true"
+                         partialUpdate="false"
+                         scrollable="true"
+                         scrollHeight="100%">
+
+                <p:column id="tarih" sortBy="#{item.tarih}" filterBy="#{item.tarih}" width="12%" filterMatchMode="between">
+                    <f:facet name="header">
+                        <h:outputText value="#{messages.tarihText}"/>
+                    </f:facet>
+                    <f:facet name="filter">
+                        <p:datePicker selectionMode="range" onchange="PF('ekstreWidget').filter()" monthNavigator="true" yearNavigator="true"
+                                      showButtonBar="true" showIcon="true" showOnFocus="false"/>
+                    </f:facet>
+                    <h:outputText value="#{item.tarih}">
+                        <f:convertDateTime pattern="#{messages.tarihSaatFormat}" type="localDateTime"/>
+                    </h:outputText>
+                </p:column>
+
+
+                <p:column id="fiyat" sortBy="#{item.fiyat}" filterBy="#{item.fiyat}" width="10%">
+                    <f:facet name="header">
+                        <h:outputText value="#{messages.fiyatText}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.fiyat}">
+                        <f:convertNumber minFractionDigits="2" maxFractionDigits="2"/>
+                    </h:outputText>
+                </p:column>
+
+            </p:dataTable>
+        </h:form>
+
+    </p:dialog>
+
+</ui:composition>
+
+</html>
+
