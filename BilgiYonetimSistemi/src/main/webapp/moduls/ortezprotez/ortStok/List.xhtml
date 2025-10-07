@@ -25,9 +25,9 @@
                         rowKey="#{item.id}"
                         selection="#{ortStokController.selected}"
                         filtered="#{ortStokController.filtered}"
-                        rowselect=":OrtStokListForm:datalist:datalist:createButton,:OrtStokListForm:datalist:datalist:viewButton,:OrtStokListForm:datalist:datalist:editButton,:OrtStokListForm:datalist:datalist:deleteButton"
+                        rowselect=":OrtStokListForm:datalist:datalist:createButton,:OrtStokListForm:datalist:datalist:viewButton,:OrtStokListForm:datalist:datalist:editButton,:OrtStokListForm:datalist:datalist:deleteButton,:OrtStokListForm:datalist:datalist:stokHistoryButton"
                         rowDblselect="document.getElementById('OrtStokListForm:datalist:datalist:editButton').click()"
-                        contextMenu=":OrtStokListForm:datalist:datalist:createButton :OrtStokListForm:datalist:datalist:viewButton :OrtStokListForm:datalist:datalist:editButton :OrtStokListForm:datalist:datalist:deleteButton"
+                        contextMenu=":OrtStokListForm:datalist:datalist:createButton :OrtStokListForm:datalist:datalist:viewButton :OrtStokListForm:datalist:datalist:editButton :OrtStokListForm:datalist:datalist:deleteButton :OrtStokListForm:datalist:datalist:stokHistoryButton"
                         selectListener="#{ortStokController.resetParents}"
                         controller="#{ortStokController}"
                         header="#{messages.personelListesi}">
@@ -52,6 +52,13 @@
                                  rendered="#{syKullaniciController.hasPermission('ortstok:sil')}">
                     <p:confirm header="#{messages.ConfirmationHeader}" message="#{messages.ConfirmDeleteMessage}" icon="pi pi-exclamation-circle"/>
                 </p:commandButton>
+
+                <p:commandButton id="stokHistoryButton" styleClass="ui-button-orange" icon="pi pi-list-check" pt:data-tooltip="#{messages.buttonStokHareket}"
+                                 update=":OrtStokHareketForm" oncomplete="PF('OrtStokHareketDialog').show()"
+                                 disabled="#{empty ortStokController.selected}"
+                                 actionListener="#{ortStokHareketController.getInfo(ortStokController.selected)}"
+                                 onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('ortstok:hareketgor')}"/>
 
             </f:facet>
 
