@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces">
+
+<ui:composition>
+
+
+    <script type="text/javascript">
+        $(function () {
+
+            $(window).trigger('resize');
+
+            $(window).resize(function () {
+                windowResize();
+
+            });
+        });
+
+        function windowResize() {
+            var windowH = $(window).height();
+            windowH -= 115;
+            $('.form-height-ekstre').css({'height': windowH + 'px'});
+            $('#OrtStokHareketForm\\:ekstreId').css({'height': windowH - 121 + 'px'});
+            $('#OrtStokHareketForm\\:ekstreId .ui-datatable-scrollable-body').css({'height': windowH - 260 + 'px'});
+        }
+
+    </script>
+
+    <p:dialog widgetVar="OrtStokHareketDialog"
+              modal="true"
+              resizable="false"
+              closeOnEscape="true"
+              header="#{messages.dialogStokHareketler}"
+              appendTo="@(body)"
+              responsive="true"
+              onShow="PF('OrtStokHareketDialog').initPosition();PF('OrtStokHareketDialog').toggleMaximize();windowResize()"
+              onHide="PF('OrtStokHareketDialog').toggleMaximize();windowResize()"
+              style="overflow: auto;"
+              fitViewport="true"
+              position="top">
+
+        <h:form id="OrtStokHareketForm" styleClass="form-height-ekstre">
+            <div class="row align-items-center g-3">
+                <div class="col">
+                    <div class="p-1 py-2 h-auto bg-light rounded-3 border-50">
+                        <h:outputText value="#{ortStokController.selected.stokAdi}" styleClass="fw-semibold fs-36 "/>
+                    </div>
+                </div>
+            </div>
+
+            <p:dataTable id="ekstreId"
+                         value="#{ortStokHareketController.lazyItems}"
+                         var="item"
+                         lazy="true"
+                         rowKey="#{item.id}"
+                         paginator="true"
+                         rows="30"
+                         emptyMessage="#{messages.kayitBulunamadi}"
+                         paginatorPosition="bottom"
+                         rowsPerPageTemplate="30,50,100,200,500"
+                         widgetVar="ekstreWidget"
+                         pageLinks="5"
+                         reflow="true"
+                         rowHover="true"
+                         size="small"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         currentPageReportTemplate="#{messages.currentPageTemplate}"
+                         stripedRows="true"
+                         partialUpdate="false"
+                         scrollable="true"
+                         scrollHeight="100%">
+
+                <p:column id="tarih" sortBy="#{item.tarih}" filterBy="#{item.tarih}" width="12%" filterMatchMode="between">
+                    <f:facet name="header">
+                        <h:outputText value="#{messages.tarihText}"/>
+                    </f:facet>
+                    <f:facet name="filter">
+                        <p:datePicker selectionMode="range" onchange="PF('ekstreWidget').filter()" monthNavigator="true" yearNavigator="true"
+                                      showButtonBar="true" showIcon="true" showOnFocus="false"/>
+                    </f:facet>
+                    <h:outputText value="#{item.tarih}">
+                        <f:convertDateTime pattern="#{messages.tarihSaatFormat}" type="localDateTime"/>
+                    </h:outputText>
+                </p:column>
+
+
+                <p:column id="hareketTur" sortBy="#{item.hareketTur}" filterBy="#{item.hareketTur}" width="10%">
+                    <f:facet name="header">
+                        <h:outputText value="#{messages.hareketTurText}"/>
+                    </f:facet>
+                    <f:facet name="filter">
+                        <p:selectOneMenu onchange="PF('ekstreWidget').filter();"
+                                         converter="omnifaces.SelectItemsConverter">
+                            <f:selectItem itemLabel="#{messages.tumuText}"/>
+                            <f:selectItems value="#{enumOrtStokHareketTur.ALL_VALUES}"
+                                           var="hareketTurs"
+                                           itemValue="#{hareketTurs}"
+                                           itemLabel="#{hareketTurs.displayValue}"/>
+                            <p:ajax onstart="PF('Loading').show()" oncomplete="PF('Loading').hide()"/>
+                        </p:selectOneMenu>
+                    </f:facet>
+                    <h:outputText value="#{item.hareketTur.displayValue}"/>
+                </p:column>
+
+                <p:column id="aciklama" sortBy="#{item.aciklama}" filterBy="#{item.aciklama}">
+                    <f:facet name="header">
+                        <h:outputText value="#{messages.aciklamaText}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.aciklama}"/>
+                </p:column>
+
+                <p:column id="miktar" sortBy="#{item.miktar}" filterBy="#{item.miktar}" width="10%">
+                    <f:facet name="header">
+                        <h:outputText value="#{messages.miktarText}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.miktar}">
+                        <f:convertNumber minFractionDigits="2" maxFractionDigits="2"/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column id="durum" sortBy="#{item.durum}" filterBy="#{item.durum}" width="10%">
+                    <f:facet name="header">
+                        <h:outputText value="#{messages.durumText}"/>
+                    </f:facet>
+                    <f:facet name="filter">
+                        <p:selectOneMenu onchange="PF('ekstreWidget').filter();"
+                                         converter="omnifaces.SelectItemsConverter">
+                            <f:selectItem itemLabel="#{messages.tumuText}"/>
+                            <f:selectItems value="#{enumGirisCikis.ALL_VALUES}"
+                                           var="durums"
+                                           itemValue="#{durums}"
+                                           itemLabel="#{durums.displayValue}"/>
+                            <p:ajax onstart="PF('Loading').show()" oncomplete="PF('Loading').hide()"/>
+                        </p:selectOneMenu>
+                    </f:facet>
+                    <h:outputText value="#{item.durum.displayValue}"/>
+                </p:column>
+
+            </p:dataTable>
+        </h:form>
+
+    </p:dialog>
+
+</ui:composition>
+
+</html>
+
