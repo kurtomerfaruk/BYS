@@ -4,10 +4,13 @@
 xmlns:p="primefaces">
 
     <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtStokBirim" var="enumOrtStokBirim"/>
+    <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtStokHareketTur" var="enumOrtStokHareketTur"/>
+    <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.bys.EnumGirisCikis" var="enumGirisCikis"/>
 
     <ui:include src="/moduls/ortezprotez/ortStok/List.xhtml"/>
     <ui:include src="/moduls/ortezprotez/ortStok/View.xhtml"/>
     <ui:include src="/moduls/ortezprotez/ortStok/Edit.xhtml"/>
     <ui:include src="/moduls/ortezprotez/ortStok/Create.xhtml"/>
+    <ui:include src="/moduls/ortezprotez/ortStok/Hareket.xhtml"/>
 
 </ui:composition>
