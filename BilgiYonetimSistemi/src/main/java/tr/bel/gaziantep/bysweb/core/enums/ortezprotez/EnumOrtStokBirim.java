@@ -12,7 +12,8 @@ import tr.bel.gaziantep.bysweb.core.enums.BaseEnum;
 public enum EnumOrtStokBirim implements BaseEnum {
 
     ADET("Adet"),
-    Metre("Metre");
+    TUP("Tüp"),
+    GRAM("Gram");
 
     private final String label;
 
