@@ -50,10 +50,10 @@
                                     </li>
                                 </ui:fragment>
 
-                                <ui:fragment rendered="#{syKullaniciController.hasPermission('ortbasvurumalzemetalep:goster')}">
+                                <ui:fragment rendered="#{syKullaniciController.hasPermission('ortmalzemetalep:goster')}">
                                     <li class="slide">
                                         <p:commandLink styleClass="side-menu__item sublevel2"
-                                                       actionListener="#{menuController.setPageLink('/moduls/ortezprotez/ortBasvuruMalzemeTalep/index')}"
+                                                       actionListener="#{menuController.setPageLink('/moduls/ortezprotez/ortMalzemeTalep/index')}"
                                                        update="myPanel,:growl"
                                                        onstart="PF('Loading').show()"
                                                        onsuccess="PF('Loading').hide()"

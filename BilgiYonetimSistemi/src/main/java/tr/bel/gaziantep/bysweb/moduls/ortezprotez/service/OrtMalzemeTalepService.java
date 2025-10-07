@@ -5,23 +5,23 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import tr.bel.gaziantep.bysweb.core.service.AbstractService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
-import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtBasvuruMalzemeTalep;
+import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtMalzemeTalep;
 
 import java.io.Serial;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
  * @version 1.0.0
- * @since 7.10.2025 10:02
+ * @since 7.10.2025 13:53
  */
 @Stateless
-public class OrtBasvuruMalzemeTalepService extends AbstractService<OrtBasvuruMalzemeTalep> {
+public class OrtMalzemeTalepService extends AbstractService<OrtMalzemeTalep> {
 
     @Serial
-    private static final long serialVersionUID = -409927207420075926L;
+    private static final long serialVersionUID = -1304811183724913035L;
 
-    public OrtBasvuruMalzemeTalepService() {
-        super(OrtBasvuruMalzemeTalep.class);
+    public OrtMalzemeTalepService() {
+        super(OrtMalzemeTalep.class);
     }
 
     @PersistenceContext(unitName = Constants.UNIT_NAME)

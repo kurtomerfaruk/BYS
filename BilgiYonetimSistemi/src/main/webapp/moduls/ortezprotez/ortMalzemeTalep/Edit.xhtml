@@ -7,66 +7,66 @@
 
 <ui:composition>
 
-    <coco:createpage id="OrtBasvuruMalzemeTalepCreateForm"
-                     renderedListener="#{ortBasvuruMalzemeTalepController.selected != null}"
-                     widgetVar="OrtBasvuruMalzemeTalepCreateDialog"
-                     actionListener="#{ortBasvuruMalzemeTalepController.saveNew}"
-                     listForm="OrtBasvuruMalzemeTalepListForm">
+    <coco:editpage id="OrtMalzemeTalepEditForm"
+                   model="#{ortMalzemeTalepController.selected}"
+                   widgetVar="OrtMalzemeTalepEditDialog"
+                   actionListener="#{ortMalzemeTalepController.save}"
+                   listForm="OrtMalzemeTalepListForm">
 
         <p:outputLabel value="#{messages.talepTarihiLabel}" for="@next"/>
-        <p:datePicker id="talepTarihi" locale="tr" pattern="#{messages.tarihFormat}" value="#{ortBasvuruMalzemeTalepController.selected.talepTarihi}"
+        <p:datePicker id="talepTarihi" locale="tr" pattern="#{messages.tarihFormat}" value="#{ortMalzemeTalepController.selected.talepTarihi}"
                       title="#{messages.talepTarihiText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
                       showOnFocus="false"/>
 
         <p:outputLabel value="#{messages.hastaLabel}" for="@next"/>
         <coco:inputWithButton id="inputWithButtonHastaId" inputId="hastaId"
-                              inputValue="#{ortBasvuruMalzemeTalepController.selected.ortBasvuru.ortHasta.gnlKisi.tcKimlikNo}"
+                              inputValue="#{ortMalzemeTalepController.selected.ort.ortHasta.gnlKisi.tcKimlikNo}"
                               inputTitle="#{messages.hastaText}"
-                              actionListener="#{bysController.openCommonDialog('ortBasvuruSecMalzemeTalep')}"
-                              ajaxListener="#{ortBasvuruMalzemeTalepController.secilenOrtBasvuru}"
+                              actionListener="#{bysController.openCommonDialog('ortSecMalzemeTalep')}"
+                              ajaxListener="#{ortMalzemeTalepController.secilenOrt}"
                               buttonTitle="#{messages.hastaSecmelisiniz}"
                               size="50"
-                              dialogId="OrtBasvuruMalzemeTalepCreateDialogId"/>
+                              dialogId="OrtMalzemeTalepCreateDialogId"/>
 
         <p:outputLabel value="#{messages.adSoyadLabel}" for="@next"/>
-        <p:inputText id="adSoyad" value="#{ortBasvuruMalzemeTalepController.selected.ortBasvuru.ortHasta.gnlKisi.adSoyad}" required="true"
+        <p:inputText id="adSoyad" value="#{ortMalzemeTalepController.selected.ort.ortHasta.gnlKisi.adSoyad}" required="true"
                      readonly="#{facesContext.renderResponse}" styleClass="inputUpdate"/>
 
         <p:outputLabel value="#{messages.telefonLabel}" for="@next"/>
-        <p:inputText id="telefon" value="#{ortBasvuruMalzemeTalepController.selected.ortBasvuru.ortHasta.gnlKisi.telefon}" required="true"
+        <p:inputText id="telefon" value="#{ortMalzemeTalepController.selected.ort.ortHasta.gnlKisi.telefon}" required="true"
                      readonly="#{facesContext.renderResponse}" styleClass="inputUpdate"/>
 
         <p:outputLabel value="#{messages.stokAdiLabel}" for="@next"/>
         <coco:inputWithButton id="inputWithButtonStokId" inputId="stokId"
-                              inputValue="#{ortBasvuruMalzemeTalepController.selected.ortStok.stokAdi}"
+                              inputValue="#{ortMalzemeTalepController.selected.ortStok.stokAdi}"
                               inputTitle="#{messages.stokAdiText}"
                               actionListener="#{bysController.openCommonDialog('ortStokSec')}"
-                              ajaxListener="#{ortBasvuruMalzemeTalepController.secilenOrtStok}"
+                              ajaxListener="#{ortMalzemeTalepController.secilenOrtStok}"
                               buttonTitle="#{messages.stokSecmelisiniz}"
                               size="50"
                               updateClass="inputStok"
-                              dialogId="OrtBasvuruMalzemeTalepCreateDialogId"/>
+                              dialogId="OrtMalzemeTalepCreateDialogId"/>
 
         <p:outputLabel value="#{messages.birimLabel}" for="@next"/>
-        <p:inputText id="birim" value="#{ortBasvuruMalzemeTalepController.selected.ortStok.birim}" required="true"
+        <p:inputText id="birim" value="#{ortMalzemeTalepController.selected.ortStok.birim.name()}" required="true"
                      readonly="#{facesContext.renderResponse}" styleClass="inputStok"/>
 
         <p:outputLabel value="#{messages.miktarLabel}" for="@next"/>
-        <p:inputNumber id="miktar" value="#{ortBasvuruMalzemeTalepController.selected.miktar}" inputStyleClass="text-right" decimalPlaces="2"
+        <p:inputNumber id="miktar" value="#{ortMalzemeTalepController.selected.miktar}" inputStyleClass="text-right" decimalPlaces="2"
                        decimalSeparator="," thousandSeparator="." emptyValue="zero"/>
 
         <p:outputLabel value="#{messages.talepEdenPersonelLabel}" for="@next"/>
-        <p:inputText id="talepEdenPersonel" value="#{ortBasvuruMalzemeTalepController.selected.talepEdenOrtPersonel.gnlPersonel.gnlKisi.adSoyad}"
+        <p:inputText id="talepEdenPersonel" value="#{ortMalzemeTalepController.selected.talepEdenOrtPersonel.gnlPersonel.gnlKisi.adSoyad}"
                      readonly="true" title="#{messages.talepEdenPersonelText}"/>
 
         <p:outputLabel value="#{messages.aciklamaLabel}" for="@next"/>
-        <p:inputTextarea rows="4" id="aciklama" value="#{ortBasvuruMalzemeTalepController.selected.aciklama}" title="#{messages.aciklamaText}"
+        <p:inputTextarea rows="4" id="aciklama" value="#{ortMalzemeTalepController.selected.aciklama}" title="#{messages.aciklamaText}"
                          styleClass="w-100" autoResize="false"/>
 
         <p:outputLabel value="#{messages.durumLabel}" for="@next"/>
-        <p:inputText id="durum" value="#{ortBasvuruMalzemeTalepController.selected.durum.displayValue}" readonly="true" title="#{messages.durumText}"/>
+        <p:inputText id="durum" value="#{ortMalzemeTalepController.selected.durum.displayValue}" readonly="true" title="#{messages.durumText}"/>
 
-    </coco:createpage>
+    </coco:editpage>
 
 </ui:composition>
 
