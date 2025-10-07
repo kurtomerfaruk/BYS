@@ -13,6 +13,7 @@ import org.primefaces.event.SelectEvent;
 import tr.bel.gaziantep.bysweb.core.controller.AbstractController;
 import tr.bel.gaziantep.bysweb.core.enums.ErrorType;
 import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtBasvuruDurumu;
+import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtBasvuruHareketDurumu;
 import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.EnumSyFiltreAnahtari;
 import tr.bel.gaziantep.bysweb.core.exception.BysBusinessException;
 import tr.bel.gaziantep.bysweb.core.service.FilterOptionService;
@@ -129,24 +130,59 @@ public class OrtBasvuruController extends AbstractController<OrtBasvuru> {
         }
     }
 
-    public void getInfo(){
+    public void getInfo() {
         if (this.getSelected().getOrtHasta() == null) {
             throw new BysBusinessException(ErrorType.NESNE_OKUNAMADI);
         }
         this.getSelected().setRaporuOnaylayanOrtPersonel(ortPersonel);
     }
 
-    public void paid(){
-        if (this.getSelected().getOrtHasta() == null) {
+    public void paid() {
+        if (this.getSelected() == null) {
             throw new BysBusinessException(ErrorType.NESNE_OKUNAMADI);
         }
         try {
             this.getSelected().setOdendi(StringUtil.isNotBlank(this.getSelected().getMakbuzNo()));
-            ortBasvuruService.pay(this.getSelected());
+            ortBasvuruService.saveDurum(this.getSelected(), EnumOrtBasvuruHareketDurumu.ODEME_ALINDI);
             FacesUtil.successMessage("odemeAlindi");
-        }catch (Exception ex) {
+        } catch (Exception ex) {
             log.error(null, ex);
             FacesUtil.errorMessage(Constants.HATA_OLUSTU);
         }
+    }
+
+    public void saveSutKodu() {
+        if (this.getSelected() == null) {
+            throw new BysBusinessException(ErrorType.NESNE_OKUNAMADI);
+        }
+        try {
+            if (StringUtil.isNotBlank(this.getSelected().getSutKodu())) {
+                ortBasvuruService.saveDurum(this.getSelected(), EnumOrtBasvuruHareketDurumu.SUT_KODU_VERILDI);
+                FacesUtil.successMessage("sutKoduVerildi");
+            }
+
+        } catch (Exception ex) {
+            log.error(null, ex);
+            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+        }
+    }
+
+    public boolean checkSutKodu() {
+        if (this.getSelected() == null) {
+            throw new BysBusinessException(ErrorType.NESNE_OKUNAMADI);
+        }
+
+//        boolean result = false;
+//
+//        if (this.getSelected().isUcretli()) {
+//            if (this.getSelected().isOdendi()) {
+//                result = true;
+//            }
+//        } else {
+//            result = true;
+//        }
+//
+//        return result;
+        return !getSelected().isUcretli() || getSelected().isOdendi();
     }
 }
