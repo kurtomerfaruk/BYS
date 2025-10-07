@@ -10,7 +10,7 @@
     <coco:editpage id="OrtBasvuruSutKoduForm"
                    model="#{ortBasvuruController.selected}"
                    widgetVar="OrtBasvuruSutKoduDialog"
-                   actionListener="#{ortBasvuruController.saveSutKodu}"
+                   actionListener="#{ortBasvuruController.saveSutKodu()}"
                    listForm="OrtBasvuruListForm">
 
         <p:outputLabel value="#{messages.sutKoduLabel}" for="@next"/>
