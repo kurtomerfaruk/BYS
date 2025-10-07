@@ -29,6 +29,9 @@
         <p:inputText id="gorevi" value="#{ortPersonelController.selected.gnlPersonel.gnlUnvan.tanim}" title="#{messages.gorevText}"
                      size="50" maxlength="50" readonly="true"/>
 
+        <p:outputLabel value="#{messages.malzemeOnayLabel}" for="@next"/>
+        <p:selectBooleanCheckbox id="malzemeOnay" value="#{ortPersonelController.selected.malzemeOnay}"/>
+
 
     </coco:createpage>
 

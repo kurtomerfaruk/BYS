@@ -311,6 +311,8 @@ public abstract class AbstractService<T> implements java.io.Serializable {
             return result ? cb.isTrue(booleanExpression) : cb.isFalse(booleanExpression);
         } else if (value.equals("null")) {
             return cb.isNull(path);
+        } else if (value.equals("not_null")) {
+            return cb.isNotNull(path);
         } else if (value.contains("_month")) {
             return cb.equal(cb.function("MONTH", Integer.class, path), value.replace("_month", ""));
         } else if (value.contains("_year")) {

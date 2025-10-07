@@ -3,6 +3,8 @@ package tr.bel.gaziantep.bysweb.moduls.ortezprotez.controller;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
 import lombok.extern.slf4j.Slf4j;
+import org.primefaces.PrimeFaces;
+import org.primefaces.event.SelectEvent;
 import tr.bel.gaziantep.bysweb.core.controller.AbstractController;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtStok;
 
@@ -23,5 +25,14 @@ public class OrtStokController extends AbstractController<OrtStok> {
 
     public OrtStokController() {
         super(OrtStok.class);
+    }
+
+    public void stokSecKapat(OrtStok ortStok) {
+        PrimeFaces.current().dialog().closeDynamic(ortStok);
+    }
+
+    public void onRowDblSelect(SelectEvent<OrtStok> event) {
+        OrtStok ortStok = event.getObject();
+        stokSecKapat(ortStok);
     }
 }

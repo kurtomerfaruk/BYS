@@ -15,6 +15,7 @@
     <composite:attribute name="inputRequired" default="true"/>
     <composite:attribute name="size" default="80"/>
     <composite:attribute name="dialogId" required="true"/>
+    <composite:attribute name="updateClass" default="inputUpdate"/>
 </composite:interface>
 
 <composite:implementation>
@@ -29,7 +30,7 @@
                              process="@this"
                              update=":growl" title="#{cc.attrs.buttonTitle}">
                 <p:resetInput target=":#{cc.attrs.dialogId},#{cc.attrs.inputId}" />
-                <p:ajax event="dialogReturn" process="@this" listener="#{cc.attrs.ajaxListener}" update=":growl,@(.inputUpdate),#{cc.attrs.inputId}"/>
+                <p:ajax event="dialogReturn" process="@this" listener="#{cc.attrs.ajaxListener}" update=":growl,@(.#{cc.attrs.updateClass}),#{cc.attrs.inputId}"/>
             </p:commandButton>
         </div>
     </h:panelGroup>

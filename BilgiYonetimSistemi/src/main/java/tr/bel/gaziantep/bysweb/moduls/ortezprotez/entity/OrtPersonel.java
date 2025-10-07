@@ -32,6 +32,9 @@ public class OrtPersonel extends BaseEntity {
     @JoinColumn(name = "GNLPERSONEL_ID")
     private GnlPersonel gnlPersonel;
 
+    @Column(name = "MALZEME_ONAY")
+    private boolean malzemeOnay;
+
     @Override
     public int hashCode() {
         int hash = 0;
