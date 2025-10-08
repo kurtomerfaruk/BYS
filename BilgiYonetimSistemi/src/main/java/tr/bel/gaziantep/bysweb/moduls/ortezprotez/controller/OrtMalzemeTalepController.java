@@ -11,11 +11,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.SelectEvent;
 import tr.bel.gaziantep.bysweb.core.controller.AbstractController;
+import tr.bel.gaziantep.bysweb.core.enums.ErrorType;
+import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtBasvuruHareketDurumu;
 import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtMalzemeOnayDurumu;
+import tr.bel.gaziantep.bysweb.core.exception.BysBusinessException;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.*;
+import tr.bel.gaziantep.bysweb.moduls.ortezprotez.service.OrtBasvuruService;
+import tr.bel.gaziantep.bysweb.moduls.ortezprotez.service.OrtMalzemeTalepService;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.service.OrtMalzemeTalepStokService;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.service.OrtPersonelService;
 
@@ -39,11 +44,14 @@ public class OrtMalzemeTalepController extends AbstractController<OrtMalzemeTale
     @Serial
     private static final long serialVersionUID = 8030620919466467588L;
 
-
+    @Inject
+    private OrtMalzemeTalepService service;
     @Inject
     private OrtMalzemeTalepStokService ortMalzemeTalepStokService;
     @Inject
     private OrtPersonelService personelService;
+    @Inject
+    private OrtBasvuruService ortBasvuruService;
 
     @Getter
     @Setter
@@ -115,14 +123,13 @@ public class OrtMalzemeTalepController extends AbstractController<OrtMalzemeTale
         try {
             this.getSelected().getOrtMalzemeTalepStokList().removeIf(x -> x.getOrtStok().equals(detay.getOrtStok()));
 
-
             if (this.getSelected().getId() != null && detay.getId() != null) {
                 detay.setAktif(false);
                 ortMalzemeTalepStokService.edit(detay);
             }
             this.getSelected().getOrtMalzemeTalepStokList().removeIf(x -> x.getOrtStok().equals(detay.getOrtStok()));
         } catch (Exception ex) {
-            log.error(null,ex);
+            log.error(null, ex);
             FacesUtil.errorMessage(Constants.HATA_OLUSTU);
         }
     }
@@ -142,4 +149,127 @@ public class OrtMalzemeTalepController extends AbstractController<OrtMalzemeTale
             this.getSelected().getOrtMalzemeTalepStokList().get(rowIndex).setOrtStok(stok);
         }
     }
+
+    public void persist(ActionEvent event) {
+        if (this.getSelected() == null) {
+            throw new BysBusinessException(ErrorType.NESNE_OKUNAMADI);
+        }
+        try {
+            if (this.getSelected().getOrtMalzemeTalepStokList().isEmpty()) {
+                FacesUtil.warningMessage("malzemeGirilmedenKaydedilemez");
+                return;
+            }
+
+            service.persist(this.getSelected(), EnumOrtBasvuruHareketDurumu.MALZEME_TALEP_EDILDI);
+            FacesUtil.successMessage(Constants.KAYIT_GUNCELLENDI);
+        } catch (Exception ex) {
+            log.error(null, ex);
+            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+        }
+    }
+
+    public void update(ActionEvent event) {
+        if (this.getSelected() == null) {
+            throw new BysBusinessException(ErrorType.NESNE_OKUNAMADI);
+        }
+        try {
+            if (this.getSelected().getOrtMalzemeTalepStokList().isEmpty()) {
+                FacesUtil.warningMessage("malzemeGirilmedenKaydedilemez");
+                return;
+            }
+            EnumOrtBasvuruHareketDurumu durum = EnumOrtBasvuruHareketDurumu.MALZEME_TALEP_EDILDI;
+            if (this.getSelected().getDurum() == EnumOrtMalzemeOnayDurumu.IPTAL_EDILDI) {
+                durum = EnumOrtBasvuruHareketDurumu.MALZEME_TALEBI_IPTAL_EDILDI;
+            }
+            service.update(this.getSelected(), this.getSyKullanici(), durum);
+            FacesUtil.successMessage(Constants.KAYIT_GUNCELLENDI);
+        } catch (Exception ex) {
+            log.error(null, ex);
+            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+        }
+    }
+
+    public void approveInfo() {
+        if (this.getSelected() == null) {
+            throw new BysBusinessException(ErrorType.NESNE_OKUNAMADI);
+        }
+
+        this.getSelected().setOnaylayanOrtPersonel(ortPersonel);
+        this.getSelected().setOnayTarihi(LocalDateTime.now());
+    }
+
+    public void rejectInfo() {
+        if (this.getSelected() == null) {
+            throw new BysBusinessException(ErrorType.NESNE_OKUNAMADI);
+        }
+
+        this.getSelected().setRededenOrtPersonel(ortPersonel);
+        this.getSelected().setRedTarihi(LocalDateTime.now());
+    }
+
+    public void approve() {
+        if (this.getSelected() == null) {
+            throw new BysBusinessException(ErrorType.NESNE_OKUNAMADI);
+        }
+
+        try {
+            this.getSelected().setRedTarihi(null);
+            this.getSelected().setRedSebebi(null);
+            this.getSelected().setRedTarihi(null);
+            this.getSelected().setDurum(EnumOrtMalzemeOnayDurumu.ONAYLANDI);
+            service.approve(this.getSelected(), this.getSyKullanici(), EnumOrtBasvuruHareketDurumu.MALZEME_TALEBI_ONAYLANDI);
+            FacesUtil.successMessage("kayitOnaylandi");
+        } catch (Exception ex) {
+            log.error(null, ex);
+            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+        }
+    }
+
+    public void reject() {
+        if (this.getSelected() == null) {
+            throw new BysBusinessException(ErrorType.NESNE_OKUNAMADI);
+        }
+
+        try {
+            this.getSelected().setOnayTarihi(null);
+            this.getSelected().setOnaylayanOrtPersonel(null);
+            this.getSelected().setDurum(EnumOrtMalzemeOnayDurumu.REDDEDILDI);
+            service.edit(this.getSelected());
+            OrtBasvuru basvuru = this.getSelected().getOrtBasvuru();
+            basvuru.setBasvuruHareketDurumu(EnumOrtBasvuruHareketDurumu.MALZEME_TALEBI_REDDEDILDI);
+            ortBasvuruService.edit(basvuru);
+            FacesUtil.successMessage("kayitRededildi");
+        } catch (Exception ex) {
+            log.error(null, ex);
+            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+        }
+    }
+
+    public void deliveryInfo() {
+        if (this.getSelected() == null) {
+            throw new BysBusinessException(ErrorType.NESNE_OKUNAMADI);
+        }
+        this.getSelected().setTeslimTarihi(LocalDateTime.now());
+        this.getSelected().setTeslimEdenPersonel(ortPersonel);
+    }
+
+    public void delivery() {
+        if (this.getSelected() == null) {
+            throw new BysBusinessException(ErrorType.NESNE_OKUNAMADI);
+        }
+
+        try {
+            this.getSelected().setTeslimEdildi(true);
+            service.edit(this.getSelected());
+            OrtBasvuru basvuru = this.getSelected().getOrtBasvuru();
+            basvuru.setBasvuruHareketDurumu(EnumOrtBasvuruHareketDurumu.TEKNIKERE_TESLIM_EDILDI);
+            ortBasvuruService.edit(basvuru);
+            FacesUtil.successMessage("malzemeTeslimEdildi");
+        } catch (Exception ex) {
+            log.error(null, ex);
+            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+        }
+    }
+
+
 }

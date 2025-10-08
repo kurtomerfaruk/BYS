@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+>
+
+<ui:composition>
+
+    <p:dialog widgetVar="OrtMalzemeTalepApproveDialog"
+              id="OrtMalzemeTalepApproveDialogId"
+              modal="true"
+              resizable="false"
+              closeOnEscape="true"
+              header="Kayıt Onayla"
+              appendTo="@(body)"
+              responsive="true"
+              onShow="PF('OrtMalzemeTalepApproveDialog').initPosition();"
+              fitViewport="true"
+              position="top"
+              style="max-width:50% !important;">
+
+        <h:form id="OrtMalzemeTalepApproveForm">
+            <h:panelGroup id="display">
+                <p:focus context="display"/>
+                <p:panelGrid columns="1" columnClasses="column" rendered="#{ortMalzemeTalepController.selected != null}" layout="tabular">
+
+                    <p:panelGrid columns="2">
+                        <p:outputLabel value="#{messages.talepTarihiLabel}" for="@next"/>
+                        <p:datePicker id="talepTarihi" locale="tr" pattern="#{messages.tarihFormat}" value="#{ortMalzemeTalepController.selected.talepTarihi}"
+                                      title="#{messages.talepTarihiText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true"
+                                      showIcon="true" showOnFocus="false" readonly="true"/>
+
+                        <p:outputLabel value="#{messages.hastaLabel}" for="@next"/>
+                        <p:inputText id="inputWithButtonHastaId" value="#{ortMalzemeTalepController.selected.ortBasvuru.ortHasta.gnlKisi.tcKimlikNo}"
+                                     readonly="true" size="50"/>
+
+                        <p:outputLabel value="#{messages.adSoyadLabel}" for="@next"/>
+                        <p:inputText id="adSoyad" value="#{ortMalzemeTalepController.selected.ortBasvuru.ortHasta.gnlKisi.adSoyad}" required="true"
+                                     readonly="true" size="50"/>
+
+                        <p:outputLabel value="#{messages.telefonLabel}" for="@next"/>
+                        <p:inputText id="telefon" value="#{ortMalzemeTalepController.selected.ortBasvuru.ortHasta.gnlKisi.telefon}" required="true"
+                                     readonly="true"/>
+
+                        <p:outputLabel value="#{messages.talepEdenPersonelLabel}" for="@next"/>
+                        <p:inputText id="talepEdenPersonel" value="#{ortMalzemeTalepController.selected.talepEdenOrtPersonel.gnlPersonel.gnlKisi.adSoyad}"
+                                     readonly="true" title="#{messages.talepEdenPersonelText}"/>
+
+                        <p:outputLabel value="#{messages.aciklamaLabel}" for="@next"/>
+                        <p:inputTextarea rows="2" id="aciklama" value="#{ortMalzemeTalepController.selected.aciklama}" title="#{messages.aciklamaText}"
+                                         styleClass="w-100" autoResize="false" readonly="true"/>
+
+                        <p:outputLabel value="#{messages.onayTarihiLabel}" for="@next"/>
+                        <p:datePicker id="onayTarihi" locale="tr" pattern="#{messages.tarihFormat}" value="#{ortMalzemeTalepController.selected.onayTarihi}"
+                                      title="#{messages.onayTarihiText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true"
+                                      showIcon="true" showOnFocus="false"/>
+
+                        <p:outputLabel value="#{messages.onaylayanPersonelLabel}" for="@next"/>
+                        <p:inputText id="redEdenPersonel" value="#{ortMalzemeTalepController.selected.onaylayanOrtPersonel.gnlPersonel.gnlKisi.adSoyad}"
+                                     readonly="true" title="#{messages.onaylayanPersonelText}"/>
+
+                        <p:outputLabel value="#{messages.durumLabel}" for="@next"/>
+                        <p:inputText id="durum" value="#{ortMalzemeTalepController.selected.durum.displayValue}" readonly="true" title="#{messages.durumText}"/>
+                    </p:panelGrid>
+
+                    <p:panelGrid columns="1">
+                        <p:dataTable id="detayId"
+                                     var="detay"
+                                     value="#{ortMalzemeTalepController.selected.ortMalzemeTalepStokList}"
+                                     styleClass="w-100"
+                                     scrollable="true"
+                                     scrollHeight="250"
+                                     showGridlines="true"
+                                     size="small">
+
+                            <p:column headerText="Stok Kod" width="10%">
+                                <h:outputText value="#{detay.ortStok.stokKodu}"/>
+                            </p:column>
+
+                            <p:column headerText="Stok Ad">
+                                <h:outputText value="#{detay.ortStok.stokAdi}"/>
+                            </p:column>
+
+                            <p:column headerText="Miktar" styleClass="text-right" width="80">
+                                <h:outputText value="#{detay.miktar}"/>
+                            </p:column>
+
+                            <p:column headerText="Birim" width="80">
+                                <h:outputText value="#{detay.ortStok.birim.displayValue}"/>
+                            </p:column>
+
+                            <p:column headerText="Açıklama" styleClass="text-right" width="100">
+                                <h:outputText value="#{detay.aciklama}"/>
+                            </p:column>
+                        </p:dataTable>
+                    </p:panelGrid>
+
+                    <f:facet name="footer">
+                        <div class="float-end">
+                            <p:commandButton icon="pi pi-check" styleClass="ui-button-success"
+                                             actionListener="#{ortMalzemeTalepController.approve()}"
+                                             value="#{messages.buttonOnayla}"
+                                             update=":OrtMalzemeTalepListForm:datalist:datalist,:growl,display"
+                                             oncomplete="handleSubmit(xhr,status,args,PF('OrtMalzemeTalepApproveDialog'));"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                            <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                             value="#{messages.buttonIptal}"
+                                             onclick="PF('OrtMalzemeTalepApproveDialog').hide()" immediate="true"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()">
+                                <p:resetInput target="@form"/>
+                            </p:commandButton>
+                        </div>
+                    </f:facet>
+                </p:panelGrid>
+            </h:panelGroup>
+        </h:form>
+    </p:dialog>
+
+</ui:composition>
+
+</html>

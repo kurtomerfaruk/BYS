@@ -9,20 +9,20 @@
 
 <ui:composition>
 
-    <p:dialog widgetVar="OrtMalzemeTalepEditDialog"
-              id="OrtMalzemeTalepEditDialogId"
+    <p:dialog widgetVar="OrtMalzemeTalepRejectDialog"
+              id="OrtMalzemeTalepRejectDialogId"
               modal="true"
               resizable="false"
               closeOnEscape="true"
-              header="#{messages.dialogKayitGuncelle}"
+              header="Talep Reddet"
               appendTo="@(body)"
               responsive="true"
-              onShow="PF('OrtMalzemeTalepEditDialog').initPosition();"
+              onShow="PF('OrtMalzemeTalepRejectDialog').initPosition();"
               fitViewport="true"
               position="top"
               style="max-width:50% !important;">
 
-        <h:form id="OrtMalzemeTalepEditForm">
+        <h:form id="OrtMalzemeTalepRejectForm">
             <h:panelGroup id="display">
                 <p:focus context="display"/>
                 <p:panelGrid columns="1" columnClasses="column" rendered="#{ortMalzemeTalepController.selected != null}" layout="tabular">
@@ -42,7 +42,7 @@
                                               ajaxListener="#{ortMalzemeTalepController.secilenBasvuru}"
                                               buttonTitle="#{messages.hastaSecmelisiniz}"
                                               size="50"
-                                              dialogId="OrtMalzemeTalepEditDialogId"/>
+                                              dialogId="OrtMalzemeTalepRejectDialogId"/>
 
                         <p:outputLabel value="#{messages.adSoyadLabel}" for="@next"/>
                         <p:inputText id="adSoyad" value="#{ortMalzemeTalepController.selected.ortBasvuru.ortHasta.gnlKisi.adSoyad}" required="true"
@@ -60,81 +60,43 @@
                         <p:inputTextarea rows="4" id="aciklama" value="#{ortMalzemeTalepController.selected.aciklama}" title="#{messages.aciklamaText}"
                                          styleClass="w-100" autoResize="false"/>
 
+                        <p:outputLabel value="#{messages.redTarihiLabel}" for="@next"/>
+                        <p:datePicker id="redTarihi" locale="tr" pattern="#{messages.tarihFormat}" value="#{ortMalzemeTalepController.selected.redTarihi}"
+                                      title="#{messages.redTarihiText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true"
+                                      showIcon="true" showOnFocus="false"/>
+
+                        <p:outputLabel value="#{messages.redEdenPersonelLabel}" for="@next"/>
+                        <p:inputText id="redEdenPersonel" value="#{ortMalzemeTalepController.selected.rededenOrtPersonel.gnlPersonel.gnlKisi.adSoyad}"
+                                     readonly="true" title="#{messages.redEdenPersonelText}"/>
+
+                        <p:outputLabel value="#{messages.redSebebiLabel}" for="@next"/>
+                        <p:inputTextarea rows="4" id="redSebebi" value="#{ortMalzemeTalepController.selected.redSebebi}" title="#{messages.redSebebiText}"
+                                         styleClass="w-100" autoResize="false"/>
+
                         <p:outputLabel value="#{messages.durumLabel}" for="@next"/>
-                        <p:selectOneMenu id="durum" value="#{ortMalzemeTalepController.selected.durum}">
-                            <f:selectItem itemLabel="Beklemede" itemValue="BEKLEMEDE"/>
-                            <f:selectItem itemLabel="İptal Edildi" itemValue="IPTAL_EDILDI"/>
-                        </p:selectOneMenu>
+                        <p:inputText id="durum" value="#{ortMalzemeTalepController.selected.durum.displayValue}" readonly="true" title="#{messages.durumText}"/>
                     </p:panelGrid>
 
                     <p:panelGrid columns="1">
-                        <f:facet name="header">
-                            <div class="float-end">
-                                <p:commandButton title="#{messages.buttonMalzemeEkle}" actionListener="#{ortMalzemeTalepController.onAddNew()}"
-                                                 styleClass="ui-button-success" icon="pi pi-plus" update=":growl,detayId" process="@this"/>
-                            </div>
-                        </f:facet>
                         <p:dataTable id="detayId"
                                      var="detay"
                                      value="#{ortMalzemeTalepController.selected.ortMalzemeTalepStokList}"
                                      styleClass="w-100"
-                                     editable="true"
-                                     editMode="cell"
                                      scrollable="true"
                                      scrollHeight="250"
                                      showGridlines="true"
                                      size="small">
 
-
-                            <p:ajax event="cellEdit" listener="#{ortMalzemeTalepController.onCellEdit}" update=":growl"/>
-                            <p:ajax event="cellEditInit" listener="#{ortMalzemeTalepController.onCellEditInit}" update=":growl"/>
-
-                            <p:column headerText="Sil" width="10%">
-                                <p:commandButton styleClass="ui-button-danger mr-2" icon="pi pi-times" update="detayId,:growl,.@(tutar)" process="@this"
-                                                 actionListener="#{ortMalzemeTalepController.removeRow(detay)}"/>
-                            </p:column>
                             <p:column headerText="Stok Kod" width="10%">
-
-                                <h:outputText value="#{detay.ortStok.stokKodu}" styleClass="dtInputUpdate"/>
+                                <h:outputText value="#{detay.ortStok.stokKodu}"/>
                             </p:column>
 
                             <p:column headerText="Stok Ad">
-                                <p:cellEditor>
-                                    <f:facet name="output">
-                                        <h:outputText value="#{detay.ortStok.stokAdi}"/>
-                                    </f:facet>
-                                    <f:facet name="input">
-                                        <h:panelGroup>
-                                            <div class="ui-inputgroup">
-                                                <p:inputText id="stokId" value="#{detay.ortStok.stokAdi}" required="true"
-                                                             title="#{messages.stokAdiText}" label="#{messages.stokAdiText}"
-                                                             readonly="#{facesContext.currentPhaseId.ordinal eq 6}" size="50">
-                                                </p:inputText>
-                                                <p:commandButton icon="pi pi-search"
-                                                                 action="#{bysController.openCommonDialog('ortStokSec')}"
-                                                                 process="@this"
-                                                                 update=":growl" title="#{messages.stokSecmelisiniz}">
-                                                    <p:resetInput target=":OrtMalzemeTalepEditDialogId,stokId"/>
-                                                    <p:ajax event="dialogReturn" process="@this" listener="#{ortMalzemeTalepController.secilenStok}"
-                                                            update=":growl,@(.dtInputUpdate),stokId,detayId"/>
-                                                </p:commandButton>
-                                            </div>
-                                        </h:panelGroup>
-                                    </f:facet>
-                                </p:cellEditor>
+                                <h:outputText value="#{detay.ortStok.stokAdi}"/>
                             </p:column>
 
                             <p:column headerText="Miktar" styleClass="text-right" width="80">
-                                <p:cellEditor>
-                                    <f:facet name="output">
-                                        <h:outputText value="#{detay.miktar}" styleClass="tutar"/>
-                                    </f:facet>
-                                    <f:facet name="input">
-                                        <p:spinner id="miktar" value="#{detay.miktar}" min="0">
-                                            <p:ajax event="change" update="@(.tutar),:growl"/>
-                                        </p:spinner>
-                                    </f:facet>
-                                </p:cellEditor>
+                                <h:outputText value="#{detay.miktar}"/>
                             </p:column>
 
                             <p:column headerText="Birim" width="80">
@@ -142,14 +104,7 @@
                             </p:column>
 
                             <p:column headerText="Açıklama" styleClass="text-right" width="100">
-                                <p:cellEditor>
-                                    <f:facet name="output">
-                                        <p:outputLabel value="#{detay.aciklama}"/>
-                                    </f:facet>
-                                    <f:facet name="input">
-                                        <p:inputText id="aciklamaDetay" value="#{detay.aciklama}" size="50"/>
-                                    </f:facet>
-                                </p:cellEditor>
+                                <h:outputText value="#{detay.aciklama}"/>
                             </p:column>
                         </p:dataTable>
                     </p:panelGrid>
@@ -157,14 +112,14 @@
                     <f:facet name="footer">
                         <div class="float-end">
                             <p:commandButton icon="pi pi-check" styleClass="ui-button-success"
-                                             actionListener="#{ortMalzemeTalepController.update}"
-                                             value="#{messages.buttonKaydet}"
+                                             actionListener="#{ortMalzemeTalepController.reject()}"
+                                             value="#{messages.buttonReddet}"
                                              update=":OrtMalzemeTalepListForm:datalist:datalist,:growl,display"
-                                             oncomplete="handleSubmit(xhr,status,args,PF('OrtMalzemeTalepEditDialog'));"
+                                             oncomplete="handleSubmit(xhr,status,args,PF('OrtMalzemeTalepRejectDialog'));"
                                              onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
                             <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
                                              value="#{messages.buttonIptal}"
-                                             onclick="PF('OrtMalzemeTalepEditDialog').hide()" immediate="true"
+                                             onclick="PF('OrtMalzemeTalepRejectDialog').hide()" immediate="true"
                                              onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()">
                                 <p:resetInput target="@form"/>
                             </p:commandButton>

@@ -22,6 +22,8 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 @Table(name = "ORTSTOK_HAREKET")
+@NamedQuery(name = "OrtStokHareket.findByIslemIdByHareketTur", query = "SELECT s FROM OrtStokHareket s WHERE s.aktif=true AND s.islemId=:islemId " +
+        "AND s.hareketTur = :hareketTur AND s.ortStok = :ortStok")
 public class OrtStokHareket extends BaseEntity {
     @Serial
     private static final long serialVersionUID = -8492524138021401375L;
@@ -53,6 +55,9 @@ public class OrtStokHareket extends BaseEntity {
 
     @Column(name = "MIKTAR", precision = 18, scale = 2)
     private BigDecimal miktar;
+
+    @Column(name = "ISLEM_ID")
+    private Integer islemId;
 
     @Override
     public int hashCode() {

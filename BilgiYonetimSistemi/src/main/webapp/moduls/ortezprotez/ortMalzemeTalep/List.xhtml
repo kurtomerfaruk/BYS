@@ -25,9 +25,17 @@
                         rowKey="#{item.id}"
                         selection="#{ortMalzemeTalepController.selected}"
                         filtered="#{ortMalzemeTalepController.filtered}"
-                        rowselect=":OrtMalzemeTalepListForm:datalist:datalist:createButton,:OrtMalzemeTalepListForm:datalist:datalist:viewButton,:OrtMalzemeTalepListForm:datalist:datalist:editButton,:OrtMalzemeTalepListForm:datalist:datalist:deleteButton"
+                        rowselect=":OrtMalzemeTalepListForm:datalist:datalist:createButton,:OrtMalzemeTalepListForm:datalist:datalist:viewButton,
+                        :OrtMalzemeTalepListForm:datalist:datalist:editButton,:OrtMalzemeTalepListForm:datalist:datalist:deleteButton,
+                        :OrtMalzemeTalepListForm:datalist:datalist:approveButton,:OrtMalzemeTalepListForm:datalist:datalist:rejectButton,
+                        :OrtMalzemeTalepListForm:datalist:datalist:deliveryButton,:OrtMalzemeTalepListForm:datalist:datalist:printButton,
+                        :OrtMalzemeTalepListForm:datalist:datalist:appointmentButton"
                         rowDblselect="document.getElementById('OrtMalzemeTalepListForm:datalist:datalist:editButton').click()"
-                        contextMenu=":OrtMalzemeTalepListForm:datalist:datalist:createButton :OrtMalzemeTalepListForm:datalist:datalist:viewButton :OrtMalzemeTalepListForm:datalist:datalist:editButton :OrtMalzemeTalepListForm:datalist:datalist:deleteButton"
+                        contextMenu=":OrtMalzemeTalepListForm:datalist:datalist:createButton :OrtMalzemeTalepListForm:datalist:datalist:viewButton
+                        :OrtMalzemeTalepListForm:datalist:datalist:editButton :OrtMalzemeTalepListForm:datalist:datalist:deleteButton
+                        :OrtMalzemeTalepListForm:datalist:datalist:approveButton :OrtMalzemeTalepListForm:datalist:datalist:rejectButton
+                        :OrtMalzemeTalepListForm:datalist:datalist:deliveryButton :OrtMalzemeTalepListForm:datalist:datalist:printButton
+                        :OrtMalzemeTalepListForm:datalist:datalist:appointmentButton"
                         selectListener="#{ortMalzemeTalepController.resetParents}"
                         controller="#{ortMalzemeTalepController}"
                         header="#{messages.malzemeTalepListesi}">
@@ -41,22 +49,50 @@
                                  oncomplete="PF('OrtMalzemeTalepCreateDialog').show()" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
                                  rendered="#{syKullaniciController.hasPermission('ortmalzemetalep:ekle')}"/>
                 <p:commandButton id="editButton" styleClass="ui-button-success" icon="pi pi-pencil" pt:data-tooltip="#{messages.buttonGuncelle}"
-                                 update=":OrtMalzemeTalepEditForm:OrtMalzemeTalepEditForm" oncomplete="PF('OrtMalzemeTalepEditDialog').show()"
-                                 disabled="#{empty ortMalzemeTalepController.selected}" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                 update=":OrtMalzemeTalepEditForm" oncomplete="PF('OrtMalzemeTalepEditDialog').show()"
+                                 disabled="#{empty ortMalzemeTalepController.selected or (ortMalzemeTalepController.selected.durum ne 'BEKLEMEDE' and ortMalzemeTalepController.selected.durum ne 'IPTAL_EDILDI')}"
+                                 onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
                                  rendered="#{syKullaniciController.hasPermission('ortmalzemetalep:guncelle')}"/>
                 <p:commandButton id="viewButton" styleClass="ui-button-info" icon="pi pi-search" pt:data-tooltip="#{messages.buttonDetay}"
                                  update=":OrtMalzemeTalepViewForm:OrtMalzemeTalepViewForm" oncomplete="PF('OrtMalzemeTalepViewDialog').show()"
                                  disabled="#{empty ortMalzemeTalepController.selected}" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
                 <p:commandButton id="deleteButton" styleClass="ui-button-danger" icon="pi pi-trash" pt:data-tooltip="#{messages.buttonSil}"
-                                 actionListener="#{ortMalzemeTalepController.delete}" update=":growl,datalist" disabled="#{empty ortMalzemeTalepController.selected}"
+                                 actionListener="#{ortMalzemeTalepController.delete}" update=":growl,datalist"
+                                 disabled="#{empty ortMalzemeTalepController.selected or ortMalzemeTalepController.selected.durum ne 'BEKLEMEDE'}"
                                  rendered="#{syKullaniciController.hasPermission('ortmalzemetalep:sil')}">
                     <p:confirm header="#{messages.ConfirmationHeader}" message="#{messages.ConfirmDeleteMessage}" icon="pi pi-exclamation-circle"/>
                 </p:commandButton>
+                <p:commandButton id="approveButton" styleClass="ui-button-teal" icon="pi pi-check" pt:data-tooltip="#{messages.buttonOnayla}"
+                                 update=":OrtMalzemeTalepApproveForm" oncomplete="PF('OrtMalzemeTalepApproveDialog').show()"
+                                 disabled="#{empty ortMalzemeTalepController.selected or ortMalzemeTalepController.selected.durum ne 'BEKLEMEDE'}"
+                                 onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('ortmalzemetalep:onayla')}"
+                                 actionListener="#{ortMalzemeTalepController.approveInfo()}"/>
+                <p:commandButton id="rejectButton" styleClass="ui-button-pink" icon="pi pi-times" pt:data-tooltip="#{messages.buttonReddet}"
+                                 update=":OrtMalzemeTalepRejectForm" oncomplete="PF('OrtMalzemeTalepRejectDialog').show()"
+                                 disabled="#{empty ortMalzemeTalepController.selected or ortMalzemeTalepController.selected.durum ne 'BEKLEMEDE'}"
+                                 onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('ortmalzemetalep:reddet')}"
+                                 actionListener="#{ortMalzemeTalepController.rejectInfo()}"/>
 
+
+                <p:commandButton id="deliveryButton" styleClass="ui-button-indigo" icon="pi pi-arrow-right" pt:data-tooltip="#{messages.buttonTeslimEt}"
+                                 update=":OrtMalzemeTalepDeliveryForm:OrtMalzemeTalepDeliveryForm" oncomplete="PF('OrtMalzemeTalepDeliveryDialog').show()"
+                                 disabled="#{empty ortMalzemeTalepController.selected or ortMalzemeTalepController.selected.teslimEdildi}"
+                                 onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                 actionListener="#{ortMalzemeTalepController.deliveryInfo()}"/>
+
+                <p:commandButton id="printButton" styleClass="ui-button-teal" icon="pi pi-print" pt:data-tooltip="#{messages.buttonYazdir}"
+                                 disabled="#{empty ortMalzemeTalepController.selected or ortMalzemeTalepController.selected.teslimEdildi}"
+                                 onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+
+                <p:commandButton id="appointmentButton" styleClass="ui-button-orange" icon="pi pi-table" pt:data-tooltip="#{messages.buttonRandevuOlustur}"
+                                 update=":OrtMalzemeTalepAppointForm:OrtMalzemeTalepAppointForm" oncomplete="PF('OrtMalzemeTalepAppointDialog').show()"
+                                 disabled="#{empty ortMalzemeTalepController.selected or !ortMalzemeTalepController.selected.teslimEdildi}"
+                                 onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
             </f:facet>
 
         </coco:datatable>
-
 
         <ui:include src="/confirmation.xhtml"/>
 

@@ -3,6 +3,7 @@ package tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Nationalized;
 import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
 import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtMalzemeOnayDurumu;
@@ -52,6 +53,33 @@ public class OrtMalzemeTalep extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ONAYLAYAN_ORTPERSONEL_ID")
     private OrtPersonel onaylayanOrtPersonel;
+
+    @Column(name = "RED_TARIHI")
+    private LocalDateTime redTarihi;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "REDEDEN_ORTPERSONEL_ID")
+    private OrtPersonel rededenOrtPersonel;
+
+    @Nationalized
+    @Lob
+    @Column(name = "RED_SEBEBI")
+    private String redSebebi;
+
+    @ColumnDefault("0")
+    @Column(name = "TESLIM_EDILDI")
+    private boolean teslimEdildi;
+
+    @Column(name = "TESLIM_TARIHI")
+    private LocalDateTime teslimTarihi;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "TESLIM_ALAN_ORTPERSONEL_ID")
+    private OrtPersonel teslimAlanPersonel;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "TESLIM_EDEN_ORTPERSONEL_ID")
+    private OrtPersonel teslimEdenPersonel;
 
     @Column(name = "DURUM")
     @Enumerated(EnumType.STRING)

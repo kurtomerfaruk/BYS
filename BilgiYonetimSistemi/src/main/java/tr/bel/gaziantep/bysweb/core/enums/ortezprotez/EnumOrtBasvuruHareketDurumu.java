@@ -15,7 +15,12 @@ public enum EnumOrtBasvuruHareketDurumu implements BaseEnum {
     OLCU_ALINDI("Ölçü alındı"),
     OLCU_SONRASI_RANDEVU_VERILDI("Ölçü sonrası randevu verildi"),
     ODEME_ALINDI("Ödeme Alındı"),
-    SUT_KODU_VERILDI("Şut kodu verildi");
+    SUT_KODU_VERILDI("Şut kodu verildi"),
+    MALZEME_TALEP_EDILDI("Malzeme Talep Edildi"),
+    MALZEME_TALEBI_IPTAL_EDILDI("Malzeme Talebi İptal Edildi"),
+    MALZEME_TALEBI_REDDEDILDI("Malzeme Talebi Reddedildi"),
+    MALZEME_TALEBI_ONAYLANDI("Malzeme Talebi Onaylandı"),
+    TEKNIKERE_TESLIM_EDILDI("Teknikere teslim edildi");
 
     private final String label;
 

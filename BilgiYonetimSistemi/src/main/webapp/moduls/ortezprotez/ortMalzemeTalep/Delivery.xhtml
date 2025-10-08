@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:editpage id="OrtMalzemeTalepDeliveryForm"
+                   model="#{ortMalzemeTalepController.selected}"
+                   widgetVar="OrtMalzemeTalepDeliveryDialog"
+                   actionListener="#{ortMalzemeTalepController.delivery()}"
+                   listForm="OrtMalzemeTalepListForm"
+                   header="Malzeme Teslim Et">
+
+        <p:outputLabel value="#{messages.teslimTarihiLabel}" for="@next"/>
+        <p:datePicker id="teslimTarihi" locale="tr" pattern="#{messages.tarihFormat}" value="#{ortMalzemeTalepController.selected.teslimTarihi}"
+                      title="#{messages.teslimTarihiText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true"
+                      showIcon="true" showOnFocus="false"/>
+
+        <p:outputLabel value="#{messages.teslimEdenPersonelLabel}" for="@next"/>
+        <p:inputText id="teslimEdenPersonel" value="#{ortMalzemeTalepController.selected.teslimEdenPersonel.gnlPersonel.gnlKisi.adSoyad}"
+                     readonly="true" title="#{messages.teslimEdenPersonelText}" size="50"/>
+
+        <p:outputLabel value="#{messages.teslimAlanPersonelLabel}" for="@next"/>
+        <p:selectOneMenu id="teslimAlanPersonel" value="#{ortMalzemeTalepController.selected.teslimAlanPersonel}" converter="omnifaces.SelectItemsConverter"
+                         required="true">
+            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{ortPersonelController.items}"
+                           var="personels"
+                           itemLabel="#{personels.gnlPersonel.gnlKisi.adSoyad}"
+                           itemValue="#{personels}"/>
+        </p:selectOneMenu>
+
+    </coco:editpage>
+
+</ui:composition>
+
+</html>

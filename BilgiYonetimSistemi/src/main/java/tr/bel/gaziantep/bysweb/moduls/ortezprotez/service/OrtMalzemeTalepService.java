@@ -1,13 +1,21 @@
 package tr.bel.gaziantep.bysweb.moduls.ortezprotez.service;
 
-import jakarta.ejb.Stateless;
+import jakarta.ejb.*;
+import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import tr.bel.gaziantep.bysweb.core.enums.bys.EnumGirisCikis;
+import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtBasvuruHareketDurumu;
+import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtStokHareketTur;
 import tr.bel.gaziantep.bysweb.core.service.AbstractService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
-import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtMalzemeTalep;
+import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.*;
+import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.entity.SyKullanici;
 
 import java.io.Serial;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
@@ -15,6 +23,7 @@ import java.io.Serial;
  * @since 7.10.2025 13:53
  */
 @Stateless
+@TransactionManagement(TransactionManagementType.CONTAINER)
 public class OrtMalzemeTalepService extends AbstractService<OrtMalzemeTalep> {
 
     @Serial
@@ -30,5 +39,82 @@ public class OrtMalzemeTalepService extends AbstractService<OrtMalzemeTalep> {
     @Override
     protected EntityManager getEntityManager() {
         return em;
+    }
+
+    @Inject
+    private OrtStokService stokService;
+    @Inject
+    private OrtStokHareketService stokHareketService;
+
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void update(OrtMalzemeTalep malzemeTalep, SyKullanici syKullanici, EnumOrtBasvuruHareketDurumu durum) {
+        OrtMalzemeTalep existingTalep = find(malzemeTalep.getId());
+        updateMalzemeFields(existingTalep, malzemeTalep);
+        List<OrtMalzemeTalepStok> updatedDetails = malzemeTalep.getOrtMalzemeTalepStokList();
+        List<OrtMalzemeTalepStok> existingDetails = existingTalep.getOrtMalzemeTalepStokList();
+
+        existingDetails.stream()
+                .filter(detail -> !updatedDetails.contains(detail))
+                .forEach(detail -> detail.setAktif(false));
+
+        updatedDetails.forEach(detail -> {
+            if (detail.getId() == null) {
+                detail.setEkleyen(syKullanici);
+                detail.setEklemeTarihi(LocalDateTime.now());
+                detail.setOrtMalzemeTalep(existingTalep);
+            }
+        });
+
+        existingTalep.setOrtMalzemeTalepStokList(updatedDetails);
+        refreshEdit(existingTalep);
+        OrtBasvuru basvuru = existingTalep.getOrtBasvuru();
+        basvuru.setBasvuruHareketDurumu(durum);
+        basvuruUpdate(basvuru);
+    }
+
+    private void updateMalzemeFields(OrtMalzemeTalep target, OrtMalzemeTalep source) {
+        target.setOrtBasvuru(source.getOrtBasvuru());
+        target.setTalepTarihi(source.getTalepTarihi());
+        target.setAciklama(source.getAciklama());
+        target.setTalepEdenOrtPersonel(source.getTalepEdenOrtPersonel());
+        target.setDurum(source.getDurum());
+    }
+
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void approve(OrtMalzemeTalep malzemeTalep, SyKullanici syKullanici,EnumOrtBasvuruHareketDurumu durum) {
+        edit(malzemeTalep);
+        OrtBasvuru basvuru = malzemeTalep.getOrtBasvuru();
+        basvuru.setBasvuruHareketDurumu(durum);
+        basvuruUpdate(basvuru);
+        for (OrtMalzemeTalepStok talepStok : malzemeTalep.getOrtMalzemeTalepStokList()) {
+            OrtStok ortStok = talepStok.getOrtStok();
+
+            OrtStokHareket stokHareket = stokHareketService.createHareket(syKullanici,
+                    ortStok,
+                    malzemeTalep.getOnayTarihi(),
+                    talepStok.getAciklama(),
+                    talepStok.getMiktar(),
+                    EnumOrtStokHareketTur.HASTA_ICIN_KULLANIM,
+                    malzemeTalep.getId(),
+                    EnumGirisCikis.CIKIS,
+                    talepStok.isAktif());
+
+            getEntityManager().merge(stokHareket);
+            if (ortStok.getOrtStokHareketList() == null) ortStok.setOrtStokHareketList(new ArrayList<>());
+            ortStok.getOrtStokHareketList().add(stokHareket);
+            stokService.setStokMiktar(ortStok);
+        }
+    }
+
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void persist(OrtMalzemeTalep malzemeTalep, EnumOrtBasvuruHareketDurumu durum) {
+        create(malzemeTalep);
+        OrtBasvuru basvuru = malzemeTalep.getOrtBasvuru();
+        basvuru.setBasvuruHareketDurumu(durum);
+        basvuruUpdate(malzemeTalep.getOrtBasvuru());
+    }
+
+    private void basvuruUpdate(OrtBasvuru ortBasvuru) {
+        getEntityManager().merge(ortBasvuru);
     }
 }
