@@ -19,10 +19,7 @@ import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.*;
-import tr.bel.gaziantep.bysweb.moduls.ortezprotez.service.OrtBasvuruService;
-import tr.bel.gaziantep.bysweb.moduls.ortezprotez.service.OrtMalzemeTalepService;
-import tr.bel.gaziantep.bysweb.moduls.ortezprotez.service.OrtMalzemeTalepStokService;
-import tr.bel.gaziantep.bysweb.moduls.ortezprotez.service.OrtPersonelService;
+import tr.bel.gaziantep.bysweb.moduls.ortezprotez.service.*;
 
 import java.io.Serial;
 import java.lang.reflect.InvocationTargetException;
@@ -52,6 +49,8 @@ public class OrtMalzemeTalepController extends AbstractController<OrtMalzemeTale
     private OrtPersonelService personelService;
     @Inject
     private OrtBasvuruService ortBasvuruService;
+    @Inject
+    private OrtRandevuService ortRandevuService;
 
     @Getter
     @Setter
@@ -59,6 +58,9 @@ public class OrtMalzemeTalepController extends AbstractController<OrtMalzemeTale
     @Getter
     @Setter
     private OrtPersonel ortPersonel;
+    @Getter
+    @Setter
+    private OrtRandevu ortRandevu;
 
     public OrtMalzemeTalepController() {
         super(OrtMalzemeTalep.class);
@@ -266,6 +268,33 @@ public class OrtMalzemeTalepController extends AbstractController<OrtMalzemeTale
             ortBasvuruService.edit(basvuru);
             FacesUtil.successMessage("malzemeTeslimEdildi");
         } catch (Exception ex) {
+            log.error(null, ex);
+            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+        }
+    }
+
+    public void appointmentInfo(){
+        if (this.getSelected() == null) {
+            throw new BysBusinessException(ErrorType.NESNE_OKUNAMADI);
+        }
+
+        ortRandevu = OrtRandevu.builder()
+                .ortHasta(this.getSelected().getOrtBasvuru().getOrtHasta())
+                .randevuTarihi(LocalDateTime.now())
+                .konu("Malzeme Teslim")
+                .build();
+
+    }
+
+    public void createAppointMent(){
+        if (this.getSelected() == null) {
+            throw new BysBusinessException(ErrorType.NESNE_OKUNAMADI);
+        }
+
+        try {
+            ortRandevuService.create(ortRandevu);
+            FacesUtil.successMessage("randevuOlusturuldu");
+        }catch (Exception ex) {
             log.error(null, ex);
             FacesUtil.errorMessage(Constants.HATA_OLUSTU);
         }
