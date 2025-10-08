@@ -2,6 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="primefaces"
       xmlns:coco="jakarta.faces.composite/ui">
 
 <ui:composition>
@@ -9,10 +10,28 @@
     <coco:editpage id="OrtMalzemeTalepAppointForm"
                    model="#{ortMalzemeTalepController.selected}"
                    widgetVar="OrtMalzemeTalepAppointDialog"
-                   actionListener="#{ortMalzemeTalepController.save}"
+                   actionListener="#{ortMalzemeTalepController.createAppointMent()}"
                    listForm="OrtMalzemeTalepListForm">
 
+        <p:outputLabel value="#{messages.randevuTarihiLabel}" for="@next"/>
+        <p:datePicker id="randevuTarihi" locale="tr" pattern="#{messages.tarihFormat}" value="#{ortMalzemeTalepController.ortRandevu.randevuTarihi}"
+                      title="#{messages.randevuTarihiText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true"
+                      showIcon="true" showOnFocus="false"/>
 
+        <p:outputLabel value="#{messages.tcKimlikNoLabel}" for="@next"/>
+        <p:inputText value="#{ortMalzemeTalepController.ortRandevu.ortHasta.gnlKisi.tcKimlikNo}" readonly="true"/>
+
+        <p:outputLabel value="#{messages.hastaLabel}" for="@next"/>
+        <p:inputText value="#{ortMalzemeTalepController.ortRandevu.ortHasta.gnlKisi.adSoyad}" size="50" readonly="true"/>
+
+        <p:outputLabel value="#{messages.telefonLabel}" for="@next"/>
+        <p:inputText value="#{ortMalzemeTalepController.ortRandevu.ortHasta.gnlKisi.telefon}" size="50" readonly="true"/>
+
+        <p:outputLabel value="#{messages.konuLabel}" for="@next"/>
+        <p:inputText value="#{ortMalzemeTalepController.ortRandevu.konu}" size="50" title="#{messages.konuText}" required="true"/>
+
+        <p:outputLabel value="#{messages.aciklamaLabel}" for="@next"/>
+        <p:inputTextarea value="#{ortMalzemeTalepController.ortRandevu.aciklama}" rows="4" autoResize="false" styleClass="w-100"/>
 
     </coco:editpage>
 

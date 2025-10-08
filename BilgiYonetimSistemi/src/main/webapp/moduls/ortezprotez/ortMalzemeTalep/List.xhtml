@@ -89,7 +89,8 @@
                 <p:commandButton id="appointmentButton" styleClass="ui-button-orange" icon="pi pi-table" pt:data-tooltip="#{messages.buttonRandevuOlustur}"
                                  update=":OrtMalzemeTalepAppointForm:OrtMalzemeTalepAppointForm" oncomplete="PF('OrtMalzemeTalepAppointDialog').show()"
                                  disabled="#{empty ortMalzemeTalepController.selected or !ortMalzemeTalepController.selected.teslimEdildi}"
-                                 onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                                 onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                 actionListener="#{ortMalzemeTalepController.appointmentInfo()}"/>
             </f:facet>
 
         </coco:datatable>
