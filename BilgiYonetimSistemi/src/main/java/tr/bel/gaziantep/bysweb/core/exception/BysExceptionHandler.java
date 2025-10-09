@@ -13,6 +13,7 @@ import jakarta.faces.event.ExceptionQueuedEvent;
 import jakarta.faces.event.PhaseId;
 import jakarta.faces.lifecycle.ClientWindow;
 import jakarta.faces.view.ViewDeclarationLanguage;
+import org.primefaces.PrimeFaces;
 import org.primefaces.application.exceptionhandler.ExceptionInfo;
 import org.primefaces.application.exceptionhandler.PrimeExceptionHandler;
 import org.primefaces.component.ajaxexceptionhandler.AjaxExceptionHandler;
@@ -23,6 +24,7 @@ import org.primefaces.context.PrimeRequestContext;
 import org.primefaces.csp.CspPhaseListener;
 import org.primefaces.expression.SearchExpressionUtils;
 import org.primefaces.util.*;
+import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -70,6 +72,13 @@ public class BysExceptionHandler extends ExceptionHandlerWrapper {
                 try {
                     Throwable throwable = unhandledExceptionQueuedEvents.next().getContext().getException();
 
+                    if (throwable instanceof BysBusinessException) {
+                        unhandledExceptionQueuedEvents.remove();
+                        FacesUtil.addErrorMessage(throwable.getMessage());
+                        PrimeFaces.current().ajax().update(":growl");
+                        return; // diğer hataları bastır
+                    }
+
                     unhandledExceptionQueuedEvents.remove();
 
                     Throwable rootCause = getRootCause(throwable);
@@ -90,6 +99,8 @@ public class BysExceptionHandler extends ExceptionHandlerWrapper {
                     else {
                         handleRedirect(context, rootCause, info, false);
                     }
+
+
                 }
                 catch (Exception ex) {
                     LOGGER.log(Level.SEVERE, "Could not handle exception!", ex);
