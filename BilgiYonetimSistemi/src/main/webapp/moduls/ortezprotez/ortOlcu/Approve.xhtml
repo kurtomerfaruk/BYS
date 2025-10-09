@@ -37,12 +37,12 @@
 
         <p:outputLabel value="#{messages.tutarLabel}" for="@next" rendered="#{ortOlcuController.selected.ortBasvuru.ucretli}"/>
         <p:inputNumber id="tutar" value="#{ortOlcuController.selected.ortBasvuru.tutar}" inputStyleClass="text-end" decimalPlaces="2" decimalSeparator=","
-                       thousandSeparator="." emptyValue="zero"/>
+                       thousandSeparator="." emptyValue="zero" rendered="#{ortOlcuController.selected.ortBasvuru.ucretli}"/>
 
         <p:outputLabel value="#{messages.randevuTarihiLabel}" for="@next" rendered="#{ortOlcuController.selected.durum eq 'UYGUN_DEGIL'}"/>
         <p:datePicker id="randevuTarihi" locale="tr" pattern="#{messages.tarihFormat}" value="#{ortOlcuController.selected.randevuTarihi}"
                       title="#{messages.randevuTarihiText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
-                      showOnFocus="false" rendered="#{ortOlcuController.selected.durum eq 'UYGUN_DEGIL'}"
+                      showOnFocus="false"  rendered="#{ortOlcuController.selected.durum eq 'UYGUN_DEGIL'}"
                       required="#{ortOlcuController.selected.durum eq 'UYGUN_DEGIL'}"/>
 
     </coco:editpage>
