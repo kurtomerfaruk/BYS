@@ -151,6 +151,9 @@
     <p:ajaxExceptionHandler type="tr.bel.gaziantep.bysweb.core.exception.BysException"
                             update="exceptionDialog"
                             onexception="PF('exceptionDialog').show()"/>
+    <p:ajaxExceptionHandler type="tr.bel.gaziantep.bysweb.core.exception.BysBusinessException"
+                            update="exceptionDialog"
+                            onexception="PF('exceptionDialog').show()"/>
     <p:ajaxExceptionHandler type="jakarta.faces.FacesException"
                             update="exceptionDialog"
                             onexception="PF('exceptionDialog').show()"/>
