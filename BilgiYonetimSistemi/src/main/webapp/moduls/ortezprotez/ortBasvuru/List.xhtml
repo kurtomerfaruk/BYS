@@ -8,7 +8,11 @@
                 xmlns:pt="jakarta.faces.passthrough"
                 xmlns:coco="jakarta.faces.composite/ui">
 
+
+
     <h:form id="OrtBasvuruListForm" styleClass="form-height">
+
+        <f:event type="preRenderView" listener="#{ortBasvuruController.onPreRenderView}" />
 
         <p:contextMenu id="OrtBasvuruDataTableContextMenu" for="datalist:datalist">
             <p:menuitem value="#{messages.buttonEkle}" onclick="document.getElementById('OrtBasvuruListForm:datalist:datalist:createButton').click();"

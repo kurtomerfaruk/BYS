@@ -1,6 +1,5 @@
 package tr.bel.gaziantep.bysweb.moduls.ortezprotez.controller;
 
-import jakarta.annotation.PostConstruct;
 import jakarta.faces.event.ActionEvent;
 import jakarta.faces.model.SelectItem;
 import jakarta.faces.view.ViewScoped;
@@ -82,13 +81,21 @@ public class OrtBasvuruController extends AbstractController<OrtBasvuru> {
 
     }
 
-    @Override
-    @PostConstruct
-    public void init() {
-        super.init();
+//    @Override
+//    @PostConstruct
+//    public void init() {
+//        super.init();
+//        ortPersonel = personelService.findByGnlPersonel(this.getSyKullanici().getGnlPersonel());
+//        if (ortPersonel == null) {
+//            FacesUtil.addErrorMessage("Sistem yöneticiniz ile görüşüp personel tanımı yaptırınız...");
+//            throw new BysBusinessException(ErrorType.NESNE_OKUNAMADI);
+//        }
+//    }
+
+    public void onPreRenderView() {
         ortPersonel = personelService.findByGnlPersonel(this.getSyKullanici().getGnlPersonel());
         if (ortPersonel == null) {
-            FacesUtil.addErrorMessage("Sistem yöneticiniz ile görüşüp personel tanımı yaptırınız...");
+            throw new BysBusinessException("Sistem yöneticiniz ile görüşüp personel tanımı yaptırınız...");
         }
     }
 
