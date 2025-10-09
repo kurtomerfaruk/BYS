@@ -149,9 +149,11 @@ public class OrtHastaController extends AbstractKisiController<OrtHasta> {
             throw new BysBusinessException(ErrorType.KISI_BILGILERI_OKUNAMADI);
         }
 
+        eyEngelGrubus = new ArrayList<>();
+
         if (!this.getSelected().isEngelli()) {
             eyKisi = null;
-            eyEngelGrubus = new ArrayList<>();
+            return;
         }
 
         if (!StringUtil.isBlank(this.getSelected().getGnlKisi().getTcKimlikNo())) {
@@ -160,6 +162,12 @@ public class OrtHastaController extends AbstractKisiController<OrtHasta> {
             if (eyKisi != null) {
                 eyEngelGrubus = eyKisiEngelGrubuService.getEyEngelGrubuByEyKisi(eyKisi);
                 this.getSelected().setEngelli(!eyEngelGrubus.isEmpty());
+            }else{
+                eyKisi =EyKisi.builder()
+                        .gnlKisi(this.getSelected().getGnlKisi())
+                        .eyKisiEngelGrubuList(new ArrayList<>())
+                        .build();
+
             }
         }
     }
