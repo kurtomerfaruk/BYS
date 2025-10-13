@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
 import tr.bel.gaziantep.bysweb.core.enums.bys.EnumGirisCikis;
+import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtStokHareketTablo;
 import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtStokHareketTur;
 
 import java.io.Serial;
@@ -47,6 +48,10 @@ public class OrtStokHareket extends BaseEntity {
     @Column(name = "DURUM")
     @Enumerated(EnumType.STRING)
     private EnumGirisCikis durum;
+
+    @Column(name = "TABLO")
+    @Enumerated(EnumType.STRING)
+    private EnumOrtStokHareketTablo tablo;
 
     @Nationalized
     @Lob
