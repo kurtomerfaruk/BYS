@@ -133,4 +133,10 @@ public class OrtBasvuruService extends AbstractService<OrtBasvuru> {
         ortBasvuru.setBasvuruHareketDurumu(durum);
         edit(ortBasvuru);
     }
+
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void saveNew(OrtBasvuru ortBasvuru) {
+        ortBasvuruHareketService.addHistory(ortBasvuru, EnumOrtBasvuruHareketDurumu.BEKLEMEDE);
+        create(ortBasvuru);
+    }
 }

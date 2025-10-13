@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Nationalized;
+import org.hibernate.annotations.SQLRestriction;
 import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
 import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtEngelOlusum;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
@@ -101,6 +102,10 @@ public class OrtHasta extends BaseEntity {
 
     @OneToMany(mappedBy = "ortHasta")
     private List<OrtRandevu> ortrandevus = new ArrayList<>();
+
+    @OneToMany(mappedBy = "ortHasta")
+    @SQLRestriction("AKTIF=true")
+    private List<OrtFizikTedavi> ortFizikTedaviList = new ArrayList<>();
 
     @Override
     public int hashCode() {

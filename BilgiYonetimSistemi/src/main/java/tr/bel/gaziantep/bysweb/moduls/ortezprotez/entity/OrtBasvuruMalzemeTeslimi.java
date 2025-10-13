@@ -1,9 +1,9 @@
 package tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Nationalized;
 import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
 
@@ -17,6 +17,9 @@ import java.time.LocalDateTime;
  */
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "ORTBASVURU_MALZEME_TESLIMI")
 public class OrtBasvuruMalzemeTeslimi extends BaseEntity {
@@ -53,6 +56,11 @@ public class OrtBasvuruMalzemeTeslimi extends BaseEntity {
     @ColumnDefault("0")
     @Column(name = "STOKTAN_DUS", nullable = false)
     private boolean stoktanDus;
+
+    @Nationalized
+    @Lob
+    @Column(name = "ACIKLAMA")
+    private String aciklama;
 
     @Override
     public int hashCode() {

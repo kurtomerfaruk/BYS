@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:editpage id="OrtBasvuruSiliconDeliveryForm"
+                   model="#{ortBasvuruController.selected}"
+                   widgetVar="OrtBasvuruSiliconDeliveryDialog"
+                   actionListener="#{ortBasvuruController.saveSiliconDelivery()}"
+                   listForm="OrtBasvuruListForm"
+                   header="Silikon Teslimi">
+
+        <p:outputLabel value="#{messages.teslimTarihiLabel}" for="@next"/>
+        <p:datePicker id="teslimTarihi" locale="tr" pattern="#{messages.tarihFormat}" value="#{ortBasvuruController.ortBasvuruMalzemeTeslimi.teslimTarihi}"
+                      title="#{messages.teslimTarihiText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true"
+                      showIcon="true" showOnFocus="false" required="true"/>
+
+        <p:outputLabel value="#{messages.malzemeLabel}" for="@next"/>
+        <coco:inputWithButton id="inputWithButtonStokId" inputId="stokId"
+                              inputValue="#{ortBasvuruController.ortBasvuruMalzemeTeslimi.ortStok.stokAdi}"
+                              inputTitle="#{messages.malzemeText}"
+                              actionListener="#{bysController.openCommonDialog('ortStokSec')}"
+                              ajaxListener="#{ortBasvuruController.secilenOrtStok}"
+                              buttonTitle="#{messages.stokSecmelisiniz}"
+                              size="50"
+                              dialogId="OrtBasvuruSiliconDeliveryForm"/>
+
+        <p:outputLabel value="#{messages.markaLabel}" for="@next"/>
+        <p:inputText value="#{ortBasvuruController.ortBasvuruMalzemeTeslimi.ortStok.marka}" styleClass="inputUpdate" readonly="true"/>
+
+        <p:outputLabel value="#{messages.miktarLabel}" for="@next"/>
+        <p:spinner id="miktar" value="#{ortBasvuruController.ortBasvuruMalzemeTeslimi.miktar}" min="1" required="true"/>
+
+        <p:outputLabel value="#{messages.teslimEdenPersonelLabel}" for="@next"/>
+        <p:inputText value="#{ortBasvuruController.ortBasvuruMalzemeTeslimi.teslimEdenOrtPersonel.gnlPersonel.gnlKisi.adSoyad}" readonly="true"/>
+
+
+
+    </coco:editpage>
+
+</ui:composition>
+
+</html>

@@ -37,6 +37,13 @@
 
             <p:ajax event="rowDblselect" listener="#{ortStokController.onRowDblSelect}"/>
 
+            <p:column sortBy="#{item.marka}" filterBy="#{item.marka}">
+                <f:facet name="header">
+                    <h:outputText value="#{messages.markaText}"/>
+                </f:facet>
+                <h:outputText value="#{item.marka}"/>
+            </p:column>
+
             <p:column sortBy="#{item.stokKodu}" filterBy="#{item.stokKodu}">
                 <f:facet name="header">
                     <h:outputText value="#{messages.stokKoduText}"/>

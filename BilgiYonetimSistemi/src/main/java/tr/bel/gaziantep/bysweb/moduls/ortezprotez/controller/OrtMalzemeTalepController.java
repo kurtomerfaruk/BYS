@@ -1,6 +1,5 @@
 package tr.bel.gaziantep.bysweb.moduls.ortezprotez.controller;
 
-import jakarta.annotation.PostConstruct;
 import jakarta.faces.event.ActionEvent;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
@@ -66,13 +65,20 @@ public class OrtMalzemeTalepController extends AbstractController<OrtMalzemeTale
         super(OrtMalzemeTalep.class);
     }
 
-    @Override
-    @PostConstruct
-    public void init() {
-        super.init();
+//    @Override
+//    @PostConstruct
+//    public void init() {
+//        super.init();
+//        ortPersonel = personelService.findByGnlPersonel(this.getSyKullanici().getGnlPersonel());
+//        if (ortPersonel == null) {
+//            FacesUtil.addErrorMessage("Sistem yöneticiniz ile görüşüp personel tanımı yaptırınız...");
+//        }
+//    }
+
+    public void onPreRenderView() {
         ortPersonel = personelService.findByGnlPersonel(this.getSyKullanici().getGnlPersonel());
         if (ortPersonel == null) {
-            FacesUtil.addErrorMessage("Sistem yöneticiniz ile görüşüp personel tanımı yaptırınız...");
+            throw new BysBusinessException("Sistem yöneticiniz ile görüşüp personel tanımı yaptırınız...");
         }
     }
 
@@ -152,23 +158,23 @@ public class OrtMalzemeTalepController extends AbstractController<OrtMalzemeTale
         }
     }
 
-    public void persist(ActionEvent event) {
-        if (this.getSelected() == null) {
-            throw new BysBusinessException(ErrorType.NESNE_OKUNAMADI);
-        }
-        try {
-            if (this.getSelected().getOrtMalzemeTalepStokList().isEmpty()) {
-                FacesUtil.warningMessage("malzemeGirilmedenKaydedilemez");
-                return;
-            }
-
-            service.persist(this.getSelected(), EnumOrtBasvuruHareketDurumu.MALZEME_TALEP_EDILDI);
-            FacesUtil.successMessage(Constants.KAYIT_GUNCELLENDI);
-        } catch (Exception ex) {
-            log.error(null, ex);
-            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
-        }
-    }
+//    public void persist(ActionEvent event) {
+//        if (this.getSelected() == null) {
+//            throw new BysBusinessException(ErrorType.NESNE_OKUNAMADI);
+//        }
+//        try {
+//            if (this.getSelected().getOrtMalzemeTalepStokList().isEmpty()) {
+//                FacesUtil.warningMessage("malzemeGirilmedenKaydedilemez");
+//                return;
+//            }
+//
+//            service.persist(this.getSelected(), EnumOrtBasvuruHareketDurumu.MALZEME_TALEP_EDILDI);
+//            FacesUtil.successMessage(Constants.KAYIT_GUNCELLENDI);
+//        } catch (Exception ex) {
+//            log.error(null, ex);
+//            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+//        }
+//    }
 
     public void update(ActionEvent event) {
         if (this.getSelected() == null) {
@@ -236,10 +242,11 @@ public class OrtMalzemeTalepController extends AbstractController<OrtMalzemeTale
             this.getSelected().setOnayTarihi(null);
             this.getSelected().setOnaylayanOrtPersonel(null);
             this.getSelected().setDurum(EnumOrtMalzemeOnayDurumu.REDDEDILDI);
-            service.edit(this.getSelected());
-            OrtBasvuru basvuru = this.getSelected().getOrtBasvuru();
-            basvuru.setBasvuruHareketDurumu(EnumOrtBasvuruHareketDurumu.MALZEME_TALEBI_REDDEDILDI);
-            ortBasvuruService.edit(basvuru);
+//            service.edit(this.getSelected());
+//            OrtBasvuru basvuru = this.getSelected().getOrtBasvuru();
+//            basvuru.setBasvuruHareketDurumu(EnumOrtBasvuruHareketDurumu.MALZEME_TALEBI_REDDEDILDI);
+//            ortBasvuruService.edit(basvuru);
+            service.merge(this.getSelected(), EnumOrtBasvuruHareketDurumu.MALZEME_TALEBI_REDDEDILDI);
             FacesUtil.successMessage("kayitRededildi");
         } catch (Exception ex) {
             log.error(null, ex);
@@ -262,10 +269,11 @@ public class OrtMalzemeTalepController extends AbstractController<OrtMalzemeTale
 
         try {
             this.getSelected().setTeslimEdildi(true);
-            service.edit(this.getSelected());
-            OrtBasvuru basvuru = this.getSelected().getOrtBasvuru();
-            basvuru.setBasvuruHareketDurumu(EnumOrtBasvuruHareketDurumu.TEKNIKERE_TESLIM_EDILDI);
-            ortBasvuruService.edit(basvuru);
+//            service.edit(this.getSelected());
+//            OrtBasvuru basvuru = this.getSelected().getOrtBasvuru();
+//            basvuru.setBasvuruHareketDurumu(EnumOrtBasvuruHareketDurumu.TEKNIKERE_TESLIM_EDILDI);
+//            ortBasvuruService.edit(basvuru);
+            service.merge(this.getSelected(), EnumOrtBasvuruHareketDurumu.TEKNIKERE_TESLIM_EDILDI);
             FacesUtil.successMessage("malzemeTeslimEdildi");
         } catch (Exception ex) {
             log.error(null, ex);
@@ -273,7 +281,7 @@ public class OrtMalzemeTalepController extends AbstractController<OrtMalzemeTale
         }
     }
 
-    public void appointmentInfo(){
+    public void appointmentInfo() {
         if (this.getSelected() == null) {
             throw new BysBusinessException(ErrorType.NESNE_OKUNAMADI);
         }
@@ -286,15 +294,35 @@ public class OrtMalzemeTalepController extends AbstractController<OrtMalzemeTale
 
     }
 
-    public void createAppointMent(){
+    public void createAppointMent() {
         if (this.getSelected() == null) {
             throw new BysBusinessException(ErrorType.NESNE_OKUNAMADI);
         }
 
         try {
-            ortRandevuService.create(ortRandevu);
+            OrtBasvuru basvuru = this.getSelected().getOrtBasvuru();
+            basvuru.setBasvuruHareketDurumu(EnumOrtBasvuruHareketDurumu.RANDEVU_OLUSTURULDU);
+            ortRandevuService.updateWithBasvuru(ortRandevu, basvuru);
             FacesUtil.successMessage("randevuOlusturuldu");
-        }catch (Exception ex) {
+        } catch (Exception ex) {
+            log.error(null, ex);
+            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+        }
+    }
+
+    @Override
+    public void saveNew(ActionEvent event) {
+        if (this.getSelected() == null) {
+            throw new BysBusinessException(ErrorType.NESNE_OKUNAMADI);
+        }
+        try {
+            if (this.getSelected().getOrtMalzemeTalepStokList().isEmpty()) {
+                FacesUtil.warningMessage("malzemeGirilmedenKaydedilemez");
+                return;
+            }
+            service.saveNew(this.getSelected(), EnumOrtBasvuruHareketDurumu.MALZEME_TALEP_EDILDI);
+            FacesUtil.successMessage("malzemeTalepEdildi");
+        } catch (Exception ex) {
             log.error(null, ex);
             FacesUtil.errorMessage(Constants.HATA_OLUSTU);
         }

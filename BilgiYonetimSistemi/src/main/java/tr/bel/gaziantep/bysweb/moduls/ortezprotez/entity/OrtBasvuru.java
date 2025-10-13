@@ -93,6 +93,10 @@ public class OrtBasvuru extends BaseEntity {
     @SQLRestriction("AKTIF=true")
     private List<OrtBasvuruHareket> ortBasvuruHareketList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "ortBasvuru")
+    @SQLRestriction("AKTIF=true")
+    private List<OrtBasvuruMalzemeTeslimi> ortBasvuruMalzemeTeslimiList = new ArrayList<>();
+
     @Override
     public int hashCode() {
         int hash = 0;

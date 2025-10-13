@@ -11,7 +11,8 @@
                    model="#{ortBasvuruController.selected}"
                    widgetVar="OrtPayDialog"
                    actionListener="#{ortBasvuruController.paid()}"
-                   listForm="OrtBasvuruListForm">
+                   listForm="OrtBasvuruListForm"
+                   header="Ödeme">
 
         <p:outputLabel value="#{messages.makbuzNoLabel}" for="@next"/>
         <p:inputText id="makbuzNo" value="#{ortBasvuruController.selected.makbuzNo}" title="#{messages.makbuzNoText}" required="true"/>

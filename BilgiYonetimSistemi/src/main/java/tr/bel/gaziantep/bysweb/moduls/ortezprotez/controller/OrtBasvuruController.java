@@ -20,14 +20,14 @@ import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
 import tr.bel.gaziantep.bysweb.core.utils.StringUtil;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
-import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtBasvuru;
-import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtHasta;
-import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtPersonel;
+import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.*;
+import tr.bel.gaziantep.bysweb.moduls.ortezprotez.service.OrtBasvuruMalzemeTeslimiService;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.service.OrtBasvuruService;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.service.OrtPersonelService;
 
 import java.io.Serial;
 import java.lang.reflect.InvocationTargetException;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -50,6 +50,8 @@ public class OrtBasvuruController extends AbstractController<OrtBasvuru> {
     @Inject
     private OrtPersonelService personelService;
     @Inject
+    private OrtBasvuruMalzemeTeslimiService ortBasvuruMalzemeTeslimiService;
+    @Inject
     private FilterOptionService filterOptionService;
 
     @Getter
@@ -61,6 +63,9 @@ public class OrtBasvuruController extends AbstractController<OrtBasvuru> {
     @Getter
     @Setter
     private LocalDateTime appointmentDate;
+    @Getter
+    @Setter
+    private OrtBasvuruMalzemeTeslimi ortBasvuruMalzemeTeslimi;
 
     public OrtBasvuruController() {
         super(OrtBasvuru.class);
@@ -108,6 +113,7 @@ public class OrtBasvuruController extends AbstractController<OrtBasvuru> {
             newItem.setOrtHasta(OrtHasta.builder().gnlKisi(new GnlKisi()).build());
             newItem.setMuayeneYapanOrtPersonel(ortPersonel);
             newItem.setBasvuruDurumu(EnumOrtBasvuruDurumu.BEKLEMEDE);
+            newItem.setBasvuruHareketDurumu(EnumOrtBasvuruHareketDurumu.BEKLEMEDE);
             this.setSelected(newItem);
             initializeEmbeddableKey();
             return newItem;
@@ -120,6 +126,21 @@ public class OrtBasvuruController extends AbstractController<OrtBasvuru> {
     public void secilenOrtHasta(SelectEvent<OrtHasta> event) {
         OrtHasta ortHasta = event.getObject();
         this.getSelected().setOrtHasta(ortHasta);
+    }
+
+    @Override
+    public void saveNew(ActionEvent event){
+        if (this.getSelected().getOrtHasta() == null) {
+            throw new BysBusinessException(ErrorType.NESNE_OKUNAMADI);
+        }
+
+        try {
+            ortBasvuruService.saveNew(this.getSelected());
+            FacesUtil.successMessage(Constants.KAYIT_EKLENDI);
+        } catch (Exception ex) {
+            log.error(null, ex);
+            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+        }
     }
 
     @Override
@@ -192,4 +213,42 @@ public class OrtBasvuruController extends AbstractController<OrtBasvuru> {
 //        return result;
         return !getSelected().isUcretli() || getSelected().isOdendi();
     }
+
+    public void prepareSiliconDelivery() {
+        if (this.getSelected() == null) {
+            throw new BysBusinessException(ErrorType.NESNE_OKUNAMADI);
+        }
+        if (this.getSelected().getOrtBasvuruMalzemeTeslimiList().isEmpty()) {
+            ortBasvuruMalzemeTeslimi = OrtBasvuruMalzemeTeslimi.builder()
+                    .teslimTarihi(LocalDateTime.now())
+                    .ortBasvuru(this.getSelected())
+                    .teslimEdenOrtPersonel(ortPersonel)
+                    .ortStok(new OrtStok())
+                    .miktar(BigDecimal.ONE)
+                    .build();
+        }else{
+            ortBasvuruMalzemeTeslimi = this.getSelected().getOrtBasvuruMalzemeTeslimiList().get(0);
+        }
+    }
+
+    public void saveSiliconDelivery() {
+        if (this.getSelected() == null) {
+            throw new BysBusinessException(ErrorType.NESNE_OKUNAMADI);
+        }
+
+        try {
+            ortBasvuruMalzemeTeslimiService.delivery(ortBasvuruMalzemeTeslimi, this.getSyKullanici());
+            FacesUtil.successMessage("silikonTeslimEdildi");
+            //prepareSiliconDelivery();
+        } catch (Exception ex) {
+            log.error(null, ex);
+            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+        }
+    }
+
+    public void secilenOrtStok(SelectEvent<OrtStok> event) {
+        OrtStok ortStok = event.getObject();
+        this.ortBasvuruMalzemeTeslimi.setOrtStok(ortStok);
+    }
+
 }

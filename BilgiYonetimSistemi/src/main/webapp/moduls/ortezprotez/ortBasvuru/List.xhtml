@@ -9,10 +9,9 @@
                 xmlns:coco="jakarta.faces.composite/ui">
 
 
-
     <h:form id="OrtBasvuruListForm" styleClass="form-height">
 
-        <f:event type="preRenderView" listener="#{ortBasvuruController.onPreRenderView}" />
+        <f:event type="preRenderView" listener="#{ortBasvuruController.onPreRenderView}"/>
 
         <p:contextMenu id="OrtBasvuruDataTableContextMenu" for="datalist:datalist">
             <p:menuitem value="#{messages.buttonEkle}" onclick="document.getElementById('OrtBasvuruListForm:datalist:datalist:createButton').click();"
@@ -29,9 +28,21 @@
                         rowKey="#{item.id}"
                         selection="#{ortBasvuruController.selected}"
                         filtered="#{ortBasvuruController.filtered}"
-                        rowselect=":OrtBasvuruListForm:datalist:datalist:createButton,:OrtBasvuruListForm:datalist:datalist:viewButton,:OrtBasvuruListForm:datalist:datalist:editButton,:OrtBasvuruListForm:datalist:datalist:deleteButton,:OrtBasvuruListForm:datalist:datalist:payButton,:OrtBasvuruListForm:datalist:datalist:sutButton"
+                        rowselect=":OrtBasvuruListForm:datalist:datalist:createButton,
+                        :OrtBasvuruListForm:datalist:datalist:viewButton,
+                        :OrtBasvuruListForm:datalist:datalist:editButton,
+                        :OrtBasvuruListForm:datalist:datalist:deleteButton,
+                        :OrtBasvuruListForm:datalist:datalist:payButton,
+                        :OrtBasvuruListForm:datalist:datalist:sutButton,
+                        :OrtBasvuruListForm:datalist:datalist:siliconDeliveryButton"
                         rowDblselect="document.getElementById('OrtBasvuruListForm:datalist:datalist:editButton').click()"
-                        contextMenu=":OrtBasvuruListForm:datalist:datalist:createButton :OrtBasvuruListForm:datalist:datalist:viewButton :OrtBasvuruListForm:datalist:datalist:editButton :OrtBasvuruListForm:datalist:datalist:deleteButton :OrtBasvuruListForm:datalist:datalist:payButton :OrtBasvuruListForm:datalist:datalist:sutButton"
+                        contextMenu=":OrtBasvuruListForm:datalist:datalist:createButton
+                        :OrtBasvuruListForm:datalist:datalist:viewButton
+                        :OrtBasvuruListForm:datalist:datalist:editButton
+                        :OrtBasvuruListForm:datalist:datalist:deleteButton
+                        :OrtBasvuruListForm:datalist:datalist:payButton
+                        :OrtBasvuruListForm:datalist:datalist:sutButton
+                        :OrtBasvuruListForm:datalist:datalist:siliconDeliveryButton "
                         selectListener="#{ortBasvuruController.resetParents}"
                         controller="#{ortBasvuruController}"
                         header="#{messages.basvuruListesi}">
@@ -52,6 +63,11 @@
                 <p:commandButton id="viewButton" styleClass="ui-button-info" icon="pi pi-search" pt:data-tooltip="#{messages.buttonDetay}"
                                  update=":OrtBasvuruViewForm:OrtBasvuruViewForm" oncomplete="PF('OrtBasvuruViewDialog').show()"
                                  disabled="#{empty ortBasvuruController.selected}" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                <p:commandButton id="deleteButton" styleClass="ui-button-danger" icon="pi pi-trash" pt:data-tooltip="#{messages.buttonSil}"
+                                 actionListener="#{ortBasvuruController.delete}" update=":growl,datalist" disabled="#{empty ortBasvuruController.selected}"
+                                 rendered="#{syKullaniciController.hasPermission('ortbasvuru:sil')}">
+                    <p:confirm header="#{messages.ConfirmationHeader}" message="#{messages.ConfirmDeleteMessage}" icon="pi pi-exclamation-circle"/>
+                </p:commandButton>
                 <p:commandButton id="payButton" styleClass="ui-button-teal" icon="pi pi-turkish-lira" pt:data-tooltip="#{messages.buttonOdeme}"
                                  update=":OrtPayForm:OrtPayForm" oncomplete="PF('OrtPayDialog').show()"
                                  disabled="#{empty ortBasvuruController.selected or !ortBasvuruController.selected.ucretli or ortBasvuruController.selected.odendi}"
@@ -60,11 +76,12 @@
                                  update=":OrtBasvuruSutKoduForm:OrtBasvuruSutKoduForm" oncomplete="PF('OrtBasvuruSutKoduDialog').show()"
                                  disabled="#{empty ortBasvuruController.selected or (ortBasvuruController.selected.ucretli and !ortBasvuruController.selected.odendi)}"
                                  onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
-                <p:commandButton id="deleteButton" styleClass="ui-button-danger" icon="pi pi-trash" pt:data-tooltip="#{messages.buttonSil}"
-                                 actionListener="#{ortBasvuruController.delete}" update=":growl,datalist" disabled="#{empty ortBasvuruController.selected}"
-                                 rendered="#{syKullaniciController.hasPermission('ortbasvuru:sil')}">
-                    <p:confirm header="#{messages.ConfirmationHeader}" message="#{messages.ConfirmDeleteMessage}" icon="pi pi-exclamation-circle"/>
-                </p:commandButton>
+                <p:commandButton id="siliconDeliveryButton" styleClass="ui-button-amber" icon="pi pi-cart-arrow-down" pt:data-tooltip="#{messages.buttonSilikonTeslimi}"
+                                 update=":OrtBasvuruSiliconDeliveryForm:OrtBasvuruSiliconDeliveryForm" oncomplete="PF('OrtBasvuruSiliconDeliveryDialog').show()"
+                                 disabled="#{empty ortBasvuruController.selected or ortBasvuruController.selected.sutKodu == null}"
+                                 onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                 actionListener="#{ortBasvuruController.prepareSiliconDelivery()}"/>
+
 
             </f:facet>
 

@@ -162,8 +162,8 @@ public class OrtHastaController extends AbstractKisiController<OrtHasta> {
             if (eyKisi != null) {
                 eyEngelGrubus = eyKisiEngelGrubuService.getEyEngelGrubuByEyKisi(eyKisi);
                 this.getSelected().setEngelli(!eyEngelGrubus.isEmpty());
-            }else{
-                eyKisi =EyKisi.builder()
+            } else {
+                eyKisi = EyKisi.builder()
                         .gnlKisi(this.getSelected().getGnlKisi())
                         .eyKisiEngelGrubuList(new ArrayList<>())
                         .build();

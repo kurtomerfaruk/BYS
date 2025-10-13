@@ -11,7 +11,8 @@
                    model="#{ortBasvuruController.selected}"
                    widgetVar="OrtBasvuruSutKoduDialog"
                    actionListener="#{ortBasvuruController.saveSutKodu()}"
-                   listForm="OrtBasvuruListForm">
+                   listForm="OrtBasvuruListForm"
+                   header="SUT Kodu">
 
         <p:outputLabel value="#{messages.sutKoduLabel}" for="@next"/>
         <p:inputText id="sutKodu" value="#{ortBasvuruController.selected.sutKodu}" required="true" title="#{messages.sutKoduText}"/>

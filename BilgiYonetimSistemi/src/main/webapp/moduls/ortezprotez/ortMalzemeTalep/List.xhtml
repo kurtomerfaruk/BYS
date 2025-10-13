@@ -10,6 +10,8 @@
 
     <h:form id="OrtMalzemeTalepListForm" styleClass="form-height">
 
+        <f:event type="preRenderView" listener="#{ortMalzemeTalepController.onPreRenderView}" />
+
         <p:contextMenu id="OrtMalzemeTalepDataTableContextMenu" for="datalist:datalist">
             <p:menuitem value="#{messages.buttonEkle}" onclick="document.getElementById('OrtMalzemeTalepListForm:datalist:datalist:createButton').click();"
                         icon="pi pi-plus" rendered="#{syKullaniciController.hasPermission('ortmalzemetalep:ekle')}"/>

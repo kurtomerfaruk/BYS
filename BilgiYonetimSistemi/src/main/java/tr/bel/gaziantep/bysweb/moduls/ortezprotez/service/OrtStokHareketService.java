@@ -4,6 +4,7 @@ import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import tr.bel.gaziantep.bysweb.core.enums.bys.EnumGirisCikis;
+import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtStokHareketTablo;
 import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtStokHareketTur;
 import tr.bel.gaziantep.bysweb.core.service.AbstractService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
@@ -47,6 +48,7 @@ public class OrtStokHareketService extends AbstractService<OrtStokHareket> {
                                         EnumOrtStokHareketTur hareketTur,
                                         Integer islemId,
                                         EnumGirisCikis durum,
+                                        EnumOrtStokHareketTablo tablo,
                                         boolean aktif) {
         OrtStokHareket hareket = findByIslemIdByHareketTur(islemId, hareketTur, ortStok);
         if (hareket == null) hareket = new OrtStokHareket();
@@ -64,6 +66,7 @@ public class OrtStokHareketService extends AbstractService<OrtStokHareket> {
         hareket.setHareketTur(hareketTur);
         hareket.setIslemId(islemId);
         hareket.setDurum(durum);
+        hareket.setTablo(tablo);
         hareket.setAktif(aktif);
 
         return hareket;

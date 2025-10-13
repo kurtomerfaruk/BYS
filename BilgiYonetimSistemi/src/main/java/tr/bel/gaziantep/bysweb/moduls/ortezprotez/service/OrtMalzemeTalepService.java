@@ -6,6 +6,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import tr.bel.gaziantep.bysweb.core.enums.bys.EnumGirisCikis;
 import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtBasvuruHareketDurumu;
+import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtStokHareketTablo;
 import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtStokHareketTur;
 import tr.bel.gaziantep.bysweb.core.service.AbstractService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
@@ -45,6 +46,8 @@ public class OrtMalzemeTalepService extends AbstractService<OrtMalzemeTalep> {
     private OrtStokService stokService;
     @Inject
     private OrtStokHareketService stokHareketService;
+    @Inject
+    private OrtBasvuruHareketService ortBasvuruHareketService;
 
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void update(OrtMalzemeTalep malzemeTalep, SyKullanici syKullanici, EnumOrtBasvuruHareketDurumu durum) {
@@ -67,9 +70,7 @@ public class OrtMalzemeTalepService extends AbstractService<OrtMalzemeTalep> {
 
         existingTalep.setOrtMalzemeTalepStokList(updatedDetails);
         refreshEdit(existingTalep);
-        OrtBasvuru basvuru = existingTalep.getOrtBasvuru();
-        basvuru.setBasvuruHareketDurumu(durum);
-        basvuruUpdate(basvuru);
+        basvuruUpdate(existingTalep.getOrtBasvuru(),durum);
     }
 
     private void updateMalzemeFields(OrtMalzemeTalep target, OrtMalzemeTalep source) {
@@ -81,11 +82,9 @@ public class OrtMalzemeTalepService extends AbstractService<OrtMalzemeTalep> {
     }
 
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void approve(OrtMalzemeTalep malzemeTalep, SyKullanici syKullanici,EnumOrtBasvuruHareketDurumu durum) {
+    public void approve(OrtMalzemeTalep malzemeTalep, SyKullanici syKullanici, EnumOrtBasvuruHareketDurumu durum) {
         edit(malzemeTalep);
-        OrtBasvuru basvuru = malzemeTalep.getOrtBasvuru();
-        basvuru.setBasvuruHareketDurumu(durum);
-        basvuruUpdate(basvuru);
+        basvuruUpdate(malzemeTalep.getOrtBasvuru(), durum);
         for (OrtMalzemeTalepStok talepStok : malzemeTalep.getOrtMalzemeTalepStokList()) {
             OrtStok ortStok = talepStok.getOrtStok();
 
@@ -97,24 +96,47 @@ public class OrtMalzemeTalepService extends AbstractService<OrtMalzemeTalep> {
                     EnumOrtStokHareketTur.HASTA_ICIN_KULLANIM,
                     malzemeTalep.getId(),
                     EnumGirisCikis.CIKIS,
+                    EnumOrtStokHareketTablo.ORTMALZEME_TALEP,
                     talepStok.isAktif());
 
-            getEntityManager().merge(stokHareket);
+            stokHareket = stokHareketService.refreshEdit(stokHareket);
             if (ortStok.getOrtStokHareketList() == null) ortStok.setOrtStokHareketList(new ArrayList<>());
-            ortStok.getOrtStokHareketList().add(stokHareket);
+            if (!ortStok.getOrtStokHareketList().contains(stokHareket)) {
+                ortStok.getOrtStokHareketList().add(stokHareket);
+            }
             stokService.setStokMiktar(ortStok);
         }
     }
 
-    @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void persist(OrtMalzemeTalep malzemeTalep, EnumOrtBasvuruHareketDurumu durum) {
-        create(malzemeTalep);
-        OrtBasvuru basvuru = malzemeTalep.getOrtBasvuru();
+//    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+//    public void persist(OrtMalzemeTalep malzemeTalep, EnumOrtBasvuruHareketDurumu durum) {
+//        create(malzemeTalep);
+//        basvuruUpdate(malzemeTalep.getOrtBasvuru(), durum);
+//    }
+
+    private void basvuruUpdate(OrtBasvuru basvuru, EnumOrtBasvuruHareketDurumu durum) {
         basvuru.setBasvuruHareketDurumu(durum);
-        basvuruUpdate(malzemeTalep.getOrtBasvuru());
+        ortBasvuruHareketService.addHistory(basvuru, durum);
+        getEntityManager().merge(basvuru);
     }
 
-    private void basvuruUpdate(OrtBasvuru ortBasvuru) {
-        getEntityManager().merge(ortBasvuru);
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void saveNew(OrtMalzemeTalep malzemeTalep, EnumOrtBasvuruHareketDurumu durum) {
+        create(malzemeTalep);
+        basvuruUpdate(malzemeTalep.getOrtBasvuru(), durum);
+    }
+
+//    public void delivery(OrtMalzemeTalep malzemeTalep, EnumOrtBasvuruHareketDurumu durum) {
+//        edit(malzemeTalep);
+//        basvuruUpdate(malzemeTalep.getOrtBasvuru(), durum);
+//    }
+//
+//    public void reject(OrtMalzemeTalep malzemeTalep) {
+//        edit(malzemeTalep);
+//    }
+
+    public void merge(OrtMalzemeTalep malzemeTalep, EnumOrtBasvuruHareketDurumu durum) {
+        edit(malzemeTalep);
+        basvuruUpdate(malzemeTalep.getOrtBasvuru(), durum);
     }
 }
