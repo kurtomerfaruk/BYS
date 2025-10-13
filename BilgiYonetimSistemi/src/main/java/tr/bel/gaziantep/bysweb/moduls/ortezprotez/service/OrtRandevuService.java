@@ -52,7 +52,7 @@ public class OrtRandevuService extends AbstractService<OrtRandevu> {
     public void updateWithBasvuru(OrtRandevu ortRandevu, OrtBasvuru ortBasvuru) {
         create(ortRandevu);
         ortBasvuru.setBasvuruHareketDurumu(EnumOrtBasvuruHareketDurumu.RANDEVU_OLUSTURULDU);
-        ortBasvuruHareketService.addHistory(ortBasvuru, EnumOrtBasvuruHareketDurumu.RANDEVU_OLUSTURULDU);
+        ortBasvuruHareketService.addHistory(ortBasvuru);
         getEntityManager().merge(ortBasvuru);
     }
 }

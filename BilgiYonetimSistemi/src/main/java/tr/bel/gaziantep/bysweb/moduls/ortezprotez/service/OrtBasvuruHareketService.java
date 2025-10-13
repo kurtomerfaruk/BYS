@@ -3,7 +3,6 @@ package tr.bel.gaziantep.bysweb.moduls.ortezprotez.service;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtBasvuruHareketDurumu;
 import tr.bel.gaziantep.bysweb.core.service.AbstractService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtBasvuru;
@@ -34,14 +33,14 @@ public class OrtBasvuruHareketService extends AbstractService<OrtBasvuruHareket>
         return em;
     }
 
-    public void addHistory(OrtBasvuru ortBasvuru, EnumOrtBasvuruHareketDurumu durum) {
+    public void addHistory(OrtBasvuru ortBasvuru) {
         boolean alreadyExists = ortBasvuru.getOrtBasvuruHareketList().stream()
-                .anyMatch(x -> x.isAktif() && x.getDurum() == durum);
+                .anyMatch(x -> x.isAktif() && x.getDurum() == ortBasvuru.getBasvuruHareketDurumu());
 
         if (!alreadyExists) {
             OrtBasvuruHareket hareket = OrtBasvuruHareket.builder()
                     .ortBasvuru(ortBasvuru)
-                    .durum(durum)
+                    .durum(ortBasvuru.getBasvuruHareketDurumu())
                     .build();
             ortBasvuru.getOrtBasvuruHareketList().add(hareket);
         }

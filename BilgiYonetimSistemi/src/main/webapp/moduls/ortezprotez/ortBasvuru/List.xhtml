@@ -34,7 +34,8 @@
                         :OrtBasvuruListForm:datalist:datalist:deleteButton,
                         :OrtBasvuruListForm:datalist:datalist:payButton,
                         :OrtBasvuruListForm:datalist:datalist:sutButton,
-                        :OrtBasvuruListForm:datalist:datalist:siliconDeliveryButton"
+                        :OrtBasvuruListForm:datalist:datalist:siliconDeliveryButton,
+                        :OrtBasvuruListForm:datalist:datalist:physioTherapyButton"
                         rowDblselect="document.getElementById('OrtBasvuruListForm:datalist:datalist:editButton').click()"
                         contextMenu=":OrtBasvuruListForm:datalist:datalist:createButton
                         :OrtBasvuruListForm:datalist:datalist:viewButton
@@ -42,7 +43,8 @@
                         :OrtBasvuruListForm:datalist:datalist:deleteButton
                         :OrtBasvuruListForm:datalist:datalist:payButton
                         :OrtBasvuruListForm:datalist:datalist:sutButton
-                        :OrtBasvuruListForm:datalist:datalist:siliconDeliveryButton "
+                        :OrtBasvuruListForm:datalist:datalist:siliconDeliveryButton
+                        :OrtBasvuruListForm:datalist:datalist:physioTherapyButton "
                         selectListener="#{ortBasvuruController.resetParents}"
                         controller="#{ortBasvuruController}"
                         header="#{messages.basvuruListesi}">
@@ -81,6 +83,11 @@
                                  disabled="#{empty ortBasvuruController.selected or ortBasvuruController.selected.sutKodu == null}"
                                  onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
                                  actionListener="#{ortBasvuruController.prepareSiliconDelivery()}"/>
+                <p:commandButton id="physioTherapyButton" styleClass="ui-button-indigo" icon="pi pi-bolt" pt:data-tooltip="#{messages.buttonFizikTedavi}"
+                                 update=":PhysioTherapyForm" oncomplete="PF('PhysioTherapyDialog').show()"
+                                 disabled="#{empty ortBasvuruController.selected or ortBasvuruController.selected.basvuruHareketDurumu ne 'RANDEVU_OLUSTURULDU'}"
+                                 onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                 actionListener="#{ortBasvuruController.preparePhysioTherapy()}"/>
 
 
             </f:facet>

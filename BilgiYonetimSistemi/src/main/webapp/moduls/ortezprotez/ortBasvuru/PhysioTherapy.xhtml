@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+>
+
+<ui:composition>
+
+    <p:dialog widgetVar="PhysioTherapyDialog"
+              modal="true"
+              resizable="false"
+              closeOnEscape="true"
+              header="Fizik Tedavi"
+              appendTo="@(body)"
+              responsive="true"
+              onShow="PF('PhysioTherapyDialog').initPosition();"
+              fitViewport="true"
+              position="top"
+              style="max-width:500px !important">
+
+        <h:form id="PhysioTherapyForm">
+            <h:panelGroup id="display">
+                <p:focus context="display"/>
+                <p:panelGrid columns="1" columnClasses="column" rendered="#{ortBasvuruController.fizikTedaviList !=null}">
+
+                    <f:facet name="header">
+                        <div class="float-end">
+                            <p:commandButton title="#{messages.buttonTedaviEkle}" actionListener="#{ortBasvuruController.onAddNew()}"
+                                             styleClass="ui-button-success"
+                                             icon="pi pi-plus" update=":growl,detayId" process="@this"/>
+                        </div>
+                    </f:facet>
+                    <p:dataTable id="detayId"
+                                 var="detay"
+                                 value="#{ortBasvuruController.fizikTedaviList}"
+                                 styleClass="w-100"
+                                 editable="true"
+                                 editMode="cell"
+                                 scrollable="true"
+                                 scrollHeight="250"
+                                 showGridlines="true"
+                                 size="small">
+
+
+                        <p:ajax event="cellEdit" listener="#{ortBasvuruController.onCellEdit}" update=":growl"/>
+                        <p:ajax event="cellEditInit" listener="#{ortBasvuruController.onCellEditInit}" update=":growl"/>
+
+                        <p:column headerText="Tarih">
+                            <p:cellEditor>
+                                <f:facet name="output">
+                                    <h:outputText value="#{detay.tarih}">
+                                        <f:convertDateTime pattern="#{messages.tarihSaatFormat}" type="localDateTime"/>
+                                    </h:outputText>
+                                </f:facet>
+                                <f:facet name="input">
+                                    <p:datePicker locale="tr" pattern="#{messages.tarihFormat}" value="#{detay.tarih}" title="#{messages.tarihText}" mask="true"
+                                                  monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true" showOnFocus="false"/>
+                                </f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column headerText="Sil" width="10%">
+                            <p:commandButton styleClass="ui-button-danger mr-2" icon="pi pi-times" update="detayId,:growl" process="@this"
+                                             actionListener="#{ortBasvuruController.removeRow(detay)}"/>
+                        </p:column>
+
+                    </p:dataTable>
+
+
+                    <f:facet name="footer">
+                        <div class="float-end">
+                            <p:commandButton icon="pi pi-check" styleClass="ui-button-success"
+                                             actionListener="#{ortBasvuruController.savePhysioTherapy()}"
+                                             value="#{messages.buttonKaydet}"
+                                             update="display,:OrtBasvuruListForm:datalist:datalist,:growl"
+                                             oncomplete="handleSubmit(xhr,status,args,PF('PhysioTherapyDialog'));"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                            <p:commandButton icon="pi pi-times" styleClass="btn-danger"
+                                             value="#{messages.buttonIptal}"
+                                             onclick="PF('PhysioTherapyDialog').hide()" immediate="true"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()">
+                                <p:resetInput target="@form"/>
+                            </p:commandButton>
+                        </div>
+                    </f:facet>
+                </p:panelGrid>
+            </h:panelGroup>
+        </h:form>
+
+    </p:dialog>
+
+</ui:composition>
+
+</html>

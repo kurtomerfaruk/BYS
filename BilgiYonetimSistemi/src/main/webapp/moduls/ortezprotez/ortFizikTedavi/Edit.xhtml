@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:editpage id="OrtFizikTedaviEditForm"
+                   model="#{ortFizikTedaviController.selected}"
+                   widgetVar="OrtFizikTedaviEditDialog"
+                   actionListener="#{ortFizikTedaviController.save}"
+                   listForm="OrtFizikTedaviListForm">
+
+        <p:outputLabel value="#{messages.tarihLabel}" for="@next"/>
+        <p:datePicker id="tarih" locale="tr" pattern="#{messages.tarihFormat}" value="#{ortFizikTedaviController.selected.tarih}"
+                      title="#{messages.tarihText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true"
+                      showIcon="true" showOnFocus="false"/>
+
+        <p:outputLabel value="#{messages.hastaLabel}" for="@next"/>
+        <coco:inputWithButton id="inputWithButtonHastaiId" inputId="hastaId"
+                              inputValue="#{ortFizikTedaviController.selected.ortHasta.gnlKisi.tcKimlikNo}"
+                              inputTitle="#{messages.hastaText}"
+                              actionListener="#{bysController.openCommonDialog('ortHastaSec')}"
+                              ajaxListener="#{ortFizikTedaviController.secilenOrtHasta}"
+                              buttonTitle="#{messages.hastaSecmelisiniz}"
+                              size="50"
+                              dialogId="OrtFizikTedaviCreateDialogId"/>
+
+        <p:outputLabel value="#{messages.adSoyadLabel}" for="@next"/>
+        <p:inputText id="adSoyad" value="#{ortFizikTedaviController.selected.ortHasta.gnlKisi.adSoyad}" required="true"
+                     readonly="#{facesContext.renderResponse}"   styleClass="inputUpdate"/>
+
+        <p:outputLabel value="#{messages.telefonLabel}" for="@next"/>
+        <p:inputText id="telefon" value="#{ortFizikTedaviController.selected.ortHasta.gnlKisi.telefon}" required="true"
+                     readonly="#{facesContext.renderResponse}"  styleClass="inputUpdate"/>
+
+        <p:outputLabel value="#{messages.aciklamaLabel}" for="@next"/>
+        <p:inputTextarea rows="4" id="aciklama" value="#{ortFizikTedaviController.selected.aciklama}" title="#{messages.aciklamaText}" styleClass="w-100"
+                         autoResize="false"/>
+
+        <p:outputLabel value="#{messages.durumLabel}" for="@next"/>
+        <p:selectOneMenu id="durum" value="#{ortFizikTedaviController.selected.durum}" required="true" converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{enumDurum.ALL_VALUES}"
+                           var="durums"
+                           itemValue="#{durums}"
+                           itemLabel="#{durums.displayValue}"/>
+        </p:selectOneMenu>
+
+
+    </coco:editpage>
+
+</ui:composition>
+
+</html>

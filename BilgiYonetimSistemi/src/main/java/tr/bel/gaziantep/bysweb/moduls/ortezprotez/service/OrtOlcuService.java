@@ -56,8 +56,8 @@ public class OrtOlcuService extends AbstractService<OrtOlcu> {
     }
 
     private void addHistory(OrtOlcu ortOlcu){
-        basvuruHareketService.addHistory(ortOlcu.getOrtBasvuru(), EnumOrtBasvuruHareketDurumu.OLCU_SONRASI_RANDEVU_VERILDI);
         ortOlcu.getOrtBasvuru().setBasvuruHareketDurumu(EnumOrtBasvuruHareketDurumu.OLCU_SONRASI_RANDEVU_VERILDI);
+        basvuruHareketService.addHistory(ortOlcu.getOrtBasvuru());
         getEntityManager().merge(ortOlcu.getOrtBasvuru());
     }
 

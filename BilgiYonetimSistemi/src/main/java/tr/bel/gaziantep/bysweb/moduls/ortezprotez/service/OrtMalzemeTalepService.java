@@ -116,7 +116,7 @@ public class OrtMalzemeTalepService extends AbstractService<OrtMalzemeTalep> {
 
     private void basvuruUpdate(OrtBasvuru basvuru, EnumOrtBasvuruHareketDurumu durum) {
         basvuru.setBasvuruHareketDurumu(durum);
-        ortBasvuruHareketService.addHistory(basvuru, durum);
+        ortBasvuruHareketService.addHistory(basvuru);
         getEntityManager().merge(basvuru);
     }
 

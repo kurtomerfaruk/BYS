@@ -55,7 +55,7 @@ public class OrtBasvuruMalzemeTeslimiService extends AbstractService<OrtBasvuruM
         OrtBasvuru basvuru = ortBasvuruMalzemeTeslimi.getOrtBasvuru();
         basvuru.setBasvuruHareketDurumu(EnumOrtBasvuruHareketDurumu.SILIKON_TESLIM_EDILDI);
         ortBasvuruMalzemeTeslimi= refreshEdit(ortBasvuruMalzemeTeslimi);
-        ortBasvuruHareketService.addHistory(basvuru, EnumOrtBasvuruHareketDurumu.SILIKON_TESLIM_EDILDI);
+        ortBasvuruHareketService.addHistory(basvuru);
         getEntityManager().merge(basvuru);
         OrtStok ortStok =  ortBasvuruMalzemeTeslimi.getOrtStok();
         OrtStokHareket stokHareket = stokHareketService.createHareket(syKullanici,

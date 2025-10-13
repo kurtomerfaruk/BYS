@@ -26,8 +26,7 @@ public class OrtBasvuruService extends AbstractService<OrtBasvuru> {
     @Serial
     private static final long serialVersionUID = 4259094003224116213L;
 
-    @Inject
-    private OrtBasvuruHareketService ortBasvuruHareketService;
+
 
     public OrtBasvuruService() {
         super(OrtBasvuru.class);
@@ -40,6 +39,9 @@ public class OrtBasvuruService extends AbstractService<OrtBasvuru> {
     protected EntityManager getEntityManager() {
         return em;
     }
+
+    @Inject
+    private OrtBasvuruHareketService ortBasvuruHareketService;
 
 //    @TransactionAttribute(TransactionAttributeType.REQUIRED)
 //    public void save(OrtBasvuru ortBasvuru, boolean addAppointment, LocalDateTime appointmentDate) {
@@ -81,7 +83,8 @@ public class OrtBasvuruService extends AbstractService<OrtBasvuru> {
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void save(OrtBasvuru ortBasvuru, boolean addAppointment, LocalDateTime appointmentDate) {
         if (ortBasvuru.getBasvuruDurumu() == EnumOrtBasvuruDurumu.OLUMLU) {
-            ortBasvuruHareketService.addHistory(ortBasvuru, EnumOrtBasvuruHareketDurumu.OLUMLU);
+            ortBasvuru.setBasvuruHareketDurumu(EnumOrtBasvuruHareketDurumu.OLUMLU);
+            ortBasvuruHareketService.addHistory(ortBasvuru);
         }
 
         if (addAppointment) {
@@ -92,8 +95,8 @@ public class OrtBasvuruService extends AbstractService<OrtBasvuru> {
                     .aciklama("Başvuruya istinaden randevu verilmiştir.")
                     .build();
             getEntityManager().persist(randevu);
-
-            ortBasvuruHareketService.addHistory(ortBasvuru, EnumOrtBasvuruHareketDurumu.OLCU_ICIN_RANDEVU_VERILDI);
+            ortBasvuru.setBasvuruHareketDurumu(EnumOrtBasvuruHareketDurumu.OLCU_ICIN_RANDEVU_VERILDI);
+            ortBasvuruHareketService.addHistory(ortBasvuru);
             ortBasvuru.setBasvuruHareketDurumu(EnumOrtBasvuruHareketDurumu.OLCU_ICIN_RANDEVU_VERILDI);
         }
 
@@ -129,14 +132,15 @@ public class OrtBasvuruService extends AbstractService<OrtBasvuru> {
 //    }
 
     public void saveDurum(OrtBasvuru ortBasvuru,EnumOrtBasvuruHareketDurumu durum) {
-        ortBasvuruHareketService.addHistory(ortBasvuru, durum);
         ortBasvuru.setBasvuruHareketDurumu(durum);
+        ortBasvuruHareketService.addHistory(ortBasvuru);
         edit(ortBasvuru);
     }
 
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void saveNew(OrtBasvuru ortBasvuru) {
-        ortBasvuruHareketService.addHistory(ortBasvuru, EnumOrtBasvuruHareketDurumu.BEKLEMEDE);
+        ortBasvuru.setBasvuruHareketDurumu(EnumOrtBasvuruHareketDurumu.BEKLEMEDE);
+        ortBasvuruHareketService.addHistory(ortBasvuru);
         create(ortBasvuru);
     }
 }

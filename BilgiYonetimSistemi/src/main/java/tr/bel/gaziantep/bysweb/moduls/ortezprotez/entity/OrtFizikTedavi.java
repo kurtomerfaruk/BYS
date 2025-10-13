@@ -1,10 +1,10 @@
 package tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.Nationalized;
 import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
+import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtFizikTedaviDurum;
 
 import java.io.Serial;
 import java.time.LocalDateTime;
@@ -15,6 +15,9 @@ import java.time.LocalDateTime;
  */
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "ORTFIZIK_TEDAVI")
 public class OrtFizikTedavi extends BaseEntity {
@@ -41,6 +44,10 @@ public class OrtFizikTedavi extends BaseEntity {
     @Lob
     @Column(name = "ACIKLAMA")
     private String aciklama;
+
+    @Column(name = "DURUM")
+    @Enumerated(EnumType.STRING)
+    private EnumOrtFizikTedaviDurum durum;
 
     @Override
     public int hashCode() {

@@ -8,11 +8,13 @@ import jakarta.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.SelectEvent;
 import tr.bel.gaziantep.bysweb.core.controller.AbstractController;
 import tr.bel.gaziantep.bysweb.core.enums.ErrorType;
 import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtBasvuruDurumu;
 import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtBasvuruHareketDurumu;
+import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtFizikTedaviDurum;
 import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.EnumSyFiltreAnahtari;
 import tr.bel.gaziantep.bysweb.core.exception.BysBusinessException;
 import tr.bel.gaziantep.bysweb.core.service.FilterOptionService;
@@ -23,12 +25,14 @@ import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.*;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.service.OrtBasvuruMalzemeTeslimiService;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.service.OrtBasvuruService;
+import tr.bel.gaziantep.bysweb.moduls.ortezprotez.service.OrtFizikTedaviService;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.service.OrtPersonelService;
 
 import java.io.Serial;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -52,6 +56,8 @@ public class OrtBasvuruController extends AbstractController<OrtBasvuru> {
     @Inject
     private OrtBasvuruMalzemeTeslimiService ortBasvuruMalzemeTeslimiService;
     @Inject
+    private OrtFizikTedaviService fizikTedaviService;
+    @Inject
     private FilterOptionService filterOptionService;
 
     @Getter
@@ -66,6 +72,12 @@ public class OrtBasvuruController extends AbstractController<OrtBasvuru> {
     @Getter
     @Setter
     private OrtBasvuruMalzemeTeslimi ortBasvuruMalzemeTeslimi;
+    @Getter
+    @Setter
+    private List<OrtFizikTedavi> fizikTedaviList;
+    @Getter
+    @Setter
+    private int rowIndex;
 
     public OrtBasvuruController() {
         super(OrtBasvuru.class);
@@ -129,7 +141,7 @@ public class OrtBasvuruController extends AbstractController<OrtBasvuru> {
     }
 
     @Override
-    public void saveNew(ActionEvent event){
+    public void saveNew(ActionEvent event) {
         if (this.getSelected().getOrtHasta() == null) {
             throw new BysBusinessException(ErrorType.NESNE_OKUNAMADI);
         }
@@ -226,7 +238,7 @@ public class OrtBasvuruController extends AbstractController<OrtBasvuru> {
                     .ortStok(new OrtStok())
                     .miktar(BigDecimal.ONE)
                     .build();
-        }else{
+        } else {
             ortBasvuruMalzemeTeslimi = this.getSelected().getOrtBasvuruMalzemeTeslimiList().get(0);
         }
     }
@@ -249,6 +261,64 @@ public class OrtBasvuruController extends AbstractController<OrtBasvuru> {
     public void secilenOrtStok(SelectEvent<OrtStok> event) {
         OrtStok ortStok = event.getObject();
         this.ortBasvuruMalzemeTeslimi.setOrtStok(ortStok);
+    }
+
+    public void preparePhysioTherapy() {
+        if (this.getSelected() == null) {
+            throw new BysBusinessException(ErrorType.NESNE_OKUNAMADI);
+        }
+
+        try {
+            if (this.getSelected().getOrtHasta().getOrtFizikTedaviList() == null) {
+                fizikTedaviList = new ArrayList<>();
+            } else {
+                fizikTedaviList = this.getSelected().getOrtHasta().getOrtFizikTedaviList();
+            }
+        } catch (Exception ex) {
+            log.error(null, ex);
+            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+        }
+
+    }
+
+    public void savePhysioTherapy() {
+        if (this.getSelected() == null) {
+            throw new BysBusinessException(ErrorType.NESNE_OKUNAMADI);
+        }
+        try {
+            this.getSelected().setBasvuruHareketDurumu(EnumOrtBasvuruHareketDurumu.FIZIK_TEDAVI_PLANI_OLUSTURULDU);
+            fizikTedaviService.persist(fizikTedaviList, this.getSelected());
+            FacesUtil.successMessage("fizikTedaviEklendi");
+        } catch (Exception ex) {
+            log.error(null, ex);
+            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+        }
+    }
+
+
+    public void onAddNew() {
+        OrtFizikTedavi fizikTedavi = OrtFizikTedavi.builder()
+                .ortHasta(this.getSelected().getOrtHasta())
+                .tarih(LocalDateTime.now())
+                .durum(EnumOrtFizikTedaviDurum.BEKLIYOR)
+                .build();
+        fizikTedaviList.add(fizikTedavi);
+    }
+
+    public void onCellEdit(CellEditEvent event) {
+    }
+
+    public void onCellEditInit(CellEditEvent event) {
+        this.setRowIndex(event.getRowIndex());
+    }
+
+    public void removeRow(OrtFizikTedavi detay) {
+        try {
+           fizikTedaviList.remove(detay);
+        } catch (Exception ex) {
+            log.error(null, ex);
+            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+        }
     }
 
 }
