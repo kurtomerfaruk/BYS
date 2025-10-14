@@ -26,14 +26,14 @@ public class EyKisiDosya extends BaseEntity {
     private EyKisi eyKisi;
 
     @Size(max = 50)
-        @Column(name = "DOSYA_ADI", length = 50)
+    @Column(name = "DOSYA_ADI", length = 50)
     private String dosyaAdi;
 
     @Column(name = "TARIH")
     private LocalDateTime tarih;
 
     @Size(max = 250)
-        @Column(name = "DOSYA_YOLU", length = 250)
+    @Column(name = "DOSYA_YOLU", length = 250)
     private String dosyaYolu;
 
     @Override
