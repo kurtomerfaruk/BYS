@@ -111,6 +111,10 @@
         <mime-type>image/svg+xml</mime-type>
     </mime-mapping>
     <mime-mapping>
+        <extension>pfb</extension>
+        <mime-type>application/vnd.ms-fontobject</mime-type>
+    </mime-mapping>
+    <mime-mapping>
         <extension>less</extension>
         <mime-type>text/css</mime-type>
     </mime-mapping>
