@@ -34,4 +34,6 @@ public class Constants implements java.io.Serializable{
     public final static String EVDE_YASAM_VERILECEK_HIZMETLER_KLASORU_MAC = "/Users/omerfarukkurt/BYS/EvdeYasam/VerilecekHizmetler/";
     public final static String ORTEZ_PROTEZ_OLCU_SABLON_KLASORU = "C:\\BYS\\OrtezProtez\\OlcuSablon\\";
     public final static String ORTEZ_PROTEZ_OLCU_SABLON_KLASORU_MAC = "/Users/omerfarukkurt/BYS/OrtezProtez/OlcuSablon/";
+    public final static String ORTEZ_PROTEZ_RAPOR_RECETE_KLASORU = "C:\\BYS\\OrtezProtez\\RaporRecete\\";
+    public final static String ORTEZ_PROTEZ_RAPOR_RECETE_KLASORU_MAC = "/Users/omerfarukkurt/BYS/OrtezProtez/RaporRecete/";
 }
