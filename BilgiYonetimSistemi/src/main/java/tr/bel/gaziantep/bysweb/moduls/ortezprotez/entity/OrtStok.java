@@ -32,15 +32,15 @@ public class OrtStok extends BaseEntity {
     @Column(name = "ID", nullable = false)
     private Integer id;
 
-    @Size(max = 50)
-    @Nationalized
-    @Column(name = "STOK_KODU", length = 50)
-    private String stokKodu;
-
     @Size(max = 100)
     @Nationalized
     @Column(name = "MARKA", length = 100)
     private String marka;
+
+    @Size(max = 50)
+    @Nationalized
+    @Column(name = "STOK_KODU", length = 50)
+    private String stokKodu;
 
     @Size(max = 150)
     @Nationalized
