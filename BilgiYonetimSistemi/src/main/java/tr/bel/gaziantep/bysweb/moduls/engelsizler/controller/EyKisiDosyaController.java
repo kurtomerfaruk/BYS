@@ -18,8 +18,6 @@ import tr.bel.gaziantep.bysweb.moduls.engelsizler.entity.EyKisi;
 import tr.bel.gaziantep.bysweb.moduls.engelsizler.entity.EyKisiDosya;
 import tr.bel.gaziantep.bysweb.moduls.engelsizler.service.EyKisiDosyaService;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.*;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -114,7 +112,7 @@ public class EyKisiDosyaController extends AbstractController<EyKisiDosya> {
 
             List<String> contentType = Arrays.asList("png", "jpg", "jpeg", "bmp");
 
-            InputStream inputStream = contentType.contains(event.getFile().getContentType()) ? compressImage(event.getFile().getInputStream(), result) : event.getFile().getInputStream();
+            InputStream inputStream = contentType.contains(event.getFile().getContentType()) ? ImageUtil.compressImage(event.getFile().getInputStream(), result) : event.getFile().getInputStream();
 
             while (true) {
                 bulk = inputStream.read(buffer);
@@ -142,25 +140,25 @@ public class EyKisiDosyaController extends AbstractController<EyKisiDosya> {
 
     }
 
-    private InputStream compressImage(InputStream inputStream, File file) {
-        try (InputStream is = inputStream;
-             OutputStream out = new FileOutputStream(file)) {
-
-            BufferedImage img = ImageIO.read(is);
-            BufferedImage scaledImg;
-            if (img.getWidth() >= img.getHeight())
-                scaledImg = Scalr.resize(img, Scalr.Method.ULTRA_QUALITY, Scalr.Mode.FIT_TO_HEIGHT, 800, 1000);
-            else
-                scaledImg = Scalr.resize(img, Scalr.Method.ULTRA_QUALITY, Scalr.Mode.FIT_TO_WIDTH, 1000, 800);
-            ImageIO.write(scaledImg, "jpg", out);
-            ByteArrayOutputStream os = new ByteArrayOutputStream();
-            ImageIO.write(scaledImg, "jpg", os);
-            return new ByteArrayInputStream(os.toByteArray());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+//    private InputStream compressImage(InputStream inputStream, File file) {
+//        try (InputStream is = inputStream;
+//             OutputStream out = new FileOutputStream(file)) {
+//
+//            BufferedImage img = ImageIO.read(is);
+//            BufferedImage scaledImg;
+//            if (img.getWidth() >= img.getHeight())
+//                scaledImg = Scalr.resize(img, Scalr.Method.ULTRA_QUALITY, Scalr.Mode.FIT_TO_HEIGHT, 800, 1000);
+//            else
+//                scaledImg = Scalr.resize(img, Scalr.Method.ULTRA_QUALITY, Scalr.Mode.FIT_TO_WIDTH, 1000, 800);
+//            ImageIO.write(scaledImg, "jpg", out);
+//            ByteArrayOutputStream os = new ByteArrayOutputStream();
+//            ImageIO.write(scaledImg, "jpg", os);
+//            return new ByteArrayInputStream(os.toByteArray());
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
 
     public void dosyaSil(EyKisiDosya dosya) {
         if (dosya != null) {

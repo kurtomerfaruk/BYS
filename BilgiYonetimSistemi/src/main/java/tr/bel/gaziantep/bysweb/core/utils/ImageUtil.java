@@ -1,6 +1,7 @@
 package tr.bel.gaziantep.bysweb.core.utils;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FilenameUtils;
 import org.primefaces.model.file.UploadedFile;
 
 import javax.imageio.ImageIO;
@@ -98,5 +99,20 @@ public class ImageUtil implements java.io.Serializable {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static boolean isImage(String fileName) {
+        if (StringUtil.isNotBlank(fileName)) {
+            return Function.isImage(fileName);
+        }
+
+        return false;
+    }
+
+    public static boolean isPdf(String fileName) {
+        if(StringUtil.isNotBlank(fileName)){
+            return FilenameUtils.getExtension(fileName).equals("pdf");
+        }
+        return false;
     }
 }

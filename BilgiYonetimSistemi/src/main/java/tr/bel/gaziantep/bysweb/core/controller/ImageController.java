@@ -8,6 +8,7 @@ import org.primefaces.extensions.event.RotateEvent;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import tr.bel.gaziantep.bysweb.moduls.engelsizler.entity.EyKisiDosya;
+import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtBasvuruDosya;
 
 import java.io.*;
 
@@ -40,6 +41,15 @@ public class ImageController implements java.io.Serializable {
     }
 
     public StreamedContent getKisiDosyaImage(EyKisiDosya dosya) throws FileNotFoundException {
+        if (dosya != null) {
+            File file = new File(dosya.getDosyaYolu());
+            InputStream stream = new FileInputStream(file);
+            preview = DefaultStreamedContent.builder().contentType("image/png").name(dosya.getDosyaAdi()).stream(() -> stream).build();
+        }
+        return preview;
+    }
+
+    public StreamedContent getOrtBasvuruDosyaImage(OrtBasvuruDosya dosya) throws FileNotFoundException {
         if (dosya != null) {
             File file = new File(dosya.getDosyaYolu());
             InputStream stream = new FileInputStream(file);

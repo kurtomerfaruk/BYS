@@ -20,6 +20,7 @@ import tr.bel.gaziantep.bysweb.core.exception.BysBusinessException;
 import tr.bel.gaziantep.bysweb.core.service.FilterOptionService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
+import tr.bel.gaziantep.bysweb.core.utils.ImageUtil;
 import tr.bel.gaziantep.bysweb.core.utils.StringUtil;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.*;
@@ -319,6 +320,14 @@ public class OrtBasvuruController extends AbstractController<OrtBasvuru> {
             log.error(null, ex);
             FacesUtil.errorMessage(Constants.HATA_OLUSTU);
         }
+    }
+
+    public boolean isImage(String fileName){
+        return ImageUtil.isImage(fileName);
+    }
+
+    public boolean isPdf(String fileName){
+        return ImageUtil.isPdf(fileName);
     }
 
 }

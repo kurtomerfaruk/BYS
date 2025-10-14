@@ -35,7 +35,8 @@
                         :OrtBasvuruListForm:datalist:datalist:payButton,
                         :OrtBasvuruListForm:datalist:datalist:sutButton,
                         :OrtBasvuruListForm:datalist:datalist:siliconDeliveryButton,
-                        :OrtBasvuruListForm:datalist:datalist:physioTherapyButton"
+                        :OrtBasvuruListForm:datalist:datalist:physioTherapyButton,
+                        :OrtBasvuruListForm:datalist:datalist:fileButton"
                         rowDblselect="document.getElementById('OrtBasvuruListForm:datalist:datalist:editButton').click()"
                         contextMenu=":OrtBasvuruListForm:datalist:datalist:createButton
                         :OrtBasvuruListForm:datalist:datalist:viewButton
@@ -44,7 +45,8 @@
                         :OrtBasvuruListForm:datalist:datalist:payButton
                         :OrtBasvuruListForm:datalist:datalist:sutButton
                         :OrtBasvuruListForm:datalist:datalist:siliconDeliveryButton
-                        :OrtBasvuruListForm:datalist:datalist:physioTherapyButton "
+                        :OrtBasvuruListForm:datalist:datalist:physioTherapyButton
+                        :OrtBasvuruListForm:datalist:datalist:fileButton "
                         selectListener="#{ortBasvuruController.resetParents}"
                         controller="#{ortBasvuruController}"
                         header="#{messages.basvuruListesi}">
@@ -88,6 +90,13 @@
                                  disabled="#{empty ortBasvuruController.selected or ortBasvuruController.selected.basvuruHareketDurumu ne 'RANDEVU_OLUSTURULDU'}"
                                  onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
                                  actionListener="#{ortBasvuruController.preparePhysioTherapy()}"/>
+                <p:commandButton id="fileButton" styleClass="ui-button-teal" icon="pi pi-file-import" pt:data-tooltip="#{messages.buttonDosyalar}"
+                                 update=":PrescriptionForm" oncomplete="PF('PrescriptionDialog').show()"
+                                 disabled="#{empty ortBasvuruController.selected or ortBasvuruController.selected.basvuruHareketDurumu ne 'FIZIK_TEDAVI_PLANI_OLUSTURULDU'}"
+                                 onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()">
+                    <f:attribute name="ortBasvuru" value="#{ortBasvuruController.selected}"/>
+                    <f:actionListener binding="#{ortBasvuruDosyaController.getInfo()}"/>
+                </p:commandButton>
 
 
             </f:facet>
