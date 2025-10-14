@@ -360,4 +360,9 @@ public class FilterOptionService implements java.io.Serializable{
                 .collect(Collectors.toList());
     }
 
+    public List<SelectItem> getOrtMalzemeTalepOnayDurums() {
+        return Arrays.stream(EnumOrtMalzemeOnayDurumu.values())
+                .map(value -> new SelectItem(value, value.getDisplayValue()))
+                .collect(Collectors.toList());
+    }
 }

@@ -52,7 +52,8 @@ public enum EnumSyFiltreAnahtari implements BaseEnum {
     ORTBASVURU_DURUMU("Ortez/Protez Başvuru Durumu"),
     ORTBASVURU_HAREKET_DURUMU("Ortez/Protez Başvuru Hareket Durumu"),
     ORTOLCU_DURUM("Ortez/Protez Ölçü Durum"),
-    ORTSTOK_BIRIM("Ortez/Protez Stok Birim");
+    ORTSTOK_BIRIM("Ortez/Protez Stok Birim"),
+    ORTMALZEME_TALEP_ONAY_DURUMU("Ortez/Protez Malzeme Talep Onay Durumu");
 
     private final String label;
 
