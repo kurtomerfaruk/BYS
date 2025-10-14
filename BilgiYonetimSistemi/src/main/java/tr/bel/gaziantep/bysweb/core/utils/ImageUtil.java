@@ -79,4 +79,24 @@ public class ImageUtil implements java.io.Serializable {
         return bytesArray;
 
     }
+
+    public static InputStream compressImage(InputStream inputStream, File file) {
+        try (InputStream is = inputStream;
+             OutputStream out = new FileOutputStream(file)) {
+
+            BufferedImage img = ImageIO.read(is);
+            BufferedImage scaledImg;
+            if (img.getWidth() >= img.getHeight())
+                scaledImg = Scalr.resize(img, Scalr.Method.ULTRA_QUALITY, Scalr.Mode.FIT_TO_HEIGHT, 800, 1000);
+            else
+                scaledImg = Scalr.resize(img, Scalr.Method.ULTRA_QUALITY, Scalr.Mode.FIT_TO_WIDTH, 1000, 800);
+            ImageIO.write(scaledImg, "jpg", out);
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            ImageIO.write(scaledImg, "jpg", os);
+            return new ByteArrayInputStream(os.toByteArray());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
