@@ -12,7 +12,8 @@
                    model="#{ortStokController.selected}"
                    widgetVar="OrtStokPriceDialog"
                    actionListener="#{ortStokController.updatePrice()}"
-                   listForm="OrtStokListForm">
+                   listForm="OrtStokListForm"
+                   header="Fiyat Güncelle">
 
 
         <p:outputLabel value="#{messages.fiyatTuruLabel}" for="@next"/>
@@ -25,8 +26,8 @@
         </p:selectOneMenu>
 
         <p:outputLabel value="#{messages.fiyatLabel}" for="@next"/>
-        <p:inputNumber id="fiyat" value="#{ortStokController.fiyat}" styleClass="text-right" decimalPlaces="2" decimalSeparator="," thousandSeparator="."
-                       emptyValue="zero"/>
+        <p:inputNumber id="fiyat" value="#{ortStokController.fiyat}" decimalPlaces="2" decimalSeparator="," thousandSeparator="."
+                       emptyValue="zero" inputStyleClass="text-end"/>
 
     </coco:editpage>
 
