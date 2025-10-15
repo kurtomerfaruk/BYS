@@ -15,6 +15,7 @@ import tr.bel.gaziantep.bysweb.core.enums.ErrorType;
 import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtBasvuruDurumu;
 import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtBasvuruHareketDurumu;
 import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtFizikTedaviDurum;
+import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtMalzemeOnayDurumu;
 import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.EnumSyFiltreAnahtari;
 import tr.bel.gaziantep.bysweb.core.exception.BysBusinessException;
 import tr.bel.gaziantep.bysweb.core.service.FilterOptionService;
@@ -24,10 +25,7 @@ import tr.bel.gaziantep.bysweb.core.utils.ImageUtil;
 import tr.bel.gaziantep.bysweb.core.utils.StringUtil;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.*;
-import tr.bel.gaziantep.bysweb.moduls.ortezprotez.service.OrtBasvuruMalzemeTeslimiService;
-import tr.bel.gaziantep.bysweb.moduls.ortezprotez.service.OrtBasvuruService;
-import tr.bel.gaziantep.bysweb.moduls.ortezprotez.service.OrtFizikTedaviService;
-import tr.bel.gaziantep.bysweb.moduls.ortezprotez.service.OrtPersonelService;
+import tr.bel.gaziantep.bysweb.moduls.ortezprotez.service.*;
 
 import java.io.Serial;
 import java.lang.reflect.InvocationTargetException;
@@ -56,6 +54,8 @@ public class OrtBasvuruController extends AbstractController<OrtBasvuru> {
     private OrtPersonelService personelService;
     @Inject
     private OrtBasvuruMalzemeTeslimiService ortBasvuruMalzemeTeslimiService;
+    @Inject
+    private OrtMalzemeTalepService malzemeTalepService;
     @Inject
     private OrtFizikTedaviService fizikTedaviService;
     @Inject
@@ -315,19 +315,58 @@ public class OrtBasvuruController extends AbstractController<OrtBasvuru> {
 
     public void removeRow(OrtFizikTedavi detay) {
         try {
-           fizikTedaviList.remove(detay);
+            fizikTedaviList.remove(detay);
         } catch (Exception ex) {
             log.error(null, ex);
             FacesUtil.errorMessage(Constants.HATA_OLUSTU);
         }
     }
 
-    public boolean isImage(String fileName){
+    public boolean isImage(String fileName) {
         return ImageUtil.isImage(fileName);
     }
 
-    public boolean isPdf(String fileName){
+    public boolean isPdf(String fileName) {
         return ImageUtil.isPdf(fileName);
+    }
+
+    public void prepareDelivery() {
+        OrtBasvuru selected = this.getSelected();
+        if (selected == null) {
+            throw new BysBusinessException(ErrorType.NESNE_OKUNAMADI);
+        }
+
+        try {
+            List<OrtMalzemeTalep> talepler = malzemeTalepService.findByOrtBasvuruByOnayDurum(selected, EnumOrtMalzemeOnayDurumu.ONAYLANDI);
+
+            List<OrtBasvuruMalzemeTeslimi> teslimListesi = selected.getOrtBasvuruMalzemeTeslimiList();
+            LocalDateTime now = LocalDateTime.now();
+
+            talepler.stream()
+                    .filter(t -> t.getOrtMalzemeTalepStokList() != null)
+                    .flatMap(t -> t.getOrtMalzemeTalepStokList().stream())
+                    .map(talepStok -> OrtBasvuruMalzemeTeslimi.builder()
+                            .ortBasvuru(selected)
+                            .ortStok(talepStok.getOrtStok())
+                            .miktar(talepStok.getMiktar())
+                            .teslimTarihi(now)
+                            .teslimEdenOrtPersonel(ortPersonel)
+                            .build())
+                    .forEach(teslimListesi::add);
+            this.getSelected().setOrtBasvuruMalzemeTeslimiList(teslimListesi);
+        } catch (Exception ex) {
+            log.error("Teslim hazırlığı sırasında hata oluştu", ex);
+            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+        }
+    }
+
+    public void saveDelivery(){
+        try {
+            FacesUtil.successMessage("urunlerTeslimEdildi");
+        }catch (Exception ex){
+            log.error("Teslim kayıdı sırasında hata oluştu", ex);
+            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+        }
     }
 
 }
