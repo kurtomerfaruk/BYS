@@ -1,16 +1,19 @@
 package tr.bel.gaziantep.bysweb.moduls.ortezprotez.service;
 
-import jakarta.ejb.Stateless;
+import jakarta.ejb.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import tr.bel.gaziantep.bysweb.core.enums.bys.EnumAlisSatis;
 import tr.bel.gaziantep.bysweb.core.enums.bys.EnumGirisCikis;
 import tr.bel.gaziantep.bysweb.core.service.AbstractService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtStok;
+import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtStokFiyatHareket;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtStokHareket;
 
 import java.io.Serial;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -21,6 +24,7 @@ import java.util.stream.Collectors;
  * @since 6.10.2025 13:57
  */
 @Stateless
+@TransactionManagement(TransactionManagementType.CONTAINER)
 public class OrtStokService extends AbstractService<OrtStok> {
 
     @Serial
@@ -54,5 +58,22 @@ public class OrtStokService extends AbstractService<OrtStok> {
         }
         ortStok.setMiktar(miktar);
         edit(ortStok);
+    }
+
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void updatePrice(OrtStok stok, EnumAlisSatis fiyatTur, BigDecimal fiyat) {
+        if (fiyatTur == EnumAlisSatis.ALIS) {
+            stok.setAlisFiyati(fiyat);
+        } else {
+            stok.setSatisFiyati(fiyat);
+        }
+        edit(stok);
+        OrtStokFiyatHareket hareket = OrtStokFiyatHareket.builder()
+                .tur(fiyatTur)
+                .tarih(LocalDateTime.now())
+                .fiyat(fiyat)
+                .build();
+        getEntityManager().persist(hareket);
+        stok.getOrtStokFiyatHareketList().add(hareket);
     }
 }
