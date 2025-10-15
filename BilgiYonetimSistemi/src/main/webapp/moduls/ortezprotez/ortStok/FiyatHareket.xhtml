@@ -87,6 +87,21 @@
                     </h:outputText>
                 </p:column>
 
+                <p:column id="tur" sortBy="#{item.tur}" filterBy="#{item.tur}" width="10%">
+                    <f:facet name="header">
+                        <h:outputText value="#{messages.fiyatTuruText}"/>
+                    </f:facet>
+                    <f:facet name="filter">
+                        <p:selectOneMenu onchange="PF('ekstreWidget').filter()" converter="omnifaces.SelectItemsConverter">
+                            <f:selectItem itemLabel="#{messages.tumuText}" itemValue="#{null}" noSelectionOption="true"/>
+                            <f:selectItems value="#{enumAlisSatis.ALL_VALUES}"
+                                           var="option"
+                                           itemValue="#{option}"
+                                           itemLabel="#{option.displayValue}"/>
+                        </p:selectOneMenu>
+                    </f:facet>
+                    <h:outputText value="#{item.tur.displayValue}"/>
+                </p:column>
 
                 <p:column id="fiyat" sortBy="#{item.fiyat}" filterBy="#{item.fiyat}" width="10%">
                     <f:facet name="header">
