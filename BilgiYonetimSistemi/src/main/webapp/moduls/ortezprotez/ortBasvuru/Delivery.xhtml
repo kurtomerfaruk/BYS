@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <p:dialog widgetVar="DeliveryDialog"
+              modal="true"
+              resizable="false"
+              closeOnEscape="true"
+              header="Ürün Teslimi"
+              appendTo="@(body)"
+              responsive="true"
+              onShow="PF('DeliveryDialog').initPosition();"
+              fitViewport="true"
+              position="top"
+              style="max-width:50% !important">
+
+        <h:form id="DeliveryForm">
+            <h:panelGroup id="display">
+                <p:focus context="display"/>
+                <p:panelGrid columns="1" columnClasses="column" rendered="#{ortBasvuruController.selected !=null}">
+
+                    <p:panelGrid columns="2">
+                        <p:outputLabel value="#{messages.teslimTarihiLabel}" for="@next"/>
+                        <p:datePicker id="basvuruTarihi" locale="tr" pattern="#{messages.tarihFormat}" value="#{ortBasvuruController.teslimTarihi}"
+                                      title="#{messages.teslimTarihiText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true"
+                                      showIcon="true" showOnFocus="false"/>
+
+                        <p:outputLabel value="#{messages.teslimEdenPersonelLabel}" for="@next"/>
+                        <p:selectOneMenu id="teslimEdenPersonel" value="#{ortBasvuruController.ortPersonel}" filter="true"
+                                         converter="omnifaces.SelectItemsConverter">
+                            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+                            <f:selectItems value="#{ortPersonelController.items}"
+                                           var="personels"
+                                           itemLabel="#{personels.gnlPersonel.gnlKisi.adSoyad}"
+                                           itemValue="#{personels}"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="#{messages.tcKimlikNoLabel}" for="@next"/>
+                        <coco:tcKimlikNoDogumTarihi actionListener="#{ortBasvuruController.getTcKimlik()}" update=":growl,@(.tcUpdate)"
+                                                    value="#{ortBasvuruController.teslimAlanKisi.tcKimlikNo}"
+                                                    dateValue="#{ortBasvuruController.teslimAlanKisi.dogumTarihi}" required="false"/>
+
+                        <p:outputLabel value="#{messages.adLabel}" for="@next"/>
+                        <p:inputText id="ad" value="#{ortBasvuruController.teslimAlanKisi.ad}" title="#{messages.adText}" readonly="true" styleClass="tcUpdate"
+                                     size="70"/>
+
+                        <p:outputLabel value="#{messages.soyadLabel}" for="@next"/>
+                        <p:inputText id="soyad" value="#{ortBasvuruController.teslimAlanKisi.soyad}" title="#{messages.soyadText}" readonly="true"
+                                     styleClass="tcUpdate"/>
+
+                        <f:facet name="footer">
+                            <div class="float-end">
+                                <p:commandButton value="Tümüne Uygula" icon="pi pi-check" styleClass="ui-button-success"
+                                                 actionListener="#{ortBasvuruController.updateFields()}" update=":growl,detayId"
+                                                 onstart="PF('Loading').show()" oncomplete="PF('Loading').hide()"/>
+                            </div>
+                        </f:facet>
+                    </p:panelGrid>
+
+                    <p:dataTable id="detayId"
+                                 var="detay"
+                                 value="#{ortBasvuruController.selected.ortBasvuruMalzemeTeslimiList}"
+                                 styleClass="w-100"
+                                 scrollable="true"
+                                 scrollHeight="250"
+                                 showGridlines="true"
+                                 size="small">
+
+
+                        <p:ajax event="cellEdit" listener="#{ortBasvuruController.onCellEdit}" update=":growl"/>
+                        <p:ajax event="cellEditInit" listener="#{ortBasvuruController.onCellEditInit}" update=":growl"/>
+
+                        <p:column headerText="Stok Adı" width="100">
+                            <h:outputText value="#{detay.ortStok.stokAdi}"/>
+                        </p:column>
+
+                        <p:column headerText="Miktar" width="60" styleClass="text-end">
+                            <h:outputText value="#{detay.miktar}"/>
+                        </p:column>
+
+                        <p:column headerText="Teslim Tarihi" width="100">
+                            <h:outputText value="#{detay.teslimTarihi}">
+                                <f:convertDateTime pattern="#{messages.tarihSaatFormat}" type="localDateTime"/>
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column headerText="Teslim Eden Personel" width="100">
+                            <h:outputText value="#{detay.teslimEdenOrtPersonel.gnlPersonel.gnlKisi.adSoyad}"/>
+                        </p:column>
+
+                        <p:column headerText="Teslim Alan Kişi" width="100">
+                            <h:outputText value="#{detay.teslimAlanGnlKisi.adSoyad}"/>
+                        </p:column>
+
+                        <p:column headerText="Teslim Edildi" width="60">
+                            <ui:fragment rendered="#{detay.id!=null}">
+                                <button type="button" class="btn btn-primary btn-wave waves-effect waves-light" data-bs-toggle="tooltip"
+                                        data-bs-placement="right" title="Teslim Edildi">
+                                    <i class="ti ti-check"></i>
+                                </button>
+                            </ui:fragment>
+
+                            <ui:fragment rendered="#{detay.id==null}">
+                                <button type="button" class="btn btn-danger btn-wave waves-effect waves-light" data-bs-toggle="tooltip"
+                                        data-bs-placement="right" title="Teslim Bekliyor">
+                                    <i class="ti ti-x"></i>
+                                </button>
+                            </ui:fragment>
+                        </p:column>
+
+                        <!--                        <p:column headerText="Tarih">-->
+                        <!--                            <p:cellEditor>-->
+                        <!--                                <f:facet name="output">-->
+                        <!--                                    <h:outputText value="#{detay.tarih}">-->
+                        <!--                                        <f:convertDateTime pattern="#{messages.tarihSaatFormat}" type="localDateTime"/>-->
+                        <!--                                    </h:outputText>-->
+                        <!--                                </f:facet>-->
+                        <!--                                <f:facet name="input">-->
+                        <!--                                    <p:datePicker locale="tr" pattern="#{messages.tarihFormat}" value="#{detay.tarih}" title="#{messages.tarihText}" mask="true"-->
+                        <!--                                                  monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true" showOnFocus="false"/>-->
+                        <!--                                </f:facet>-->
+                        <!--                            </p:cellEditor>-->
+                        <!--                        </p:column>-->
+
+                        <!--                        <p:column headerText="Sil" width="10%">-->
+                        <!--                            <p:commandButton styleClass="ui-button-danger mr-2" icon="pi pi-times" update="detayId,:growl" process="@this"-->
+                        <!--                                             actionListener="#{ortBasvuruController.removeRow(detay)}"/>-->
+                        <!--                        </p:column>-->
+
+                    </p:dataTable>
+
+
+                    <f:facet name="footer">
+                        <div class="float-end">
+                            <p:commandButton icon="pi pi-check" styleClass="ui-button-success"
+                                             actionListener="#{ortBasvuruController.saveDelivery()}"
+                                             value="#{messages.buttonKaydet}"
+                                             update="display,:OrtBasvuruListForm:datalist:datalist,:growl"
+                                             oncomplete="handleSubmit(xhr,status,args,PF('DeliveryDialog'));"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                            <p:commandButton icon="pi pi-times" styleClass="btn-danger"
+                                             value="#{messages.buttonIptal}"
+                                             onclick="PF('DeliveryDialog').hide()" immediate="true"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()">
+                                <p:resetInput target="@form"/>
+                            </p:commandButton>
+                        </div>
+                    </f:facet>
+                </p:panelGrid>
+            </h:panelGroup>
+        </h:form>
+
+    </p:dialog>
+
+</ui:composition>
+
+</html>

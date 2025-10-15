@@ -24,7 +24,8 @@ public enum EnumOrtBasvuruHareketDurumu implements BaseEnum {
     MALZEME_TALEBI_ONAYLANDI("Malzeme Talebi Onaylandı"),
     TEKNIKERE_TESLIM_EDILDI("Teknikere teslim edildi"),
     RANDEVU_OLUSTURULDU("Randevu oluşturuldu"),
-    FIZIK_TEDAVI_PLANI_OLUSTURULDU("Fizik Tedavi Planı oluşturuldu.");
+    FIZIK_TEDAVI_PLANI_OLUSTURULDU("Fizik Tedavi Planı oluşturuldu."),
+    URUNLER_TESLIM_EDILDI("Ürünler Teslim Edildi");
 
     private final String label;
 

@@ -11,7 +11,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.SelectEvent;
 import tr.bel.gaziantep.bysweb.core.controller.AbstractController;
+import tr.bel.gaziantep.bysweb.core.controller.KpsController;
 import tr.bel.gaziantep.bysweb.core.enums.ErrorType;
+import tr.bel.gaziantep.bysweb.core.enums.bys.EnumModul;
 import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtBasvuruDurumu;
 import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtBasvuruHareketDurumu;
 import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtFizikTedaviDurum;
@@ -24,6 +26,7 @@ import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
 import tr.bel.gaziantep.bysweb.core.utils.ImageUtil;
 import tr.bel.gaziantep.bysweb.core.utils.StringUtil;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
+import tr.bel.gaziantep.bysweb.moduls.genel.service.GnlKisiService;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.*;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.service.*;
 
@@ -49,7 +52,7 @@ public class OrtBasvuruController extends AbstractController<OrtBasvuru> {
     private static final long serialVersionUID = 8798606249246291031L;
 
     @Inject
-    private OrtBasvuruService ortBasvuruService;
+    private OrtBasvuruService service;
     @Inject
     private OrtPersonelService personelService;
     @Inject
@@ -60,6 +63,10 @@ public class OrtBasvuruController extends AbstractController<OrtBasvuru> {
     private OrtFizikTedaviService fizikTedaviService;
     @Inject
     private FilterOptionService filterOptionService;
+    @Inject
+    private GnlKisiService gnlKisiService;
+    @Inject
+    private KpsController kps;
 
     @Getter
     @Setter
@@ -79,6 +86,12 @@ public class OrtBasvuruController extends AbstractController<OrtBasvuru> {
     @Getter
     @Setter
     private int rowIndex;
+    @Getter
+    @Setter
+    private LocalDateTime teslimTarihi;
+    @Getter
+    @Setter
+    private GnlKisi teslimAlanKisi;
 
     public OrtBasvuruController() {
         super(OrtBasvuru.class);
@@ -148,7 +161,7 @@ public class OrtBasvuruController extends AbstractController<OrtBasvuru> {
         }
 
         try {
-            ortBasvuruService.saveNew(this.getSelected());
+            service.saveNew(this.getSelected());
             FacesUtil.successMessage(Constants.KAYIT_EKLENDI);
         } catch (Exception ex) {
             log.error(null, ex);
@@ -163,7 +176,7 @@ public class OrtBasvuruController extends AbstractController<OrtBasvuru> {
         }
 
         try {
-            ortBasvuruService.save(this.getSelected(), addAppointment, appointmentDate);
+            service.save(this.getSelected(), addAppointment, appointmentDate);
             FacesUtil.successMessage(Constants.KAYIT_GUNCELLENDI);
         } catch (Exception ex) {
             log.error(null, ex);
@@ -184,7 +197,7 @@ public class OrtBasvuruController extends AbstractController<OrtBasvuru> {
         }
         try {
             this.getSelected().setOdendi(StringUtil.isNotBlank(this.getSelected().getMakbuzNo()));
-            ortBasvuruService.saveDurum(this.getSelected(), EnumOrtBasvuruHareketDurumu.ODEME_ALINDI);
+            service.saveDurum(this.getSelected(), EnumOrtBasvuruHareketDurumu.ODEME_ALINDI);
             FacesUtil.successMessage("odemeAlindi");
         } catch (Exception ex) {
             log.error(null, ex);
@@ -198,7 +211,7 @@ public class OrtBasvuruController extends AbstractController<OrtBasvuru> {
         }
         try {
             if (StringUtil.isNotBlank(this.getSelected().getSutKodu())) {
-                ortBasvuruService.saveDurum(this.getSelected(), EnumOrtBasvuruHareketDurumu.SUT_KODU_VERILDI);
+                service.saveDurum(this.getSelected(), EnumOrtBasvuruHareketDurumu.SUT_KODU_VERILDI);
                 FacesUtil.successMessage("sutKoduVerildi");
             }
 
@@ -340,7 +353,6 @@ public class OrtBasvuruController extends AbstractController<OrtBasvuru> {
             List<OrtMalzemeTalep> talepler = malzemeTalepService.findByOrtBasvuruByOnayDurum(selected, EnumOrtMalzemeOnayDurumu.ONAYLANDI);
 
             List<OrtBasvuruMalzemeTeslimi> teslimListesi = selected.getOrtBasvuruMalzemeTeslimiList();
-            LocalDateTime now = LocalDateTime.now();
 
             talepler.stream()
                     .filter(t -> t.getOrtMalzemeTalepStokList() != null)
@@ -349,10 +361,10 @@ public class OrtBasvuruController extends AbstractController<OrtBasvuru> {
                             .ortBasvuru(selected)
                             .ortStok(talepStok.getOrtStok())
                             .miktar(talepStok.getMiktar())
-                            .teslimTarihi(now)
-                            .teslimEdenOrtPersonel(ortPersonel)
                             .build())
                     .forEach(teslimListesi::add);
+            teslimTarihi = LocalDateTime.now();
+            teslimAlanKisi = new GnlKisi();
             this.getSelected().setOrtBasvuruMalzemeTeslimiList(teslimListesi);
         } catch (Exception ex) {
             log.error("Teslim hazırlığı sırasında hata oluştu", ex);
@@ -360,11 +372,56 @@ public class OrtBasvuruController extends AbstractController<OrtBasvuru> {
         }
     }
 
-    public void saveDelivery(){
+    public void saveDelivery() {
         try {
+            service.saveDelivery(this.getSelected(),this.getSyKullanici());
             FacesUtil.successMessage("urunlerTeslimEdildi");
-        }catch (Exception ex){
+        } catch (Exception ex) {
             log.error("Teslim kayıdı sırasında hata oluştu", ex);
+            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+        }
+    }
+
+    public void getTcKimlik() {
+        try {
+            if (teslimAlanKisi != null) {
+                String tcKimlikNo = teslimAlanKisi.getTcKimlikNo();
+                GnlKisi kisi = gnlKisiService.findByTckimlikNo(tcKimlikNo);
+                if (kisi == null) kisi = teslimAlanKisi;
+                kisi = kps.findByTcKimlikNo(kisi, EnumModul.ORTEZ_PROTEZ);
+                if (kisi != null) {
+                    teslimAlanKisi = kisi;
+                }
+            }
+        } catch (Exception ex) {
+            log.error(null, ex);
+        }
+    }
+
+    public void updateFields() {
+        try {
+            List<OrtBasvuruMalzemeTeslimi> teslimList = this.getSelected().getOrtBasvuruMalzemeTeslimiList();
+
+            boolean hasTeslimAlan = teslimAlanKisi != null && StringUtil.isNotBlank(teslimAlanKisi.getAd());
+            boolean hasTarih = teslimTarihi != null;
+            boolean hasPersonel = ortPersonel != null;
+
+
+            for (OrtBasvuruMalzemeTeslimi teslim : teslimList) {
+                if(teslim.getId()!=null) continue;
+                if (hasTeslimAlan) {
+                    teslim.setTeslimAlanGnlKisi(teslimAlanKisi);
+                }
+                if (hasTarih) {
+                    teslim.setTeslimTarihi(teslimTarihi);
+                }
+                if (hasPersonel) {
+                    teslim.setTeslimEdenOrtPersonel(ortPersonel);
+                }
+            }
+
+        } catch (Exception ex) {
+            log.error("Malzeme teslim güncelleme hatası", ex);
             FacesUtil.errorMessage(Constants.HATA_OLUSTU);
         }
     }

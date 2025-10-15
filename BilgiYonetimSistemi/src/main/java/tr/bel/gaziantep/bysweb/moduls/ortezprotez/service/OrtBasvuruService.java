@@ -4,15 +4,19 @@ import jakarta.ejb.*;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import tr.bel.gaziantep.bysweb.core.enums.bys.EnumGirisCikis;
 import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtBasvuruDurumu;
 import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtBasvuruHareketDurumu;
+import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtStokHareketTablo;
+import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtStokHareketTur;
 import tr.bel.gaziantep.bysweb.core.service.AbstractService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
-import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtBasvuru;
-import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtRandevu;
+import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.*;
+import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.entity.SyKullanici;
 
 import java.io.Serial;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
@@ -42,6 +46,10 @@ public class OrtBasvuruService extends AbstractService<OrtBasvuru> {
 
     @Inject
     private OrtBasvuruHareketService ortBasvuruHareketService;
+    @Inject
+    private OrtStokHareketService stokHareketService;
+    @Inject
+    private OrtStokService stokService;
 
 //    @TransactionAttribute(TransactionAttributeType.REQUIRED)
 //    public void save(OrtBasvuru ortBasvuru, boolean addAppointment, LocalDateTime appointmentDate) {
@@ -142,5 +150,35 @@ public class OrtBasvuruService extends AbstractService<OrtBasvuru> {
         ortBasvuru.setBasvuruHareketDurumu(EnumOrtBasvuruHareketDurumu.BEKLEMEDE);
         ortBasvuruHareketService.addHistory(ortBasvuru);
         create(ortBasvuru);
+    }
+
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void saveDelivery(OrtBasvuru basvuru, SyKullanici syKullanici) {
+        basvuru.setBasvuruHareketDurumu(EnumOrtBasvuruHareketDurumu.URUNLER_TESLIM_EDILDI);
+        ortBasvuruHareketService.addHistory(basvuru);
+        for (OrtBasvuruMalzemeTeslimi teslim : basvuru.getOrtBasvuruMalzemeTeslimiList()) {
+            teslim.setStoktanDus(true);
+            teslim =getEntityManager().merge(teslim);
+            OrtStok ortStok =  teslim.getOrtStok();
+            OrtStokHareket stokHareket = stokHareketService.createHareket(syKullanici,
+                    ortStok,
+                    teslim.getTeslimTarihi(),
+                    teslim.getAciklama(),
+                    teslim.getMiktar(),
+                    EnumOrtStokHareketTur.HASTA_ICIN_KULLANIM,
+                    teslim.getId(),
+                    EnumGirisCikis.CIKIS,
+                    EnumOrtStokHareketTablo.ORTBASVURU_MALZEME_TESLIMI,
+                    teslim.isAktif());
+
+            stokHareket =  stokHareketService.refreshEdit(stokHareket);
+            if (ortStok.getOrtStokHareketList() == null) ortStok.setOrtStokHareketList(new ArrayList<>());
+            if(!ortStok.getOrtStokHareketList().contains(stokHareket)) {
+                ortStok.getOrtStokHareketList().add(stokHareket);
+            }
+            stokService.setStokMiktar(ortStok);
+        }
+
+        edit(basvuru);
     }
 }
