@@ -67,13 +67,15 @@ public class OrtStokService extends AbstractService<OrtStok> {
         } else {
             stok.setSatisFiyati(fiyat);
         }
-        edit(stok);
+
         OrtStokFiyatHareket hareket = OrtStokFiyatHareket.builder()
                 .tur(fiyatTur)
                 .tarih(LocalDateTime.now())
                 .fiyat(fiyat)
+                .ortStok(stok)
                 .build();
         getEntityManager().persist(hareket);
         stok.getOrtStokFiyatHareketList().add(hareket);
+        edit(stok);
     }
 }
