@@ -365,4 +365,10 @@ public class FilterOptionService implements java.io.Serializable{
                 .map(value -> new SelectItem(value, value.getDisplayValue()))
                 .collect(Collectors.toList());
     }
+
+    public List<SelectItem> getOrtFizikTedaviDurums() {
+        return Arrays.stream(EnumOrtFizikTedaviDurum.values())
+                .map(value -> new SelectItem(value, value.getDisplayValue()))
+                .collect(Collectors.toList());
+    }
 }
