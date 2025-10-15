@@ -25,9 +25,21 @@
                         rowKey="#{item.id}"
                         selection="#{ortStokController.selected}"
                         filtered="#{ortStokController.filtered}"
-                        rowselect=":OrtStokListForm:datalist:datalist:createButton,:OrtStokListForm:datalist:datalist:viewButton,:OrtStokListForm:datalist:datalist:editButton,:OrtStokListForm:datalist:datalist:deleteButton,:OrtStokListForm:datalist:datalist:stokHistoryButton :OrtStokListForm:datalist:datalist:stokHistoryPriceButton"
+                        rowselect=":OrtStokListForm:datalist:datalist:createButton,
+                        :OrtStokListForm:datalist:datalist:viewButton,
+                        :OrtStokListForm:datalist:datalist:editButton,
+                        :OrtStokListForm:datalist:datalist:deleteButton,
+                        :OrtStokListForm:datalist:datalist:stokHistoryButton,
+                        :OrtStokListForm:datalist:datalist:stokHistoryPriceButton,
+                        :OrtStokListForm:datalist:datalist:priceButton"
                         rowDblselect="document.getElementById('OrtStokListForm:datalist:datalist:editButton').click()"
-                        contextMenu=":OrtStokListForm:datalist:datalist:createButton :OrtStokListForm:datalist:datalist:viewButton :OrtStokListForm:datalist:datalist:editButton :OrtStokListForm:datalist:datalist:deleteButton :OrtStokListForm:datalist:datalist:stokHistoryButton :OrtStokListForm:datalist:datalist:stokHistoryPriceButton"
+                        contextMenu=":OrtStokListForm:datalist:datalist:createButton
+                        :OrtStokListForm:datalist:datalist:viewButton
+                        :OrtStokListForm:datalist:datalist:editButton
+                        :OrtStokListForm:datalist:datalist:deleteButton
+                        :OrtStokListForm:datalist:datalist:stokHistoryButton
+                        :OrtStokListForm:datalist:datalist:stokHistoryPriceButton
+                        :OrtStokListForm:datalist:datalist:priceButton "
                         selectListener="#{ortStokController.resetParents}"
                         controller="#{ortStokController}"
                         header="#{messages.stokListesi}">
@@ -66,6 +78,13 @@
                                  actionListener="#{ortStokFiyatHareketController.getInfo(ortStokController.selected)}"
                                  onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
                                  rendered="#{syKullaniciController.hasPermission('ortstok:fiyathareketgor')}"/>
+
+                <p:commandButton id="priceButton" styleClass="ui-button-orange" icon="pi pi-turkish-lira" pt:data-tooltip="#{messages.buttonFiyatGuncelle}"
+                                 update=":OrtStokPriceForm:OrtStokPriceForm" oncomplete="PF('OrtStokPriceDialog').show()"
+                                 disabled="#{empty ortStokController.selected}"
+                                 actionListener="#{ortStokController.preparePrice()}"
+                                 onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('ortstok:fiyatguncelle')}"/>
 
             </f:facet>
 
