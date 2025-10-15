@@ -1,8 +1,7 @@
 package tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
 import tr.bel.gaziantep.bysweb.core.enums.bys.EnumAlisSatis;
 
@@ -18,6 +17,9 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "ORTSTOK_FIYAT_HAREKET")
 public class OrtStokFiyatHareket extends BaseEntity {
@@ -38,7 +40,7 @@ public class OrtStokFiyatHareket extends BaseEntity {
 
     @Column(name = "TUR")
     @Enumerated(EnumType.STRING)
-    private EnumAlisSatis birim;
+    private EnumAlisSatis tur;
 
     @Column(name = "FIYAT", precision = 18, scale = 2)
     private BigDecimal fiyat;
