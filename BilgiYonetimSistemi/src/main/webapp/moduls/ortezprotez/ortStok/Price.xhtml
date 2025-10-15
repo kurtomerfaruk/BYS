@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:editpage id="OrtStokPriceForm"
+                   model="#{ortStokController.selected}"
+                   widgetVar="OrtStokPriceDialog"
+                   actionListener="#{ortStokController.updatePrice()}"
+                   listForm="OrtStokListForm">
+
+
+        <p:outputLabel value="#{messages.fiyatTuruLabel}" for="@next"/>
+        <p:selectOneMenu id="birim" value="#{ortStokController.fiyatTur}" required="true" converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{enumAlisSatis.ALL_VALUES}"
+                           var="turs"
+                           itemValue="#{turs}"
+                           itemLabel="#{turs.displayValue}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.fiyatLabel}" for="@next"/>
+        <p:inputNumber id="fiyat" value="#{ortStokController.fiyat}" styleClass="text-right" decimalPlaces="2" decimalSeparator="," thousandSeparator="."
+                       emptyValue="zero"/>
+
+    </coco:editpage>
+
+</ui:composition>
+
+</html>
