@@ -78,7 +78,7 @@ public class OrtStokController extends AbstractController<OrtStok> {
         if (this.getSelected() == null) {
             throw new BysBusinessException(ErrorType.NESNE_OKUNAMADI);
         }
-        fiyat = BigDecimal.ZERO;
+        fiyat = this.getSelected().getSatisFiyati()==null ? BigDecimal.ZERO : this.getSelected().getSatisFiyati();
         fiyatTur = EnumAlisSatis.SATIS;
     }
 
