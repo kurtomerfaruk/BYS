@@ -6,6 +6,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import tr.bel.gaziantep.bysweb.core.enums.bys.EnumGirisCikis;
 import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtBasvuruHareketDurumu;
+import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtMalzemeOnayDurumu;
 import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtStokHareketTablo;
 import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtStokHareketTur;
 import tr.bel.gaziantep.bysweb.core.service.AbstractService;
@@ -138,5 +139,12 @@ public class OrtMalzemeTalepService extends AbstractService<OrtMalzemeTalep> {
     public void merge(OrtMalzemeTalep malzemeTalep, EnumOrtBasvuruHareketDurumu durum) {
         edit(malzemeTalep);
         basvuruUpdate(malzemeTalep.getOrtBasvuru(), durum);
+    }
+
+    public List<OrtMalzemeTalep> findByOrtBasvuruByOnayDurum(OrtBasvuru ortBasvuru, EnumOrtMalzemeOnayDurumu onayDurumu) {
+        return getEntityManager().createNamedQuery("OrtMalzemeTalep.findByOrtBasvuruByOnayDurum")
+                .setParameter("ortBasvuru",ortBasvuru)
+                .setParameter("onayDurumu",onayDurumu)
+                .getResultList();
     }
 }
