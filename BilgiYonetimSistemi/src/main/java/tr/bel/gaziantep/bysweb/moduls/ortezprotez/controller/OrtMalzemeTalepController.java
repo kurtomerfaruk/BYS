@@ -1,6 +1,7 @@
 package tr.bel.gaziantep.bysweb.moduls.ortezprotez.controller;
 
 import jakarta.faces.event.ActionEvent;
+import jakarta.faces.model.SelectItem;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -13,18 +14,24 @@ import tr.bel.gaziantep.bysweb.core.controller.AbstractController;
 import tr.bel.gaziantep.bysweb.core.enums.ErrorType;
 import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtBasvuruHareketDurumu;
 import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtMalzemeOnayDurumu;
+import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.EnumSyFiltreAnahtari;
 import tr.bel.gaziantep.bysweb.core.exception.BysBusinessException;
+import tr.bel.gaziantep.bysweb.core.service.FilterOptionService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.*;
-import tr.bel.gaziantep.bysweb.moduls.ortezprotez.service.*;
+import tr.bel.gaziantep.bysweb.moduls.ortezprotez.service.OrtMalzemeTalepService;
+import tr.bel.gaziantep.bysweb.moduls.ortezprotez.service.OrtMalzemeTalepStokService;
+import tr.bel.gaziantep.bysweb.moduls.ortezprotez.service.OrtPersonelService;
+import tr.bel.gaziantep.bysweb.moduls.ortezprotez.service.OrtRandevuService;
 
 import java.io.Serial;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -47,9 +54,9 @@ public class OrtMalzemeTalepController extends AbstractController<OrtMalzemeTale
     @Inject
     private OrtPersonelService personelService;
     @Inject
-    private OrtBasvuruService ortBasvuruService;
-    @Inject
     private OrtRandevuService ortRandevuService;
+    @Inject
+    private FilterOptionService filterOptionService;
 
     @Getter
     @Setter
@@ -65,22 +72,25 @@ public class OrtMalzemeTalepController extends AbstractController<OrtMalzemeTale
         super(OrtMalzemeTalep.class);
     }
 
-//    @Override
-//    @PostConstruct
-//    public void init() {
-//        super.init();
-//        ortPersonel = personelService.findByGnlPersonel(this.getSyKullanici().getGnlPersonel());
-//        if (ortPersonel == null) {
-//            FacesUtil.addErrorMessage("Sistem yöneticiniz ile görüşüp personel tanımı yaptırınız...");
-//        }
-//    }
-
     public void onPreRenderView() {
         ortPersonel = personelService.findByGnlPersonel(this.getSyKullanici().getGnlPersonel());
         if (ortPersonel == null) {
             throw new BysBusinessException("Sistem yöneticiniz ile görüşüp personel tanımı yaptırınız...");
         }
     }
+
+
+    public List<SelectItem> getFilterOptions(EnumSyFiltreAnahtari key) {
+        switch (key) {
+            case ORTMALZEME_TALEP_ONAY_DURUMU -> {
+                return filterOptionService.getOrtMalzemeTalepOnayDurums();
+            }
+            default -> {
+                return Collections.emptyList();
+            }
+        }
+    }
+
 
     @Override
     public OrtMalzemeTalep prepareCreate(ActionEvent event) {
@@ -158,24 +168,6 @@ public class OrtMalzemeTalepController extends AbstractController<OrtMalzemeTale
         }
     }
 
-//    public void persist(ActionEvent event) {
-//        if (this.getSelected() == null) {
-//            throw new BysBusinessException(ErrorType.NESNE_OKUNAMADI);
-//        }
-//        try {
-//            if (this.getSelected().getOrtMalzemeTalepStokList().isEmpty()) {
-//                FacesUtil.warningMessage("malzemeGirilmedenKaydedilemez");
-//                return;
-//            }
-//
-//            service.persist(this.getSelected(), EnumOrtBasvuruHareketDurumu.MALZEME_TALEP_EDILDI);
-//            FacesUtil.successMessage(Constants.KAYIT_GUNCELLENDI);
-//        } catch (Exception ex) {
-//            log.error(null, ex);
-//            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
-//        }
-//    }
-
     public void update(ActionEvent event) {
         if (this.getSelected() == null) {
             throw new BysBusinessException(ErrorType.NESNE_OKUNAMADI);
@@ -242,10 +234,6 @@ public class OrtMalzemeTalepController extends AbstractController<OrtMalzemeTale
             this.getSelected().setOnayTarihi(null);
             this.getSelected().setOnaylayanOrtPersonel(null);
             this.getSelected().setDurum(EnumOrtMalzemeOnayDurumu.REDDEDILDI);
-//            service.edit(this.getSelected());
-//            OrtBasvuru basvuru = this.getSelected().getOrtBasvuru();
-//            basvuru.setBasvuruHareketDurumu(EnumOrtBasvuruHareketDurumu.MALZEME_TALEBI_REDDEDILDI);
-//            ortBasvuruService.edit(basvuru);
             service.merge(this.getSelected(), EnumOrtBasvuruHareketDurumu.MALZEME_TALEBI_REDDEDILDI);
             FacesUtil.successMessage("kayitRededildi");
         } catch (Exception ex) {
@@ -269,10 +257,6 @@ public class OrtMalzemeTalepController extends AbstractController<OrtMalzemeTale
 
         try {
             this.getSelected().setTeslimEdildi(true);
-//            service.edit(this.getSelected());
-//            OrtBasvuru basvuru = this.getSelected().getOrtBasvuru();
-//            basvuru.setBasvuruHareketDurumu(EnumOrtBasvuruHareketDurumu.TEKNIKERE_TESLIM_EDILDI);
-//            ortBasvuruService.edit(basvuru);
             service.merge(this.getSelected(), EnumOrtBasvuruHareketDurumu.TEKNIKERE_TESLIM_EDILDI);
             FacesUtil.successMessage("malzemeTeslimEdildi");
         } catch (Exception ex) {
