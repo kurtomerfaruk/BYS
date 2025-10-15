@@ -22,6 +22,8 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "ORTMALZEME_TALEP")
+@NamedQuery(name = "OrtMalzemeTalep.findByOrtBasvuruByOnayDurum",query="SELECT m FROM OrtMalzemeTalep m WHERE m.aktif=true AND m.durum =:onayDurumu AND " +
+        "m.ortBasvuru=:ortBasvuru")
 public class OrtMalzemeTalep extends BaseEntity {
     @Serial
     private static final long serialVersionUID = -4182897377510927161L;
