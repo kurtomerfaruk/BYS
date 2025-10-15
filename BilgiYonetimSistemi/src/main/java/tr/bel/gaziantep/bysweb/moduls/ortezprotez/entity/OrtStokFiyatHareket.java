@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
+import tr.bel.gaziantep.bysweb.core.enums.bys.EnumAlisSatis;
 
 import java.io.Serial;
 import java.math.BigDecimal;
@@ -35,8 +36,13 @@ public class OrtStokFiyatHareket extends BaseEntity {
     @Column(name = "TARIH")
     private LocalDateTime tarih;
 
+    @Column(name = "TUR")
+    @Enumerated(EnumType.STRING)
+    private EnumAlisSatis birim;
+
     @Column(name = "FIYAT", precision = 18, scale = 2)
     private BigDecimal fiyat;
+
 
     @Override
     public int hashCode() {
