@@ -38,7 +38,7 @@
         <p:outputLabel value="#{messages.teslimEdenPersonelLabel}" for="@next"/>
         <p:inputText value="#{ortBasvuruController.ortBasvuruMalzemeTeslimi.teslimEdenOrtPersonel.gnlPersonel.gnlKisi.adSoyad}" readonly="true"/>
 
-        <p:outputLabel value="#{messages.tcKimlikNoLabel}" for="@next"/>
+        <p:outputLabel value="Teslim Alan #{messages.tcKimlikNoLabel}" for="@next"/>
         <coco:tcKimlikNoDogumTarihi actionListener="#{ortBasvuruController.getTcKimlikSilicon()}" update=":growl,@(.tcUpdate)"
                                     value="#{ortBasvuruController.ortBasvuruMalzemeTeslimi.teslimAlanGnlKisi.tcKimlikNo}"
                                     dateValue="#{ortBasvuruController.ortBasvuruMalzemeTeslimi.teslimAlanGnlKisi.dogumTarihi}" required="false"/>

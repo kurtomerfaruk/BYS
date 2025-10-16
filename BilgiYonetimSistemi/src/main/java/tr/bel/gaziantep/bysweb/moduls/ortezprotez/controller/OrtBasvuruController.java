@@ -249,11 +249,15 @@ public class OrtBasvuruController extends AbstractController<OrtBasvuru> {
                     .teslimTarihi(LocalDateTime.now())
                     .ortBasvuru(this.getSelected())
                     .teslimEdenOrtPersonel(ortPersonel)
+                    .teslimAlanGnlKisi(new GnlKisi())
                     .ortStok(new OrtStok())
                     .miktar(BigDecimal.ONE)
                     .build();
         } else {
             ortBasvuruMalzemeTeslimi = this.getSelected().getOrtBasvuruMalzemeTeslimiList().get(0);
+            if(ortBasvuruMalzemeTeslimi.getTeslimAlanGnlKisi()==null){
+                ortBasvuruMalzemeTeslimi.setTeslimAlanGnlKisi(new GnlKisi());
+            }
         }
     }
 
@@ -391,6 +395,22 @@ public class OrtBasvuruController extends AbstractController<OrtBasvuru> {
                 kisi = kps.findByTcKimlikNo(kisi, EnumModul.ORTEZ_PROTEZ);
                 if (kisi != null) {
                     teslimAlanKisi = kisi;
+                }
+            }
+        } catch (Exception ex) {
+            log.error(null, ex);
+        }
+    }
+
+    public void getTcKimlikSilicon() {
+        try {
+            if (ortBasvuruMalzemeTeslimi.getTeslimAlanGnlKisi() != null) {
+                String tcKimlikNo = ortBasvuruMalzemeTeslimi.getTeslimAlanGnlKisi().getTcKimlikNo();
+                GnlKisi kisi = gnlKisiService.findByTckimlikNo(tcKimlikNo);
+                if (kisi == null) kisi = ortBasvuruMalzemeTeslimi.getTeslimAlanGnlKisi();
+                kisi = kps.findByTcKimlikNo(kisi, EnumModul.ORTEZ_PROTEZ);
+                if (kisi != null) {
+                    ortBasvuruMalzemeTeslimi.setTeslimAlanGnlKisi(kisi);
                 }
             }
         } catch (Exception ex) {
