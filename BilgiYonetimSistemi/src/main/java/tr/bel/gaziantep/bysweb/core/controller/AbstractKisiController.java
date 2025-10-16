@@ -60,6 +60,10 @@ public abstract class AbstractKisiController<T> extends AbstractController<T> {
                 kisi.setAktif(Boolean.TRUE);
                 kisi = kps.findByTcKimlikNo(kisi, modul);
 
+                if(kisi==null){
+                    kisi =GnlKisi.builder().tcKimlikNo(tcKimlikNo).dogumTarihi(dogumTarihi).build();
+                }
+
                 kisiSetter.accept(this.getSelected(), kisi);
 
             } catch (Exception ex) {
