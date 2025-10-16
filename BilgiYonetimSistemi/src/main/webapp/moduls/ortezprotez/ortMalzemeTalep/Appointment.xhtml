@@ -11,7 +11,8 @@
                    model="#{ortMalzemeTalepController.selected}"
                    widgetVar="OrtMalzemeTalepAppointDialog"
                    actionListener="#{ortMalzemeTalepController.createAppointMent()}"
-                   listForm="OrtMalzemeTalepListForm">
+                   listForm="OrtMalzemeTalepListForm"
+                   header="Randevu Oluştur">
 
         <p:outputLabel value="#{messages.randevuTarihiLabel}" for="@next"/>
         <p:datePicker id="randevuTarihi" locale="tr" pattern="#{messages.tarihSaatFormat}" value="#{ortMalzemeTalepController.ortRandevu.randevuTarihi}"
