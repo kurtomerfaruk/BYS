@@ -55,6 +55,18 @@
             </p:column>
         </p:autoComplete>
 
+        <p:outputLabel value="#{messages.yetkiLabel}" for="@next"/>
+        <p:autoComplete id="yetkis" multiple="true" value="#{syKullaniciController.selectedYetkis}"
+                        completeMethod="#{syKullaniciController.completeYetkis}" showEmptyMessage="false"
+                        var="yetkiItem" itemLabel="#{yetkiItem.aciklama}" itemValue="#{yetkiItem}"
+                        converter="#{yetkiConverter}" forceSelection="false" scrollHeight="250" unique="true">
+            <p:ajax event="itemSelect" listener="#{syKullaniciController.onYetkiItemSelect}" update=":growl"/>
+            <p:ajax event="itemUnselect" listener="#{syKullaniciController.onYetkiItemUnSelect}" update=":growl"/>
+            <p:column>
+                <h:outputText value="#{yetkiItem.aciklama}"/>
+            </p:column>
+        </p:autoComplete>
+
         <p:outputLabel value="#{messages.kilitLiLabel}" for="@next"/>
         <p:selectBooleanCheckbox id="kilitli" value="#{syKullaniciController.selected.kilitli}"/>
 

@@ -6,9 +6,7 @@ import jakarta.persistence.PersistenceContext;
 import tr.bel.gaziantep.bysweb.core.service.AbstractService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.core.utils.Function;
-import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.entity.SyKullanici;
-import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.entity.SyKullaniciRol;
-import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.entity.SyRol;
+import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.entity.*;
 
 import java.io.Serial;
 import java.util.List;
@@ -58,7 +56,7 @@ public class SyKullaniciService extends AbstractService<SyKullanici> {
     }
 
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void update(SyKullanici syKullanici, List<SyRol> rols) {
+    public void update(SyKullanici syKullanici, List<SyRol> rols, List<SyYetki> yetkis) {
         syKullanici.getSyKullaniciRols().forEach(kullaniciRol -> kullaniciRol.setAktif(false));
         Map<SyRol, SyKullaniciRol> rolYetkiMap = syKullanici.getSyKullaniciRols().stream()
                 .collect(Collectors.toMap(SyKullaniciRol::getSyRol, java.util.function.Function.identity()));
@@ -75,8 +73,28 @@ public class SyKullaniciService extends AbstractService<SyKullanici> {
                 kullaniciRol.setAktif(true);
             }
         }
+
+        syKullanici.getSyKullaniciYetkis().forEach(kullaniciYetki -> kullaniciYetki.setAktif(false));
+        Map<SyYetki, SyKullaniciYetki> kullaniciYetkiMap = syKullanici.getSyKullaniciYetkis().stream()
+                .collect(Collectors.toMap(SyKullaniciYetki::getSyYetki, java.util.function.Function.identity()));
+        for (SyYetki yetki : yetkis) {
+            SyKullaniciYetki kullaniciYetki = kullaniciYetkiMap.get(yetki);
+            if (kullaniciYetki == null) {
+                kullaniciYetki = SyKullaniciYetki.builder()
+                        .syYetki(yetki)
+                        .syKullanici(syKullanici)
+                        .build();
+                kullaniciYetki.setAktif(true);
+                syKullanici.getSyKullaniciYetkis().add(kullaniciYetki);
+            } else {
+                kullaniciYetki.setAktif(true);
+            }
+        }
+
         edit(syKullanici);
     }
+
+
 
     public List<SyKullanici> findByKilitli() {
         return getEntityManager().createNamedQuery("SyKullanici.findByKilitli").getResultList();

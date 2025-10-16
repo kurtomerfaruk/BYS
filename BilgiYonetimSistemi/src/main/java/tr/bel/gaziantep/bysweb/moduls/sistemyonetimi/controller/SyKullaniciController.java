@@ -23,11 +23,10 @@ import tr.bel.gaziantep.bysweb.core.validation.StrongPassword;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlPersonel;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlUnvan;
-import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.entity.SyKullanici;
-import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.entity.SyKullaniciRol;
-import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.entity.SyRol;
+import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.entity.*;
 import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.service.SyKullaniciService;
 import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.service.SyRolService;
+import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.service.SyYetkiService;
 
 import java.io.Serial;
 import java.lang.reflect.InvocationTargetException;
@@ -52,6 +51,8 @@ public class SyKullaniciController extends AbstractController<SyKullanici> {
     @Inject
     private SyRolService syRolService;
     @Inject
+    private SyYetkiService syYetkiService;
+    @Inject
     private FilterOptionService filterOptionService;
 
     @Getter
@@ -60,6 +61,9 @@ public class SyKullaniciController extends AbstractController<SyKullanici> {
     @Getter
     @Setter
     private List<SyRol> selectedRols;
+    @Getter
+    @Setter
+    private List<SyYetki> selectedYetkis;
     @Getter
     @Setter
     private String currentPassword;
@@ -94,12 +98,21 @@ public class SyKullaniciController extends AbstractController<SyKullanici> {
     public void init() {
 //        syKullanici = Util.getSyKullanici();
 //        readColumns(syKullanici);
+        super.init();
         this.getSyKullanici().getSyKullaniciRols().stream()
                 .flatMap(kullaniciRol -> kullaniciRol.getSyRol().getSyRolYetkis().stream().filter(BaseEntity::isAktif))
                 .map(rolYetki -> rolYetki.getSyYetki().getYetki())
                 .forEach(permissions::add);
+        this.getSyKullanici().getSyKullaniciYetkis().stream()
+                .flatMap(kullaniciYetki -> kullaniciYetki.getSyYetki().getSyKullaniciYetkis().stream().filter(BaseEntity::isAktif))
+                .map(rolYetki -> rolYetki.getSyYetki().getYetki())
+                .forEach(permissions::add);
+//        this.getSyKullanici().getSyKullaniciYetkis()
+//                .stream()
+//                .map(x->x.getSyYetki().getYetki())
+//                .forEach(permissions::add);
         selectedRols = new ArrayList<>();
-        readColumns();
+        //readColumns();
     }
 
     public boolean hasPermission(String permissionKey) {
@@ -120,7 +133,7 @@ public class SyKullaniciController extends AbstractController<SyKullanici> {
             initializeEmbeddableKey();
             return newItem;
         } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException ex) {
-            log.error(null,ex);
+            log.error(null, ex);
         }
         return null;
     }
@@ -134,7 +147,7 @@ public class SyKullaniciController extends AbstractController<SyKullanici> {
         if (this.getSelected() == null) return;
         try {
             this.getSelected().setParola(Function.encrypt(this.getSelected().getParola()));
-            service.update(this.getSelected(), selectedRols);
+            service.update(this.getSelected(), selectedRols,selectedYetkis);
             FacesUtil.successMessage(Constants.KAYIT_EKLENDI);
         } catch (Exception ex) {
             log.error(null, ex);
@@ -145,7 +158,7 @@ public class SyKullaniciController extends AbstractController<SyKullanici> {
     public void update() {
         if (this.getSelected() == null) return;
         try {
-            service.update(this.getSelected(), selectedRols);
+            service.update(this.getSelected(), selectedRols, selectedYetkis);
             FacesUtil.successMessage(Constants.KAYIT_GUNCELLENDI);
         } catch (Exception ex) {
             log.error(null, ex);
@@ -161,6 +174,12 @@ public class SyKullaniciController extends AbstractController<SyKullanici> {
                 .filter(BaseEntity::isAktif)
                 .map(SyKullaniciRol::getSyRol)
                 .collect(Collectors.toList());
+        selectedYetkis = this.getSelected()
+                .getSyKullaniciYetkis()
+                .parallelStream()
+                .filter(BaseEntity::isAktif)
+                .map(SyKullaniciYetki::getSyYetki)
+                .collect(Collectors.toList());
     }
 
     public void allPasswordChange() {
@@ -171,7 +190,7 @@ public class SyKullaniciController extends AbstractController<SyKullanici> {
             FacesUtil.successMessage(Constants.KAYIT_GUNCELLENDI);
         } catch (Exception ex) {
             FacesUtil.errorMessage(Constants.HATA_OLUSTU);
-            log.error(null,ex);
+            log.error(null, ex);
         }
     }
 
@@ -191,6 +210,14 @@ public class SyKullaniciController extends AbstractController<SyKullanici> {
         return result;
     }
 
+    public List<SyYetki> completeYetkis(String query) {
+        String queryLowerCase = query.toLowerCase();
+        List<SyYetki> yetkis = syYetkiService.findAll();
+        List<SyYetki> result = yetkis.stream().filter(t -> t.getAciklama().toLowerCase().contains(queryLowerCase)).collect(Collectors.toList());
+        result.removeAll(selectedYetkis);
+        return result;
+    }
+
     public void onItemUnSelect(UnselectEvent<SyRol> event) {
         SyRol rol = event.getObject();
         selectedRols.remove(rol);
@@ -203,6 +230,18 @@ public class SyKullaniciController extends AbstractController<SyKullanici> {
         }
     }
 
+    public void onYetkiItemUnSelect(UnselectEvent<SyYetki> event) {
+        SyYetki yetki = event.getObject();
+        selectedYetkis.remove(yetki);
+    }
+
+    public void onYetkiItemSelect(SelectEvent<SyYetki> event) {
+        SyYetki rol = event.getObject();
+        if (!selectedYetkis.contains(rol)) {
+            selectedYetkis.add(rol);
+        }
+    }
+
     public void profilePasswordUpdate(ActionEvent event) {
         try {
             if (this.getSyKullanici() != null) {
@@ -210,7 +249,7 @@ public class SyKullaniciController extends AbstractController<SyKullanici> {
                     FacesUtil.warningMessage("parolaHatali");
                     return;
                 }
-                if(!Function.isPasswordStrong(newPassword)){
+                if (!Function.isPasswordStrong(newPassword)) {
                     FacesUtil.warningMessage("gucluParolaKontrol");
                     return;
                 }
@@ -222,7 +261,7 @@ public class SyKullaniciController extends AbstractController<SyKullanici> {
                 newPasswordRepeat = "";
             }
         } catch (Exception ex) {
-            log.error(null,ex);
+            log.error(null, ex);
             FacesUtil.errorMessage(Constants.HATA_OLUSTU);
         }
     }

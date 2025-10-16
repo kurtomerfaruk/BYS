@@ -1,42 +1,39 @@
 package tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
 
 import java.io.Serial;
-import java.util.ArrayList;
-import java.util.List;
 
+/**
+ * @author Omer Faruk KURT kurtomerfaruk@gmail.com
+ * @version 1.0.0
+ * @since 16.10.2025 11:22
+ */
 @Getter
 @Setter
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
-@Table(name = "SYYETKI")
-public class SyYetki extends BaseEntity {
+@Table(name = "SYKULLANICI_YETKI")
+public class SyKullaniciYetki extends BaseEntity {
     @Serial
-    private static final long serialVersionUID = -3211208783080785130L;
+    private static final long serialVersionUID = 5232727565061314147L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID", nullable = false)
     private Integer id;
 
-    @Size(max = 50)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "SYKULLANICI_ID")
+    private SyKullanici syKullanici;
 
-    @Column(name = "YETKI", length = 50)
-    private String yetki;
-
-    @Size(max = 250)
-
-    @Column(name = "ACIKLAMA", length = 250)
-    private String aciklama;
-
-    @OneToMany(mappedBy = "syYetki",cascade = CascadeType.MERGE)
-    private List<SyKullaniciYetki> syKullaniciYetkis = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "SYYETKI_ID")
+    private SyYetki syYetki;
 
     @Override
     public int hashCode() {
@@ -47,7 +44,7 @@ public class SyYetki extends BaseEntity {
 
     @Override
     public boolean equals(Object object) {
-        if (!(object instanceof SyYetki other)) {
+        if (!(object instanceof SyKullaniciYetki other)) {
             return false;
         }
         return (this.id != null || other.id == null) && (this.id == null || this.id.equals(other.id));

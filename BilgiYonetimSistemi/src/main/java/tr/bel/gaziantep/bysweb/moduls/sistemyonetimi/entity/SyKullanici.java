@@ -88,6 +88,10 @@ public class SyKullanici extends BaseEntityNoVersion {
     @Builder.Default
     private Set<SyKullaniciRol> syKullaniciRols = new LinkedHashSet<>();
 
+    @OneToMany(mappedBy = "syKullanici",cascade = CascadeType.ALL)
+    @Builder.Default
+    private Set<SyKullaniciYetki> syKullaniciYetkis = new LinkedHashSet<>();
+
     @OneToMany(mappedBy = "syKullanici")
     @Builder.Default
     private List<SyDuyuruKullanici> syDuyuruKullaniciList = new ArrayList<>();
