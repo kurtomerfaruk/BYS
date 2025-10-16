@@ -31,7 +31,6 @@ public class OrtBasvuruService extends AbstractService<OrtBasvuru> {
     private static final long serialVersionUID = 4259094003224116213L;
 
 
-
     public OrtBasvuruService() {
         super(OrtBasvuru.class);
     }
@@ -139,7 +138,7 @@ public class OrtBasvuruService extends AbstractService<OrtBasvuru> {
 //        edit(ortBasvuru);
 //    }
 
-    public void saveDurum(OrtBasvuru ortBasvuru,EnumOrtBasvuruHareketDurumu durum) {
+    public void saveDurum(OrtBasvuru ortBasvuru, EnumOrtBasvuruHareketDurumu durum) {
         ortBasvuru.setBasvuruHareketDurumu(durum);
         ortBasvuruHareketService.addHistory(ortBasvuru);
         edit(ortBasvuru);
@@ -158,8 +157,8 @@ public class OrtBasvuruService extends AbstractService<OrtBasvuru> {
         ortBasvuruHareketService.addHistory(basvuru);
         for (OrtBasvuruMalzemeTeslimi teslim : basvuru.getOrtBasvuruMalzemeTeslimiList()) {
             teslim.setStoktanDus(true);
-            teslim =getEntityManager().merge(teslim);
-            OrtStok ortStok =  teslim.getOrtStok();
+            teslim = getEntityManager().merge(teslim);
+            OrtStok ortStok = teslim.getOrtStok();
             OrtStokHareket stokHareket = stokHareketService.createHareket(syKullanici,
                     ortStok,
                     teslim.getTeslimTarihi(),
@@ -171,9 +170,9 @@ public class OrtBasvuruService extends AbstractService<OrtBasvuru> {
                     EnumOrtStokHareketTablo.ORTBASVURU_MALZEME_TESLIMI,
                     teslim.isAktif());
 
-            stokHareket =  stokHareketService.refreshEdit(stokHareket);
+            stokHareket = stokHareketService.refreshEdit(stokHareket);
             if (ortStok.getOrtStokHareketList() == null) ortStok.setOrtStokHareketList(new ArrayList<>());
-            if(!ortStok.getOrtStokHareketList().contains(stokHareket)) {
+            if (!ortStok.getOrtStokHareketList().contains(stokHareket)) {
                 ortStok.getOrtStokHareketList().add(stokHareket);
             }
             stokService.setStokMiktar(ortStok);
