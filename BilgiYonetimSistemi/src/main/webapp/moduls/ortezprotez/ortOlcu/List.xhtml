@@ -48,16 +48,15 @@
                 <p:commandButton id="viewButton" styleClass="ui-button-info" icon="pi pi-search" pt:data-tooltip="#{messages.buttonDetay}"
                                  update=":OrtOlcuViewForm:OrtOlcuViewForm" oncomplete="PF('OrtOlcuViewDialog').show()"
                                  disabled="#{empty ortOlcuController.selected}" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
-                <p:commandButton id="approveButton" styleClass="ui-button-orange" icon="pi pi-check" pt:data-tooltip="#{messages.buttonOnayla}"
-                                 update=":OrtOlcuApproveForm:OrtOlcuApproveForm" oncomplete="PF('OrtOlcuApproveDialog').show()"
-                                 disabled="#{empty ortOlcuController.selected}" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
-                                 rendered="#{syKullaniciController.hasPermission('ortolcu:onayla')}"/>
                 <p:commandButton id="deleteButton" styleClass="ui-button-danger" icon="pi pi-trash" pt:data-tooltip="#{messages.buttonSil}"
                                  actionListener="#{ortOlcuController.delete}" update=":growl,datalist" disabled="#{empty ortOlcuController.selected}"
                                  rendered="#{syKullaniciController.hasPermission('ortolcu:sil')}">
                     <p:confirm header="#{messages.ConfirmationHeader}" message="#{messages.ConfirmDeleteMessage}" icon="pi pi-exclamation-circle"/>
                 </p:commandButton>
-
+                <p:commandButton id="approveButton" styleClass="ui-button-orange" icon="pi pi-check" pt:data-tooltip="#{messages.buttonOnayla}"
+                                 update=":OrtOlcuApproveForm:OrtOlcuApproveForm" oncomplete="PF('OrtOlcuApproveDialog').show()"
+                                 disabled="#{empty ortOlcuController.selected}" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('ortolcu:onayla')}"/>
             </f:facet>
 
         </coco:datatable>
