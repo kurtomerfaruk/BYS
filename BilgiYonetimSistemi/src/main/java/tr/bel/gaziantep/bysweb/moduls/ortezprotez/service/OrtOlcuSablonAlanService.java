@@ -73,6 +73,11 @@ public class OrtOlcuSablonAlanService extends AbstractService<OrtOlcuSablonAlan>
         template.setResimGenislik(imageWidth);
         template.setResimYukseklik(imageHeight);
 
+        if(!template.isKutuBul()){
+            getEntityManager().merge(template);
+            return null;
+        }
+
         // Griye çevir
         Mat gray = new Mat();
         Imgproc.cvtColor(img, gray, Imgproc.COLOR_BGR2GRAY);
