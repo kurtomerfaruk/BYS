@@ -8,7 +8,11 @@ import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKurs;
 
 import java.io.Serial;
-
+/**
+ * @author Omer Faruk KURT kurtomerfaruk@gmail.com
+ * @version 1.0.0
+ * @since 2.07.2025 14:01
+ */
 @Getter
 @Setter
 @Entity

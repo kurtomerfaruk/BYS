@@ -6,7 +6,11 @@ import org.hibernate.annotations.ColumnDefault;
 import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
 
 import java.io.Serial;
-
+/**
+ * @author Omer Faruk KURT kurtomerfaruk@gmail.com
+ * @version 1.0.0
+ * @since 2.07.2025 14:01
+ */
 @Getter
 @Setter
 @Builder
