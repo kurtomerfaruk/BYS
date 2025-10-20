@@ -101,10 +101,12 @@ public class OrtHasta extends BaseEntity {
     private String hastaninOykusuTalebi;
 
     @OneToMany(mappedBy = "ortHasta")
+    @Builder.Default
     private List<OrtRandevu> ortrandevus = new ArrayList<>();
 
     @OneToMany(mappedBy = "ortHasta")
     @SQLRestriction("AKTIF=true")
+    @Builder.Default
     private List<OrtFizikTedavi> ortFizikTedaviList = new ArrayList<>();
 
     @Override

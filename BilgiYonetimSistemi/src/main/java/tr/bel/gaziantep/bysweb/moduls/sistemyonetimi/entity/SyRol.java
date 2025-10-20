@@ -36,6 +36,7 @@ public class SyRol extends BaseEntity {
     private String aciklama;
 
     @OneToMany(mappedBy = "syRol",cascade = CascadeType.MERGE)
+    @Builder.Default
     private List<SyRolYetki> syRolYetkis = new ArrayList<>();
 
     @Override

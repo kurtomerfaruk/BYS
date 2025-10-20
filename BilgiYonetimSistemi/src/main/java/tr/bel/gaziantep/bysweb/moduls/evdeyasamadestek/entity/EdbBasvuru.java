@@ -202,6 +202,7 @@ public class EdbBasvuru extends BaseEntity {
 
     @OneToMany(mappedBy = "edbBasvuru", fetch = FetchType.LAZY)
     @SQLRestriction("AKTIF=true")
+    @Builder.Default
     private List<EdbTalep> edbTalepList = new ArrayList<>();
 
     @Nationalized

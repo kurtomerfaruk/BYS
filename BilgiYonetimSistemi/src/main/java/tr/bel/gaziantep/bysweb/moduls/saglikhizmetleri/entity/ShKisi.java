@@ -45,9 +45,11 @@ public class ShKisi extends BaseEntity {
     private EnumShObeziteHizmet verilenHizmet;
 
     @OneToMany(mappedBy = "shKisi")
+    @Builder.Default
     private List<ShKisiKanTahlilSonuc> shKisiKanTahlilSonucList = new ArrayList<>();
 
     @OneToMany(mappedBy = "shKisi")
+    @Builder.Default
     private List<ShKisiKontrol> shKisiKontrolList = new ArrayList<>();
 
     @Override

@@ -269,15 +269,19 @@ public class GnlKisi extends BaseEntity {
     private BigDecimal kiraBedeli;
 
     @OneToMany(mappedBy = "gnlKisi", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @Builder.Default
     private List<GnlKisiFaydalandigiHaklar> gnlKisiFaydalandigiHaklarList = new ArrayList<>();
 
     @OneToMany(mappedBy = "gnlKisi", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @Builder.Default
     private List<GnlKisiGelirKaynagi> gnlKisiGelirKaynagiList = new ArrayList<>();
 
     @OneToMany(mappedBy = "gnlKisi", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @Builder.Default
     private List<GnlKisiYardimAlinanYerler> gnlKisiYardimAlinanYerlerList = new ArrayList<>();
 
     @OneToMany(mappedBy = "gnlKisi", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @Builder.Default
     private List<GnlKisiAldigiYardimlar> gnlKisiAldigiYardimlarList = new ArrayList<>();
 
     @Transient

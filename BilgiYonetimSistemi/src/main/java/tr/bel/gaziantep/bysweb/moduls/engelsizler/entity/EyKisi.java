@@ -211,21 +211,27 @@ public class EyKisi extends BaseEntity {
     private EyCozger eyCozger;
 
     @OneToMany(mappedBy = "eyKisi", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @Builder.Default
     private List<EyKisiDosya> eyKisiDosyaList = new ArrayList<>();
 
     @OneToMany(mappedBy = "eyKisi", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @Builder.Default
     private List<EyKisiEngelGrubu> eyKisiEngelGrubuList = new ArrayList<>();
 
     @OneToMany(mappedBy = "eyKisi", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @Builder.Default
     private List<EyKisiKullandigiCihaz> eyKisiKullandigiCihazList = new ArrayList<>();
 
     @OneToMany(mappedBy = "eyKisi", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @Builder.Default
     private List<EyKisiMaddeKullanimi> eyKisiMaddeKullanimiList = new ArrayList<>();
 
     @OneToMany(mappedBy = "eyKisi", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @Builder.Default
     private List<EyKisiRapor> eyKisiRaporList = new ArrayList<>();
 
     @OneToMany(mappedBy = "eyKisi")
+    @Builder.Default
     private List<EyTalep> eyTalepList = new ArrayList<>();
 
     @Transient

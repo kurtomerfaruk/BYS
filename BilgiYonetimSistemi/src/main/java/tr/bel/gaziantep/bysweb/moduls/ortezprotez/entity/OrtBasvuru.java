@@ -91,14 +91,17 @@ public class OrtBasvuru extends BaseEntity {
 
     @OneToMany(mappedBy = "ortBasvuru", fetch = FetchType.LAZY,cascade = {CascadeType.MERGE,CascadeType.PERSIST})
     @SQLRestriction("AKTIF=true")
+    @Builder.Default
     private List<OrtBasvuruHareket> ortBasvuruHareketList = new ArrayList<>();
 
     @OneToMany(mappedBy = "ortBasvuru")
     @SQLRestriction("AKTIF=true")
+    @Builder.Default
     private List<OrtBasvuruMalzemeTeslimi> ortBasvuruMalzemeTeslimiList = new ArrayList<>();
 
     @OneToMany(mappedBy = "ortBasvuru")
     @SQLRestriction("AKTIF=true")
+    @Builder.Default
     private List<OrtBasvuruDosya> ortBasvuruDosyaList = new ArrayList<>();
 
     @Override

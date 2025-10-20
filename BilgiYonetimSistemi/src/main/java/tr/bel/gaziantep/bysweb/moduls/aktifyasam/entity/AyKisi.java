@@ -95,14 +95,23 @@ public class AyKisi extends BaseEntity {
 
     @OneToMany(mappedBy = "ayKisi", fetch = FetchType.LAZY)
     @SQLRestriction("AKTIF=true")
+    @Builder.Default
     private List<AyKisiAranacakKisi> ayAranacakKisiList = new ArrayList<>();
+
     @OneToMany(mappedBy = "ayKisi", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @Builder.Default
     private List<AyKisiSaglikBilgi> ayKisiSaglikBilgileriList = new ArrayList<>();
+
     @OneToMany(mappedBy = "ayKisi", fetch = FetchType.LAZY)
+    @Builder.Default
     private List<AyGirisCikis> ayGirisCikisList = new ArrayList<>();
+
     @OneToMany(mappedBy = "ayKisi", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @Builder.Default
     private List<AyKisiAktivite> ayKisiAktiviteList = new ArrayList<>();
+
     @OneToMany(mappedBy = "ayKisi", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @Builder.Default
     private List<AyKisiSanatsalBeceri> ayKisiSanatsalBeceriList = new ArrayList<>();
 
     @Override

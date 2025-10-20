@@ -38,6 +38,7 @@ public class GnlPersonel extends BaseEntity {
     private String dahili;
 
     @OneToMany(mappedBy = "gnlPersonel", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE,CascadeType.PERSIST})
+    @Builder.Default
     private List<GnlPersonelBirim> gnlPersonelBirimList = new ArrayList<>();
 
     @Override
