@@ -9,7 +9,11 @@ import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
 
 import java.io.Serial;
 import java.time.LocalDateTime;
-
+/**
+ * @author Omer Faruk KURT kurtomerfaruk@gmail.com
+ * @version 1.0.0
+ * @since 28.06.2025 08:32
+ */
 @Getter
 @Setter
 @Entity
