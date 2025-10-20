@@ -7,7 +7,11 @@ import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
 import tr.bel.gaziantep.bysweb.core.enums.bys.EnumPuanlama;
-
+/**
+ * @author Omer Faruk KURT kurtomerfaruk@gmail.com
+ * @version 1.0.0
+ * @since 15.08.2025 15:24
+ */
 @Getter
 @Setter
 @Entity

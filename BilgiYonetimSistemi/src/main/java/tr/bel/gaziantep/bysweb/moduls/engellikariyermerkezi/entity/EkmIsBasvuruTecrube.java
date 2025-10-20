@@ -7,14 +7,22 @@ import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
 
+import java.io.Serial;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-
+/**
+ * @author Omer Faruk KURT kurtomerfaruk@gmail.com
+ * @version 1.0.0
+ * @since 15.08.2025 15:24
+ */
 @Getter
 @Setter
 @Entity
 @Table(name = "EKMIS_BASVURU_TECRUBE")
 public class EkmIsBasvuruTecrube extends BaseEntity {
+    @Serial
+    private static final long serialVersionUID = 2026242281265026827L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID", nullable = false)

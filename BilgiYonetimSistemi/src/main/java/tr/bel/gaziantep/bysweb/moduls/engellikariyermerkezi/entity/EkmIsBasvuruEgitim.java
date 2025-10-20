@@ -11,7 +11,11 @@ import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlEgitimBolum;
 
 import java.io.Serial;
 import java.time.LocalDate;
-
+/**
+ * @author Omer Faruk KURT kurtomerfaruk@gmail.com
+ * @version 1.0.0
+ * @since 15.08.2025 15:24
+ */
 @Getter
 @Setter
 @Entity
