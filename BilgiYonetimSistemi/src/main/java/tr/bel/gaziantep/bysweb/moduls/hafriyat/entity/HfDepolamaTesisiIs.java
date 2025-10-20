@@ -11,7 +11,11 @@ import tr.bel.gaziantep.bysweb.core.enums.hafriyat.EnumHfMalCinsi;
 import java.io.Serial;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-
+/**
+ * @author Omer Faruk KURT kurtomerfaruk@gmail.com
+ * @version 1.0.0
+ * @since 29.07.2025 11:19
+ */
 @Getter
 @Setter
 @Entity

@@ -5,7 +5,11 @@ import lombok.*;
 import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
 
 import java.io.Serial;
-
+/**
+ * @author Omer Faruk KURT kurtomerfaruk@gmail.com
+ * @version 1.0.0
+ * @since 29.07.2025 11:19
+ */
 @Getter
 @Setter
 @Builder

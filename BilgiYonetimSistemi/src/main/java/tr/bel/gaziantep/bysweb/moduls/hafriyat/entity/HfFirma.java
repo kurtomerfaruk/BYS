@@ -12,7 +12,11 @@ import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlIl;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlIlce;
 
 import java.io.Serial;
-
+/**
+ * @author Omer Faruk KURT kurtomerfaruk@gmail.com
+ * @version 1.0.0
+ * @since 29.07.2025 11:19
+ */
 @Getter
 @Setter
 @Entity

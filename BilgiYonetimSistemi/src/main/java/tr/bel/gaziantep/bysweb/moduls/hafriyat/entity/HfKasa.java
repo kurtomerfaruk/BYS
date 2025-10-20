@@ -12,7 +12,11 @@ import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlBanka;
 import java.io.Serial;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-
+/**
+ * @author Omer Faruk KURT kurtomerfaruk@gmail.com
+ * @version 1.0.0
+ * @since 29.07.2025 11:19
+ */
 @Getter
 @Setter
 @Entity
