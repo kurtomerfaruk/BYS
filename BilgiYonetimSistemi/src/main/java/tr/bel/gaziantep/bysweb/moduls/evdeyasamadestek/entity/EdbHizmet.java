@@ -9,7 +9,11 @@ import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
 import tr.bel.gaziantep.bysweb.core.enums.evdeyasamadestek.EnumEdbHizmetTuru;
 
 import java.io.Serial;
-
+/**
+ * @author Omer Faruk KURT kurtomerfaruk@gmail.com
+ * @version 1.0.0
+ * @since 7.07.2025 08:54
+ */
 @Getter
 @Setter
 @Entity

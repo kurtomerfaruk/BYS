@@ -12,7 +12,11 @@ import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlTalepTuru;
 
 import java.io.Serial;
 import java.time.LocalDateTime;
-
+/**
+ * @author Omer Faruk KURT kurtomerfaruk@gmail.com
+ * @version 1.0.0
+ * @since 7.07.2025 08:54
+ */
 @Getter
 @Setter
 @Builder
