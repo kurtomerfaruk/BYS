@@ -83,21 +83,15 @@ public class SyKullaniciController extends AbstractController<SyKullanici> {
     }
 
     public List<SelectItem> getFilterOptions(EnumSyFiltreAnahtari key) {
-        switch (key) {
-            case KULLANICI_TURU -> {
-                return filterOptionService.getSyKullaniciTurus();
-            }
-            default -> {
-                return Collections.emptyList();
-            }
+        if(key == EnumSyFiltreAnahtari.KULLANICI_TURU){
+            return filterOptionService.getSyKullaniciTurus();
         }
+        return Collections.emptyList();
     }
 
     @Override
     @PostConstruct
     public void init() {
-//        syKullanici = Util.getSyKullanici();
-//        readColumns(syKullanici);
         super.init();
         this.getSyKullanici().getSyKullaniciRols().stream()
                 .flatMap(kullaniciRol -> kullaniciRol.getSyRol().getSyRolYetkis().stream().filter(BaseEntity::isAktif))
@@ -107,12 +101,7 @@ public class SyKullaniciController extends AbstractController<SyKullanici> {
                 .flatMap(kullaniciYetki -> kullaniciYetki.getSyYetki().getSyKullaniciYetkis().stream().filter(BaseEntity::isAktif))
                 .map(rolYetki -> rolYetki.getSyYetki().getYetki())
                 .forEach(permissions::add);
-//        this.getSyKullanici().getSyKullaniciYetkis()
-//                .stream()
-//                .map(x->x.getSyYetki().getYetki())
-//                .forEach(permissions::add);
         selectedRols = new ArrayList<>();
-        //readColumns();
     }
 
     public boolean hasPermission(String permissionKey) {

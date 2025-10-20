@@ -11,9 +11,7 @@ import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlPersonel;
 import java.io.Serial;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
@@ -86,11 +84,11 @@ public class SyKullanici extends BaseEntityNoVersion {
 
     @OneToMany(mappedBy = "syKullanici",cascade = CascadeType.ALL)
     @Builder.Default
-    private Set<SyKullaniciRol> syKullaniciRols = new LinkedHashSet<>();
+    private List<SyKullaniciRol> syKullaniciRols = new ArrayList<>();
 
     @OneToMany(mappedBy = "syKullanici",cascade = CascadeType.ALL)
     @Builder.Default
-    private Set<SyKullaniciYetki> syKullaniciYetkis = new LinkedHashSet<>();
+    private List<SyKullaniciYetki> syKullaniciYetkis = new ArrayList<>();
 
     @OneToMany(mappedBy = "syKullanici")
     @Builder.Default
