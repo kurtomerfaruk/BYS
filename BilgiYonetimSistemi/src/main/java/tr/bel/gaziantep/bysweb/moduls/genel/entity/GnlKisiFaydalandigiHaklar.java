@@ -7,7 +7,11 @@ import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
 import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlFaydalandigiHak;
 
 import java.io.Serial;
-
+/**
+ * @author Omer Faruk KURT kurtomerfaruk@gmail.com
+ * @version 1.0.0
+ * @since 31.07.2025 10:08
+ */
 @Getter
 @Setter
 @Builder

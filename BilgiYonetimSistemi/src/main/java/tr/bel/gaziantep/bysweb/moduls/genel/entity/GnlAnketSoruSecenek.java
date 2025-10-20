@@ -8,7 +8,11 @@ import org.hibernate.annotations.Nationalized;
 import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
 
 import java.io.Serial;
-
+/**
+ * @author Omer Faruk KURT kurtomerfaruk@gmail.com
+ * @version 1.0.0
+ * @since 18.09.2025 09:46
+ */
 @Getter
 @Setter
 @Entity
