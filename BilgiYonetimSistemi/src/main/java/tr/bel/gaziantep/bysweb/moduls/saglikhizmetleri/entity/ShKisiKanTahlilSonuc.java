@@ -8,7 +8,11 @@ import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
 import java.io.Serial;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-
+/**
+ * @author Omer Faruk KURT kurtomerfaruk@gmail.com
+ * @version 1.0.0
+ * @since 14.07.2025 13:12
+ */
 @Getter
 @Setter
 @Entity
