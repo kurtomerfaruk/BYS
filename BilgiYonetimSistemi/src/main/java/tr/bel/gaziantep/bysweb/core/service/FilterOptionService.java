@@ -106,7 +106,7 @@ public class FilterOptionService implements java.io.Serializable{
         List<SelectItem> result = new ArrayList<>();
         List<GnlIlce> ilceList = gnlIlceService.findByIlId(27);
         for (GnlIlce value : ilceList) {
-            result.add(new SelectItem(value.getId(), value.getTanim()));
+            result.add(new SelectItem(value.getTanim(), value.getTanim()));
         }
         return result;
     }
@@ -115,7 +115,7 @@ public class FilterOptionService implements java.io.Serializable{
         List<SelectItem> result = new ArrayList<>();
         List<GnlIl> ilList = gnlIlService.findAll();
         for (GnlIl value : ilList) {
-            result.add(new SelectItem(value.getId(), value.getTanim()));
+            result.add(new SelectItem(value.getTanim(), value.getTanim()));
         }
         return result;
     }
@@ -188,7 +188,7 @@ public class FilterOptionService implements java.io.Serializable{
         List<SelectItem> result = new ArrayList<>();
         List<EyTalepKonu> list = eyTalepKonuService.findAll();
         for (EyTalepKonu value : list) {
-            result.add(new SelectItem(value.getId(), value.getTanim()));
+            result.add(new SelectItem(value.getTanim(), value.getTanim()));
         }
         return result;
     }
@@ -243,7 +243,7 @@ public class FilterOptionService implements java.io.Serializable{
         List<SelectItem> result = new ArrayList<>();
         List<AyBirim> list = ayBirimService.findAll();
         for (AyBirim value : list) {
-            result.add(new SelectItem(value.getId(), value.getTanim()));
+            result.add(new SelectItem(value.getTanim(), value.getTanim()));
         }
         return result;
     }
@@ -326,7 +326,7 @@ public class FilterOptionService implements java.io.Serializable{
         List<SelectItem> result = new ArrayList<>();
         List<OrtOlcuSablon> list = ortOlcuSablonService.findAll();
         for (OrtOlcuSablon value : list) {
-            result.add(new SelectItem(value.getId(), value.getTanim()));
+            result.add(new SelectItem(value.getTanim(), value.getTanim()));
         }
         return result;
     }

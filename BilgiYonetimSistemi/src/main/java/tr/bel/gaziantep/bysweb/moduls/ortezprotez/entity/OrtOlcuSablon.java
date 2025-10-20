@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Nationalized;
 import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
 
@@ -46,6 +47,10 @@ public class OrtOlcuSablon extends BaseEntity {
 
     @Column(name = "RESIM_YUKSEKLIK")
     private Integer resimYukseklik;
+
+    @ColumnDefault("0")
+    @Column(name = "KUTU_BUL")
+    private boolean kutuBul;
 
     @OneToMany(mappedBy = "ortOlcuSablon")
     private List<OrtOlcuSablonAlan> ortOlcuSablonAlanList = new ArrayList<>();

@@ -32,6 +32,9 @@
                     <p:outputLabel value="#{messages.sablonLabel}" for="@next"/>
                     <p:inputText id="sablon" value="#{ortOlcuSablonController.selected.tanim}" title="#{messages.sablonText}" size="50" maxlength="50"/>
 
+                    <p:outputLabel value="#{messages.kutuBulLabel}" for="@next"/>
+                    <p:selectBooleanCheckbox id="kutuBul" value="#{ortOlcuSablonController.selected.kutuBul}"/>
+
                     <p:outputLabel value="#{messages.resimLabel}" for="@next"/>
                     <p:fileUpload id="fileUpload" value="#{ortOlcuSablonImageController.file}"
                                   mode="advanced" skinSimple="true" auto="true"

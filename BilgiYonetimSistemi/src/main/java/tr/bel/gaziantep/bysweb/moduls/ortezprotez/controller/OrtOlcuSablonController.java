@@ -49,9 +49,9 @@ public class OrtOlcuSablonController extends AbstractController<OrtOlcuSablon> {
             try {
                 String path = createFilePath(ortOlcuSablonImageController.getFile());
                 this.getSelected().setResimYolu(path);
-                service.edit(this.getSelected());
+                //service.edit(this.getSelected());
                 ImageUtil.saveImage(ortOlcuSablonImageController.getFile(), path);
-                ortOlcuSablonAlanService.detectAndSaveFields(this.getSelected(),path);
+                ortOlcuSablonAlanService.detectAndSaveFields(this.getSelected(), path);
                 FacesUtil.successMessage(Constants.KAYIT_GUNCELLENDI);
             } catch (Exception e) {
                 log.error(e.getMessage());

@@ -3,7 +3,9 @@ package tr.bel.gaziantep.bysweb.moduls.ortezprotez.service;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import org.opencv.core.*;
+import org.opencv.core.Mat;
+import org.opencv.core.MatOfPoint;
+import org.opencv.core.Rect;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtSablonAlanTuru;
@@ -127,17 +129,17 @@ public class OrtOlcuSablonAlanService extends AbstractService<OrtOlcuSablonAlan>
     }
 
 
-    private MatOfPoint hullPoints(MatOfInt hullInt, MatOfPoint contour) {
-        Point[] contourPts = contour.toArray();
-        int[] hullIndices = hullInt.toArray();
-        Point[] hullPts = new Point[hullIndices.length];
-        for (int i = 0; i < hullIndices.length; i++) {
-            hullPts[i] = contourPts[hullIndices[i]];
-        }
-        MatOfPoint mop = new MatOfPoint();
-        mop.fromArray(hullPts);
-        return mop;
-    }
+//    private MatOfPoint hullPoints(MatOfInt hullInt, MatOfPoint contour) {
+//        Point[] contourPts = contour.toArray();
+//        int[] hullIndices = hullInt.toArray();
+//        Point[] hullPts = new Point[hullIndices.length];
+//        for (int i = 0; i < hullIndices.length; i++) {
+//            hullPts[i] = contourPts[hullIndices[i]];
+//        }
+//        MatOfPoint mop = new MatOfPoint();
+//        mop.fromArray(hullPts);
+//        return mop;
+//    }
 
     public void copy(OrtOlcuSablonAlan source) {
         OrtOlcuSablon attachedSablon = getEntityManager().getReference(
