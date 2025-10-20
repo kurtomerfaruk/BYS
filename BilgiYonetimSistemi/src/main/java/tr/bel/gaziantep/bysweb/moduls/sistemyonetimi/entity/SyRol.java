@@ -8,7 +8,11 @@ import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
 import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * @author Omer Faruk KURT kurtomerfaruk@gmail.com
+ * @version 1.0.0
+ * @since 16.06.2025 13:50
+ */
 @Getter
 @Setter
 @Builder

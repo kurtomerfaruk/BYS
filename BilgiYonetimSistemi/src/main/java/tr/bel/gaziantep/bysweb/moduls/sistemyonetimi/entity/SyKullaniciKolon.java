@@ -6,7 +6,11 @@ import tr.bel.gaziantep.bysweb.core.entity.BaseEntityNoVersion;
 import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.EnumSyFiltreEslesmeModu;
 
 import java.io.Serial;
-
+/**
+ * @author Omer Faruk KURT kurtomerfaruk@gmail.com
+ * @version 1.0.0
+ * @since 16.06.2025 13:50
+ */
 @Getter
 @Setter
 @Builder

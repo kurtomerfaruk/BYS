@@ -2,11 +2,14 @@ package tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
 
 import java.io.Serial;
-
+/**
+ * @author Omer Faruk KURT kurtomerfaruk@gmail.com
+ * @version 1.0.0
+ * @since 16.06.2025 13:50
+ */
 @Getter
 @Setter
 @Builder
