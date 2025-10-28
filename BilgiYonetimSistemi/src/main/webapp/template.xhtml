@@ -389,9 +389,9 @@
                                                 <li class="dropdown-item">
                                                     <div class="d-flex align-items-start">
                                                         <div class="pe-2 lh-1">
-                                                                            <span class="avatar avatar-md avatar-rounded bg-primary-transparent">
-                                                                                        #{users.gnlPersonel.gnlKisi.ad.charAt(0)}
-                                                                            </span>
+                                                            <span class="avatar avatar-md avatar-rounded bg-primary-transparent">
+                                                                #{users.gnlPersonel.gnlKisi.ad.charAt(0)}
+                                                            </span>
                                                         </div>
                                                         <div class="flex-grow-1 d-flex align-items-start justify-content-between">
                                                             <div>
@@ -413,6 +413,9 @@
                                                                 </div>
                                                                 <div class="fw-normal fs-13 header-notification-text text-truncate">
                                                                     <h:outputText value="#{users.sonGirilenIp}"/>
+                                                                </div>
+                                                                <div class="fw-normal fs-13 header-notification-text text-truncate">
+                                                                    <h:outputText value="#{users.gnlPersonel.gnlUnvan.tanim}"/>
                                                                 </div>
                                                             </div>
                                                             <div>
