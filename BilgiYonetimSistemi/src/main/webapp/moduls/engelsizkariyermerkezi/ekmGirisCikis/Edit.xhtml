@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:editpage id="EkmGirisCikisEditForm"
+                   model="#{ekmGirisCikisController.selected}"
+                   widgetVar="EkmGirisCikisEditDialog"
+                   actionListener="#{ekmGirisCikisController.save}"
+                   listForm="EkmGirisCikisListForm">
+
+        <p:outputLabel value="#{messages.kursLabel}" for="@next"/>
+        <p:selectOneMenu id="aykursId" value="#{ekmGirisCikisController.selected.gnlKurs}" filter="true" converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{gnlKursController.items}"
+                           var="aykursIdItem"
+                           itemValue="#{aykursIdItem}"
+                           itemLabel="#{aykursIdItem.tanim.toString()}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.kisiLabel}" for="@next"/>
+        <h:panelGroup>
+            <div class="ui-inputgroup">
+                <p:inputText id="kisiId" value="#{ekmGirisCikisController.selected.eyKisi.gnlKisi.adSoyad}" required="true" title="#{messages.kisiText}"
+                             label="#{messages.kisiText}" readonly="#{facesContext.renderResponse}" size="50">
+                </p:inputText>
+                <p:commandButton icon="pi pi-search"
+                                 actionListener="#{bysController.openCommonDialog('eyKisiSec')}"
+                                 process="@this"
+                                 update=":growl" title="Kişi seçmelisiniz">
+                    <p:ajax event="dialogReturn"
+                            listener="#{ekmGirisCikisController.secilenKisi}"
+                            update=":growl,@(.inputUpdate),kisiId"/>
+                </p:commandButton>
+            </div>
+        </h:panelGroup>
+
+        <p:outputLabel value="#{messages.girisTarihiLabel}" for="@next"/>
+        <p:datePicker id="girisTarihi" locale="tr" pattern="#{messages.tarihSaatFormat}" value="#{ekmGirisCikisController.selected.girisTarihi}"
+                      title="#{messages.girisTarihiText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
+                      showOnFocus="false" showTime="true"/>
+
+        <p:outputLabel value="#{messages.cikisTarihiLabel}" for="@next"/>
+        <p:datePicker id="cikisTarihi" locale="tr" pattern="#{messages.tarihSaatFormat}" value="#{ekmGirisCikisController.selected.cikisTarihi}"
+                      title="#{messages.cikisTarihiText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
+                      showOnFocus="false" showTime="true"/>
+
+    </coco:editpage>
+
+</ui:composition>
+
+</html>

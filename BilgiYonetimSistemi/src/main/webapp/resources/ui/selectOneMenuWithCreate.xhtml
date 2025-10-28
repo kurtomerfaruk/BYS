@@ -1,0 +1,44 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:composite="jakarta.faces.composite"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces">
+
+<composite:interface>
+    <composite:attribute name="id" />
+    <composite:attribute name="value" />
+    <composite:attribute name="styleClass"/>
+    <composite:attribute name="itemsValue" />
+    <composite:attribute name="itemLabel" />
+    <composite:attribute name="oncomplete" />
+    <composite:attribute name="actionListener" method-signature="void actionListener(jakarta.faces.event.ActionEvent)"
+                         />
+    <composite:attribute name="update" />
+    <composite:attribute name="oneMenuDisabled" default="false"/>
+    <composite:attribute name="buttonDisabled" default="false"/>
+    <composite:clientBehavior name="change" event="change" targets="#{cc.attrs.id}"/>
+</composite:interface>
+
+<composite:implementation>
+    <h:panelGroup>
+        <div class="ui-inputgroup">
+            <p:selectOneMenu id="#{cc.attrs.id}" value="#{cc.attrs.value}" required="true" filter="true"
+                             converter="omnifaces.SelectItemsConverter" styleClass="#{cc.attrs.styleClass}" disabled="#{cc.attrs.oneMenuDisabled}">
+                <f:selectItem itemLabel="#{messages.seciniz}" value="#{null}"/>
+                <f:selectItems value="#{cc.attrs.itemsValue}"
+                               var="obj"
+                               itemLabel="#{obj[cc.attrs.itemLabel]}"
+                               itemValue="#{obj}"/>
+                <p:autoUpdate/>
+            </p:selectOneMenu>
+            <p:commandButton icon="pi pi-plus" styleClass="ui-button-info"
+                             process="@this"
+                             oncomplete="PF('#{cc.attrs.oncomplete}').show();"
+                             actionListener="#{cc.attrs.actionListener}"
+                             update="#{cc.attrs.update}"
+                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide();"/>
+        </div>
+    </h:panelGroup>
+</composite:implementation>
+
+</html>

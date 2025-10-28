@@ -3,12 +3,6 @@ package tr.bel.gaziantep.bysweb.moduls.ortezprotez.service;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import org.opencv.core.Mat;
-import org.opencv.core.MatOfPoint;
-import org.opencv.core.Rect;
-import org.opencv.imgcodecs.Imgcodecs;
-import org.opencv.imgproc.Imgproc;
-import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtSablonAlanTuru;
 import tr.bel.gaziantep.bysweb.core.service.AbstractService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.core.utils.StringUtil;
@@ -16,8 +10,6 @@ import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtOlcuSablon;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtOlcuSablonAlan;
 
 import java.io.Serial;
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -43,9 +35,9 @@ public class OrtOlcuSablonAlanService extends AbstractService<OrtOlcuSablonAlan>
         return em;
     }
 
-    static {
-        nu.pattern.OpenCV.loadLocally();
-    }
+//    static {
+//        nu.pattern.OpenCV.loadLocally();
+//    }
 
     public OrtOlcuSablonAlan findByXByY(int x, int y) {
         return (OrtOlcuSablonAlan) getEntityManager().createNamedQuery("OrtOlcuSablonAlan.findByXByY")
@@ -63,70 +55,70 @@ public class OrtOlcuSablonAlanService extends AbstractService<OrtOlcuSablonAlan>
                 .getResultList();
     }
 
-    public List<OrtOlcuSablonAlan> detectAndSaveFields(OrtOlcuSablon template, String imagePath) {
-        Mat img = Imgcodecs.imread(imagePath);
-        if (img.empty()) {
-            throw new RuntimeException("Resim okunamadı: " + imagePath);
-        }
-
-        int imageWidth = img.width();
-        int imageHeight = img.height();
-
-        template.setResimGenislik(imageWidth);
-        template.setResimYukseklik(imageHeight);
-
-        if(!template.isKutuBul()){
-            getEntityManager().merge(template);
-            return null;
-        }
-
-        // Griye çevir
-        Mat gray = new Mat();
-        Imgproc.cvtColor(img, gray, Imgproc.COLOR_BGR2GRAY);
-
-        // Kenar tespiti
-        Mat edges = new Mat();
-        Imgproc.Canny(gray, edges, 50, 150);
-
-        // Kontur bulma
-        List<MatOfPoint> contours = new ArrayList<>();
-        Mat hierarchy = new Mat();
-        Imgproc.findContours(edges, contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
-
-        List<OrtOlcuSablonAlan> detected = new ArrayList<>();
-        int counter = 1;
-
-        for (MatOfPoint contour : contours) {
-            Rect rect = Imgproc.boundingRect(contour);
-
-            // Filtreleme (çok küçük/büyük kutuları alma)
-            if (rect.width > 25 && rect.height > 15 && rect.width < imageWidth - 50 && rect.height < imageHeight - 50) {
-                OrtOlcuSablonAlan field = findByXByY(rect.x, rect.y);
-                if(field == null) {
-                    field = new OrtOlcuSablonAlan();
-                }
-                if (rect.width < 40 && rect.height < 40) {
-                    field.setTur(EnumOrtSablonAlanTuru.CHECKBOX);
-                } else  {
-                    field.setTur(EnumOrtSablonAlanTuru.TEXT);
-                }
-
-                field.setOrtOlcuSablon(template);
-                field.setTanim("kutucuk_" + counter++);
-                field.setX(BigDecimal.valueOf(rect.x));
-                field.setY(BigDecimal.valueOf(rect.y));
-                field.setGenislik(BigDecimal.valueOf(rect.width));
-                field.setYukseklik(BigDecimal.valueOf(rect.height));
-
-                getEntityManager().merge(field);
-                detected.add(field);
-            }
-        }
-
-
-        getEntityManager().merge(template);
-        return detected;
-    }
+//    public List<OrtOlcuSablonAlan> detectAndSaveFields(OrtOlcuSablon template, String imagePath) {
+//        Mat img = Imgcodecs.imread(imagePath);
+//        if (img.empty()) {
+//            throw new RuntimeException("Resim okunamadı: " + imagePath);
+//        }
+//
+//        int imageWidth = img.width();
+//        int imageHeight = img.height();
+//
+//        template.setResimGenislik(imageWidth);
+//        template.setResimYukseklik(imageHeight);
+//
+//        if(!template.isKutuBul()){
+//            getEntityManager().merge(template);
+//            return null;
+//        }
+//
+//        // Griye çevir
+//        Mat gray = new Mat();
+//        Imgproc.cvtColor(img, gray, Imgproc.COLOR_BGR2GRAY);
+//
+//        // Kenar tespiti
+//        Mat edges = new Mat();
+//        Imgproc.Canny(gray, edges, 50, 150);
+//
+//        // Kontur bulma
+//        List<MatOfPoint> contours = new ArrayList<>();
+//        Mat hierarchy = new Mat();
+//        Imgproc.findContours(edges, contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
+//
+//        List<OrtOlcuSablonAlan> detected = new ArrayList<>();
+//        int counter = 1;
+//
+//        for (MatOfPoint contour : contours) {
+//            Rect rect = Imgproc.boundingRect(contour);
+//
+//            // Filtreleme (çok küçük/büyük kutuları alma)
+//            if (rect.width > 25 && rect.height > 15 && rect.width < imageWidth - 50 && rect.height < imageHeight - 50) {
+//                OrtOlcuSablonAlan field = findByXByY(rect.x, rect.y);
+//                if(field == null) {
+//                    field = new OrtOlcuSablonAlan();
+//                }
+//                if (rect.width < 40 && rect.height < 40) {
+//                    field.setTur(EnumOrtSablonAlanTuru.CHECKBOX);
+//                } else  {
+//                    field.setTur(EnumOrtSablonAlanTuru.TEXT);
+//                }
+//
+//                field.setOrtOlcuSablon(template);
+//                field.setTanim("kutucuk_" + counter++);
+//                field.setX(BigDecimal.valueOf(rect.x));
+//                field.setY(BigDecimal.valueOf(rect.y));
+//                field.setGenislik(BigDecimal.valueOf(rect.width));
+//                field.setYukseklik(BigDecimal.valueOf(rect.height));
+//
+//                getEntityManager().merge(field);
+//                detected.add(field);
+//            }
+//        }
+//
+//
+//        getEntityManager().merge(template);
+//        return detected;
+//    }
 
 
 //    private MatOfPoint hullPoints(MatOfInt hullInt, MatOfPoint contour) {

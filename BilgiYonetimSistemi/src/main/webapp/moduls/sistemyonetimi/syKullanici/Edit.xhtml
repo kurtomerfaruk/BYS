@@ -70,6 +70,13 @@
         <p:outputLabel value="#{messages.kilitLiLabel}" for="@next"/>
         <p:selectBooleanCheckbox id="kilitli" value="#{syKullaniciController.selected.kilitli}"/>
 
+        <p:outputLabel value="#{messages.aktifLabel}" for="@next"/>
+        <p:selectOneMenu value="#{syKullaniciController.selected.aktif}" required="true">
+            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+            <f:selectItem itemValue="#{true}" itemLabel="#{messages.aktifText}"/>
+            <f:selectItem itemValue="#{false}" itemLabel="#{messages.pasifText}"/>
+        </p:selectOneMenu>
+
     </coco:editpage>
 
 </ui:composition>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="primefaces">
+<ui:composition>
+
+    <p:outputLabel value="#{messages.ameliyatOlduguHastaneLabel}" for="@next"/>
+    <p:inputText id="ameliyatOlduguHastane" value="#{ortHastaController.selected.ameliyatOlduguHastane}" title="#{messages.ameliyatOlduguHastaneText}"/>
+
+    <p:outputLabel value="#{messages.ameliyatTarihiLabel}" for="@next"/>
+    <p:datePicker id="ameliyatTarihi" locale="tr" pattern="#{messages.tarihFormat}" value="#{ortHastaController.selected.ameliyatTarihi}"
+                  title="#{messages.ameliyatTarihiText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
+                  showOnFocus="false"/>
+
+    <p:outputLabel value="#{messages.depremeNeredeYakalandiLabel}" for="@next"/>
+    <p:inputText id="depremeNeredeYakalandi" value="#{ortHastaController.selected.depremeNeredeYakalandi}" title="#{messages.depremeNeredeYakalandiText}"/>
+
+    <p:outputLabel value="#{messages.birinciDereceVefatDurumuLabel}" for="@next"/>
+    <p:inputText id="birinciDereceVefatDurumu" value="#{ortHastaController.selected.birinciDereceVefatDurumu}"
+                 title="#{messages.birinciDereceVefatDurumuText}"/>
+
+    <p:outputLabel value="#{messages.meslekLabel}" for="@next"/>
+    <p:inputText id="meslek" value="#{ortHastaController.selected.gnlKisi.meslek}" title="#{messages.meslekText}" styleClass="tcUpdate"/>
+</ui:composition>
+</html>

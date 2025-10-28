@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:coco="jakarta.faces.composite/ui"
+      xmlns:h="jakarta.faces.html">
+
+<ui:composition>
+
+   <coco:custompage id="CikisYapForm"
+                    renderedListener="#{ekmGirisCikisController.selected != null}"
+                    widgetVar="CikisYapDialog"
+                    actionListener="#{ekmGirisCikisController.save}"
+                    listForm="EkmGirisCikisListForm"
+                    header="#{messages.dialogCikisYap}"
+                    focus="CikisYapForm:CikisYapForm:cikisTarihi">
+
+      <h:outputText value="#{messages.kursLabel}"/>
+      <h:outputText value="#{ekmGirisCikisController.selected.gnlKurs.tanim}"/>
+
+      <p:outputLabel value="#{messages.adSoyadLabel}" for="kisiId"/>
+      <p:selectOneMenu id="kisiId" value="#{ekmGirisCikisController.selected.eyKisi}" required="true"
+                       converter="omnifaces.SelectItemsConverter" filter="true">
+         <f:selectItem itemLabel="#{messages.seciniz}"/>
+         <f:selectItems value="#{ekmGirisCikisController.eyKisiList}"
+                        var="kisiIdItem"
+                        itemValue="#{kisiIdItem}"
+                        itemLabel="#{kisiIdItem.gnlKisi.adSoyad.toString()}"/>
+      </p:selectOneMenu>
+
+      <h:outputText value="#{messages.girisTarihiLabel}"/>
+      <h:outputText value="#{ekmGirisCikisController.selected.girisTarihi}">
+         <f:convertDateTime pattern="#{messages.tarihSaatFormat}" type="localDateTime"/>
+      </h:outputText>
+
+      <p:outputLabel value="#{messages.cikisTarihiLabel}" for="cikisTarihi"/>
+      <p:datePicker id="cikisTarihi" locale="tr" pattern="#{messages.tarihSaatFormat}" value="#{ekmGirisCikisController.selected.cikisTarihi}"
+                    title="#{messages.cikisTarihiText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
+                    showOnFocus="false" showTime="true"/>
+
+   </coco:custompage>
+
+</ui:composition>
+
+</html>

@@ -8,11 +8,6 @@ PrimeFaces.widget.LMap = class extends PrimeFaces.widget.BaseWidget {
 
         this.cfg.tile.addTo(this.cfg.map);
 
-        if (this.cfg.fullScreen) {
-            var fsControl = L.control.fullscreen();
-            this.cfg.map.addControl(fsControl);
-        }
-
         //conf markers
         if (this.cfg.markers) {
             this.configureMarkers();
@@ -140,7 +135,6 @@ PrimeFaces.widget.LMap = class extends PrimeFaces.widget.BaseWidget {
     }
 
     configureRoutes() {
-        console.log(this.cfg.routes);
         L.Routing.control({
             waypoints: this.cfg.routes.waypoints,
             language: 'tr',

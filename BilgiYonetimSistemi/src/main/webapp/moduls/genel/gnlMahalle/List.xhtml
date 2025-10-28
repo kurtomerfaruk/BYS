@@ -12,8 +12,12 @@
     <h:form id="GnlMahalleListForm" class="form-height">
 
         <p:contextMenu id="GnlMahalleDataTableContextMenu" for="datalist:datalist">
+            <p:menuitem value="#{messages.buttonEkle}" onclick="document.getElementById('GnlMahalleListForm:datalist:datalist:createButton').click();"
+                        icon="pi pi-plus"/>
+            <p:menuitem value="#{messages.buttonGuncelle}" onclick="document.getElementById('GnlMahalleListForm:datalist:datalist:editButton').click();"
+                        icon="pi pi-pencil"/>
             <p:menuitem value="#{messages.buttonDetay}"
-                        onclick="document.getElementById('GnlMahalleListForm:datalist:datalist:viewButton').click();"
+                        onclick="document.getElementById('GnlMahalleListForm:datalist:datalist:editButton').click();"
                         icon="pi pi-search"/>
             <p:menuitem value="#{messages.buttonSil}"
                         onclick="document.getElementById('GnlMahalleListForm:datalist:datalist:deleteButton').click();"
@@ -35,28 +39,37 @@
             <p:ajax event="colResize" listener="#{gnlMahalleController.onResize}"/>
 
             <f:facet name="paginatorBottomLeft">
-                    <p:commandButton id="viewButton" styleClass="ui-button-info" icon="pi pi-search"
-                                     pt:data-tooltip="#{messages.buttonDetay}"
-                                     update=":GnlMahalleViewForm:GnlMahalleViewForm"
-                                     oncomplete="PF('GnlMahalleViewDialog').show()"
-                                     disabled="#{empty gnlMahalleController.selected}" onstart="PF('Loading').show()"
-                                     onsuccess="PF('Loading').hide()"/>
-                    <p:commandButton id="deleteButton" styleClass="ui-button-danger" icon="pi pi-trash"
-                                     pt:data-tooltip="#{messages.buttonSil}"
-                                     actionListener="#{gnlMahalleController.delete}"
-                                     update=":growl,datalist" disabled="#{empty gnlMahalleController.selected}">
-                        <p:confirm header="#{messages.ConfirmationHeader}" message="#{messages.ConfirmDeleteMessage}"
-                                   icon="pi pi-warning"/>
-                    </p:commandButton>
+                <p:commandButton id="createButton" styleClass="ui-button-primary" icon="pi pi-plus" pt:data-tooltip="#{messages.buttonEkle}"
+                                 actionListener="#{gnlMahalleController.prepareCreate}" update=":GnlMahalleCreateForm:GnlMahalleCreateForm"
+                                 oncomplete="PF('GnlMahalleCreateDialog').show()" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('gnlunvan:ekle')}"/>
+                <p:commandButton id="editButton" styleClass="ui-button-success" icon="pi pi-pencil" pt:data-tooltip="#{messages.buttonGuncelle}"
+                                 update=":GnlMahalleEditForm:GnlMahalleEditForm"
+                                 oncomplete="PF('GnlMahalleEditDialog').show()" disabled="#{empty gnlMahalleController.selected}" onstart="PF('Loading').show()"
+                                 onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('gnlunvan:guncelle')}"/>
+                <p:commandButton id="viewButton" styleClass="ui-button-info" icon="pi pi-search"
+                                 pt:data-tooltip="#{messages.buttonDetay}"
+                                 update=":GnlMahalleViewForm:GnlMahalleViewForm"
+                                 oncomplete="PF('GnlMahalleViewDialog').show()"
+                                 disabled="#{empty gnlMahalleController.selected}" onstart="PF('Loading').show()"
+                                 onsuccess="PF('Loading').hide()"/>
+                <p:commandButton id="deleteButton" styleClass="ui-button-danger" icon="pi pi-trash"
+                                 pt:data-tooltip="#{messages.buttonSil}"
+                                 actionListener="#{gnlMahalleController.delete}"
+                                 update=":growl,datalist" disabled="#{empty gnlMahalleController.selected}">
+                    <p:confirm header="#{messages.ConfirmationHeader}" message="#{messages.ConfirmDeleteMessage}"
+                               icon="pi pi-warning"/>
+                </p:commandButton>
 
-                    <p:commandButton id="listeGuncelleButton" styleClass="ui-button-success" icon="pi pi-refresh"
-                                     pt:data-tooltip="#{messages.buttonListeyiGuncelle}"
-                                     actionListener="#{gnlMahalleController.updateList}" update=":growl,datalist"
-                                     onclick="PF('MahalleGuncelle').show()"
-                    rendered="#{syKullaniciController.hasPermission('gnlmahalle:listeyiGuncelle')}">
-                        <p:confirm header="#{messages.listeGuncelleOnay}" message="#{messages.listeGuncelleOnayMesaj}"
-                                   icon="pi pi-warning"/>
-                    </p:commandButton>
+                <p:commandButton id="listeGuncelleButton" styleClass="ui-button-success" icon="pi pi-refresh"
+                                 pt:data-tooltip="#{messages.buttonListeyiGuncelle}"
+                                 actionListener="#{gnlMahalleController.updateList}" update=":growl,datalist"
+                                 onclick="PF('MahalleGuncelle').show()"
+                                 rendered="#{syKullaniciController.hasPermission('gnlmahalle:listeyiGuncelle')}">
+                    <p:confirm header="#{messages.listeGuncelleOnay}" message="#{messages.listeGuncelleOnayMesaj}"
+                               icon="pi pi-warning"/>
+                </p:commandButton>
             </f:facet>
 
         </coco:datatable>

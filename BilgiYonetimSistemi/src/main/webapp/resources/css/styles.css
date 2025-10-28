@@ -7418,6 +7418,30 @@ input[type=range]::-webkit-slider-runnable-track {
 .tab-style-3 .nav-item .nav-link.services:after {
   content: "3";
 }
+.tab-style-3 .nav-item .nav-link.application-info:after {
+  content: "1";
+}
+.tab-style-3 .nav-item .nav-link.measure:after {
+  content: "2";
+}
+.tab-style-3 .nav-item .nav-link.pay:after {
+  content: "3";
+}
+.tab-style-3 .nav-item .nav-link.sut-kodu:after {
+  content: "4";
+}
+.tab-style-3 .nav-item .nav-link.delivery-of-materials:after {
+  content: "5";
+}
+.tab-style-3 .nav-item .nav-link.physio-therapy:after {
+  content: "6";
+}
+.tab-style-3 .nav-item .nav-link.files:after {
+  content: "7";
+}
+.tab-style-3 .nav-item .nav-link.delivery:after {
+  content: "8";
+}
 .tab-style-3 .nav-item .nav-link:hover {
   border: 0;
 }

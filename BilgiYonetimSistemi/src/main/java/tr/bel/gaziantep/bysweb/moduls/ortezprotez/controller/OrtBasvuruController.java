@@ -12,7 +12,6 @@ import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.SelectEvent;
 import tr.bel.gaziantep.bysweb.core.controller.AbstractController;
 import tr.bel.gaziantep.bysweb.core.controller.KpsController;
-import tr.bel.gaziantep.bysweb.core.enums.ErrorType;
 import tr.bel.gaziantep.bysweb.core.enums.bys.EnumModul;
 import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtBasvuruDurumu;
 import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtBasvuruHareketDurumu;
@@ -112,17 +111,6 @@ public class OrtBasvuruController extends AbstractController<OrtBasvuru> {
 
     }
 
-//    @Override
-//    @PostConstruct
-//    public void init() {
-//        super.init();
-//        ortPersonel = personelService.findByGnlPersonel(this.getSyKullanici().getGnlPersonel());
-//        if (ortPersonel == null) {
-//            FacesUtil.addErrorMessage("Sistem yöneticiniz ile görüşüp personel tanımı yaptırınız...");
-//            throw new BysBusinessException(ErrorType.NESNE_OKUNAMADI);
-//        }
-//    }
-
     public void onPreRenderView() {
         ortPersonel = personelService.findByGnlPersonel(this.getSyKullanici().getGnlPersonel());
         if (ortPersonel == null) {
@@ -156,123 +144,109 @@ public class OrtBasvuruController extends AbstractController<OrtBasvuru> {
 
     @Override
     public void saveNew(ActionEvent event) {
-        if (this.getSelected().getOrtHasta() == null) {
-            throw new BysBusinessException(ErrorType.NESNE_OKUNAMADI);
-        }
+        if (this.getSelected().getOrtHasta() != null) {
 
-        try {
-            service.saveNew(this.getSelected());
-            FacesUtil.successMessage(Constants.KAYIT_EKLENDI);
-        } catch (Exception ex) {
-            log.error(null, ex);
-            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+            try {
+                service.saveNew(this.getSelected());
+                FacesUtil.successMessage(Constants.KAYIT_EKLENDI);
+            } catch (Exception ex) {
+                log.error(null, ex);
+                FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+            }
         }
     }
 
     @Override
     public void save(ActionEvent event) {
-        if (this.getSelected().getOrtHasta() == null) {
-            throw new BysBusinessException(ErrorType.NESNE_OKUNAMADI);
-        }
+        if (this.getSelected().getOrtHasta() != null) {
 
-        try {
-            service.save(this.getSelected(), addAppointment, appointmentDate);
-            FacesUtil.successMessage(Constants.KAYIT_GUNCELLENDI);
-        } catch (Exception ex) {
-            log.error(null, ex);
-            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+            try {
+                service.save(this.getSelected(), addAppointment, appointmentDate);
+                FacesUtil.successMessage(Constants.KAYIT_GUNCELLENDI);
+            } catch (Exception ex) {
+                log.error(null, ex);
+                FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+            }
         }
     }
 
     public void getInfo() {
-        if (this.getSelected().getOrtHasta() == null) {
-            throw new BysBusinessException(ErrorType.NESNE_OKUNAMADI);
+        if (this.getSelected() != null) {
+            if (this.getSelected().getOrtHasta() != null) {
+                this.getSelected().setRaporuOnaylayanOrtPersonel(ortPersonel);
+            }
+            prepareSiliconDelivery();
+            preparePhysioTherapy();
         }
-        this.getSelected().setRaporuOnaylayanOrtPersonel(ortPersonel);
     }
 
     public void paid() {
-        if (this.getSelected() == null) {
-            throw new BysBusinessException(ErrorType.NESNE_OKUNAMADI);
-        }
-        try {
-            this.getSelected().setOdendi(StringUtil.isNotBlank(this.getSelected().getMakbuzNo()));
-            service.saveDurum(this.getSelected(), EnumOrtBasvuruHareketDurumu.ODEME_ALINDI);
-            FacesUtil.successMessage("odemeAlindi");
-        } catch (Exception ex) {
-            log.error(null, ex);
-            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+        if (this.getSelected() != null) {
+            try {
+                this.getSelected().setOdendi(StringUtil.isNotBlank(this.getSelected().getMakbuzNo()));
+                service.saveDurum(this.getSelected(), EnumOrtBasvuruHareketDurumu.ODEME_ALINDI);
+                FacesUtil.successMessage("odemeAlindi");
+            } catch (Exception ex) {
+                log.error(null, ex);
+                FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+            }
         }
     }
 
     public void saveSutKodu() {
-        if (this.getSelected() == null) {
-            throw new BysBusinessException(ErrorType.NESNE_OKUNAMADI);
-        }
-        try {
-            if (StringUtil.isNotBlank(this.getSelected().getSutKodu())) {
-                service.saveDurum(this.getSelected(), EnumOrtBasvuruHareketDurumu.SUT_KODU_VERILDI);
-                FacesUtil.successMessage("sutKoduVerildi");
+        if (this.getSelected() != null) {
+            try {
+                if (StringUtil.isNotBlank(this.getSelected().getSutKodu())) {
+                    service.saveDurum(this.getSelected(), EnumOrtBasvuruHareketDurumu.SUT_KODU_VERILDI);
+                    FacesUtil.successMessage("sutKoduVerildi");
+                }
+            } catch (Exception ex) {
+                log.error(null, ex);
+                FacesUtil.errorMessage(Constants.HATA_OLUSTU);
             }
-
-        } catch (Exception ex) {
-            log.error(null, ex);
-            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
         }
     }
 
     public boolean checkSutKodu() {
-        if (this.getSelected() == null) {
-            throw new BysBusinessException(ErrorType.NESNE_OKUNAMADI);
+        if (this.getSelected() != null) {
+            return !getSelected().isUcretli() || getSelected().isOdendi();
         }
-
-//        boolean result = false;
-//
-//        if (this.getSelected().isUcretli()) {
-//            if (this.getSelected().isOdendi()) {
-//                result = true;
-//            }
-//        } else {
-//            result = true;
-//        }
-//
-//        return result;
-        return !getSelected().isUcretli() || getSelected().isOdendi();
+        return false;
     }
 
     public void prepareSiliconDelivery() {
-        if (this.getSelected() == null) {
-            throw new BysBusinessException(ErrorType.NESNE_OKUNAMADI);
-        }
-        if (this.getSelected().getOrtBasvuruMalzemeTeslimiList().isEmpty()) {
-            ortBasvuruMalzemeTeslimi = OrtBasvuruMalzemeTeslimi.builder()
-                    .teslimTarihi(LocalDateTime.now())
-                    .ortBasvuru(this.getSelected())
-                    .teslimEdenOrtPersonel(ortPersonel)
-                    .teslimAlanGnlKisi(new GnlKisi())
-                    .ortStok(new OrtStok())
-                    .miktar(BigDecimal.ONE)
-                    .build();
-        } else {
-            ortBasvuruMalzemeTeslimi = this.getSelected().getOrtBasvuruMalzemeTeslimiList().get(0);
-            if(ortBasvuruMalzemeTeslimi.getTeslimAlanGnlKisi()==null){
-                ortBasvuruMalzemeTeslimi.setTeslimAlanGnlKisi(new GnlKisi());
+        try {
+            if (this.getSelected().getOrtBasvuruMalzemeTeslimiList().isEmpty()) {
+                ortBasvuruMalzemeTeslimi = OrtBasvuruMalzemeTeslimi.builder()
+                        .teslimTarihi(LocalDateTime.now())
+                        .ortBasvuru(this.getSelected())
+                        .teslimEdenOrtPersonel(ortPersonel)
+                        .teslimAlanGnlKisi(new GnlKisi())
+                        .ortStok(new OrtStok())
+                        .miktar(BigDecimal.ONE)
+                        .build();
+            } else {
+                ortBasvuruMalzemeTeslimi = this.getSelected().getOrtBasvuruMalzemeTeslimiList().get(0);
+                if (ortBasvuruMalzemeTeslimi.getTeslimAlanGnlKisi() == null) {
+                    ortBasvuruMalzemeTeslimi.setTeslimAlanGnlKisi(new GnlKisi());
+                }
             }
+        } catch (Exception ex) {
+            log.error(null, ex);
+            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
         }
     }
 
     public void saveSiliconDelivery() {
-        if (this.getSelected() == null) {
-            throw new BysBusinessException(ErrorType.NESNE_OKUNAMADI);
-        }
-
-        try {
-            ortBasvuruMalzemeTeslimiService.delivery(ortBasvuruMalzemeTeslimi, this.getSyKullanici());
-            FacesUtil.successMessage("silikonTeslimEdildi");
-            //prepareSiliconDelivery();
-        } catch (Exception ex) {
-            log.error(null, ex);
-            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+        if (this.getSelected() != null) {
+            try {
+                ortBasvuruMalzemeTeslimiService.delivery(ortBasvuruMalzemeTeslimi, this.getSyKullanici());
+                FacesUtil.successMessage("silikonTeslimEdildi");
+                //prepareSiliconDelivery();
+            } catch (Exception ex) {
+                log.error(null, ex);
+                FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+            }
         }
     }
 
@@ -282,10 +256,6 @@ public class OrtBasvuruController extends AbstractController<OrtBasvuru> {
     }
 
     public void preparePhysioTherapy() {
-        if (this.getSelected() == null) {
-            throw new BysBusinessException(ErrorType.NESNE_OKUNAMADI);
-        }
-
         try {
             if (this.getSelected().getOrtHasta().getOrtFizikTedaviList() == null) {
                 fizikTedaviList = new ArrayList<>();
@@ -296,20 +266,18 @@ public class OrtBasvuruController extends AbstractController<OrtBasvuru> {
             log.error(null, ex);
             FacesUtil.errorMessage(Constants.HATA_OLUSTU);
         }
-
     }
 
     public void savePhysioTherapy() {
-        if (this.getSelected() == null) {
-            throw new BysBusinessException(ErrorType.NESNE_OKUNAMADI);
-        }
-        try {
-            this.getSelected().setBasvuruHareketDurumu(EnumOrtBasvuruHareketDurumu.FIZIK_TEDAVI_PLANI_OLUSTURULDU);
-            fizikTedaviService.persist(fizikTedaviList, this.getSelected());
-            FacesUtil.successMessage("fizikTedaviEklendi");
-        } catch (Exception ex) {
-            log.error(null, ex);
-            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+        if (this.getSelected() != null) {
+            try {
+                this.getSelected().setBasvuruHareketDurumu(EnumOrtBasvuruHareketDurumu.FIZIK_TEDAVI_PLANI_OLUSTURULDU);
+                fizikTedaviService.persist(fizikTedaviList, this.getSelected());
+                FacesUtil.successMessage("fizikTedaviEklendi");
+            } catch (Exception ex) {
+                log.error(null, ex);
+                FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+            }
         }
     }
 
@@ -324,6 +292,7 @@ public class OrtBasvuruController extends AbstractController<OrtBasvuru> {
     }
 
     public void onCellEdit(CellEditEvent event) {
+        // TODO document why this method is empty
     }
 
     public void onCellEditInit(CellEditEvent event) {
@@ -349,40 +318,41 @@ public class OrtBasvuruController extends AbstractController<OrtBasvuru> {
 
     public void prepareDelivery() {
         OrtBasvuru selected = this.getSelected();
-        if (selected == null) {
-            throw new BysBusinessException(ErrorType.NESNE_OKUNAMADI);
-        }
+        if (selected != null) {
 
-        try {
-            List<OrtMalzemeTalep> talepler = malzemeTalepService.findByOrtBasvuruByOnayDurum(selected, EnumOrtMalzemeOnayDurumu.ONAYLANDI);
+            try {
+                List<OrtMalzemeTalep> talepler = malzemeTalepService.findByOrtBasvuruByOnayDurum(selected, EnumOrtMalzemeOnayDurumu.ONAYLANDI);
 
-            List<OrtBasvuruMalzemeTeslimi> teslimListesi = selected.getOrtBasvuruMalzemeTeslimiList();
+                List<OrtBasvuruMalzemeTeslimi> teslimListesi = selected.getOrtBasvuruMalzemeTeslimiList();
 
-            talepler.stream()
-                    .filter(t -> t.getOrtMalzemeTalepStokList() != null)
-                    .flatMap(t -> t.getOrtMalzemeTalepStokList().stream())
-                    .map(talepStok -> OrtBasvuruMalzemeTeslimi.builder()
-                            .ortBasvuru(selected)
-                            .ortStok(talepStok.getOrtStok())
-                            .miktar(talepStok.getMiktar())
-                            .build())
-                    .forEach(teslimListesi::add);
-            teslimTarihi = LocalDateTime.now();
-            teslimAlanKisi = new GnlKisi();
-            this.getSelected().setOrtBasvuruMalzemeTeslimiList(teslimListesi);
-        } catch (Exception ex) {
-            log.error("Teslim hazırlığı sırasında hata oluştu", ex);
-            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+                talepler.stream()
+                        .filter(t -> t.getOrtMalzemeTalepStokList() != null)
+                        .flatMap(t -> t.getOrtMalzemeTalepStokList().stream())
+                        .map(talepStok -> OrtBasvuruMalzemeTeslimi.builder()
+                                .ortBasvuru(selected)
+                                .ortStok(talepStok.getOrtStok())
+                                .miktar(talepStok.getMiktar())
+                                .build())
+                        .forEach(teslimListesi::add);
+                teslimTarihi = LocalDateTime.now();
+                teslimAlanKisi = new GnlKisi();
+                this.getSelected().setOrtBasvuruMalzemeTeslimiList(teslimListesi);
+            } catch (Exception ex) {
+                log.error("Teslim hazırlığı sırasında hata oluştu", ex);
+                FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+            }
         }
     }
 
     public void saveDelivery() {
-        try {
-            service.saveDelivery(this.getSelected(),this.getSyKullanici());
-            FacesUtil.successMessage("urunlerTeslimEdildi");
-        } catch (Exception ex) {
-            log.error("Teslim kayıdı sırasında hata oluştu", ex);
-            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+        if (this.getSelected() != null) {
+            try {
+                service.saveDelivery(this.getSelected(), this.getSyKullanici());
+                FacesUtil.successMessage("urunlerTeslimEdildi");
+            } catch (Exception ex) {
+                log.error("Teslim kayıdı sırasında hata oluştu", ex);
+                FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+            }
         }
     }
 
@@ -428,7 +398,7 @@ public class OrtBasvuruController extends AbstractController<OrtBasvuru> {
 
 
             for (OrtBasvuruMalzemeTeslimi teslim : teslimList) {
-                if(teslim.getId()!=null) continue;
+                if (teslim.getId() != null) continue;
                 if (hasTeslimAlan) {
                     teslim.setTeslimAlanGnlKisi(teslimAlanKisi);
                 }

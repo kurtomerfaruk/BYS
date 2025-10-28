@@ -126,6 +126,9 @@
                                     <p:inputText id="cocukSayisi" value="#{gnlKisiController.selected.cocukSayisi}"
                                                  title="#{messages.cocukSayisiText}"/>
 
+                                    <p:outputLabel value="#{messages.epostaAdresiLabel}" for="@next"/>
+                                    <p:inputText value="#{gnlKisiController.selected.epostaAdresi}" title="#{messages.epostaAdresiText}"/>
+
                                     <p:outputLabel value="#{messages.durumuLabel}" for="@next"/>
                                     <p:inputText id="durum" value="#{gnlKisiController.selected.durum}"
                                                  title="#{messages.durumuText}" size="50"

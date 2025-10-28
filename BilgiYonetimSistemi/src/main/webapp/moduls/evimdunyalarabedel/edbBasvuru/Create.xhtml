@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:p="primefaces">
+
+<ui:composition>
+
+    <p:dialog widgetVar="EdbBasvuruCreateDialog"
+              id="EdbBasvuruCreateDialogId"
+              modal="true"
+              resizable="false"
+              closeOnEscape="true"
+              header="#{messages.dialogYeniKayit}"
+              appendTo="@(body)"
+              responsive="true"
+              onShow="PF('EdbBasvuruCreateDialog').initPosition();adjustMenuWidth()"
+              fitViewport="true"
+              position="top">
+
+        <h:form id="EdbBasvuruCreateForm">
+
+            <h:panelGroup id="display">
+                <p:focus context="display"/>
+                <div class="card">
+
+                    <div class="card-body">
+
+                        <ul class="nav nav-tabs mb-3 tab-style-8 scaleX" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="edbKisiBilgileriCreateTab" data-bs-toggle="tab"
+                                        data-bs-target="#edbKisiBilgileriCreateTabPane" type="button" role="tab"
+                                        aria-controls="edbKisiBilgileriCreateTabPane" aria-selected="true">Kişi Bilgileri
+                                </button>
+                            </li>
+
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="edbAileDurumuCreateTab" data-bs-toggle="tab"
+                                        data-bs-target="#edbAileDurumuCreateTabPane" type="button" role="tab"
+                                        aria-controls="edbAileDurumuCreateTabPane" aria-selected="true">Aile Durumu
+                                </button>
+                            </li>
+
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="edbEkonomomikDurumCreateTab" data-bs-toggle="tab"
+                                        data-bs-target="#edbEkonomomikDurumCreateTabPane" type="button" role="tab"
+                                        aria-controls="edbEkonomomikDurumCreateTabPane" aria-selected="true">Ekonomik Durumu
+                                </button>
+                            </li>
+
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="edbEvDurumuCreateTab" data-bs-toggle="tab"
+                                        data-bs-target="#edbEvDurumuCreateTabPane" type="button" role="tab"
+                                        aria-controls="edbEvDurumuCreateTabPane" aria-selected="true">Ev Durumu
+                                </button>
+                            </li>
+
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="edbSaglikDurumuCreateTab" data-bs-toggle="tab"
+                                        data-bs-target="#edbSaglikDurumuCreateTabPane" type="button" role="tab"
+                                        aria-controls="edbSaglikDurumuCreateTabPane" aria-selected="true">Sağlık Durumu
+                                </button>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content text-muted">
+                            <div class="tab-pane overflow-hidden active show" id="edbKisiBilgileriCreateTabPane" role="tabpanel"
+                                 aria-labelledby="edbKisiBilgileriCreateTab" tabindex="0">
+                                <p:panelGrid id="kisiPanel" columns="2" styleClass="w-100" rendered="#{edbBasvuruController.selected!=null}"
+                                             layout="tabular">
+                                    <ui:include src="/moduls/evimdunyalarabedel/edbBasvuru/KisiBilgileriTab.xhtml"/>
+                                </p:panelGrid>
+                            </div>
+                            <div class="tab-pane overflow-hidden" id="edbAileDurumuCreateTabPane" role="tabpanel" aria-labelledby="edbAileDurumuCreateTab"
+                                 tabindex="0">
+                                <p:panelGrid id="aileDurumuPanel" columns="2" styleClass="w-100" rendered="#{edbBasvuruController.selected!=null}"
+                                             layout="tabular">
+                                    <ui:include src="/moduls/evimdunyalarabedel/edbBasvuru/AileDurumuTab.xhtml"/>
+                                </p:panelGrid>
+                            </div>
+
+                            <div class="tab-pane overflow-hidden" id="edbEkonomomikDurumCreateTabPane" role="tabpanel"
+                                 aria-labelledby="edbEkonomomikDurumCreateTab" tabindex="0">
+                                <p:panelGrid id="ekonomikDurumPanel" columns="2" styleClass="w-100" rendered="#{edbBasvuruController.selected!=null}"
+                                             layout="tabular">
+                                    <ui:include src="/moduls/evimdunyalarabedel/edbBasvuru/EkonomikDurumTab.xhtml"/>
+                                </p:panelGrid>
+                            </div>
+
+                            <div class="tab-pane overflow-hidden" id="edbEvDurumuCreateTabPane" role="tabpanel"
+                                 aria-labelledby="edbEvDurumuCreateTab" tabindex="0">
+                                <p:panelGrid id="evDurumuPanel" columns="2" styleClass="w-100" rendered="#{edbBasvuruController.selected!=null}"
+                                             layout="tabular">
+                                    <ui:include src="/moduls/evimdunyalarabedel/edbBasvuru/EvDurumuTab.xhtml"/>
+                                </p:panelGrid>
+                            </div>
+
+                            <div class="tab-pane overflow-hidden" id="edbSaglikDurumuCreateTabPane" role="tabpanel"
+                                 aria-labelledby="edbSaglikDurumuCreateTab" tabindex="0">
+                                <p:panelGrid id="saglikDurumuPanel" columns="2" styleClass="w-100" rendered="#{edbBasvuruController.selected!=null}"
+                                             layout="tabular">
+                                    <ui:include src="/moduls/evimdunyalarabedel/edbBasvuru/SaglikDurumuTab.xhtml"/>
+                                </p:panelGrid>
+                            </div>
+                        </div>
+                    </div><!-- end card-body -->
+                    <div class="card-footer">
+                        <div class="float-end">
+                            <p:commandButton icon="pi pi-check" styleClass="ui-button-success"
+                                             actionListener="#{edbBasvuruController.saveNew}"
+                                             value="#{messages.buttonKaydet}"
+                                             update="display,:EdbBasvuruListForm:datalist:datalist,:growl"
+                                             oncomplete="handleSubmit(xhr,status,args,PF('EdbBasvuruCreateDialog'));"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                            <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                             value="#{messages.buttonIptal}" onclick="PF('EdbBasvuruCreateDialog').hide()"
+                                             immediate="true" onstart="PF('Loading').show()"
+                                             onsuccess="PF('Loading').hide()"/>
+                        </div>
+                    </div>
+                </div>
+            </h:panelGroup>
+        </h:form>
+
+    </p:dialog>
+
+    <script type="text/javascript">
+        var dialogWidth=0;
+        function adjustMenuWidth() {
+            var dialog = PF('EdbBasvuruCreateDialog');
+            var menu = $(".checkboxMenu");
+
+            if (dialog &amp;&amp; menu) {
+                if(dialogWidth===0){
+                    dialogWidth = dialog.jq.innerWidth()-30;
+                }
+                var menuContainer = $(menu).closest('.ui-selectcheckboxmenu');
+                menuContainer.width(dialogWidth);
+            }
+        }
+        document.addEventListener('shown.bs.tab', function (event) {
+            adjustMenuWidth();
+        });
+    </script>
+
+</ui:composition>
+
+</html>

@@ -30,12 +30,12 @@ public class Constants implements java.io.Serializable{
     public static final String AKTIF_YASAM_ETKINLIK_RESIMLERI_MAC = "/Users/omerfarukkurt/BYS/AktifYasam/Etkinlik/";
     public static final String MORAL_EVI_ETKINLIK_RESIMLERI = "C:\\BYS\\MoralEvi\\Etkinlik\\";
     public static final String MORAL_EVI_ETKINLIK_RESIMLERI_MAC = "/Users/omerfarukkurt/BYS/MoralEvi/Etkinlik/";
-    public final static String EVDE_YASAM_VERILECEK_HIZMETLER_KLASORU = "C:\\BYS\\EvdeYasam\\VerilecekHizmetler\\";
-    public final static String EVDE_YASAM_VERILECEK_HIZMETLER_KLASORU_MAC = "/Users/omerfarukkurt/BYS/EvdeYasam/VerilecekHizmetler/";
-    public final static String ORTEZ_PROTEZ_OLCU_SABLON_KLASORU = "C:\\BYS\\OrtezProtez\\OlcuSablon\\";
-    public final static String ORTEZ_PROTEZ_OLCU_SABLON_KLASORU_MAC = "/Users/omerfarukkurt/BYS/OrtezProtez/OlcuSablon/";
-    public final static String ORTEZ_PROTEZ_RAPOR_RECETE_KLASORU = "C:\\BYS\\OrtezProtez\\RaporRecete\\";
-    public final static String ORTEZ_PROTEZ_RAPOR_RECETE_KLASORU_MAC = "/Users/omerfarukkurt/BYS/OrtezProtez/RaporRecete/";
-    public final static String ORTEZ_PROTEZ_BASVURU_DOSYA_KLASORU = "C:\\BYS\\OrtezProtez\\BasvuruDosya\\";
-    public final static String ORTEZ_PROTEZ_BASVURU_DOSYA_KLASORU_MAC = "/Users/omerfarukkurt/BYS/OrtezProtez/BasvuruDosya/";
+    public static final String EVDE_YASAM_VERILECEK_HIZMETLER_KLASORU = "C:\\BYS\\EvdeYasam\\VerilecekHizmetler\\";
+    public static final String EVDE_YASAM_VERILECEK_HIZMETLER_KLASORU_MAC = "/Users/omerfarukkurt/BYS/EvdeYasam/VerilecekHizmetler/";
+    public static final String ORTEZ_PROTEZ_OLCU_SABLON_KLASORU = "C:\\BYS\\OrtezProtez\\OlcuSablon\\";
+    public static final String ORTEZ_PROTEZ_OLCU_SABLON_KLASORU_MAC = "/Users/omerfarukkurt/BYS/OrtezProtez/OlcuSablon/";
+    public static final String ORTEZ_PROTEZ_RAPOR_RECETE_KLASORU = "C:\\BYS\\OrtezProtez\\RaporRecete\\";
+    public static final String ORTEZ_PROTEZ_RAPOR_RECETE_KLASORU_MAC = "/Users/omerfarukkurt/BYS/OrtezProtez/RaporRecete/";
+    public static final String ORTEZ_PROTEZ_BASVURU_DOSYA_KLASORU = "C:\\BYS\\OrtezProtez\\BasvuruDosya\\";
+    public static final String ORTEZ_PROTEZ_BASVURU_DOSYA_KLASORU_MAC = "/Users/omerfarukkurt/BYS/OrtezProtez/BasvuruDosya/";
 }

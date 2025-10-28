@@ -49,4 +49,22 @@ public class OrtOlcuDegerService extends AbstractService<OrtOlcuDeger> {
                 .setParameter("ortOlcuSablon", ortOlcuSablon)
                 .getResultList();
     }
+
+//    public List<OrtOlcuDegerDTO> findByOlcuAndSablon(Integer olcuId, Integer sablonId) {
+//        return em.createQuery("""
+//            SELECT new tr.bel.gaziantep.bysweb.moduls.ortezprotez.dto.OrtOlcuDegerDTO(
+//                a.tanim,
+//                a.tur,
+//                d.deger
+//            )
+//            FROM OrtOlcuDeger d
+//            JOIN d.ortOlcuSablonAlan a
+//            WHERE d.ortOlcu.id = :olcuId
+//              AND a.ortOlcuSablon.id = :sablonId
+//            ORDER BY a.id
+//            """, OrtOlcuDegerDTO.class)
+//                .setParameter("olcuId", olcuId)
+//                .setParameter("sablonId", sablonId)
+//                .getResultList();
+//    }
 }

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:p="primefaces">
+
+<ui:composition>
+
+    <p:dialog widgetVar="EdbBasvuruEditDialog"
+              modal="true"
+              resizable="false"
+              closeOnEscape="true"
+              header="#{messages.dialogYeniKayit}"
+              appendTo="@(body)"
+              responsive="true"
+              onShow="PF('EdbBasvuruEditDialog').initPosition();"
+              fitViewport="true">
+
+        <h:form id="EdbBasvuruEditForm">
+
+            <h:panelGroup id="display">
+                <p:focus context="display"/>
+                <div class="card">
+                    <div class="card-body">
+
+                        <ul class="nav nav-tabs mb-3 tab-style-8 scaleX" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="edbKisiBilgileriEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#edbKisiBilgileriEditTabPane" type="button" role="tab"
+                                        aria-controls="edbKisiBilgileriEditTabPane" aria-selected="true">Kişi Bilgileri
+                                </button>
+                            </li>
+
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="edbAileDurumuEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#edbAileDurumuEditTabPane" type="button" role="tab"
+                                        aria-controls="edbAileDurumuEditTabPane" aria-selected="true">Aile Durumu
+                                </button>
+                            </li>
+
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="edbEkonomomikDurumEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#edbEkonomomikDurumEditTabPane" type="button" role="tab"
+                                        aria-controls="edbEkonomomikDurumEditTabPane" aria-selected="true">Ekonomik Durumu
+                                </button>
+                            </li>
+
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="edbEvDurumuEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#edbEvDurumuEditTabPane" type="button" role="tab"
+                                        aria-controls="edbEvDurumuEditTabPane" aria-selected="true">Ev Durumu
+                                </button>
+                            </li>
+
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="edbSaglikDurumuEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#edbSaglikDurumuEditTabPane" type="button" role="tab"
+                                        aria-controls="edbSaglikDurumuEditTabPane" aria-selected="true">Sağlık Durumu
+                                </button>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content text-muted">
+                            <div class="tab-pane overflow-hidden active show" id="edbKisiBilgileriEditTabPane" role="tabpanel"
+                                 aria-labelledby="edbKisiBilgileriEditTab" tabindex="0">
+                                <p:panelGrid id="kisiPanel" columns="2" styleClass="w-100" rendered="#{edbBasvuruController.selected!=null}"
+                                             layout="tabular">
+                                    <ui:include src="/moduls/evimdunyalarabedel/edbBasvuru/KisiBilgileriTab.xhtml"/>
+                                </p:panelGrid>
+                            </div>
+
+                            <div class="tab-pane overflow-hidden" id="edbAileDurumuEditTabPane" role="tabpanel"
+                                 aria-labelledby="edbAileDurumuEditTab" tabindex="0">
+                                <p:panelGrid id="aileDurumuPanel" columns="2" styleClass="w-100" rendered="#{edbBasvuruController.selected!=null}"
+                                             layout="tabular">
+                                    <ui:include src="/moduls/evimdunyalarabedel/edbBasvuru/AileDurumuTab.xhtml"/>
+                                </p:panelGrid>
+                            </div>
+
+                            <div class="tab-pane overflow-hidden" id="edbEkonomikDurumEditTabPane" role="tabpanel"
+                                 aria-labelledby="edbEkonomikDurumEditTab" tabindex="0">
+                                <p:panelGrid id="ekonomikDurumPanel" columns="2" styleClass="w-100" rendered="#{edbBasvuruController.selected!=null}"
+                                             layout="tabular">
+                                    <ui:include src="/moduls/evimdunyalarabedel/edbBasvuru/EkonomikDurumTab.xhtml"/>
+                                </p:panelGrid>
+                            </div>
+
+                            <div class="tab-pane overflow-hidden" id="edbEvDurumEditTabPane" role="tabpanel"
+                                 aria-labelledby="edbEvDurumEditTab" tabindex="0">
+                                <p:panelGrid id="evDurumuPanel" columns="2" styleClass="w-100" rendered="#{edbBasvuruController.selected!=null}"
+                                             layout="tabular">
+                                    <ui:include src="/moduls/evimdunyalarabedel/edbBasvuru/EvDurumuTab.xhtml"/>
+                                </p:panelGrid>
+                            </div>
+
+                            <div class="tab-pane overflow-hidden" id="edbSaglikDurumuEditTabPane" role="tabpanel"
+                                 aria-labelledby="edbSaglikDurumuEditTab" tabindex="0">
+                                <p:panelGrid id="saglikDurumuPanel" columns="2" styleClass="w-100" rendered="#{edbBasvuruController.selected!=null}"
+                                             layout="tabular">
+                                    <ui:include src="/moduls/evimdunyalarabedel/edbBasvuru/SaglikDurumuTab.xhtml"/>
+                                </p:panelGrid>
+                            </div>
+                        </div>
+                    </div><!-- end card-body -->
+                    <div class="card-footer">
+                        <div class="float-end">
+                            <p:commandButton icon="pi pi-check" styleClass="ui-button-success"
+                                             actionListener="#{edbBasvuruController.save}"
+                                             value="#{messages.buttonKaydet}"
+                                             update="display,:EdbBasvuruListForm:datalist:datalist,:growl"
+                                             oncomplete="handleSubmit(xhr,status,args,PF('EdbBasvuruEditDialog'));"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                            <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                             value="#{messages.buttonIptal}" onclick="PF('EdbBasvuruEditDialog').hide()"
+                                             immediate="true" onstart="PF('Loading').show()"
+                                             onsuccess="PF('Loading').hide()"/>
+                        </div>
+                    </div>
+                </div>
+            </h:panelGroup>
+        </h:form>
+
+    </p:dialog>
+
+</ui:composition>
+
+</html>

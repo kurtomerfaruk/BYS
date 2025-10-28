@@ -57,43 +57,49 @@ public class SyKullaniciService extends AbstractService<SyKullanici> {
 
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void update(SyKullanici syKullanici, List<SyRol> rols, List<SyYetki> yetkis) {
-        syKullanici.getSyKullaniciRols().forEach(kullaniciRol -> kullaniciRol.setAktif(false));
-        Map<SyRol, SyKullaniciRol> rolYetkiMap = syKullanici.getSyKullaniciRols().stream()
-                .collect(Collectors.toMap(SyKullaniciRol::getSyRol, java.util.function.Function.identity()));
-        for (SyRol rol : rols) {
-            SyKullaniciRol kullaniciRol = rolYetkiMap.get(rol);
-            if (kullaniciRol == null) {
-                kullaniciRol = SyKullaniciRol.builder()
-                        .syRol(rol)
-                        .syKullanici(syKullanici)
-                        .build();
-                kullaniciRol.setAktif(true);
-                syKullanici.getSyKullaniciRols().add(kullaniciRol);
-            } else {
-                kullaniciRol.setAktif(true);
+        if (rols != null) {
+
+
+            syKullanici.getSyKullaniciRols().forEach(kullaniciRol -> kullaniciRol.setAktif(false));
+            Map<SyRol, SyKullaniciRol> rolYetkiMap = syKullanici.getSyKullaniciRols().stream()
+                    .collect(Collectors.toMap(SyKullaniciRol::getSyRol, java.util.function.Function.identity()));
+            for (SyRol rol : rols) {
+                SyKullaniciRol kullaniciRol = rolYetkiMap.get(rol);
+                if (kullaniciRol == null) {
+                    kullaniciRol = SyKullaniciRol.builder()
+                            .syRol(rol)
+                            .syKullanici(syKullanici)
+                            .build();
+                    kullaniciRol.setAktif(true);
+                    syKullanici.getSyKullaniciRols().add(kullaniciRol);
+                } else {
+                    kullaniciRol.setAktif(true);
+                }
             }
         }
 
-        syKullanici.getSyKullaniciYetkis().forEach(kullaniciYetki -> kullaniciYetki.setAktif(false));
-        Map<SyYetki, SyKullaniciYetki> kullaniciYetkiMap = syKullanici.getSyKullaniciYetkis().stream()
-                .collect(Collectors.toMap(SyKullaniciYetki::getSyYetki, java.util.function.Function.identity()));
-        for (SyYetki yetki : yetkis) {
-            SyKullaniciYetki kullaniciYetki = kullaniciYetkiMap.get(yetki);
-            if (kullaniciYetki == null) {
-                kullaniciYetki = SyKullaniciYetki.builder()
-                        .syYetki(yetki)
-                        .syKullanici(syKullanici)
-                        .build();
-                kullaniciYetki.setAktif(true);
-                syKullanici.getSyKullaniciYetkis().add(kullaniciYetki);
-            } else {
-                kullaniciYetki.setAktif(true);
+        if (yetkis != null) {
+
+            syKullanici.getSyKullaniciYetkis().forEach(kullaniciYetki -> kullaniciYetki.setAktif(false));
+            Map<SyYetki, SyKullaniciYetki> kullaniciYetkiMap = syKullanici.getSyKullaniciYetkis().stream()
+                    .collect(Collectors.toMap(SyKullaniciYetki::getSyYetki, java.util.function.Function.identity()));
+            for (SyYetki yetki : yetkis) {
+                SyKullaniciYetki kullaniciYetki = kullaniciYetkiMap.get(yetki);
+                if (kullaniciYetki == null) {
+                    kullaniciYetki = SyKullaniciYetki.builder()
+                            .syYetki(yetki)
+                            .syKullanici(syKullanici)
+                            .build();
+                    kullaniciYetki.setAktif(true);
+                    syKullanici.getSyKullaniciYetkis().add(kullaniciYetki);
+                } else {
+                    kullaniciYetki.setAktif(true);
+                }
             }
         }
 
         edit(syKullanici);
     }
-
 
 
     public List<SyKullanici> findByKilitli() {

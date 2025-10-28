@@ -31,7 +31,7 @@
         <p:outputLabel value="#{messages.ucretliLabel}" for="@next"/>
         <p:selectOneMenu id="ucretli" value="#{ortOlcuController.selected.ortBasvuru.ucretli}">
             <f:selectItem itemValue="#{false}" itemLabel="#{messages.hayir}"/>
-            <f:selectItem itemValue="#{true}" itemLabel="#{messages.evet}"/>
+            <f:selectItem itemValue="#{true}" itemLabel="#{messages.evet}" itemDisabled="#{not empty ortOlcuController.selected.ortBasvuru.ortProje}"/>
             <p:ajax event="change" update="@form"/>
         </p:selectOneMenu>
 

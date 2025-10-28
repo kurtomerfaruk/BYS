@@ -46,22 +46,23 @@
                 <p:commandButton id="createButton" styleClass="ui-button-primary" icon="pi pi-plus"
                                  pt:data-tooltip="#{messages.buttonEkle}"
                                  actionListener="#{ortHastaController.prepareCreate}"
-                                 update=":OrtHastaCreateForm:OrtHastaCreateForm"
+                                 update=":OrtHastaCreateForm"
                                  oncomplete="PF('OrtHastaCreateDialog').show()" onstart="PF('Loading').show()"
                                  onsuccess="PF('Loading').hide()"
                                  rendered="#{syKullaniciController.hasPermission('orthasta:ekle')}"/>
                 <p:commandButton id="editButton" styleClass="ui-button-success" icon="pi pi-pencil"
-                                 pt:data-tooltip="#{messages.buttonGuncelle}" update=":OrtHastaEditForm:OrtHastaEditForm"
+                                 pt:data-tooltip="#{messages.buttonGuncelle}" update=":OrtHastaEditForm"
                                  oncomplete="PF('OrtHastaEditDialog').show()"
                                  disabled="#{empty ortHastaController.selected}"
                                  onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
                                  actionListener="#{ortHastaController.getDisabledInfo()}"
                                  rendered="#{syKullaniciController.hasPermission('orthasta:guncelle')}"/>
                 <p:commandButton id="viewButton" styleClass="ui-button-info" icon="pi pi-search"
-                                 pt:data-tooltip="#{messages.buttonDetay}" update=":OrtHastaViewForm:OrtHastaViewForm"
+                                 pt:data-tooltip="#{messages.buttonDetay}" update=":OrtHastaViewForm"
                                  oncomplete="PF('OrtHastaViewDialog').show()"
                                  disabled="#{empty ortHastaController.selected}" onstart="PF('Loading').show()"
-                                 onsuccess="PF('Loading').hide()"/>
+                                 onsuccess="PF('Loading').hide()"
+                                 actionListener="#{ortHastaController.getDisabledInfo()}"/>
                 <p:commandButton id="deleteButton" styleClass="ui-button-danger" icon="pi pi-trash"
                                  pt:data-tooltip="#{messages.buttonSil}" actionListener="#{ortHastaController.delete}"
                                  update=":growl,datalist" disabled="#{empty ortHastaController.selected}"

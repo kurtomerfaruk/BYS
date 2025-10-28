@@ -1,14 +1,26 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns:ui="jakarta.faces.facelets"
-xmlns:p="primefaces">
+                xmlns:p="primefaces">
 
-        <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtEngelOlusum" var="enumOrtEngelOlusum"/>
+    <!--    ORTEZ PROTEZ    -->
+    <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtEngelOlusum" var="enumOrtEngelOlusum"/>
+    <!--    ORTEZ PROTEZ    -->
+
+    <!--    GENEL    -->
+    <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlUyruk" var="enumUyruk"/>
+    <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlEgitimDurumu" var="enumEgitimDurumu"/>
+    <!--    GENEL    -->
 
 
-        <ui:include src="/moduls/ortezprotez/ortHasta/List.xhtml"/>
-        <ui:include src="/moduls/ortezprotez/ortHasta/View.xhtml"/>
-        <ui:include src="/moduls/ortezprotez/ortHasta/Edit.xhtml"/>
-        <ui:include src="/moduls/ortezprotez/ortHasta/Create.xhtml"/>
+    <ui:include src="/moduls/ortezprotez/ortHasta/List.xhtml"/>
+    <ui:include src="/moduls/ortezprotez/ortHasta/View.xhtml"/>
+    <ui:include src="/moduls/ortezprotez/ortHasta/Edit.xhtml"/>
+    <ui:include src="/moduls/ortezprotez/ortHasta/Create.xhtml"/>
+
+    <ui:include src="/moduls/genel/gnlMahalle/Create.xhtml">
+        <ui:param name="formId" value="#{not empty formId ? 'GnlMahalleCreateFormExt':'GnlMahalleCreateForm'}"/>
+        <ui:param name="dialogId" value="#{not empty dialogId ? 'GnlMahalleCreateDialogExt':'GnlMahalleCreateDialog'}"/>
+    </ui:include>
 
 </ui:composition>

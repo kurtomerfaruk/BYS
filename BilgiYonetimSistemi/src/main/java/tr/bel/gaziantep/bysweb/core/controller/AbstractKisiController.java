@@ -55,7 +55,9 @@ public abstract class AbstractKisiController<T> extends AbstractController<T> {
                 LocalDate dogumTarihi = gnlKisi.getDogumTarihi();
 
                 GnlKisi kisi = kisiService.findByTckimlikNoByDogumTarihi(tcKimlikNo, dogumTarihi);
-                if (kisi == null) kisi = gnlKisi;
+                if (kisi == null) {
+                    kisi = GnlKisi.builder().tcKimlikNo(tcKimlikNo).dogumTarihi(dogumTarihi).build();
+                }
 
                 kisi.setAktif(Boolean.TRUE);
                 kisi = kps.findByTcKimlikNo(kisi, modul);

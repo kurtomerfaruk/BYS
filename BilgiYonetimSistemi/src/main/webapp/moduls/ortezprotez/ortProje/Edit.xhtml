@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:editpage id="OrtProjeEditForm"
+                   model="#{ortProjeController.selected}"
+                   widgetVar="OrtProjeEditDialog"
+                   actionListener="#{ortProjeController.save}"
+                   listForm="OrtProjeListForm">
+
+        <p:outputLabel value="#{messages.projeAdiLabel}" for="@next"/>
+        <p:inputText id="projeAdi" value="#{ortProjeController.selected.projeAdi}" title="#{messages.projeAdiText}" required="true" size="50" maxlength="50"/>
+
+        <p:outputLabel value="#{messages.aciklamaLabel}" for="@next"/>
+        <p:inputTextarea rows="4" id="aciklama" value="#{ortProjeController.selected.aciklama}" title="#{messages.aciklamaText}" styleClass="w-100"
+                         autoResize="false"/>
+
+        <p:outputLabel value="#{messages.baslangicTarihiLabel}" for="@next"/>
+        <p:datePicker id="baslangicTarihi" locale="tr" pattern="#{messages.tarihFormat}" value="#{ortProjeController.selected.baslangicTarihi}"
+                      title="#{messages.baslangicTarihiText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true"
+                      showIcon="true" showOnFocus="false"/>
+
+        <p:outputLabel value="#{messages.bitisTarihiLabel}" for="@next"/>
+        <p:datePicker id="bitisTarihi" locale="tr" pattern="#{messages.tarihFormat}" value="#{ortProjeController.selected.bitisTarihi}"
+                      title="#{messages.bitisTarihiText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true"
+                      showIcon="true" showOnFocus="false"/>
+
+    </coco:editpage>
+
+</ui:composition>
+
+</html>

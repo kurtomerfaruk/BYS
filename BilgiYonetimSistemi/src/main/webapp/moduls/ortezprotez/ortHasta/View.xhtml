@@ -2,13 +2,256 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
       xmlns:coco="jakarta.faces.composite/ui">
 
 <ui:composition>
 
-    <coco:viewpage id="OrtHastaViewForm"
-                   widgetVar="OrtHastaViewDialog"
-                   model="#{ortHastaController.selected}"/>
+    <p:dialog widgetVar="OrtHastaViewDialog"
+              id="OrtHastaViewDlg"
+              modal="true"
+              resizable="false"
+              closeOnEscape="true"
+              header="#{messages.dialogKayitBilgisi}"
+              appendTo="@(body)"
+              responsive="true"
+              onShow="PF('OrtHastaViewDialog').initPosition();"
+              fitViewport="true"
+              position="top">
+
+        <h:form id="OrtHastaViewForm">
+            <h:panelGroup id="display">
+                <p:focus context="display"/>
+                <div class="card custom-card">
+
+                    <div class="card-body">
+
+                        <ul class="nav nav-tabs mb-3 tab-style-8 scaleX" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="patientViewTab" data-bs-toggle="tab"
+                                        data-bs-target="#patientViewTabPane" type="button" role="tab"
+                                        aria-controls="patientViewTabPane" aria-selected="true">Hasta Bilgileri
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="healthViewTab" data-bs-toggle="tab"
+                                        data-bs-target="#healthViewTabPane" type="button" role="tab"
+                                        aria-controls="healthViewTabPane" aria-selected="false">Sağlık Durumu
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="examinationViewTab" data-bs-toggle="tab"
+                                        data-bs-target="#examinationViewTabPane" type="button" role="tab"
+                                        aria-controls="examinationViewTabPane" aria-selected="false">Muayene Durumu
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="patientHistoryViewTab" data-bs-toggle="tab"
+                                        data-bs-target="#patientHistoryViewTabPane" type="button" role="tab"
+                                        aria-controls="patientHistoryViewTabPane" aria-selected="false">Hastanın Öyküsü
+                                </button>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content text-muted">
+                            <div class="tab-pane show active" id="patientViewTabPane">
+                                <p:panelGrid id="patientPanel" columns="2" styleClass="w-100" rendered="#{ortHastaController.selected!=null}" layout="tabular">
+
+                                    <h:outputText value="#{messages.eklemeYeriLabel}"/>
+                                    <h:outputText value="#{ortHastaController.selected.gnlKisi.eklemeYeri.displayValue}"/>
+
+                                    <p:outputLabel value="#{messages.kayitTarihiLabel}" for="@next"/>
+                                    <p:datePicker id="kayitTarihi" locale="tr" pattern="#{messages.tarihFormat}"
+                                                  value="#{ortHastaController.selected.gnlKisi.kayitTarihi}"
+                                                  title="#{messages.kayitTarihiText}" mask="true"
+                                                  monthNavigator="true" yearNavigator="true" showButtonBar="true"
+                                                  showIcon="true" showOnFocus="false"/>
+
+                                    <p:outputLabel value="#{messages.uyrukLabel}" for="@next"/>
+                                    <p:selectOneMenu id="uyruk" value="#{ortHastaController.selected.gnlKisi.uyruk}"
+                                                     required="true" converter="omnifaces.SelectItemsConverter">
+                                        <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+                                        <f:selectItems value="#{enumUyruk.ALL_VALUES}"
+                                                       var="uyruks"
+                                                       itemLabel="#{uyruks.displayValue}"
+                                                       itemValue="#{uyruks}"/>
+                                    </p:selectOneMenu>
+
+
+                                    <p:outputLabel value="#{messages.tcKimlikNoLabel}" for="@next"/>
+                                    <coco:tcKimlikNoDogumTarihi actionListener="#{ortHastaController.getTcKimlik()}"
+                                                                update=":growl,@(.tcUpdate)"
+                                                                value="#{ortHastaController.selected.gnlKisi.tcKimlikNo}"
+                                                                dateValue="#{ortHastaController.selected.gnlKisi.dogumTarihi}"/>
+
+                                    <p:outputLabel value="#{messages.adLabel}" for="@next"/>
+                                    <p:inputText id="ad" value="#{ortHastaController.selected.gnlKisi.ad}" size="50" title="#{messages.adText}" required="true"
+                                                 readonly="#{facesContext.renderResponse}" styleClass="tcUpdate"/>
+
+                                    <p:outputLabel value="#{messages.soyadLabel}" for="@next"/>
+                                    <p:inputText id="soyad" value="#{ortHastaController.selected.gnlKisi.soyad}" title="#{messages.soyadText}" required="true"
+                                                 readonly="#{facesContext.renderResponse}" styleClass="tcUpdate"/>
+
+                                    <p:outputLabel value="#{messages.telefonLabel}" for="@next"/>
+                                    <p:inputMask id="telefon" value="#{ortHastaController.selected.gnlKisi.telefon}" mask="#{messages.telefonFormat}" required="true"
+                                                 title="#{messages.telefonText}" size="14" styleClass="tcUpdate"/>
+
+                                    <p:outputLabel value="#{messages.telefonLabel}" for="@next"/>
+                                    <p:inputMask id="telefon2" value="#{ortHastaController.selected.gnlKisi.telefon2}" mask="#{messages.telefonFormat}" title="#{messages.telefonText}"
+                                                 size="14" styleClass="tcUpdate"/>
+
+                                    <p:outputLabel value="#{messages.anaAdiLabel}" for="@next"/>
+                                    <p:inputText id="anaAdi" value="#{ortHastaController.selected.gnlKisi.anaAdi}" title="#{messages.anaAdiLabel}" required="true" styleClass="tcUpdate"/>
+
+                                    <p:outputLabel value="#{messages.babaAdiLabel}" for="@next"/>
+                                    <p:inputText id="babaAdi" value="#{ortHastaController.selected.gnlKisi.babaAdi}" title="#{messages.babaAdiLabel}" required="true"
+                                                 styleClass="tcUpdate"/>
+
+                                    <p:outputLabel value="#{messages.dogumYeriLabel}" for="@next"/>
+                                    <p:inputText id="dogumYeri" value="#{ortHastaController.selected.gnlKisi.dogumYeri}" title="#{messages.dogumYeriText}" required="true"
+                                                 styleClass="tcUpdate"/>
+
+                                    <p:outputLabel value="#{messages.cinsiyetLabel}" for="@next"/>
+                                    <p:inputText id="cinsiyet" value="#{ortHastaController.selected.gnlKisi.cinsiyet}" required="true" readonly="#{facesContext.renderResponse}"
+                                                 styleClass="tcUpdate"/>
+
+                                    <p:outputLabel value="#{messages.medeniDurumLabel}" for="@next"/>
+                                    <p:inputText id="medeniDurum" value="#{ortHastaController.selected.gnlKisi.medeniDurum}" title="#{messages.medeniDurumText}" required="true"
+                                                 readonly="#{facesContext.renderResponse}"
+                                                 styleClass="tcUpdate"/>
+
+                                    <p:outputLabel value="#{messages.egitimDurumuLabel}" for="@next"/>
+                                    <p:inputText value="#{ortHastaController.selected.gnlKisi.egitimDurumu.displayValue}"/>
+
+                                    <p:outputLabel value="#{messages.sehirLabel}" for="@next"/>
+                                    <p:inputText value="#{ortHastaController.selected.gnlKisi.gnlIl.tanim}"/>
+
+                                    <p:outputLabel value="#{messages.ilceLabel}" for="@next"/>
+                                    <p:inputText value="#{ortHastaController.selected.gnlKisi.gnlIlce.tanim}"/>
+
+                                    <p:outputLabel value="#{messages.mahalleLabel}" for="@next"/>
+                                    <p:inputText value="#{ortHastaController.selected.gnlKisi.gnlMahalle.tanim}"/>
+
+                                    <p:outputLabel value="#{messages.adresLabel}" for="@next"/>
+                                    <p:inputTextarea rows="4" id="adres" value="#{ortHastaController.selected.gnlKisi.adres}" title="#{messages.adresText}" styleClass="w-100 tcUpdate"
+                                                     autoResize="false" readonly="#{!ortHastaController.sehirDisi}"/>
+
+                                    <p:outputLabel value="#{messages.cocukSayisiLabel}" for="@next"/>
+                                    <p:spinner id="cocukSayisi" value="#{ortHastaController.selected.gnlKisi.cocukSayisi}" title="#{messages.cocukSayisiText}" required="true"
+                                               styleClass="tcUpdate" stepFactor="1"/>
+
+                                    <p:outputLabel value="#{messages.ehliyetLabel}" for="@next"/>
+                                    <h:panelGroup>
+                                        <div class="ui-inputgroup">
+                                            <div class="ui-inputgroup-addon">
+                                                <p:selectBooleanCheckbox id="ehliyet"
+                                                                         value="#{ortHastaController.selected.gnlKisi.ehliyet}">
+                                                    <p:ajax event="change" update="ehliyetAciklama"
+                                                            listener="#{ortHastaController.selected.gnlKisi.setEhliyetAciklama('')}"/>
+                                                </p:selectBooleanCheckbox>
+                                            </div>
+                                            <p:inputText id="ehliyetAciklama"
+                                                         value="#{ortHastaController.selected.gnlKisi.ehliyetAciklama}"
+                                                         title="#{messages.ehliyetAciklamaText}"
+                                                         required="#{ortHastaController.selected.gnlKisi.ehliyet}"
+                                                         disabled="#{!ortHastaController.selected.gnlKisi.ehliyet}"/>
+                                        </div>
+                                    </h:panelGroup>
+
+                                    <p:outputLabel value="#{messages.sabikaKaydiLabel}" for="@next"/>
+                                    <h:panelGroup>
+                                        <div class="ui-inputgroup">
+                                            <div class="ui-inputgroup-addon">
+                                                <p:selectBooleanCheckbox id="sabikaKaydi"
+                                                                         value="#{ortHastaController.selected.gnlKisi.sabikaKaydi}">
+                                                    <p:ajax event="change" update="sabikaKaydiAciklama"
+                                                            listener="#{ortHastaController.selected.gnlKisi.setSabikaKaydiAciklama('')}"/>
+                                                </p:selectBooleanCheckbox>
+                                            </div>
+                                            <p:inputText id="sabikaKaydiAciklama"
+                                                         value="#{ortHastaController.selected.gnlKisi.sabikaKaydiAciklama}"
+                                                         title="#{messages.sabikaKaydiAciklamaText}"
+                                                         required="#{ortHastaController.selected.gnlKisi.sabikaKaydi}"
+                                                         disabled="#{!ortHastaController.selected.gnlKisi.sabikaKaydi}"/>
+                                        </div>
+                                    </h:panelGroup>
+
+                                    <p:outputLabel value="#{messages.iskurLabel}" for="@next"/>
+                                    <p:selectBooleanCheckbox id="iskurKaydi" value="#{ortHastaController.selected.gnlKisi.iskurKaydi}"/>
+                                </p:panelGrid>
+                            </div>
+                            <div class="tab-pane" id="healthViewTabPane">
+                                <p:panelGrid id="healthPanel" columns="2" styleClass="w-100" rendered="#{ortHastaController.selected!=null}" layout="tabular">
+                                    <ui:include src="/moduls/ortezprotez/ortHasta/Health.xhtml"/>
+                                </p:panelGrid>
+                            </div>
+
+                            <div class="tab-pane" id="examinationViewTabPane">
+                                <p:panelGrid id="examinationPanel" columns="2" styleClass="w-100" rendered="#{ortHastaController.selected!=null}"
+                                             layout="tabular">
+                                    <ui:include src="/moduls/ortezprotez/ortHasta/Examination.xhtml"/>
+                                </p:panelGrid>
+                            </div>
+
+                            <div class="tab-pane" id="patientHistoryViewTabPane">
+                                <p:panelGrid id="patientHistoryPanel" columns="2" styleClass="w-100" rendered="#{ortHastaController.selected!=null}"
+                                             layout="tabular">
+                                    <ui:include src="/moduls/ortezprotez/ortHasta/PatientHistory.xhtml"/>
+                                </p:panelGrid>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="float-end">
+                            <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                             value="#{messages.buttonKapat}"
+                                             onclick="PF('OrtHastaViewDialog').hide()" onstart="PF('Loading').show()"
+                                             onsuccess="PF('Loading').hide()"/>
+                        </div>
+                    </div>
+                </div>
+            </h:panelGroup>
+            <!--            <h:panelGroup id="display">-->
+            <!--                <p:panelGrid columns="#{cc.attrs.columns}" columnClasses="column" rendered="#{cc.attrs.model !=null}" layout="tabular">-->
+
+            <!--                    <h:outputText value="#{messages.kayitNoLabel}"/>-->
+            <!--                    <h:outputText value="#{cc.attrs.model.id}">-->
+            <!--                        <f:convertNumber pattern="#{messages.sayiFormat}"/>-->
+            <!--                    </h:outputText>-->
+
+            <!--                    <h:outputText value="#{messages.ekleyenLabel}"/>-->
+            <!--                    <h:outputText value="#{cc.attrs.model.ekleyen.gnlPersonel.gnlKisi.adSoyad}"/>-->
+
+            <!--                    <h:outputText value="#{messages.eklemeTarihiLabel}"/>-->
+            <!--                    <h:outputText value="#{cc.attrs.model.eklemeTarihi}">-->
+            <!--                        <f:convertDateTime pattern="#{messages.tarihSaatFormat}" type="localDateTime"/>-->
+            <!--                    </h:outputText>-->
+
+            <!--                    <h:outputText value="#{messages.guncelleyenLabel}"/>-->
+            <!--                    <h:outputText value="#{cc.attrs.model.guncelleyen.gnlPersonel.gnlKisi.adSoyad}"/>-->
+
+            <!--                    <h:outputText value="#{messages.guncellemeTarihiLabel}"/>-->
+            <!--                    <h:outputText value="#{cc.attrs.model.guncellemeTarihi}">-->
+            <!--                        <f:convertDateTime pattern="#{messages.tarihSaatFormat}" type="localDateTime"/>-->
+            <!--                    </h:outputText>-->
+
+            <!--                    <h:outputText value="#{messages.aktifLabel}"/>-->
+            <!--                    <p:selectBooleanCheckbox value="#{cc.attrs.model.aktif}" disabled="true"/>-->
+            <!--                    <f:facet name="footer">-->
+            <!--                        <div class="float-end">-->
+            <!--                            <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"-->
+            <!--                                             value="#{messages.buttonKapat}"-->
+            <!--                                             onclick="PF('OrtHastaViewDialog').hide()" onstart="PF('Loading').show()"-->
+            <!--                                             onsuccess="PF('Loading').hide()"/>-->
+            <!--                        </div>-->
+            <!--                    </f:facet>-->
+            <!--                </p:panelGrid>-->
+            <!--            </h:panelGroup>-->
+        </h:form>
+
+    </p:dialog>
 
 </ui:composition>
 

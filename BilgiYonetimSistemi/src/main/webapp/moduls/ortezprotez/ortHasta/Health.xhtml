@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces">
+<ui:composition>
+
+    <p:outputLabel value="#{messages.engelliLabel}" for="@next"/>
+    <p:selectBooleanCheckbox id="engelli" value="#{ortHastaController.selected.engelli}" styleClass="tcUpdate">
+        <p:ajax event="change" update="@(.engelliUpdate)"/>
+    </p:selectBooleanCheckbox>
+
+    <p:outputLabel value="#{messages.engelGrubuLabel}" for="@next"/>
+    <p:selectManyCheckbox id="engelGrubu" value="#{ortHastaController.eyEngelGrubus}"
+                          layout="responsive" columns="3"
+                          disabled="#{!ortHastaController.selected.engelli}"
+                          required="#{ortHastaController.selected.engelli}"
+                          converter="omnifaces.SelectItemsConverter"
+                          styleClass="engelliUpdate">
+        <f:selectItems value="#{eyEngelGrubuController.items}"
+                       var="engelGrubus"
+                       itemValue="#{engelGrubus}"
+                       itemLabel="#{engelGrubus.tanim}"/>
+    </p:selectManyCheckbox>
+
+    <p:outputLabel value="#{messages.engelDurumuLabel}" for="@next"/>
+    <p:selectOneRadio id="engelOlusmaDurumu" value="#{ortHastaController.selected.engelOlusmaDurumu}" layout="lineDirection">
+        <f:selectItems value="#{enumOrtEngelOlusum.ALL_VALUES}"
+                       var="engelOlusums"
+                       itemValue="#{engelOlusums}"
+                       itemLabel="#{engelOlusums.displayValue}"/>
+    </p:selectOneRadio>
+
+    <p:outputLabel value="#{messages.engelSeviyesiLabel}" for="@next"/>
+    <p:panelGrid columns="2"
+                 columnClasses="ui-grid-col-3,ui-grid-col-9"
+                 layout="grid"
+                 styleClass="ui-panelgrid-blank ui-fluid"
+                 style="border:0px none; background-color:transparent;">
+
+        <p:row styleClass="mt-4">
+            <p:column>
+                <p:selectBooleanCheckbox value="#{ortHastaController.selected.protez}" itemLabel="#{messages.protezText}">
+                    <p:ajax event="change" update="protezSeviyesi"/>
+                </p:selectBooleanCheckbox>
+            </p:column>
+            <p:column>
+                <h:panelGroup>
+                            <span class="ui-float-label">
+                                <p:inputText id="protezSeviyesi" value="#{ortHastaController.selected.protezSeviyesi}" title="#{messages.amputeSeviyesiText}"
+                                             disabled="#{!ortHastaController.selected.protez}"/>
+                                <p:outputLabel value="#{messages.amputeSeviyesiLabel}" for="@previous"/>
+                            </span>
+                </h:panelGroup>
+            </p:column>
+        </p:row>
+
+        <p:row styleClass="mt-4">
+            <p:column>
+                <p:selectBooleanCheckbox value="#{ortHastaController.selected.ortez}" itemLabel="#{messages.ortezText}">
+                    <p:ajax event="change" update="ortezTipi"/>
+                </p:selectBooleanCheckbox>
+            </p:column>
+            <p:column>
+                <h:panelGroup>
+                           <span class="ui-float-label">
+                                <p:inputText id="ortezTipi" value="#{ortHastaController.selected.ortezTipi}" title="#{messages.ortezTipiText}"
+                                             disabled="#{!ortHastaController.selected.ortez}"/>
+                                <p:outputLabel value="#{messages.ortezTipiLabel}" for="@previous"/>
+                           </span>
+                </h:panelGroup>
+            </p:column>
+        </p:row>
+
+    </p:panelGrid>
+
+    <p:outputLabel value="#{messages.kullandigiCihazProtezLabel}" for="@next"/>
+    <p:inputText id="kullandigiCihazProtez" value="#{ortHastaController.selected.kullandigiCihazProtez}" title="#{messages.kullandigiCihazProtezText}"/>
+
+    <p:outputLabel value="#{messages.kullandigiCihazOrtezLabel}" for="@next"/>
+    <p:inputText id="kullandigiCihazOrtez" value="#{ortHastaController.selected.kullandigiCihazOrtez}" title="#{messages.kullandigiCihazOrtezText}"/>
+
+    <p:outputLabel value="#{messages.ailedekiEngelliSayisiLabel}" for="@next"/>
+    <p:inputText id="ailedekiEngelliSayisi" value="#{ortHastaController.eyKisi.ailedekiEngelliSayisi}" title="#{messages.ailedekiEngelliSayisiText}"
+                 styleClass="engelliUpdate" disabled="#{!ortHastaController.selected.engelli}">
+        <p:keyFilter mask="num"/>
+    </p:inputText>
+
+    <p:outputLabel value="#{messages.raporTarihiLabel}" for="@next"/>
+    <p:datePicker id="raporTarihi" locale="tr" pattern="#{messages.tarihFormat}"
+                  value="#{ortHastaController.eyKisi.raporTarihi}"
+                  title="#{messages.raporTarihiText}" mask="true"
+                  monthNavigator="true" yearNavigator="true" showButtonBar="true"
+                  showIcon="true" disabled="#{!ortHastaController.selected.engelli}" styleClass="engelliUpdate"/>
+
+
+    <p:outputLabel value="#{messages.surekliLabel}" for="@next"/>
+    <h:panelGroup>
+        <div class="ui-inputgroup">
+            <div class="ui-inputgroup-addon">
+                <p:selectBooleanCheckbox id="surekli" value="#{ortHastaController.eyKisi.surekli}">
+                    <p:ajax event="change" update="surekliAciklama" listener="#{ortHastaController.eyKisi.setSurekliAciklama('')}"/>
+                </p:selectBooleanCheckbox>
+            </div>
+            <p:inputText id="surekliAciklama"
+                         value="#{ortHastaController.eyKisi.surekliAciklama}"
+                         title="#{messages.surekliAciklamaText}"
+                         disabled="#{ortHastaController.eyKisi.surekli}"/>
+        </div>
+    </h:panelGroup>
+
+    <p:outputLabel value="#{messages.raporBitisTarihiLabel}" for="@next"/>
+    <p:datePicker id="raporBitisTarihi" locale="tr" pattern="#{messages.tarihFormat}"
+                  value="#{ortHastaController.eyKisi.raporBitisTarihi}"
+                  title="#{messages.raporBitisTarihiText}"
+                  disabled="#{ortHastaController.eyKisi.surekli}"
+                  mask="true" monthNavigator="true" yearNavigator="true"
+                  showButtonBar="true" showIcon="true"/>
+
+    <p:outputLabel value="#{messages.hastahaneLabel}" for="@next"/>
+    <p:inputText id="hastahane" value="#{ortHastaController.eyKisi.hastahane}"
+                 title="#{messages.hastahaneText}" size="50"/>
+
+    <p:outputLabel value="#{messages.toplamVucutKayipOraniLabel}" for="@next"/>
+    <p:inputText id="toplamVucutKayipOrani"
+                 value="#{ortHastaController.eyKisi.toplamVucutKayipOrani}"
+                 title="#{messages.toplamVucutKayipOraniText}">
+        <p:keyFilter mask="num"/>
+    </p:inputText>
+
+    <p:outputLabel value="#{messages.agirOzurluLabel}" for="@next"/>
+    <p:selectBooleanCheckbox id="agirOzurlu" value="#{ortHastaController.eyKisi.agirOzurlu}"/>
+
+</ui:composition>
+</html>

@@ -2,79 +2,171 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
       xmlns:f="jakarta.faces.core"
-      xmlns:p="primefaces"
-      xmlns:coco="jakarta.faces.composite/ui">
+      xmlns:p="primefaces">
 
 <ui:composition>
 
-    <coco:editpage id="OrtBasvuruEditForm"
-                   model="#{ortBasvuruController.selected}"
-                   widgetVar="OrtBasvuruEditDialog"
-                   actionListener="#{ortBasvuruController.save}"
-                   listForm="OrtBasvuruListForm">
+    <p:dialog widgetVar="OrtBasvuruEditDialog"
+              id="OrtBasvuruEditDlg"
+              modal="true"
+              resizable="false"
+              closeOnEscape="true"
+              header="#{messages.dialogKayitGuncelle}"
+              appendTo="@(body)"
+              responsive="true"
+              onShow="PF('OrtBasvuruEditDialog').initPosition();adjustMenuWidth();"
+              fitViewport="true"
+              position="top">
 
-        <p:outputLabel value="#{messages.basvuruTarihiLabel}" for="@next"/>
-        <p:datePicker id="basvuruTarihi" locale="tr" pattern="#{messages.tarihFormat}" value="#{ortBasvuruController.selected.basvuruTarihi}"
-                      title="#{messages.basvuruTarihiText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true"
-                      showIcon="true" showOnFocus="false"/>
+        <h:form id="OrtBasvuruEditForm" enctype="multipart/form-data">
+            <h:panelGroup id="display">
+                <p:focus context="display"/>
+                <div class="card custom-card">
 
-        <p:outputLabel value="#{messages.hastaLabel}" for="@next"/>
-        <coco:inputWithButton id="inputWithButtonHastaiId" inputId="hastaId"
-                              inputValue="#{ortBasvuruController.selected.ortHasta.gnlKisi.tcKimlikNo}"
-                              inputTitle="#{messages.hastaText}"
-                              actionListener="#{bysController.openCommonDialog('ortHastaSec')}"
-                              ajaxListener="#{ortBasvuruController.secilenOrtHasta}"
-                              buttonTitle="#{messages.hastaSecmelisiniz}"
-                              size="50"
-                              dialogId="OrtBasvuruCreateDialogId"/>
+                    <div class="card-body">
+                        <p:staticMessage severity="info" summary="Bilgi"
+                                         detail="Her sekme bir işlem olduğundan işlem yapılan sekmedeki bilgileri kaydetmek için o sekmede bulunan Kaydet butonuna tıklamanı gerekmektedir."
+                                         style="width: 100%"/>
+                        <ul class="nav nav-tabs justify-content-center mb-5 tab-style-3" role="tablist">
+                            <li class="nav-item me-0" role="presentation">
+                                <button class="nav-link active application-info py-1" id="applicationInfoEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#applicationInfoEditTabPane" type="button" role="tab"
+                                        aria-controls="applicationInfoEditTabPane" aria-selected="true">Başvuru Bilgileri
+                                </button>
+                            </li>
 
-        <p:outputLabel value="#{messages.adSoyadLabel}" for="@next"/>
-        <p:inputText id="adSoyad" value="#{ortBasvuruController.selected.ortHasta.gnlKisi.adSoyad}" required="true" readonly="#{facesContext.renderResponse}"
-                     styleClass="inputUpdate"/>
+                            <li class="nav-item me-0" role="presentation">
+                                <button class="nav-link measure py-1 #{ortBasvuruController.selected.basvuruHareketDurumu.ordinal() ge 2 ? '' :'disabled'}" id="measureEditTab"
+                                        data-bs-toggle="tab"
+                                        data-bs-target="#measureEditTabPane" type="button" role="tab"
+                                        aria-controls="measureEditTabPane" aria-selected="false">Ölçü
+                                </button>
+                            </li>
 
-        <p:outputLabel value="#{messages.telefonLabel}" for="@next"/>
-        <p:inputText id="telefon" value="#{ortBasvuruController.selected.ortHasta.gnlKisi.telefon}" required="true" readonly="#{facesContext.renderResponse}"
-                     styleClass="inputUpdate"/>
+                            <li class="nav-item me-0" role="presentation">
+                                <button class="nav-link pay py-1 #{!ortBasvuruController.selected.ucretli ? 'disabled' : ''}" id="payEditTab"
+                                        data-bs-toggle="tab"
+                                        data-bs-target="#payEditTabPane" type="button" role="tab"
+                                        aria-controls="payEditTabPane" aria-selected="false">Ödeme
+                                </button>
+                            </li>
 
-        <p:outputLabel value="#{messages.degerlendirmeTarihiLabel}" for="@next"/>
-        <p:datePicker id="degerlendirmeTarihi" locale="tr" pattern="#{messages.tarihFormat}" value="#{ortBasvuruController.selected.degerlendirmeTarihi}"
-                      title="#{messages.degerlendirmeTarihiText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
-                      showOnFocus="false"/>
+                            <li class="nav-item me-0" role="presentation">
+                                <button class="nav-link sut-kodu py-1 #{ortBasvuruController.selected.basvuruHareketDurumu.ordinal() ge 4 ? '' :'disabled'}"
+                                        id="sutKoduEditTab"
+                                        data-bs-toggle="tab"
+                                        data-bs-target="#sutKoduEditTabPane" type="button" role="tab"
+                                        aria-controls="sutKoduEditTabPane" aria-selected="false">SUT Kodu
+                                    #{ortBasvuruController.selected.basvuruHareketDurumu.ordinal()}
+                                </button>
+                            </li>
+                            <li class="nav-item me-0" role="presentation">
+                                <button class="nav-link delivery-of-materials py-1 #{ortBasvuruController.selected.basvuruHareketDurumu.ordinal() ge 6 ? ''
+                                :'disabled'}"
+                                        id="deliveryOfMaterialsEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#deliveryOfMaterialsEditTabPane" type="button" role="tab"
+                                        aria-controls="deliveryOfMaterialsEditTabPane" aria-selected="false">Malzeme Teslimi
+                                </button>
+                            </li>
+                            <li class="nav-item me-0" role="presentation">
+                                <button class="nav-link physio-therapy py-1 #{ortBasvuruController.selected.basvuruHareketDurumu.ordinal() ge 7 ? ''
+                                :'disabled'}" id="physioTherapyEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#physioTherapyEditTabPane" type="button" role="tab"
+                                        aria-controls="physioTherapyEditTabPane" aria-selected="false">Fizik Tedavi
+                                </button>
+                            </li>
+                            <li class="nav-item me-0" role="presentation">
+                                <button class="nav-link files py-1 #{ortBasvuruController.selected.basvuruHareketDurumu.ordinal() ge 10 ? '' :'disabled'}"
+                                        id="filesEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#filesEditTabPane" type="button" role="tab"
+                                        aria-controls="filesEditTabPane" aria-selected="false"> Dosyalar
+                                </button>
+                            </li>
+                            <li class="nav-item me-0" role="presentation">
+                                <button class="nav-link delivery py-1 #{ortBasvuruController.selected.basvuruHareketDurumu.ordinal() ge 10 ? '' :'disabled'}"
+                                        id="deliveryEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#deliveryEditTabPane" type="button" role="tab"
+                                        aria-controls="deliveryEditTabPane" aria-selected="false"> Teslim Et
+                                </button>
+                            </li>
+                        </ul>
 
-        <p:outputLabel value="#{messages.kararGorusLabel}" for="@next"/>
-        <p:inputTextarea rows="4" id="kararGorus" value="#{ortBasvuruController.selected.kararGorus}"
-                         title="#{messages.kararGorusText}" styleClass="w-100" autoResize="false"/>
+                        <div class="tab-content text-muted">
+                            <div class="tab-pane fade show active text-muted" id="applicationInfoEditTabPane" role="tabpanel"
+                                 aria-labelledby="applicationInfoEditTab" tabindex="0">
+                                <p:panelGrid id="applicationInfoPanel" columns="2" styleClass="w-100" rendered="#{ortBasvuruController.selected!=null}"
+                                             layout="tabular">
 
-        <p:outputLabel value="#{messages.basvuruDurumuLabel}" for="@next"/>
-        <p:selectOneMenu id="basvuruDurumu" value="#{ortBasvuruController.selected.basvuruDurumu}" required="true" converter="omnifaces.SelectItemsConverter">
-            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
-            <f:selectItems value="#{enumOrtBasvuruDurumu.ALL_VALUES}"
-                           var="basvuruDurums"
-                           itemValue="#{basvuruDurums}"
-                           itemLabel="#{basvuruDurums.displayValue}"/>
-        </p:selectOneMenu>
+                                    <ui:include src="/moduls/ortezprotez/ortBasvuru/ApplicationInfo.xhtml"/>
 
-        <p:outputLabel value="#{messages.muayeneYapanLabel}" for="@next"/>
-        <p:inputText id="muayeneYapan" value="#{ortBasvuruController.selected.muayeneYapanOrtPersonel.gnlPersonel.gnlKisi.adSoyad}"
-                     title="#{messages.muayeneYapanText}" readonly="true"/>
+                                    <f:facet name="footer">
+                                        <div class="float-end">
+                                            <p:commandButton icon="pi pi-check" styleClass="ui-button-success"
+                                                             actionListener="#{ortBasvuruController.save}"
+                                                             value="#{messages.buttonKaydet}"
+                                                             update="display,:OrtBasvuruListForm:datalist:datalist,:growl"
+                                                             oncomplete="handleSubmit(xhr,status,args,PF('OrtBasvuruEditDialog'));"
+                                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                                            <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                                             value="#{messages.buttonIptal}" onclick="PF('OrtBasvuruEditDialog').hide()"
+                                                             immediate="true" onstart="PF('Loading').show()"
+                                                             onsuccess="PF('Loading').hide()"/>
+                                        </div>
+                                    </f:facet>
+                                </p:panelGrid>
+                            </div>
 
-        <p:outputLabel value="#{messages.raporuOnaylayanLabel}" for="@next"/>
-        <p:inputText id="raporuOnaylayan" value="#{ortBasvuruController.selected.raporuOnaylayanOrtPersonel.gnlPersonel.gnlKisi.adSoyad}"
-                     title="#{messages.raporuOnaylayanText}" readonly="true"/>
+                            <div class="tab-pane fade text-muted" id="measureEditTabPane" role="tabpanel" aria-labelledby="measureEditTab" tabindex="0">
+                                <ui:include src="/moduls/ortezprotez/ortBasvuru/Measure.xhtml"/>
+                            </div>
 
-        <p:outputLabel value="#{messages.aciklamaLabel}" for="@next"/>
-        <p:inputTextarea rows="4" id="aciklama" value="#{ortBasvuruController.selected.aciklama}" title="#{messages.aciklamaText}" styleClass="w-100"
-                         autoResize="false"/>
+                            <div class="tab-pane fade text-muted" id="payEditTabPane" role="tabpanel" aria-labelledby="payEditTabPane" tabindex="0">
+                                <p:panelGrid id="payPanel" columns="2" styleClass="w-100" rendered="#{ortBasvuruController.selected!=null}" layout="tabular">
+                                    <ui:include src="/moduls/ortezprotez/ortBasvuru/Pay.xhtml"/>
+                                </p:panelGrid>
+                            </div>
 
-        <p:outputLabel value="#{messages.randuvuyaEklensinMi}" for="@next"/>
-        <p:selectBooleanCheckbox value="#{ortBasvuruController.addAppointment}"/>
+                            <div class="tab-pane fade text-muted" id="sutKoduEditTabPane" role="tabpanel" aria-labelledby="sutKoduEditTab" tabindex="0">
+                                    <ui:include src="/moduls/ortezprotez/ortBasvuru/SutKodu.xhtml"/>
+                            </div>
+                            <div class="tab-pane fade text-muted" id="deliveryOfMaterialsEditTabPane" role="tabpanel"
+                                 aria-labelledby="deliveryOfMaterialsEditTab" tabindex="0">
+                                    <ui:include src="/moduls/ortezprotez/ortBasvuru/DeliveryOfMaterials.xhtml"/>
+                            </div>
+                            <div class="tab-pane fade text-muted" id="physioTherapyEditTabPane" role="tabpanel" aria-labelledby="physioTherapyEditTab"
+                                 tabindex="0">
+                                    <ui:include src="/moduls/ortezprotez/ortBasvuru/PhysioTherapy.xhtml"/>
+                            </div>
+                            <div class="tab-pane fade text-muted" id="filesEditTabPane" role="tabpanel" aria-labelledby="filesEditTab" tabindex="0">
+                                <ui:include src="/moduls/ortezprotez/ortBasvuru/Files.xhtml"/>
+                            </div>
+                            <div class="tab-pane fade text-muted" id="deliveryEditTabPane" role="tabpanel" aria-labelledby="deliveryEditTab" tabindex="0">
+                                <ui:include src="/moduls/ortezprotez/ortBasvuru/Delivery.xhtml"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </h:panelGroup>
+        </h:form>
 
-        <p:outputLabel value="#{messages.randevuTarihiLabel}" for="@next"/>
-        <p:datePicker locale="tr" pattern="#{messages.tarihFormat}" value="#{ortBasvuruController.appointmentDate}" title="#{messages.randevuTarihiText}"
-                      mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true" showOnFocus="false"/>
+    </p:dialog>
 
-    </coco:editpage>
+    <ui:include src="/moduls/ortezprotez/ortHasta/View.xhtml"/>
+
+    <script type="text/javascript">
+        function adjustMenuWidth() {
+            var dialog = PF('OrtBasvuruEditDialog');
+            var menu = $(".checkboxMenu");
+
+            if (dialog &amp;&amp; menu) {
+                var dialogWidth = dialog.jq.innerWidth();
+                var menuContainer = $(menu).closest('.ui-selectcheckboxmenu');
+                menuContainer.width(dialogWidth - 30);
+            }
+        }
+    </script>
 
 </ui:composition>
 

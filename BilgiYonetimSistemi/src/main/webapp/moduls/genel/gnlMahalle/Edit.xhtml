@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:editpage id="GnlMahalleEditForm"
+                   widgetVar="GnlMahalleEditDialog"
+                   actionListener="#{gnlMahalleController.save}"
+                   listForm="GnlMahalleListForm"
+                   model="#{gnlMahalleController.selected}">
+
+        <p:outputLabel value="#{messages.sehirLabel}" for="@next"/>
+        <p:selectOneMenu id="sehir" value="#{gnlMahalleController.selected.gnlIlce.gnlIl}" filter="true" converter="omnifaces.SelectItemsConverter"
+                         required="true">
+            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{gnlIlController.items}"
+                           var="sehirs"
+                           itemValue="#{sehirs}"
+                           itemLabel="#{sehirs.tanim}"
+                           itemDisabled="#{sehirs.id eq 27}"/>
+            <p:ajax event="change" update="ilce"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.ilceLabel}" for="@next"/>
+        <p:selectOneMenu id="ilce" value="#{gnlMahalleController.selected.gnlIlce}" filter="true" converter="omnifaces.SelectItemsConverter"
+                         disabled="#{!ortHastaController.sehirDisi}" styleClass="tcUpdate" required="true">
+            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{gnlIlceController.getIlceByIlId(gnlMahalleController.selected.gnlIlce.gnlIl)}"
+                           var="ilces"
+                           itemLabel="#{ilces.tanim}"
+                           itemValue="#{ilces}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.mahalleLabel}" for="@next"/>
+        <p:inputText id="tanim" value="#{gnlMahalleController.selected.tanim}" title="#{messages.mahalleText}" size="50" maxlength="50" required="true"/>
+
+    </coco:editpage>
+
+</ui:composition>
+
+</html>

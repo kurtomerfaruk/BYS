@@ -11,10 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 import tr.bel.gaziantep.bysweb.core.controller.AbstractKisiController;
-import tr.bel.gaziantep.bysweb.core.enums.ErrorType;
 import tr.bel.gaziantep.bysweb.core.enums.bys.EnumModul;
 import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.EnumSyFiltreAnahtari;
-import tr.bel.gaziantep.bysweb.core.exception.BysBusinessException;
 import tr.bel.gaziantep.bysweb.core.service.FilterOptionService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
@@ -23,6 +21,7 @@ import tr.bel.gaziantep.bysweb.moduls.engelsizler.entity.EyEngelGrubu;
 import tr.bel.gaziantep.bysweb.moduls.engelsizler.entity.EyKisi;
 import tr.bel.gaziantep.bysweb.moduls.engelsizler.service.EyKisiEngelGrubuService;
 import tr.bel.gaziantep.bysweb.moduls.engelsizler.service.EyKisiService;
+import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlIl;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlIlce;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlMahalle;
@@ -64,6 +63,9 @@ public class OrtHastaController extends AbstractKisiController<OrtHasta> {
     @Getter
     @Setter
     private EyKisi eyKisi;
+    @Getter
+    @Setter
+    private boolean sehirDisi;
 
     public OrtHastaController() {
         super(OrtHasta.class);
@@ -96,9 +98,11 @@ public class OrtHastaController extends AbstractKisiController<OrtHasta> {
             newItem = OrtHasta.class.getDeclaredConstructor().newInstance();
             GnlKisi kisi = GnlKisi.builder()
                     .kayitTarihi(LocalDate.now())
+                    .gnlIl(new GnlIl())
                     .gnlIlce(new GnlIlce())
                     .gnlMahalle(new GnlMahalle())
                     .eklemeYeri(EnumModul.ORTEZ_PROTEZ).build();
+            eyEngelGrubus = new ArrayList<>();
             newItem.setGnlKisi(kisi);
             this.setSelected(newItem);
             initializeEmbeddableKey();
@@ -138,51 +142,64 @@ public class OrtHastaController extends AbstractKisiController<OrtHasta> {
                 OrtHasta::setGnlKisi,
                 EnumModul.ORTEZ_PROTEZ
         );
+
+        sehirDisi = this.getSelected().getGnlKisi().getGnlIl() == null || this.getSelected().getGnlKisi().getGnlIl().getId() != 27;
+
+        getDisabledInfo();
     }
 
     public void getDisabledInfo() {
-        if (this.getSelected() == null) {
-            throw new BysBusinessException(ErrorType.NESNE_OKUNAMADI);
-        }
+        if (this.getSelected() != null && this.getSelected().getGnlKisi() != null) {
 
-        if (this.getSelected().getGnlKisi() == null) {
-            throw new BysBusinessException(ErrorType.KISI_BILGILERI_OKUNAMADI);
-        }
+            try {
+                eyEngelGrubus = new ArrayList<>();
 
-        eyEngelGrubus = new ArrayList<>();
+//                if (!this.getSelected().isEngelli()) {
+//                    eyKisi = null;
+//                    return;
+//                }
 
-        if (!this.getSelected().isEngelli()) {
-            eyKisi = null;
-            return;
-        }
+                if (!StringUtil.isBlank(this.getSelected().getGnlKisi().getTcKimlikNo())) {
+                    eyKisi = eyKisiService.findByTcKimlikNo(this.getSelected().getGnlKisi().getTcKimlikNo());
 
-        if (!StringUtil.isBlank(this.getSelected().getGnlKisi().getTcKimlikNo())) {
-            eyKisi = eyKisiService.findByTcKimlikNo(this.getSelected().getGnlKisi().getTcKimlikNo());
+                    if (eyKisi != null) {
+                        eyEngelGrubus = eyKisiEngelGrubuService.getEyEngelGrubuByEyKisi(eyKisi);
+                        this.getSelected().setEngelli(!eyEngelGrubus.isEmpty());
+                        this.getSelected().setEngelli(true);
+                    } else {
+                        eyKisi = EyKisi.builder()
+                                .gnlKisi(this.getSelected().getGnlKisi())
+                                .eyKisiEngelGrubuList(new ArrayList<>())
+                                .build();
 
-            if (eyKisi != null) {
-                eyEngelGrubus = eyKisiEngelGrubuService.getEyEngelGrubuByEyKisi(eyKisi);
-                this.getSelected().setEngelli(!eyEngelGrubus.isEmpty());
-            } else {
-                eyKisi = EyKisi.builder()
-                        .gnlKisi(this.getSelected().getGnlKisi())
-                        .eyKisiEngelGrubuList(new ArrayList<>())
-                        .build();
-
+                    }
+                }
+            } catch (Exception ex) {
+                log.error(null, ex);
+                FacesUtil.errorMessage(Constants.HATA_OLUSTU);
             }
         }
+
     }
 
     @Override
     public void save(ActionEvent event) {
-        if (this.getSelected() == null) {
-            throw new BysBusinessException(ErrorType.NESNE_OKUNAMADI);
+        if (this.getSelected() != null) {
+            try {
+                service.save(this.getSelected(), eyKisi, eyEngelGrubus);
+                FacesUtil.successMessage(Constants.KAYIT_GUNCELLENDI);
+            } catch (Exception ex) {
+                log.error(null, ex);
+                FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+            }
         }
-        try {
-            service.save(this.getSelected(), eyKisi, eyEngelGrubus);
-            FacesUtil.successMessage(Constants.KAYIT_GUNCELLENDI);
-        } catch (Exception ex) {
-            log.error(null, ex);
-            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+    }
+
+    public void getViewInfo(OrtHasta ortHasta) {
+        if (ortHasta != null) {
+            this.setSelected(ortHasta);
+            getDisabledInfo();
+            PrimeFaces.current().executeScript("PF('OrtHastaViewDialog').show()");
         }
     }
 }

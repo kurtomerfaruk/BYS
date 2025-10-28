@@ -3,198 +3,103 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="jakarta.faces.facelets"
       xmlns:h="jakarta.faces.html"
-      xmlns:f="jakarta.faces.core"
       xmlns:p="primefaces"
-      xmlns:coco="jakarta.faces.composite/ui">
+>
 
 <ui:composition>
 
-    <coco:createpage id="OrtHastaCreateForm"
-                     renderedListener="#{ortHastaController.selected != null}"
-                     widgetVar="OrtHastaCreateDialog"
-                     actionListener="#{ortHastaController.save}"
-                     listForm="OrtHastaListForm">
+    <p:dialog widgetVar="OrtHastaCreateDialog"
+              id="OrtHastaCreateDlg"
+              modal="true"
+              resizable="false"
+              closeOnEscape="true"
+              header="#{messages.dialogYeniKayit}"
+              appendTo="@(body)"
+              responsive="true"
+              onShow="PF('OrtHastaCreateDialog').initPosition();"
+              fitViewport="true"
+              position="top">
 
-        <p:outputLabel value="#{messages.kayitTarihiLabel}" for="@next"/>
-        <p:datePicker id="kayitTarihi" locale="tr" pattern="#{messages.tarihFormat}" value="#{ortHastaController.selected.gnlKisi.kayitTarihi}"
-                      title="#{messages.kayitTarihiText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
-                      showOnFocus="false"/>
+        <h:form id="OrtHastaCreateForm" enctype="multipart/form-data">
+            <h:panelGroup id="display">
+                <p:focus context="display"/>
+                <div class="card custom-card">
 
-        <p:outputLabel value="#{messages.tcKimlikNoLabel}" for="@next"/>
-        <coco:tcKimlikNoDogumTarihi actionListener="#{ortHastaController.getTcKimlik()}" update=":growl,@(.tcUpdate)"
-                                    value="#{ortHastaController.selected.gnlKisi.tcKimlikNo}"
-                                    dateValue="#{ortHastaController.selected.gnlKisi.dogumTarihi}"/>
+                    <div class="card-body">
 
-        <p:outputLabel value="#{messages.adLabel}" for="@next"/>
-        <p:inputText id="ad" value="#{ortHastaController.selected.gnlKisi.ad}" title="#{messages.adText}" required="true"
-                     readonly="#{facesContext.renderResponse}" styleClass="tcUpdate" size="70"/>
+                        <ul class="nav nav-tabs mb-3 tab-style-8 scaleX" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="patientCreateTab" data-bs-toggle="tab"
+                                        data-bs-target="#patientCreateTabPane" type="button" role="tab"
+                                        aria-controls="patientCreateTabPane" aria-selected="true">Hasta Bilgileri
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="healthCreateTab" data-bs-toggle="tab"
+                                        data-bs-target="#healthCreateTabPane" type="button" role="tab"
+                                        aria-controls="healthCreateTabPane" aria-selected="false">Sağlık Durumu
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="examinationCreateTab" data-bs-toggle="tab"
+                                        data-bs-target="#examinationCreateTabPane" type="button" role="tab"
+                                        aria-controls="examinationCreateTabPane" aria-selected="false">Muayene Durumu
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="patientHistoryCreateTab" data-bs-toggle="tab"
+                                        data-bs-target="#patientHistoryCreateTabPane" type="button" role="tab"
+                                        aria-controls="patientHistoryCreateTabPane" aria-selected="false">Hastanın Öyküsü
+                                </button>
+                            </li>
+                        </ul>
 
-        <p:outputLabel value="#{messages.soyadLabel}" for="@next"/>
-        <p:inputText id="soyad" value="#{ortHastaController.selected.gnlKisi.soyad}" title="#{messages.soyadText}" required="true"
-                     readonly="#{facesContext.renderResponse}" styleClass="tcUpdate"/>
+                        <div class="tab-content text-muted">
+                            <div class="tab-pane show active" id="patientCreateTabPane">
+                                <p:panelGrid id="patientPanel" columns="2" styleClass="w-100" rendered="#{ortHastaController.selected!=null}" layout="tabular">
 
-        <p:outputLabel value="#{messages.medeniDurumLabel}" for="@next"/>
-        <p:inputText id="medeniDurum" value="#{ortHastaController.selected.gnlKisi.medeniDurum}" title="#{messages.medeniDurumText}" required="true"
-                     readonly="#{facesContext.renderResponse}" styleClass="tcUpdate"/>
+                                    <ui:include src="/moduls/ortezprotez/ortHasta/Patient.xhtml"/>
+                                </p:panelGrid>
+                            </div>
+                            <div class="tab-pane" id="healthCreateTabPane">
+                                <p:panelGrid id="healthPanel" columns="2" styleClass="w-100"  rendered="#{ortHastaController.selected!=null}" layout="tabular">
+                                    <ui:include src="/moduls/ortezprotez/ortHasta/Health.xhtml"/>
+                                </p:panelGrid>
+                            </div>
 
-        <p:outputLabel value="#{messages.anaAdiLabel}" for="@next"/>
-        <p:inputText id="anaAdi" value="#{ortHastaController.selected.gnlKisi.anaAdi}" title="#{messages.anaAdiLabel}" required="true" styleClass="tcUpdate"/>
+                            <div class="tab-pane" id="examinationCreateTabPane">
+                                <p:panelGrid id="examinationPanel" columns="2" styleClass="w-100"  rendered="#{ortHastaController.selected!=null}" layout="tabular">
+                                    <ui:include src="/moduls/ortezprotez/ortHasta/Examination.xhtml"/>
+                                </p:panelGrid>
+                            </div>
 
-        <p:outputLabel value="#{messages.babaAdiLabel}" for="@next"/>
-        <p:inputText id="babaAdi" value="#{ortHastaController.selected.gnlKisi.babaAdi}" title="#{messages.babaAdiLabel}" required="true"
-                     styleClass="tcUpdate"/>
+                            <div class="tab-pane" id="patientHistoryCreateTabPane">
+                                <p:panelGrid id="patientHistoryPanel" columns="2" styleClass="w-100"  rendered="#{ortHastaController.selected!=null}"
+                                             layout="tabular">
+                                    <ui:include src="/moduls/ortezprotez/ortHasta/PatientHistory.xhtml"/>
+                                </p:panelGrid>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="float-end">
+                            <p:commandButton icon="pi pi-check" styleClass="ui-button-success"
+                                             actionListener="#{ortHastaController.save}"
+                                             value="#{messages.buttonKaydet}"
+                                             update="display,:OrtHastaListForm:datalist:datalist,:growl"
+                                             oncomplete="handleSubmit(xhr,status,args,PF('OrtHastaCreateDialog'));"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                            <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                             value="#{messages.buttonIptal}" onclick="PF('OrtHastaCreateDialog').hide()"
+                                             immediate="true" onstart="PF('Loading').show()"
+                                             onsuccess="PF('Loading').hide()"/>
+                        </div>
+                    </div>
+                </div>
+            </h:panelGroup>
+        </h:form>
 
-        <p:outputLabel value="#{messages.dogumYeriLabel}" for="@next"/>
-        <p:inputText id="dogumYeri" value="#{ortHastaController.selected.gnlKisi.dogumYeri}" title="#{messages.dogumYeriText}" required="true"
-                     readonly="#{facesContext.renderResponse}" styleClass="tcUpdate"/>
-
-        <p:outputLabel value="#{messages.cinsiyetLabel}" for="@next"/>
-        <p:inputText id="cinsiyet" value="#{ortHastaController.selected.gnlKisi.cinsiyet}" required="true" readonly="#{facesContext.renderResponse}"
-                     styleClass="tcUpdate"/>
-
-        <p:outputLabel value="#{messages.telefonLabel}" for="@next"/>
-        <p:inputMask id="telefon" value="#{ortHastaController.selected.gnlKisi.telefon}" mask="#{messages.telefonFormat}" required="true" title="#{messages.telefonText}"
-                     size="14" styleClass="tcUpdate"/>
-
-        <p:outputLabel value="#{messages.telefonLabel}" for="@next"/>
-        <p:inputMask id="telefon2" value="#{ortHastaController.selected.gnlKisi.telefon2}" mask="#{messages.telefonFormat}" title="#{messages.telefonText}" size="14"
-                     styleClass="tcUpdate"/>
-
-        <p:outputLabel value="#{messages.cocukSayisiLabel}" for="@next"/>
-        <p:spinner id="cocukSayisi" value="#{ortHastaController.selected.gnlKisi.cocukSayisi}" title="#{messages.cocukSayisiText}" required="true"
-                   styleClass="tcUpdate" stepFactor="1"/>
-
-        <p:outputLabel value="#{messages.ilceLabel}" for="@next"/>
-        <p:inputText id="ilce" value="#{ortHastaController.selected.gnlKisi.gnlIlce.tanim}" required="true" readonly="#{facesContext.renderResponse}"
-                     styleClass="tcUpdate"/>
-
-        <p:outputLabel value="#{messages.mahalleLabel}" for="@next"/>
-        <p:inputText id="mahalle" value="#{ortHastaController.selected.gnlKisi.gnlMahalle.tanim}" required="true" readonly="#{facesContext.renderResponse}"
-                     styleClass="tcUpdate"/>
-
-        <p:outputLabel value="#{messages.adresLabel}" for="@next"/>
-        <p:inputTextarea rows="2" id="adres" value="#{ortHastaController.selected.gnlKisi.adres}" title="#{messages.adresText}" styleClass="w-100 tcUpdate"
-                         autoResize="false" readonly="#{facesContext.renderResponse}"/>
-
-        <p:divider align="center" type="dashed">
-            <b>Sağlık Durumu</b>
-        </p:divider>
-        <p:divider align="center" type="dashed">
-            <b>Sağlık Durumu</b>
-        </p:divider>
-
-        <p:outputLabel value="#{messages.engelliLabel}" for="@next"/>
-        <p:selectBooleanCheckbox id="engelli" value="#{ortHastaController.selected.engelli}">
-            <p:ajax event="change" update="engelGrubu" listener="#{ortHastaController.getDisabledInfo()}"/>
-        </p:selectBooleanCheckbox>
-
-
-        <p:outputLabel value="#{messages.engelGrubuLabel}" for="@next"/>
-        <p:selectManyCheckbox id="engelGrubu" value="#{ortHastaController.eyEngelGrubus}"
-                              layout="responsive" columns="3"
-                              disabled="#{!ortHastaController.selected.engelli}"
-                              required="#{ortHastaController.selected.engelli}"
-                              converter="omnifaces.SelectItemsConverter">
-            <f:selectItems value="#{eyEngelGrubuController.items}"
-                           var="engelGrubus"
-                           itemValue="#{engelGrubus}"
-                           itemLabel="#{engelGrubus.tanim}"/>
-        </p:selectManyCheckbox>
-
-        <p:outputLabel value="#{messages.engelDurumuLabel}" for="@next"/>
-        <p:selectOneRadio id="engelOlusmaDurumu" value="#{ortHastaController.selected.engelOlusmaDurumu}" layout="lineDirection">
-            <f:selectItems value="#{enumOrtEngelOlusum.ALL_VALUES}"
-                           var="engelOlusums"
-                           itemValue="#{engelOlusums}"
-                           itemLabel="#{engelOlusums.displayValue}"/>
-        </p:selectOneRadio>
-
-        <p:outputLabel value="#{messages.engelGrubuLabel}" for="@next"/>
-        <p:panelGrid columns="2"
-                     columnClasses="ui-grid-col-3,ui-grid-col-9"
-                     layout="grid"
-                     styleClass="ui-panelgrid-blank ui-fluid"
-                     style="border:0px none; background-color:transparent;">
-
-            <p:row styleClass="mt-4">
-                <p:column>
-                    <p:selectBooleanCheckbox value="#{ortHastaController.selected.protez}" itemLabel="#{messages.protezText}">
-                        <p:ajax event="change" update="protezSeviyesi"/>
-                    </p:selectBooleanCheckbox>
-                </p:column>
-                <p:column>
-                    <h:panelGroup>
-                            <span class="ui-float-label">
-                                <p:inputText id="protezSeviyesi" value="#{ortHastaController.selected.protezSeviyesi}" title="#{messages.amputeSeviyesiText}"
-                                             disabled="#{!ortHastaController.selected.protez}"/>
-                                <p:outputLabel value="#{messages.amputeSeviyesiLabel}" for="@previous"/>
-                            </span>
-                    </h:panelGroup>
-                </p:column>
-            </p:row>
-
-            <p:row styleClass="mt-4">
-                <p:column>
-                    <p:selectBooleanCheckbox value="#{ortHastaController.selected.ortez}" itemLabel="#{messages.ortezText}">
-                        <p:ajax event="change" update="ortezTipi"/>
-                    </p:selectBooleanCheckbox>
-                </p:column>
-                <p:column>
-                    <h:panelGroup>
-                           <span class="ui-float-label">
-                                <p:inputText id="ortezTipi" value="#{ortHastaController.selected.ortezTipi}" title="#{messages.ortezTipiText}"
-                                             disabled="#{!ortHastaController.selected.ortez}"/>
-                                <p:outputLabel value="#{messages.ortezTipiLabel}" for="@previous"/>
-                           </span>
-                    </h:panelGroup>
-                </p:column>
-            </p:row>
-
-        </p:panelGrid>
-
-        <p:outputLabel value="#{messages.kullandigiCihazProtezLabel}" for="@next"/>
-        <p:inputText id="kullandigiCihazProtez" value="#{ortHastaController.selected.kullandigiCihazProtez}" title="#{messages.kullandigiCihazProtezText}"/>
-
-        <p:outputLabel value="#{messages.kullandigiCihazOrtezLabel}" for="@next"/>
-        <p:inputText id="kullandigiCihazOrtez" value="#{ortHastaController.selected.kullandigiCihazOrtez}" title="#{messages.kullandigiCihazOrtezText}"/>
-
-        <p:divider align="center" type="dashed">
-            <b>Muayene Durumu</b>
-        </p:divider>
-        <p:divider align="center" type="dashed">
-            <b>Muayene Durumu</b>
-        </p:divider>
-
-        <p:outputLabel value="#{messages.ameliyatOlduguHastaneLabel}" for="@next"/>
-        <p:inputText id="ameliyatOlduguHastane" value="#{ortHastaController.selected.ameliyatOlduguHastane}" title="#{messages.ameliyatOlduguHastaneText}"/>
-
-        <p:outputLabel value="#{messages.ameliyatTarihiLabel}" for="@next"/>
-        <p:datePicker id="ameliyatTarihi" locale="tr" pattern="#{messages.tarihFormat}" value="#{ortHastaController.selected.ameliyatTarihi}"
-                      title="#{messages.ameliyatTarihiText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
-                      showOnFocus="false"/>
-
-        <p:outputLabel value="#{messages.depremeNeredeYakalandiLabel}" for="@next"/>
-        <p:inputText id="depremeNeredeYakalandi" value="#{ortHastaController.selected.depremeNeredeYakalandi}" title="#{messages.depremeNeredeYakalandiText}"/>
-
-        <p:outputLabel value="#{messages.birinciDereceVefatDurumuLabel}" for="@next"/>
-        <p:inputText id="birinciDereceVefatDurumu" value="#{ortHastaController.selected.birinciDereceVefatDurumu}"
-                     title="#{messages.birinciDereceVefatDurumuText}"/>
-
-        <p:outputLabel value="#{messages.meslekLabel}" for="@next"/>
-        <p:inputText id="meslek" value="#{ortHastaController.selected.gnlKisi.meslek}" title="#{messages.meslekText}" styleClass="tcUpdate"/>
-
-        <p:divider align="center" type="dashed">
-            <b>Hastanın Öyküsü ve Talebi</b>
-        </p:divider>
-        <p:divider align="center" type="dashed">
-            <b>Hastanın Öyküsü ve Talebi</b>
-        </p:divider>
-
-        <p:outputLabel value="#{messages.hastaninOykusuVeTalebiLabel}" for="@next"/>
-        <p:inputTextarea rows="4" id="hastaninOykusuTalebi" value="#{ortHastaController.selected.hastaninOykusuTalebi}"
-                         title="#{messages.hastaninOykusuVeTalebiText}" styleClass="w-100" autoResize="false"/>
-
-    </coco:createpage>
+    </p:dialog>
 
 </ui:composition>
 

@@ -15,7 +15,11 @@ import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtOlcuSablon;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.service.OrtOlcuSablonAlanService;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.service.OrtOlcuSablonService;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
 import java.io.Serial;
 
 /**
@@ -47,17 +51,29 @@ public class OrtOlcuSablonController extends AbstractController<OrtOlcuSablon> {
     public void save(ActionEvent event) {
         if (this.getSelected() != null) {
             try {
-                String path = createFilePath(ortOlcuSablonImageController.getFile());
+                UploadedFile file = ortOlcuSablonImageController.getFile();
+                String path = createFilePath(file);
                 this.getSelected().setResimYolu(path);
-                //service.edit(this.getSelected());
-                ImageUtil.saveImage(ortOlcuSablonImageController.getFile(), path);
-                ortOlcuSablonAlanService.detectAndSaveFields(this.getSelected(), path);
+                setDimension(file);
+                service.edit(this.getSelected());
+                ImageUtil.saveImage(file, path);
+                //ortOlcuSablonAlanService.detectAndSaveFields(this.getSelected(), path);
                 FacesUtil.successMessage(Constants.KAYIT_GUNCELLENDI);
             } catch (Exception e) {
                 log.error(e.getMessage());
                 FacesUtil.errorMessage(Constants.HATA_OLUSTU);
             }
         }
+    }
+
+    private void setDimension(UploadedFile file) throws IOException {
+        byte[] imageTest = file.getContent();
+        ByteArrayInputStream baiStream = new ByteArrayInputStream(imageTest);
+        BufferedImage bi = ImageIO.read(baiStream);
+        int imageWidth = bi.getWidth();
+        int imageHeight = bi.getHeight();
+        this.getSelected().setResimYukseklik(imageHeight);
+        this.getSelected().setResimGenislik(imageWidth);
     }
 
     private String createFilePath(UploadedFile file) {

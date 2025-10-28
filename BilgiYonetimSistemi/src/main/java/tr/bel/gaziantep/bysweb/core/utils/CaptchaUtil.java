@@ -1,5 +1,6 @@
 package tr.bel.gaziantep.bysweb.core.utils;
 
+import java.io.Serial;
 import java.util.Random;
 
 /**
@@ -7,7 +8,14 @@ import java.util.Random;
  * @version 1.0.0
  * @since 18.08.2025 11:10
  */
-public class CaptchaUtil {
+public class CaptchaUtil implements java.io.Serializable {
+
+    @Serial
+    private static final long serialVersionUID = -2362937583674526895L;
+
+    public CaptchaUtil() {
+        // TODO document why this constructor is empty
+    }
 
     public static String generateCaptchaText(int length) {
         String chars = "ABCDEFGHJKMNOPQRSTUVWXYZabcdefghjkmnopqrstuvwxyz0123456789";

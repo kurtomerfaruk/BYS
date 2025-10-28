@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="jakarta.faces.core">
+
+    <h:form id="TopluGirisCikisForm">
+        <p:importEnum type="tr.bel.gaziantep.belediyebilgisistemi.core.enums.bys.EnumGirisCikis" var="enumGirisCikis" allSuffix="ALL_ENUM_VALUES"/>
+        <h:panelGroup id="display">
+            <div class="row">
+                <div class="col-xxl-12">
+                    <div class="card border card-border-primary">
+                        <div class="card-header align-items-center d-flex">
+                            <h4 class="card-title mb-0 flex-grow-1">Toplu Giriş Listesi</h4>
+
+                        </div>
+                        <div class="card-body">
+                            <div class="ui-g">
+                                <div class="ui-g-12 ui-md-12 ui-lg-12">
+                                    <div class="ui-g">
+                                        <div class="ui-g-4 text-right">
+                                            <p:outputLabel value="#{messages.turLabel}" for="@next"/>
+                                        </div>
+                                        <div class="ui-g-8">
+                                            <p:selectOneMenu id="girisCikis" value="#{ekmTopluGirisCikisController.girisCikis}"
+                                                             converter="omnifaces.SelectItemsConverter">
+                                                <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+                                                <f:selectItems value="#{enumGirisCikis.ALL_ENUM_VALUES}"
+                                                               var="girisCikiss"
+                                                               itemLabel="#{girisCikiss.displayValue}"
+                                                               itemValue="#{girisCikiss}"/>
+                                                <p:ajax event="change" update="cikisTarihi,kursId"/>
+                                            </p:selectOneMenu>
+                                        </div>
+                                    </div>
+                                    <div class="ui-g">
+                                        <div class="ui-g-4 text-right">
+                                            <p:outputLabel value="#{messages.girisTarihiLabel}" for="@next"/>
+                                        </div>
+                                        <div class="ui-g-8">
+                                            <p:datePicker id="girisTarihi" locale="tr" pattern="#{messages.tarihFormat}"
+                                                          value="#{ekmTopluGirisCikisController.selected.girisTarihi}" title="#{messages.girisTarihiText}"
+                                                          mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
+                                                          showOnFocus="false" showTime="true"/>
+                                        </div>
+                                    </div>
+                                    <div class="ui-g">
+                                        <div class="ui-g-4 text-right">
+                                            <p:outputLabel value="#{messages.cikisTarihiLabel}" for="@next"/>
+                                        </div>
+                                        <div class="ui-g-8">
+                                            <p:datePicker id="cikisTarihi" locale="tr" pattern="#{messages.tarihFormat}"
+                                                          value="#{ekmTopluGirisCikisController.selected.cikisTarihi}" title="#{messages.cikisTarihiText}"
+                                                          mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
+                                                          showOnFocus="false" showTime="true"/>
+                                        </div>
+                                    </div>
+                                    <div class="ui-g">
+                                        <div class="ui-g-4 text-right">
+                                            <p:outputLabel value="#{messages.kursLabel}" for="@next"/>
+                                        </div>
+                                        <div class="ui-g-8">
+                                            <p:selectOneMenu id="kursId" value="#{ekmTopluGirisCikisController.selected.gnlkursId}"
+                                                             converter="omnifaces.SelectItemsConverter" required="true" filter="true">
+                                                <f:selectItem itemLabel="#{messages.seciniz}"/>
+                                                <f:selectItems value="#{gnlKursController.items}"
+                                                               var="kursIdItem"
+                                                               itemValue="#{kursIdItem}"
+                                                               itemLabel="#{kursIdItem.tanim.toString()}"/>
+                                                <p:ajax event="change" listener="#{ekmTopluGirisCikisController.createKisiList()}" update="kisiler"/>
+                                            </p:selectOneMenu>
+                                        </div>
+                                    </div>
+
+                                    <div class="ui-g">
+                                        <div class="ui-g-4 text-right">
+                                            <p:outputLabel value="#{messages.kursaGirisYapanlarLabel}" for="kisiler"/>
+                                        </div>
+                                        <div class="ui-g-8">
+                                            <p:pickList id="kisiler" value="#{ekmTopluGirisCikisController.dualEyKisi}"
+                                                        var="item"
+                                                        itemValue="#{item}"
+                                                        itemLabel="#{item.gnlkisiId.adSoyad}"
+                                                        showSourceControls="true"
+                                                        showTargetControls="true"
+                                                        showCheckbox="true"
+                                                        responsive="true"
+                                                        showSourceFilter="true"
+                                                        showTargetFilter="true"
+                                                        filterMatchMode="contains"
+                                                        addAllLabel="#{messages.tumunuEkle}"
+                                                        addLabel="#{messages.ekle}"
+                                                        removeAllLabel="#{messages.tumunuCikar}"
+                                                        removeLabel="#{messages.cikar}"
+                                                        converter="picklistGenericConverter">
+
+                                            </p:pickList>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="hstack gap-2 justify-content-end">
+                                <p:commandButton icon="pi pi-check" styleClass="btn btn-success" value="#{messages.buttonKaydet}"
+                                                 actionListener="#{ekmTopluGirisCikisController.kaydet}" update="@form,:growl"
+                                                 onstart="PF('Loading').show()"
+                                                 onsuccess="PF('Loading').hide()"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </h:panelGroup>
+    </h:form>
+
+</ui:composition>

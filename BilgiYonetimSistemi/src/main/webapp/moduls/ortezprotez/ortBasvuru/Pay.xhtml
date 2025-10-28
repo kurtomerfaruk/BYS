@@ -2,22 +2,42 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
       xmlns:p="primefaces"
-      xmlns:coco="jakarta.faces.composite/ui">
+>
 
 <ui:composition>
 
-    <coco:editpage id="OrtPayForm"
-                   model="#{ortBasvuruController.selected}"
-                   widgetVar="OrtPayDialog"
-                   actionListener="#{ortBasvuruController.paid()}"
-                   listForm="OrtBasvuruListForm"
-                   header="Ödeme">
+    <h:form id="PayFormEdit">
+        <h:panelGroup id="displayPay">
+            <p:focus context="displayPay"/>
+            <p:panelGrid id="measurePanel" columns="2" styleClass="w-100" rendered="#{ortBasvuruController.selected!=null}" layout="tabular">
 
-        <p:outputLabel value="#{messages.makbuzNoLabel}" for="@next"/>
-        <p:inputText id="makbuzNo" value="#{ortBasvuruController.selected.makbuzNo}" title="#{messages.makbuzNoText}" required="true"/>
+                <p:outputLabel value="#{messages.makbuzNoLabel}" for="@next"/>
+                <p:inputText id="makbuzNo" value="#{ortBasvuruController.selected.makbuzNo}" title="#{messages.makbuzNoText}"/>
 
-    </coco:editpage>
+                <f:facet name="footer">
+                    <div class="float-end">
+                        <p:commandButton icon="pi pi-check" styleClass="ui-button-success"
+                                         actionListener="#{ortBasvuruController.paid()}"
+                                         value="#{messages.buttonKaydet}"
+                                         update=":OrtBasvuruListForm:datalist:datalist,:growl,displayPay"
+                                         oncomplete="handleSubmit(xhr,status,args,PF('OrtBasvuruEditDialog'));"
+                                         onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                         process="@form"/>
+                        <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                         value="#{messages.buttonIptal}"
+                                         onclick="PF('OrtBasvuruEditDialog').hide()" immediate="true"
+                                         onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()">
+                            <p:resetInput target="@form"/>
+                        </p:commandButton>
+                    </div>
+                </f:facet>
+            </p:panelGrid>
+        </h:panelGroup>
+    </h:form>
+
 
 </ui:composition>
 

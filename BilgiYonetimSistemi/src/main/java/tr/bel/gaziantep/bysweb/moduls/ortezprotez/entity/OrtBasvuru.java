@@ -93,6 +93,10 @@ public class OrtBasvuru extends BaseEntity {
     @Column(name = "SUT_KODU",length = 50)
     private String sutKodu;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ORTPROJE_ID")
+    private OrtProje ortProje;
+
     @OneToMany(mappedBy = "ortBasvuru", fetch = FetchType.LAZY,cascade = {CascadeType.MERGE,CascadeType.PERSIST})
     @SQLRestriction("AKTIF=true")
     @Builder.Default
@@ -107,6 +111,11 @@ public class OrtBasvuru extends BaseEntity {
     @SQLRestriction("AKTIF=true")
     @Builder.Default
     private List<OrtBasvuruDosya> ortBasvuruDosyaList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "ortBasvuru")
+    @SQLRestriction("AKTIF=true")
+    @Builder.Default
+    private List<OrtOlcu> ortOlcuList = new ArrayList<>();
 
     @Override
     public int hashCode() {

@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>BilgiYonetimSistemi</artifactId>
-    <version>1.0.0-RC5</version>
+    <version>1.0.0-RC8</version>
     <packaging>war</packaging>
     <name>BilgiYonetimSistemi</name>
 
@@ -244,10 +244,10 @@
             <artifactId>slf4j-simple</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.openpnp</groupId>
-            <artifactId>opencv</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.openpnp</groupId>-->
+<!--            <artifactId>opencv</artifactId>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>com.kurtomerfaruk</groupId>

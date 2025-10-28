@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces">
+
+<ui:composition>
+
+    <p:dataTable id="olcuId" var="item" value="#{ortBasvuruController.selected.ortOlcuList}">
+        <p:column headerText="Kayıt No">
+            <h:outputText value="#{item.id}">
+                <f:convertNumber pattern="#{messages.sayiFormat}"/>
+            </h:outputText>
+        </p:column>
+
+        <p:column headerText="Tarih">
+            <h:outputText value="#{item.tarih}">
+                <f:convertDateTime pattern="#{messages.tarihSaatFormat}" type="localDateTime"/>
+            </h:outputText>
+        </p:column>
+        <p:column headerText="Durum">
+            <h:outputText value="#{item.durum.displayValue}"/>
+        </p:column>
+        <p:column headerText="İşlem" style="width:100px;text-align:center;">
+            <p:commandButton icon="pi pi-eye"
+                             title="Şablon Değerlerini Gör"
+                             actionListener="#{ortOlcuController.loadSablonDialog(item)}"
+                             oncomplete="PF('dlgSablonDetayWidget').show()"
+                             update="OrtBasvuruEditForm:dlgSablonDetay"/>
+        </p:column>
+    </p:dataTable>
+
+
+    <p:dialog id="dlgSablonDetay"
+              widgetVar="dlgSablonDetayWidget"
+              header="Şablon Detayları"
+              modal="true"
+              width="900"
+              height="500"
+              responsive="true"
+              appendTo="@(body)"
+              position="top">
+
+        <h:panelGrid columns="2" cellpadding="5" rendered="#{not empty ortOlcuController.selected}">
+            <h:outputText value="Ölçü ID:" style="font-weight:bold"/>
+            <h:outputText value="#{ortOlcuController.selected.id}">
+                <f:convertNumber pattern="#{messages.sayiFormat}"/>
+            </h:outputText>
+            <h:outputText value="Tarih:" style="font-weight:bold"/>
+            <h:outputText value="#{ortOlcuController.selected.tarih}">
+                <f:convertDateTime pattern="#{messages.tarihSaatFormat}" type="localDateTime"/>
+            </h:outputText>
+        </h:panelGrid>
+
+        <p:dataTable value="#{ortOlcuController.ortOlcuSablonList}" var="sablon" styleClass="p-datatable-sm">
+
+            <p:column headerText="Şablon Adı">
+                #{sablon.tanim}
+            </p:column>
+            <p:column headerText="İşlem">
+                <p:commandButton icon="pi pi-eye" title="Değerleri Gör"
+                                 onstart="PF('Loading').show()"
+                                 onsuccess="PF('Loading').hide()"
+                                 oncomplete="PF('dlgSablonDegerWidget').show()"
+                                 actionListener="#{ortOlcuController.prepareOlcuDialog(sablon)}"
+                                 update="OrtBasvuruEditForm:dlgSablonDeger,:growl"/>
+            </p:column>
+
+        </p:dataTable>
+    </p:dialog>
+
+    <!-- Şablon değerleri dialog -->
+    <p:dialog id="dlgSablonDeger"
+              widgetVar="dlgSablonDegerWidget"
+              header="Şablon Alan Değerleri"
+              modal="true"
+              width="800"
+              height="600"
+              responsive="true"
+              appendTo="@(body)"
+              position="top">
+        <div style="position: relative; display: inline-block;">
+            <p:graphicImage value="/images/dynamic/?file=#{ortOlcuController.selectedSablon.resimYolu}"
+                            style="max-width:#{ortOlcuController.selectedSablon.resimGenislik}px; height:auto;"/>
+
+            <ui:repeat value="#{ortOlcuController.currentOlcuDegerList}" var="d">
+                <ui:fragment rendered="#{d.ortOlcuSablonAlan.tur eq 'TEXT'}">
+                    <p:inputText value="#{d.deger}" style="position:absolute !important;
+                        top:#{(d.ortOlcuSablonAlan.y / ortOlcuController.selectedSablon.resimYukseklik) * 100}% !important;
+                        left:#{(d.ortOlcuSablonAlan.x /ortOlcuController.selectedSablon.resimGenislik) * 100}% !important;
+                        width:#{(d.ortOlcuSablonAlan.genislik /ortOlcuController.selectedSablon.resimGenislik) * 100}% !important;
+                        height:#{(d.ortOlcuSablonAlan.yukseklik / ortOlcuController.selectedSablon.resimYukseklik) * 100}% !important;" readonly="true"/>
+                </ui:fragment>
+                <ui:fragment rendered="#{d.ortOlcuSablonAlan.tur eq 'CHECKBOX'}">
+                    <p:selectBooleanCheckbox value="#{d.deger}"
+                                             style="position:absolute !important;
+                        top:#{(d.ortOlcuSablonAlan.y / ortOlcuController.selectedSablon.resimYukseklik) * 100}% !important;
+                        left:#{(d.ortOlcuSablonAlan.x /ortOlcuController.selectedSablon.resimGenislik) * 100}% !important;
+                        width:#{(d.ortOlcuSablonAlan.genislik /ortOlcuController.selectedSablon.resimGenislik) * 100}% !important;
+                        height:#{(d.ortOlcuSablonAlan.yukseklik / ortOlcuController.selectedSablon.resimYukseklik) * 100}% !important;"/>
+                </ui:fragment>
+            </ui:repeat>
+
+        </div>
+
+    </p:dialog>
+
+</ui:composition>
+</html>

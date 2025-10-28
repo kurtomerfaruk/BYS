@@ -28,6 +28,17 @@
                             </a>
                             <ul class="slide-menu child2">
 
+                                <ui:fragment rendered="#{syKullaniciController.hasPermission('orthasta:goster')}">
+                                    <li class="slide">
+                                        <p:commandLink styleClass="side-menu__item sublevel2"
+                                                       actionListener="#{menuController.setPageLink('/moduls/ortezprotez/ortHasta/index')}"
+                                                       update="myPanel,:growl"
+                                                       onstart="PF('Loading').show()"
+                                                       onsuccess="PF('Loading').hide()"
+                                                       value="Hasta Listesi"/>
+                                    </li>
+                                </ui:fragment>
+
                                 <ui:fragment rendered="#{syKullaniciController.hasPermission('ortbasvuru:goster')}">
                                     <li class="slide">
                                         <p:commandLink styleClass="side-menu__item sublevel2"
@@ -39,16 +50,7 @@
                                     </li>
                                 </ui:fragment>
 
-                                <ui:fragment rendered="#{syKullaniciController.hasPermission('orthasta:goster')}">
-                                    <li class="slide">
-                                        <p:commandLink styleClass="side-menu__item sublevel2"
-                                                       actionListener="#{menuController.setPageLink('/moduls/ortezprotez/ortHasta/index')}"
-                                                       update="myPanel,:growl"
-                                                       onstart="PF('Loading').show()"
-                                                       onsuccess="PF('Loading').hide()"
-                                                       value="Hasta Listesi"/>
-                                    </li>
-                                </ui:fragment>
+
 
                                 <ui:fragment rendered="#{syKullaniciController.hasPermission('ortmalzemetalep:goster')}">
                                     <li class="slide">
@@ -147,6 +149,17 @@
                                                        onstart="PF('Loading').show()"
                                                        onsuccess="PF('Loading').hide()"
                                                        value="Stok Listesi"/>
+                                    </li>
+                                </ui:fragment>
+
+                                <ui:fragment rendered="#{syKullaniciController.hasPermission('ortproje:goster')}">
+                                    <li class="slide">
+                                        <p:commandLink styleClass="side-menu__item sublevel2"
+                                                       actionListener="#{menuController.setPageLink('/moduls/ortezprotez/ortProje/index')}"
+                                                       update="myPanel,:growl"
+                                                       onstart="PF('Loading').show()"
+                                                       onsuccess="PF('Loading').hide()"
+                                                       value="Proje Listesi"/>
                                     </li>
                                 </ui:fragment>
 

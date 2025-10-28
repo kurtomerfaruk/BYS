@@ -53,12 +53,6 @@ public class OrtBasvuruDosyaController extends AbstractController<OrtBasvuruDosy
 
     public ActionListener getInfo() {
         return event -> ortBasvuru = (OrtBasvuru) event.getComponent().getAttributes().get("ortBasvuru");
-//        return new ActionListener() {
-//            @Override
-//            public void processAction(ActionEvent event) throws AbortProcessingException {
-//                ortBasvuru = (OrtBasvuru) event.getComponent().getAttributes().get("ortBasvuru");
-//            }
-//        };
     }
 
     public StreamedContent getDownload() {

@@ -82,11 +82,21 @@ public class SyKullaniciController extends AbstractController<SyKullanici> {
         super(SyKullanici.class);
     }
 
+
+
     public List<SelectItem> getFilterOptions(EnumSyFiltreAnahtari key) {
-        if(key == EnumSyFiltreAnahtari.KULLANICI_TURU){
-            return filterOptionService.getSyKullaniciTurus();
+        switch (key) {
+            case KULLANICI_TURU -> {
+                return filterOptionService.getSyKullaniciTurus();
+            }
+            case EVET_HAYIR -> {
+                return filterOptionService.getEvetHayirs();
+            }
+            default -> {
+                return Collections.emptyList();
+            }
         }
-        return Collections.emptyList();
+
     }
 
     @Override
@@ -118,6 +128,7 @@ public class SyKullaniciController extends AbstractController<SyKullanici> {
                     .gnlUnvan(new GnlUnvan())
                     .build());
             newItem.setKullaniciTuru(EnumSyKullaniciTuru.KULLANICI);
+            selectedYetkis = new ArrayList<>();
             this.setSelected(newItem);
             initializeEmbeddableKey();
             return newItem;

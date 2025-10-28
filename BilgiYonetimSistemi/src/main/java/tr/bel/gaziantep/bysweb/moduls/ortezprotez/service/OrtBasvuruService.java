@@ -104,7 +104,6 @@ public class OrtBasvuruService extends AbstractService<OrtBasvuru> {
             getEntityManager().persist(randevu);
             ortBasvuru.setBasvuruHareketDurumu(EnumOrtBasvuruHareketDurumu.OLCU_ICIN_RANDEVU_VERILDI);
             ortBasvuruHareketService.addHistory(ortBasvuru);
-            ortBasvuru.setBasvuruHareketDurumu(EnumOrtBasvuruHareketDurumu.OLCU_ICIN_RANDEVU_VERILDI);
         }
 
         edit(ortBasvuru);

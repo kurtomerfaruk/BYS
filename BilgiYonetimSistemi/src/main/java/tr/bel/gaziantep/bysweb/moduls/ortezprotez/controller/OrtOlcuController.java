@@ -10,16 +10,15 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.primefaces.event.SelectEvent;
 import tr.bel.gaziantep.bysweb.core.controller.AbstractController;
-import tr.bel.gaziantep.bysweb.core.enums.ErrorType;
 import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtOlcuDurum;
 import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.EnumSyFiltreAnahtari;
-import tr.bel.gaziantep.bysweb.core.exception.BysBusinessException;
 import tr.bel.gaziantep.bysweb.core.service.FilterOptionService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
 import tr.bel.gaziantep.bysweb.core.utils.StringUtil;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.*;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.service.OrtOlcuDegerService;
+import tr.bel.gaziantep.bysweb.moduls.ortezprotez.service.OrtOlcuSablonService;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.service.OrtOlcuService;
 
 import java.io.Serial;
@@ -43,7 +42,9 @@ public class OrtOlcuController extends AbstractController<OrtOlcu> {
     @Inject
     private OrtOlcuService service;
     @Inject
-    private OrtOlcuDegerService ortOlcuDegerService;
+    private OrtOlcuDegerService olcuDegerService;
+    @Inject
+    private OrtOlcuSablonService olcuSablonService;
     @Inject
     private FilterOptionService filterOptionService;
 
@@ -148,7 +149,7 @@ public class OrtOlcuController extends AbstractController<OrtOlcu> {
 
         this.selectedSablon = sablon;
 
-        List<OrtOlcuDeger> olcuDegers = ortOlcuDegerService.findByOrtOlcuByOrtOlcuSablon(this.getSelected(), sablon);
+        List<OrtOlcuDeger> olcuDegers = olcuDegerService.findByOrtOlcuByOrtOlcuSablon(this.getSelected(), sablon);
 
         if (olcuDegers.isEmpty()) {
             List<OrtOlcuDeger> list = new ArrayList<>();
@@ -169,44 +170,69 @@ public class OrtOlcuController extends AbstractController<OrtOlcu> {
 
     @Override
     public void save(ActionEvent event) {
-        if (this.getSelected() == null) {
-            throw new BysBusinessException(ErrorType.NESNE_OKUNAMADI);
-        }
-        try {
-            service.save(this.getSelected(), olcuMap);
-            FacesUtil.successMessage(Constants.KAYIT_EKLENDI);
-        } catch (Exception ex) {
-            log.error(null, ex);
-            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
-        }
-    }
-
-    public void getInfo() {
-        if (this.getSelected() == null) {
-            throw new BysBusinessException(ErrorType.NESNE_OKUNAMADI);
-        }
-
-        currentOlcuDegerList = ortOlcuDegerService.findByOrtOlcu(this.getSelected());
-        ortOlcuSablonList = new ArrayList<>();
-        ortOlcuSablon = new OrtOlcuSablon();
-
-        for (OrtOlcuDeger ortOlcuDeger : currentOlcuDegerList) {
-            if (!ortOlcuSablonList.contains(ortOlcuDeger.getOrtOlcuSablonAlan().getOrtOlcuSablon())) {
-                ortOlcuSablonList.add(ortOlcuDeger.getOrtOlcuSablonAlan().getOrtOlcuSablon());
+        if (this.getSelected() != null) {
+            try {
+                service.save(this.getSelected(), olcuMap);
+                FacesUtil.successMessage(Constants.KAYIT_EKLENDI);
+            } catch (Exception ex) {
+                log.error(null, ex);
+                FacesUtil.errorMessage(Constants.HATA_OLUSTU);
             }
         }
     }
 
-    public void approve(ActionEvent event) {
-        if (this.getSelected() == null) {
-            throw new BysBusinessException(ErrorType.NESNE_OKUNAMADI);
-        }
-        try {
-            service.approve(this.getSelected());
-            FacesUtil.successMessage("kayitOnaylandi");
-        }catch (Exception ex) {
-            log.error(null, ex);
-            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+    public void getInfo() {
+        if (this.getSelected() != null) {
+            currentOlcuDegerList = olcuDegerService.findByOrtOlcu(this.getSelected());
+            ortOlcuSablonList = new ArrayList<>();
+            ortOlcuSablon = new OrtOlcuSablon();
+
+            for (OrtOlcuDeger ortOlcuDeger : currentOlcuDegerList) {
+                if (!ortOlcuSablonList.contains(ortOlcuDeger.getOrtOlcuSablonAlan().getOrtOlcuSablon())) {
+                    ortOlcuSablonList.add(ortOlcuDeger.getOrtOlcuSablonAlan().getOrtOlcuSablon());
+                }
+            }
         }
     }
+
+
+    public void approve(ActionEvent event) {
+        if (this.getSelected() != null) {
+            try {
+                service.approve(this.getSelected());
+                FacesUtil.successMessage("kayitOnaylandi");
+            } catch (Exception ex) {
+                log.error(null, ex);
+                FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+            }
+        }
+    }
+
+//    public List<OrtOlcuSablon> findSablonListByOlcu(OrtOlcu olcu) {
+//       return olcuSablonService.findByOlcuId(olcu.getId());
+//    }
+
+//    public void loadDegerDetay(OrtOlcu olcu, OrtOlcuSablon sablon) {
+//        this.setSelected(olcu);
+//        this.selectedSablon = sablon;
+//        this.degerList = olcuDegerService.findByOlcuAndSablon(olcu.getId(), sablon.getId());
+//    }
+
+//    public void loadSablonDetay(OrtOlcu olcu) {
+//       this.setSelected(olcu);
+//
+//        // Ölçüye bağlı şablon ve değerleri getir
+//        this.selectedSablon = olcuSablonService.findSablonByOlcuId(olcu.getId());
+//        this.degerList = olcuDegerService.findByOlcuAndSablon(olcu.getId(), selectedSablon.getId());
+//    }
+
+    public void loadSablonDialog(OrtOlcu olcu) {
+        this.setSelected(olcu);
+        ortOlcuSablonList = olcuSablonService.findByOlcuId(olcu.getId());
+    }
+
+//    public void loadDegerList(OrtOlcuSablon sablon) {
+//        this.selectedSablon = sablon;
+//        this.degerList = olcuDegerService.findByOlcuAndSablon(this.getSelected().getId(), sablon.getId());
+//    }
 }

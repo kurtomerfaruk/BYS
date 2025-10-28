@@ -52,14 +52,10 @@ public class OrtFizikTedaviController extends AbstractController<OrtFizikTedavi>
     }
 
     public List<SelectItem> getFilterOptions(EnumSyFiltreAnahtari key) {
-        switch (key) {
-            case ORTFIZIK_TEDAVI_DURUM -> {
-                return filterOptionService.getOrtFizikTedaviDurums();
-            }
-            default -> {
-                return Collections.emptyList();
-            }
+        if(key == EnumSyFiltreAnahtari.ORTFIZIK_TEDAVI_DURUM){
+            return filterOptionService.getOrtFizikTedaviDurums();
         }
+        return Collections.emptyList();
     }
 
     @Override

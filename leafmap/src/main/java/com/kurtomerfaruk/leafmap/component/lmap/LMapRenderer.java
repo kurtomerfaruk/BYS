@@ -79,7 +79,8 @@ public class LMapRenderer extends CoreRenderer {
                 "L.map('" + map.getClientId() + "_map', { dragging: " + map.isDraggable()
                         + ", zoomControl: " + map.isZoomControl()
                         + ", scrollWheelZoom: " + map.isScrollWheel()
-                        + ",loadingControl: " + map.isLoadingControl() + " } ).setView(['"
+                        + ",loadingControl: " + map.isLoadingControl()
+                        + ",fullscreenControl: " + map.isFullScreen() + " } ).setView(['"
                         + parts[0].trim() + "', '"
                         + parts[1].trim() + "'], " + map.getZoom() + ")");
 

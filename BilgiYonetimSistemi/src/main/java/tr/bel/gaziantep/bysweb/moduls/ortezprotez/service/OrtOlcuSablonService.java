@@ -8,6 +8,7 @@ import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtOlcuSablon;
 
 import java.io.Serial;
+import java.util.List;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
@@ -36,4 +37,28 @@ public class OrtOlcuSablonService  extends AbstractService<OrtOlcuSablon> {
     public String getSortCol() {
         return "tanim";
     }
+
+
+    public List<OrtOlcuSablon> findByOlcuId(Integer olcuId) {
+        return getEntityManager().createQuery("""
+            SELECT DISTINCT s
+            FROM OrtOlcuDeger d
+            JOIN d.ortOlcuSablonAlan a
+            JOIN a.ortOlcuSablon s
+            WHERE d.ortOlcu.id = :olcuId
+            """, OrtOlcuSablon.class)
+                .setParameter("olcuId", olcuId)
+                .getResultList();
+    }
+//
+//    public OrtOlcuSablon findSablonByOlcuId(Integer olcuId) {
+//        return em.createQuery("""
+//            SELECT s FROM OrtOlcuSablon s
+//            JOIN OrtOlcuDeger d ON d.ortOlcuSablonAlan.ortOlcuSablon.id = s.id
+//            WHERE d.ortOlcu.id = :olcuId
+//            """, OrtOlcuSablon.class)
+//                .setParameter("olcuId", olcuId)
+//                .setMaxResults(1)
+//                .getSingleResult();
+//    }
 }

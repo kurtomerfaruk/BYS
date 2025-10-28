@@ -1,5 +1,6 @@
 package tr.bel.gaziantep.bysweb.moduls.genel.controller;
 
+import jakarta.faces.event.ActionEvent;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -10,6 +11,7 @@ import org.primefaces.PrimeFaces;
 import tr.bel.gaziantep.bysweb.core.controller.AbstractController;
 import tr.bel.gaziantep.bysweb.core.controller.InitApp;
 import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
+import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlIl;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlIlce;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlMahalle;
 import tr.bel.gaziantep.bysweb.moduls.genel.service.GnlIlceService;
@@ -19,6 +21,8 @@ import tr.bel.gaziantep.bysweb.webservice.kps.model.mahalle.MahalleSorguSonucu;
 import tr.bel.gaziantep.bysweb.webservice.kps.model.parameters.KodParameter;
 
 import java.io.Serial;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -48,7 +52,25 @@ public class GnlMahalleController extends AbstractController<GnlMahalle> {
         super(GnlMahalle.class);
     }
 
-    public List<GnlMahalle> getMahalleByIlce(GnlIlce gnlIlce){
+    @Override
+    public GnlMahalle prepareCreate(ActionEvent event) {
+        GnlMahalle newItem;
+        try {
+            newItem = GnlMahalle.class.getDeclaredConstructor().newInstance();
+            newItem.setGnlIlce(GnlIlce.builder().gnlIl(new GnlIl()).build());
+            this.setSelected(newItem);
+            initializeEmbeddableKey();
+            return newItem;
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException ex) {
+            log.error(null,ex);
+        }
+        return null;
+    }
+
+    public List<GnlMahalle> getMahalleByIlce(GnlIlce gnlIlce) {
+        if (gnlIlce == null || gnlIlce.getId() == null) {
+            return Collections.emptyList();
+        }
         return service.findByIlce(gnlIlce);
     }
 
@@ -76,7 +98,7 @@ public class GnlMahalleController extends AbstractController<GnlMahalle> {
             FacesUtil.successMessage("listeGuncellendi");
             PrimeFaces.current().ajax().update(":GnlMahalleListForm:datalist:datalist", ":growl");
         } catch (Exception ex) {
-            log.error(null,ex);
+            log.error(null, ex);
             FacesUtil.errorMessage("mahalleGuncellemeHata");
         } finally {
             PrimeFaces.current().executeScript("PF('MahalleGuncelle').hide()");

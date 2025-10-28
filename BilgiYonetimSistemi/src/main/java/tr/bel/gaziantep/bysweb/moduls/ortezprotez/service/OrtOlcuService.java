@@ -52,10 +52,10 @@ public class OrtOlcuService extends AbstractService<OrtOlcu> {
                 getEntityManager().merge(d);
             }
         }
-       addHistory(ortOlcu);
+        addHistory(ortOlcu);
     }
 
-    private void addHistory(OrtOlcu ortOlcu){
+    private void addHistory(OrtOlcu ortOlcu) {
         ortOlcu.getOrtBasvuru().setBasvuruHareketDurumu(EnumOrtBasvuruHareketDurumu.OLCU_SONRASI_RANDEVU_VERILDI);
         basvuruHareketService.addHistory(ortOlcu.getOrtBasvuru());
         getEntityManager().merge(ortOlcu.getOrtBasvuru());
@@ -64,7 +64,7 @@ public class OrtOlcuService extends AbstractService<OrtOlcu> {
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void approve(OrtOlcu ortOlcu) {
         edit(ortOlcu);
-        OrtHasta hasta =getEntityManager().find(OrtHasta.class, ortOlcu.getOrtBasvuru().getOrtHasta().getId()) ;
+        OrtHasta hasta = getEntityManager().find(OrtHasta.class, ortOlcu.getOrtBasvuru().getOrtHasta().getId());
         OrtRandevu randevu = OrtRandevu.builder()
                 .randevuTarihi(ortOlcu.getRandevuTarihi())
                 .ortHasta(hasta)
@@ -73,6 +73,6 @@ public class OrtOlcuService extends AbstractService<OrtOlcu> {
                 .build();
         getEntityManager().persist(randevu);
 
-       addHistory(ortOlcu);
+        addHistory(ortOlcu);
     }
 }

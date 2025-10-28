@@ -10,10 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 import tr.bel.gaziantep.bysweb.core.controller.AbstractController;
-import tr.bel.gaziantep.bysweb.core.enums.ErrorType;
 import tr.bel.gaziantep.bysweb.core.enums.bys.EnumAlisSatis;
 import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.EnumSyFiltreAnahtari;
-import tr.bel.gaziantep.bysweb.core.exception.BysBusinessException;
 import tr.bel.gaziantep.bysweb.core.service.FilterOptionService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
@@ -75,11 +73,10 @@ public class OrtStokController extends AbstractController<OrtStok> {
     }
 
     public void preparePrice(){
-        if (this.getSelected() == null) {
-            throw new BysBusinessException(ErrorType.NESNE_OKUNAMADI);
+        if (this.getSelected() != null) {
+            fiyat = this.getSelected().getSatisFiyati() == null ? BigDecimal.ZERO : this.getSelected().getSatisFiyati();
+            fiyatTur = EnumAlisSatis.SATIS;
         }
-        fiyat = this.getSelected().getSatisFiyati()==null ? BigDecimal.ZERO : this.getSelected().getSatisFiyati();
-        fiyatTur = EnumAlisSatis.SATIS;
     }
 
     public void updatePrice(){
