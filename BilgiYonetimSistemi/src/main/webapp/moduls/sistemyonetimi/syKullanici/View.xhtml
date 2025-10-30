@@ -2,14 +2,125 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="jakarta.faces.facelets"
-      xmlns:coco="jakarta.faces.composite/ui">
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+>
 
 <ui:composition>
 
-    <coco:viewpage id="SyKullaniciViewForm"
-                   model="#{syKullaniciController.selected}"
-                   widgetVar="SyKullaniciViewDialog"/>
+    <p:dialog widgetVar="SyKullaniciViewDialog"
+              modal="true"
+              resizable="false"
+              closeOnEscape="true"
+              header="#{messages.dialogKayitBilgisi}"
+              appendTo="@(body)"
+              responsive="true"
+              style="overflow: auto;max-height: 600px;max-width=500px">
 
+        <h:form id="SyKullaniciViewForm">
+            <h:panelGroup id="display">
+                <div class="card custom-card">
+
+                    <div class="card-body">
+                        <ul class="nav nav-tabs mb-3 tab-style-8 scaleX" id="myTab4" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="kullaniciBilgileriViewTab" data-bs-toggle="tab"
+                                        data-bs-target="#kullaniciBilgileriViewTabPane" type="button" role="tab"
+                                        aria-controls="kullaniciBilgileriViewTabPane" aria-selected="true">Kullanıcı Bilgileri
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="girisBilgileriViewTab" data-bs-toggle="tab"
+                                        data-bs-target="#girisBilgileriViewTabPane" type="button" role="tab"
+                                        aria-controls="girisBilgileriViewTab" aria-selected="false">Giriş Bilgileri
+                                </button>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content" id="tabContent">
+                            <div class="tab-pane show active overflow-hidden" id="kullaniciBilgileriViewTabPane"
+                                 role="tabpanel" aria-labelledby="kullaniciBilgileriViewTab" tabindex="0">
+                                <p:panelGrid id="kullaniciBilgileriPanel" columns="2" styleClass="w-100" layout="tabular">
+
+                                    <h:outputText value="#{messages.kayitNoLabel}"/>
+                                    <h:outputText value="#{syKullaniciController.selected.id}">
+                                        <f:convertNumber pattern="#{messages.sayiFormat}"/>
+                                    </h:outputText>
+
+                                    <h:outputText value="#{messages.kullaniciAdiLabel}"/>
+                                    <h:outputText value="#{syKullaniciController.selected.kullaniciAdi}"/>
+
+                                    <h:outputText value="#{messages.kullaniciTuruLabel}"/>
+                                    <h:outputText value="#{syKullaniciController.selected.kullaniciTuru.displayValue}"/>
+
+                                    <h:outputText value="#{messages.sonGirisYapilanIPLabel}"/>
+                                    <h:outputText value="#{syKullaniciController.selected.sonGirilenIp}"/>
+
+                                    <h:outputText value="#{messages.sonGirisZamaniLabel}"/>
+                                    <h:outputText value="#{syKullaniciController.selected.sonGirisZamani}">
+                                        <f:convertDateTime pattern="#{messages.tarihSaatFormat}" type="localDateTime"/>
+                                    </h:outputText>
+
+                                    <h:outputText value="#{messages.ekleyenLabel}"/>
+                                    <h:outputText value="#{syKullaniciController.selected.ekleyen.gnlPersonel.gnlKisi.adSoyad}"/>
+
+                                    <h:outputText value="#{messages.eklemeTarihiLabel}"/>
+                                    <h:outputText value="#{syKullaniciController.selected.eklemeTarihi}">
+                                        <f:convertDateTime pattern="#{messages.tarihSaatFormat}" type="localDateTime"/>
+                                    </h:outputText>
+
+                                    <h:outputText value="#{messages.guncelleyenLabel}"/>
+                                    <h:outputText value="#{syKullaniciController.selected.guncelleyen.gnlPersonel.gnlKisi.adSoyad}"/>
+
+                                    <h:outputText value="#{messages.guncellemeTarihiLabel}"/>
+                                    <h:outputText value="#{syKullaniciController.selected.guncellemeTarihi}">
+                                        <f:convertDateTime pattern="#{messages.tarihSaatFormat}" type="localDateTime"/>
+                                    </h:outputText>
+
+                                    <h:outputText value="#{messages.aktifLabel}"/>
+                                    <p:selectBooleanCheckbox value="#{syKullaniciController.selected.aktif}" disabled="true"/>
+
+                                </p:panelGrid>
+                            </div>
+                            <div class="tab-pane overflow-hidden" id="girisBilgileriViewTabPane" role="tabpanel"
+                                 aria-labelledby="girisBilgileriViewTab" tabindex="0">
+                                <p:dataScroller value="#{syKullaniciController.selected.syKullaniciGirisList}" var="item"
+                                                chunkSize="10" mode="inline" scrollHeight="250" lazy="false" style="width:500px !important">
+                                    <f:facet name="header">Son Giriş</f:facet>
+                                    <div class="list-group">
+                                        <div class="list-group-item">
+                                            <h:outputText value="#{item.girisIp}"/>
+                                        </div>
+                                        <div class="list-group-item">
+                                            <h:outputText value="#{item.girisZamani}">
+                                                <f:convertDateTime pattern="#{messages.tarihSaatFormat}" type="localDateTime"/>
+                                            </h:outputText>
+                                        </div>
+                                        <div class="list-group-item">
+                                            <h:outputText value="#{item.aciklama}"/>
+                                        </div>
+                                    </div>
+                                </p:dataScroller>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="card-footer">
+                        <div class="float-end">
+                            <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                             value="#{messages.buttonKapat}"
+                                             onclick="PF('SyKullaniciViewDialog').hide()" onstart="PF('Loading').show()"
+                                             onsuccess="PF('Loading').hide()"/>
+                        </div>
+                    </div>
+                </div>
+
+            </h:panelGroup>
+        </h:form>
+
+    </p:dialog>
 
 </ui:composition>
 
