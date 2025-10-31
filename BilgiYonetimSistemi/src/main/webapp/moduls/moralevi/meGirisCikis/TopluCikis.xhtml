@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:body>
+    <f:metadata>
+        <f:event listener="#{meTopluGirisCikisController.createExit}" type="preRenderView"/>
+    </f:metadata>
+    <h:form id="MeTopluCikisForm">
+        <div class="row">
+            <div class="col-xxl-12">
+                <div class="card">
+                    <div class="card-header align-items-center d-flex">
+                        <h4 class="card-title mb-0 flex-grow-1">Toplu Çıkış Listesi</h4>
+                    </div><!-- end card header -->
+                    <div class="card-body">
+                        <div class="live-preview">
+                            <div class="row mb-3">
+                                <div class="col-lg-12">
+                                    <p:dataTable id="datalist"
+                                                 var="item"
+                                                 value="#{meTopluGirisCikisController.cikisYapacaklar}"
+                                                 emptyMessage="#{messages.kayitBulunamadi}"
+                                                 scrollable="true"
+                                                 scrollHeight="200"
+                                                 reflow="true"
+                                                 editable="true"
+                                                 editMode="cell">
+
+                                        <p:column styleClass="text-center">
+                                            <f:facet name="header">
+                                                <h:outputText value="#{messages.tcKimlikNoText}"/>
+                                            </f:facet>
+                                            <h:outputText value="#{item.meKisi.eyKisi.gnlKisi.tcKimlikNo}"/>
+                                        </p:column>
+
+                                        <p:column>
+                                            <f:facet name="header">
+                                                <h:outputText value="#{messages.adText}"/>
+                                            </f:facet>
+                                            <h:outputText value="#{item.meKisi.eyKisi.gnlKisi.ad}"/>
+                                        </p:column>
+
+                                        <p:column>
+                                            <f:facet name="header">
+                                                <h:outputText value="#{messages.soyadText}"/>
+                                            </f:facet>
+                                            <h:outputText value="#{item.meKisi.eyKisi.gnlKisi.soyad}"/>
+                                        </p:column>
+
+                                        <p:column styleClass="text-center">
+                                            <f:facet name="header">
+                                                <h:outputText value="#{messages.girisTarihiText}"/>
+                                            </f:facet>
+                                            <h:outputText value="#{item.girisTarihi}">
+                                                <f:convertDateTime pattern="#{messages.tarihSaatFormat}"/>
+                                            </h:outputText>
+                                        </p:column>
+
+                                        <p:column styleClass="text-center">
+                                            <f:facet name="header">
+                                                <h:outputText value="#{messages.cikisTarihiText}"/>
+                                            </f:facet>
+                                            <h:outputText value="#{item.cikisTarihi}">
+                                                <f:convertDateTime pattern="#{messages.tarihSaatFormat}"/>
+                                            </h:outputText>
+                                        </p:column>
+
+                                        <p:column headerText="#{messages.tansiyonText}">
+                                            <p:cellEditor>
+                                                <f:facet name="output">
+                                                    <h:outputText value="#{item.tansiyon}"/>
+                                                </f:facet>
+                                                <f:facet name="input">
+                                                    <p:inputText id="tansiyon" value="#{item.tansiyon}" style="width:100%"/>
+                                                </f:facet>
+                                            </p:cellEditor>
+                                        </p:column>
+
+                                        <p:column headerText="#{messages.sekerText}">
+                                            <p:cellEditor>
+                                                <f:facet name="output">
+                                                    <h:outputText value="#{item.seker}"/>
+                                                </f:facet>
+                                                <f:facet name="input">
+                                                    <p:inputText id="seker" value="#{item.seker}" style="width:100%"/>
+                                                </f:facet>
+                                            </p:cellEditor>
+                                        </p:column>
+
+                                        <p:column headerText="#{messages.buttonSil}"
+                                                  style="width: 70px;text-align: center">
+                                            <p:commandButton styleClass="btn-xs" icon="pi pi-trash"
+                                                             actionListener="#{meTopluGirisCikisController.removeItem(item)}"
+                                                             update="datalist,:growl" process="datalist"/>
+                                        </p:column>
+
+                                    </p:dataTable>
+                                </div>
+                            </div>
+                            <div class="text-end">
+                                <p:commandButton icon="pi pi-check" styleClass="ui-button-success" value="#{messages.buttonKaydet}"
+                                                 actionListener="#{meTopluGirisCikisController.save}" update="@form,:growl"
+                                                 onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </h:form>
+</h:body>
+</html>

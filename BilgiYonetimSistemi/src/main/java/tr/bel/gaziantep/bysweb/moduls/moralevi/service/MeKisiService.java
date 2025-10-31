@@ -64,4 +64,8 @@ public class MeKisiService extends AbstractService<MeKisi> {
     public List<MeKisi> findByGnlKisi(GnlKisi kisi) {
         return getEntityManager().createNamedQuery("MeKisi.findByGnlKisi").setParameter("gnlKisi",kisi).getResultList();
     }
+
+    public List<MeKisi> findByGirisYapmayanlar() {
+        return getEntityManager().createNamedQuery("MeKisi.findByGirisYapmayanlar").getResultList();
+    }
 }

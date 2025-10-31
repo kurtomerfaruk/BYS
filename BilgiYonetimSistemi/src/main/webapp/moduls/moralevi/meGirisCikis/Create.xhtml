@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:createpage id="MeGirisCikisCreateForm"
+                     renderedListener="#{meGirisCikisController.selected != null}"
+                     widgetVar="MeGirisCikisCreateDialog"
+                     actionListener="#{meGirisCikisController.saveNew}"
+                     listForm="MeGirisCikisListForm">
+
+        <p:outputLabel value="#{messages.kisiLabel}" for="@next"/>
+        <coco:inputWithButton id="inputWithButtonMeKisi" inputId="ayKisiId"
+                              inputValue="#{meGirisCikisController.selected.meKisi.eyKisi.gnlKisi.adSoyad}"
+                              inputTitle="#{messages.tcKimlikNoText}"
+                              actionListener="#{bysController.openCommonDialog('meKisiSec')}"
+                              ajaxListener="#{meGirisCikisController.secilenMeKisi}"
+                              buttonTitle="#{messages.kisiSecmelisiniz}"
+                              size="50" inputRequired="false"
+                              dialogId="MeGirisCikisCreateDialogId"/>
+
+        <p:outputLabel value="#{messages.tcKimlikNoLabel}" for="@next"/>
+        <p:inputText id="tcKimlikNo" value="#{meGirisCikisController.selected.meKisi.eyKisi.gnlKisi.tcKimlikNo}" title="#{messages.tcKimlikNoText}"
+                     size="50" required="true" readonly="#{facesContext.renderResponse}" styleClass="inputUpdate"/>
+
+        <p:outputLabel value="#{messages.adSoyadLabel}" for="@next"/>
+        <p:inputText id="adSoyad" value="#{meGirisCikisController.selected.meKisi.eyKisi.gnlKisi.adSoyad}" title="#{messages.adSoyadText}" size="50"
+                     required="true" readonly="#{facesContext.renderResponse}" styleClass="inputUpdate"/>
+
+        <p:outputLabel value="#{messages.girisTarihiLabel}" for="@next"/>
+        <p:datePicker id="girisTarihi" locale="tr" pattern="#{messages.tarihSaatFormat}" value="#{meGirisCikisController.selected.girisTarihi}"
+                      title="#{messages.girisTarihiText}"
+                      mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true" showOnFocus="false" showTime="true"/>
+
+
+    </coco:createpage>
+
+</ui:composition>
+
+</html>

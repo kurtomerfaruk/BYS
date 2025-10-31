@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:body>
+    <h:form id="MeTopluGirisForm">
+        <div class="row">
+            <div class="col-xxl-12">
+                <div class="card">
+                    <div class="card-header align-items-center d-flex">
+                        <h4 class="card-title mb-0 flex-grow-1">Toplu Giriş Listesi</h4>
+                    </div><!-- end card header -->
+                    <div class="card-body">
+                        <div class="live-preview">
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <p:outputLabel value="#{messages.girisTarihiLabel}" for="@next"/>
+                                </div>
+                                <div class="col-lg-9">
+                                    <p:datePicker id="girisTarihi" locale="tr" pattern="#{messages.tarihSaatFormat}"
+                                                  value="#{meTopluGirisCikisController.selected.girisTarihi}" title="#{messages.girisTarihiText}"
+                                                  mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
+                                                  showOnFocus="false" showTime="true"/>
+
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <p:outputLabel value="#{messages.merkezeGirisYapanlarLabel}" for="@next"/>
+                                </div>
+                                <div class="col-lg-9">
+                                    <p:pickList id="kisiler" value="#{meTopluGirisCikisController.dualMeKisiler}"
+                                                var="item"
+                                                itemValue="#{item}"
+                                                itemLabel="#{item.eyKisi.gnlKisi.adSoyad}"
+                                                showSourceControls="true"
+                                                showTargetControls="true"
+                                                showCheckbox="true"
+                                                responsive="true"
+                                                showSourceFilter="true"
+                                                showTargetFilter="true"
+                                                filterMatchMode="contains"
+                                                converter="meKisiConverter"
+                                                required="true"
+                                                addAllLabel="#{messages.tumunuEkle}"
+                                                addLabel="#{messages.ekle}"
+                                                removeAllLabel="#{messages.tumunuCikar}"
+                                                removeLabel="#{messages.cikar}">
+                                    </p:pickList>
+
+                                </div>
+                            </div>
+                            <div class="text-end">
+                                <p:commandButton icon="pi pi-check" styleClass="ui-button-success" value="#{messages.buttonKaydet}"
+                                                 actionListener="#{meTopluGirisCikisController.saveNew}" update="kisiler,:growl"
+                                                 onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </h:form>
+</h:body>
+</html>

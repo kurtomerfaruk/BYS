@@ -26,6 +26,8 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "MEKISI")
 @NamedQuery(name = "MeKisi.findByGnlKisi", query = "SELECT m FROM MeKisi m WHERE m.aktif=true AND m.eyKisi.gnlKisi =:gnlKisi")
+@NamedQuery(name = "MeKisi.findByGirisYapmayanlar", query = "SELECT m FROM MeKisi m WHERE m.id NOT IN (SELECT c.meKisi.id FROM MeGirisCikis c WHERE c.cikisTarihi" +
+        " IS NULL) AND m.aktif=true AND m.eyKisi.gnlKisi.durum=tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlDurum.SAG")
 public class MeKisi extends BaseEntity {
     @Serial
     private static final long serialVersionUID = -2516657658087328999L;

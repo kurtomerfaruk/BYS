@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:viewpage id="MeGirisCikisViewForm"
+                   model="#{meGirisCikisController.selected}"
+                   widgetVar="MeGirisCikisViewDialog">
+
+        <h:outputText value="#{messages.tcKimlikNoLabel}"/>
+        <h:outputText value="#{meGirisCikisController.selected.meKisi.eyKisi.gnlKisi.tcKimlikNo}"/>
+
+        <h:outputText value="#{messages.adSoyadText}"/>
+        <h:outputText value="#{meGirisCikisController.selected.meKisi.eyKisi.gnlKisi.adSoyad}"/>
+
+        <h:outputText value="#{messages.girisTarihiLabel}"/>
+        <h:outputText value="#{meGirisCikisController.selected.girisTarihi}">
+            <f:convertDateTime pattern="#{messages.tarihSaatFormat}" type="localDateTime"/>
+        </h:outputText>
+
+        <h:outputText value="#{messages.cikisTarihiLabel}"/>
+        <h:outputText value="#{meGirisCikisController.selected.cikisTarihi}">
+            <f:convertDateTime pattern="#{messages.tarihSaatFormat}" type="localDateTime"/>
+        </h:outputText>
+
+        <h:outputText value="#{messages.tansiyonLabel}"/>
+        <h:outputText value="#{meGirisCikisController.selected.tansiyon}"/>
+
+        <h:outputText value="#{messages.sekerLabel}"/>
+        <h:outputText value="#{meGirisCikisController.selected.seker}"/>
+
+    </coco:viewpage>
+
+</ui:composition>
+
+</html>
+
