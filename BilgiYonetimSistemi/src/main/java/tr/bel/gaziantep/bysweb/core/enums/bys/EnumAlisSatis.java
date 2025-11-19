@@ -18,8 +18,6 @@ public enum EnumAlisSatis implements BaseEnum {
     EnumAlisSatis(String label) {
         this.label = label;
     }
-
-
     @Override
     public String getDisplayValue() {
         return label;

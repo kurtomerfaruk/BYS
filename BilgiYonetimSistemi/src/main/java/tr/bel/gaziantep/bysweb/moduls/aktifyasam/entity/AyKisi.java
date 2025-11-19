@@ -1,12 +1,15 @@
 package tr.bel.gaziantep.bysweb.moduls.aktifyasam.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Nationalized;
 import org.hibernate.annotations.SQLRestriction;
 import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
 import tr.bel.gaziantep.bysweb.core.enums.aktifyasam.EnumAyDevamDurumu;
+import tr.bel.gaziantep.bysweb.core.enums.aktifyasam.EnumAyGrup;
+import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlGun;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
 
 import java.io.Serial;
@@ -47,9 +50,22 @@ public class AyKisi extends BaseEntity {
     @JoinColumn(name = "AYBIRIM_ID")
     private AyBirim ayBirim;
 
+    @Column(name = "GRUP")
+    @Enumerated(EnumType.STRING)
+    private EnumAyGrup grup;
+
+    @Column(name = "GUN")
+    @Enumerated(EnumType.STRING)
+    private EnumGnlGun gun;
+
     @Column(name = "DEVAM_DURUMU")
     @Enumerated(EnumType.STRING)
     private EnumAyDevamDurumu devamDurumu;
+
+    @Size(max = 150)
+    @Nationalized
+    @Column(name = "DURAK",length = 150)
+    private String durak;
 
     @Nationalized
     @Lob

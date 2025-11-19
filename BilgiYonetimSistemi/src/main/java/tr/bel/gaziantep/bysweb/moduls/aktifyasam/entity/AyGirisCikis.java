@@ -57,6 +57,16 @@ public class AyGirisCikis extends BaseEntity {
     @Column(name = "SEKER", length = 50)
     private String seker;
 
+    @Size(max = 50)
+    @Nationalized
+    @Column(name = "NABIZ", length = 50)
+    private String nabiz;
+
+    @Size(max = 50)
+    @Nationalized
+    @Column(name = "ATES", length = 50)
+    private String ates;
+
     @Transient
     @Getter(AccessLevel.NONE)
     private boolean exit;

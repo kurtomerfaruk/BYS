@@ -31,6 +31,10 @@ public class AyEtkinlik extends BaseEntity {
     @Column(name = "ID", nullable = false)
     private Integer id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "AYBIRIM_ID")
+    private AyBirim ayBirim;
+
     @Column(name = "TARIH")
     private LocalDate tarih;
 

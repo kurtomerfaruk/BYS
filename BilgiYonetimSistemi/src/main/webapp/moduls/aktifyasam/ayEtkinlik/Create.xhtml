@@ -2,6 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
       xmlns:p="primefaces"
       xmlns:coco="jakarta.faces.composite/ui">
 
@@ -17,6 +18,15 @@
         <p:outputLabel value="#{messages.tarihLabel}" for="@next"/>
         <p:datePicker id="tarih" locale="tr" pattern="#{messages.tarihFormat}" value="#{ayEtkinlikController.selected.tarih}" title="#{messages.tarihText}"
                       mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true" showOnFocus="false" required="true"/>
+
+        <p:outputLabel value="#{messages.birimLabel}" for="@next"/>
+        <p:selectOneMenu id="ayBirim" value="#{ayEtkinlikController.selected.ayBirim}" converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{ayBirimController.items}"
+                           var="birims"
+                           itemValue="#{birims}"
+                           itemLabel="#{birims.tanim}"/>
+        </p:selectOneMenu>
 
         <p:outputLabel value="#{messages.konuLabel}" for="@next"/>
         <p:inputTextarea rows="4" id="konu" value="#{ayEtkinlikController.selected.konu}" title="#{messages.konuText}" styleClass="w-100"

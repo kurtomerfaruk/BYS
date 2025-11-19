@@ -6,17 +6,17 @@ import tr.bel.gaziantep.bysweb.core.enums.BaseEnum;
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
  * @version 1.0.0
- * @since 2.07.2025 16:19
+ * @since 19.11.2025 11:27
  */
 @Getter
-public enum EnumAyDevamDurumu implements BaseEnum {
+public enum EnumAyGrup implements BaseEnum {
 
-    DEVAM_EDIYOR("Devam Ediyor"),
-    DEVAM_ETMIYOR("Devam Etmiyor");
+    BIRINCI_GRUP("1. Grup"),
+    IKINCI_GRUP("2. Grup");
 
     private final String label;
 
-    EnumAyDevamDurumu(String label) {
+    EnumAyGrup(String label) {
         this.label = label;
     }
 

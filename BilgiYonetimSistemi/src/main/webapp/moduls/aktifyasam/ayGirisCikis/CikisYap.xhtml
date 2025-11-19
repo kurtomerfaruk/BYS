@@ -19,7 +19,7 @@
                     focus="CikisYapForm:CikisYapForm:tansiyon">
 
 
-      <p:outputLabel value="#{messages.adSoyadLabel}" for="kisiId"/>
+      <p:outputLabel value="#{messages.adSoyadLabel}" for="@next"/>
       <p:selectOneMenu id="kisiId" value="#{ayGirisCikisController.selected.ayKisi}" required="true"
                        converter="omnifaces.SelectItemsConverter" filter="true">
          <f:selectItem itemLabel="#{messages.seciniz}"/>
@@ -34,13 +34,19 @@
          <f:convertDateTime pattern="#{messages.tarihSaatFormat}" type="localDateTime"/>
       </h:outputText>
 
-      <p:outputLabel value="#{messages.tansiyonLabel}" for="tansiyon"/>
+      <p:outputLabel value="#{messages.tansiyonLabel}" for="@next"/>
       <p:inputText id="tansiyon" value="#{ayGirisCikisController.selected.tansiyon}" title="#{messages.tansiyonText}"/>
 
-      <p:outputLabel value="#{messages.sekerLabel}" for="seker"/>
+      <p:outputLabel value="#{messages.sekerLabel}" for="@next"/>
       <p:inputText id="seker" value="#{ayGirisCikisController.selected.seker}" title="#{messages.sekerText}"/>
 
-      <p:outputLabel value="#{messages.cikisTarihiLabel}" for="cikisTarihi"/>
+      <p:outputLabel value="#{messages.nabizLabel}" for="@next"/>
+      <p:inputText id="nabiz" value="#{ayGirisCikisController.selected.nabiz}" title="#{messages.nabizText}"/>
+
+      <p:outputLabel value="#{messages.atesLabel}" for="@next"/>
+      <p:inputText id="ates" value="#{ayGirisCikisController.selected.ates}" title="#{messages.atesText}"/>
+
+      <p:outputLabel value="#{messages.cikisTarihiLabel}" for="@next"/>
       <p:datePicker id="cikisTarihi" locale="tr" pattern="#{messages.tarihSaatFormat}" value="#{ayGirisCikisController.selected.cikisTarihi}"
                     title="#{messages.cikisTarihiText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
                     showOnFocus="false" showTime="true"/>

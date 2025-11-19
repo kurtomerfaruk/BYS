@@ -54,27 +54,48 @@
     <p:inputText id="medeniDurum" value="#{ayKisiController.selected.gnlKisi.medeniDurum}" title="#{messages.medeniDurumText}" required="true"
                  readonly="#{facesContext.renderResponse}" styleClass="tcUpdate"/>
 
-    <p:outputLabel value="#{messages.anaAdiLabel}" for="anaAdi"/>
+    <p:outputLabel value="#{messages.anaAdiLabel}" for="@next"/>
     <p:inputText id="anaAdi" value="#{ayKisiController.selected.gnlKisi.anaAdi}" title="#{messages.anaAdiLabel}" required="true" styleClass="tcUpdate"/>
 
-    <p:outputLabel value="#{messages.babaAdiLabel}" for="babaAdi"/>
+    <p:outputLabel value="#{messages.babaAdiLabel}" for="@next"/>
     <p:inputText id="babaAdi" value="#{ayKisiController.selected.gnlKisi.babaAdi}" title="#{messages.babaAdiLabel}" required="true" styleClass="tcUpdate"/>
 
-    <p:outputLabel value="#{messages.dogumYeriLabel}" for="dogumYeri"/>
+    <p:outputLabel value="#{messages.dogumYeriLabel}" for="@next"/>
     <p:inputText id="dogumYeri" value="#{ayKisiController.selected.gnlKisi.dogumYeri}" title="#{messages.dogumYeriText}" required="true" styleClass="tcUpdate"/>
 
     <p:outputLabel value="#{messages.cinsiyetLabel}" for="@next"/>
     <p:inputText id="cinsiyet" value="#{ayKisiController.selected.gnlKisi.cinsiyet}" required="true" readonly="#{facesContext.renderResponse}"
                  styleClass="tcUpdate"/>
 
-    <p:outputLabel value="#{messages.telefonLabel}" for="telefon"/>
+    <p:outputLabel value="#{messages.telefonLabel}" for="@next"/>
     <p:inputMask id="telefon" value="#{ayKisiController.selected.gnlKisi.telefon}" mask="#{messages.telefonFormat}" required="true" title="#{messages.telefonText}"
                  size="14"
                  styleClass="tcUpdate"/>
 
-    <p:outputLabel value="#{messages.telefonLabel}" for="telefon2"/>
+    <p:outputLabel value="#{messages.telefonLabel}" for="@next"/>
     <p:inputMask id="telefon2" value="#{ayKisiController.selected.gnlKisi.telefon2}" mask="#{messages.telefonFormat}" title="#{messages.telefonText}" size="14"
                  styleClass="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.grupLabel}" for="@next"/>
+    <p:selectOneMenu id="grup" value="#{ayKisiController.selected.grup}">
+        <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+        <f:selectItems value="#{enumGrup.ALL_VALUES}"
+                       var="grups"
+                       itemValue="#{grups}"
+                       itemLabel="#{grups.displayValue}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.gunLabel}" for="@next"/>
+    <p:selectOneMenu id="gun" value="#{ayKisiController.selected.gun}">
+        <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+        <f:selectItems value="#{enumGun.ALL_VALUES}"
+                       var="guns"
+                       itemValue="#{guns}"
+                       itemLabel="#{guns.displayValue}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.durakLabel}" for="@next"/>
+    <p:inputText id="durak" value="#{ayKisiController.selected.durak}" title="#{messages.durakText}" maxlength="150"/>
 
     <p:outputLabel value="#{messages.aciklamaLabel}" for="@next"/>
     <p:inputTextarea rows="4" id="aciklama" value="#{ayKisiController.selected.aciklama}" title="#{messages.aciklamaText}" styleClass="w-100 tcUpdate"
