@@ -14,18 +14,18 @@
                    actionListener="#{edbPersonelController.save}"
                    listForm="EdbPersonelListForm">
 
-        <p:outputLabel value="#{messages.kullaniciLabel}" for="@next"/>
-        <p:selectOneMenu id="sykullaniciId" value="#{edbPersonelController.selected.syKullanici}" filter="true" converter="omnifaces.SelectItemsConverter">
+        <p:outputLabel value="#{messages.personelLabel}" for="@next"/>
+        <p:selectOneMenu id="gnlPersonel" value="#{edbPersonelController.selected.gnlPersonel}" filter="true" converter="omnifaces.SelectItemsConverter">
             <f:selectItem itemLabel="#{messages.seciniz}"/>
-            <f:selectItems value="#{syKullaniciController.items}"
-                           var="sykullaniciIdItem"
-                           itemValue="#{sykullaniciIdItem}"
-                           itemLabel="#{sykullaniciIdItem.gnlPersonel.gnlKisi.adSoyad.toString()}"/>
+            <f:selectItems value="#{gnlPersonelController.items}"
+                           var="personelItem"
+                           itemValue="#{personelItem}"
+                           itemLabel="#{personelItem.gnlKisi.adSoyad.toString()}"/>
             <p:ajax event="change" update="gorevi"/>
         </p:selectOneMenu>
 
         <p:outputLabel value="#{messages.gorevLabel}" for="@next"/>
-        <p:inputText id="gorevi" value="#{edbPersonelController.selected.syKullanici.gnlPersonel.gnlUnvan.tanim}" title="#{messages.gorevText}"
+        <p:inputText id="gorevi" value="#{edbPersonelController.selected.gnlPersonel.gnlUnvan.tanim}" title="#{messages.gorevText}"
                      size="50" maxlength="50" readonly="true"/>
 
         <p:outputLabel value="#{messages.birimLabel}" for="@next"/>

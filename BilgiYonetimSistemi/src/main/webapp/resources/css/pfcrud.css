@@ -306,3 +306,15 @@ body .ui-button.ui-button-indigo,body .ui-splitbutton.ui-button-indigo>.ui-butto
     border: 1px solid #3F51B5 !important;
 }
 
+.rotate-text-180 {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    text-align: center;
+    white-space: nowrap;
+}
+
+.text-balanced {
+    max-inline-size: 50ch;
+    text-wrap: balance;
+}
+

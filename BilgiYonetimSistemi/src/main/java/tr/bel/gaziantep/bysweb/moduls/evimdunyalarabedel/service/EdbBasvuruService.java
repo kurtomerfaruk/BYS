@@ -10,6 +10,7 @@ import tr.bel.gaziantep.bysweb.moduls.evimdunyalarabedel.entity.EdbBasvuru;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
 
 import java.io.Serial;
+import java.util.List;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
@@ -46,5 +47,9 @@ public class EdbBasvuruService extends AbstractService<EdbBasvuru> {
         edbBasvuru.setEyKisi(eyKisi);
 
         getEntityManager().merge(edbBasvuru);
+    }
+
+    public List<EdbBasvuru> findByGnlKisi(GnlKisi kisi) {
+        return getEntityManager().createNamedQuery("EdbBasvuru.findByGnlKisi").setParameter("gnlKisi", kisi).getResultList();
     }
 }

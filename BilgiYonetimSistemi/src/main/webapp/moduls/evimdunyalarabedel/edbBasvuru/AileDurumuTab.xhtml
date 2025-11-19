@@ -14,7 +14,13 @@
                        var="kiminleYasiyors"
                        itemValue="#{kiminleYasiyors}"
                        itemLabel="#{kiminleYasiyors.displayValue}"/>
+        <p:ajax event="change" update="kiminleYasiyorAciklama"/>
     </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.kiminleYasiyorAciklamaLabel}" for="@next"/>
+    <p:inputText id="kiminleYasiyorAciklama" value="#{edbBasvuruController.selected.gnlKisi.kiminleYasiyorAciklama}"
+                 title="#{messages.kiminleYasiyorAciklamaLabel}"
+                 styleClass="tcUpdate" disabled="#{edbBasvuruController.selected.gnlKisi.kiminleYasiyor ne 'DIGER'}"/>
 
     <p:outputLabel value="#{messages.durumLabel}" for="@next"/>
     <p:inputTextarea rows="4" id="durum" value="#{edbBasvuruController.selected.durum}" title="#{messages.durumText}" styleClass="w-100"
@@ -60,14 +66,14 @@
                        itemLabel="#{yakinlikDerecesis.displayValue}"/>
     </p:selectOneMenu>
 
-    <p:outputLabel value="#{messages.adresLabel}" for="yakinAdres"/>
+    <p:outputLabel value="#{messages.adresLabel}" for="@next"/>
     <p:inputTextarea id="yakinAdres" value="#{edbBasvuruController.selected.kisiYakiniAdres}"
                      readonly="#{edbBasvuruController.selected.basvuranKendisi}"
                      autoResize="false"
                      rows="4"
                      styleClass="basvuran w-100"/>
 
-    <p:outputLabel value="#{messages.ilceLabel}" for="yakinIlce"/>
+    <p:outputLabel value="#{messages.ilceLabel}" for="@next"/>
     <p:selectOneMenu id="yakinIlce" filter="true"
                      styleClass="basvuran"
                      value="#{edbBasvuruController.selected.kisiYakiniGnlIlce}"

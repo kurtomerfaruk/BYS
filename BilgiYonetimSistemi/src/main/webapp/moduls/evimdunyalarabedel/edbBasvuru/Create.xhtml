@@ -62,6 +62,13 @@
                                         aria-controls="edbSaglikDurumuCreateTabPane" aria-selected="true">Sağlık Durumu
                                 </button>
                             </li>
+
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="edbBasvurularCreateTab" data-bs-toggle="tab"
+                                        data-bs-target="#edbBasvurularCreateTabPane" type="button" role="tab"
+                                        aria-controls="edbBasvurularCreateTabPane" aria-selected="true">Başvurular
+                                </button>
+                            </li>
                         </ul>
 
                         <div class="tab-content text-muted">
@@ -103,6 +110,14 @@
                                     <ui:include src="/moduls/evimdunyalarabedel/edbBasvuru/SaglikDurumuTab.xhtml"/>
                                 </p:panelGrid>
                             </div>
+
+                            <div class="tab-pane overflow-hidden" id="edbBasvurularCreateTabPane" role="tabpanel"
+                                 aria-labelledby="edbBasvurularCreateTab" tabindex="0">
+                                <p:panelGrid id="edbBasvurularPanel" columns="2" styleClass="w-100" rendered="#{edbBasvuruController.selected!=null}"
+                                             layout="tabular">
+                                    <ui:include src="/moduls/evimdunyalarabedel/edbBasvuru/BasvurularTab.xhtml"/>
+                                </p:panelGrid>
+                            </div>
                         </div>
                     </div><!-- end card-body -->
                     <div class="card-footer">
@@ -126,21 +141,25 @@
     </p:dialog>
 
     <script type="text/javascript">
-        var dialogWidth=0;
+        var dialogWidth = 0;
+
         function adjustMenuWidth() {
             var dialog = PF('EdbBasvuruCreateDialog');
             var menu = $(".checkboxMenu");
 
             if (dialog &amp;&amp; menu) {
-                if(dialogWidth===0){
-                    dialogWidth = dialog.jq.innerWidth()-30;
+                if (dialogWidth === 0) {
+                    dialogWidth = dialog.jq.innerWidth() - 30;
                 }
                 var menuContainer = $(menu).closest('.ui-selectcheckboxmenu');
                 menuContainer.width(dialogWidth);
             }
         }
+
         document.addEventListener('shown.bs.tab', function (event) {
             adjustMenuWidth();
+           var width = $("#EdbBasvuruCreateDialogId").width();
+            $("#EdbBasvuruCreateDialogId").css("width",width);
         });
     </script>
 

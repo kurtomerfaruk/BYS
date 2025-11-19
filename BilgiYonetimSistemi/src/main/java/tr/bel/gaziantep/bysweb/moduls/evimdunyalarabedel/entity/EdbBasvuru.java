@@ -32,6 +32,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "EDBBASVURU")
+@NamedQuery(name = "EdbBasvuru.findByGnlKisi",query = "SELECT b FROM EdbBasvuru b WHERE b.aktif=true AND b.gnlKisi=:gnlKisi ORDER BY b.id DESC")
 public class EdbBasvuru extends BaseEntity {
     @Serial
     private static final long serialVersionUID = 1384077361319063427L;

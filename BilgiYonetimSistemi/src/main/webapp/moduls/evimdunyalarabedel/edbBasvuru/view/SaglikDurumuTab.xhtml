@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces">
+<ui:composition>
+    <p:outputLabel value="#{messages.engellilikVarMiLabel}" for="@next"/>
+    <p:selectBooleanCheckbox id="engelliMi" value="#{edbBasvuruController.selected.engelDurumu}" title="#{messages.engellilikVarMiText}" styleClass="tcUpdate">
+        <p:ajax event="change" update="@(.engelli)" listener="#{edbBasvuruController.isDisabled()}"/>
+    </p:selectBooleanCheckbox>
+
+    <p:outputLabel value="#{messages.engelGrubuLabel}" for="@next"/>
+    <p:selectManyCheckbox id="engelGrubu" value="#{edbBasvuruController.engelGrubuList}"
+                          layout="responsive" columns="3"
+                          disabled="#{!edbBasvuruController.selected.engelDurumu}"
+                          required="#{edbBasvuruController.selected.engelDurumu}"
+                          converter="omnifaces.SelectItemsConverter" styleClass="engelli tcUpdate">
+        <f:selectItems value="#{eyEngelGrubuController.items}"
+                       var="engelGrubus"
+                       itemValue="#{engelGrubus}"
+                       itemLabel="#{engelGrubus.tanim}"/>
+    </p:selectManyCheckbox>
+
+    <p:outputLabel value="#{messages.toplamVucutKayipOraniLabel}" for="@next"/>
+    <p:inputText id="toplamVucutKayipOrani" value="#{edbBasvuruController.selected.eyKisi.toplamVucutKayipOrani}"
+                 title="#{messages.toplamVucutKayipOraniText}" disabled="#{!edbBasvuruController.selected.engelDurumu}" styleClass="engelli tcUpdate">
+        <p:keyFilter mask="num"/>
+    </p:inputText>
+
+    <p:outputLabel value="#{messages.agirOzurluLabel}" for="@next"/>
+    <p:selectBooleanCheckbox id="agirOzurlu" value="#{edbBasvuruController.selected.eyKisi.agirOzurlu}"
+                             disabled="#{!edbBasvuruController.selected.engelDurumu}" styleClass="engelli tcUpdate"/>
+
+    <p:outputLabel value="#{messages.raporTarihiLabel}" for="@next"/>
+    <p:datePicker id="raporTarihi" locale="tr" pattern="#{messages.tarihFormat}" value="#{edbBasvuruController.selected.eyKisi.raporTarihi}"
+                  title="#{messages.cikisTarihiText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
+                  showOnFocus="false" styleClass="engelli tcUpdate" disabled="#{!edbBasvuruController.selected.engelDurumu}"/>
+
+    <p:outputLabel value="#{messages.raporAlinanHastaneLabel}" for="@next"/>
+    <p:inputText id="raporAlinanHastane"
+                 value="#{edbBasvuruController.selected.eyKisi.hastahane}"
+                 title="#{messages.raporAlinanHastaneText}" size="50" styleClass="engelli tcUpdate" disabled="#{!edbBasvuruController.selected.engelDurumu}"/>
+
+    <p:outputLabel value="#{messages.surekliLabel}" for="@next"/>
+    <p:selectBooleanCheckbox id="surekli" value="#{edbBasvuruController.selected.eyKisi.surekli}" styleClass="engelli tcUpdate"
+                             disabled="#{!edbBasvuruController.selected.engelDurumu}"/>
+
+    <p:outputLabel value="#{messages.surekliAciklamaLabel}" for="@next"/>
+    <p:inputTextarea id="surekliAciklama" rows="4"
+                     value="#{edbBasvuruController.selected.eyKisi.surekliAciklama}"
+                     styleClass="w-100 engelli tcUpdate" autoResize="false"  disabled="#{!edbBasvuruController.selected.engelDurumu}"/>
+
+    <p:outputLabel value="#{messages.ailedekiEngelliSayisiLabel}" for="@next"/>
+    <p:inputText id="ailedekiEngelliSayisi" value="#{edbBasvuruController.selected.ailedekiEngelliSayisi}" title="#{messages.ailedekiEngelliSayisiText}">
+        <p:keyFilter mask="num"/>
+    </p:inputText>
+
+    <p:outputLabel value="#{messages.kullandigiCihazlarLabel}" for="@next"/>
+    <p:selectCheckboxMenu id="kullandigiCihazlar"
+                          value="#{edbBasvuruController.kullandigiCihazlars}"
+                          label="#{messages.kullandigiCihazlarText}" multiple="true"
+                          filter="true" filterMatchMode="startsWith" styleClass="checkboxMenu tcUpdate">
+        <f:selectItems value="#{enumKullandigiCihazlar.ALL_VALUES}"
+                       var="kullandigiCihazlars"
+                       itemValue="#{kullandigiCihazlars}"
+                       itemLabel="#{kullandigiCihazlars.displayValue}"/>
+        <f:converter converterId="omnifaces.GenericEnumConverter"/>
+    </p:selectCheckboxMenu>
+
+    <p:outputLabel value="#{messages.sigaraLabel}" for="@next"/>
+    <p:selectBooleanCheckbox id="sigara" value="#{edbBasvuruController.selected.sigara}"/>
+
+    <p:outputLabel value="#{messages.sigaraAciklamaLabel}" for="@next"/>
+    <p:inputTextarea id="sigaraAciklama" rows="4"
+                     value="#{edbBasvuruController.selected.sigaraAciklama}"
+                     styleClass="w-100" autoResize="false"/>
+
+    <p:outputLabel value="#{messages.alkolLabel}" for="@next"/>
+    <p:selectBooleanCheckbox id="alkol" value="#{edbBasvuruController.selected.alkol}"/>
+
+    <p:outputLabel value="#{messages.alkolAciklamaLabel}" for="@next"/>
+    <p:inputTextarea id="alkolAciklama" rows="4"
+                     value="#{edbBasvuruController.selected.alkolAciklama}"
+                     styleClass="w-100" autoResize="false"/>
+
+    <p:outputLabel value="#{messages.maddeLabel}" for="@next"/>
+    <p:selectBooleanCheckbox id="madde" value="#{edbBasvuruController.selected.madde}"/>
+
+    <p:outputLabel value="#{messages.maddeAciklamaLabel}" for="@next"/>
+    <p:inputTextarea id="maddeAciklama" rows="4"
+                     value="#{edbBasvuruController.selected.maddeAciklama}"
+                     styleClass="w-100" autoResize="false"/>
+
+    <p:outputLabel value="#{messages.yaraDegerlendirmeLabel}" for="@next"/>
+    <p:selectCheckboxMenu id="yaraDegerlendirme"
+                          value="#{edbBasvuruController.yaraList}"
+                          label="#{messages.yaraDegerlendirmeText}" multiple="true"
+                          filter="true" filterMatchMode="startsWith" styleClass="checkboxMenu">
+        <f:selectItems value="#{enumYara.ALL_VALUES}"
+                       var="yaras"
+                       itemValue="#{yaras}"
+                       itemLabel="#{yaras.displayValue}"/>
+        <f:converter converterId="omnifaces.GenericEnumConverter"/>
+    </p:selectCheckboxMenu>
+
+    <p:outputLabel value="#{messages.incelemeYapaninGorusuLabel}" for="@next"/>
+    <p:inputTextarea id="incelemeYapaninGorusu"
+                     value="#{edbBasvuruController.selected.incelemeYapaninGorusu}"
+                     title="#{messages.incelemeYapaninGorusuText}" rows="4" autoResize="false"
+                     styleClass="w-100"/>
+
+    <p:outputLabel value="#{messages.hizmeteUygunMuLabel}" for="@next"/>
+    <p:selectOneMenu id="hizmeteUygunluk" value="#{edbBasvuruController.selected.hizmetDurumu}">
+        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+        <f:selectItems value="#{enumBasvuruDurumu.ALL_VALUES}"
+                       var="durums"
+                       itemValue="#{durums}"
+                       itemLabel="#{durums.displayValue}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.aciklamaLabel}" for="@next"/>
+    <p:inputTextarea id="uygunlukAciklama"
+                     value="#{edbBasvuruController.selected.hizmeteUygunlukAciklama}"
+                     title="#{messages.aciklamaText}" rows="4" autoResize="false"
+                     styleClass="w-100"/>
+</ui:composition>
+</html>

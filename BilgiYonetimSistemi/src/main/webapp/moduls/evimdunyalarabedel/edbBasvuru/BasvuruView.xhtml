@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:p="primefaces">
+
+<ui:composition>
+
+    <p:dialog widgetVar="EdbBasvuruDetayViewDialog"
+              modal="true"
+              resizable="false"
+              closeOnEscape="true"
+              header="#{messages.dialogKayitBilgisi}"
+              appendTo="@(body)"
+              responsive="true"
+              fitViewport="true"
+              style="overflow: auto;"
+              position="top">
+
+        <h:form id="EdbBasvuruDetayViewForm">
+            <h:panelGroup id="display">
+                <p:focus context="display"/>
+                <div class="card">
+
+                    <div class="card-body">
+
+                        <ul class="nav nav-tabs mb-3 tab-style-8 scaleX" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="edbKisiBilgileriDetayView" data-bs-toggle="tab"
+                                        data-bs-target="#edbKisiBilgileriDetayViewPane" type="button" role="tab"
+                                        aria-controls="edbKisiBilgileriDetayViewPane" aria-selected="true">Kişi Bilgileri
+                                </button>
+                            </li>
+
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="edbAileDurumuDetayView" data-bs-toggle="tab"
+                                        data-bs-target="#edbAileDurumuDetayViewPane" type="button" role="tab"
+                                        aria-controls="edbAileDurumuDetayViewPane" aria-selected="true">Aile Durumu
+                                </button>
+                            </li>
+
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="edbEkonomomikDurumDetayView" data-bs-toggle="tab"
+                                        data-bs-target="#edbEkonomomikDurumDetayViewPane" type="button" role="tab"
+                                        aria-controls="edbEkonomomikDurumDetayViewPane" aria-selected="true">Ekonomik Durumu
+                                </button>
+                            </li>
+
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="edbEvDurumuDetayView" data-bs-toggle="tab"
+                                        data-bs-target="#edbEvDurumuDetayViewPane" type="button" role="tab"
+                                        aria-controls="edbEvDurumuDetayViewPane" aria-selected="true">Ev Durumu
+                                </button>
+                            </li>
+
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="edbSaglikDurumuDetayView" data-bs-toggle="tab"
+                                        data-bs-target="#edbSaglikDurumuDetayViewPane" type="button" role="tab"
+                                        aria-controls="edbSaglikDurumuDetayViewPane" aria-selected="true">Sağlık Durumu
+                                </button>
+                            </li>
+
+                        </ul>
+
+                        <div class="tab-content text-muted">
+                            <div class="tab-pane overflow-hidden active show" id="edbKisiBilgileriDetayViewPane" role="tabpanel"
+                                 aria-labelledby="edbKisiBilgileriDetayView" tabindex="0">
+                                <p:panelGrid id="kisiPanel" columns="2" styleClass="w-100" rendered="#{edbBasvuruController.basvuruView!=null}"
+                                             layout="tabular">
+                                    <ui:include src="/moduls/evimdunyalarabedel/edbBasvuru/view/KisiBilgileriTab.xhtml"/>
+                                </p:panelGrid>
+                            </div>
+                            <div class="tab-pane overflow-hidden" id="edbAileDurumuDetayViewPane" role="tabpanel" aria-labelledby="edbAileDurumuDetayView"
+                                 tabindex="0">
+                                <p:panelGrid id="aileDurumuPanel" columns="2" styleClass="w-100" rendered="#{edbBasvuruController.basvuruView!=null}"
+                                             layout="tabular">
+                                    <ui:include src="/moduls/evimdunyalarabedel/edbBasvuru/view/AileDurumuTab.xhtml"/>
+                                </p:panelGrid>
+                            </div>
+
+                            <div class="tab-pane overflow-hidden" id="edbEkonomomikDurumDetayViewPane" role="tabpanel"
+                                 aria-labelledby="edbEkonomomikDurumDetayView" tabindex="0">
+                                <p:panelGrid id="ekonomikDurumPanel" columns="2" styleClass="w-100" rendered="#{edbBasvuruController.basvuruView!=null}"
+                                             layout="tabular">
+                                    <ui:include src="/moduls/evimdunyalarabedel/edbBasvuru/view/EkonomikDurumTab.xhtml"/>
+                                </p:panelGrid>
+                            </div>
+
+                            <div class="tab-pane overflow-hidden" id="edbEvDurumuDetayViewPane" role="tabpanel"
+                                 aria-labelledby="edbEvDurumuDetayView" tabindex="0">
+                                <p:panelGrid id="evDurumuPanel" columns="2" styleClass="w-100" rendered="#{edbBasvuruController.basvuruView!=null}"
+                                             layout="tabular">
+                                    <ui:include src="/moduls/evimdunyalarabedel/edbBasvuru/view/EvDurumuTab.xhtml"/>
+                                </p:panelGrid>
+                            </div>
+
+                            <div class="tab-pane overflow-hidden" id="edbSaglikDurumuDetayViewPane" role="tabpanel"
+                                 aria-labelledby="edbSaglikDurumuDetayView" tabindex="0">
+                                <p:panelGrid id="saglikDurumuPanel" columns="2" styleClass="w-100" rendered="#{edbBasvuruController.basvuruView!=null}"
+                                             layout="tabular">
+                                    <ui:include src="/moduls/evimdunyalarabedel/edbBasvuru/view/SaglikDurumuTab.xhtml"/>
+                                </p:panelGrid>
+                            </div>
+
+                        </div>
+                    </div><!-- end card-body -->
+                    <div class="card-footer">
+                        <div class="float-end">
+                            <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                             value="#{messages.buttonIptal}" onclick="PF('EdbBasvuruDetayViewDialog').hide()"
+                                             immediate="true" onstart="PF('Loading').show()"
+                                             onsuccess="PF('Loading').hide()"/>
+                        </div>
+                    </div>
+                </div>
+            </h:panelGroup>
+        </h:form>
+
+    </p:dialog>
+
+</ui:composition>
+
+</html>
+

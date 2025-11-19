@@ -8,14 +8,16 @@
 <ui:composition>
 
     <p:dialog widgetVar="EdbBasvuruEditDialog"
+              id="EdbBasvuruEditDialogId"
               modal="true"
               resizable="false"
               closeOnEscape="true"
-              header="#{messages.dialogYeniKayit}"
+              header="#{messages.dialogKayitGuncelle}"
               appendTo="@(body)"
               responsive="true"
-              onShow="PF('EdbBasvuruEditDialog').initPosition();"
-              fitViewport="true">
+              onShow="PF('EdbBasvuruEditDialog').initPosition();adjustMenuWidth();"
+              fitViewport="true"
+              position="top">
 
         <h:form id="EdbBasvuruEditForm">
 
@@ -57,6 +59,13 @@
                                 <button class="nav-link" id="edbSaglikDurumuEditTab" data-bs-toggle="tab"
                                         data-bs-target="#edbSaglikDurumuEditTabPane" type="button" role="tab"
                                         aria-controls="edbSaglikDurumuEditTabPane" aria-selected="true">Sağlık Durumu
+                                </button>
+                            </li>
+
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="edbBasvurularEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#edbBasvurularEditTabPane" type="button" role="tab"
+                                        aria-controls="edbBasvurularEditTabPane" aria-selected="true">Başvurular
                                 </button>
                             </li>
                         </ul>
@@ -101,6 +110,14 @@
                                     <ui:include src="/moduls/evimdunyalarabedel/edbBasvuru/SaglikDurumuTab.xhtml"/>
                                 </p:panelGrid>
                             </div>
+
+                            <div class="tab-pane overflow-hidden" id="edbBasvurularEditTabPane" role="tabpanel"
+                                 aria-labelledby="edbBasvurularEditTab" tabindex="0">
+                                <p:panelGrid id="edbBasvurularPanel" columns="2" styleClass="w-100" rendered="#{edbBasvuruController.selected!=null}"
+                                             layout="tabular">
+                                    <ui:include src="/moduls/evimdunyalarabedel/edbBasvuru/BasvurularTab.xhtml"/>
+                                </p:panelGrid>
+                            </div>
                         </div>
                     </div><!-- end card-body -->
                     <div class="card-footer">
@@ -122,6 +139,29 @@
         </h:form>
 
     </p:dialog>
+
+    <script type="text/javascript">
+        var dialogWidth = 0;
+
+        function adjustMenuWidth() {
+            var dialog = PF('EdbBasvuruEditDialog');
+            var menu = $(".checkboxMenu");
+
+            if (dialog &amp;&amp; menu) {
+                if (dialogWidth === 0) {
+                    dialogWidth = dialog.jq.innerWidth() - 30;
+                }
+                var menuContainer = $(menu).closest('.ui-selectcheckboxmenu');
+                menuContainer.width(dialogWidth);
+            }
+        }
+
+        document.addEventListener('shown.bs.tab', function (event) {
+            adjustMenuWidth();
+            var width = $("#EdbBasvuruEditDialogId").width();
+            $("#EdbBasvuruEditDialogId").css("width", width);
+        });
+    </script>
 
 </ui:composition>
 

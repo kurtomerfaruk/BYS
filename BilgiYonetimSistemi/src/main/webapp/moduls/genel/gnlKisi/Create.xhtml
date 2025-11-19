@@ -156,6 +156,11 @@
                                                  title="#{messages.adresNoText}"
                                                  readonly="true" styleClass="tcUpdate"/>
 
+                                    <p:outputLabel value="#{messages.adres2Label}" for="@next"/>
+                                    <p:inputTextarea rows="4" id="adres2" value="#{gnlKisiController.selected.adres2}"
+                                                     title="#{messages.adres2Text}"
+                                                     styleClass="w-100 tcUpdate" autoResize="false"/>
+
                                     <p:outputLabel value="#{messages.adresLabel}" for="@next"/>
                                     <p:inputTextarea rows="4" id="adres" value="#{gnlKisiController.selected.adres}"
                                                      title="#{messages.adresText}"

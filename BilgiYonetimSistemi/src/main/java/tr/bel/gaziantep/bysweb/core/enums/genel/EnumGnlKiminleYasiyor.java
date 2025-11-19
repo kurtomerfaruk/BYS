@@ -15,7 +15,8 @@ public enum EnumGnlKiminleYasiyor implements BaseEnum {
     AILE("Aile"),
     YAKINI("Yakını"),
     COCUGU("Çocuğu"),
-    YALNIZ("Yalnız");
+    YALNIZ("Yalnız"),
+    DIGER("Diğer");
 
     private final String label;
 

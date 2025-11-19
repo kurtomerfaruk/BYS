@@ -140,6 +140,11 @@ public class GnlKisi extends BaseEntity {
     @Size(max = 2147483647)
     private String adres;
 
+    @Column(name = "ADRES_2")
+    @Nationalized
+    @Size(max = 2147483647)
+    private String adres2;
+
     @Column(name = "BINA_NO")
     private Integer binaNo;
 
@@ -186,6 +191,11 @@ public class GnlKisi extends BaseEntity {
     @Column(name = "KIMINLE_YASIYOR")
     @Enumerated(EnumType.STRING)
     private EnumGnlKiminleYasiyor kiminleYasiyor;
+
+    @Size(max = 50)
+    @Nationalized
+    @Column(name = "KIMINLE_YASIYOR_ACIKLAMA", length = 50)
+    private String kiminleYasiyorAciklama;
 
     @Size(max = 100)
     @Nationalized

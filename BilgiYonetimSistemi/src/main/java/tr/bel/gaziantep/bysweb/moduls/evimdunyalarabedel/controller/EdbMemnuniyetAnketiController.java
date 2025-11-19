@@ -1,0 +1,74 @@
+package tr.bel.gaziantep.bysweb.moduls.evimdunyalarabedel.controller;
+
+import jakarta.faces.event.ActionEvent;
+import jakarta.faces.model.SelectItem;
+import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import lombok.extern.slf4j.Slf4j;
+import org.primefaces.event.SelectEvent;
+import tr.bel.gaziantep.bysweb.core.controller.AbstractController;
+import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.EnumSyFiltreAnahtari;
+import tr.bel.gaziantep.bysweb.core.service.FilterOptionService;
+import tr.bel.gaziantep.bysweb.moduls.evimdunyalarabedel.entity.EdbBasvuru;
+import tr.bel.gaziantep.bysweb.moduls.evimdunyalarabedel.entity.EdbMemnuniyetAnketi;
+import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
+
+import java.io.Serial;
+import java.lang.reflect.InvocationTargetException;
+import java.time.LocalDate;
+import java.util.Collections;
+import java.util.List;
+
+/**
+ * @author Omer Faruk KURT kurtomerfaruk@gmail.com
+ * @version 1.0.0
+ * @since 18.11.2025 16:14
+ */
+@Named
+@ViewScoped
+@Slf4j
+public class EdbMemnuniyetAnketiController extends AbstractController<EdbMemnuniyetAnketi> {
+
+    @Serial
+    private static final long serialVersionUID = 6527820799002919636L;
+
+    @Inject
+    private FilterOptionService filterOptionService;
+
+    public EdbMemnuniyetAnketiController() {
+        super(EdbMemnuniyetAnketi.class);
+    }
+
+    @Override
+    public EdbMemnuniyetAnketi prepareCreate(ActionEvent event) {
+        EdbMemnuniyetAnketi newItem;
+        try {
+            newItem = EdbMemnuniyetAnketi.class.getDeclaredConstructor().newInstance();
+            newItem.setGnlKisi(new GnlKisi());
+            newItem.setTarih(LocalDate.now());
+            this.setSelected(newItem);
+            initializeEmbeddableKey();
+            return newItem;
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException ex) {
+            log.error(null,ex);
+        }
+        return null;
+    }
+
+    public List<SelectItem> getFilterOptions(EnumSyFiltreAnahtari key) {
+        switch (key) {
+            case ILCE -> {
+                return filterOptionService.getGnlIlces();
+            }
+            default -> {
+                return Collections.emptyList();
+            }
+        }
+    }
+
+    public void secilenKisi(SelectEvent<EdbBasvuru> event) {
+        EdbBasvuru edbBasvuru = event.getObject();
+        this.getSelected().setGnlKisi(edbBasvuru.getGnlKisi());
+    }
+}

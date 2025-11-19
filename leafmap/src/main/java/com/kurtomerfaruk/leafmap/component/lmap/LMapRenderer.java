@@ -98,10 +98,6 @@ public class LMapRenderer extends CoreRenderer {
 
         wb.nativeAttr("tile", "L.tileLayer('" + tileUrl + "', { attribution: '" + attribution + "' })");
 
-        if (map.isFullScreen()) {
-            encodeFullScreen(context, map);
-        }
-
         encodeOverlays(context, map);
 
         for (UIComponent child : map.getChildren()) {
@@ -144,11 +140,6 @@ public class LMapRenderer extends CoreRenderer {
         writer.write(",maxZoom:" + heatMap.getMaxZoom()) ;
         writer.write(",max:" + heatMap.getMax()) ;
         writer.write("}");
-    }
-
-    private void encodeFullScreen(FacesContext context, LMap map) throws IOException {
-        ResponseWriter writer = context.getResponseWriter();
-        writer.write(",fullScreen: " + map.isFullScreen());
     }
 
     protected void encodeOverlays(FacesContext context, LMap map) throws IOException {

@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:of="http://omnifaces.org/functions"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <p:dialog widgetVar="EdbMemnuniyetAnketiCreateDialog"
+              id="EdbMemnuniyetAnketiCreateDialogId"
+              modal="true"
+              resizable="false"
+              closeOnEscape="true"
+              header="#{messages.dialogYeniKayit}"
+              appendTo="@(body)"
+              responsive="true"
+              onShow="PF('EdbMemnuniyetAnketiCreateDialog').initPosition();"
+              fitViewport="true"
+              position="top">
+
+        <h:form id="EdbMemnuniyetAnketiCreateForm">
+            <h:panelGroup id="display">
+                <p:focus context="display"/>
+                <p:panelGrid columns="0" columnClasses="column" rendered="#{edbMemnuniyetAnketiController.selected != null}" layout="tabular">
+
+
+                    <f:facet name="header">
+                        <p:row>
+                            <p:column colspan="7">EVİM DÜNYALARA BEDEL BİRİMİ MEMNUNİYET ANKETİ </p:column>
+                            <p:column>
+                                <p:datePicker id="tarih" locale="tr" pattern="#{messages.tarihFormat}" value="#{edbMemnuniyetAnketiController.selected.tarih}"
+                                              title="#{messages.tarihText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true"
+                                              showIcon="true" showOnFocus="false" required="true"/>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column colspan="2" style="text-align:left !important">
+                                Anket Yapılan Vatandaşın Adı Soyadı
+                            </p:column>
+                            <p:column colspan="5">
+                                <coco:inputWithButton id="inputWithButtonGnlKisi" inputId="gnlKisi"
+                                                      inputValue="#{edbMemnuniyetAnketiController.selected.gnlKisi.tcKimlikNo}"
+                                                      inputTitle="#{messages.tcKimlikNoText}"
+                                                      actionListener="#{bysController.openCommonDialog('edbBasvuruSec')}"
+                                                      ajaxListener="#{edbMemnuniyetAnketiController.secilenKisi}"
+                                                      buttonTitle="#{messages.kisiSecmelisiniz}"
+                                                      size="12"
+                                                      dialogId="EdbMemnuniyetAnketiCreateDialogId"/>
+
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="adSoyad" value="#{edbMemnuniyetAnketiController.selected.gnlKisi.adSoyad}" title="#{messages.adSoyadText}"
+                                             size="50" maxlength="50" readonly="true" styleClass="inputUpdate"/>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column colspan="2" style="text-align:left !important">
+                                Anketi Yapan Personelin Adı Soyadı
+                            </p:column>
+                            <p:column colspan="6">
+                                <p:selectOneMenu id="anketYapanEdbPersonel" value="#{edbMemnuniyetAnketiController.selected.anketYapanEdbPersonel}"
+                                                 converter="omnifaces.SelectItemsConverter" required="true" filter="true">
+                                    <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+                                    <f:selectItems value="#{edbPersonelController.items}"
+                                                   var="personels"
+                                                   itemValue="#{personels}"
+                                                   itemLabel="#{personels.gnlPersonel.gnlKisi.adSoyad}"/>
+                                </p:selectOneMenu>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column rowspan="2" styleClass="rotate-text-180">Madde No</p:column>
+                            <p:column rowspan="2">Memnuniyet İfadeleri</p:column>
+                            <p:column colspan="5">Memnuniyet Derecesi</p:column>
+                            <p:column rowspan="4">Açıklama</p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column styleClass="rotate-text-180">Hiç Memnun Değilim</p:column>
+                            <p:column styleClass="rotate-text-180">Memnun Değilim</p:column>
+                            <p:column styleClass="rotate-text-180">Kararsızım</p:column>
+                            <p:column styleClass="rotate-text-180">Memnunum</p:column>
+                            <p:column styleClass="rotate-text-180">Çok Memnunum</p:column>
+                        </p:row>
+                    </f:facet>
+
+                    <p:row>
+                        <p:column> 1.</p:column>
+                        <p:column><p:outputLabel value="Aldığınız Ev Temizliği Hizmetinden Memnun Musunuz? Değilseniz Nedenini Belirtir Misiniz?"
+                                                 styleClass="text-balanced"/></p:column>
+                        <p:column colspan="5">
+                            <p:selectOneRadio id="evTemizligi" value="#{edbMemnuniyetAnketiController.selected.evTemizligi}" layout="responsive" columns="5"
+                                              required="true">
+                                <f:selectItems value="#{of:createIntegerArray(1, 5)}"/>
+                            </p:selectOneRadio>
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="evTemizligiAciklama" value="#{edbMemnuniyetAnketiController.selected.evTemizligiAciklama}" size="50"/>
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column> 2.</p:column>
+                        <p:column><p:outputLabel
+                                value="Aldığınız Kişisel Bakım (Saç-Sakal, Tırnak Kesimi) Hizmetinden Memnun Musunuz? Değilseniz Nedenini Belirtir Misiniz?"
+                                styleClass="text-balanced"/></p:column>
+                        <p:column colspan="5">
+                            <p:selectOneRadio id="kisiselBakim" value="#{edbMemnuniyetAnketiController.selected.kisiselBakim}" layout="responsive" columns="5"
+                                              required="true">
+                                <f:selectItems value="#{of:createIntegerArray(1, 5)}"/>
+                            </p:selectOneRadio>
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="kisiselBakimAciklama" value="#{edbMemnuniyetAnketiController.selected.kisiselBakimAciklama}" size="50"/>
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column> 3.</p:column>
+                        <p:column>
+                            <p:outputLabel
+                                    value="Boya Badana Hizmeti Aldıysanız Memnun Kaldınız Mı? Memnun Kalmadıysanız Nedenini Belirtir Misiniz?"
+                                    styleClass="text-balanced"/></p:column>
+                        <p:column colspan="5">
+                            <p:selectOneRadio id="boyaBadana" value="#{edbMemnuniyetAnketiController.selected.boyaBadana}" layout="responsive" columns="5"
+                                              required="true">
+                                <f:selectItems value="#{of:createIntegerArray(1, 5)}"/>
+                            </p:selectOneRadio>
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="boyaBadanaAciklama" value="#{edbMemnuniyetAnketiController.selected.boyaBadanaAciklama}" size="50"/>
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column> 4.</p:column>
+                        <p:column>
+                            <p:outputLabel
+                                    value="Verilen Basit Tadilat Bakım Onarım Hizmetlerinden Memnun Musunuz? Memnun Değilseniz Nedenini Belirtir Misiniz?"
+                                    styleClass="text-balanced"/>
+                        </p:column>
+                        <p:column colspan="5">
+                            <p:selectOneRadio id="tadilatBakim" value="#{edbMemnuniyetAnketiController.selected.tadilatBakim}" layout="responsive" columns="5"
+                                              required="true">
+                                <f:selectItems value="#{of:createIntegerArray(1, 5)}"/>
+                            </p:selectOneRadio>
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="tadilatBakimAciklama" value="#{edbMemnuniyetAnketiController.selected.tadilatBakimAciklama}" size="50"/>
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column> 5.</p:column>
+                        <p:column>
+                            <p:outputLabel
+                                    value="Hizmet İçin Gelen Temizlik Ekibi Personelinin Tutum ve Davranışlarını Nasıl Buluyorsunuz?"
+                                    styleClass="text-balanced"/>
+                        </p:column>
+                        <p:column colspan="5">
+                            <p:selectOneRadio id="personelTutumDavranis" value="#{edbMemnuniyetAnketiController.selected.personelTutumDavranis}" layout="responsive" columns="5"
+                                              required="true">
+                                <f:selectItems value="#{of:createIntegerArray(1, 5)}"/>
+                            </p:selectOneRadio>
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="personelTutumDavranisAciklama" value="#{edbMemnuniyetAnketiController.selected.personelTutumDavranisAciklama}" size="50"/>
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column> 6.</p:column>
+                        <p:column>
+                            <p:outputLabel
+                                    value="Hizmet İçin Gelen Temizlik Ekibi Personelinin Üslubunu Nasıl Buluyorsunuz?"
+                                    styleClass="text-balanced"/>
+                        </p:column>
+                        <p:column colspan="5">
+                            <p:selectOneRadio id="personelUslup" value="#{edbMemnuniyetAnketiController.selected.personelUslup}" layout="responsive" columns="5"
+                                              required="true">
+                                <f:selectItems value="#{of:createIntegerArray(1, 5)}"/>
+                            </p:selectOneRadio>
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="personelUslupAciklama" value="#{edbMemnuniyetAnketiController.selected.personelUslupAciklama}" size="50"/>
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column> 7.</p:column>
+                        <p:column>
+                            <p:outputLabel   value="Ekibimiz Evinize Geldiğinde Kendinizi Güvende Hissediyor Musunuz?"   styleClass="text-balanced"/>
+                        </p:column>
+                        <p:column colspan="5">
+                            <p:selectOneRadio id="guvendeHissetme" value="#{edbMemnuniyetAnketiController.selected.guvendeHissetme}" layout="responsive" columns="5"
+                                              required="true">
+                                <f:selectItems value="#{of:createIntegerArray(1, 5)}"/>
+                            </p:selectOneRadio>
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="guvendeHissetmeAciklama" value="#{edbMemnuniyetAnketiController.selected.guvendeHissetmeAciklama}" size="50"/>
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column> 8.</p:column>
+                        <p:column>
+                            <p:outputLabel
+                                    value="Hizmet Verilirken Kullanılan Ürün Ve Malzemelerin Yeterliliğinden Memnun Musunuz?"
+                                    styleClass="text-balanced"/>
+                        </p:column>
+                        <p:column colspan="5">
+                            <p:selectOneRadio id="malzemeYeterliligi" value="#{edbMemnuniyetAnketiController.selected.malzemeYeterliligi}" layout="responsive" columns="5"
+                                              required="true">
+                                <f:selectItems value="#{of:createIntegerArray(1, 5)}"/>
+                            </p:selectOneRadio>
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="malzemeYeterliligiAciklama" value="#{edbMemnuniyetAnketiController.selected.malzemeYeterliligiAciklama}" size="50"/>
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column> 9.</p:column>
+                        <p:column>
+                            <p:outputLabel
+                                    value="Hizmet Ve Başvuru İçin Telefonla İletişim Kuran Personelin İletişiminden Memnun Musunuz?"
+                                    styleClass="text-balanced"/>
+                        </p:column>
+                        <p:column colspan="5">
+                            <p:selectOneRadio id="iletisimKuranPersonel" value="#{edbMemnuniyetAnketiController.selected.iletisimKuranPersonel}" layout="responsive" columns="5"
+                                              required="true">
+                                <f:selectItems value="#{of:createIntegerArray(1, 5)}"/>
+                            </p:selectOneRadio>
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="iletisimKuranPersonelAciklama" value="#{edbMemnuniyetAnketiController.selected.iletisimKuranPersonelAciklama}" size="50"/>
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column> 10.</p:column>
+                        <p:column>
+                            <p:outputLabel value="Dilek, Öneri Ve Şikâyetleriniz Var Mı?"  styleClass="text-balanced"/>
+                        </p:column>
+                        <p:column colspan="6">
+                            <p:inputText id="dilekOneriSikayet" value="#{edbMemnuniyetAnketiController.selected.dilekOneriSikayet}" size="50"/>
+                        </p:column>
+                    </p:row>
+
+                    <f:facet name="footer">
+                        <p:row>
+                            <p:column colspan="8">
+                                <div class="float-end">
+                                    <p:commandButton icon="pi pi-check" styleClass="ui-button-success"
+                                                     actionListener="#{edbMemnuniyetAnketiController.saveNew}"
+                                                     value="#{messages.buttonKaydet}"
+                                                     update=":EdbMemnuniyetAnketiListForm:datalist:datalist,:growl,display"
+                                                     oncomplete="handleSubmit(xhr,status,args,PF('EdbMemnuniyetAnketiCreateDialog'));"
+                                                     onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                                    <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                                     value="#{messages.buttonIptal}"
+                                                     onclick="PF('EdbMemnuniyetAnketiCreateDialog').hide()" immediate="true"
+                                                     onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()">
+                                        <p:resetInput target="@form"/>
+                                    </p:commandButton>
+                                </div>
+                            </p:column>
+                        </p:row>
+                    </f:facet>
+                </p:panelGrid>
+            </h:panelGroup>
+        </h:form>
+    </p:dialog>
+</ui:composition>
+
+</html>

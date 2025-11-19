@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces">
+<ui:composition>
+
+    <p:panelGrid columns="1" styleClass="w-100 tcUpdate" id="basvuruPanel" rendered="#{edbBasvuruController.selected !=null}" layout="tabular">
+        <p:dataTable value="#{edbBasvuruController.edbBasvuruList}"
+                     var="basvuru"
+                     id="basvuruDt"
+                     scrollable="true"
+                     paginator="true"
+                     rows="3"
+                     emptyMessage="#{messages.kayitBulunamadi}"
+                     paginatorPosition="bottom"
+                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                     currentPageReportTemplate="#{messages.currentPageTemplate}">
+
+            <p:column sortBy="#{basvuru.id}">
+                <f:facet name="header">
+                    <h:outputText value="#{messages.kayitNoText}"/>
+                </f:facet>
+                <h:outputText value="#{basvuru.id}">
+                    <f:convertNumber pattern="#{messages.sayiFormat}"/>
+                </h:outputText>
+            </p:column>
+            <p:column sortBy="#{basvuru.basvuruTarihi}">
+                <f:facet name="header">
+                    <h:outputText value="#{messages.basvuruTarihiText}"/>
+                </f:facet>
+                <h:outputText value="#{basvuru.basvuruTarihi}">
+                    <f:convertDateTime pattern="#{messages.tarihSaatFormat}" type="localDateTime"/>
+                </h:outputText>
+            </p:column>
+
+            <p:column sortBy="#{basvuru.basvuruDurumu}">
+                <f:facet name="header">
+                    <h:outputText value="#{messages.basvuruDurumuText}"/>
+                </f:facet>
+                <h:outputText value="#{basvuru.basvuruDurumu.displayValue}"/>
+            </p:column>
+
+            <p:column sortBy="#{basvuru.hizmetDurumu}">
+                <f:facet name="header">
+                    <h:outputText value="Hizmet Durumu"/>
+                </f:facet>
+                <h:outputText value="#{basvuru.hizmetDurumu.displayValue}"/>
+            </p:column>
+
+            <p:column sortBy="#{basvuru.gnlKisi.durum}">
+                <f:facet name="header">
+                    <h:outputText value="#{messages.kisiText} #{messages.durumText}"/>
+                </f:facet>
+                <h:outputText value="#{basvuru.gnlKisi.durum.displayValue}"/>
+            </p:column>
+
+<!--            <p:column headerText="Detay">-->
+<!--                <p:commandButton icon="pi pi-search" actionListener="#{edbBasvuruController.openBasvuruView(basvuru)}" onstart="PF('Loading').show()"-->
+<!--                                 oncomplete="PF('Loading').hide()" onsuccess="PF('EdbBasvuruDetayViewDialog').show()" update=":EdbBasvuruDetayViewForm"-->
+<!--                                 process="@this"/>-->
+<!--            </p:column>-->
+
+
+        </p:dataTable>
+
+    </p:panelGrid>
+
+</ui:composition>
+</html>

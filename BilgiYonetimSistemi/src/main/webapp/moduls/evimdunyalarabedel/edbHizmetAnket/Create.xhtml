@@ -61,7 +61,7 @@
             <f:selectItems value="#{edbPersonelController.items}"
                            var="gorusmeyiYapanPersonelItem"
                            itemValue="#{gorusmeyiYapanPersonelItem}"
-                           itemLabel="#{gorusmeyiYapanPersonelItem.syKullanici.gnlPersonel.gnlKisi.adSoyad.toString()}"/>
+                           itemLabel="#{gorusmeyiYapanPersonelItem.gnlPersonel.gnlKisi.adSoyad.toString()}"/>
         </p:selectOneMenu>
 
         <p:outputLabel value="#{messages.personelMemnuniyetLabel}" for="@next"/>

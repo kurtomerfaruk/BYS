@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces">
+<ui:composition>
+
+    <p:outputLabel value="#{messages.kiminleYasiyorLabel}" for="@next"/>
+    <p:inputText value="#{edbBasvuruController.basvuruView.gnlKisi.kiminleYasiyor.displayValue}" readonly="true"/>
+
+
+    <p:outputLabel value="#{messages.kiminleYasiyorAciklamaLabel}" for="@next"/>
+    <p:inputText id="kiminleYasiyorAciklama" value="#{edbBasvuruController.basvuruView.gnlKisi.kiminleYasiyorAciklama}"
+                 title="#{messages.kiminleYasiyorAciklamaLabel}" readonly="true"/>
+
+    <p:outputLabel value="#{messages.durumLabel}" for="@next"/>
+    <p:inputTextarea rows="4" id="durum" value="#{edbBasvuruController.basvuruView.durum}" title="#{messages.durumText}" styleClass="w-100"
+                     autoResize="false" readonly="true"/>
+
+    <p:outputLabel value="#{messages.ozelDurumuLabel}" for="@next"/>
+    <p:inputText value="#{edbBasvuruController.basvuruView.ozelDurum.displayValue}" readonly="true"/>
+
+    <p:outputLabel value="#{messages.basvuranKendisiLabel}" for="@next"/>
+    <p:selectBooleanCheckbox id="basvuranKendisi" value="#{edbBasvuruController.basvuruView.basvuranKendisi}" readonly="true"/>
+
+    <p:outputLabel value="#{messages.tcKimlikNoText}" for="yakinTc"/>
+    <p:inputText id="yakinTc" value="#{edbBasvuruController.basvuruView.kisiYakiniTcKimlikNo}" readonly="true"/>
+
+    <p:outputLabel value="#{messages.adLabel}" for="yakinAd"/>
+    <p:inputText id="yakinAd" value="#{edbBasvuruController.basvuruView.kisiYakiniAdi}" readonly="true" size="50"  styleClass="basvuran"/>
+
+    <p:outputLabel value="#{messages.soyadLabel}" for="yakinSoyad"/>
+    <p:inputText id="yakinSoyad" value="#{edbBasvuruController.basvuruView.kisiYakiniSoyadi}" readonly="#{edbBasvuruController.basvuruView.basvuranKendisi}"
+                 styleClass="basvuran"/>
+
+    <p:outputLabel value="#{messages.telefonLabel}" for="yakinTelefon"/>
+    <p:inputText id="yakinTelefon" value="#{edbBasvuruController.basvuruView.kisiYakiniTelefon}" readonly="#{edbBasvuruController.basvuruView.basvuranKendisi}"
+                 styleClass="basvuran"/>
+
+    <p:outputLabel value="#{messages.yakinlikDerecesiLabel}" for="yakinDerece"/>
+    <p:selectOneMenu id="yakinDerece" styleClass="basvuran"
+                     value="#{edbBasvuruController.basvuruView.kisiYakiniYakinlikDerecesi}">
+        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+        <f:selectItems value="#{enumYakinlikDerecesi.ALL_VALUES}"
+                       var="yakinlikDerecesis"
+                       itemValue="#{yakinlikDerecesis}"
+                       itemLabel="#{yakinlikDerecesis.displayValue}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.adresLabel}" for="@next"/>
+    <p:inputTextarea id="yakinAdres" value="#{edbBasvuruController.basvuruView.kisiYakiniAdres}"
+                     readonly="#{edbBasvuruController.basvuruView.basvuranKendisi}"
+                     autoResize="false"
+                     rows="4"
+                     styleClass="basvuran w-100"/>
+
+    <p:outputLabel value="#{messages.ilceLabel}" for="@next"/>
+    <p:selectOneMenu id="yakinIlce" filter="true"
+                     styleClass="basvuran"
+                     value="#{edbBasvuruController.basvuruView.kisiYakiniGnlIlce}"
+                     converter="omnifaces.SelectItemsConverter">
+        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+        <f:selectItems value="#{gnlIlceController.getIlceByIl()}"
+                       var="ilce"
+                       itemValue="#{ilce}"
+                       itemLabel="#{ilce.tanim}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.durumAciklamaLabel}" for="aileDurumuAciklama"/>
+    <p:inputTextarea id="aileDurumuAciklama" value="#{edbBasvuruController.basvuruView.aileDurumuAciklama}" title="#{messages.durumAciklamaText}" rows="4"
+                     autoResize="false" styleClass="w-100"/>
+
+</ui:composition>
+</html>

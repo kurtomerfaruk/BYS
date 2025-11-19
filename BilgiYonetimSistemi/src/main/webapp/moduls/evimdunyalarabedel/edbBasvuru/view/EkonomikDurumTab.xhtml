@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces">
+<ui:composition>
+
+    <p:outputLabel value="#{messages.calismaDurumuLabel}" for="@next"/>
+    <p:inputText id="calismaDurumu" value="#{edbBasvuruController.selected.gnlKisi.calismaDurumu}" styleClass="tcUpdate"
+                 title="#{messages.calismaDurumuText}"/>
+
+    <p:outputLabel value="#{messages.aileninSosyalGuvencesiLabel}" for="@next"/>
+    <p:selectOneMenu id="aileSosyalGuvence" styleClass="tcUpdate"
+                     value="#{edbBasvuruController.selected.gnlKisi.sosyalGuvence}">
+        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+        <f:selectItems value="#{enumSosyalGuvence.ALL_VALUES}"
+                       var="sosyalGuvences"
+                       itemValue="#{sosyalGuvences}"
+                       itemLabel="#{sosyalGuvences.displayValue}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.aileninNetGeliriLabel}" for="@next"/>
+    <p:inputNumber id="bedel" value="#{edbBasvuruController.selected.gnlKisi.aylikGeliri}" styleClass="text-end" decimalSeparator="," thousandSeparator="."
+                   emptyValue="zero"/>
+
+    <p:outputLabel value="#{messages.aileninGelirKaynagiLabel}" for="@next"/>
+    <p:selectCheckboxMenu id="aileninGelirKaynagi"
+                          value="#{edbBasvuruController.gelirKaynagis}"
+                          styleClass="tcUpdate checkboxMenu"
+                          label="#{messages.aileninGelirKaynagiText}" multiple="true"
+                          filter="true" filterMatchMode="startsWith">
+        <f:selectItems value="#{enumGelirKaynagi.ALL_VALUES}"
+                       var="aileninGelirKaynagis"
+                       itemValue="#{aileninGelirKaynagis}"
+                       itemLabel="#{aileninGelirKaynagis.displayValue}"/>
+        <f:converter converterId="omnifaces.GenericEnumConverter"/>
+    </p:selectCheckboxMenu>
+
+    <p:outputLabel value="#{messages.aileninGelirKaynagiAciklamaLabel}"   for="@next"/>
+    <p:inputText id="aileninGelirKaynagiAciklama" value="#{edbBasvuruController.selected.gnlKisi.gelirKaynagiAciklama}" styleClass="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.yardimAlinanYerlerLabel}" for="@next"/>
+    <p:selectCheckboxMenu id="yardimAlinanYerler"
+                          value="#{edbBasvuruController.yardimAlinanYerlerList}"
+                          label="#{messages.yardimAlinanYerlerText}" multiple="true"
+                          styleClass="tcUpdate checkboxMenu"
+                          filter="true" filterMatchMode="startsWith">
+        <f:selectItems value="#{enumYardimAlinanYerler.ALL_VALUES}"
+                       var="yardimAlinanYerlers"
+                       itemValue="#{yardimAlinanYerlers}"
+                       itemLabel="#{yardimAlinanYerlers.displayValue}"  />
+        <f:converter converterId="omnifaces.GenericEnumConverter"/>
+    </p:selectCheckboxMenu>
+
+    <p:outputLabel value="#{messages.aldiginizYardimlarLabel}" for="@next"/>
+    <p:selectCheckboxMenu id="aldiginizYardimlar"
+                          value="#{edbBasvuruController.aldigiYardimlarList}"
+                          label="#{messages.aldiginizYardimlarText}" multiple="true"
+                          filter="true" filterMatchMode="startsWith" styleClass="checkboxMenu">
+        <f:selectItems value="#{enumYardimTuru.ALL_VALUES}"
+                       var="yardimTurus"
+                       itemValue="#{yardimTurus}"
+                       itemLabel="#{yardimTurus.displayValue}" />
+        <f:converter converterId="omnifaces.GenericEnumConverter"/>
+    </p:selectCheckboxMenu>
+
+    <p:outputLabel value="#{messages.digerBirimlerimizdenYararlanmaLabel}"  for="@next"/>
+    <p:selectCheckboxMenu id="digerBirimlerimizdenYararlanma"
+                          value="#{edbBasvuruController.digerBirimlerList}"
+                          label="#{messages.digerBirimlerimizdenYararlanmaText}"
+                          converter="omnifaces.SelectItemsConverter" multiple="true"
+                          filter="true"
+                          filterMatchMode="startsWith" styleClass="checkboxMenu">
+        <f:selectItems value="#{ayBirimController.items}"
+                       var="digerBirimler"
+                       itemValue="#{digerBirimler}"
+                       itemLabel="#{digerBirimler.tanim}" />
+    </p:selectCheckboxMenu>
+
+    <p:outputLabel value="#{messages.aracVarMiLabel}" for="@next"/>
+    <p:selectBooleanCheckbox id="aracVarMi" value="#{edbBasvuruController.selected.aracVarMi}" title="#{messages.aracVarMiText}"/>
+</ui:composition>
+</html>

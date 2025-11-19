@@ -14,14 +14,20 @@ public enum EnumGnlTalepTipi implements BaseEnum {
     SAHSEN("Şahsen"),
     TELEFON("Telefon"),
     EPOSTA("E-Posta"),
-    WEB_SITESI("Web Sitesi"),
-    ENGELLI_IZLEME_VE_DEGERLENDIRME("Engelli İzleme ve Değerlendirme"),
+    WEB_SITE("Web Sitesi"),
+    ENGELLI_IZLEME("Engelli İzleme ve Değerlendirme"),
     MOBIL("Mobil"),
     GIKOM("Gikom"),
     MORAL_EVI_EV_ZIYARETI("Moral Evi Ev Ziyareti"),
-    HALK_GUNU("Halk Günü"),
     SOSYAL_MEDYA("Sosyal Medya"),
-    OZEL_KALEM("Özel Kalem");
+    HALK_GUNU("Halk Günü"),
+    OZEL_KALEM("Özel Kalem"),
+    EMNIYET_COCUK_POLISI("Emniyet Çocuk Polisi"),
+    AMATEM("AMATEM"),
+    MUHTARLIKLAR("Muhtarlıklar"),
+    OKULLAR("Okullar"),
+    BELEDIYELER("Belediyeler"),
+    IRTIBAT_OFISI("İrtibat Ofisi");
 
     private final String label;
 

@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
 import tr.bel.gaziantep.bysweb.moduls.aktifyasam.entity.AyBirim;
-import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.entity.SyKullanici;
+import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlPersonel;
 
 import java.io.Serial;
 /**
@@ -35,8 +35,8 @@ public class EdbPersonel extends BaseEntity {
     private EdbEkip edbEkip;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "SYKULLANICI_ID")
-    private SyKullanici syKullanici;
+    @JoinColumn(name = "GNLPERSONEL_ID")
+    private GnlPersonel gnlPersonel;
 
     @Override
     public int hashCode() {

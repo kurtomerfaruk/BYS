@@ -111,7 +111,7 @@
             <f:selectItems value="#{edbPersonelController.items}"
                            var="incelemeyiYapanEdbpersonelItem"
                            itemValue="#{incelemeyiYapanEdbpersonelItem}"
-                           itemLabel="#{incelemeyiYapanEdbpersonelItem.syKullanici.gnlPersonel.gnlKisi.adSoyad.toString()}"  />
+                           itemLabel="#{incelemeyiYapanEdbpersonelItem.gnlPersonel.gnlKisi.adSoyad.toString()}"  />
         </p:selectOneMenu>
 
         <p:outputLabel value="#{messages.sosyalIncelemeKarariLabel}" for="@next"/>

@@ -19,8 +19,7 @@ public enum EnumEdbBasvuruDurumu implements BaseEnum {
     VEFAT("Vefat"),
     KIRMIZI("Kırmızı (15 Gün)"),
     YESIL("Yeşil (30 Gün)"),
-    MAVI("Mavi (45 Gün)"),
-    GRI("Gri (İptal / Vefat)");
+    MAVI("Mavi (45 Gün)");
 
     private final String label;
 

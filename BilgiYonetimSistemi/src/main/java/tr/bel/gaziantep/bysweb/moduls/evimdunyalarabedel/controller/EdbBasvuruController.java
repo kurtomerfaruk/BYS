@@ -69,6 +69,9 @@ public class EdbBasvuruController extends AbstractController<EdbBasvuru> {
 
     @Getter
     @Setter
+    private EdbBasvuru basvuruView;
+    @Getter
+    @Setter
     private List<EnumGnlFaydalandigiHak> faydalandigiHaklars;
     @Getter
     @Setter
@@ -91,6 +94,9 @@ public class EdbBasvuruController extends AbstractController<EdbBasvuru> {
     @Getter
     @Setter
     private List<EnumEdbYara> yaraList;
+    @Getter
+    @Setter
+    private List<EdbBasvuru> edbBasvuruList;
 
     public EdbBasvuruController() {
         super(EdbBasvuru.class);
@@ -124,24 +130,24 @@ public class EdbBasvuruController extends AbstractController<EdbBasvuru> {
             newItem.setBasvuruTarihi(LocalDateTime.now());
             newItem.setBasvuruDurumu(EnumEdbBasvuruDurumu.ON_KAYIT);
             newItem.setEyKisi(new EyKisi());
-
+            edbBasvuruList = new ArrayList<>();
             this.setSelected(newItem);
             initializeEmbeddableKey();
             return newItem;
         } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException ex) {
-           log.error(null,ex);
+            log.error(null, ex);
         }
         return null;
     }
 
-    public void createTempObject(){
+    public void createTempObject() {
         faydalandigiHaklars = new ArrayList<>();
         gelirKaynagis = new ArrayList<>();
         yardimAlinanYerlerList = new ArrayList<>();
         aldigiYardimlarList = new ArrayList<>();
         digerBirimlerList = new ArrayList<>();
         engelGrubuList = new ArrayList<>();
-        kullandigiCihazlars=new ArrayList<>();
+        kullandigiCihazlars = new ArrayList<>();
     }
 
     public void getApplicant() {
@@ -165,7 +171,7 @@ public class EdbBasvuruController extends AbstractController<EdbBasvuru> {
 
                 GnlKisi kisi = kisiService.findByTckimlikNo(tcKimlikNo);
                 if (kisi == null) kisi = this.getSelected().getGnlKisi();
-                kisi = kpsController.findByTcKimlikNo(kisi,  EnumModul.EDB);
+                kisi = kpsController.findByTcKimlikNo(kisi, EnumModul.EDB);
                 this.getSelected().setGnlKisi(kisi);
                 kisi.getGnlKisiFaydalandigiHaklarList().stream()
                         .filter(GnlKisiFaydalandigiHaklar::isSecili)
@@ -193,8 +199,10 @@ public class EdbBasvuruController extends AbstractController<EdbBasvuru> {
                     this.getSelected().setEngelDurumu(true);
                     this.getSelected().setEyKisi(eyKisi);
                 }
+
+                edbBasvuruList = service.findByGnlKisi(kisi);
             } catch (Exception ex) {
-                log.error(null,ex);
+                log.error(null, ex);
                 FacesUtil.errorMessage(Constants.HATA_OLUSTU);
             }
         }
@@ -214,6 +222,7 @@ public class EdbBasvuruController extends AbstractController<EdbBasvuru> {
         if (this.getSelected() != null) {
             engelGrubuList = new ArrayList<>();
             readDisableInfo();
+            edbBasvuruList = service.findByGnlKisi(this.getSelected().getGnlKisi());
         }
     }
 
@@ -238,7 +247,7 @@ public class EdbBasvuruController extends AbstractController<EdbBasvuru> {
                 FacesUtil.successMessage(Constants.KAYIT_EKLENDI);
                 createTempObject();
             } catch (Exception ex) {
-                log.error(null,ex);
+                log.error(null, ex);
                 FacesUtil.errorMessage(Constants.HATA_OLUSTU);
             }
         }
@@ -255,7 +264,7 @@ public class EdbBasvuruController extends AbstractController<EdbBasvuru> {
                 FacesUtil.successMessage(Constants.KAYIT_GUNCELLENDI);
                 createTempObject();
             } catch (Exception ex) {
-                log.error(null,ex);
+                log.error(null, ex);
                 FacesUtil.errorMessage(Constants.HATA_OLUSTU);
             }
         }
@@ -296,5 +305,10 @@ public class EdbBasvuruController extends AbstractController<EdbBasvuru> {
     }
 
 
+    public void openBasvuruView(EdbBasvuru basvuru) {
+        if (basvuru != null) {
+            basvuruView = basvuru;
+        }
+    }
 
 }

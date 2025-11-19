@@ -10,9 +10,9 @@
 <ui:composition>
 
     <p:outputLabel value="#{messages.basvuruTarihiLabel}" for="@next"/>
-    <p:datePicker id="basvuruTarihi" locale="tr" pattern="#{messages.tarihFormat}" value="#{edbBasvuruController.selected.basvuruTarihi}"
-                  title="#{messages.basvuruTarihiText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
-                  showOnFocus="false"/>
+    <p:inputText value="#{edbBasvuruController.basvuruView.basvuruTarihi}" readonly="true">
+        <f:convertDateTime pattern="#{messages.tarihSaatFormat}" type="localDateTime"/>
+    </p:inputText>
 
     <p:outputLabel value="#{messages.hizmetKoduLabel}" for="@next"/>
     <p:selectOneMenu id="basvuruDurumu" value="#{edbBasvuruController.selected.basvuruDurumu}" required="true">

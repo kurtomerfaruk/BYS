@@ -8,7 +8,7 @@ import jakarta.inject.Named;
 import lombok.extern.slf4j.Slf4j;
 import org.primefaces.event.SelectEvent;
 import tr.bel.gaziantep.bysweb.core.controller.AbstractController;
-import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlTalepDurumu;
+import tr.bel.gaziantep.bysweb.core.enums.moralevi.EnumMeTalepDurumu;
 import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.EnumSyFiltreAnahtari;
 import tr.bel.gaziantep.bysweb.core.service.FilterOptionService;
 import tr.bel.gaziantep.bysweb.moduls.engelsizler.entity.EyKisi;
@@ -53,8 +53,8 @@ public class MeTalepController extends AbstractController<MeTalep> {
             case TALEP_TIPI -> {
                 return filterOptionService.getGnlTalepTipis();
             }
-            case TALEP_DURUMU -> {
-                return filterOptionService.getTalepDurumus();
+            case METALEP_DURUMU -> {
+                return filterOptionService.getMeTalepDurums();
             }
             case EYTALEP_KONU -> {
                 return filterOptionService.getEyTalepKonus();
@@ -74,7 +74,7 @@ public class MeTalepController extends AbstractController<MeTalep> {
             eyKisi.setGnlKisi(GnlKisi.builder().build());
             newItem.setMeKisi(MeKisi.builder().eyKisi(eyKisi).build());
             newItem.setTarih(LocalDateTime.now());
-            newItem.setDurum(EnumGnlTalepDurumu.BEKLIYOR);
+            newItem.setDurum(EnumMeTalepDurumu.BEKLIYOR);
             this.setSelected(newItem);
             initializeEmbeddableKey();
             return newItem;

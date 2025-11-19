@@ -6,9 +6,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
-import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlTalepDurumu;
 import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlTalepTipi;
 import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlTalepTuru;
+import tr.bel.gaziantep.bysweb.core.enums.moralevi.EnumMeTalepDurumu;
 import tr.bel.gaziantep.bysweb.moduls.engelsizler.entity.EyTalepKonu;
 
 import java.io.Serial;
@@ -58,7 +58,7 @@ public class MeTalep extends BaseEntity {
 
     @Column(name = "DURUM")
     @Enumerated(EnumType.STRING)
-    private EnumGnlTalepDurumu durum;
+    private EnumMeTalepDurumu durum;
 
     @Nationalized
     @Lob
