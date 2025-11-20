@@ -60,6 +60,17 @@
                                     </li>
                                 </ui:fragment>
 
+                                <ui:fragment rendered="#{syKullaniciController.hasPermission('ayarama:goster')}">
+                                    <li class="slide">
+                                        <p:commandLink styleClass="side-menu__item sublevel2"
+                                                       actionListener="#{menuController.setPageLink('/moduls/aktifyasam/ayArama/index')}"
+                                                       update="myPanel,:growl"
+                                                       onstart="PF('Loading').show()"
+                                                       onsuccess="PF('Loading').hide()"
+                                                       value="Arama Listesi"/>
+                                    </li>
+                                </ui:fragment>
+
                                 <ui:fragment rendered="#{syKullaniciController.hasPermission('ayrota:goster')}">
                                     <li class="slide">
                                         <p:commandLink styleClass="side-menu__item sublevel2"

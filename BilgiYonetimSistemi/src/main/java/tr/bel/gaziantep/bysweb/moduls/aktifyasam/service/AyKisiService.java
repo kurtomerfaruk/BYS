@@ -3,6 +3,7 @@ package tr.bel.gaziantep.bysweb.moduls.aktifyasam.service;
 import jakarta.ejb.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlGun;
 import tr.bel.gaziantep.bysweb.core.service.AbstractService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.moduls.aktifyasam.entity.*;
@@ -54,4 +55,7 @@ public class AyKisiService extends AbstractService<AyKisi> {
     }
 
 
+    public List<AyKisi> findByGun(EnumGnlGun day) {
+        return getEntityManager().createNamedQuery("AyKisi.findByGun").setParameter("gun",day).getResultList();
+    }
 }

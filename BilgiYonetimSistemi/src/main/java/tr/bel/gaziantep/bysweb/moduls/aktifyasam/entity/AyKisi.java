@@ -30,6 +30,9 @@ import java.util.List;
 @Table(name = "AYKISI")
 @NamedQuery(name = "AyKisi.findByLatLngIsNull", query = "SELECT a FROM AyKisi a WHERE a.aktif=true AND a.gnlKisi.latLng IS NULL  AND " +
         "a.gnlKisi.binaNo IS NOT NULL")
+@NamedQuery(name = "AyKisi.findByGun",query = "SELECT a FROM AyKisi a WHERE a.aktif=true " +
+        "AND a.gnlKisi.durum=tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlDurum.SAG AND a.gun =:gun " +
+        "AND a.devamDurumu =tr.bel.gaziantep.bysweb.core.enums.aktifyasam.EnumAyDevamDurumu.DEVAM_EDIYOR")
 public class AyKisi extends BaseEntity {
     @Serial
     private static final long serialVersionUID = 668865374558285865L;

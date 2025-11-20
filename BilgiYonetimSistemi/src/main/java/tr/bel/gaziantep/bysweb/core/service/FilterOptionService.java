@@ -378,4 +378,10 @@ public class FilterOptionService implements java.io.Serializable{
                 .map(value -> new SelectItem(value,value.getDisplayValue()))
                 .collect(Collectors.toList());
     }
+
+    public List<SelectItem> getGnlGuns() {
+        return Arrays.stream(EnumGnlGun.values())
+                .map(value -> new SelectItem(value,value.getDisplayValue()))
+                .collect(Collectors.toList());
+    }
 }

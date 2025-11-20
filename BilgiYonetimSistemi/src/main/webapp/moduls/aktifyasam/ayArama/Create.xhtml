@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+>
+
+<ui:composition>
+
+    <p:dialog widgetVar="AyAramaCreateDialog"
+              id="AyAramaCreateDialogId"
+              modal="true"
+              resizable="false"
+              closeOnEscape="true"
+              header="#{messages.dialogYeniKayit}"
+              appendTo="@(body)"
+              responsive="true"
+              onShow="PF('AyAramaCreateDialog').initPosition();"
+              fitViewport="true"
+              position="top"
+              style="max-width:50%">
+
+        <h:form id="AyAramaCreateForm">
+            <h:panelGroup id="display">
+                <p:focus context="display"/>
+                <p:panelGrid columns="1" columnClasses="column" rendered="#{ayAramaController.ayAramaList!=null}" layout="tabular">
+
+                    <p:panelGrid columns="2">
+                        <p:outputLabel value="#{messages.tarihLabel}" for="@next"/>
+                        <p:datePicker id="tarih" locale="tr" pattern="#{messages.tarihFormat}" value="#{ayAramaController.date}"
+                                      title="#{messages.tarihText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
+                                      showOnFocus="false">
+                                <p:ajax event="dateSelect" update="@form" listener="#{ayAramaController.changeDay()}"/>
+                        </p:datePicker>
+
+                        <p:outputLabel value="#{messages.gunLabel}" for="@next"/>
+                        <p:selectOneMenu id="day" value="#{ayAramaController.day}">
+                            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+                            <f:selectItems value="#{enumGun.ALL_VALUES}"
+                                           var="guns"
+                                           itemValue="#{guns}"
+                                           itemLabel="#{guns.displayValue}"/>
+                            <p:ajax event="change" update="@form" listener="#{ayAramaController.changeDay()}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:panelGrid columns="1">
+                        <p:dataTable id="kisiId" var="kisi" value="#{ayAramaController.ayAramaList}">
+                            <p:column headerText="#{messages.adSoyadText}">
+                                <h:outputText value="#{kisi.ayKisi.gnlKisi.adSoyad}"/>
+                            </p:column>
+
+                            <p:column headerText="#{messages.telefonText}">
+                                <h:outputText value="#{kisi.ayKisi.gnlKisi.telefon}"/>
+                            </p:column>
+                            <p:column headerText="#{messages.telefonText}2">
+                                <h:outputText value="#{kisi.ayKisi.gnlKisi.telefon2}"/>
+                            </p:column>
+
+                            <p:column headerText="Gelecek">
+                                <p:commandButton icon="pi pi-check" styleClass="ui-button-success"
+                                                 actionListener="#{ayAramaController.call(kisi,true)}" update="kisiId,:growl,:AyAramaListForm:datalist:datalist"
+                                                 process="kisiId"/>
+                            </p:column>
+
+                            <p:column headerText="Gelecek">
+                                <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                                 actionListener="#{ayAramaController.call(kisi,false)}" update="kisiId,:growl,:AyAramaListForm:datalist:datalist"
+                                                 process="kisiId"/>
+                            </p:column>
+
+                        </p:dataTable>
+                    </p:panelGrid>
+
+
+                </p:panelGrid>
+            </h:panelGroup>
+        </h:form>
+    </p:dialog>
+
+</ui:composition>
+
+</html>

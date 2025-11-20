@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:editpage id="AyAramaEditForm"
+                   widgetVar="AyAramaEditDialog"
+                   actionListener="#{ayAramaController.save}"
+                   listForm="AyAramaListForm"
+                   model="#{ayAramaController.selected}">
+
+        <p:outputLabel value="#{messages.tarihLabel}" for="@next"/>
+        <p:datePicker id="tarih" locale="tr" pattern="#{messages.tarihFormat}" value="#{ayAramaController.selected.tarih}"
+                      title="#{messages.tarihText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
+                      showOnFocus="false"/>
+
+        <p:outputLabel value="#{messages.kisiLabel}" for="@next"/>
+        <coco:inputWithButton id="inputWithButtonAyKisi" inputId="ayKisiId"
+                              inputValue="#{ayAramaController.selected.ayKisi.gnlKisi.adSoyad}"
+                              inputTitle="#{messages.tcKimlikNoText}"
+                              actionListener="#{bysController.openCommonDialog('ayKisiSec')}"
+                              ajaxListener="#{ayAramaController.secilenAyKisi}"
+                              buttonTitle="#{messages.kisiSecmelisiniz}"
+                              size="50"
+                              dialogId="AyAramaEditDialogId"/>
+
+        <p:outputLabel value="#{messages.gunLabel}" for="@next"/>
+        <p:selectOneMenu id="day" value="#{ayAramaController.selected.gun}">
+            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{enumGun.ALL_VALUES}"
+                           var="guns"
+                           itemValue="#{guns}"
+                           itemLabel="#{guns.displayValue}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.gelecekLabel}" for="@next"/>
+        <p:selectBooleanCheckbox id="gelecek" value="#{ayAramaController.selected.gelecek}"/>
+
+    </coco:editpage>
+
+</ui:composition>
+
+</html>

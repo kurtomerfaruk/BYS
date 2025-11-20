@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:p="primefaces"
+                xmlns:pt="jakarta.faces.passthrough"
+                xmlns:coco="jakarta.faces.composite/ui">
+
+    <h:form id="AyAramaListForm" styleClass="form-height">
+
+        <p:contextMenu id="AyAramaDataTableContextMenu" for="datalist:datalist">
+            <p:menuitem value="#{messages.buttonEkle}"
+                        onclick="document.getElementById('AyAramaListForm:datalist:datalist:createButton').click();"
+                        icon="pi pi-plus" rendered="#{syKullaniciController.hasPermission('ayarama:ekle')}"/>
+            <p:menuitem value="#{messages.buttonGuncelle}"
+                        onclick="document.getElementById('AyAramaListForm:datalist:datalist:editButton').click();"
+                        icon="pi pi-pencil" rendered="#{syKullaniciController.hasPermission('ayarama:guncelle')}"/>
+            <p:menuitem value="#{messages.buttonDetay}"
+                        onclick="document.getElementById('AyAramaListForm:datalist:datalist:viewButton').click();"
+                        icon="pi pi-search"/>
+            <p:menuitem value="#{messages.buttonSil}"
+                        onclick="document.getElementById('AyAramaListForm:datalist:datalist:deleteButton').click();"
+                        icon="pi pi-trash" rendered="#{syKullaniciController.hasPermission('ayarama:sil')}"/>
+        </p:contextMenu>
+        <coco:datatable id="datalist"
+                        value="#{ayAramaController.lazyItems}"
+                        rowKey="#{item.id}"
+                        selection="#{ayAramaController.selected}"
+                        filtered="#{ayAramaController.filtered}"
+                        rowselect=":AyAramaListForm:datalist:datalist:createButton,:AyAramaListForm:datalist:datalist:viewButton,:AyAramaListForm:datalist:datalist:editButton,:AyAramaListForm:datalist:datalist:deleteButton,:AyAramaListForm:AyAramaDataTableContextMenu"
+                        rowDblselect="document.getElementById('AyAramaListForm:datalist:datalist:editButton').click()"
+                        contextMenu=":AyAramaListForm:datalist:datalist:createButton :AyAramaListForm:datalist:datalist:viewButton :AyAramaListForm:datalist:datalist:editButton :AyAramaListForm:datalist:datalist:deleteButton"
+                        selectListener="#{ayAramaController.resetParents}"
+                        controller="#{ayAramaController}"
+                        header="#{messages.aramaListesi}">
+
+
+            <p:ajax event="colResize" listener="#{ayAramaController.onResize}"/>
+
+
+            <f:facet name="paginatorBottomLeft">
+
+                <p:commandButton id="createButton" styleClass="ui-button-primary" icon="pi pi-plus"
+                                 pt:data-tooltip="#{messages.buttonEkle}"
+                                 actionListener="#{ayAramaController.prepareList()}"
+                                 update=":AyAramaCreateForm"
+                                 oncomplete="PF('AyAramaCreateDialog').show()" onstart="PF('Loading').show()"
+                                 onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('ayarama:ekle')}"/>
+                <p:commandButton id="editButton" styleClass="ui-button-success" icon="pi pi-pencil"
+                                 pt:data-tooltip="#{messages.buttonGuncelle}" update=":AyAramaEditForm:AyAramaEditForm"
+                                 oncomplete="PF('AyAramaEditDialog').show()"
+                                 disabled="#{empty ayAramaController.selected}" onstart="PF('Loading').show()"
+                                 onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('ayarama:guncelle')}"/>
+                <p:commandButton id="viewButton" styleClass="ui-button-info" icon="pi pi-search"
+                                 pt:data-tooltip="#{messages.buttonDetay}" update=":AyAramaViewForm:AyAramaViewForm"
+                                 oncomplete="PF('AyAramaViewDialog').show()"
+                                 disabled="#{empty ayAramaController.selected}" onstart="PF('Loading').show()"
+                                 onsuccess="PF('Loading').hide()"/>
+                <p:commandButton id="deleteButton" styleClass="ui-button-danger" icon="pi pi-trash"
+                                 pt:data-tooltip="#{messages.buttonSil}" actionListener="#{ayAramaController.delete}"
+                                 update=":growl,datalist" disabled="#{empty ayAramaController.selected}"
+                                 rendered="#{syKullaniciController.hasPermission('ayarama:sil')}">
+                    <p:confirm header="#{messages.ConfirmationHeader}" message="#{messages.ConfirmDeleteMessage}"
+                               icon="pi pi-warning"/>
+                </p:commandButton>
+
+            </f:facet>
+
+        </coco:datatable>
+
+
+        <ui:include src="/confirmation.xhtml"/>
+
+    </h:form>
+
+</ui:composition>
