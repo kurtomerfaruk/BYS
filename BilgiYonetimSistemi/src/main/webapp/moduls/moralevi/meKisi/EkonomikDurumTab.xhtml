@@ -46,5 +46,30 @@
                        itemLabel="#{evinDurumus.displayValue}"/>
     </p:selectOneMenu>
 
+    <p:outputLabel value="#{messages.yasadigiOrtamAciklamaLabel}" for="@next"/>
+    <p:inputTextarea rows="4" id="yasadigiOrtamAciklama" value="#{meKisiController.selected.yasadigiOrtamAciklama}"
+                     title="#{messages.yasadigiOrtamAciklamaText}"
+                     styleClass="w-100" autoResize="false"/>
+
+    <p:outputLabel value="#{messages.yardimAlinanYerlerLabel}" for="@next"/>
+    <p:selectCheckboxMenu id="yardimAlinanYerler" value="#{meKisiController.yardimAlinanYerlers}" label="#{messages.yardimAlinanYerlerText}" multiple="true"
+                          filter="true" filterMatchMode="startsWith" styleClass="checkboxMenu tcUpdate">
+        <f:selectItems value="#{enumYardimAlinanYerler.ALL_VALUES}"
+                       var="yardimAlinanYerlers"
+                       itemValue="#{yardimAlinanYerlers}"
+                       itemLabel="#{yardimAlinanYerlers.displayValue}"/>
+        <f:converter converterId="omnifaces.GenericEnumConverter"/>
+    </p:selectCheckboxMenu>
+
+    <p:outputLabel value="#{messages.aldiginizYardimlarLabel}" for="@next"/>
+    <p:selectCheckboxMenu id="aldiginizYardimlar" value="#{meKisiController.yardimTurus}" label="#{messages.aldiginizYardimlarText}" multiple="true"
+                          filter="true" filterMatchMode="startsWith" styleClass="checkboxMenu tcUpdate">
+        <f:selectItems value="#{enumYardimTuru.ALL_VALUES}"
+                       var="yardimTurus"
+                       itemValue="#{yardimTurus}"
+                       itemLabel="#{yardimTurus.displayValue}"/>
+        <f:converter converterId="omnifaces.GenericEnumConverter"/>
+    </p:selectCheckboxMenu>
+
 </ui:composition>
 </html>

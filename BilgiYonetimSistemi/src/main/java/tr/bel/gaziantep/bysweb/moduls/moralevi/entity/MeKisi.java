@@ -6,6 +6,7 @@ import lombok.*;
 import org.hibernate.annotations.Nationalized;
 import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
 import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlYakinlikDerecesi;
+import tr.bel.gaziantep.bysweb.core.enums.moralevi.EnumMeTelefonKullanimDurumu;
 import tr.bel.gaziantep.bysweb.moduls.engelsizler.entity.EyKisi;
 
 import java.io.Serial;
@@ -90,6 +91,66 @@ public class MeKisi extends BaseEntity {
     @Lob
     @Column(name = "IZLEME_YAPANIN_GORUSU")
     private String izlemeYapaninGorusu;
+
+    @Column(name = "TELEFON_KULLANIM_DURUMU")
+    @Enumerated(EnumType.STRING)
+    private EnumMeTelefonKullanimDurumu telefonKullanimDurumu;
+
+    @Nationalized
+    @Lob
+    @Column(name = "SOSYAL_YASANTI_BILGILERI")
+    private String sosyalYasantiBilgileri;
+
+    @Nationalized
+    @Lob
+    @Column(name = "REFAKATCI_SAGLIK_DURUMU")
+    private String refakatciSaglikDurumu;
+
+    @Nationalized
+    @Lob
+    @Column(name = "REFAKATCI_EGITIM_VE_CALISMA_BILGILERI")
+    private String refakatciEgitimVeCalismaBilgileri;
+
+    @Nationalized
+    @Lob
+    @Column(name = "BAKIM_DESTEGINE_IHTIYAC_SEBEBI")
+    private String bakimDestegineIhtiyacSebebi;
+
+    @Nationalized
+    @Lob
+    @Column(name = "BAKIM_DESTEGINDEN_YARARLANMA_SURESI")
+    private String bakimDestegindenYarlanmaSuresi;
+
+    @Nationalized
+    @Lob
+    @Column(name = "YASADIGI_ORTAM_ACIKLAMA")
+    private String yasadigiOrtamAciklama;
+
+    @Column(name = "ILK_DEMANS_TANI_TARIHI")
+    private LocalDate ilkDemansTaniTarihi;
+
+    @Nationalized
+    @Lob
+    @Column(name = "TANIYI_ORTAYA_KOYAN_KURULUS")
+    private String taniyiOrtayaKoyanKurulus;
+
+    @Nationalized
+    @Lob
+    @Column(name = "GECIRMIS_OLDUGU_AMELIYATLAR")
+    private String gecirmisOlduguAmeliyatlar;
+
+    @Nationalized
+    @Lob
+    @Column(name = "HASTALIKLAR_KULLANDIGI_ILACLAR_ALERJI_DURUMU")
+    private String hastaliklarKullandigiIlaclarAlerjiDurumu;
+
+    @Nationalized
+    @Lob
+    @Column(name = "KULLANDIGI_YARDIMCI_ARAC_CIHAZ")
+    private String kullandigiYardimciAracCihaz;
+
+    @Column(name = "HASTANE_KONTROL_TARIHI")
+    private LocalDate hastaneKontrolTarihi;
 
     @Override
     public int hashCode() {

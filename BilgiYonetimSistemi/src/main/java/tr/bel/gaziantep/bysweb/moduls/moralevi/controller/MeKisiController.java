@@ -221,7 +221,25 @@ public class MeKisiController extends AbstractController<MeKisi> {
     }
 
     public void readInfo() {
+        if (this.getSelected() != null) {
+            // Ortak filtreleme işlemini metodlaştırıyoruz.
+            engelGrubus = Function.filterAndCollect(this.getSelected().getEyKisi().getEyKisiEngelGrubuList(), EyKisiEngelGrubu::isSecili,
+                    EyKisiEngelGrubu::getEyEngelGrubu);
+            faydalandigiHaklars = Function.filterAndCollect(this.getSelected().getEyKisi().getGnlKisi().getGnlKisiFaydalandigiHaklarList(),
+                    GnlKisiFaydalandigiHaklar::isSecili,
+                    GnlKisiFaydalandigiHaklar::getTanim);
+            maddeKullanimis = Function.filterAndCollect(this.getSelected().getEyKisi().getEyKisiMaddeKullanimiList(), EyKisiMaddeKullanimi::isSecili,
+                    EyKisiMaddeKullanimi::getTanim);
+            aileninGelirKaynagis = Function.filterAndCollect(this.getSelected().getEyKisi().getGnlKisi().getGnlKisiGelirKaynagiList(), GnlKisiGelirKaynagi::isSecili,
+                    GnlKisiGelirKaynagi::getTanim);
+            yardimAlinanYerlers = Function.filterAndCollect(this.getSelected().getEyKisi().getGnlKisi().getGnlKisiYardimAlinanYerlerList(),
+                    GnlKisiYardimAlinanYerler::isSecili, GnlKisiYardimAlinanYerler::getTanim);
+            yardimTurus = Function.filterAndCollect(this.getSelected().getEyKisi().getGnlKisi().getGnlKisiAldigiYardimlarList(), GnlKisiAldigiYardimlar::isSecili,
+                    GnlKisiAldigiYardimlar::getTanim);
+            kullandigiCihazs = Function.filterAndCollect(this.getSelected().getEyKisi().getEyKisiKullandigiCihazList(), EyKisiKullandigiCihaz::isSecili,
+                    EyKisiKullandigiCihaz::getTanim);
 
+        }
     }
 
     public void meKisiSecKapat(MeKisi meKisi) {

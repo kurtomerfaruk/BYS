@@ -65,5 +65,35 @@
                        itemLabel="#{hizmetlerdenMemnunMus.displayValue}"/>
     </p:selectOneMenu>
 
+    <p:outputLabel value="#{messages.ilkDemansTaniTarihiLabel}" for="@next"/>
+    <p:datePicker id="ilkDemansTaniTarihi" locale="tr" pattern="#{messages.tarihFormat}" value="#{meKisiController.selected.ilkDemansTaniTarihi}"
+                  title="#{messages.ilkDemansTaniTarihiText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
+                  showOnFocus="false"/>
+
+    <p:outputLabel value="#{messages.taniyiOrtayaKoyanKurulusLabel}" for="@next"/>
+    <p:inputTextarea id="taniyiOrtayaKoyanKurulus" value="#{meKisiController.selected.taniyiOrtayaKoyanKurulus}"
+                     title="#{messages.taniyiOrtayaKoyanKurulusText}" size="50" rows="4"
+                     autoResize="false" styleClass="w-100"/>
+
+    <p:outputLabel value="#{messages.gecirmisOlduguAmeliyatlarLabel}" for="@next"/>
+    <p:inputTextarea id="gecirmisOlduguAmeliyatlar" value="#{meKisiController.selected.gecirmisOlduguAmeliyatlar}"
+                     title="#{messages.gecirmisOlduguAmeliyatlarText}" size="50" rows="4"
+                     autoResize="false" styleClass="w-100"/>
+
+    <p:outputLabel value="#{messages.hastaliklarKullandigiIlaclarAlerjiDurumuLabel}" for="@next"/>
+    <p:inputTextarea id="hastaliklarKullandigiIlaclarAlerjiDurumu" value="#{meKisiController.selected.hastaliklarKullandigiIlaclarAlerjiDurumu}"
+                     title="#{messages.hastaliklarKullandigiIlaclarAlerjiDurumuText}" size="50" rows="4"
+                     autoResize="false" styleClass="w-100"/>
+
+    <p:outputLabel value="#{messages.kullandigiYardimciAracCihazLabel}" for="@next"/>
+    <p:inputTextarea id="kullandigiYardimciAracCihaz" value="#{meKisiController.selected.kullandigiYardimciAracCihaz}"
+                     title="#{messages.kullandigiYardimciAracCihazText}" size="50" rows="4"
+                     autoResize="false" styleClass="w-100"/>
+
+    <p:outputLabel value="#{messages.hastaneKontrolTarihiLabel}" for="@next"/>
+    <p:datePicker id="hastaneKontrolTarihi" locale="tr" pattern="#{messages.tarihFormat}" value="#{meKisiController.selected.hastaneKontrolTarihi}"
+                  title="#{messages.hastaneKontrolTarihiText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
+                  showOnFocus="false"/>
+
 </ui:composition>
 </html>

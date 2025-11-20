@@ -98,5 +98,32 @@
     <p:spinner id="cocukSayisi" value="#{meKisiController.selected.eyKisi.gnlKisi.cocukSayisi}" stepFactor="1" title="#{messages.cocukSayisiText}"
                styleClass="tcUpdate"/>
 
+    <p:outputLabel value="#{messages.telefonKullanimDurumuLabel}" for="@next"/>
+    <p:selectOneMenu id="telefonKullanimDurumu" value="#{meKisiController.selected.telefonKullanimDurumu}">
+        <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+        <f:selectItems value="#{enumTelefonDurumu.ALL_VALUES}"
+                       var="telefons"
+                       itemValue="#{telefons}"
+                       itemLabel="#{telefons.displayValue}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.maddeKullanimiLabel}" for="@next"/>
+    <p:selectCheckboxMenu id="maddeKullanimi"
+                          value="#{meKisiController.maddeKullanimis}"
+                          label="#{messages.maddeKullanimiText}" multiple="true"
+                          filter="true" filterMatchMode="startsWith" styleClass="checkboxMenu">
+        <f:selectItems value="#{enumMaddeKullanimi.ALL_VALUES}"
+                       var="maddeKullanimis"
+                       itemValue="#{maddeKullanimis}"
+                       itemLabel="#{maddeKullanimis.displayValue}"/>
+        <f:converter converterId="omnifaces.GenericEnumConverter"/>
+    </p:selectCheckboxMenu>
+
+    <p:outputLabel value="#{messages.sosyalYasantiBilgileriLabel}" for="@next"/>
+    <p:inputTextarea rows="4" id="sosyalYasantiBilgileri"
+                     value="#{meKisiController.selected.sosyalYasantiBilgileri}"
+                     title="#{messages.sosyalYasantiBilgileriText}"
+                     styleClass="w-100" autoResize="false"/>
+
 </ui:composition>
 </html>

@@ -20,6 +20,7 @@
               position="top">
 
         <h:form id="MeKisiCreateForm">
+
             <h:panelGroup id="display">
                 <p:focus context="display"/>
                 <div class="card">
@@ -36,74 +37,69 @@
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link" id="meAileDurumuCreateTab" data-bs-toggle="tab"
                                         data-bs-target="#meAileDurumuCreateTabPane" type="button" role="tab"
-                                        aria-controls="meAileDurumuCreateTabPane" aria-selected="false">Aile Durumu
+                                        aria-controls="meAileDurumuCreateTabPane" aria-selected="true">Aile Durumu
                                 </button>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link" id="meEkonomikDurumuCreateTab" data-bs-toggle="tab"
                                         data-bs-target="#meEkonomikDurumuCreateTabPane" type="button" role="tab"
-                                        aria-controls="meEkonomikDurumuCreateTabPane" aria-selected="false">Ekonomik Durum
+                                        aria-controls="meEkonomikDurumuCreateTabPane" aria-selected="true">Ekonomik Durum
                                 </button>
                             </li>
-<!--                            <li class="nav-item" role="presentation">-->
-<!--                                <button class="nav-link" id="meSosyalYardimCreateTab" data-bs-toggle="tab"-->
-<!--                                        data-bs-target="#meSosyalYardimCreateTabPane" type="button" role="tab"-->
-<!--                                        aria-controls="meSosyalYardimCreateTabPane" aria-selected="false">Sosyal Yardım Durumu-->
-<!--                                </button>-->
-<!--                            </li>-->
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="meSosyalYardimCreateTab" data-bs-toggle="tab"
+                                        data-bs-target="#meSosyalYardimCreateTabPane" type="button" role="tab"
+                                        aria-controls="meSosyalYardimCreateTabPane" aria-selected="true">Sosyal Yardım
+                                </button>
+                            </li>
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link" id="meSaglikBilgileriCreateTab" data-bs-toggle="tab"
                                         data-bs-target="#meSaglikBilgileriCreateTabPane" type="button" role="tab"
-                                        aria-controls="meSaglikBilgileriCreateTabPane" aria-selected="false">Sağlık Bilgileri
+                                        aria-controls="meSaglikBilgileriCreateTabPane" aria-selected="true">Sağlık Bilgileri
                                 </button>
                             </li>
                         </ul>
 
                         <div class="tab-content">
                             <div class="tab-pane overflow-hidden active show" id="meKisiBilgileriCreateTabPane" role="tabpanel"
-                                 aria-labelledby="meKisiBilgileriCreateTab"  tabindex="0">
+                                 aria-labelledby="meKisiBilgileriCreateTab" tabindex="0">
                                 <p:panelGrid id="kisiPanel" columns="2" styleClass="w-100" rendered="#{meKisiController.selected!=null}" layout="tabular">
 
-                                    <ui:include src="/moduls/moralevi/meKisi/KisiBilgileriTab.xhtml"/>
+                                    <ui:include src="KisiBilgileriTab.xhtml"/>
                                 </p:panelGrid>
                             </div>
 
                             <div class="tab-pane overflow-hidden" id="meAileDurumuCreateTabPane" role="tabpanel" aria-labelledby="meAileDurumuCreateTab"
                                  tabindex="0">
 
-                                <p:panelGrid id="aileDurumuPanel" columns="2" styleClass="w-100" rendered="#{meKisiController.selected!=null}"
-                                             layout="tabular">
+                                <p:panelGrid id="aileDurumuPanel" columns="2" styleClass="w-100" rendered="#{meKisiController.selected!=null}" layout="tabular">
 
-                                    <ui:include src="/moduls/moralevi/meKisi/AileDurumuTab.xhtml"/>
+                                    <ui:include src="AileDurumuTab.xhtml"/>
 
                                 </p:panelGrid>
                             </div>
-
                             <div class="tab-pane overflow-hidden" id="meEkonomikDurumuCreateTabPane" role="tabpanel" aria-labelledby="meEkonomikDurumuCreateTab"
                                  tabindex="0">
                                 <p:panelGrid id="ekonomikDurumPanel" columns="2" styleClass="w-100" rendered="#{meKisiController.selected!=null}"
                                              layout="tabular">
 
-                                    <ui:include src="/moduls/moralevi/meKisi/EkonomikDurumTab.xhtml"/>
+                                    <ui:include src="EkonomikDurumTab.xhtml"/>
 
                                 </p:panelGrid>
                             </div>
-
-<!--                            <div class="tab-pane overflow-hidden" id="meSosyalYardimCreateTabPane" role="tabpanel" aria-labelledby="meSosyalYardimCreateTab"-->
-<!--                                 tabindex="0">-->
-<!--                                <p:panelGrid id="meSosyalYardimPanel" columns="2" styleClass="w-100"-->
-<!--                                             rendered="#{meKisiController.selected!=null}" layout="tabular">-->
-<!--                                    <ui:include src="/moduls/moralevi/meKisi/SosyalYardimTab.xhtml"/>-->
-
-<!--                                </p:panelGrid>-->
-<!--                            </div>-->
-
-                            <div class="tab-pane overflow-hidden" id="meSaglikBilgileriCreateTabPane" role="tabpanel" aria-labelledby="meSaglikBilgileriCreateTab"
+                            <div class="tab-pane overflow-hidden" id="meSosyalYardimCreateTabPane" role="tabpanel" aria-labelledby="meSosyalYardimCreateTab"
                                  tabindex="0">
-                                <p:panelGrid id="meSaglikBilgileriPanel" columns="2" styleClass="w-100"
-                                             rendered="#{meKisiController.selected!=null}" layout="tabular">
+                                <p:panelGrid id="sosyalYardimPanel" columns="2" styleClass="w-100" rendered="#{meKisiController.selected!=null}"
+                                             layout="tabular">
+                                    <ui:include src="SosyalYardimTab.xhtml"/>
 
-                                    <ui:include src="/moduls/moralevi/meKisi/SaglikBilgileriTab.xhtml"/>
+                                </p:panelGrid>
+                            </div>
+                            <div class="tab-pane overflow-hidden" id="meSaglikBilgileriCreateTabPane" role="tabpanel"
+                                 aria-labelledby="meSaglikBilgileriCreateTab" tabindex="0">
+                                <p:panelGrid id="engellilikPanel" columns="2" styleClass="w-100" rendered="#{meKisiController.selected!=null}" layout="tabular">
+
+                                    <ui:include src="SaglikBilgileriTab.xhtml"/>
 
                                 </p:panelGrid>
                             </div>
@@ -114,7 +110,7 @@
                             <p:commandButton icon="pi pi-check" styleClass="ui-button-success"
                                              actionListener="#{meKisiController.update}"
                                              value="#{messages.buttonKaydet}"
-                                             update="display,:EyKisiListForm:datalist:datalist,:growl"
+                                             update="display,:MeKisiListForm:datalist:datalist,:growl"
                                              oncomplete="handleSubmit(xhr,status,args,PF('MeKisiCreateDialog'));"
                                              onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
                             <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
@@ -128,18 +124,25 @@
         </h:form>
 
     </p:dialog>
-
     <script type="text/javascript">
+        var dialogWidth = 0;
+
         function adjustMenuWidth() {
             var dialog = PF('MeKisiCreateDialog');
             var menu = $(".checkboxMenu");
 
             if (dialog &amp;&amp; menu) {
-                var dialogWidth = dialog.jq.innerWidth();
+                if (dialogWidth === 0) {
+                    dialogWidth = dialog.jq.innerWidth() - 30;
+                }
                 var menuContainer = $(menu).closest('.ui-selectcheckboxmenu');
-                menuContainer.width(dialogWidth - 30); // 30px padding/margin için
+                menuContainer.width(dialogWidth);
             }
         }
+
+        document.addEventListener('shown.bs.tab', function (event) {
+            adjustMenuWidth();
+        });
     </script>
 
 </ui:composition>

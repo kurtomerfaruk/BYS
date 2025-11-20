@@ -48,12 +48,32 @@
                        itemValue="#{enumYakinlikDerecesis}"/>
     </p:selectOneMenu>
 
-    <p:outputLabel value="#{messages.aciklamaLabel}" for="@next"/>
-    <p:inputTextarea rows="4" id="aciklama" value="#{meKisiController.selected.digerAciklama}" title="#{messages.aciklamaText}" styleClass="w-100"
-                     autoResize="false"/>
+    <!--    <p:outputLabel value="#{messages.aciklamaLabel}" for="@next"/>-->
+    <!--    <p:inputTextarea rows="4" id="aciklama" value="#{meKisiController.selected.digerAciklama}" title="#{messages.aciklamaText}" styleClass="w-100"-->
+    <!--                     autoResize="false"/>-->
 
-    <p:outputLabel value="#{messages.ozelDurumuLabel}" for="@next"/>
-    <p:inputTextarea rows="4" id="ozelDurumu" value="#{meKisiController.selected.eyKisi.ozelDurumlar}" title="#{messages.ozelDurumuText}"
+    <!--    <p:outputLabel value="#{messages.ozelDurumuLabel}" for="@next"/>-->
+    <!--    <p:inputTextarea rows="4" id="ozelDurumu" value="#{meKisiController.selected.eyKisi.ozelDurumlar}" title="#{messages.ozelDurumuText}"-->
+    <!--                     styleClass="w-100" autoResize="false"/>-->
+
+    <p:outputLabel value="#{messages.refakatciSaglikDurumuLabel}" for="@next"/>
+    <p:inputTextarea rows="4" id="refakatciSaglikDurumu" value="#{meKisiController.selected.refakatciSaglikDurumu}"
+                     title="#{messages.refakatciSaglikDurumuText}"
+                     styleClass="w-100" autoResize="false"/>
+
+    <p:outputLabel value="#{messages.refakatciEgitimVeCalismaBilgileriLabel}" for="@next"/>
+    <p:inputTextarea rows="4" id="refakatciEgitimVeCalismaBilgileri" value="#{meKisiController.selected.refakatciEgitimVeCalismaBilgileri}"
+                     title="#{messages.refakatciEgitimVeCalismaBilgileriText}"
+                     styleClass="w-100" autoResize="false"/>
+
+    <p:outputLabel value="#{messages.bakimDestegineIhtiyacSebebiLabel}" for="@next"/>
+    <p:inputTextarea rows="4" id="bakimDestegineIhtiyacSebebi" value="#{meKisiController.selected.bakimDestegineIhtiyacSebebi}"
+                     title="#{messages.bakimDestegineIhtiyacSebebiText}"
+                     styleClass="w-100" autoResize="false"/>
+
+    <p:outputLabel value="#{messages.bakimDestegindenYarlanmaSuresiLabel}" for="@next"/>
+    <p:inputTextarea rows="4" id="bakimDestegindenYarlanmaSuresi" value="#{meKisiController.selected.bakimDestegindenYarlanmaSuresi}"
+                     title="#{messages.bakimDestegindenYarlanmaSuresiText}"
                      styleClass="w-100" autoResize="false"/>
 
 </ui:composition>

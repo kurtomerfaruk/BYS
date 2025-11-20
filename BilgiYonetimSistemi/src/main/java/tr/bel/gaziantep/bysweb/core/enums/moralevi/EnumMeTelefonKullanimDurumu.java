@@ -6,21 +6,17 @@ import tr.bel.gaziantep.bysweb.core.enums.BaseEnum;
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
  * @version 1.0.0
- * @since 13.11.2025 15:12
+ * @since 20.11.2025 11:03
  */
 @Getter
-public enum EnumMeTalepDurumu implements BaseEnum {
+public enum EnumMeTelefonKullanimDurumu implements BaseEnum {
 
-    BEKLIYOR("Bekliyor"),
-    EV_ZIYARETI_BEKLEYEN("Ev Ziyareti Bekleyen"),
-    HASTANEYE_YONLENDIRILEN("Hastaneye Yönlendirilen"),
-    OLUMLU("Olumlu"),
-    OLUMSUZ("Olumsuz"),
-    KURUMDAN_CIKIS("Kurumdan Çıkış");
+    KULLANIYOR("Kullanıyor"),
+    KULLANMIYOR("Kullanmıyor");
 
     private final String label;
 
-    EnumMeTalepDurumu(String label) {
+    EnumMeTelefonKullanimDurumu(String label) {
         this.label = label;
     }
 
@@ -28,4 +24,5 @@ public enum EnumMeTalepDurumu implements BaseEnum {
     public String getDisplayValue() {
         return label;
     }
+
 }

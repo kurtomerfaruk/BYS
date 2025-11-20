@@ -31,4 +31,9 @@ public class MeEtkinlikService extends AbstractService<MeEtkinlik> {
     protected EntityManager getEntityManager() {
         return em;
     }
+
+    @Override
+    public String getSortCol() {
+        return "tarih";
+    }
 }
