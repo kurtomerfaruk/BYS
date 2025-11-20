@@ -129,17 +129,17 @@
 
             <h:commandLink>
                 <p:graphicImage name="images/excel.png" width="24"/>
-                <p:dataExporter type="xls" target="datalist" fileName="DataExport" encoding="CP1254" visibleOnly="true"
+                <p:dataExporter type="xlsxstream" target="#{cc.attrs.id}" fileName="DataExport" encoding="CP1254" visibleOnly="true"
                                 options="#{cc.attrs.controller.excelOpt}"/>
             </h:commandLink>
             <h:commandLink>
                 <p:graphicImage name="images/csv.png" width="24"/>
-                <p:dataExporter type="csv" target="datalist" fileName="DataExport" encoding="CP1254" visibleOnly="true"/>
+                <p:dataExporter type="csv" target="#{cc.attrs.id}" fileName="DataExport" encoding="CP1254" visibleOnly="true"/>
             </h:commandLink>
 
             <h:commandLink>
                 <p:graphicImage name="images/xml.png" width="24"/>
-                <p:dataExporter type="xml" target="datalist" fileName="DataExport" encoding="CP1254" visibleOnly="true"/>
+                <p:dataExporter type="xml" target="#{cc.attrs.id}" fileName="DataExport" encoding="CP1254" visibleOnly="true"/>
             </h:commandLink>
 
         </f:facet>
@@ -153,7 +153,8 @@
                    width="#{column.genislik}"
                    visible="#{column.gorunurluk}"
                    filterMatchMode="#{column.syKolon.filtreEslesmeModu.displayValue}"
-                   styleClass="#{column.syKolon.tip eq 'DECIMAL' ? 'text-end':''}">
+                   styleClass="#{column.syKolon.tip eq 'DECIMAL' ? 'text-end':''}"
+                   exportValue="#{cc.attrs.controller.getResolvedValueText(item,column.syKolon.columnProperty)}">
 
             <ui:fragment rendered="#{column.syKolon.tip eq 'ID'}">
                 <h:outputText value="#{cc.attrs.controller.getResolvedValue(item,column.syKolon.columnProperty)}"

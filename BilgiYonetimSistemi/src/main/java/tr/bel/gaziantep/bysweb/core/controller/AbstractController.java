@@ -440,6 +440,11 @@ public abstract class AbstractController<T> implements Serializable {
         return resolveProperty(item, property);
     }
 
+    public String getResolvedValueText(Object item, String prop) {
+        Object value = getResolvedValue(item, prop);
+        return value != null ? value.toString() : "";
+    }
+
     public void changeFilterMatchMode(SyKullaniciKolon kullaniciKolon) {
         if (kullaniciKolon == null) return;
         syKullaniciKolonService.edit(kullaniciKolon);
