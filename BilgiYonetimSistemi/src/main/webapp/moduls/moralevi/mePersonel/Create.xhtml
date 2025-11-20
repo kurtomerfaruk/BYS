@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:createpage id="MePersonelCreateForm"
+                     renderedListener="#{mePersonelController.selected != null}"
+                     widgetVar="MePersonelCreateDialog"
+                     actionListener="#{mePersonelController.saveNew}"
+                     listForm="MePersonelListForm">
+
+        <p:outputLabel value="#{messages.personelLabel}" for="@next"/>
+        <p:selectOneMenu id="gnlPersonel" value="#{mePersonelController.selected.gnlPersonel}" filter="true" converter="omnifaces.SelectItemsConverter"
+                         required="true">
+            <f:selectItem itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{gnlPersonelController.items}"
+                           var="gnlPersonels"
+                           itemValue="#{gnlPersonels}"
+                           itemLabel="#{gnlPersonels.gnlKisi.adSoyad.toString()}"/>
+            <p:ajax event="change" update="gorevi"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.gorevLabel}" for="@next"/>
+        <p:inputText id="gorevi" value="#{mePersonelController.selected.gnlPersonel.gnlUnvan.tanim}" title="#{messages.gorevText}"
+                     size="50" maxlength="50" readonly="true"/>
+
+    </coco:createpage>
+
+</ui:composition>
+
+</html>

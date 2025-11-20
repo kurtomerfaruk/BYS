@@ -105,16 +105,16 @@
                             <i class="ri-arrow-right-s-line side-menu__angle"></i></a>
                         <ul class="slide-menu child2">
 
-<!--                            <ui:fragment rendered="#{syKullaniciController.hasPermission('metalepkonu:goster')}">-->
-<!--                                <li class="slide">-->
-<!--                                    <p:commandLink styleClass="side-menu__item sublevel2"-->
-<!--                                                   actionListener="#{menuController.setPageLink('/moduls/moralevi/meTalepKonu/index')}"-->
-<!--                                                   update="myPanel,:growl"-->
-<!--                                                   onstart="PF('Loading').show()"-->
-<!--                                                   onsuccess="PF('Loading').hide()"-->
-<!--                                                   value="Talep Konuları"/>-->
-<!--                                </li>-->
-<!--                            </ui:fragment>-->
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('mepersonel:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/moralevi/mePersonel/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="Personel Listesi"/>
+                                </li>
+                            </ui:fragment>
 
                         </ul>
                     </li>
