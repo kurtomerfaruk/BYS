@@ -23,12 +23,12 @@ public class AyGirisCikisService extends AbstractService<AyGirisCikis> {
     @Serial
     private static final long serialVersionUID = 4314733345341349926L;
 
-    @PersistenceContext(unitName = Constants.UNIT_NAME)
-    private EntityManager em;
-
     public AyGirisCikisService() {
         super(AyGirisCikis.class);
     }
+
+    @PersistenceContext(unitName = Constants.UNIT_NAME)
+    private EntityManager em;
 
     @Override
     protected EntityManager getEntityManager() {

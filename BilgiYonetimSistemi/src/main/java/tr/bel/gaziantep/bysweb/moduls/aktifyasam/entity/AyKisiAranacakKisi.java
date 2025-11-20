@@ -2,8 +2,7 @@ package tr.bel.gaziantep.bysweb.moduls.aktifyasam.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.Nationalized;
 import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
 
@@ -15,6 +14,9 @@ import java.io.Serial;
  */
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "AYKISI_ARANACAK_KISI")
 public class AyKisiAranacakKisi extends BaseEntity {

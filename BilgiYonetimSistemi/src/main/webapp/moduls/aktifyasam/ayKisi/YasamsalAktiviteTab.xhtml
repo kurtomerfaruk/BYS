@@ -16,6 +16,11 @@
     <p:outputLabel value="#{messages.sosyoPsikolojikDestekLabel}" for="@next"/>
     <p:selectBooleanCheckbox id="sosyoPsikolojikDestek" value="#{ayKisiController.selected.sosyoPsikolojikDestek}"/>
 
+    <p:outputLabel value="#{messages.sosyoPsikolojikDestekAciklamaLabel}" for="@next"/>
+    <p:inputTextarea rows="4" id="sosyoPsikolojikDestekAciklama" value="#{ayKisiController.selected.sosyoPsikolojikDestekAciklama}"
+                     title="#{messages.sosyoPsikolojikDestekAciklamaText}"
+                     styleClass="w-100"   autoResize="false"/>
+
     <p:outputLabel value="#{messages.sosyalAktiviteIstegiLabel}" for="@next"/>
     <p:selectBooleanCheckbox id="sosyalAktiviteIstegi"   value="#{ayKisiController.selected.sosyalAktiviteIstegi}"/>
 
@@ -37,5 +42,15 @@
                        itemValue="#{sanatsals}"
                        itemLabel="#{sanatsals.tanim}"/>
     </p:selectManyCheckbox>
+
+    <p:outputLabel value="#{messages.fizikTedaviAciklamaLabel}" for="@next"/>
+    <p:inputTextarea rows="4" id="fizikTedaviAciklama" value="#{ayKisiController.selected.fizikTedaviAciklama}"
+                     title="#{messages.fizikTedaviAciklamaText}"
+                     styleClass="w-100"   autoResize="false"/>
+
+    <p:outputLabel value="#{messages.diyetisyenAciklamaLabel}" for="@next"/>
+    <p:inputTextarea rows="4" id="diyetisyenAciklama" value="#{ayKisiController.selected.diyetisyenAciklama}"
+                     title="#{messages.diyetisyenAciklamaText}"
+                     styleClass="w-100"   autoResize="false"/>
 </ui:composition>
 </html>

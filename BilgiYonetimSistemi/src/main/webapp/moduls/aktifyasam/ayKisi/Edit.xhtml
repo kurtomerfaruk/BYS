@@ -9,6 +9,7 @@
 <ui:composition>
 
     <p:dialog widgetVar="AyKisiEditDialog"
+              id="AyKisiEditDialogId"
               modal="true"
               resizable="false"
               closeOnEscape="true"
@@ -178,7 +179,13 @@
         </h:form>
 
     </p:dialog>
-
+    <script type="text/javascript">
+        document.addEventListener('shown.bs.tab', function (event) {
+            adjustMenuWidth();
+            var width = $("#AyKisiEditDialogId").width();
+            $("#AyKisiEditDialogId").css("width",width);
+        });
+    </script>
 </ui:composition>
 
 </html>

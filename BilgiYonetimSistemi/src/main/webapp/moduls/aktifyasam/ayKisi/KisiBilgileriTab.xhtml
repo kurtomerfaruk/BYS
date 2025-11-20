@@ -34,7 +34,12 @@
                        var="devamDurumus"
                        itemValue="#{devamDurumus}"
                        itemLabel="#{devamDurumus.displayValue}"/>
+        <p:ajax event="change" update="devamDurumuAciklama"/>
     </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.devamDurumuAciklamaLabel}" for="@next"/>
+    <p:inputTextarea rows="4" id="devamDurumuAciklama" value="#{ayKisiController.selected.devamDurumuAciklama}" title="#{messages.devamDurumuAciklamaText}"
+                     styleClass="w-100"   autoResize="false" readonly="#{ayKisiController.selected.devamDurumu eq 'DEVAM_EDIYOR'}"/>
 
     <p:outputLabel value="#{messages.tcKimlikNoLabel}" for="@next"/>
     <coco:tcKimlikNoDogumTarihi actionListener="#{ayKisiController.getTcKimlik()}" update=":growl,@(.tcUpdate)"
@@ -68,7 +73,8 @@
                  styleClass="tcUpdate"/>
 
     <p:outputLabel value="#{messages.telefonLabel}" for="@next"/>
-    <p:inputMask id="telefon" value="#{ayKisiController.selected.gnlKisi.telefon}" mask="#{messages.telefonFormat}" required="true" title="#{messages.telefonText}"
+    <p:inputMask id="telefon" value="#{ayKisiController.selected.gnlKisi.telefon}" mask="#{messages.telefonFormat}" required="true"
+                 title="#{messages.telefonText}"
                  size="14"
                  styleClass="tcUpdate"/>
 

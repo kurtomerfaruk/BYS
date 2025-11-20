@@ -23,6 +23,7 @@ import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
 import tr.bel.gaziantep.bysweb.core.utils.StringUtil;
 import tr.bel.gaziantep.bysweb.moduls.aktifyasam.entity.*;
+import tr.bel.gaziantep.bysweb.moduls.aktifyasam.service.AyKisiAranacakKisiService;
 import tr.bel.gaziantep.bysweb.moduls.aktifyasam.service.AyKisiService;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
 import tr.bel.gaziantep.bysweb.moduls.genel.service.GnlKisiService;
@@ -61,6 +62,8 @@ public class AyKisiController extends AbstractController<AyKisi> {
     private PushContext push;
     @Inject
     private FilterOptionService filterOptionService;
+    @Inject
+    private AyKisiAranacakKisiService ayKisiAranacakKisiService;
 
     private int count;
     @Getter

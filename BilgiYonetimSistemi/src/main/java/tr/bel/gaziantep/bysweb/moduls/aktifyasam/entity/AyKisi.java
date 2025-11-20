@@ -65,6 +65,11 @@ public class AyKisi extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private EnumAyDevamDurumu devamDurumu;
 
+    @Nationalized
+    @Lob
+    @Column(name = "DEVAM_DURUMU_ACIKLAMA")
+    private String devamDurumuAciklama;
+
     @Size(max = 150)
     @Nationalized
     @Column(name = "DURAK",length = 150)
@@ -93,6 +98,21 @@ public class AyKisi extends BaseEntity {
     @Column(name = "SOSYAL_AKTIVITE_ISTEGI")
     private boolean sosyalAktiviteIstegi;
 
+    @Nationalized
+    @Lob
+    @Column(name = "SOSYO_PSIKOLOJIK_DESTEK_ACIKLAMA")
+    private String sosyoPsikolojikDestekAciklama;
+
+    @Nationalized
+    @Lob
+    @Column(name = "FIZIK_TEDAVI_ACIKLAMA")
+    private String fizikTedaviAciklama;
+
+    @Nationalized
+    @Lob
+    @Column(name = "DIYETISYEN_ACIKLAMA")
+    private String diyetisyenAciklama;
+
     @ColumnDefault("0")
     @Column(name = "AILEDEKI_HUKUMLU_DURUMU")
     private boolean ailedekiHukumluDurumu;
@@ -116,7 +136,7 @@ public class AyKisi extends BaseEntity {
 
 
 
-    @OneToMany(mappedBy = "ayKisi", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "ayKisi", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @SQLRestriction("AKTIF=true")
     @Builder.Default
     private List<AyKisiAranacakKisi> ayAranacakKisiList = new ArrayList<>();
