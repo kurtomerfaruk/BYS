@@ -158,6 +158,9 @@
     <p:ajaxExceptionHandler type="jakarta.faces.FacesException"
                             update="exceptionDialog"
                             onexception="PF('exceptionDialog').show()"/>
+    <p:ajaxExceptionHandler type="java.lang.RuntimeException"
+                            update="exceptionDialog"
+                            onexception="PF('exceptionDialog').show()"/>
 
 
     <p:dialog id="exceptionDialog" header="Hata Detayı"

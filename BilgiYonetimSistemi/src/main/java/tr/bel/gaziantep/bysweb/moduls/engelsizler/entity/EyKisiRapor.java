@@ -18,6 +18,7 @@ import java.time.LocalDate;
 @Setter
 @Entity
 @Table(name = "EYKISI_RAPOR")
+@Deprecated
 public class EyKisiRapor extends BaseEntity {
     @Serial
     private static final long serialVersionUID = -5931959043227881605L;

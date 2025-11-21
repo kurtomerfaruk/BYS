@@ -64,6 +64,7 @@ public class EyKisiService extends AbstractService<EyKisi> {
                        List<EnumGnlYardimTuru> yardimTurus,
                        List<EnumEyKullandigiCihaz> kullandigiCihazs) {
 
+
         eyKisi = processAllUpdates(eyKisi, engelGrubus, faydalandigiHakList,maddeKullanimis,aileninGelirKaynagis,yardimAlinanYerlers,yardimTurus,kullandigiCihazs);
         edit(eyKisi);
     }

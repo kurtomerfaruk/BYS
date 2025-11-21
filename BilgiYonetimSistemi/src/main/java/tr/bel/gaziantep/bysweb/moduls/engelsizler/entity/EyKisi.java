@@ -230,9 +230,9 @@ public class EyKisi extends BaseEntity {
     @Builder.Default
     private List<EyKisiMaddeKullanimi> eyKisiMaddeKullanimiList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "eyKisi", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @Builder.Default
-    private List<EyKisiRapor> eyKisiRaporList = new ArrayList<>();
+//    @OneToMany(mappedBy = "eyKisi", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+//    @Builder.Default
+//    private List<EyKisiRapor> eyKisiRaporList = new ArrayList<>();
 
     @OneToMany(mappedBy = "eyKisi")
     @Builder.Default

@@ -85,9 +85,9 @@ public class EyKisiController extends AbstractController<EyKisi> {
     private PushContext pushContext;
 
 //    private SyKullanici syKullanici;
-    @Getter
-    @Setter
-    private EyKisiRapor eyKisiRapor;
+//    @Getter
+//    @Setter
+//    private EyKisiRapor eyKisiRapor;
     @Getter
     @Setter
     private LocalDate maxDate;
@@ -199,8 +199,8 @@ public class EyKisiController extends AbstractController<EyKisi> {
                     .build();
             newItem.setGnlKisi(kisi);
             newItem.setIrtibatKuranGnlPersonel(this.getSyKullanici().getGnlPersonel());
-            eyKisiRapor = new EyKisiRapor();
-            eyKisiRapor.setEyKisi(newItem);
+//            eyKisiRapor = new EyKisiRapor();
+//            eyKisiRapor.setEyKisi(newItem);
             clearList();
             this.setSelected(newItem);
             initializeEmbeddableKey();
@@ -215,6 +215,13 @@ public class EyKisiController extends AbstractController<EyKisi> {
     public void update(ActionEvent event) {
         try {
             if (this.getSelected() != null) {
+                EyKisi existing = service.findByKisi(this.getSelected().getGnlKisi());
+
+                if(existing != null && !existing.getId().equals(this.getSelected().getId())) {
+                    FacesUtil.addErrorMessage("Bu kişiye ait zaten Engelli kaydı var.");
+                    return;
+                }
+
                 service.update(this.getSelected(), engelGrubus, faydalandigiHaklars, maddeKullanimis, aileninGelirKaynagis, yardimAlinanYerlers, yardimTurus, kullandigiCihazs);
                 FacesUtil.successMessage(Constants.KAYIT_GUNCELLENDI);
             }

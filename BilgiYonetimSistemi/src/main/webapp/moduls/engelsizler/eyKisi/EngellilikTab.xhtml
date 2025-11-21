@@ -21,6 +21,13 @@
                   monthNavigator="true" yearNavigator="true" showButtonBar="true"
                   showIcon="true"/>
 
+    <p:outputLabel value="#{messages.raporBitisTarihiLabel}" for="@next"/>
+    <p:datePicker id="raporBitisTarihi" locale="tr" pattern="#{messages.tarihFormat}"
+                  value="#{eyKisiController.selected.raporBitisTarihi}"
+                  title="#{messages.raporBitisTarihiText}"
+                  disabled="#{eyKisiController.selected.surekli}"
+                  mask="true" monthNavigator="true" yearNavigator="true"
+                  showButtonBar="true" showIcon="true"/>
 
     <p:outputLabel value="#{messages.surekliLabel}" for="@next"/>
     <h:panelGroup>
@@ -37,17 +44,11 @@
         </div>
     </h:panelGroup>
 
-    <p:outputLabel value="#{messages.raporBitisTarihiLabel}" for="@next"/>
-    <p:datePicker id="raporBitisTarihi" locale="tr" pattern="#{messages.tarihFormat}"
-                  value="#{eyKisiController.selected.raporBitisTarihi}"
-                  title="#{messages.raporBitisTarihiText}"
-                  disabled="#{eyKisiController.eyKisiRapor.surekli}"
-                  mask="true" monthNavigator="true" yearNavigator="true"
-                  showButtonBar="true" showIcon="true"/>
-
     <p:outputLabel value="#{messages.hastahaneLabel}" for="@next"/>
-    <p:inputText id="hastahane" value="#{eyKisiController.selected.hastahane}"
-                 title="#{messages.hastahaneText}" size="50"/>
+    <p:inputText id="hastahane" value="#{eyKisiController.selected.hastahane}"  title="#{messages.hastahaneText}" size="50"/>
+
+    <p:outputLabel value="#{messages.raporNoLabel}" for="@next"/>
+    <p:inputText id="raporNo" value="#{eyKisiController.selected.raporNo}"  title="#{messages.raporNoText}" size="50"/>
 
     <p:outputLabel value="#{messages.cozgerLabel}" for="@next"/>
     <p:selectOneMenu id="cozger" value="#{eyKisiController.selected.eyCozger}"
@@ -77,8 +78,7 @@
     </p:inputText>
 
     <p:outputLabel value="#{messages.agirOzurluLabel}" for="@next"/>
-    <p:selectBooleanCheckbox id="agirOzurlu"
-                             value="#{eyKisiController.selected.agirOzurlu}"/>
+    <p:selectBooleanCheckbox id="agirOzurlu" value="#{eyKisiController.selected.agirOzurlu}"/>
 
     <p:outputLabel value="#{messages.kullandigiCihazlarLabel}" for="@next"/>
     <p:selectCheckboxMenu id="kullandigiCihazlar"

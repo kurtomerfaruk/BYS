@@ -80,6 +80,7 @@
                                     <ui:include src="/moduls/engelsizler/eyKisi/KisiBilgileriTab.xhtml"/>
                                 </p:panelGrid>
                             </div>
+
                             <div class="tab-pane" id="aileDurumuEditTabPane">
 
                                 <p:panelGrid id="aileDurumuPanel" columns="2" styleClass="w-100"
@@ -89,6 +90,7 @@
 
                                 </p:panelGrid>
                             </div>
+
                             <div class="tab-pane" id="ekonomomikDurumEditTabPane">
                                 <p:panelGrid id="ekonomikDurumPanel" columns="2" styleClass="w-100"
                                              rendered="#{eyKisiController.selected!=null}" layout="tabular">
@@ -97,6 +99,7 @@
 
                                 </p:panelGrid>
                             </div>
+
                             <div class="tab-pane" id="sosyalYardimEditTabPane">
                                 <p:panelGrid id="sosyalYardimPanel" columns="2" styleClass="w-100" rendered="#{eyKisiController.selected!=null}"
                                              layout="tabular">
@@ -104,14 +107,17 @@
 
                                 </p:panelGrid>
                             </div>
+
                             <div class="tab-pane" id="engellilikEditTabPane">
                                 <p:panelGrid id="engellilikPanel" columns="2" styleClass="w-100" rendered="#{eyKisiController.selected!=null}" layout="tabular">
                                     <ui:include src="/moduls/engelsizler/eyKisi/EngellilikTab.xhtml"/>
                                 </p:panelGrid>
                             </div>
-                            <div class="tab-pane" id="talepEditTabPane">
+
+                           <div class="tab-pane" id="talepEditTabPane">
                                 <ui:include src="/moduls/engelsizler/eyKisi/TalepListesiTab.xhtml"/>
                             </div>
+
                             <div class="tab-pane" id="dosyalarEditTabPane">
                                 <ui:include src="/moduls/engelsizler/eyKisi/DosyalarTab.xhtml"/>
                             </div>
