@@ -81,9 +81,8 @@
                  styleClass="tcUpdate"/>
 
     <p:outputLabel value="#{messages.egitimDurumuLabel}" for="@next"/>
-    <p:selectOneMenu id="egitimDurumu" styleClass="tcUpdate"
-                     value="#{eyKisiController.selected.gnlKisi.egitimDurumu}"
-                     required="true" converter="omnifaces.SelectItemsConverter">
+    <p:selectOneMenu id="egitimDurumu" styleClass="tcUpdate"  value="#{eyKisiController.selected.gnlKisi.egitimDurumu}"
+                     required="true" converter="omnifaces.SelectItemsConverter" filter="true">
         <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
         <f:selectItems value="#{enumEgitimDurumu.ALL_VALUES}"
                        var="enumEgitimDurumus"
@@ -119,8 +118,8 @@
                  styleClass="tcUpdate"/>
 
     <p:outputLabel value="#{messages.cocukSayisiLabel}" for="@next"/>
-    <p:inputText id="cocukSayisi" value="#{eyKisiController.selected.gnlKisi.cocukSayisi}"
-                 title="#{messages.cocukSayisiText}" styleClass="tcUpdate"/>
+    <p:spinner id="cocukSayisi" value="#{eyKisiController.selected.gnlKisi.cocukSayisi}"  title="#{messages.cocukSayisiText}" styleClass="tcUpdate"
+               stepFactor="1" min="0"/>
 
     <p:outputLabel value="#{messages.ehliyetLabel}" for="@next"/>
     <h:panelGroup>

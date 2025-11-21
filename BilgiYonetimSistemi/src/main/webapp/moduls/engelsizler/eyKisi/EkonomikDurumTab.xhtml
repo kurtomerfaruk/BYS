@@ -99,7 +99,16 @@
     </p:selectCheckboxMenu>
 
     <p:outputLabel value="#{messages.aileninGelirKaynagiAciklamaLabel}" for="@next"/>
-    <p:inputText id="aileninGelirKaynagiAciklama" value="#{eyKisiController.selected.gnlKisi.gelirKaynagiAciklama}"/>
+    <p:inputText id="aileninGelirKaynagiAciklama" value="#{eyKisiController.selected.gnlKisi.gelirKaynagiAciklama}" styleClass="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.evDurumuLabel}" for="@next"/>
+    <p:selectOneMenu id="evDurumu" value="#{eyKisiController.selected.gnlKisi.evinDurumu}" converter="omnifaces.SelectItemsConverter" styleClass="tcUpdate">
+        <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+        <f:selectItems value="#{enumEvinDurumu.ALL_VALUES}"
+                       var="evDurumus"
+                       itemValue="#{evDurumus}"
+                       itemLabel="#{evDurumus.displayValue}"/>
+    </p:selectOneMenu>
 
 </ui:composition>
 </html>
