@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:p="primefaces"
+                xmlns:pt="jakarta.faces.passthrough"
+                xmlns:coco="jakarta.faces.composite/ui">
+
+    <h:form id="MeAnketListForm" styleClass="form-height">
+
+        <p:contextMenu id="MeAnketDataTableContextMenu" for="datalist:datalist">
+            <p:menuitem value="#{messages.buttonEkle}" onclick="document.getElementById('MeAnketListForm:datalist:datalist:createButton').click();"
+                        icon="pi pi-plus" rendered="#{syKullaniciController.hasPermission('meanket:ekle')}"/>
+            <p:menuitem value="#{messages.buttonGuncelle}" onclick="document.getElementById('MeAnketListForm:datalist:datalist:editButton').click();"
+                        icon="pi pi-pencil" rendered="#{syKullaniciController.hasPermission('meanket:guncelle')}"/>
+            <p:menuitem value="#{messages.buttonDetay}" onclick="document.getElementById('MeAnketListForm:datalist:datalist:viewButton').click();"
+                        icon="pi pi-search"/>
+            <p:menuitem value="#{messages.buttonSil}" onclick="document.getElementById('MeAnketListForm:datalist:datalist:deleteButton').click();"
+                        icon="pi pi-trash" rendered="#{syKullaniciController.hasPermission('meanket:sil')}"/>
+        </p:contextMenu>
+        <coco:datatable id="datalist"
+                        value="#{meAnketController.lazyItems}"
+                        rowKey="#{item.id}"
+                        selection="#{meAnketController.selected}"
+                        filtered="#{meAnketController.filtered}"
+                        rowselect=":MeAnketListForm:datalist:datalist:createButton,:MeAnketListForm:datalist:datalist:viewButton,:MeAnketListForm:datalist:datalist:editButton,:MeAnketListForm:datalist:datalist:deleteButton"
+                        rowDblselect="document.getElementById('MeAnketListForm:datalist:datalist:editButton').click()"
+                        contextMenu=":MeAnketListForm:datalist:datalist:createButton :MeAnketListForm:datalist:datalist:viewButton :MeAnketListForm:datalist:datalist:editButton :MeAnketListForm:datalist:datalist:deleteButton"
+                        selectListener="#{meAnketController.resetParents}"
+                        controller="#{meAnketController}"
+                        header="#{messages.anketListesi}">
+
+            <p:ajax event="colResize" listener="#{meAnketController.onResize}"/>
+
+            <f:facet name="paginatorBottomLeft">
+
+                <p:commandButton id="createButton" styleClass="ui-button-primary" icon="pi pi-plus" pt:data-tooltip="#{messages.buttonEkle}"
+                                 actionListener="#{meAnketController.prepareCreate}" update=":MeAnketCreateForm:MeAnketCreateForm"
+                                 oncomplete="PF('MeAnketCreateDialog').show()" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('meanket:ekle')}"/>
+                <p:commandButton id="editButton" styleClass="ui-button-success" icon="pi pi-pencil" pt:data-tooltip="#{messages.buttonGuncelle}"
+                                 update=":MeAnketEditForm:MeAnketEditForm" oncomplete="PF('MeAnketEditDialog').show()"
+                                 disabled="#{empty meAnketController.selected}" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('meanket:guncelle')}"/>
+                <p:commandButton id="viewButton" styleClass="ui-button-info" icon="pi pi-search" pt:data-tooltip="#{messages.buttonDetay}"
+                                 update=":MeAnketViewForm:MeAnketViewForm" oncomplete="PF('MeAnketViewDialog').show()"
+                                 disabled="#{empty meAnketController.selected}" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                <p:commandButton id="deleteButton" styleClass="ui-button-danger" icon="pi pi-trash" pt:data-tooltip="#{messages.buttonSil}"
+                                 actionListener="#{meAnketController.delete}" update=":growl,datalist" disabled="#{empty meAnketController.selected}"
+                                 rendered="#{syKullaniciController.hasPermission('meanket:sil')}">
+                    <p:confirm header="#{messages.ConfirmationHeader}" message="#{messages.ConfirmDeleteMessage}" icon="pi pi-exclamation-circle"/>
+                </p:commandButton>
+
+            </f:facet>
+
+        </coco:datatable>
+
+
+        <ui:include src="/confirmation.xhtml"/>
+
+    </h:form>
+
+</ui:composition>

@@ -1,13 +1,15 @@
 package tr.bel.gaziantep.bysweb.moduls.moralevi.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
 import tr.bel.gaziantep.bysweb.core.enums.bys.EnumEvetHayir;
 import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlYakinlikDerecesi;
+import tr.bel.gaziantep.bysweb.core.enums.moralevi.EnumMeAnketHizmetSuresi;
+import tr.bel.gaziantep.bysweb.core.enums.moralevi.EnumMeAnketKatilimDurumu;
+import tr.bel.gaziantep.bysweb.core.enums.moralevi.EnumMeAnketPeriyot;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
 
 import java.io.Serial;
@@ -34,7 +36,7 @@ public class MeAnket extends BaseEntity {
     @JoinColumn(name = "MEKISI_ID")
     private MeKisi meKisi;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "ANKET_YAPILAN_GNLKISI_ID")
     private GnlKisi anketYapilanGnlKisi;
 
@@ -94,20 +96,17 @@ public class MeAnket extends BaseEntity {
     @Column(name = "TARIH")
     private LocalDate tarih;
 
-    @Size(max = 50)
-    @Nationalized
-    @Column(name = "ANKET_PERIYODU", length = 50)
-    private String anketPeriyodu;
+    @Column(name = "ANKET_PERIYODU")
+    @Enumerated(EnumType.STRING)
+    private EnumMeAnketPeriyot anketPeriyodu;
 
-    @Size(max = 50)
-    @Nationalized
-    @Column(name = "HIZMET_SURESI", length = 50)
-    private String hizmetSuresi;
+    @Column(name = "HIZMET_SURESI")
+    @Enumerated(EnumType.STRING)
+    private EnumMeAnketHizmetSuresi hizmetSuresi;
 
-    @Size(max = 50)
-    @Nationalized
-    @Column(name = "HAFTALIK_KATILIM_SIKLIGI", length = 50)
-    private String haftalikKatilimSikligi;
+    @Column(name = "HAFTALIK_KATILIM_DURUMU")
+    @Enumerated(EnumType.STRING)
+    private EnumMeAnketKatilimDurumu haftalikKatilimDurumu;
 
     @Override
     public int hashCode() {

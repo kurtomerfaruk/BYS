@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:createpage id="MeAnketCreateForm"
+                     renderedListener="#{meAnketController.selected != null}"
+                     widgetVar="MeAnketCreateDialog"
+                     actionListener="#{meAnketController.saveNew}"
+                     listForm="MeAnketListForm">
+
+        <p:outputLabel value="#{messages.tarihLabel}" for="@next"/>
+        <p:datePicker id="tarih" locale="tr" pattern="#{messages.tarihFormat}" value="#{meAnketController.selected.tarih}" title="#{messages.tarihText}"
+                      mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true" showOnFocus="false" required="true"/>
+
+        <p:outputLabel value="#{messages.kisiLabel}" for="@next"/>
+        <coco:inputWithButton id="inputWithButtonMeKisi" inputId="meKisiId"
+                              inputValue="#{meAnketController.selected.meKisi.eyKisi.gnlKisi.adSoyad}"
+                              inputTitle="#{messages.tcKimlikNoText}"
+                              actionListener="#{bysController.openCommonDialog('meKisiSec')}"
+                              ajaxListener="#{meAnketController.secilenMeKisi}"
+                              buttonTitle="#{messages.kisiSecmelisiniz}"
+                              size="50" inputRequired="false"
+                              dialogId="MeAnketCreateDialogId"/>
+
+        <p:outputLabel value="#{messages.anketYapilanTcLabel}" for="@next"/>
+        <coco:tcKimlikNoDogumTarihi actionListener="#{meAnketController.getTcKimlik()}"
+                                    update=":growl,@(.anketUpdate)"
+                                    value="#{meAnketController.selected.anketYapilanGnlKisi.tcKimlikNo}"
+                                    dateValue="#{meAnketController.selected.anketYapilanGnlKisi.dogumTarihi}"/>
+
+        <p:outputLabel value="#{messages.anketYapilanAdSoyadLabel}" for="@next"/>
+        <p:inputText id="anketYapilanAdSoyad" value="#{meAnketController.selected.anketYapilanGnlKisi.adSoyad}"
+                     title="#{messages.anketYapilanAdSoyadText}" size="50" maxlength="50" disabled="true" styleClass="anketUpdate"/>
+
+        <p:outputLabel value="#{messages.yakinlikDerecesiLabel}" for="@next"/>
+        <p:selectOneMenu id="yakinlik" value="#{meAnketController.selected.yakinlik}" converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{enumYakinlik.ALL_VALUES}"
+                           var="yakinlikDerecesis"
+                           itemValue="#{yakinlikDerecesis}"
+                           itemLabel="#{yakinlikDerecesis.displayValue}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.hizmetlerdenMemnunMuLabel}" for="@next"/>
+        <p:selectOneRadio id="hizmetlerdenMemnun" value="#{meAnketController.selected.hizmetlerdenMemnun}" layout="responsive" columns="2">
+            <f:selectItems value="#{enumEvetHayir.ALL_VALUES}"
+                           var="memnuns"
+                           itemValue="#{memnuns}"
+                           itemLabel="#{memnuns.displayValue}"/>
+            <p:ajax event="change" update="hizmetlerdenMemnunAciklama"/>
+        </p:selectOneRadio>
+
+        <p:outputLabel value="#{messages.hizmetlerdenMemnunAciklamaLabel}" for="@next"/>
+        <p:inputTextarea rows="3" id="hizmetlerdenMemnunAciklama" value="#{meAnketController.selected.hizmetlerdenMemnunAciklama}"
+                         title="#{messages.hizmetlerdenMemnunAciklamaText}"
+                         disabled="#{meAnketController.selected.hizmetlerdenMemnun!='HAYIR'}" styleClass="w-100"/>
+
+        <p:outputLabel value="#{messages.olumluIlerlemeLabel}" for="@next"/>
+        <p:selectOneRadio id="olumluIlerleme" value="#{meAnketController.selected.olumluIlerleme}" layout="responsive" columns="2">
+            <f:selectItems value="#{enumEvetHayir.ALL_VALUES}"
+                           var="memnuns"
+                           itemValue="#{memnuns}"
+                           itemLabel="#{memnuns.displayValue}"/>
+            <p:ajax event="change" update="olumluIlerlemeAciklama"/>
+        </p:selectOneRadio>
+
+        <p:outputLabel value="#{messages.olumluIlerlemeAciklamaLabel}" for="@next"/>
+        <p:inputTextarea rows="3" id="olumluIlerlemeAciklama" value="#{meAnketController.selected.olumluIlerlemeAciklama}"
+                         title="#{messages.olumluIlerlemeAciklamaText}" disabled="#{meAnketController.selected.olumluIlerleme!='HAYIR'}"
+                         styleClass="w-100"/>
+
+        <p:outputLabel value="#{messages.servistenMemnunLabel}" for="@next"/>
+        <p:selectOneRadio id="servistenMemnun" value="#{meAnketController.selected.servistenMemnun}" layout="responsive" columns="2">
+            <f:selectItems value="#{enumEvetHayir.ALL_VALUES}"
+                           var="memnuns"
+                           itemValue="#{memnuns}"
+                           itemLabel="#{memnuns.displayValue}"/>
+            <p:ajax event="change" update="servistenMemnunAciklama"/>
+        </p:selectOneRadio>
+
+        <p:outputLabel value="#{messages.servistenMemnunAciklamaLabel}" for="@next"/>
+        <p:inputTextarea rows="3" id="servistenMemnunAciklama" value="#{meAnketController.selected.servistenMemnunAciklama}"
+                         title="#{messages.servistenMemnunAciklamaText}" styleClass="w-100"
+                         disabled="#{meAnketController.selected.servistenMemnun!='HAYIR'}"/>
+
+        <p:outputLabel value="#{messages.personelDavranisindanMemnunKalindiMiLabel}" for="@next"/>
+        <p:selectOneRadio id="personelDavranislarindanMemnun" value="#{meAnketController.selected.personelDavranislarindanMemnun}" layout="responsive" columns="2">
+            <f:selectItems value="#{enumEvetHayir.ALL_VALUES}"
+                           var="memnuns"
+                           itemValue="#{memnuns}"
+                           itemLabel="#{memnuns.displayValue}"/>
+            <p:ajax event="change" update="personelDavranislarindanMemnunAciklama"/>
+        </p:selectOneRadio>
+
+        <p:outputLabel value="#{messages.personelDavranisindanMemnunAciklamaLabel}"  for="@next"/>
+        <p:inputTextarea rows="3" id="personelDavranislarindanMemnunAciklama"
+                         value="#{meAnketController.selected.personelDavranislarindanMemnunAciklama}"
+                         title="#{messages.personelDavranisindanMemnunAciklamaText}" styleClass="w-100"
+                         disabled="#{meAnketController.selected.personelDavranislarindanMemnun!='HAYIR'}"/>
+
+        <p:outputLabel value="#{messages.onerilerLabel}" for="@next"/>
+        <p:selectOneRadio id="oneriler" value="#{meAnketController.selected.oneriler}" layout="responsive" columns="2">
+            <f:selectItems value="#{enumEvetHayir.ALL_VALUES}"
+                           var="memnuns"
+                           itemValue="#{memnuns}"
+                           itemLabel="#{memnuns.displayValue}"/>
+            <p:ajax event="change" update="onerilerAciklama"/>
+        </p:selectOneRadio>
+
+        <p:outputLabel value="#{messages.oneriAciklamaLabel}" for="@next"/>
+        <p:inputTextarea rows="4" id="onerilerAciklama" value="#{meAnketController.selected.onerilerAciklama}"
+                         title="#{messages.oneriAciklamaText}" styleClass="w-100"
+                         disabled="#{meAnketController.selected.oneriler!='HAYIR'}"/>
+
+        <p:outputLabel value="#{messages.anketPeriyoduLabel}" for="@next"/>
+        <p:selectOneRadio id="anketPeriyodu" value="#{meAnketController.selected.anketPeriyodu}" layout="responsive" columns="2">
+            <f:selectItems value="#{enumAnketPeriyot.ALL_VALUES}"
+                           var="periyots"
+                           itemValue="#{periyots}"
+                           itemLabel="#{periyots.displayValue}"/>
+        </p:selectOneRadio>
+
+        <p:outputLabel value="#{messages.hizmetSuresiLabel}" for="@next"/>
+        <p:selectOneRadio id="hizmetSuresi" value="#{meAnketController.selected.hizmetSuresi}" layout="responsive" columns="2">
+            <f:selectItems value="#{enumAnketHizmetSuresi.ALL_VALUES}"
+                           var="hizmetSuresis"
+                           itemValue="#{hizmetSuresis}"
+                           itemLabel="#{hizmetSuresis.displayValue}"/>
+        </p:selectOneRadio>
+
+        <p:outputLabel value="#{messages.haftalikKatilimDurumuLabel}" for="@next"/>
+        <p:selectOneRadio id="haftalikKatilimDurumu" value="#{meAnketController.selected.haftalikKatilimDurumu}" layout="responsive" columns="2">
+            <f:selectItems value="#{enumAnketKatilimDurumu.ALL_VALUES}"
+                           var="katilimDurums"
+                           itemValue="#{katilimDurums}"
+                           itemLabel="#{katilimDurums.displayValue}"/>
+        </p:selectOneRadio>
+
+        <p:outputLabel value="#{messages.gorusmeyiYapanPersonelLabel}" for="@next"/>
+        <p:selectOneMenu id="gorusmeYapanKullaniciId" value="#{meAnketController.selected.gorusmeYapanMePersonel}" filter="true"
+                         converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{mePersonelController.items}"
+                           var="personels"
+                           itemValue="#{personels}"
+                           itemLabel="#{personels.gnlPersonel.gnlKisi.adSoyad}"/>
+        </p:selectOneMenu>
+
+    </coco:createpage>
+
+</ui:composition>
+
+</html>

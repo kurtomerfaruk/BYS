@@ -27,6 +27,17 @@
                             <i class="ri-arrow-right-s-line side-menu__angle"></i></a>
                         <ul class="slide-menu child2">
 
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('meanket:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/moralevi/meAnket/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="Anketler"/>
+                                </li>
+                            </ui:fragment>
+
                             <ui:fragment rendered="#{syKullaniciController.hasPermission('meetkinlik:goster')}">
                                 <li class="slide">
                                     <p:commandLink styleClass="side-menu__item sublevel2"
