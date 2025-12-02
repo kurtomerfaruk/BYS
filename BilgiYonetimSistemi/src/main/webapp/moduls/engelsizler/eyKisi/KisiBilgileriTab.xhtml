@@ -108,87 +108,85 @@
                      readonly="true"/>
 
     <p:outputLabel value="#{messages.ilceLabel}" for="@next"/>
-    <p:inputText id="ilce" value="#{eyKisiController.selected.gnlKisi.gnlIlce.tanim}" title="#{messages.ilceText}"
-                 required="true" readonly="#{facesContext.renderResponse}"
-                 styleClass="tcUpdate"/>
+    <p:inputText id="ilce" value="#{eyKisiController.selected.gnlKisi.gnlIlce.tanim}" title="#{messages.ilceText}" readonly="true" styleClass="tcUpdate"/>
 
     <p:outputLabel value="#{messages.mahalleLabel}" for="@next"/>
     <p:inputText id="mahalle" value="#{eyKisiController.selected.gnlKisi.gnlMahalle.tanim}" title="#{messages.mahalleText}" readonly="true"
                  styleClass="tcUpdate"/>
 
-        <p:outputLabel value="#{messages.cocukSayisiLabel}" for="@next"/>
-        <p:spinner id="cocukSayisi" value="#{eyKisiController.selected.gnlKisi.cocukSayisi}"  title="#{messages.cocukSayisiText}" styleClass="tcUpdate"
-                   stepFactor="1" min="0"/>
+    <p:outputLabel value="#{messages.cocukSayisiLabel}" for="@next"/>
+    <p:spinner id="cocukSayisi" value="#{eyKisiController.selected.gnlKisi.cocukSayisi}" title="#{messages.cocukSayisiText}" styleClass="tcUpdate"
+               stepFactor="1" min="0"/>
 
-        <p:outputLabel value="#{messages.ehliyetLabel}" for="@next"/>
-        <h:panelGroup>
-            <div class="ui-inputgroup">
-                <div class="ui-inputgroup-addon">
-                    <p:selectBooleanCheckbox id="ehliyet"
-                                             value="#{eyKisiController.selected.gnlKisi.ehliyet}">
-                        <p:ajax event="change" update="ehliyetAciklama"
-                                listener="#{eyKisiController.selected.gnlKisi.setEhliyetAciklama('')}"/>
-                    </p:selectBooleanCheckbox>
-                </div>
-                <p:inputText id="ehliyetAciklama"
-                             value="#{eyKisiController.selected.gnlKisi.ehliyetAciklama}"
-                             title="#{messages.ehliyetAciklamaText}"
-                             required="#{eyKisiController.selected.gnlKisi.ehliyet}"
-                             disabled="#{!eyKisiController.selected.gnlKisi.ehliyet}"/>
+    <p:outputLabel value="#{messages.ehliyetLabel}" for="@next"/>
+    <h:panelGroup>
+        <div class="ui-inputgroup">
+            <div class="ui-inputgroup-addon">
+                <p:selectBooleanCheckbox id="ehliyet"
+                                         value="#{eyKisiController.selected.gnlKisi.ehliyet}">
+                    <p:ajax event="change" update="ehliyetAciklama"
+                            listener="#{eyKisiController.selected.gnlKisi.setEhliyetAciklama('')}"/>
+                </p:selectBooleanCheckbox>
             </div>
-        </h:panelGroup>
+            <p:inputText id="ehliyetAciklama"
+                         value="#{eyKisiController.selected.gnlKisi.ehliyetAciklama}"
+                         title="#{messages.ehliyetAciklamaText}"
+                         required="#{eyKisiController.selected.gnlKisi.ehliyet}"
+                         disabled="#{!eyKisiController.selected.gnlKisi.ehliyet}"/>
+        </div>
+    </h:panelGroup>
 
-        <p:outputLabel value="#{messages.sabikaKaydiLabel}" for="@next"/>
-        <h:panelGroup>
-            <div class="ui-inputgroup">
-                <div class="ui-inputgroup-addon">
-                    <p:selectBooleanCheckbox id="sabikaKaydi"
-                                             value="#{eyKisiController.selected.gnlKisi.sabikaKaydi}">
-                        <p:ajax event="change" update="sabikaKaydiAciklama"
-                                listener="#{eyKisiController.selected.gnlKisi.setSabikaKaydiAciklama('')}"/>
-                    </p:selectBooleanCheckbox>
-                </div>
-                <p:inputText id="sabikaKaydiAciklama"
-                             value="#{eyKisiController.selected.gnlKisi.sabikaKaydiAciklama}"
-                             title="#{messages.sabikaKaydiAciklamaText}"
-                             required="#{eyKisiController.selected.gnlKisi.sabikaKaydi}"
-                             disabled="#{!eyKisiController.selected.gnlKisi.sabikaKaydi}"/>
+    <p:outputLabel value="#{messages.sabikaKaydiLabel}" for="@next"/>
+    <h:panelGroup>
+        <div class="ui-inputgroup">
+            <div class="ui-inputgroup-addon">
+                <p:selectBooleanCheckbox id="sabikaKaydi"
+                                         value="#{eyKisiController.selected.gnlKisi.sabikaKaydi}">
+                    <p:ajax event="change" update="sabikaKaydiAciklama"
+                            listener="#{eyKisiController.selected.gnlKisi.setSabikaKaydiAciklama('')}"/>
+                </p:selectBooleanCheckbox>
             </div>
-        </h:panelGroup>
+            <p:inputText id="sabikaKaydiAciklama"
+                         value="#{eyKisiController.selected.gnlKisi.sabikaKaydiAciklama}"
+                         title="#{messages.sabikaKaydiAciklamaText}"
+                         required="#{eyKisiController.selected.gnlKisi.sabikaKaydi}"
+                         disabled="#{!eyKisiController.selected.gnlKisi.sabikaKaydi}"/>
+        </div>
+    </h:panelGroup>
 
-        <p:outputLabel value="#{messages.iskurLabel}" for="@next"/>
-        <p:selectBooleanCheckbox id="iskurKaydi" value="#{eyKisiController.selected.gnlKisi.iskurKaydi}"/>
+    <p:outputLabel value="#{messages.iskurLabel}" for="@next"/>
+    <p:selectBooleanCheckbox id="iskurKaydi" value="#{eyKisiController.selected.gnlKisi.iskurKaydi}"/>
 
-        <p:outputLabel value="#{messages.faydalandigiHaklarLabel}"
-                       for="@next"/>
-        <p:selectCheckboxMenu id="faydalandigiHaklar"
-                              value="#{eyKisiController.faydalandigiHaklars}"
-                              label="#{messages.faydalandigiHaklarText}" multiple="true"
-                              filter="true" filterMatchMode="startsWith" styleClass="checkboxMenu">
-            <f:selectItems value="#{enumFaydalandigiHaklar.ALL_VALUES}"
-                           var="faydalandigiHaklars"
-                           itemValue="#{faydalandigiHaklars}"
-                           itemLabel="#{faydalandigiHaklars.displayValue}"/>
-            <f:converter converterId="omnifaces.GenericEnumConverter"/>
-        </p:selectCheckboxMenu>
+    <p:outputLabel value="#{messages.faydalandigiHaklarLabel}"
+                   for="@next"/>
+    <p:selectCheckboxMenu id="faydalandigiHaklar"
+                          value="#{eyKisiController.faydalandigiHaklars}"
+                          label="#{messages.faydalandigiHaklarText}" multiple="true"
+                          filter="true" filterMatchMode="startsWith" styleClass="checkboxMenu">
+        <f:selectItems value="#{enumFaydalandigiHaklar.ALL_VALUES}"
+                       var="faydalandigiHaklars"
+                       itemValue="#{faydalandigiHaklars}"
+                       itemLabel="#{faydalandigiHaklars.displayValue}"/>
+        <f:converter converterId="omnifaces.GenericEnumConverter"/>
+    </p:selectCheckboxMenu>
 
-        <p:outputLabel value="#{messages.maddeKullanimiLabel}" for="maddeKullanimi"/>
-        <p:selectCheckboxMenu id="maddeKullanimi"
-                              value="#{eyKisiController.maddeKullanimis}"
-                              label="#{messages.maddeKullanimiText}" multiple="true"
-                              filter="true" filterMatchMode="startsWith" styleClass="checkboxMenu">
-            <f:selectItems value="#{enumMaddeKullanimi.ALL_VALUES}"
-                           var="maddeKullanimis"
-                           itemValue="#{maddeKullanimis}"
-                           itemLabel="#{maddeKullanimis.displayValue}"/>
-            <f:converter converterId="omnifaces.GenericEnumConverter"/>
-        </p:selectCheckboxMenu>
+    <p:outputLabel value="#{messages.maddeKullanimiLabel}" for="maddeKullanimi"/>
+    <p:selectCheckboxMenu id="maddeKullanimi"
+                          value="#{eyKisiController.maddeKullanimis}"
+                          label="#{messages.maddeKullanimiText}" multiple="true"
+                          filter="true" filterMatchMode="startsWith" styleClass="checkboxMenu">
+        <f:selectItems value="#{enumMaddeKullanimi.ALL_VALUES}"
+                       var="maddeKullanimis"
+                       itemValue="#{maddeKullanimis}"
+                       itemLabel="#{maddeKullanimis.displayValue}"/>
+        <f:converter converterId="omnifaces.GenericEnumConverter"/>
+    </p:selectCheckboxMenu>
 
-        <p:outputLabel value="#{messages.aciklamaLabel}" for="@next"/>
-        <p:inputTextarea id="aciklama" value="#{eyKisiController.selected.aciklama}"
-                         autoResize="false" rows="4" styleClass="w-100"/>
+    <p:outputLabel value="#{messages.aciklamaLabel}" for="@next"/>
+    <p:inputTextarea id="aciklama" value="#{eyKisiController.selected.aciklama}"
+                     autoResize="false" rows="4" styleClass="w-100"/>
 
-        <h:outputText value="#{messages.kayitYapanLabel}"/>
-        <h:outputText value="#{eyKisiController.selected.irtibatKuranGnlPersonel.gnlKisi.adSoyad}"/>
+    <h:outputText value="#{messages.kayitYapanLabel}"/>
+    <h:outputText value="#{eyKisiController.selected.irtibatKuranGnlPersonel.gnlKisi.adSoyad}"/>
 </ui:composition>
 </html>

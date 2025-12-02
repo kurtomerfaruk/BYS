@@ -80,6 +80,7 @@ public class ModelConverter implements java.io.Serializable {
             kisi.setOlumTarihi(kpsModel.getKutukModel().getOlumTarihi());
             kisi.setKimlikSeriNo(kpsModel.getKutukModel().getKimlikSeriNo());
             kisi.setSonGecerlilikTarihi(kpsModel.getKutukModel().getSonGecerlilikTarihi());
+            kisi.setAktif(true);
             if (kisi.getEklemeYeri() == null) {
                 kisi.setEklemeYeri(modul);
             }

@@ -36,4 +36,9 @@ public class MeEtkinlikService extends AbstractService<MeEtkinlik> {
     public String getSortCol() {
         return "tarih";
     }
+
+    @Override
+    public String getSorting(){
+        return "desc";
+    }
 }

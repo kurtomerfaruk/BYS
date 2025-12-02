@@ -52,9 +52,7 @@
         <p:keyFilter mask="num"/>
     </p:inputText>
 
-    <p:outputLabel value="#{messages.izlemeYapanKisiGorusuLabel}" for="@next"/>
-    <p:inputTextarea id="izlemeYapaninGorusu" value="#{meKisiController.selected.izlemeYapaninGorusu}" title="#{messages.izlemeYapanKisiGorusuText}" size="50"
-                     rows="4" autoResize="false" styleClass="w-100"/>
+
 
     <p:outputLabel value="#{messages.hizmetlerdenMemnunMuLabel}" for="@next"/>
     <p:selectOneMenu id="hizmetlerdenMemnunMu" value="#{meKisiController.selected.eyKisi.hizmetlerdenMemnunMu}">
@@ -94,6 +92,10 @@
     <p:datePicker id="hastaneKontrolTarihi" locale="tr" pattern="#{messages.tarihFormat}" value="#{meKisiController.selected.hastaneKontrolTarihi}"
                   title="#{messages.hastaneKontrolTarihiText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
                   showOnFocus="false"/>
+
+    <p:outputLabel value="#{messages.izlemeYapanKisiGorusuLabel}" for="@next"/>
+    <p:inputTextarea id="izlemeYapaninGorusu" value="#{meKisiController.selected.izlemeYapaninGorusu}" title="#{messages.izlemeYapanKisiGorusuText}" size="50"
+                     rows="4" autoResize="false" styleClass="w-100"/>
 
 </ui:composition>
 </html>
