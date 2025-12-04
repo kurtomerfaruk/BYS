@@ -4,6 +4,7 @@ import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
 import jakarta.servlet.ServletContext;
 import lombok.extern.slf4j.Slf4j;
+import org.primefaces.PrimeFaces;
 import tr.bel.gaziantep.bysweb.core.controller.AbstractReportController;
 import tr.bel.gaziantep.bysweb.core.utils.Util;
 
@@ -35,6 +36,7 @@ public class AyKisiPrint extends AbstractReportController {
             parameterMap.put("aykisi_id", ayKisiId);
             generateAttribute(sc, parameterMap);
             sc.getRequestDispatcher("/ReportServlet");
+            PrimeFaces.current().executeScript("PF('PrintDialog').show()");
 
         } catch (Exception ex) {
             log.error(null,ex);

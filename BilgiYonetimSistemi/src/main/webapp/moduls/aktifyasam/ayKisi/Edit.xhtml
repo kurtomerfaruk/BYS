@@ -16,7 +16,7 @@
               header="#{messages.dialogKayitGuncelle}"
               appendTo="@(body)"
               responsive="true"
-              onShow="PF('AyKisiEditDialog').initPosition();"
+              onShow="PF('AyKisiEditDialog').initPosition();adjustCheckMenuWidth();"
               fitViewport="true"
               position="top">
 
@@ -24,101 +24,94 @@
             <h:panelGroup id="display">
                 <p:focus context="display"/>
                 <div class="card">
-                    <div class="card-header align-items-center d-flex">
-                        <div class="flex-shrink-0 ms-2">
-                            <ul class="nav justify-content-end nav-tabs-custom rounded card-header-tabs border-bottom-0" role="tablist">
-                                <li class="nav-item">
-                                    <a class="nav-link active" data-bs-toggle="tab" href="#kisiBilgileriEditTab" role="tab">
-                                        <i class="ri-user-fill nav-icon nav-tab-position"></i>
-                                        Kişi Bilgileri
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" data-bs-toggle="tab" href="#detayBilgileriEditTab" role="tab">
-                                        <i class="ri-function-fill nav-icon nav-tab-position"></i>
-                                        Detay Bilgileri
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" data-bs-toggle="tab" href="#gelirDurumuEditTab" role="tab">
-                                        <i class="ri-funds-box-fill nav-icon nav-tab-position"></i>
-                                        Gelir Durumu
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" data-bs-toggle="tab" href="#evDurumuEditTab" role="tab">
-                                        <i class="ri-user-fill nav-icon nav-tab-position"></i>
-                                        Ev Durumu
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" data-bs-toggle="tab" href="#yasamsalAktiviteEditTab" role="tab">
-                                        <i class="ri-user-fill nav-icon nav-tab-position"></i>
-                                        Yaşamsal Aktiviteler
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" data-bs-toggle="tab" href="#aranacakKisiEditTab" role="tab">
-                                        <i class="ri-user-fill nav-icon nav-tab-position"></i>
-                                        Aranacak Kişiler
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" data-bs-toggle="tab" href="#saglikBilgileriEditTab" role="tab">
-                                        <i class="ri-heart-fill nav-icon nav-tab-position"></i>
-                                        Sağlık Bilgileri
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" data-bs-toggle="tab" href="#adresBilgileriEditTab" role="tab">
-                                        <i class="ri-user-fill nav-icon nav-tab-position"></i>
-                                        Adres Bilgileri
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" data-bs-toggle="tab" href="#durumBilgileriEditTab" role="tab">
-                                        <i class="ri-user-fill nav-icon nav-tab-position"></i>
-                                        Durum Bilgileri
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
                     <div class="card-body">
+                        <ul class="nav nav-tabs mb-3 tab-style-8 scaleX" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="aykisiBilgileriEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#aykisiBilgileriEditTabPane" type="button" role="tab"
+                                        aria-controls="aykisiBilgileriEditTabPane" aria-selected="false">Kişi Bilgileri
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="aydetayBilgileriEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#aydetayBilgileriEditTabPane" type="button" role="tab"
+                                        aria-controls="aydetayBilgileriEditTabPane" aria-selected="false">Detay Bilgileri
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="aygelirDurumuEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#aygelirDurumuEditTabPane" type="button" role="tab"
+                                        aria-controls="aygelirDurumuEditTabPane" aria-selected="false">Gelir Durumu
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="ayevDurumuEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#ayevDurumuEditTabPane" type="button" role="tab"
+                                        aria-controls="ayevDurumuEditTabPane" aria-selected="false">Ev Durumu
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="ayyasamsalAktiviteEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#ayyasamsalAktiviteEditTabPane" type="button" role="tab"
+                                        aria-controls="ayyasamsalAktiviteEditTabPane" aria-selected="false">Yaşamsal Aktiviteler
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="ayaranacakKisiEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#ayaranacakKisiEditTabPane" type="button" role="tab"
+                                        aria-controls="ayaranacakKisiEditTabPane" aria-selected="false">Aranacak Kişiler
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="aysaglikBilgileriEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#aysaglikBilgileriEditTabPane" type="button" role="tab"
+                                        aria-controls="aysaglikBilgileriEditTabPane" aria-selected="false">Sağlık Bilgileri
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="ayadresBilgileriEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#ayadresBilgileriEditTabPane" type="button" role="tab"
+                                        aria-controls="ayadresBilgileriEditTabPane" aria-selected="false">Adres Bilgileri
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="aydurumBilgileriEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#aydurumBilgileriEditTabPane" type="button" role="tab"
+                                        aria-controls="aydurumBilgileriEditTabPane" aria-selected="false">Durum Bilgileri
+                                </button>
+                            </li>
+                        </ul>
                         <div class="tab-content text-muted">
-                            <div class="tab-pane active" id="kisiBilgileriEditTab" role="tabpanel">
+                            <div class="tab-pane show active overflow-hidden" id="aykisiBilgileriEditTabPane" role="tabpanel"
+                                 aria-labelledby="aykisiBilgileriEditTab" tabindex="0">
                                 <p:panelGrid id="kisiPanel" columns="2" styleClass="w-100" rendered="#{ayKisiController.selected!=null}"
                                              layout="tabular">
-
                                     <ui:include src="KisiBilgileriTab.xhtml"/>
-
                                 </p:panelGrid>
                             </div>
-                            <div class="tab-pane" id="detayBilgileriEditTab" role="tabpanel">
+                            <div class="tab-pane overflow-hidden" id="aydetayBilgileriEditTabPane" role="tabpanel" aria-labelledby="aydetayBilgileriEditTab"
+                                 tabindex="0">
                                 <p:panelGrid id="detayPanel" columns="2" styleClass="w-100" rendered="#{ayKisiController.selected!=null}"
                                              layout="tabular">
-
                                     <ui:include src="DetayBilgileriTab.xhtml"/>
-
                                 </p:panelGrid>
                             </div>
-                            <div class="tab-pane" id="gelirDurumuEditTab" role="tabpanel">
+                            <div class="tab-pane overflow-hidden" id="aygelirDurumuEditTabPane" role="tabpanel" aria-labelledby="aygelirDurumuEditTab"
+                                 tabindex="0">
                                 <p:panelGrid id="gelirDurumuPanel" columns="2" styleClass="w-100" rendered="#{ayKisiController.selected!=null}"
                                              layout="tabular">
-
                                     <ui:include src="GelirDurumuTab.xhtml"/>
-
                                 </p:panelGrid>
                             </div>
-                            <div class="tab-pane" id="evDurumuEditTab" role="tabpanel">
+                            <div class="tab-pane overflow-hidden" id="ayevDurumuEditTabPane" role="tabpanel" aria-labelledby="ayevDurumuEditTab"
+                                 tabindex="0">
                                 <p:panelGrid id="evDurumuPanel" columns="2" styleClass="w-100" rendered="#{ayKisiController.selected!=null}"
                                              layout="tabular">
-
                                     <ui:include src="EvDurumuTab.xhtml"/>
-
                                 </p:panelGrid>
                             </div>
-                            <div class="tab-pane" id="yasamsalAktiviteEditTab" role="tabpanel">
+                            <div class="tab-pane overflow-hidden" id="ayyasamsalAktiviteEditTabPane" role="tabpanel"
+                                 aria-labelledby="ayyasamsalAktiviteEditTab" tabindex="0">
                                 <p:panelGrid id="yasamsalAktivitePanel" columns="2" styleClass="w-100" rendered="#{ayKisiController.selected!=null}"
                                              layout="tabular">
 
@@ -126,7 +119,8 @@
 
                                 </p:panelGrid>
                             </div>
-                            <div class="tab-pane" id="aranacakKisiEditTab" role="tabpanel">
+                            <div class="tab-pane overflow-hidden" id="ayaranacakKisiEditTabPane" role="tabpanel" aria-labelledby="ayaranacakKisiEditTab"
+                                 tabindex="0">
                                 <p:panelGrid id="aranacakKisiPanel" columns="1" styleClass="w-100" rendered="#{ayKisiController.selected!=null}"
                                              layout="tabular">
 
@@ -134,7 +128,8 @@
 
                                 </p:panelGrid>
                             </div>
-                            <div class="tab-pane" id="saglikBilgileriEditTab" role="tabpanel">
+                            <div class="tab-pane overflow-hidden" id="aysaglikBilgileriEditTabPane" role="tabpanel"
+                                 aria-labelledby="aysaglikBilgileriEditTab" tabindex="0">
                                 <p:panelGrid id="saglikBilgileriPanel" columns="2" styleClass="w-100" rendered="#{ayKisiController.selected!=null}"
                                              layout="tabular">
 
@@ -142,7 +137,8 @@
 
                                 </p:panelGrid>
                             </div>
-                            <div class="tab-pane" id="adresBilgileriEditTab" role="tabpanel">
+                            <div class="tab-pane overflow-hidden" id="ayadresBilgileriEditTabPane" role="tabpanel" aria-labelledby="ayadresBilgileriEditTab"
+                                 tabindex="0">
                                 <p:panelGrid id="adresBilgileriPanel" columns="2" styleClass="w-100" rendered="#{ayKisiController.selected!=null}"
                                              layout="tabular">
 
@@ -150,7 +146,8 @@
 
                                 </p:panelGrid>
                             </div>
-                            <div class="tab-pane" id="durumBilgileriEditTab" role="tabpanel">
+                            <div class="tab-pane overflow-hidden" id="aydurumBilgileriEditTabPane" role="tabpanel" aria-labelledby="aydurumBilgileriEditTab"
+                                 tabindex="0">
                                 <p:panelGrid id="durumBilgileriPanel" columns="2" styleClass="w-100" rendered="#{ayKisiController.selected!=null}"
                                              layout="tabular">
 
@@ -161,9 +158,9 @@
                         </div>
                     </div><!-- end card-body -->
                     <div class="card-footer">
-                        <div class="pull-right">
+                        <div class="float-end">
                             <p:commandButton icon="pi pi-check" styleClass="ui-button-success"
-                                             actionListener="#{ayKisiController.save}"
+                                             actionListener="#{ayKisiController.update}"
                                              value="#{messages.buttonKaydet}"
                                              update="display,:AyKisiListForm:datalist:datalist,:growl"
                                              oncomplete="handleSubmit(xhr,status,args,PF('AyKisiEditDialog'));"
@@ -181,10 +178,21 @@
     </p:dialog>
     <script type="text/javascript">
         document.addEventListener('shown.bs.tab', function (event) {
-            adjustMenuWidth();
-            var width = $("#AyKisiEditDialogId").width();
-            $("#AyKisiEditDialogId").css("width",width);
+            adjustCheckMenuWidth();
         });
+
+
+        function adjustCheckMenuWidth() {
+            var menu = $(".checkboxMenu");
+            var width = $("#AyKisiEditDialogId").width();
+
+            if (menu) {
+                $("#AyKisiEditDialogId").css("width", width);
+                var menuContainer = $(menu).closest('.ui-selectcheckboxmenu');
+                menuContainer.width(width - 300);
+            }
+        }
+
     </script>
 </ui:composition>
 

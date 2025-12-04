@@ -77,6 +77,7 @@ public class EyKisiService extends AbstractService<EyKisi> {
                                      List<EnumGnlYardimAlinanYerler> yardimAlinanYerlers,
                                      List<EnumGnlYardimTuru> yardimTurus,
                                      List<EnumEyKullandigiCihaz> kullandigiCihazs) {
+
         eyKisi = checkKisiEngelGrubu(eyKisi, engelGrubus);
         eyKisi = checkGnlKisiFaydalandigiHak(eyKisi, faydalandigiHakList);
         eyKisi = checkEyKisiMaddeKullanimi(eyKisi, maddeKullanimis);

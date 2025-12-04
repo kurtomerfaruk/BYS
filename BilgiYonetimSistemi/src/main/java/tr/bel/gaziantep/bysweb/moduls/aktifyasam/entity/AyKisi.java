@@ -8,8 +8,6 @@ import org.hibernate.annotations.Nationalized;
 import org.hibernate.annotations.SQLRestriction;
 import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
 import tr.bel.gaziantep.bysweb.core.enums.aktifyasam.EnumAyDevamDurumu;
-import tr.bel.gaziantep.bysweb.core.enums.aktifyasam.EnumAyGrup;
-import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlGun;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
 
 import java.io.Serial;
@@ -30,9 +28,9 @@ import java.util.List;
 @Table(name = "AYKISI")
 @NamedQuery(name = "AyKisi.findByLatLngIsNull", query = "SELECT a FROM AyKisi a WHERE a.aktif=true AND a.gnlKisi.latLng IS NULL  AND " +
         "a.gnlKisi.binaNo IS NOT NULL")
-@NamedQuery(name = "AyKisi.findByGun",query = "SELECT a FROM AyKisi a WHERE a.aktif=true " +
-        "AND a.gnlKisi.durum=tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlDurum.SAG AND a.gun =:gun " +
-        "AND a.devamDurumu =tr.bel.gaziantep.bysweb.core.enums.aktifyasam.EnumAyDevamDurumu.DEVAM_EDIYOR")
+//@NamedQuery(name = "AyKisi.findByGun",query = "SELECT a FROM AyKisi a WHERE a.aktif=true " +
+//        "AND a.gnlKisi.durum=tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlDurum.SAG AND a.gun =:gun " +
+//        "AND a.devamDurumu =tr.bel.gaziantep.bysweb.core.enums.aktifyasam.EnumAyDevamDurumu.DEVAM_EDIYOR")
 public class AyKisi extends BaseEntity {
     @Serial
     private static final long serialVersionUID = 668865374558285865L;
@@ -53,13 +51,13 @@ public class AyKisi extends BaseEntity {
     @JoinColumn(name = "AYBIRIM_ID")
     private AyBirim ayBirim;
 
-    @Column(name = "GRUP")
-    @Enumerated(EnumType.STRING)
-    private EnumAyGrup grup;
-
-    @Column(name = "GUN")
-    @Enumerated(EnumType.STRING)
-    private EnumGnlGun gun;
+//    @Column(name = "GRUP")
+//    @Enumerated(EnumType.STRING)
+//    private EnumAyGrup grup;
+//
+//    @Column(name = "GUN")
+//    @Enumerated(EnumType.STRING)
+//    private EnumGnlGun gun;
 
     @Column(name = "DEVAM_DURUMU")
     @Enumerated(EnumType.STRING)
@@ -156,6 +154,14 @@ public class AyKisi extends BaseEntity {
     @OneToMany(mappedBy = "ayKisi", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @Builder.Default
     private List<AyKisiSanatsalBeceri> ayKisiSanatsalBeceriList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "ayKisi", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @Builder.Default
+    private List<AyKisiGrup> ayKisiGrupList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "ayKisi", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @Builder.Default
+    private List<AyKisiGun> ayKisiGunList = new ArrayList<>();
 
     @Override
     public int hashCode() {

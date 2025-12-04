@@ -16,7 +16,7 @@
               header="#{messages.dialogYeniKayit}"
               appendTo="@(body)"
               responsive="true"
-              onShow="PF('AyKisiCreateDialog').initPosition();"
+              onShow="PF('AyKisiCreateDialog').initPosition();adjustCheckMenuWidth();"
               fitViewport="true"
               position="top">
 
@@ -87,35 +87,27 @@
                             <div class="tab-pane show active overflow-hidden" id="aykisiBilgileriCreateTabPane" role="tabpanel"
                                  aria-labelledby="aykisiBilgileriCreateTab" tabindex="0">
                                 <p:panelGrid id="kisiPanel" columns="2" styleClass="w-100" rendered="#{ayKisiController.selected!=null}" layout="tabular">
-
                                     <ui:include src="KisiBilgileriTab.xhtml"/>
-
                                 </p:panelGrid>
                             </div>
                             <div class="tab-pane overflow-hidden" id="aydetayBilgileriCreateTabPane" role="tabpanel" aria-labelledby="aydetayBilgileriCreateTab"
                                  tabindex="0">
                                 <p:panelGrid id="detayPanel" columns="2" styleClass="w-100" rendered="#{ayKisiController.selected!=null}" layout="tabular">
-
                                     <ui:include src="DetayBilgileriTab.xhtml"/>
-
                                 </p:panelGrid>
                             </div>
                             <div class="tab-pane overflow-hidden" id="aygelirDurumuCreateTabPane" role="tabpanel" aria-labelledby="aygelirDurumuCreateTab"
                                  tabindex="0">
                                 <p:panelGrid id="gelirDurumuPanel" columns="2" styleClass="w-100" rendered="#{ayKisiController.selected!=null}"
                                              layout="tabular">
-
                                     <ui:include src="GelirDurumuTab.xhtml"/>
-
                                 </p:panelGrid>
                             </div>
                             <div class="tab-pane overflow-hidden" id="ayevDurumuCreateTabPane" role="tabpanel" aria-labelledby="ayevDurumuCreateTab"
                                  tabindex="0">
                                 <p:panelGrid id="evDurumuPanel" columns="2" styleClass="w-100" rendered="#{ayKisiController.selected!=null}"
                                              layout="tabular">
-
                                     <ui:include src="EvDurumuTab.xhtml"/>
-
                                 </p:panelGrid>
                             </div>
                             <div class="tab-pane overflow-hidden" id="ayyasamsalAktiviteCreateTabPane" role="tabpanel"
@@ -123,17 +115,13 @@
                                  tabindex="0">
                                 <p:panelGrid id="yasamsalAktivitePanel" columns="2" styleClass="w-100" rendered="#{ayKisiController.selected!=null}"
                                              layout="tabular">
-
                                     <ui:include src="YasamsalAktiviteTab.xhtml"/>
-
                                 </p:panelGrid>
                             </div>
                             <div class="tab-pane overflow-hidden" id="ayaranacakKisiCreateTabPane" role="tabpanel" aria-labelledby="ayaranacakKisiCreateTab"
                                  tabindex="0">
                                 <p:panelGrid id="aranacakKisiPanel" columns="1" styleClass="w-100" rendered="#{ayKisiController.selected!=null}">
-
                                     <ui:include src="AranacakKisiTab.xhtml"/>
-
                                 </p:panelGrid>
                             </div>
                             <div class="tab-pane overflow-hidden" id="aysaglikBilgileriCreateTabPane" role="tabpanel"
@@ -141,27 +129,21 @@
                                  tabindex="0">
                                 <p:panelGrid id="saglikBilgileriPanel" columns="2" styleClass="w-100" rendered="#{ayKisiController.selected!=null}"
                                              layout="tabular">
-
                                     <ui:include src="SaglikBilgileriTab.xhtml"/>
-
                                 </p:panelGrid>
                             </div>
                             <div class="tab-pane overflow-hidden" id="ayadresBilgileriCreateTabPane" role="tabpanel" aria-labelledby="ayadresBilgileriCreateTab"
                                  tabindex="0">
                                 <p:panelGrid id="adresBilgileriPanel" columns="2" styleClass="w-100" rendered="#{ayKisiController.selected!=null}"
                                              layout="tabular">
-
                                     <ui:include src="AdresBilgileriTab.xhtml"/>
-
                                 </p:panelGrid>
                             </div>
                             <div class="tab-pane overflow-hidden" id="aydurumBilgileriCreateTabPane" role="tabpanel" aria-labelledby="aydurumBilgileriCreateTab"
                                  tabindex="0">
                                 <p:panelGrid id="durumBilgileriPanel" columns="2" styleClass="w-100" rendered="#{ayKisiController.selected!=null}"
                                              layout="tabular">
-
                                     <ui:include src="DurumBilgileriTab.xhtml"/>
-
                                 </p:panelGrid>
                             </div>
                         </div>
@@ -169,7 +151,7 @@
                     <div class="card-footer">
                         <div class="float-end">
                             <p:commandButton icon="pi pi-check" styleClass="ui-button-success"
-                                             actionListener="#{ayKisiController.create}"
+                                             actionListener="#{ayKisiController.update}"
                                              value="#{messages.buttonKaydet}"
                                              update="display,:AyKisiListForm:datalist:datalist,:growl"
                                              oncomplete="handleSubmit(xhr,status,args,PF('AyKisiCreateDialog'));"
@@ -188,10 +170,23 @@
 
     <script type="text/javascript">
         document.addEventListener('shown.bs.tab', function (event) {
-            adjustMenuWidth();
-            var width = $("#AyKisiCreateDialogId").width();
-            $("#AyKisiCreateDialogId").css("width",width);
+            adjustCheckMenuWidth();
+            // var width = $("#AyKisiCreateDialogId").width();
+            // $("#AyKisiCreateDialogId").css("width", width);
         });
+
+
+        function adjustCheckMenuWidth() {
+            var menu = $(".checkboxMenu");
+            var width = $("#AyKisiCreateDialogId").width();
+
+            if (menu) {
+                $("#AyKisiCreateDialogId").css("width", width);
+                var menuContainer = $(menu).closest('.ui-selectcheckboxmenu');
+                menuContainer.width(width - 300);
+            }
+        }
+
     </script>
 
 </ui:composition>

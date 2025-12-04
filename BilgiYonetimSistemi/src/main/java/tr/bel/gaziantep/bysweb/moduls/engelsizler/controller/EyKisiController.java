@@ -215,7 +215,7 @@ public class EyKisiController extends AbstractController<EyKisi> {
     public void update(ActionEvent event) {
         try {
             if (this.getSelected() != null) {
-                EyKisi existing = service.findByKisi(this.getSelected().getGnlKisi());
+                EyKisi existing = service.findByTcKimlikNo(this.getSelected().getGnlKisi().getTcKimlikNo());
 
                 if(existing != null && !existing.getId().equals(this.getSelected().getId())) {
                     FacesUtil.addErrorMessage("Bu kişiye ait zaten Engelli kaydı var.");
@@ -227,7 +227,7 @@ public class EyKisiController extends AbstractController<EyKisi> {
             }
         } catch (Exception ex) {
             log.error(null, ex);
-            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+            FacesUtil.errorMessage(Constants.KAYIT_EKLENIRKEN_GUNCELLENIRKEN_HATA_OLUSTU);
         }
     }
 

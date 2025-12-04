@@ -40,8 +40,13 @@ public class AyEtkinlik extends BaseEntity {
 
     @Size(max = 500)
     @Nationalized
-    @Column(name = "KONU", length = 500)
-    private String konu;
+    @Column(name = "AD", length = 500)
+    private String ad;
+
+    @Size(max = 500)
+    @Nationalized
+    @Column(name = "ETKINLIK_YERI", length = 500    )
+    private String etkinlikYeri;
 
     @Nationalized
     @Lob

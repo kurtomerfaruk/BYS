@@ -23,6 +23,7 @@ public class Constants implements java.io.Serializable{
     public static final String AKTIF = "aktif";
     public static final String SESSION_ID = "sessionId";
     public static final String USER_COUNTER = "userCounter";
+    public static final String KAYIT_EKLENIRKEN_GUNCELLENIRKEN_HATA_OLUSTU = "kayitEklenirkenGuncellenirkenHataOlustu";
 
     public static final String ENGELSIZLER_KISI_DOSYALARI = "C:\\BYS\\Engelsizler\\Dosyalar\\";
     public static final String ENGELSIZLER_KISI_DOSYALARI_MAC = "/Users/omerfarukkurt/BYS/Engelsizler/Dosyalar/";

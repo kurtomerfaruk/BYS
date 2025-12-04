@@ -3,559 +3,556 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="jakarta.faces.facelets"
-      xmlns:h="jakarta.faces.html"
-      xmlns:f="jakarta.faces.core"
-      xmlns:p="primefaces"
-      xmlns:l="http://kurtomerfaruk.com/ui">
+>
 
 <ui:composition>
-    <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlCinsiyet" var="enumCinsiyet"/>
+<!--    <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlCinsiyet" var="enumCinsiyet"/>-->
 
-    <h:form id="MapForm" prependId="false">
-        <!--                <div style="position: relative; height: calc(100vh - 100px);">-->
-        <!--                    <l:map id="generalMap1" center="37.069387, 37.374620" zoom="13" widgetVar="mapVar1">-->
-        <!--                        <l:marker lat="37.067949" lng="37.348871" title="İstanbul"/>-->
-        <!--                        <l:marker lat="41.015" lng="28.985" title="Başka bir konum"/>-->
-        <!--                        <l:route/>-->
-        <!--                    </l:map>-->
-        <!--                </div>-->
-        <div class="col-xl-12">
-            <div class="card custom-card">
-                <div class="card-body">
-                    <ul class="nav nav-tabs mb-3 tab-style-8 scaleX" id="mainTab" role="tablist">
-                        <ui:fragment rendered="#{syKullaniciController.hasPermission('engelsiz_dashboard:goster')}">
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link active" id="engelsizler-tab" data-bs-toggle="tab"
-                                        data-bs-target="#engelsizler-tab-pane" type="button" role="tab"
-                                        aria-controls="engelsizler-tab-pane" aria-selected="true">Engelsizler
-                                </button>
-                            </li>
-                        </ui:fragment>
-                        <ui:fragment rendered="#{syKullaniciController.hasPermission('genel_dashboard:goster')}">
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="genel-tab" data-bs-toggle="tab"
-                                        data-bs-target="#genel-tab-pane" type="button" role="tab"
-                                        aria-controls="genel-tab-pane" aria-selected="false">Genel
-                                </button>
-                            </li>
-                        </ui:fragment>
-                        <ui:fragment
-                                rendered="#{syKullaniciController.hasPermission('saglik_hizmetleri_dashboard:goster')}">
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="saglik-hizmetleri-tab" data-bs-toggle="tab"
-                                        data-bs-target="#saglik-hizmetleri-tab-pane" type="button" role="tab"
-                                        aria-controls="saglik-hizmetleri-tab-pane"
-                                        aria-selected="false">Sağlık Hizmetleri
-                                </button>
-                            </li>
-                        </ui:fragment>
-                    </ul>
-                    <div class="tab-content" id="mainTabContent">
-                        <ui:fragment rendered="#{syKullaniciController.hasPermission('engelsiz_dashboard:goster')}">
-                            <div class="tab-pane show active overflow-hidden" id="engelsizler-tab-pane"
-                                 role="tabpanel" aria-labelledby="engelsizler-tab" tabindex="0">
-                                <ul class="nav nav-tabs mb-3 tab-style-8 scaleX" id="engelsizlerTab" role="tablist">
-                                    <li class="nav-item" role="presentation">
-                                        <button class="nav-link active" id="engelsizler-map-tab"
-                                                data-bs-toggle="tab"
-                                                data-bs-target="#engelsizler-map-tab-pane" type="button"
-                                                role="tab"
-                                                aria-controls="engelsizler-map-tab-pane"
-                                                aria-selected="true">Sıcaklık Haritası
-                                        </button>
-                                    </li>
-                                    <li class="nav-item" role="presentation">
-                                        <button class="nav-link" id="engelsizler-kayit-ozeti-tab"
-                                                data-bs-toggle="tab"
-                                                data-bs-target="#engelsizler-kayit-ozeti-tab-pane" type="button"
-                                                role="tab"
-                                                aria-controls="engelsizler-kayit-ozeti-tab-pane"
-                                                aria-selected="true">Kayıt Özeti
-                                        </button>
-                                    </li>
-                                    <li class="nav-item" role="presentation">
-                                        <button class="nav-link" id="engelsizler-grafik-tab" data-bs-toggle="tab"
-                                                data-bs-target="#engelsizler-grafik-tab-pane" type="button" role="tab"
-                                                aria-controls="engelsizler-grafik-tab-pane" aria-selected="false">Grafik
-                                        </button>
-                                    </li>
-                                </ul>
-                                <div class="tab-content" id="engelsizTabContent">
-                                    <div class="tab-pane show active overflow-hidden"
-                                         id="engelsizler-map-tab-pane"
-                                         role="tabpanel" aria-labelledby="engelsizler-map-tab" tabindex="0">
-                                        <button class="btn btn-primary" type="button" onclick="PF('rightBar').show()"
-                                                style="position: absolute;right: 0;top: 50%;z-index:1;">
-                                            <i class="ti ti-search"></i>
-                                        </button>
+<!--    <h:form id="MapForm" prependId="false">-->
+<!--        &lt;!&ndash;                <div style="position: relative; height: calc(100vh - 100px);">&ndash;&gt;-->
+<!--        &lt;!&ndash;                    <l:map id="generalMap1" center="37.069387, 37.374620" zoom="13" widgetVar="mapVar1">&ndash;&gt;-->
+<!--        &lt;!&ndash;                        <l:marker lat="37.067949" lng="37.348871" title="İstanbul"/>&ndash;&gt;-->
+<!--        &lt;!&ndash;                        <l:marker lat="41.015" lng="28.985" title="Başka bir konum"/>&ndash;&gt;-->
+<!--        &lt;!&ndash;                        <l:route/>&ndash;&gt;-->
+<!--        &lt;!&ndash;                    </l:map>&ndash;&gt;-->
+<!--        &lt;!&ndash;                </div>&ndash;&gt;-->
+<!--        <div class="col-xl-12">-->
+<!--            <div class="card custom-card">-->
+<!--                <div class="card-body">-->
+<!--                    <ul class="nav nav-tabs mb-3 tab-style-8 scaleX" id="mainTab" role="tablist">-->
+<!--                        <ui:fragment rendered="#{syKullaniciController.hasPermission('engelsiz_dashboard:goster')}">-->
+<!--                            <li class="nav-item" role="presentation">-->
+<!--                                <button class="nav-link active" id="engelsizler-tab" data-bs-toggle="tab"-->
+<!--                                        data-bs-target="#engelsizler-tab-pane" type="button" role="tab"-->
+<!--                                        aria-controls="engelsizler-tab-pane" aria-selected="true">Engelsizler-->
+<!--                                </button>-->
+<!--                            </li>-->
+<!--                        </ui:fragment>-->
+<!--                        <ui:fragment rendered="#{syKullaniciController.hasPermission('genel_dashboard:goster')}">-->
+<!--                            <li class="nav-item" role="presentation">-->
+<!--                                <button class="nav-link" id="genel-tab" data-bs-toggle="tab"-->
+<!--                                        data-bs-target="#genel-tab-pane" type="button" role="tab"-->
+<!--                                        aria-controls="genel-tab-pane" aria-selected="false">Genel-->
+<!--                                </button>-->
+<!--                            </li>-->
+<!--                        </ui:fragment>-->
+<!--                        <ui:fragment-->
+<!--                                rendered="#{syKullaniciController.hasPermission('saglik_hizmetleri_dashboard:goster')}">-->
+<!--                            <li class="nav-item" role="presentation">-->
+<!--                                <button class="nav-link" id="saglik-hizmetleri-tab" data-bs-toggle="tab"-->
+<!--                                        data-bs-target="#saglik-hizmetleri-tab-pane" type="button" role="tab"-->
+<!--                                        aria-controls="saglik-hizmetleri-tab-pane"-->
+<!--                                        aria-selected="false">Sağlık Hizmetleri-->
+<!--                                </button>-->
+<!--                            </li>-->
+<!--                        </ui:fragment>-->
+<!--                    </ul>-->
+<!--                    <div class="tab-content" id="mainTabContent">-->
+<!--                        <ui:fragment rendered="#{syKullaniciController.hasPermission('engelsiz_dashboard:goster')}">-->
+<!--                            <div class="tab-pane show active overflow-hidden" id="engelsizler-tab-pane"-->
+<!--                                 role="tabpanel" aria-labelledby="engelsizler-tab" tabindex="0">-->
+<!--                                <ul class="nav nav-tabs mb-3 tab-style-8 scaleX" id="engelsizlerTab" role="tablist">-->
+<!--                                    <li class="nav-item" role="presentation">-->
+<!--                                        <button class="nav-link active" id="engelsizler-map-tab"-->
+<!--                                                data-bs-toggle="tab"-->
+<!--                                                data-bs-target="#engelsizler-map-tab-pane" type="button"-->
+<!--                                                role="tab"-->
+<!--                                                aria-controls="engelsizler-map-tab-pane"-->
+<!--                                                aria-selected="true">Sıcaklık Haritası-->
+<!--                                        </button>-->
+<!--                                    </li>-->
+<!--                                    <li class="nav-item" role="presentation">-->
+<!--                                        <button class="nav-link" id="engelsizler-kayit-ozeti-tab"-->
+<!--                                                data-bs-toggle="tab"-->
+<!--                                                data-bs-target="#engelsizler-kayit-ozeti-tab-pane" type="button"-->
+<!--                                                role="tab"-->
+<!--                                                aria-controls="engelsizler-kayit-ozeti-tab-pane"-->
+<!--                                                aria-selected="true">Kayıt Özeti-->
+<!--                                        </button>-->
+<!--                                    </li>-->
+<!--                                    <li class="nav-item" role="presentation">-->
+<!--                                        <button class="nav-link" id="engelsizler-grafik-tab" data-bs-toggle="tab"-->
+<!--                                                data-bs-target="#engelsizler-grafik-tab-pane" type="button" role="tab"-->
+<!--                                                aria-controls="engelsizler-grafik-tab-pane" aria-selected="false">Grafik-->
+<!--                                        </button>-->
+<!--                                    </li>-->
+<!--                                </ul>-->
+<!--                                <div class="tab-content" id="engelsizTabContent">-->
+<!--                                    <div class="tab-pane show active overflow-hidden"-->
+<!--                                         id="engelsizler-map-tab-pane"-->
+<!--                                         role="tabpanel" aria-labelledby="engelsizler-map-tab" tabindex="0">-->
+<!--                                        <button class="btn btn-primary" type="button" onclick="PF('rightBar').show()"-->
+<!--                                                style="position: absolute;right: 0;top: 50%;z-index:1;">-->
+<!--                                            <i class="ti ti-search"></i>-->
+<!--                                        </button>-->
 
-                                        <p:sidebar widgetVar="rightBar" position="right"
-                                                   style="min-width:500px !important">
-                                            <div id="search-criteria">
-                                                <div class="card">
-                                                    <div class="card-header">
-                                                        Arama Kriterleri
-                                                    </div>
-                                                    <div class="card-body">
-                                                        <div class="row">
-                                                            <div class="col-12">
-                                                                <p:outputLabel value="#{messages.cinsiyetText}"
-                                                                               for="@next"/>
-                                                                <p:selectOneMenu id="cinsiyet"
-                                                                                 value="#{engelsizDashboardController.cinsiyet}"
-                                                                                 converter="omnifaces.SelectItemsConverter">
-                                                                    <f:selectItem itemLabel="#{messages.seciniz}"
-                                                                                  itemValue="#{null}"/>
-                                                                    <f:selectItems value="#{enumCinsiyet.ALL_VALUES}"
-                                                                                   var="cinsiyets"
-                                                                                   itemLabel="#{cinsiyets.displayValue}"
-                                                                                   itemValue="#{cinsiyets}"/>
-                                                                </p:selectOneMenu>
-                                                            </div>
-                                                            <div class="col-12">
-                                                                <p:outputLabel value="#{messages.ilceText}"
-                                                                               for="@next"/>
-                                                                <p:selectOneMenu id="gnlIlce"
-                                                                                 value="#{engelsizDashboardController.gnlIlce}"
-                                                                                 filter="true"
-                                                                                 converter="omnifaces.SelectItemsConverter">
-                                                                    <f:selectItem itemLabel="#{messages.tumuText}"
-                                                                                  itemValue="#{null}"/>
-                                                                    <f:selectItems
-                                                                            value="#{gnlIlceController.getIlceByIl()}"
-                                                                            var="ilces"
-                                                                            itemValue="#{ilces}"
-                                                                            itemLabel="#{ilces.tanim.toString()}"/>
-                                                                    <p:ajax event="change" update="gnlmahalle"/>
-                                                                </p:selectOneMenu>
-                                                            </div>
-                                                            <div class="col-12">
-                                                                <p:outputLabel value="#{messages.mahalleText}"
-                                                                               for="@next"/>
-                                                                <p:selectOneMenu id="gnlmahalle"
-                                                                                 value="#{engelsizDashboardController.gnlMahalle}"
-                                                                                 filter="true"
-                                                                                 converter="omnifaces.SelectItemsConverter">
-                                                                    <f:selectItem itemLabel="#{messages.tumuText}"
-                                                                                  itemValue="#{null}"/>
-                                                                    <f:selectItems
-                                                                            value="#{gnlMahalleController.getMahalleByIlce(engelsizDashboardController.gnlIlce)}"
-                                                                            var="ilces"
-                                                                            itemValue="#{ilces}"
-                                                                            itemLabel="#{ilces.tanim.toString()}"/>
-                                                                </p:selectOneMenu>
-                                                            </div>
-                                                            <div class="col-12">
-                                                                <p:outputLabel value="#{messages.yasText}" for="@next"/>
-                                                                <h:panelGroup>
-                                                                    <div class="ui-inputgroup">
-                                                                        <p:spinner id="yasBaslangic"
-                                                                                   value="#{engelsizDashboardController.yasBaslangic}"/>
-                                                                        <p:spinner id="yasBitis"
-                                                                                   value="#{engelsizDashboardController.yasBitis}"/>
-                                                                    </div>
-                                                                </h:panelGroup>
-                                                            </div>
-                                                            <div class="col-12">
-                                                                <p:outputLabel value="#{messages.engelOraniLabel}"
-                                                                               for="@next"/>
-                                                                <h:panelGroup>
-                                                                    <div class="ui-inputgroup">
-                                                                        <p:spinner id="engelOraniBaslangic"
-                                                                                   value="#{engelsizDashboardController.engelOraniBaslangic}"/>
-                                                                        <p:spinner id="engelOraniBitis"
-                                                                                   value="#{engelsizDashboardController.engelOraniBitis}"/>
-                                                                    </div>
-                                                                </h:panelGroup>
-                                                            </div>
-                                                            <div class="col-12">
-                                                                <p:outputLabel value="#{messages.engelGrubuLabel}"
-                                                                               for="@next"/>
-                                                                <p:selectOneMenu id="engelGrubu"
-                                                                                 value="#{engelsizDashboardController.eyEngelGrubu}"
-                                                                                 filter="true"
-                                                                                 converter="omnifaces.SelectItemsConverter">
-                                                                    <f:selectItem itemLabel="#{messages.tumuText}"
-                                                                                  itemValue="#{null}"/>
-                                                                    <f:selectItems
-                                                                            value="#{eyEngelGrubuController.items}"
-                                                                            var="grubus"
-                                                                            itemValue="#{grubus}"
-                                                                            itemLabel="#{grubus.tanim.toString()}"/>
-                                                                </p:selectOneMenu>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="card-footer">
-                                                        <div class="float-end">
-                                                            <p:commandButton
-                                                                    value="#{messages.buttonRaporla}"
-                                                                    styleClass="mr-2 ui-button-success"
-                                                                    style="width: auto" icon="pi pi-check"
-                                                                    update="mapGroup,:growl"
-                                                                    actionListener="#{engelsizDashboardController.getReport()}"
-                                                                    onstart="PF('Loading').show()"
-                                                                    onsuccess="PF('Loading').hide()"/>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </p:sidebar>
-                                        <div class="row">
-                                            <div class="col-xl-12">
-                                                <h:panelGroup id="mapGroup">
-                                                    <div style="position: relative; height: calc(100vh - 235px);">
-                                                        <l:map id="generalMap" center="37.069387, 37.374620" zoom="12"
-                                                               widgetVar="mapVar">
-                                                            <l:heatmap
-                                                                    points="#{engelsizDashboardController.heatmapModels}"
-                                                                    radius="25" blur="10"/>
-                                                        </l:map>
-                                                    </div>
-                                                </h:panelGroup>
-                                            </div>
-                                        </div>
+<!--                                        <p:sidebar widgetVar="rightBar" position="right"-->
+<!--                                                   style="min-width:500px !important">-->
+<!--                                            <div id="search-criteria">-->
+<!--                                                <div class="card">-->
+<!--                                                    <div class="card-header">-->
+<!--                                                        Arama Kriterleri-->
+<!--                                                    </div>-->
+<!--                                                    <div class="card-body">-->
+<!--                                                        <div class="row">-->
+<!--                                                            <div class="col-12">-->
+<!--                                                                <p:outputLabel value="#{messages.cinsiyetText}"-->
+<!--                                                                               for="@next"/>-->
+<!--                                                                <p:selectOneMenu id="cinsiyet"-->
+<!--                                                                                 value="#{engelsizDashboardController.cinsiyet}"-->
+<!--                                                                                 converter="omnifaces.SelectItemsConverter">-->
+<!--                                                                    <f:selectItem itemLabel="#{messages.seciniz}"-->
+<!--                                                                                  itemValue="#{null}"/>-->
+<!--                                                                    <f:selectItems value="#{enumCinsiyet.ALL_VALUES}"-->
+<!--                                                                                   var="cinsiyets"-->
+<!--                                                                                   itemLabel="#{cinsiyets.displayValue}"-->
+<!--                                                                                   itemValue="#{cinsiyets}"/>-->
+<!--                                                                </p:selectOneMenu>-->
+<!--                                                            </div>-->
+<!--                                                            <div class="col-12">-->
+<!--                                                                <p:outputLabel value="#{messages.ilceText}"-->
+<!--                                                                               for="@next"/>-->
+<!--                                                                <p:selectOneMenu id="gnlIlce"-->
+<!--                                                                                 value="#{engelsizDashboardController.gnlIlce}"-->
+<!--                                                                                 filter="true"-->
+<!--                                                                                 converter="omnifaces.SelectItemsConverter">-->
+<!--                                                                    <f:selectItem itemLabel="#{messages.tumuText}"-->
+<!--                                                                                  itemValue="#{null}"/>-->
+<!--                                                                    <f:selectItems-->
+<!--                                                                            value="#{gnlIlceController.getIlceByIl()}"-->
+<!--                                                                            var="ilces"-->
+<!--                                                                            itemValue="#{ilces}"-->
+<!--                                                                            itemLabel="#{ilces.tanim.toString()}"/>-->
+<!--                                                                    <p:ajax event="change" update="gnlmahalle"/>-->
+<!--                                                                </p:selectOneMenu>-->
+<!--                                                            </div>-->
+<!--                                                            <div class="col-12">-->
+<!--                                                                <p:outputLabel value="#{messages.mahalleText}"-->
+<!--                                                                               for="@next"/>-->
+<!--                                                                <p:selectOneMenu id="gnlmahalle"-->
+<!--                                                                                 value="#{engelsizDashboardController.gnlMahalle}"-->
+<!--                                                                                 filter="true"-->
+<!--                                                                                 converter="omnifaces.SelectItemsConverter">-->
+<!--                                                                    <f:selectItem itemLabel="#{messages.tumuText}"-->
+<!--                                                                                  itemValue="#{null}"/>-->
+<!--                                                                    <f:selectItems-->
+<!--                                                                            value="#{gnlMahalleController.getMahalleByIlce(engelsizDashboardController.gnlIlce)}"-->
+<!--                                                                            var="ilces"-->
+<!--                                                                            itemValue="#{ilces}"-->
+<!--                                                                            itemLabel="#{ilces.tanim.toString()}"/>-->
+<!--                                                                </p:selectOneMenu>-->
+<!--                                                            </div>-->
+<!--                                                            <div class="col-12">-->
+<!--                                                                <p:outputLabel value="#{messages.yasText}" for="@next"/>-->
+<!--                                                                <h:panelGroup>-->
+<!--                                                                    <div class="ui-inputgroup">-->
+<!--                                                                        <p:spinner id="yasBaslangic"-->
+<!--                                                                                   value="#{engelsizDashboardController.yasBaslangic}"/>-->
+<!--                                                                        <p:spinner id="yasBitis"-->
+<!--                                                                                   value="#{engelsizDashboardController.yasBitis}"/>-->
+<!--                                                                    </div>-->
+<!--                                                                </h:panelGroup>-->
+<!--                                                            </div>-->
+<!--                                                            <div class="col-12">-->
+<!--                                                                <p:outputLabel value="#{messages.engelOraniLabel}"-->
+<!--                                                                               for="@next"/>-->
+<!--                                                                <h:panelGroup>-->
+<!--                                                                    <div class="ui-inputgroup">-->
+<!--                                                                        <p:spinner id="engelOraniBaslangic"-->
+<!--                                                                                   value="#{engelsizDashboardController.engelOraniBaslangic}"/>-->
+<!--                                                                        <p:spinner id="engelOraniBitis"-->
+<!--                                                                                   value="#{engelsizDashboardController.engelOraniBitis}"/>-->
+<!--                                                                    </div>-->
+<!--                                                                </h:panelGroup>-->
+<!--                                                            </div>-->
+<!--                                                            <div class="col-12">-->
+<!--                                                                <p:outputLabel value="#{messages.engelGrubuLabel}"-->
+<!--                                                                               for="@next"/>-->
+<!--                                                                <p:selectOneMenu id="engelGrubu"-->
+<!--                                                                                 value="#{engelsizDashboardController.eyEngelGrubu}"-->
+<!--                                                                                 filter="true"-->
+<!--                                                                                 converter="omnifaces.SelectItemsConverter">-->
+<!--                                                                    <f:selectItem itemLabel="#{messages.tumuText}"-->
+<!--                                                                                  itemValue="#{null}"/>-->
+<!--                                                                    <f:selectItems-->
+<!--                                                                            value="#{eyEngelGrubuController.items}"-->
+<!--                                                                            var="grubus"-->
+<!--                                                                            itemValue="#{grubus}"-->
+<!--                                                                            itemLabel="#{grubus.tanim.toString()}"/>-->
+<!--                                                                </p:selectOneMenu>-->
+<!--                                                            </div>-->
+<!--                                                        </div>-->
+<!--                                                    </div>-->
+<!--                                                    <div class="card-footer">-->
+<!--                                                        <div class="float-end">-->
+<!--                                                            <p:commandButton-->
+<!--                                                                    value="#{messages.buttonRaporla}"-->
+<!--                                                                    styleClass="mr-2 ui-button-success"-->
+<!--                                                                    style="width: auto" icon="pi pi-check"-->
+<!--                                                                    update="mapGroup,:growl"-->
+<!--                                                                    actionListener="#{engelsizDashboardController.getReport()}"-->
+<!--                                                                    onstart="PF('Loading').show()"-->
+<!--                                                                    onsuccess="PF('Loading').hide()"/>-->
+<!--                                                        </div>-->
+<!--                                                    </div>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+<!--                                        </p:sidebar>-->
+<!--                                        <div class="row">-->
+<!--                                            <div class="col-xl-12">-->
+<!--                                                <h:panelGroup id="mapGroup">-->
+<!--                                                    <div style="position: relative; height: calc(100vh - 235px);">-->
+<!--                                                        <l:map id="generalMap" center="37.069387, 37.374620" zoom="12"-->
+<!--                                                               widgetVar="mapVar">-->
+<!--                                                            <l:heatmap-->
+<!--                                                                    points="#{engelsizDashboardController.heatmapModels}"-->
+<!--                                                                    radius="25" blur="10"/>-->
+<!--                                                        </l:map>-->
+<!--                                                    </div>-->
+<!--                                                </h:panelGroup>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
 
-                                    </div>
-                                    <div class="tab-pane overflow-hidden"
-                                         id="engelsizler-kayit-ozeti-tab-pane"
-                                         role="tabpanel" aria-labelledby="engelsizler-kayit-ozeti-tab" tabindex="0">
-                                        <div class="row">
-                                            <div class="col-xl-4">
-                                                <div class="card custom-card">
-                                                    <div class="card-body">
-                                                        <div class="d-flex align-items-center flex-wrap gap-3">
-                                                            <div class="avatar avatar-lg bg-info-transparent">
-                                                                <div class="avatar avatar-md bg-info">
-                                                                    <i class="ti ti-disabled fs-25"></i>
-                                                                </div>
-                                                            </div>
-                                                            <div class="flex-fill">
-                                                                <h3 class="fw-semibold mb-1">
-                                                                    <h:outputText
-                                                                            value="#{engelsizDashboardController.totalPerson}">
-                                                                        <f:convertNumber type="number"/>
-                                                                    </h:outputText>
-                                                                </h3>
-                                                                <span class="">Kayıtlı Kişi Sayısı</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-xl-4">
-                                                <div class="card custom-card">
-                                                    <div class="card-body">
-                                                        <div class="d-flex align-items-center flex-wrap gap-3">
-                                                            <div class="avatar avatar-lg bg-success-transparent">
-                                                                <div class="avatar avatar-md bg-success">
-                                                                    <i class="ti ti-disabled-2 fs-25"></i>
-                                                                </div>
-                                                            </div>
-                                                            <div class="flex-fill">
-                                                                <h3 class="fw-semibold mb-1">
-                                                                    <h:outputText
-                                                                            value="#{engelsizDashboardController.activePerson}">
-                                                                        <f:convertNumber type="number"/>
-                                                                    </h:outputText>
-                                                                </h3>
-                                                                <span class="">Yaşayan Kişi Sayısı</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-xl-4">
-                                                <div class="card custom-card">
-                                                    <div class="card-body">
-                                                        <div class="d-flex align-items-center flex-wrap gap-3">
-                                                            <div class="avatar avatar-lg bg-danger-transparent">
-                                                                <div class="avatar avatar-md bg-danger">
-                                                                    <i class="ti ti-wheelchair-off fs-25"></i>
-                                                                </div>
-                                                            </div>
-                                                            <div class="flex-fill">
-                                                                <h3 class="fw-semibold mb-1">
-                                                                    <h:outputText
-                                                                            value="#{engelsizDashboardController.deadPerson}">
-                                                                        <f:convertNumber type="number"/>
-                                                                    </h:outputText></h3>
-                                                                <span class="">Ölen Kişi Sayısı</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-xl-4">
-                                                <div class="card custom-card">
-                                                    <div class="card-body">
-                                                        <div class="d-flex align-items-center flex-wrap gap-3">
-                                                            <div class="avatar avatar-lg bg-purple-transparent">
-                                                                <div class="avatar avatar-md bg-purple">
-                                                                    <i class="ti ti-settings-cog fs-25"></i>
-                                                                </div>
-                                                            </div>
-                                                            <div class="flex-fill">
-                                                                <h3 class="fw-semibold mb-1">
-                                                                    <h:outputText
-                                                                            value="#{engelsizDashboardController.repairedVehicle}">
-                                                                        <f:convertNumber type="number"/>
-                                                                    </h:outputText>
-                                                                </h3>
-                                                                <span class="">Toplam Tamir Sayısı</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-xl-4">
-                                                <div class="card custom-card">
-                                                    <div class="card-body">
-                                                        <div class="d-flex align-items-center flex-wrap gap-3">
-                                                            <div class="avatar avatar-lg bg-orange-transparent">
-                                                                <div class="avatar avatar-md bg-orange">
-                                                                    <i class="ti ti-wheelchair fs-25"></i>
-                                                                </div>
-                                                            </div>
-                                                            <div class="flex-fill">
-                                                                <h3 class="fw-semibold mb-1">
-                                                                    <h:outputText
-                                                                            value="#{engelsizDashboardController.deliveredVehicle}">
-                                                                        <f:convertNumber type="number"/>
-                                                                    </h:outputText>
-                                                                </h3>
-                                                                <span class="">Toplam Cihaz Teslim Sayısı</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-xl-4">
-                                                <div class="card custom-card">
-                                                    <div class="card-body">
-                                                        <div class="d-flex align-items-center flex-wrap gap-3">
-                                                            <div class="avatar avatar-lg bg-indigo-transparent">
-                                                                <div class="avatar avatar-md bg-indigo">
-                                                                    <i class="ti ti-checklist fs-25"></i>
-                                                                </div>
-                                                            </div>
-                                                            <div class="flex-fill">
-                                                                <h3 class="fw-semibold mb-1">
-                                                                    <h:outputText
-                                                                            value="#{engelsizDashboardController.request}">
-                                                                        <f:convertNumber type="number"/>
-                                                                    </h:outputText>
-                                                                </h3>
-                                                                <span class="">Toplam Talep Sayısı</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+<!--                                    </div>-->
+<!--                                    <div class="tab-pane overflow-hidden"-->
+<!--                                         id="engelsizler-kayit-ozeti-tab-pane"-->
+<!--                                         role="tabpanel" aria-labelledby="engelsizler-kayit-ozeti-tab" tabindex="0">-->
+<!--                                        <div class="row">-->
+<!--                                            <div class="col-xl-4">-->
+<!--                                                <div class="card custom-card">-->
+<!--                                                    <div class="card-body">-->
+<!--                                                        <div class="d-flex align-items-center flex-wrap gap-3">-->
+<!--                                                            <div class="avatar avatar-lg bg-info-transparent">-->
+<!--                                                                <div class="avatar avatar-md bg-info">-->
+<!--                                                                    <i class="ti ti-disabled fs-25"></i>-->
+<!--                                                                </div>-->
+<!--                                                            </div>-->
+<!--                                                            <div class="flex-fill">-->
+<!--                                                                <h3 class="fw-semibold mb-1">-->
+<!--                                                                    <h:outputText-->
+<!--                                                                            value="#{engelsizDashboardController.totalPerson}">-->
+<!--                                                                        <f:convertNumber type="number"/>-->
+<!--                                                                    </h:outputText>-->
+<!--                                                                </h3>-->
+<!--                                                                <span class="">Kayıtlı Kişi Sayısı</span>-->
+<!--                                                            </div>-->
+<!--                                                        </div>-->
+<!--                                                    </div>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+<!--                                            <div class="col-xl-4">-->
+<!--                                                <div class="card custom-card">-->
+<!--                                                    <div class="card-body">-->
+<!--                                                        <div class="d-flex align-items-center flex-wrap gap-3">-->
+<!--                                                            <div class="avatar avatar-lg bg-success-transparent">-->
+<!--                                                                <div class="avatar avatar-md bg-success">-->
+<!--                                                                    <i class="ti ti-disabled-2 fs-25"></i>-->
+<!--                                                                </div>-->
+<!--                                                            </div>-->
+<!--                                                            <div class="flex-fill">-->
+<!--                                                                <h3 class="fw-semibold mb-1">-->
+<!--                                                                    <h:outputText-->
+<!--                                                                            value="#{engelsizDashboardController.activePerson}">-->
+<!--                                                                        <f:convertNumber type="number"/>-->
+<!--                                                                    </h:outputText>-->
+<!--                                                                </h3>-->
+<!--                                                                <span class="">Yaşayan Kişi Sayısı</span>-->
+<!--                                                            </div>-->
+<!--                                                        </div>-->
+<!--                                                    </div>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+<!--                                            <div class="col-xl-4">-->
+<!--                                                <div class="card custom-card">-->
+<!--                                                    <div class="card-body">-->
+<!--                                                        <div class="d-flex align-items-center flex-wrap gap-3">-->
+<!--                                                            <div class="avatar avatar-lg bg-danger-transparent">-->
+<!--                                                                <div class="avatar avatar-md bg-danger">-->
+<!--                                                                    <i class="ti ti-wheelchair-off fs-25"></i>-->
+<!--                                                                </div>-->
+<!--                                                            </div>-->
+<!--                                                            <div class="flex-fill">-->
+<!--                                                                <h3 class="fw-semibold mb-1">-->
+<!--                                                                    <h:outputText-->
+<!--                                                                            value="#{engelsizDashboardController.deadPerson}">-->
+<!--                                                                        <f:convertNumber type="number"/>-->
+<!--                                                                    </h:outputText></h3>-->
+<!--                                                                <span class="">Ölen Kişi Sayısı</span>-->
+<!--                                                            </div>-->
+<!--                                                        </div>-->
+<!--                                                    </div>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+<!--                                            <div class="col-xl-4">-->
+<!--                                                <div class="card custom-card">-->
+<!--                                                    <div class="card-body">-->
+<!--                                                        <div class="d-flex align-items-center flex-wrap gap-3">-->
+<!--                                                            <div class="avatar avatar-lg bg-purple-transparent">-->
+<!--                                                                <div class="avatar avatar-md bg-purple">-->
+<!--                                                                    <i class="ti ti-settings-cog fs-25"></i>-->
+<!--                                                                </div>-->
+<!--                                                            </div>-->
+<!--                                                            <div class="flex-fill">-->
+<!--                                                                <h3 class="fw-semibold mb-1">-->
+<!--                                                                    <h:outputText-->
+<!--                                                                            value="#{engelsizDashboardController.repairedVehicle}">-->
+<!--                                                                        <f:convertNumber type="number"/>-->
+<!--                                                                    </h:outputText>-->
+<!--                                                                </h3>-->
+<!--                                                                <span class="">Toplam Tamir Sayısı</span>-->
+<!--                                                            </div>-->
+<!--                                                        </div>-->
+<!--                                                    </div>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+<!--                                            <div class="col-xl-4">-->
+<!--                                                <div class="card custom-card">-->
+<!--                                                    <div class="card-body">-->
+<!--                                                        <div class="d-flex align-items-center flex-wrap gap-3">-->
+<!--                                                            <div class="avatar avatar-lg bg-orange-transparent">-->
+<!--                                                                <div class="avatar avatar-md bg-orange">-->
+<!--                                                                    <i class="ti ti-wheelchair fs-25"></i>-->
+<!--                                                                </div>-->
+<!--                                                            </div>-->
+<!--                                                            <div class="flex-fill">-->
+<!--                                                                <h3 class="fw-semibold mb-1">-->
+<!--                                                                    <h:outputText-->
+<!--                                                                            value="#{engelsizDashboardController.deliveredVehicle}">-->
+<!--                                                                        <f:convertNumber type="number"/>-->
+<!--                                                                    </h:outputText>-->
+<!--                                                                </h3>-->
+<!--                                                                <span class="">Toplam Cihaz Teslim Sayısı</span>-->
+<!--                                                            </div>-->
+<!--                                                        </div>-->
+<!--                                                    </div>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+<!--                                            <div class="col-xl-4">-->
+<!--                                                <div class="card custom-card">-->
+<!--                                                    <div class="card-body">-->
+<!--                                                        <div class="d-flex align-items-center flex-wrap gap-3">-->
+<!--                                                            <div class="avatar avatar-lg bg-indigo-transparent">-->
+<!--                                                                <div class="avatar avatar-md bg-indigo">-->
+<!--                                                                    <i class="ti ti-checklist fs-25"></i>-->
+<!--                                                                </div>-->
+<!--                                                            </div>-->
+<!--                                                            <div class="flex-fill">-->
+<!--                                                                <h3 class="fw-semibold mb-1">-->
+<!--                                                                    <h:outputText-->
+<!--                                                                            value="#{engelsizDashboardController.request}">-->
+<!--                                                                        <f:convertNumber type="number"/>-->
+<!--                                                                    </h:outputText>-->
+<!--                                                                </h3>-->
+<!--                                                                <span class="">Toplam Talep Sayısı</span>-->
+<!--                                                            </div>-->
+<!--                                                        </div>-->
+<!--                                                    </div>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
 
-                                    </div>
-                                    <div class="tab-pane overflow-hidden" id="engelsizler-grafik-tab-pane"
-                                         role="tabpanel"
-                                         aria-labelledby="engelsizler-grafik-tab" tabindex="0">
-                                        Engelsizler Grafik
-                                    </div>
-                                </div>
-                            </div>
-                        </ui:fragment>
-                        <ui:fragment rendered="#{syKullaniciController.hasPermission('genel_dashboard:goster')}">
-                            <div class="tab-pane overflow-hidden" id="genel-tab-pane" role="tabpanel"
-                                 aria-labelledby="genel-tab" tabindex="0">
-                                <ul class="nav nav-tabs mb-3 tab-style-8 scaleX" id="genelTab" role="tablist">
-                                    <li class="nav-item" role="presentation">
-                                        <button class="nav-link active" id="genel-kayit-ozeti-tab"
-                                                data-bs-toggle="tab"
-                                                data-bs-target="#genel-kayit-ozeti-tab-pane" type="button"
-                                                role="tab"
-                                                aria-controls="genel-kayit-ozeti-tab-pane"
-                                                aria-selected="true">Kayıt Özeti
-                                        </button>
-                                    </li>
-                                    <li class="nav-item" role="presentation">
-                                        <button class="nav-link" id="genel-grafik-tab" data-bs-toggle="tab"
-                                                data-bs-target="#genel-grafik-tab-pane" type="button" role="tab"
-                                                aria-controls="genel-grafik-tab-pane" aria-selected="false">Grafik
-                                        </button>
-                                    </li>
-                                </ul>
-                                <div class="tab-content" id="genelTabContent">
-                                    <div class="tab-pane show active overflow-hidden"
-                                         id="genel-kayit-ozeti-tab-pane"
-                                         role="tabpanel" aria-labelledby="genel-kayit-ozeti-tab" tabindex="0">
-                                        <div class="row">
-                                            <div class="col-xl-4">
-                                                <div class="card custom-card">
-                                                    <div class="card-body">
-                                                        <div class="d-flex align-items-center flex-wrap gap-3">
-                                                            <div class="avatar avatar-lg bg-info-transparent">
-                                                                <div class="avatar avatar-md bg-info">
-                                                                    <i class="ti ti-user-pin fs-25"></i>
-                                                                </div>
-                                                            </div>
-                                                            <div class="flex-fill">
-                                                                <h3 class="fw-semibold mb-1">
-                                                                    <h:outputText
-                                                                            value="#{genelDashboardController.totalPerson}">
-                                                                        <f:convertNumber type="number"/>
-                                                                    </h:outputText>
-                                                                </h3>
-                                                                <span class="">Kayıtlı Kişi Sayısı</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+<!--                                    </div>-->
+<!--                                    <div class="tab-pane overflow-hidden" id="engelsizler-grafik-tab-pane"-->
+<!--                                         role="tabpanel"-->
+<!--                                         aria-labelledby="engelsizler-grafik-tab" tabindex="0">-->
+<!--                                        Engelsizler Grafik-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </ui:fragment>-->
+<!--                        <ui:fragment rendered="#{syKullaniciController.hasPermission('genel_dashboard:goster')}">-->
+<!--                            <div class="tab-pane overflow-hidden" id="genel-tab-pane" role="tabpanel"-->
+<!--                                 aria-labelledby="genel-tab" tabindex="0">-->
+<!--                                <ul class="nav nav-tabs mb-3 tab-style-8 scaleX" id="genelTab" role="tablist">-->
+<!--                                    <li class="nav-item" role="presentation">-->
+<!--                                        <button class="nav-link active" id="genel-kayit-ozeti-tab"-->
+<!--                                                data-bs-toggle="tab"-->
+<!--                                                data-bs-target="#genel-kayit-ozeti-tab-pane" type="button"-->
+<!--                                                role="tab"-->
+<!--                                                aria-controls="genel-kayit-ozeti-tab-pane"-->
+<!--                                                aria-selected="true">Kayıt Özeti-->
+<!--                                        </button>-->
+<!--                                    </li>-->
+<!--                                    <li class="nav-item" role="presentation">-->
+<!--                                        <button class="nav-link" id="genel-grafik-tab" data-bs-toggle="tab"-->
+<!--                                                data-bs-target="#genel-grafik-tab-pane" type="button" role="tab"-->
+<!--                                                aria-controls="genel-grafik-tab-pane" aria-selected="false">Grafik-->
+<!--                                        </button>-->
+<!--                                    </li>-->
+<!--                                </ul>-->
+<!--                                <div class="tab-content" id="genelTabContent">-->
+<!--                                    <div class="tab-pane show active overflow-hidden"-->
+<!--                                         id="genel-kayit-ozeti-tab-pane"-->
+<!--                                         role="tabpanel" aria-labelledby="genel-kayit-ozeti-tab" tabindex="0">-->
+<!--                                        <div class="row">-->
+<!--                                            <div class="col-xl-4">-->
+<!--                                                <div class="card custom-card">-->
+<!--                                                    <div class="card-body">-->
+<!--                                                        <div class="d-flex align-items-center flex-wrap gap-3">-->
+<!--                                                            <div class="avatar avatar-lg bg-info-transparent">-->
+<!--                                                                <div class="avatar avatar-md bg-info">-->
+<!--                                                                    <i class="ti ti-user-pin fs-25"></i>-->
+<!--                                                                </div>-->
+<!--                                                            </div>-->
+<!--                                                            <div class="flex-fill">-->
+<!--                                                                <h3 class="fw-semibold mb-1">-->
+<!--                                                                    <h:outputText-->
+<!--                                                                            value="#{genelDashboardController.totalPerson}">-->
+<!--                                                                        <f:convertNumber type="number"/>-->
+<!--                                                                    </h:outputText>-->
+<!--                                                                </h3>-->
+<!--                                                                <span class="">Kayıtlı Kişi Sayısı</span>-->
+<!--                                                            </div>-->
+<!--                                                        </div>-->
+<!--                                                    </div>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
 
-                                    </div>
-                                    <div class="tab-pane overflow-hidden" id="genel-grafik-tab-pane"
-                                         role="tabpanel"
-                                         aria-labelledby="genel-grafik-tab" tabindex="0">
-                                        Genel Grafik
-                                    </div>
-                                </div>
-                            </div>
-                        </ui:fragment>
-                        <ui:fragment
-                                rendered="#{syKullaniciController.hasPermission('saglik_hizmetleri_dashboard:goster')}">
-                            <div class="tab-pane overflow-hidden" id="saglik-hizmetleri-tab-pane" role="tabpanel"
-                                 aria-labelledby="saglik-hizmetleri-tab" tabindex="0">
-                                <ul class="nav nav-tabs mb-3 tab-style-8 scaleX" id="saglikHizmetleriTab"
-                                    role="tablist">
-                                    <li class="nav-item" role="presentation">
-                                        <button class="nav-link active" id="saglikHizmetleri-kayit-ozeti-tab"
-                                                data-bs-toggle="tab"
-                                                data-bs-target="#saglikHizmetleri-kayit-ozeti-tab-pane" type="button"
-                                                role="tab"
-                                                aria-controls="saglikHizmetleri-kayit-ozeti-tab-pane"
-                                                aria-selected="true">Kayıt Özeti
-                                        </button>
-                                    </li>
-                                    <li class="nav-item" role="presentation">
-                                        <button class="nav-link" id="saglikHizmetleri-grafik-tab" data-bs-toggle="tab"
-                                                data-bs-target="#saglikHizmetleri-grafik-tab-pane" type="button"
-                                                role="tab"
-                                                aria-controls="saglikHizmetleri-grafik-tab-pane"
-                                                aria-selected="false">Grafik
-                                        </button>
-                                    </li>
-                                </ul>
-                                <div class="tab-content" id="saglikHizmetleriTabContent">
-                                    <div class="tab-pane show active overflow-hidden"
-                                         id="saglikHizmetleri-kayit-ozeti-tab-pane"
-                                         role="tabpanel" aria-labelledby="saglikHizmetleri-kayit-ozeti-tab"
-                                         tabindex="0">
-                                        <div class="row">
-                                            <div class="col-xl-3">
-                                                <div class="card custom-card">
-                                                    <div class="card-body">
-                                                        <div class="d-flex align-items-center flex-wrap gap-3">
-                                                            <div class="avatar avatar-lg bg-info-transparent">
-                                                                <div class="avatar avatar-md bg-info">
-                                                                    <i class="ti ti-user-check fs-25"></i>
-                                                                </div>
-                                                            </div>
-                                                            <div class="flex-fill">
-                                                                <h3 class="fw-semibold mb-1">
-                                                                    <h:outputText
-                                                                            value="#{saglikDashboardController.totalPerson}">
-                                                                        <f:convertNumber type="number"/>
-                                                                    </h:outputText>
-                                                                </h3>
-                                                                <span class="">Kayıtlı Kişi Sayısı</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-xl-3">
-                                                <div class="card custom-card">
-                                                    <div class="card-body">
-                                                        <div class="d-flex align-items-center flex-wrap gap-3">
-                                                            <div class="avatar avatar-lg bg-success-transparent">
-                                                                <div class="avatar avatar-md bg-success">
-                                                                    <i class="ti ti-checklist fs-25"></i>
-                                                                </div>
-                                                            </div>
-                                                            <div class="flex-fill">
-                                                                <h3 class="fw-semibold mb-1">
-                                                                    <h:outputText
-                                                                            value="#{saglikDashboardController.totalPersonCheck}">
-                                                                        <f:convertNumber type="number"/>
-                                                                    </h:outputText>
-                                                                </h3>
-                                                                <span class="">Kişi Kontrol Sayısı</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-xl-3">
-                                                <div class="card custom-card">
-                                                    <div class="card-body">
-                                                        <div class="d-flex align-items-center flex-wrap gap-3">
-                                                            <div class="avatar avatar-lg bg-danger-transparent">
-                                                                <div class="avatar avatar-md bg-danger">
-                                                                    <i class="ti ti-list-search fs-25"></i>
-                                                                </div>
-                                                            </div>
-                                                            <div class="flex-fill">
-                                                                <h3 class="fw-semibold mb-1">
-                                                                    <h:outputText
-                                                                            value="#{saglikDashboardController.totalBloodTest}">
-                                                                        <f:convertNumber type="number"/>
-                                                                    </h:outputText>
-                                                                </h3>
-                                                                <span class="">Kan Tahlil Sonuç Sayısı</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-xl-3">
-                                                <div class="card custom-card">
-                                                    <div class="card-body">
-                                                        <div class="d-flex align-items-center flex-wrap gap-3">
-                                                            <div class="avatar avatar-lg bg-purple-transparent">
-                                                                <div class="avatar avatar-md bg-purple">
-                                                                    <i class="ti ti-augmented-reality fs-25"></i>
-                                                                </div>
-                                                            </div>
-                                                            <div class="flex-fill">
-                                                                <h3 class="fw-semibold mb-1">
-                                                                    <h:outputText
-                                                                            value="#{saglikDashboardController.totalObesitySurvey}">
-                                                                        <f:convertNumber type="number"/>
-                                                                    </h:outputText>
-                                                                </h3>
-                                                                <span class="">Obezite Anket Sayısı</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+<!--                                    </div>-->
+<!--                                    <div class="tab-pane overflow-hidden" id="genel-grafik-tab-pane"-->
+<!--                                         role="tabpanel"-->
+<!--                                         aria-labelledby="genel-grafik-tab" tabindex="0">-->
+<!--                                        Genel Grafik-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </ui:fragment>-->
+<!--                        <ui:fragment-->
+<!--                                rendered="#{syKullaniciController.hasPermission('saglik_hizmetleri_dashboard:goster')}">-->
+<!--                            <div class="tab-pane overflow-hidden" id="saglik-hizmetleri-tab-pane" role="tabpanel"-->
+<!--                                 aria-labelledby="saglik-hizmetleri-tab" tabindex="0">-->
+<!--                                <ul class="nav nav-tabs mb-3 tab-style-8 scaleX" id="saglikHizmetleriTab"-->
+<!--                                    role="tablist">-->
+<!--                                    <li class="nav-item" role="presentation">-->
+<!--                                        <button class="nav-link active" id="saglikHizmetleri-kayit-ozeti-tab"-->
+<!--                                                data-bs-toggle="tab"-->
+<!--                                                data-bs-target="#saglikHizmetleri-kayit-ozeti-tab-pane" type="button"-->
+<!--                                                role="tab"-->
+<!--                                                aria-controls="saglikHizmetleri-kayit-ozeti-tab-pane"-->
+<!--                                                aria-selected="true">Kayıt Özeti-->
+<!--                                        </button>-->
+<!--                                    </li>-->
+<!--                                    <li class="nav-item" role="presentation">-->
+<!--                                        <button class="nav-link" id="saglikHizmetleri-grafik-tab" data-bs-toggle="tab"-->
+<!--                                                data-bs-target="#saglikHizmetleri-grafik-tab-pane" type="button"-->
+<!--                                                role="tab"-->
+<!--                                                aria-controls="saglikHizmetleri-grafik-tab-pane"-->
+<!--                                                aria-selected="false">Grafik-->
+<!--                                        </button>-->
+<!--                                    </li>-->
+<!--                                </ul>-->
+<!--                                <div class="tab-content" id="saglikHizmetleriTabContent">-->
+<!--                                    <div class="tab-pane show active overflow-hidden"-->
+<!--                                         id="saglikHizmetleri-kayit-ozeti-tab-pane"-->
+<!--                                         role="tabpanel" aria-labelledby="saglikHizmetleri-kayit-ozeti-tab"-->
+<!--                                         tabindex="0">-->
+<!--                                        <div class="row">-->
+<!--                                            <div class="col-xl-3">-->
+<!--                                                <div class="card custom-card">-->
+<!--                                                    <div class="card-body">-->
+<!--                                                        <div class="d-flex align-items-center flex-wrap gap-3">-->
+<!--                                                            <div class="avatar avatar-lg bg-info-transparent">-->
+<!--                                                                <div class="avatar avatar-md bg-info">-->
+<!--                                                                    <i class="ti ti-user-check fs-25"></i>-->
+<!--                                                                </div>-->
+<!--                                                            </div>-->
+<!--                                                            <div class="flex-fill">-->
+<!--                                                                <h3 class="fw-semibold mb-1">-->
+<!--                                                                    <h:outputText-->
+<!--                                                                            value="#{saglikDashboardController.totalPerson}">-->
+<!--                                                                        <f:convertNumber type="number"/>-->
+<!--                                                                    </h:outputText>-->
+<!--                                                                </h3>-->
+<!--                                                                <span class="">Kayıtlı Kişi Sayısı</span>-->
+<!--                                                            </div>-->
+<!--                                                        </div>-->
+<!--                                                    </div>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+<!--                                            <div class="col-xl-3">-->
+<!--                                                <div class="card custom-card">-->
+<!--                                                    <div class="card-body">-->
+<!--                                                        <div class="d-flex align-items-center flex-wrap gap-3">-->
+<!--                                                            <div class="avatar avatar-lg bg-success-transparent">-->
+<!--                                                                <div class="avatar avatar-md bg-success">-->
+<!--                                                                    <i class="ti ti-checklist fs-25"></i>-->
+<!--                                                                </div>-->
+<!--                                                            </div>-->
+<!--                                                            <div class="flex-fill">-->
+<!--                                                                <h3 class="fw-semibold mb-1">-->
+<!--                                                                    <h:outputText-->
+<!--                                                                            value="#{saglikDashboardController.totalPersonCheck}">-->
+<!--                                                                        <f:convertNumber type="number"/>-->
+<!--                                                                    </h:outputText>-->
+<!--                                                                </h3>-->
+<!--                                                                <span class="">Kişi Kontrol Sayısı</span>-->
+<!--                                                            </div>-->
+<!--                                                        </div>-->
+<!--                                                    </div>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+<!--                                            <div class="col-xl-3">-->
+<!--                                                <div class="card custom-card">-->
+<!--                                                    <div class="card-body">-->
+<!--                                                        <div class="d-flex align-items-center flex-wrap gap-3">-->
+<!--                                                            <div class="avatar avatar-lg bg-danger-transparent">-->
+<!--                                                                <div class="avatar avatar-md bg-danger">-->
+<!--                                                                    <i class="ti ti-list-search fs-25"></i>-->
+<!--                                                                </div>-->
+<!--                                                            </div>-->
+<!--                                                            <div class="flex-fill">-->
+<!--                                                                <h3 class="fw-semibold mb-1">-->
+<!--                                                                    <h:outputText-->
+<!--                                                                            value="#{saglikDashboardController.totalBloodTest}">-->
+<!--                                                                        <f:convertNumber type="number"/>-->
+<!--                                                                    </h:outputText>-->
+<!--                                                                </h3>-->
+<!--                                                                <span class="">Kan Tahlil Sonuç Sayısı</span>-->
+<!--                                                            </div>-->
+<!--                                                        </div>-->
+<!--                                                    </div>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+<!--                                            <div class="col-xl-3">-->
+<!--                                                <div class="card custom-card">-->
+<!--                                                    <div class="card-body">-->
+<!--                                                        <div class="d-flex align-items-center flex-wrap gap-3">-->
+<!--                                                            <div class="avatar avatar-lg bg-purple-transparent">-->
+<!--                                                                <div class="avatar avatar-md bg-purple">-->
+<!--                                                                    <i class="ti ti-augmented-reality fs-25"></i>-->
+<!--                                                                </div>-->
+<!--                                                            </div>-->
+<!--                                                            <div class="flex-fill">-->
+<!--                                                                <h3 class="fw-semibold mb-1">-->
+<!--                                                                    <h:outputText-->
+<!--                                                                            value="#{saglikDashboardController.totalObesitySurvey}">-->
+<!--                                                                        <f:convertNumber type="number"/>-->
+<!--                                                                    </h:outputText>-->
+<!--                                                                </h3>-->
+<!--                                                                <span class="">Obezite Anket Sayısı</span>-->
+<!--                                                            </div>-->
+<!--                                                        </div>-->
+<!--                                                    </div>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
 
-                                    </div>
-                                    <div class="tab-pane overflow-hidden" id="saglikHizmetleri-grafik-tab-pane"
-                                         role="tabpanel"
-                                         aria-labelledby="saglikHizmetleri-grafik-tab" tabindex="0">
-                                        Sağlık Hizmetleri Grafik
-                                    </div>
-                                </div>
-                            </div>
-                        </ui:fragment>
-                    </div>
-                </div>
-            </div>
-        </div>
+<!--                                    </div>-->
+<!--                                    <div class="tab-pane overflow-hidden" id="saglikHizmetleri-grafik-tab-pane"-->
+<!--                                         role="tabpanel"-->
+<!--                                         aria-labelledby="saglikHizmetleri-grafik-tab" tabindex="0">-->
+<!--                                        Sağlık Hizmetleri Grafik-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </ui:fragment>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
 
-    </h:form>
+<!--    </h:form>-->
 </ui:composition>
 
 </html>

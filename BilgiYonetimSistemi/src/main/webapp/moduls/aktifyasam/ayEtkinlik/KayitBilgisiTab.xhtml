@@ -26,8 +26,12 @@
                        itemLabel="#{birims.tanim}"/>
     </p:selectOneMenu>
 
-    <p:outputLabel value="#{messages.konuLabel}" for="@next"/>
-    <p:inputTextarea rows="4" id="konu" value="#{ayEtkinlikController.selected.konu}" title="#{messages.konuText}" styleClass="w-100"
+    <p:outputLabel value="#{messages.etkinlikAdiLabel}" for="@next"/>
+    <p:inputTextarea rows="4" id="ad" value="#{ayEtkinlikController.selected.ad}" title="#{messages.etkinlikAdiText}" styleClass="w-100"
+                     autoResize="false" required="true"/>
+
+    <p:outputLabel value="#{messages.etkinlikYeriLabel}" for="@next"/>
+    <p:inputTextarea rows="4" id="etkinlikYeri" value="#{ayEtkinlikController.selected.etkinlikYeri}" title="#{messages.etkinlikYeriText}" styleClass="w-100"
                      autoResize="false" required="true"/>
 
     <p:outputLabel value="#{messages.aciklamaLabel}" for="@next"/>

@@ -17,6 +17,7 @@ import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
 import tr.bel.gaziantep.bysweb.moduls.aktifyasam.entity.AyArama;
 import tr.bel.gaziantep.bysweb.moduls.aktifyasam.entity.AyKisi;
 import tr.bel.gaziantep.bysweb.moduls.aktifyasam.service.AyAramaService;
+import tr.bel.gaziantep.bysweb.moduls.aktifyasam.service.AyKisiGunService;
 import tr.bel.gaziantep.bysweb.moduls.aktifyasam.service.AyKisiService;
 
 import java.io.Serial;
@@ -43,6 +44,8 @@ public class AyAramaController extends AbstractController<AyArama> {
     @Inject
     private AyKisiService ayKisiService;
     @Inject
+    private AyKisiGunService ayKisiGunService;
+    @Inject
     private FilterOptionService filterOptionService;
 
     @Getter
@@ -59,9 +62,6 @@ public class AyAramaController extends AbstractController<AyArama> {
     public AyAramaController() {
         super(AyArama.class);
     }
-
-
-
 
     public List<SelectItem> getFilterOptions(EnumSyFiltreAnahtari key) {
         switch (key) {
@@ -84,8 +84,8 @@ public class AyAramaController extends AbstractController<AyArama> {
 
 
     public void changeDay() {
-        if(day == null) return;
-        List<AyKisi> ayKisiList = ayKisiService.findByGun(day);
+        if (day == null) return;
+        List<AyKisi> ayKisiList = ayKisiGunService.findByGun(day);
         List<AyArama> list = ayAramaService.findByGunByTarih(day, date);
         ayAramaList = new ArrayList<>();
         ayKisiList.forEach(ayKisi ->
@@ -95,7 +95,7 @@ public class AyAramaController extends AbstractController<AyArama> {
                         .ayKisi(ayKisi)
                         .build())
         );
-        ayAramaList.removeIf(x->list.stream().anyMatch(y->y.getAyKisi().equals(x.getAyKisi())));
+        ayAramaList.removeIf(x -> list.stream().anyMatch(y -> y.getAyKisi().equals(x.getAyKisi())));
     }
 
     public void call(AyArama ayArama, boolean come) {

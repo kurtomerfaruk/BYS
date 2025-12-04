@@ -16,14 +16,15 @@ import org.primefaces.event.SelectEvent;
 import tr.bel.gaziantep.bysweb.core.controller.AbstractController;
 import tr.bel.gaziantep.bysweb.core.controller.KpsController;
 import tr.bel.gaziantep.bysweb.core.converter.ModelConverter;
+import tr.bel.gaziantep.bysweb.core.enums.aktifyasam.EnumAyGrup;
 import tr.bel.gaziantep.bysweb.core.enums.bys.EnumModul;
+import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlGun;
 import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.EnumSyFiltreAnahtari;
 import tr.bel.gaziantep.bysweb.core.service.FilterOptionService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
 import tr.bel.gaziantep.bysweb.core.utils.StringUtil;
 import tr.bel.gaziantep.bysweb.moduls.aktifyasam.entity.*;
-import tr.bel.gaziantep.bysweb.moduls.aktifyasam.service.AyKisiAranacakKisiService;
 import tr.bel.gaziantep.bysweb.moduls.aktifyasam.service.AyKisiService;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
 import tr.bel.gaziantep.bysweb.moduls.genel.service.GnlKisiService;
@@ -62,8 +63,6 @@ public class AyKisiController extends AbstractController<AyKisi> {
     private PushContext push;
     @Inject
     private FilterOptionService filterOptionService;
-    @Inject
-    private AyKisiAranacakKisiService ayKisiAranacakKisiService;
 
     private int count;
     @Getter
@@ -82,6 +81,12 @@ public class AyKisiController extends AbstractController<AyKisi> {
     @Setter
     private AyKisiAranacakKisi ayKisiAranacakKisi;
     private String post;
+    @Getter
+    @Setter
+    private List<EnumGnlGun> guns;
+    @Getter
+    @Setter
+    private List<EnumAyGrup> grups;
 
 
     public AyKisiController() {
@@ -184,10 +189,10 @@ public class AyKisiController extends AbstractController<AyKisi> {
         }
     }
 
-    public void create(ActionEvent event) {
+    public void update(ActionEvent event) {
         if (this.getSelected() != null) {
             try {
-                service.persist(this.getSelected(), ayAktivites, aySanatsalBeceris, aySaglikBilgis);
+                service.update(this.getSelected(), ayAktivites, aySanatsalBeceris, aySaglikBilgis, grups, guns);
                 FacesUtil.successMessage(Constants.KAYIT_EKLENDI);
             } catch (Exception ex) {
                 log.error(null, ex);
@@ -195,6 +200,7 @@ public class AyKisiController extends AbstractController<AyKisi> {
             }
         }
     }
+
 
     public void getTcKimlik() {
         if (this.getSelected() != null) {
@@ -282,18 +288,28 @@ public class AyKisiController extends AbstractController<AyKisi> {
             ayAktivites = new ArrayList<>();
             aySanatsalBeceris = new ArrayList<>();
             aySaglikBilgis = new ArrayList<>();
+            guns = new ArrayList<>();
+            grups = new ArrayList<>();
             this.getSelected().getAyKisiSaglikBilgileriList()
                     .stream()
                     .filter(kisiSaglikBilgileri -> kisiSaglikBilgileri.isSecili() && kisiSaglikBilgileri.isAktif())
                     .forEach(kisiSaglikBilgileri -> aySaglikBilgis.add(kisiSaglikBilgileri.getAySaglikBilgi()));
             this.getSelected().getAyKisiSanatsalBeceriList()
                     .stream()
-                    .filter(kisiSanatsalBeceri -> kisiSanatsalBeceri.isSecili() && kisiSanatsalBeceri.isAktif() )
+                    .filter(kisiSanatsalBeceri -> kisiSanatsalBeceri.isSecili() && kisiSanatsalBeceri.isAktif())
                     .forEach(kisiSanatsalBeceri -> aySanatsalBeceris.add(kisiSanatsalBeceri.getAySanatsalBeceri()));
             this.getSelected().getAyKisiAktiviteList()
                     .stream()
                     .filter(kisiAktivite -> kisiAktivite.isSecili() && kisiAktivite.isAktif())
                     .forEach(kisiAktivite -> ayAktivites.add(kisiAktivite.getAyAktivite()));
+            this.getSelected().getAyKisiGrupList()
+                    .stream()
+                    .filter(grup -> grup.isSecili() && grup.isAktif())
+                    .forEach(grup -> grups.add(grup.getGrup()));
+            this.getSelected().getAyKisiGunList()
+                    .stream()
+                    .filter(gun -> gun.isSecili() && gun.isAktif())
+                    .forEach(gun -> guns.add(gun.getGun()));
         }
     }
 

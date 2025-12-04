@@ -13,7 +13,7 @@
     <h:outputText value="#{ayKisiController.selected.gnlKisi.eklemeYeri.displayValue}"/>
 
     <p:outputLabel value="#{messages.kayitTarihiLabel}" for="@next"/>
-    <p:datePicker id="kayitTarihi" locale="tr" pattern="#{messages.tarihFormat}" value="#{ayKisiController.selected.gnlKisi.kayitTarihi}"
+    <p:datePicker id="kayitTarihi" locale="tr" pattern="#{messages.tarihFormat}" value="#{ayKisiController.selected.kayitTarihi}"
                   title="#{messages.kayitTarihiText}"
                   mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true" showOnFocus="false"/>
 
@@ -83,22 +83,46 @@
                  styleClass="tcUpdate"/>
 
     <p:outputLabel value="#{messages.grupLabel}" for="@next"/>
-    <p:selectOneMenu id="grup" value="#{ayKisiController.selected.grup}">
-        <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+    <p:selectCheckboxMenu id="gruplar"
+                          value="#{ayKisiController.grups}"
+                          label="#{messages.grupText}" multiple="true"
+                          filter="true" filterMatchMode="startsWith" styleClass="checkboxMenu">
         <f:selectItems value="#{enumGrup.ALL_VALUES}"
                        var="grups"
                        itemValue="#{grups}"
                        itemLabel="#{grups.displayValue}"/>
-    </p:selectOneMenu>
+        <f:converter converterId="omnifaces.GenericEnumConverter"/>
+    </p:selectCheckboxMenu>
 
     <p:outputLabel value="#{messages.gunLabel}" for="@next"/>
-    <p:selectOneMenu id="gun" value="#{ayKisiController.selected.gun}">
-        <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+    <p:selectCheckboxMenu id="gunler"
+                          value="#{ayKisiController.guns}"
+                          label="#{messages.gunText}" multiple="true"
+                          filter="true" filterMatchMode="startsWith" styleClass="checkboxMenu">
         <f:selectItems value="#{enumGun.ALL_VALUES}"
                        var="guns"
                        itemValue="#{guns}"
                        itemLabel="#{guns.displayValue}"/>
-    </p:selectOneMenu>
+        <f:converter converterId="omnifaces.GenericEnumConverter"/>
+    </p:selectCheckboxMenu>
+
+<!--    <p:outputLabel value="#{messages.grupLabel}" for="@next"/>-->
+<!--    <p:selectOneMenu id="grup" value="#{ayKisiController.selected.grup}">-->
+<!--        <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>-->
+<!--        <f:selectItems value="#{enumGrup.ALL_VALUES}"-->
+<!--                       var="grups"-->
+<!--                       itemValue="#{grups}"-->
+<!--                       itemLabel="#{grups.displayValue}"/>-->
+<!--    </p:selectOneMenu>-->
+
+<!--    <p:outputLabel value="#{messages.gunLabel}" for="@next"/>-->
+<!--    <p:selectOneMenu id="gun" value="#{ayKisiController.selected.gun}">-->
+<!--        <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>-->
+<!--        <f:selectItems value="#{enumGun.ALL_VALUES}"-->
+<!--                       var="guns"-->
+<!--                       itemValue="#{guns}"-->
+<!--                       itemLabel="#{guns.displayValue}"/>-->
+<!--    </p:selectOneMenu>-->
 
     <p:outputLabel value="#{messages.durakLabel}" for="@next"/>
     <p:inputText id="durak" value="#{ayKisiController.selected.durak}" title="#{messages.durakText}" maxlength="150"/>
