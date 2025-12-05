@@ -14,6 +14,7 @@ import tr.bel.gaziantep.bysweb.core.enums.bys.EnumRaporTuru;
 import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlTalepDurumu;
 import tr.bel.gaziantep.bysweb.core.utils.DateUtil;
 import tr.bel.gaziantep.bysweb.core.utils.Util;
+import tr.bel.gaziantep.bysweb.moduls.engelsizler.entity.EyEngelGrubu;
 import tr.bel.gaziantep.bysweb.moduls.engelsizler.entity.EyTalepKonu;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlIlce;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlMahalle;
@@ -48,6 +49,7 @@ public class EyTalepRaporuPrint extends AbstractReportController {
     private LocalDate bitisTarihi;
     private EyTalepKonu eyTalepKonu;
     private EnumGnlTalepDurumu durum;
+    private EyEngelGrubu eyEngelGrubu;
 
     @PostConstruct
     public void init(){
@@ -65,6 +67,7 @@ public class EyTalepRaporuPrint extends AbstractReportController {
             parameterMap.put("mahalleId", gnlMahalle == null ? -1 : gnlMahalle.getId());
             parameterMap.put("ilceId", gnlIlce == null ? -1 : gnlIlce.getId());
             parameterMap.put("konuId", eyTalepKonu == null ? -1 : eyTalepKonu.getId());
+            parameterMap.put("engelGrubuId", eyEngelGrubu == null ? -1 : eyEngelGrubu.getId());
             parameterMap.put("durum", durum == null ? -1 : durum.name());
 
 
