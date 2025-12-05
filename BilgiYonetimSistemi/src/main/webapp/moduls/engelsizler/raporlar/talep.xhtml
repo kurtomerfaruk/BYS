@@ -28,7 +28,7 @@
 
                         <div class="row">
                             <div class="col-xxl-12">
-                                <div class="row clearfix">
+                                <div class="row mb-3 clearfix">
                                     <div class="col-xxl-3">
                                         <label for="tarih">#{messages.tarihLabel}</label>
                                     </div>
@@ -47,7 +47,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row clearfix">
+
+                                <div class="row mb-3 clearfix">
                                     <div class="col-xxl-3">
                                         <label for="ilceYas">#{messages.ilceLabel}</label>
                                     </div>
@@ -67,7 +68,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row clearfix">
+
+                                <div class="row mb-3 clearfix">
                                     <div class="col-xxl-3">
                                         <label for="mahalle">#{messages.mahalleLabel}</label>
                                     </div>
@@ -88,7 +90,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row clearfix">
+
+                                <div class="row mb-3 clearfix">
                                     <div class="col-xxl-3">
                                         <label for="talepKonu">#{messages.talepKonusuLabel}</label>
                                     </div>
@@ -107,7 +110,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row clearfix">
+
+                                <div class="row mb-3 clearfix">
                                     <div class="col-xxl-3">
                                         <label for="durum">#{messages.durumuLabel}</label>
                                     </div>
@@ -123,7 +127,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row clearfix">
+
+                                <div class="row mb-3 clearfix">
                                     <div class="col-xxl-3">
                                         <label for="raporTuruYas">#{messages.raporTuruLabel}</label>
                                     </div>
@@ -141,6 +146,24 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <div class="row mb-3 clearfix">
+                                    <div class="col-xxl-3">
+                                        <label for="raporTuruYas">#{messages.engelGrubuLabel}</label>
+                                    </div>
+                                    <div class="col-xxl-9">
+                                        <div class="form-group">
+                                            <p:selectOneMenu id="engelGrubu" value="#{eyTalepRaporuPrint.eyEngelGrubu}"
+                                                             converter="omnifaces.SelectItemsConverter">
+                                                <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+                                                <f:selectItems value="#{eyEngelGrubuController.items}"
+                                                               var="engelGrubus"
+                                                               itemValue="#{engelGrubus}"
+                                                               itemLabel="#{engelGrubus.tanim}"/>
+                                            </p:selectOneMenu>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -148,7 +171,7 @@
 
                     </div>
                     <div class="card-footer border-top-0">
-                        <div class="px-4 py-3 border-top border-block-start-dashed d-sm-flex justify-content-start">
+                        <div class="px-4 py-3 border-top border-block-start-dashed d-sm-flex justify-content-start float-end">
                             <p:commandButton id="raporButton"
                                              icon="pi pi-print"
                                              class="btn btn-primary"
