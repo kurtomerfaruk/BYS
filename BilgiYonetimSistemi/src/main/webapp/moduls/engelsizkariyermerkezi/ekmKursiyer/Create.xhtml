@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="primefaces"
+      xmlns:h="jakarta.faces.html">
+
+<ui:composition>
+
+    <p:dialog widgetVar="EkmKursiyerCreateDialog"
+              modal="true"
+              resizable="false"
+              closeOnEscape="true"
+              header="#{messages.dialogYeniKayit}"
+              appendTo="@(body)"
+              responsive="true"
+              onShow="PF('EkmKursiyerCreateDialog').initPosition();adjustMenuWidth()"
+              fitViewport="true"
+              position="top">
+
+        <h:form id="EkmKursiyerCreateForm">
+            <h:panelGroup id="display">
+                <p:focus context="display"/>
+                <div class="card">
+
+                    <div class="card-body">
+
+                        <ul class="nav nav-tabs mb-3 tab-style-8 scaleX" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="ekmKursiyerBilgileriCreateTab" data-bs-toggle="tab"
+                                        data-bs-target="#ekmKursiyerBilgileriCreateTabPane" type="button" role="tab"
+                                        aria-controls="ekmKursiyerBilgileriCreateTabPane" aria-selected="true">Kişi Bilgileri
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="ekmKursiyerAileDurumuCreateTab" data-bs-toggle="tab"
+                                        data-bs-target="#ekmKursiyerAileDurumuCreateTabPane" type="button" role="tab"
+                                        aria-controls="ekmKursiyerAileDurumuCreateTabPane" aria-selected="false">Aile Durumu
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="ekmKursiyerEkonomomikDurumCreateTab" data-bs-toggle="tab"
+                                        data-bs-target="#ekmKursiyerEkonomomikDurumCreateTabPane" type="button" role="tab"
+                                        aria-controls="ekmKursiyerEkonomomikDurumCreateTabPane" aria-selected="false">Ekonomik Durum
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="ekmKursiyerSosyalYardimCreateTab" data-bs-toggle="tab"
+                                        data-bs-target="#ekmKursiyerSosyalYardimCreateTabPane" type="button" role="tab"
+                                        aria-controls="ekmKursiyerSosyalYardimCreateTabPane" aria-selected="false">Sosyal Yardım Durumu
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="ekmKursiyerEngellilikCreateTab" data-bs-toggle="tab"
+                                        data-bs-target="#ekmKursiyerEngellilikCreateTabPane" type="button" role="tab"
+                                        aria-controls="ekmKursiyerEngellilikCreateTabPane" aria-selected="false">Engellilik Durumu
+                                </button>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content">
+                            <div class="tab-pane overflow-hidden active show" id="ekmKursiyerBilgileriCreateTabPane" role="tabpanel"
+                                 aria-labelledby="ekmKursiyerBilgileriCreateTab"  tabindex="0">
+                                <p:panelGrid id="kisiPanel" columns="2" styleClass="w-100" rendered="#{ekmKursiyerController.selected!=null}" layout="tabular">
+
+                                    <ui:include src="/moduls/engelsizkariyermerkezi/ekmKursiyer/KisiBilgileriTab.xhtml"/>
+                                </p:panelGrid>
+                            </div>
+
+                            <div class="tab-pane overflow-hidden" id="ekmKursiyerAileDurumuCreateTabPane" role="tabpanel"
+                                 aria-labelledby="ekmKursiyerAileDurumuCreateTab"
+                                 tabindex="0">
+
+                                <p:panelGrid id="ekmKursiyerAileDurumuPanel" columns="2" styleClass="w-100" rendered="#{ekmKursiyerController.selected!=null}"
+                                             layout="tabular">
+
+                                    <ui:include src="/moduls/engelsizkariyermerkezi/ekmKursiyer/AileDurumuTab.xhtml"/>
+
+                                </p:panelGrid>
+                            </div>
+
+                            <div class="tab-pane overflow-hidden" id="ekmKursiyerEkonomomikDurumCreateTabPane" role="tabpanel"
+                                 aria-labelledby="ekmKursiyerEkonomomikDurumCreateTab"
+                                 tabindex="0">
+                                <p:panelGrid id="ekonomikDurumPanel" columns="2" styleClass="w-100" rendered="#{ekmKursiyerController.selected!=null}"
+                                             layout="tabular">
+
+                                    <ui:include src="/moduls/engelsizkariyermerkezi/ekmKursiyer/EkonomikDurumTab.xhtml"/>
+
+                                </p:panelGrid>
+                            </div>
+
+                            <div class="tab-pane overflow-hidden" id="ekmKursiyerSosyalYardimCreateTabPane" role="tabpanel"
+                                 aria-labelledby="ekmKursiyerSosyalYardimCreateTab"
+                                 tabindex="0">
+                                <p:panelGrid id="ekmKursiyerSosyalYardimPanel" columns="2" styleClass="w-100"
+                                             rendered="#{ekmKursiyerController.selected!=null}" layout="tabular">
+                                    <ui:include src="/moduls/engelsizkariyermerkezi/ekmKursiyer/SosyalYardimTab.xhtml"/>
+
+                                </p:panelGrid>
+                            </div>
+
+                            <div class="tab-pane overflow-hidden" id="ekmKursiyerEngellilikCreateTabPane" role="tabpanel"
+                                 aria-labelledby="ekmKursiyerEngellilikCreateTab"
+                                 tabindex="0">
+                                <p:panelGrid id="ekmKursiyerEngellilikPanel" columns="2" styleClass="w-100"
+                                             rendered="#{ekmKursiyerController.selected!=null}" layout="tabular">
+
+                                    <ui:include src="/moduls/engelsizkariyermerkezi/ekmKursiyer/EngellilikTab.xhtml"/>
+
+                                </p:panelGrid>
+                            </div>
+                        </div>
+                    </div><!-- end card-body -->
+                    <div class="card-footer">
+                        <div class="float-end">
+                            <p:commandButton icon="pi pi-check" styleClass="ui-button-success"
+                                             actionListener="#{ekmKursiyerController.update}"
+                                             value="#{messages.buttonKaydet}"
+                                             update="display,:EkmKursiyerListForm:datalist:datalist,:growl"
+                                             oncomplete="handleSubmit(xhr,status,args,PF('EkmKursiyerCreateDialog'));"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                            <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                             value="#{messages.buttonIptal}" onclick="PF('EkmKursiyerCreateDialog').hide()"
+                                             immediate="true" onstart="PF('Loading').show()"
+                                             onsuccess="PF('Loading').hide()"/>
+                        </div>
+                    </div>
+                </div>
+            </h:panelGroup>
+        </h:form>
+
+    </p:dialog>
+
+    <script type="text/javascript">
+        function adjustMenuWidth() {
+            var dialog = PF('EkmKursiyerCreateDialog');
+            var menu = $(".checkboxMenu");
+
+            if (dialog &amp;&amp; menu) {
+                var dialogWidth = dialog.jq.innerWidth();
+                var menuContainer = $(menu).closest('.ui-selectcheckboxmenu');
+                menuContainer.width(dialogWidth - 30); // 30px padding/margin için
+            }
+        }
+    </script>
+
+</ui:composition>
+
+</html>

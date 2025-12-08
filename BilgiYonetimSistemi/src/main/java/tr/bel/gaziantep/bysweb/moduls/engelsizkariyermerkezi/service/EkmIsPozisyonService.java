@@ -20,12 +20,12 @@ public class EkmIsPozisyonService extends AbstractService<EkmIsPozisyon> {
     @Serial
     private static final long serialVersionUID = -5077760386710604868L;
 
-    @PersistenceContext(unitName = Constants.UNIT_NAME)
-    private EntityManager em;
-
     public EkmIsPozisyonService() {
         super(EkmIsPozisyon.class);
     }
+
+    @PersistenceContext(unitName = Constants.UNIT_NAME)
+    private EntityManager em;
 
     @Override
     protected EntityManager getEntityManager() {

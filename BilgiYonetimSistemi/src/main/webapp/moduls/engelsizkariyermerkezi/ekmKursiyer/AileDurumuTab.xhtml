@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces">
+<ui:composition>
+    <p:outputLabel value="#{messages.ebeveynDurumuLabel}" for="@next"/>
+    <p:selectOneMenu id="ebeveynDurumu"
+                     value="#{ekmKursiyerController.selected.eyKisi.ebeveynDurumu}">
+        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+        <f:selectItems value="#{enumEbeveynDurumu.ALL_VALUES}"
+                       var="ebeveynDurumus"
+                       itemValue="#{ebeveynDurumus}"
+                       itemLabel="#{ebeveynDurumus.displayValue}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.kiminleYasiyorLabel}" for="@next"/>
+    <p:selectOneMenu id="kiminleYasiyor"
+                     value="#{ekmKursiyerController.selected.eyKisi.gnlKisi.kiminleYasiyor}" styleClass="tcUpdate">
+        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+        <f:selectItems value="#{enumKiminleYasiyor.ALL_VALUES}"
+                       var="kiminleYasiyors"
+                       itemValue="#{kiminleYasiyors}"
+                       itemLabel="#{kiminleYasiyors.displayValue}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.ozelDurumuLabel}" for="@next"/>
+    <p:inputTextarea id="ozelDurumu" value="#{ekmKursiyerController.selected.eyKisi.ozelDurumlar}"
+                     title="#{messages.ozelDurumuText}" rows="4" autoResize="false" styleClass="w-100"/>
+
+    <p:outputLabel value="#{messages.aildekiHukumluLabel}" for="@next"/>
+    <h:panelGroup>
+        <div class="ui-inputgroup">
+            <div class="ui-inputgroup-addon">
+                <p:selectBooleanCheckbox id="ailedekiHukumlu"
+                                         value="#{ekmKursiyerController.selected.eyKisi.ailedekiHukumluDurumu}">
+                    <p:ajax event="change" update="ailedekiHukumluAciklama"
+                            listener="#{ekmKursiyerController.selected.eyKisi.setAiledekiHukumluDurumuAciklama('')}"/>
+                </p:selectBooleanCheckbox>
+            </div>
+            <p:inputText id="ailedekiHukumluAciklama"
+                         value="#{ekmKursiyerController.selected.eyKisi.ailedekiHukumluDurumuAciklama}"
+                         title="#{messages.aildekiHukumluText}"
+                         required="#{ekmKursiyerController.selected.eyKisi.ailedekiHukumluDurumu}"
+                         disabled="#{!ekmKursiyerController.selected.eyKisi.ailedekiHukumluDurumu}"/>
+        </div>
+    </h:panelGroup>
+</ui:composition>
+</html>

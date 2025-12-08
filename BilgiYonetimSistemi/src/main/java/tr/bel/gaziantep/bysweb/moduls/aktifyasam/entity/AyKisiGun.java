@@ -19,7 +19,7 @@ import java.io.Serial;
 @Table(name = "AYKISI_GUN")
 @NamedQuery(name = "AyKisiGun.findByGun", query = "SELECT a.ayKisi FROM AyKisiGun a WHERE a.aktif=true " +
         "AND a.ayKisi.gnlKisi.durum=tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlDurum.SAG AND a.gun =:gun " +
-        "AND a.ayKisi.devamDurumu =tr.bel.gaziantep.bysweb.core.enums.aktifyasam.EnumAyDevamDurumu.DEVAM_EDIYOR")
+        "AND a.ayKisi.devamDurumu =tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlDevamDurumu.DEVAM_EDIYOR")
 
 public class AyKisiGun extends BaseEntity {
     @Serial

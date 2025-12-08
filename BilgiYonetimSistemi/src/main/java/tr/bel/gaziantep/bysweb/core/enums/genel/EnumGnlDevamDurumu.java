@@ -1,4 +1,4 @@
-package tr.bel.gaziantep.bysweb.core.enums.aktifyasam;
+package tr.bel.gaziantep.bysweb.core.enums.genel;
 
 import lombok.Getter;
 import tr.bel.gaziantep.bysweb.core.enums.BaseEnum;
@@ -9,14 +9,14 @@ import tr.bel.gaziantep.bysweb.core.enums.BaseEnum;
  * @since 2.07.2025 16:19
  */
 @Getter
-public enum EnumAyDevamDurumu implements BaseEnum {
+public enum EnumGnlDevamDurumu implements BaseEnum {
 
     DEVAM_EDIYOR("Devam Ediyor"),
     DEVAM_ETMIYOR("Devam Etmiyor");
 
     private final String label;
 
-    EnumAyDevamDurumu(String label) {
+    EnumGnlDevamDurumu(String label) {
         this.label = label;
     }
 

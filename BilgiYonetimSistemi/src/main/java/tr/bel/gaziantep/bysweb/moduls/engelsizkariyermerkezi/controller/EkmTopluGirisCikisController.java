@@ -16,7 +16,6 @@ import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
 import tr.bel.gaziantep.bysweb.moduls.engelsizkariyermerkezi.entity.EkmGirisCikis;
 import tr.bel.gaziantep.bysweb.moduls.engelsizkariyermerkezi.service.EkmGirisCikisService;
 import tr.bel.gaziantep.bysweb.moduls.engelsizkariyermerkezi.service.EkmIsBasvuruService;
-import tr.bel.gaziantep.bysweb.moduls.engelsizkariyermerkezi.service.EkmKisiKursService;
 import tr.bel.gaziantep.bysweb.moduls.engelsizler.entity.EyKisi;
 
 import java.io.Serial;
@@ -39,8 +38,6 @@ public class EkmTopluGirisCikisController extends AbstractController<EkmGirisCik
     private static final long serialVersionUID = -6273947725403008338L;
 
     @Inject
-    private EkmKisiKursService kisiKursService;
-    @Inject
     private EkmGirisCikisService girisCikisService;
     @Inject
     private EkmIsBasvuruService isBasvuruService;
@@ -57,6 +54,7 @@ public class EkmTopluGirisCikisController extends AbstractController<EkmGirisCik
 
     public EkmTopluGirisCikisController() {
         super(EkmGirisCikis.class);
+        createNew();
     }
 
     private void createNew() {
@@ -89,18 +87,19 @@ public class EkmTopluGirisCikisController extends AbstractController<EkmGirisCik
             } else {
                 girisCikisList = girisCikisService.findByKurs(this.getSelected().getGnlKurs());
                 List<EyKisi> kisiSource = new ArrayList<>();
-                for (EkmGirisCikis ekmGirisCikis : girisCikisList) {
-                    if (!kisiSource.contains(ekmGirisCikis.getEyKisi())) {
-                        kisiSource.add(ekmGirisCikis.getEyKisi());
-                    }
-                }
+//                for (EkmGirisCikis ekmGirisCikis : girisCikisList) {
+//                    if (!kisiSource.contains(ekmGirisCikis.getEyKisi())) {
+//                        kisiSource.add(ekmGirisCikis.getEyKisi());
+//                    }
+//                }
                 dualEyKisi = new DualListModel<>(kisiSource, new ArrayList<>());
             }
 
         }
     }
 
-    public void kaydet(ActionEvent event) {
+    @Override
+    public void save(ActionEvent event) {
         try {
             if (!dualEyKisi.getTarget().isEmpty()) {
                 for (EyKisi kisi : dualEyKisi.getTarget()) {
@@ -114,7 +113,7 @@ public class EkmTopluGirisCikisController extends AbstractController<EkmGirisCik
                         ekmGirisCikis.setCikisTarihi(LocalDateTime.now());
                     } else {
                         ekmGirisCikis = this.getSelected();
-                        ekmGirisCikis.setEyKisi(kisi);
+//                        ekmGirisCikis.setEyKisi(kisi);
                     }
                     girisCikisService.edit(ekmGirisCikis);
                 }
@@ -129,10 +128,11 @@ public class EkmTopluGirisCikisController extends AbstractController<EkmGirisCik
     }
 
     private EkmGirisCikis getEkmGirisCikis(EyKisi kisi) {
-        return girisCikisList.stream()
-                .filter(ekmGirisCikis -> ekmGirisCikis.getEyKisi().getId().equals(kisi.getId())
-                        && ekmGirisCikis.getGnlKurs().getId().equals(this.getSelected().getGnlKurs().getId()))
-                .findFirst()
-                .orElse(null);
+//        return girisCikisList.stream()
+//                .filter(ekmGirisCikis -> ekmGirisCikis.getEyKisi().getId().equals(kisi.getId())
+//                        && ekmGirisCikis.getGnlKurs().getId().equals(this.getSelected().getGnlKurs().getId()))
+//                .findFirst()
+//                .orElse(null);
+        return null;
     }
 }

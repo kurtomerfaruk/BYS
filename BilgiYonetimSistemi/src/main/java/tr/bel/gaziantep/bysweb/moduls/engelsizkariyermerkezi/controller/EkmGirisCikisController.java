@@ -50,7 +50,7 @@ public class EkmGirisCikisController extends AbstractController<EkmGirisCikis> {
             newItem = EkmGirisCikis.class.getDeclaredConstructor().newInstance();
             newItem.setGirisTarihi(LocalDateTime.now());
             EyKisi eyKisi = EyKisi.builder().gnlKisi(new GnlKisi()).build();
-            newItem.setEyKisi(eyKisi);
+//            newItem.setEyKisi(eyKisi);
             this.setSelected(newItem);
             initializeEmbeddableKey();
             return newItem;
@@ -62,7 +62,7 @@ public class EkmGirisCikisController extends AbstractController<EkmGirisCikis> {
 
     public void secilenKisi(SelectEvent<EyKisi> event) {
         EyKisi kisi = event.getObject();
-        this.getSelected().setEyKisi(kisi);
+//        this.getSelected().setEyKisi(kisi);
     }
 
     public void createExitList() {

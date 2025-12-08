@@ -34,7 +34,7 @@ public enum EnumSyFiltreAnahtari implements BaseEnum {
     EYARAC_ARIZA_TURU("Engelsiz Arıza Türü"),
     EYARAC_CIHAZ_DURUMU("Engelsiz Cihaz Durumu"),
     EYDEGERLENDIRME_DURUMU("Engelsiz Değerlendirme Durumu"),
-    AYDEVAM_DURUMU("Aktif Yaşam Devam Durumu"),
+    GNLDEVAM_DURUMU("Devam Durumu"),
     AYBIRIM("Aktif Yaşam Birim"),
     EDBHIZMET_TURU("Evde Yaşama Destek Hizmet Türü"),
     EDBBASVURU_DURUMU("Evde Yaşama Destek Başvuru Durumu"),

@@ -24,18 +24,18 @@
             <p:menuitem value="#{messages.buttonSil}"
                         onclick="document.getElementById('EyKisiListForm:datalist:datalist:deleteButton').click();"
                         icon="pi pi-trash" rendered="#{syKullaniciController.hasPermission('eykisi:sil')}"/>
-            <p:separator/>
+            <p:divider/>
             <p:menuitem value="#{messages.buttonNvidenGuncelle}"
                         onclick="document.getElementById('EyKisiListForm:datalist:datalist:nviUpdateButton').click();"
                         icon="pi pi-refresh" rendered="#{syKullaniciController.hasPermission('eykisi:nvidenGuncelle')}"/>
-            <p:separator/>
+            <p:divider/>
             <p:menuitem value="#{messages.buttonQrCodeOlustur}"
                         onclick="document.getElementById('EyKisiListForm:datalist:datalist:qrCodeButton').click();"
                         icon="pi pi-qrcode" rendered="#{syKullaniciController.hasPermission('eykisi:qrOlustur')}"/>
             <p:menuitem value="#{messages.buttonYazdir}"
                         onclick="document.getElementById('EyKisiListForm:datalist:datalist:printButton').click();"
                         icon="pi pi-print" rendered="#{syKullaniciController.hasPermission('eykisi:yazdir')}"/>
-            <p:separator/>
+            <p:divider/>
             <p:menuitem value="#{messages.buttonListeyiGuncelle}"
                         onclick="document.getElementById('EyKisiListForm:datalist:datalist:updateListButton').click();"
                         icon="pi pi-check"  rendered="#{syKullaniciController.hasPermission('eykisi:listeyiGuncelle')}"/>

@@ -7,7 +7,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Nationalized;
 import org.hibernate.annotations.SQLRestriction;
 import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
-import tr.bel.gaziantep.bysweb.core.enums.aktifyasam.EnumAyDevamDurumu;
+import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlDevamDurumu;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
 
 import java.io.Serial;
@@ -30,7 +30,7 @@ import java.util.List;
         "a.gnlKisi.binaNo IS NOT NULL")
 //@NamedQuery(name = "AyKisi.findByGun",query = "SELECT a FROM AyKisi a WHERE a.aktif=true " +
 //        "AND a.gnlKisi.durum=tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlDurum.SAG AND a.gun =:gun " +
-//        "AND a.devamDurumu =tr.bel.gaziantep.bysweb.core.enums.aktifyasam.EnumAyDevamDurumu.DEVAM_EDIYOR")
+//        "AND a.devamDurumu =tr.bel.gaziantep.bysweb.core.enums.genel.EnumAyDevamDurumu.DEVAM_EDIYOR")
 public class AyKisi extends BaseEntity {
     @Serial
     private static final long serialVersionUID = 668865374558285865L;
@@ -61,7 +61,7 @@ public class AyKisi extends BaseEntity {
 
     @Column(name = "DEVAM_DURUMU")
     @Enumerated(EnumType.STRING)
-    private EnumAyDevamDurumu devamDurumu;
+    private EnumGnlDevamDurumu devamDurumu;
 
     @Nationalized
     @Lob

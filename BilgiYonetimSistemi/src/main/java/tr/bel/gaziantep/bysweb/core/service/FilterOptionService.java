@@ -3,7 +3,6 @@ package tr.bel.gaziantep.bysweb.core.service;
 import jakarta.ejb.Stateless;
 import jakarta.faces.model.SelectItem;
 import jakarta.inject.Inject;
-import tr.bel.gaziantep.bysweb.core.enums.aktifyasam.EnumAyDevamDurumu;
 import tr.bel.gaziantep.bysweb.core.enums.bys.EnumModul;
 import tr.bel.gaziantep.bysweb.core.enums.bys.EnumSoruTuru;
 import tr.bel.gaziantep.bysweb.core.enums.engelsizler.*;
@@ -232,9 +231,9 @@ public class FilterOptionService implements java.io.Serializable{
         return result;
     }
 
-    public List<SelectItem> getAyDevamDurumus() {
+    public List<SelectItem> getGnlDevamDurumus() {
         List<SelectItem> result = new ArrayList<>();
-        for (EnumAyDevamDurumu value : EnumAyDevamDurumu.values()) {
+        for (EnumGnlDevamDurumu value : EnumGnlDevamDurumu.values()) {
             result.add(new SelectItem(value, value.getDisplayValue()));
         }
         return result;

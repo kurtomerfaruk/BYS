@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="primefaces"
+      xmlns:h="jakarta.faces.html">
+
+<ui:composition>
+
+    <p:dialog widgetVar="EkmKursiyerEditDialog"
+              id="EkmKursiyerEditDlg"
+              modal="true"
+              resizable="false"
+              closeOnEscape="true"
+              header="#{messages.dialogKayitGuncelle}"
+              appendTo="@(body)"
+              responsive="true"
+              onShow="PF('EkmKursiyerEditDialog').initPosition();adjustMenuWidth();"
+              fitViewport="true"
+              position="top">
+
+        <h:form id="EkmKursiyerEditForm" enctype="multipart/form-data">
+            <h:panelGroup id="display">
+                <p:focus context="display"/>
+                <div class="card custom-card">
+
+                    <div class="card-body">
+
+                        <ul class="nav nav-tabs mb-3 tab-style-8 scaleX" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="ekmKursiyerKisiBilgileriEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#ekmKursiyerKisiBilgileriEditTabPane" type="button" role="tab"
+                                        aria-controls="ekmKursiyerKisiBilgileriEditTabPane" aria-selected="true">Kişi Bilgileri
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="ekmKursiyerAileDurumuEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#ekmKursiyerAileDurumuEditTabPane" type="button" role="tab"
+                                        aria-controls="ekmKursiyerAileDurumuEditTabPane" aria-selected="false">Aile Durumu
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="ekmKursiyerEkonomomikDurumEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#ekmKursiyerEkonomomikDurumEditTabPane" type="button" role="tab"
+                                        aria-controls="ekmKursiyerEkonomomikDurumEditTabPane" aria-selected="false">Ekonomik Durum
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="ekmKursiyerSosyalYardimEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#ekmKursiyerSosyalYardimEditTabPane" type="button" role="tab"
+                                        aria-controls="ekmKursiyerSosyalYardimEditTabPane" aria-selected="false">Sosyal Yardım Durumu
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="ekmKursiyerEngellilikEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#ekmKursiyerEngellilikEditTabPane" type="button" role="tab"
+                                        aria-controls="ekmKursiyerEngellilikEditTabPane" aria-selected="false">Engellilik Durumu
+                                </button>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content text-muted">
+                            <div class="tab-pane show active" id="ekmKursiyerKisiBilgileriEditTabPane">
+                                <p:panelGrid id="kisiPanel" columns="2" styleClass="w-100"
+                                             rendered="#{ekmKursiyerController.selected!=null}" layout="tabular">
+
+                                    <ui:include src="/moduls/engelsizkariyermerkezi/ekmKursiyer/KisiBilgileriTab.xhtml"/>
+                                </p:panelGrid>
+                            </div>
+
+                            <div class="tab-pane" id="ekmKursiyerAileDurumuEditTabPane">
+
+                                <p:panelGrid id="ekmKursiyerAileDurumuPanel" columns="2" styleClass="w-100"
+                                             rendered="#{ekmKursiyerController.selected!=null}" layout="tabular">
+
+                                    <ui:include src="/moduls/engelsizkariyermerkezi/ekmKursiyer/AileDurumuTab.xhtml"/>
+
+                                </p:panelGrid>
+                            </div>
+
+                            <div class="tab-pane" id="ekmKursiyerEkonomomikDurumEditTabPane">
+                                <p:panelGrid id="ekonomikDurumPanel" columns="2" styleClass="w-100"
+                                             rendered="#{ekmKursiyerController.selected!=null}" layout="tabular">
+
+                                    <ui:include src="/moduls/engelsizkariyermerkezi/ekmKursiyer/EkonomikDurumTab.xhtml"/>
+
+                                </p:panelGrid>
+                            </div>
+
+                            <div class="tab-pane" id="ekmKursiyerSosyalYardimEditTabPane">
+                                <p:panelGrid id="ekmKursiyerSosyalYardimPanel" columns="2" styleClass="w-100" rendered="#{ekmKursiyerController.selected!=null}"
+                                             layout="tabular">
+                                    <ui:include src="/moduls/engelsizkariyermerkezi/ekmKursiyer/SosyalYardimTab.xhtml"/>
+
+                                </p:panelGrid>
+                            </div>
+
+                            <div class="tab-pane" id="ekmKursiyerEngellilikEditTabPane">
+                                <p:panelGrid id="ekmKursiyerEngellilikPanel" columns="2" styleClass="w-100" rendered="#{ekmKursiyerController.selected!=null}"
+                                             layout="tabular">
+                                    <ui:include src="/moduls/engelsizkariyermerkezi/ekmKursiyer/EngellilikTab.xhtml"/>
+                                </p:panelGrid>
+                            </div>
+
+                        </div>
+                    </div><!-- end card-body -->
+                    <div class="card-footer">
+                        <div class="float-end">
+                            <p:commandButton icon="pi pi-check" styleClass="ui-button-success"
+                                             actionListener="#{ekmKursiyerController.update}"
+                                             value="#{messages.buttonKaydet}"
+                                             update="display,:EkmKursiyerListForm:datalist:datalist,:growl"
+                                             oncomplete="handleSubmit(xhr,status,args,PF('EkmKursiyerEditDialog'));"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                            <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                             value="#{messages.buttonIptal}" onclick="PF('EkmKursiyerEditDialog').hide()"
+                                             immediate="true" onstart="PF('Loading').show()"
+                                             onsuccess="PF('Loading').hide()"/>
+                        </div>
+                    </div>
+                </div>
+            </h:panelGroup>
+        </h:form>
+
+    </p:dialog>
+
+    <script type="text/javascript">
+        function adjustMenuWidth() {
+            var dialog = PF('EkmKursiyerEditDialog');
+            var menu = $(".checkboxMenu");
+
+            if (dialog &amp;&amp; menu) {
+                var dialogWidth = dialog.jq.innerWidth();
+                var menuContainer = $(menu).closest('.ui-selectcheckboxmenu');
+                menuContainer.width(dialogWidth - 30);
+            }
+        }
+    </script>
+
+</ui:composition>
+
+</html>

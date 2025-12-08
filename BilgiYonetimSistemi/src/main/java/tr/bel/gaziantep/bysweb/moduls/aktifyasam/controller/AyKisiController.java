@@ -95,8 +95,8 @@ public class AyKisiController extends AbstractController<AyKisi> {
 
     public List<SelectItem> getFilterOptions(EnumSyFiltreAnahtari key) {
         switch (key) {
-            case AYDEVAM_DURUMU -> {
-                return filterOptionService.getAyDevamDurumus();
+            case GNLDEVAM_DURUMU -> {
+                return filterOptionService.getGnlDevamDurumus();
             }
             case AYBIRIM -> {
                 return filterOptionService.getAyBirims();

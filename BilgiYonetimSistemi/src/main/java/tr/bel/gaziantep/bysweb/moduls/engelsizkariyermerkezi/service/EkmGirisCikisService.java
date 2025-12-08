@@ -11,6 +11,7 @@ import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKurs;
 
 import java.io.Serial;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -36,11 +37,13 @@ public class EkmGirisCikisService extends AbstractService<EkmGirisCikis>     {
     }
 
     public List<EkmGirisCikis> findByGnlKisi(GnlKisi kisi) {
-        return getEntityManager().createNamedQuery("EkmGirisCikis.findByGnlKisi").setParameter("gnlKisi",kisi).getResultList();
+//        return getEntityManager().createNamedQuery("EkmGirisCikis.findByGnlKisi").setParameter("gnlKisi",kisi).getResultList();
+        return  Collections.emptyList();
     }
 
     public List<EyKisi> getEntrants() {
-        return getEntityManager().createNamedQuery("EkmGirisCikis.findGirisYapanlar").getResultList();
+//        return getEntityManager().createNamedQuery("EkmGirisCikis.findGirisYapanlar").getResultList();
+        return  Collections.emptyList();
     }
 
     public List<EkmGirisCikis> findByKurs(GnlKurs gnlKurs) {
