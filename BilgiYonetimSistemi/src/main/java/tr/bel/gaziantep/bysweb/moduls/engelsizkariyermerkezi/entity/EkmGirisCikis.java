@@ -17,11 +17,13 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 @Table(name = "EKMGIRIS_CIKIS")
-//@NamedQuery(name = "EkmGirisCikis.findByGnlKisi", query = "SELECT a FROM EkmGirisCikis a WHERE a.aktif=true AND " +
-//        "a.eyKisi.gnlKisi=:gnlKisi ORDER BY a.cikisTarihi DESC,a.girisTarihi DESC")
-//@NamedQuery(name = "EkmGirisCikis.findGirisYapanlar", query = "SELECT e.eyKisi FROM EkmGirisCikis e WHERE e.cikisTarihi IS NULL " +
-//        "ORDER BY e.eyKisi.gnlKisi.ad,e.eyKisi.gnlKisi.soyad")
-@NamedQuery(name = "EkmGirisCikis.findByKurs", query = "SELECT e FROM EkmGirisCikis e WHERE e.cikisTarihi IS NULL AND e.gnlKurs =:gnlKurs")
+@NamedQuery(name = "EkmGirisCikis.findByGnlKisi", query = "SELECT a FROM EkmGirisCikis a WHERE a.aktif=true AND " +
+        "a.ekmKursiyer.eyKisi.gnlKisi=:gnlKisi ORDER BY a.cikisTarihi DESC,a.girisTarihi DESC")
+//@NamedQuery(name = "EkmGirisCikis.findGirisYapanlar", query = "SELECT e FROM EkmGirisCikis e WHERE e.cikisTarihi IS NULL " +
+//        "ORDER BY e.ekmKursiyer.eyKisi.gnlKisi.ad,e.ekmKursiyer.eyKisi.gnlKisi.soyad")
+@NamedQuery(name = "EkmGirisCikis.findByKurs", query = "SELECT e FROM EkmGirisCikis e " +
+        "WHERE e.aktif=true and e.cikisTarihi IS NULL AND e.gnlKurs =:gnlKurs " +
+        "ORDER BY e.ekmKursiyer.eyKisi.gnlKisi.ad,e.ekmKursiyer.eyKisi.gnlKisi.soyad")
 public class EkmGirisCikis extends BaseEntity {
     @Serial
     private static final long serialVersionUID = -3436919824962421321L;
@@ -46,7 +48,7 @@ public class EkmGirisCikis extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "EKMKURSIYER_ID")
-    private EkmKursiyer ekmkursiyer;
+    private EkmKursiyer ekmKursiyer;
 
     @Override
     public int hashCode() {

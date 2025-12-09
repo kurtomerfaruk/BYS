@@ -56,7 +56,7 @@
                     <p:confirm header="#{messages.ConfirmationHeader}" message="#{messages.ConfirmDeleteMessage}" icon="pi pi-exclamation-circle"/>
                 </p:commandButton>
                 <p:commandButton id="cikisButton" styleClass="ui-button-help" icon="pi pi-angle-right" pt:data-tooltip="#{messages.buttonCikisYap}"
-                                 actionListener="#{ekmGirisCikisController.createExitList()}" update=":CikisYapForm:CikisYapForm"
+                                 actionListener="#{ekmGirisCikisController.getTraineeList()}" update=":CikisYapForm:CikisYapForm"
                                  oncomplete="PF('CikisYapDialog').show()"
                                  disabled="#{empty ekmGirisCikisController.selected or ekmGirisCikisController.selected.cikisTarihi!=null}"
                                  onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"

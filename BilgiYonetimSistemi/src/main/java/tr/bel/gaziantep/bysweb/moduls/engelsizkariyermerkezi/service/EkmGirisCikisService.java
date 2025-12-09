@@ -6,12 +6,10 @@ import jakarta.persistence.PersistenceContext;
 import tr.bel.gaziantep.bysweb.core.service.AbstractService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.moduls.engelsizkariyermerkezi.entity.EkmGirisCikis;
-import tr.bel.gaziantep.bysweb.moduls.engelsizler.entity.EyKisi;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKurs;
 
 import java.io.Serial;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -36,15 +34,23 @@ public class EkmGirisCikisService extends AbstractService<EkmGirisCikis>     {
         return em;
     }
 
-    public List<EkmGirisCikis> findByGnlKisi(GnlKisi kisi) {
-//        return getEntityManager().createNamedQuery("EkmGirisCikis.findByGnlKisi").setParameter("gnlKisi",kisi).getResultList();
-        return  Collections.emptyList();
+    @Override
+    public String getSortCol() {
+        return "id";
     }
 
-    public List<EyKisi> getEntrants() {
-//        return getEntityManager().createNamedQuery("EkmGirisCikis.findGirisYapanlar").getResultList();
-        return  Collections.emptyList();
+    @Override
+    public String getSorting(){
+        return "desc";
     }
+
+    public List<EkmGirisCikis> findByGnlKisi(GnlKisi kisi) {
+        return getEntityManager().createNamedQuery("EkmGirisCikis.findByGnlKisi").setParameter("gnlKisi",kisi).getResultList();
+    }
+
+//    public List<EkmGirisCikis> getEntrants(GnlKurs gnlkurs) {
+//        return getEntityManager().createNamedQuery("EkmGirisCikis.findGirisYapanlar").getResultList();
+//    }
 
     public List<EkmGirisCikis> findByKurs(GnlKurs gnlKurs) {
         return  getEntityManager().createNamedQuery("EkmGirisCikis.findByKurs").setParameter("gnlKurs",gnlKurs).getResultList();

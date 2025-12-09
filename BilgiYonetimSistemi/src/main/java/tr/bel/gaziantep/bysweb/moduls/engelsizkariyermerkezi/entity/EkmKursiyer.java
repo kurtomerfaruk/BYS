@@ -41,7 +41,7 @@ public class EkmKursiyer extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private EnumGnlDevamDurumu devamDurumu;
 
-    @OneToMany(mappedBy = "ekmkursiyer",fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @OneToMany(mappedBy = "ekmKursiyer",fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private List<EkmGirisCikis> ekmGirisCikisList = new ArrayList<>();
 
     @OneToMany(mappedBy = "ekmKursiyer",fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})

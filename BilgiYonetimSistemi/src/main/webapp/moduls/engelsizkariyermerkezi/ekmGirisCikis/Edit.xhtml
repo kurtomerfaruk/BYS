@@ -16,30 +16,36 @@
                    listForm="EkmGirisCikisListForm">
 
         <p:outputLabel value="#{messages.kursLabel}" for="@next"/>
-        <p:selectOneMenu id="aykursId" value="#{ekmGirisCikisController.selected.gnlKurs}" filter="true" converter="omnifaces.SelectItemsConverter">
+        <p:selectOneMenu id="gnlKurs" value="#{ekmGirisCikisController.selected.gnlKurs}" required="true" filter="true"
+                         converter="omnifaces.SelectItemsConverter" filterNormalize="true" style="width:500px !important;">
             <f:selectItem itemLabel="#{messages.seciniz}"/>
             <f:selectItems value="#{gnlKursController.items}"
-                           var="aykursIdItem"
-                           itemValue="#{aykursIdItem}"
-                           itemLabel="#{aykursIdItem.tanim.toString()}"/>
+                           var="kursIdItem"
+                           itemValue="#{kursIdItem}"
+                           itemLabel="#{kursIdItem.tanim.toString()}"/>
+            <p:ajax event="change" update="ekmKursiyer" onstart="PF('Loading').show()" oncomplete="PF('Loading').hide()"/>
         </p:selectOneMenu>
 
-        <p:outputLabel value="#{messages.kisiLabel}" for="@next"/>
-        <h:panelGroup>
-            <div class="ui-inputgroup">
-                <p:inputText id="kisiId" value="#{ekmGirisCikisController.selected.eyKisi.gnlKisi.adSoyad}" required="true" title="#{messages.kisiText}"
-                             label="#{messages.kisiText}" readonly="#{facesContext.renderResponse}" size="50">
-                </p:inputText>
-                <p:commandButton icon="pi pi-search"
-                                 actionListener="#{bysController.openCommonDialog('eyKisiSec')}"
-                                 process="@this"
-                                 update=":growl" title="Kişi seçmelisiniz">
-                    <p:ajax event="dialogReturn"
-                            listener="#{ekmGirisCikisController.secilenKisi}"
-                            update=":growl,@(.inputUpdate),kisiId"/>
-                </p:commandButton>
-            </div>
-        </h:panelGroup>
+        <p:outputLabel value="#{messages.kursiyerLabel}" for="@next"/>
+        <p:selectOneMenu id="ekmKursiyer" value="#{ekmGirisCikisController.selected.ekmKursiyer}" filter="true" required="true" filterNormalize="true"
+                         converter="omnifaces.SelectItemsConverter" var="kursiyer" title="#{messages.kursiyerText}" label="#{messages.kursiyerText}">
+            <f:selectItems value="#{ekmGirisCikisController.getTraineeList()}"
+                           var="kursiyers"
+                           itemLabel="#{kursiyers.eyKisi.gnlKisi.adSoyad}"
+                           itemValue="#{kursiyers}"/>
+            <p:column style="width: 20%">
+                <f:facet name="header">
+                    <h:outputText value="T.C."/>
+                </f:facet>
+                <h:outputText value="#{kursiyer.eyKisi.gnlKisi.tcKimlikNo}"/>
+            </p:column>
+            <p:column>
+                <f:facet name="header">
+                    <h:outputText value="Ad Soyad"/>
+                </f:facet>
+                <h:outputText value="#{kursiyer.eyKisi.gnlKisi.adSoyad}"/>
+            </p:column>
+        </p:selectOneMenu>
 
         <p:outputLabel value="#{messages.girisTarihiLabel}" for="@next"/>
         <p:datePicker id="girisTarihi" locale="tr" pattern="#{messages.tarihSaatFormat}" value="#{ekmGirisCikisController.selected.girisTarihi}"

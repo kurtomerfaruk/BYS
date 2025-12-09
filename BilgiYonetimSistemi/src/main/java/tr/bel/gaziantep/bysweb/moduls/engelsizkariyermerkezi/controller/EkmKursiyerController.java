@@ -8,6 +8,8 @@ import jakarta.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.primefaces.PrimeFaces;
+import org.primefaces.event.SelectEvent;
 import tr.bel.gaziantep.bysweb.core.controller.AbstractController;
 import tr.bel.gaziantep.bysweb.core.controller.KpsController;
 import tr.bel.gaziantep.bysweb.core.enums.bys.EnumModul;
@@ -215,5 +217,14 @@ public class EkmKursiyerController extends AbstractController<EkmKursiyer> {
                 this.getSelected().getEyKisi().setIrtibatKuranGnlPersonel(this.getSyKullanici().getGnlPersonel());
             }
         }
+    }
+
+    public void ekmKursiyerSecKapat(EkmKursiyer ekmKursiyer) {
+        PrimeFaces.current().dialog().closeDynamic(ekmKursiyer);
+    }
+
+    public void onRowDblSelect(SelectEvent<EkmKursiyer> event) {
+        EkmKursiyer ekmKursiyer = event.getObject();
+        ekmKursiyerSecKapat(ekmKursiyer);
     }
 }

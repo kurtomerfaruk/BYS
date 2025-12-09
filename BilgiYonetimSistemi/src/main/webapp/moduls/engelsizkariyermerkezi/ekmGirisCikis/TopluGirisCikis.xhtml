@@ -4,7 +4,8 @@
                 xmlns:ui="jakarta.faces.facelets"
                 xmlns:h="jakarta.faces.html"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:f="jakarta.faces.core">
+                xmlns:f="jakarta.faces.core"
+                xmlns:fn="jakarta.tags.functions">
 
     <h:form id="TopluGirisCikisForm">
         <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.bys.EnumGirisCikis" var="enumGirisCikis"/>
@@ -31,28 +32,17 @@
                                                                var="girisCikiss"
                                                                itemLabel="#{girisCikiss.displayValue}"
                                                                itemValue="#{girisCikiss}"/>
-                                                <p:ajax event="change" update="cikisTarihi,kursId"/>
+                                                <p:ajax event="change" update="kursId"/>
                                             </p:selectOneMenu>
                                         </div>
                                     </div>
                                     <div class="ui-g">
                                         <div class="ui-g-4 text-right">
-                                            <p:outputLabel value="#{messages.girisTarihiLabel}" for="@next"/>
+                                            <p:outputLabel value="#{messages.tarihLabel}" for="@next"/>
                                         </div>
                                         <div class="ui-g-8">
                                             <p:datePicker id="girisTarihi" locale="tr" pattern="#{messages.tarihFormat}"
                                                           value="#{ekmTopluGirisCikisController.selected.girisTarihi}" title="#{messages.girisTarihiText}"
-                                                          mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
-                                                          showOnFocus="false" showTime="true"/>
-                                        </div>
-                                    </div>
-                                    <div class="ui-g">
-                                        <div class="ui-g-4 text-right">
-                                            <p:outputLabel value="#{messages.cikisTarihiLabel}" for="@next"/>
-                                        </div>
-                                        <div class="ui-g-8">
-                                            <p:datePicker id="cikisTarihi" locale="tr" pattern="#{messages.tarihFormat}"
-                                                          value="#{ekmTopluGirisCikisController.selected.cikisTarihi}" title="#{messages.cikisTarihiText}"
                                                           mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
                                                           showOnFocus="false" showTime="true"/>
                                         </div>
@@ -69,7 +59,8 @@
                                                                var="kursIdItem"
                                                                itemValue="#{kursIdItem}"
                                                                itemLabel="#{kursIdItem.tanim.toString()}"/>
-                                                <p:ajax event="change" listener="#{ekmTopluGirisCikisController.createKisiList()}" update="kisiler"/>
+                                                <p:ajax event="change" listener="#{ekmTopluGirisCikisController.createTraineeList()}" update="girisCikisId"
+                                                        onstart="PF('Loading').show()" oncomplete="PF('Loading').hide()"/>
                                             </p:selectOneMenu>
                                         </div>
                                     </div>
@@ -79,24 +70,57 @@
                                             <p:outputLabel value="#{messages.kursaGirisYapanlarLabel}" for="@next"/>
                                         </div>
                                         <div class="ui-g-8">
-                                            <p:pickList id="kisiler" value="#{ekmTopluGirisCikisController.dualEyKisi}"
-                                                        var="item"
-                                                        itemValue="#{item}"
-                                                        itemLabel="#{item.gnlKisi.adSoyad}"
-                                                        showSourceControls="true"
-                                                        showTargetControls="true"
-                                                        showCheckbox="true"
-                                                        responsive="true"
-                                                        showSourceFilter="true"
-                                                        showTargetFilter="true"
-                                                        filterMatchMode="contains"
-                                                        addAllLabel="#{messages.tumunuEkle}"
-                                                        addLabel="#{messages.ekle}"
-                                                        removeAllLabel="#{messages.tumunuCikar}"
-                                                        removeLabel="#{messages.cikar}"
-                                                        converter="eyKisiConverter">
+                                            <!--                                            <p:pickList id="kisiler" value="#{ekmTopluGirisCikisController.dualEyKisi}"-->
+                                            <!--                                                        var="item"-->
+                                            <!--                                                        itemValue="#{item}"-->
+                                            <!--                                                        itemLabel="#{item.gnlKisi.adSoyad}"-->
+                                            <!--                                                        showSourceControls="true"-->
+                                            <!--                                                        showTargetControls="true"-->
+                                            <!--                                                        showCheckbox="true"-->
+                                            <!--                                                        responsive="true"-->
+                                            <!--                                                        showSourceFilter="true"-->
+                                            <!--                                                        showTargetFilter="true"-->
+                                            <!--                                                        filterMatchMode="contains"-->
+                                            <!--                                                        addAllLabel="#{messages.tumunuEkle}"-->
+                                            <!--                                                        addLabel="#{messages.ekle}"-->
+                                            <!--                                                        removeAllLabel="#{messages.tumunuCikar}"-->
+                                            <!--                                                        removeLabel="#{messages.cikar}"-->
+                                            <!--                                                        converter="eyKisiConverter">-->
 
-                                            </p:pickList>
+                                            <!--                                            </p:pickList>-->
+                                            <p:dataTable id="girisCikisId"
+                                                         value="#{ekmTopluGirisCikisController.ekmGirisCikisList}"
+                                                         var="girisCikisVar"
+                                                         emptyMessage="#{messages.kayitBulunamadi}"
+                                                         scrollHeight="250"
+                                                         scrollable="true">
+
+                                                <p:column field="ekmKursiyer.eyKisi.gnlKisi.tcKimlikNo" headerText="#{messages.tcKimlikNoText}"/>
+                                                <p:column field="ekmKursiyer.eyKisi.gnlKisi.ad" headerText="#{messages.adText}"/>
+                                                <p:column field="ekmKursiyer.eyKisi.gnlKisi.soyad" headerText="#{messages.soyadText}"/>
+
+                                                <p:column>
+                                                    <f:facet name="header">
+                                                        <h:outputText value="#{messages.girisTarihiText}"/>
+                                                    </f:facet>
+                                                    <h:outputText value="#{girisCikisVar.girisTarihi}">
+                                                        <f:convertDateTime pattern="#{messages.tarihSaatFormat}" type="localDateTime"/>
+                                                    </h:outputText>
+                                                </p:column>
+
+
+                                                <p:column width="60" headerText="#{messages.buttonSil}">
+                                                    <p:commandButton icon="pi pi-trash" title="#{messages.buttonSil}"
+                                                                     actionListener="#{ekmTopluGirisCikisController.removeItem(girisCikisVar)}"
+                                                                     update="girisCikisId,:growl"
+                                                                     process="girisCikisId"/>
+                                                </p:column>
+
+                                                <f:facet name="footer">
+                                                    <span class="font-bold">Toplam Kayıt #{fn:length(ekmTopluGirisCikisController.ekmGirisCikisList)}</span>
+                                                </f:facet>
+
+                                            </p:dataTable>
                                         </div>
                                     </div>
                                 </div>

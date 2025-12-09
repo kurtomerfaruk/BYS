@@ -21,14 +21,25 @@
       <h:outputText value="#{messages.kursLabel}"/>
       <h:outputText value="#{ekmGirisCikisController.selected.gnlKurs.tanim}"/>
 
-      <p:outputLabel value="#{messages.adSoyadLabel}" for="kisiId"/>
-      <p:selectOneMenu id="kisiId" value="#{ekmGirisCikisController.selected.eyKisi}" required="true"
-                       converter="omnifaces.SelectItemsConverter" filter="true">
-         <f:selectItem itemLabel="#{messages.seciniz}"/>
-         <f:selectItems value="#{ekmGirisCikisController.eyKisiList}"
-                        var="kisiIdItem"
-                        itemValue="#{kisiIdItem}"
-                        itemLabel="#{kisiIdItem.gnlKisi.adSoyad.toString()}"/>
+      <p:outputLabel value="#{messages.kursiyerLabel}" for="@next"/>
+      <p:selectOneMenu id="ekmKursiyer" value="#{ekmGirisCikisController.selected.ekmKursiyer}" filter="true" required="true" filterNormalize="true"
+                       converter="omnifaces.SelectItemsConverter" var="kursiyer" title="#{messages.kursiyerText}" label="#{messages.kursiyerText}">
+         <f:selectItems value="#{ekmGirisCikisController.getTraineeList()}"
+                        var="kursiyers"
+                        itemLabel="#{kursiyers.eyKisi.gnlKisi.adSoyad}"
+                        itemValue="#{kursiyers}"/>
+         <p:column style="width: 20%">
+            <f:facet name="header">
+               <h:outputText value="T.C."/>
+            </f:facet>
+            <h:outputText value="#{kursiyer.eyKisi.gnlKisi.tcKimlikNo}"/>
+         </p:column>
+         <p:column>
+            <f:facet name="header">
+               <h:outputText value="Ad Soyad"/>
+            </f:facet>
+            <h:outputText value="#{kursiyer.eyKisi.gnlKisi.adSoyad}"/>
+         </p:column>
       </p:selectOneMenu>
 
       <h:outputText value="#{messages.girisTarihiLabel}"/>
@@ -36,7 +47,7 @@
          <f:convertDateTime pattern="#{messages.tarihSaatFormat}" type="localDateTime"/>
       </h:outputText>
 
-      <p:outputLabel value="#{messages.cikisTarihiLabel}" for="cikisTarihi"/>
+      <p:outputLabel value="#{messages.cikisTarihiLabel}" for="@next"/>
       <p:datePicker id="cikisTarihi" locale="tr" pattern="#{messages.tarihSaatFormat}" value="#{ekmGirisCikisController.selected.cikisTarihi}"
                     title="#{messages.cikisTarihiText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
                     showOnFocus="false" showTime="true"/>

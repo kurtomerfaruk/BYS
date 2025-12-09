@@ -17,6 +17,10 @@ import java.io.Serial;
 @Setter
 @Entity
 @Table(name = "EKMKURSIYER_KURS")
+@NamedQuery(name = "EkmKursiyerKurs.findByKurs",query = "SELECT k.ekmKursiyer FROM EkmKursiyerKurs k " +
+        "WHERE k.aktif=true AND k.ekmKursiyer.aktif=true " +
+        " AND k.gnlKurs=:gnlKurs AND k.ekmKursiyer.devamDurumu=tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlDevamDurumu.DEVAM_EDIYOR " +
+        "ORDER BY k.ekmKursiyer.eyKisi.gnlKisi.ad,k.ekmKursiyer.eyKisi.gnlKisi.soyad")
 public class EkmKursiyerKurs extends BaseEntity {
     @Serial
     private static final long serialVersionUID = 2845149834978335707L;

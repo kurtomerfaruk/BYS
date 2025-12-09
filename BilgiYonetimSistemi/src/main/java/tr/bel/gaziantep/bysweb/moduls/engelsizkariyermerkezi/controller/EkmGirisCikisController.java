@@ -4,19 +4,18 @@ import jakarta.faces.event.ActionEvent;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.primefaces.event.SelectEvent;
 import tr.bel.gaziantep.bysweb.core.controller.AbstractController;
 import tr.bel.gaziantep.bysweb.moduls.engelsizkariyermerkezi.entity.EkmGirisCikis;
-import tr.bel.gaziantep.bysweb.moduls.engelsizkariyermerkezi.service.EkmGirisCikisService;
+import tr.bel.gaziantep.bysweb.moduls.engelsizkariyermerkezi.entity.EkmKursiyer;
+import tr.bel.gaziantep.bysweb.moduls.engelsizkariyermerkezi.service.EkmKursiyerKursService;
 import tr.bel.gaziantep.bysweb.moduls.engelsizler.entity.EyKisi;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
 
 import java.io.Serial;
 import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -33,11 +32,8 @@ public class EkmGirisCikisController extends AbstractController<EkmGirisCikis> {
     private static final long serialVersionUID = 5457986206714063219L;
 
     @Inject
-    private EkmGirisCikisService girisCikisService;
+    private EkmKursiyerKursService ekmKursiyerKursService;
 
-    @Getter
-    @Setter
-    private List<EyKisi> eyKisiList;
 
     public EkmGirisCikisController() {
         super(EkmGirisCikis.class);
@@ -50,7 +46,9 @@ public class EkmGirisCikisController extends AbstractController<EkmGirisCikis> {
             newItem = EkmGirisCikis.class.getDeclaredConstructor().newInstance();
             newItem.setGirisTarihi(LocalDateTime.now());
             EyKisi eyKisi = EyKisi.builder().gnlKisi(new GnlKisi()).build();
-//            newItem.setEyKisi(eyKisi);
+            EkmKursiyer kursiyer = new EkmKursiyer();
+            kursiyer.setEyKisi(eyKisi);
+            newItem.setEkmKursiyer(kursiyer);
             this.setSelected(newItem);
             initializeEmbeddableKey();
             return newItem;
@@ -60,13 +58,12 @@ public class EkmGirisCikisController extends AbstractController<EkmGirisCikis> {
         return null;
     }
 
-    public void secilenKisi(SelectEvent<EyKisi> event) {
-        EyKisi kisi = event.getObject();
-//        this.getSelected().setEyKisi(kisi);
+    public List<EkmKursiyer> getTraineeList(){
+        if(this.getSelected()!=null && this.getSelected().getGnlKurs()!=null){
+            return ekmKursiyerKursService.findByKurs(this.getSelected().getGnlKurs());
+        }
+        return Collections.emptyList();
     }
 
-    public void createExitList() {
-        eyKisiList = girisCikisService.getEntrants();
-        this.getSelected().setCikisTarihi(LocalDateTime.now());
-    }
+
 }
