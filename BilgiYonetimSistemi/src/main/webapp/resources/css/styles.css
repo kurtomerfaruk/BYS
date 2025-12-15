@@ -9802,6 +9802,9 @@ button {
 .grid .g-col-6 {
   grid-column: auto/span 6;
 }
+.grid .g-col-8 {
+  grid-column: auto/span 8;
+}
 .grid .g-start-6 {
   grid-column-start: 6;
 }

@@ -1357,6 +1357,7 @@ document.querySelector(".main-content").addEventListener("click", () => {
 
 
 document.querySelectorAll('.sublevel2').forEach(element => {
+
   element.addEventListener('click', function () {
     document.querySelectorAll('.active').forEach(activeElement => {
       activeElement.classList.remove('active');

@@ -34,7 +34,7 @@
                                          styleClass="ui-panelgrid-blank ui-fluid">
                                 <p:outputLabel value="Kolon" for="@next" style="margin-top: 10px !important;"/>
                                 <p:selectOneMenu value="#{eyDinamikPrint.dynamicReportModel.columnKey}" converter="omnifaces.SelectItemsConverter"
-                                                 filter="true"
+                                                 filter="true" filterNormalize="true"
                                                  filterMatchMode="contains" filterPlaceholder="Kolon seçiniz">
                                     <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
                                     <f:selectItems value="#{eyDinamikPrint.columns.entrySet()}"

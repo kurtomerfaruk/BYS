@@ -27,6 +27,15 @@
                             <i class="ri-arrow-right-s-line side-menu__angle"></i></a>
                         <ul class="slide-menu child2">
 
+                            <li class="slide">
+                                <p:commandLink styleClass="side-menu__item sublevel2"
+                                               actionListener="#{menuController.setPageLink('/moduls/genel/gnlArama/index')}"
+                                               update="myPanel,:growl"
+                                               onstart="PF('Loading').show()"
+                                               onsuccess="PF('Loading').hide()"
+                                               value="Arama Listesi Oluştur"/>
+                            </li>
+
                             <ui:fragment rendered="#{syKullaniciController.hasPermission('gnlanket:goster')}">
                                 <li class="slide">
                                     <p:commandLink styleClass="side-menu__item sublevel2"

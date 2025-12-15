@@ -60,4 +60,13 @@ public class StringUtil {
         int num = Integer.parseInt(numberPart);
         return prefix + (num + 1);
     }
+
+    public static String toCamelCase(String className) {
+        if (className == null) return "";
+
+        String[] parts = className.split("\\.");
+        String simpleName = parts[parts.length - 1];
+
+        return simpleName.substring(0, 1).toLowerCase() + simpleName.substring(1);
+    }
 }

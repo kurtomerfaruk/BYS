@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:pe="primefaces.extensions">
+<h:head>
+    <style type="text/css">
+        #pdfDialog {
+            width: 100% !important;
+            height: 100% !important;
+            max-width: 100% !important;
+        }
+    </style>
+</h:head>
+<h:body>
+    <h:form id="raporForm">
+
+        <!-- Ana Container -->
+        <p:panel header="Dinamik Rapor Oluşturma">
+
+            <!-- Üst Menü -->
+            <p:toolbar>
+                <p:toolbarGroup>
+                    <p:commandButton id="btnRapor"
+                                     icon="pi pi-file-pdf"
+                                     title="Rapor Oluştur"
+                                     actionListener="#{gnlRaporController.raporOlustur}"
+                                     update="@form,:growl,:pdfForm"
+                                     styleClass="ui-button-success me-2"
+                                     ajax="#{gnlRaporController.ciktiTipi eq 'PDF'}"
+                                     oncomplete="#{gnlRaporController.ciktiTipi eq 'PDF' ? 'PF(\'pdfDialogWidget\').show()' :''}"/>
+
+                    <p:commandButton onclick="PF('saveTemplateDialog').show()"
+                                     icon="pi pi-save"
+                                     title="Şablon Olarak Kaydet"
+                                     styleClass="ui-button-info me-2"/>
+
+                    <p:outputLabel value="Rapor Türü :" for="@next" styleClass="me-2"/>
+                    <p:selectOneMenu id="raporTuru" value="#{gnlRaporController.ciktiTipi}"
+                                     style="display:inline-block !important; width:120px !important; vertical-align:middle;" widgetVar="raporTuruWidget">
+                        <f:selectItem itemLabel="PDF" itemValue="PDF"/>
+                        <f:selectItem itemLabel="Excel" itemValue="EXCEL"/>
+                        <f:selectItem itemLabel="CSV" itemValue="CSV"/>
+                        <p:ajax event="change" update="btnRapor"/>
+                    </p:selectOneMenu>
+                </p:toolbarGroup>
+            </p:toolbar>
+
+            <p:divider/>
+
+            <div class="grid">
+                <div class="g-col-4">
+                    <p:panel header="Rapor Konfigürasyonu">
+
+                        <!-- Modül Seçimi -->
+                        <p:panel header="Modül Seçimi" style="margin-bottom: 15px;">
+                            <p:selectOneMenu value="#{gnlRaporController.seciliModul}"
+                                             required="true"
+                                             requiredMessage="Lütfen bir modül seçiniz" converter="omnifaces.SelectItemsConverter">
+                                <f:selectItem itemLabel="Modül Seçiniz..." itemValue="#{null}"/>
+                                <f:selectItems value="#{gnlRaporController.modulListesi}"
+                                               var="modul"
+                                               itemLabel="#{modul.modulAdi}"
+                                               itemValue="#{modul}"
+                                               itemDescription="#{modul.aciklama}"/>
+                                <p:ajax listener="#{gnlRaporController.onModulChange}"
+                                        update=":raporForm:kolonPanel,:raporForm:parametrePanel,:sablonPanel,mainGrid"/>
+                            </p:selectOneMenu>
+                        </p:panel>
+
+                        <!-- Kolon Seçimi -->
+                        <p:panel id="kolonPanel" header="Kolonlar" style="margin-bottom: 15px;">
+                            <p:dataTable id="kolonTablosu"
+                                         value="#{gnlRaporController.secilebilirKolonlar}"
+                                         var="kolon"
+                                         selection="#{gnlRaporController.seciliKolonlar}"
+                                         rowKey="#{kolon.id}"
+                                         scrollable="true"
+                                         scrollHeight="200"
+                                         emptyMessage="Modül seçiniz...">
+
+                                <p:column selectionBox="true" style="width: 40px;text-align:left"/>
+
+                                <p:column headerText="Kolon Adı">
+                                    <h:outputText value="#{kolon.gorunurAdi}"/>
+                                </p:column>
+
+                                <p:column headerText="Veri Tipi" style="width: 100px">
+                                    <h:outputText value="#{kolon.veriTipi}"/>
+                                </p:column>
+
+                                <f:facet name="footer">
+                                    <p:commandButton value="Tümünü Seç"
+                                                     onclick="selectAllColumns()"
+                                                     styleClass="ui-button-secondary"/>
+                                    <p:commandButton value="Tümünü Temizle"
+                                                     onclick="clearAllColumns()"
+                                                     styleClass="ui-button-secondary"/>
+                                </f:facet>
+                            </p:dataTable>
+                        </p:panel>
+
+                        <!-- Şablonlar -->
+                        <p:panel id="sablonPanel" header="Kayıtlı Şablonlar" styleClass="template-list">
+                            <p:dataTable value="#{gnlRaporController.kullaniciSablonlari}"
+                                         var="sablon"
+                                         emptyMessage="Henüz şablonunuz yok"
+                                         style="width: 100%">
+
+                                <p:column headerText="Şablon Adı">
+                                    <h:outputText value="#{sablon.sablonAdi}"/>
+                                </p:column>
+
+                                <p:column headerText="İşlemler" style="width: 120px">
+                                    <p:commandButton icon="pi pi-download"
+                                                     title="Yükle"
+                                                     action="#{gnlRaporController.sablonYukle(sablon.id)}"
+                                                     update=":raporForm:kolonPanel,:raporForm:parametrePanel,:growl"/>
+
+                                    <p:commandButton icon="pi pi-trash"
+                                                     title="Sil"
+                                                     action="#{gnlRaporController.sablonSil(sablon.id)}"
+                                                     update=":growl,:raporForm:templateTable"
+                                                     onclick="return confirm('Şablon silinecek. Emin misiniz?')"/>
+                                </p:column>
+                            </p:dataTable>
+                        </p:panel>
+
+                    </p:panel>
+                </div>
+                <div class="g-col-8">
+                    <p:panel header="Rapor Parametreleri">
+
+                        <p:panel id="parametrePanel">
+
+
+                            <p:dataTable id="parametreDt"
+                                         value="#{gnlRaporController.modulParametreleri}"
+                                         var="paramVar"
+                                         rowKey="#{paramVar.id}"
+                                         emptyMessage="Modül seçiniz veya bu modül için parametre tanımlanmamış"
+                                         style="width: 100%">
+
+                                <p:column headerText="Parametre" style="width: 35%">
+                                    <h:outputText value="#{paramVar.gorunurAdi}"/>
+                                    <h:outputText value=" *"
+                                                  style="color: red; font-weight: bold"
+                                                  rendered="#{paramVar.zorunlu}"/>
+                                </p:column>
+
+                                <p:column headerText="Operatör" style="width: 15%">
+                                    <p:selectOneMenu value="#{gnlRaporController.parametreOperatorleri[paramVar.id]}" style="width: 100%">
+                                        <f:selectItem itemLabel="=" itemValue="="/>
+                                        <f:selectItem itemLabel=">" itemValue="&gt;"/>
+                                        <f:selectItem itemLabel="&lt;" itemValue="&lt;"/>
+                                        <f:selectItem itemLabel="&gt;=" itemValue="&gt;="/>
+                                        <f:selectItem itemLabel="&lt;=" itemValue="&lt;="/>
+                                        <f:selectItem itemLabel="LIKE" itemValue="LIKE"/>
+                                        <f:selectItem itemLabel="BETWEEN" itemValue="BETWEEN"/>
+                                        <f:selectItem itemLabel="IN" itemValue="IN"/>
+                                    </p:selectOneMenu>
+                                </p:column>
+
+                                <p:column headerText="Değer" style="width: 25%">
+                                    <!-- Text Input -->
+                                    <p:inputText value="#{gnlRaporController.parametreDegerleri[paramVar.id]}"
+                                                 rendered="#{paramVar.veriTipi == 'STRING' or paramVar.veriTipi == 'INTEGER'}"
+                                                 required="#{paramVar.zorunlu}"/>
+
+                                    <!-- Date Input -->
+                                    <p:datePicker locale="tr" pattern="#{messages.tarihFormat}" value="#{gnlRaporController.parametreDegerleri[paramVar.id]}"
+                                                  mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
+                                                  showOnFocus="false" rendered="#{paramVar.veriTipi == 'DATE'}" required="#{paramVar.zorunlu}"/>
+
+                                    <!-- DateTime Input -->
+                                    <p:datePicker locale="tr" pattern="#{messages.tarihSaatFormat}"
+                                                  value="#{gnlRaporController.parametreDegerleri[paramVar.id]}"
+                                                  mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
+                                                  showOnFocus="false"
+                                                  rendered="#{paramVar.veriTipi == 'DATETIME'}" required="#{paramVar.zorunlu}"/>
+
+                                    <!-- Boolean Select -->
+                                    <p:selectOneMenu value="#{gnlRaporController.parametreDegerleri[paramVar.id]}"
+                                                     rendered="#{paramVar.veriTipi == 'BOOLEAN'}"
+                                                     required="#{paramVar.zorunlu}" title="#{paramVar.gorunurAdi}">
+                                        <f:selectItem itemLabel="Seçiniz..." itemValue=""/>
+                                        <f:selectItem itemLabel="Evet" itemValue="true"/>
+                                        <f:selectItem itemLabel="Hayır" itemValue="false"/>
+                                    </p:selectOneMenu>
+
+                                    <!-- Lookup için select -->
+                                    <p:selectOneMenu value="#{gnlRaporController.parametreDegerleri[paramVar.id]}"
+                                                     rendered="#{paramVar.lookupQuery != null}"
+                                                     required="#{paramVar.zorunlu}">
+                                        <f:selectItem itemLabel="Seçiniz..." itemValue=""/>
+                                        <!-- Burada lookupQuery çalıştırılarak item'lar doldurulmalı -->
+                                    </p:selectOneMenu>
+
+                                    <!-- ENUM tipi için selectOneMenu -->
+                                    <p:selectOneMenu value="#{gnlRaporController.parametreDegerleri[paramVar.id]}" rendered="#{paramVar.veriTipi == 'ENUM'}"
+                                                     required="#{paramVar.zorunlu}" title="#{paramVar.gorunurAdi}" label="#{paramVar.gorunurAdi}"
+                                                     style="width:100% !important">
+                                        <f:selectItems value="#{gnlRaporController.getEnumSelectItems(paramVar)}"
+                                                       var="enumItem"
+                                                       itemLabel="#{enumItem.label}"
+                                                       itemValue="#{enumItem.value}"/>
+                                    </p:selectOneMenu>
+
+                                    <!-- MULTI_ENUM tipi için pickList -->
+                                    <p:pickList value="#{gnlRaporController.cokluEnumDegerleri[paramVar.id]}"
+                                                rendered="#{paramVar.veriTipi == 'MULTI_ENUM'}"
+                                                var="enumItem"
+                                                itemLabel="#{enumItem.aciklama}"
+                                                itemValue="#{enumItem.kod}"
+                                                style="width: 100%; height: 100px" required="#{paramVar.zorunlu}">
+                                        <f:selectItems value="#{gnlRaporController.getMultiEnumSelectItems(paramVar)}"/>
+                                    </p:pickList>
+                                </p:column>
+
+                                <p:column headerText="2. Değer" style="width: 25%">
+                                    <p:inputText value="#{gnlRaporController.ikinciDegerler[paramVar.id]}"
+                                                 rendered="#{gnlRaporController.parametreOperatorleri[paramVar.id] == 'BETWEEN'}"
+                                                 style="width: 100%"/>
+                                </p:column>
+
+                            </p:dataTable>
+                        </p:panel>
+
+
+                    </p:panel></div>
+            </div>
+        </p:panel>
+
+        <!-- Şablon Kaydetme Dialog -->
+        <p:dialog header="Şablon Kaydet"
+                  widgetVar="saveTemplateDialog"
+                  modal="true"
+                  resizable="false"
+                  style="width: 400px">
+
+            <h:panelGrid columns="2" style="width: 100%">
+                <p:outputLabel value="Şablon Adı:" for="templateName"/>
+                <p:inputText id="templateName"
+                             value="#{gnlRaporController.sablonAdi}"
+                             style="width: 100%"/>
+            </h:panelGrid>
+
+            <f:facet name="footer">
+                <p:commandButton value="Kaydet"
+                                 action="#{gnlRaporController.sablonKaydet}"
+                                 update=":growl"
+                                 oncomplete="if(!args.validationFailed) PF('saveTemplateDialog').hide()"
+                                 styleClass="ui-button-success"/>
+
+                <p:commandButton value="İptal"
+                                 onclick="PF('saveTemplateDialog').hide()"
+                                 styleClass="ui-button-secondary"/>
+            </f:facet>
+        </p:dialog>
+
+    </h:form>
+
+    <p:dialog id="pdfDialog"
+              widgetVar="pdfDialogWidget"
+              closeOnEscape="true"
+              appendTo="@(body)"
+              header="Yazdır"
+              modal="true"
+              resizable="false"
+              onShow="resizeViewer();"
+              draggable="false"
+              responsive="true"
+              styleClass="box box-pink"
+              minHeight="400"
+              fitViewport="true">
+
+        <h:form id="pdfForm" style="height: 100%">
+            <p:remoteCommand name="updateViewer" update="viewer"/>
+
+            <!--            <pe:documentViewer id="viewer" value="#{gnlRaporController.pdfContent}" download="Rapor.pdf" zoom="auto" transient="true"/>-->
+            <pe:documentViewer id="viewer" url="/gnlDinamikReportServlet" download="Rapor.pdf" zoom="auto" transient="true"
+                               rendered="#{gnlRaporController.pdfReady}"/>
+
+
+        </h:form>
+
+    </p:dialog>
+
+    <script type="text/javascript">
+        function selectAllColumns() {
+            $('[id$="kolonTablosu"] .ui-chkbox-box').each(function () {
+                if (!$(this).hasClass('ui-state-active')) {
+                    $(this).click();
+                }
+            });
+        }
+
+
+        function clearAllColumns() {
+            $('[id$="kolonTablosu"] .ui-chkbox-box').each(function () {
+                if ($(this).hasClass('ui-state-active')) {
+                    $(this).click();
+                }
+            });
+        }
+
+        function resizeViewer() {
+            console.log("resizeViewer");
+            var windowH = $(window).height();
+            windowH -= 150;
+            $("#pdfForm\\:viewer").css("height", windowH + "px");
+        }
+    </script>
+
+</h:body>
+</html>

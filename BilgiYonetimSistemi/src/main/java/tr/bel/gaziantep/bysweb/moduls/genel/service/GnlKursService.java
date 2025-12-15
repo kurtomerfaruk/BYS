@@ -20,12 +20,12 @@ public class GnlKursService extends AbstractService<GnlKurs> {
     @Serial
     private static final long serialVersionUID = 714364347905954507L;
 
-    @PersistenceContext(unitName = Constants.UNIT_NAME)
-    private EntityManager em;
-
     public GnlKursService() {
         super(GnlKurs.class);
     }
+
+    @PersistenceContext(unitName = Constants.UNIT_NAME)
+    private EntityManager em;
 
     @Override
     protected EntityManager getEntityManager() {

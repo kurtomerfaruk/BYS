@@ -29,7 +29,7 @@ import java.util.List;
 @Entity
 @Table(name = "GNLKISI")
 @NamedQuery(name = "GnlKisi.existByTcKimlikNo", query = "SELECT k FROM GnlKisi k WHERE k.tcKimlikNo=:tcKimlikNo")
-@NamedQuery(name = "GnlKisi.findByLatLngIsNull", query = "SELECT k FROM GnlKisi k WHERE k.tcKimlikNo=:tcKimlikNo")
+@NamedQuery(name = "GnlKisi.findByLatLngIsNull", query = "SELECT k FROM GnlKisi k WHERE k.aktif=true AND k.latLng IS NULL")
 @NamedQuery(name = "GnlKisi.findByBinaNo", query = "SELECT g FROM GnlKisi g WHERE g.aktif=true AND g.binaNo = :binaNo")
 @NamedQuery(name = "GnlKisi.getTcList", query = "SELECT g FROM GnlKisi g WHERE g.tcKimlikNo IS NOT NULL AND " +
         "LENGTH(g.tcKimlikNo)=11 AND g.dogumTarihi IS NOT NULL ORDER BY g.mernisGuncellemeTarihi ASC")
