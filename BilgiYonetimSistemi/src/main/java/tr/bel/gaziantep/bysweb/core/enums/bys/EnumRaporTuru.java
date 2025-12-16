@@ -14,7 +14,8 @@ public enum EnumRaporTuru implements BaseEnum {
     PDF("PDF"),
     XLS("XLS"),
     PPT("PPT"),
-    DOCX("DOCX");
+    DOCX("DOCX"),
+    CSV("CSV");
 
     private final String modul;
 

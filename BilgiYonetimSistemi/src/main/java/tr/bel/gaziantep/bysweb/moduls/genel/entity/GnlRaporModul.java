@@ -11,7 +11,11 @@ import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
 import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * @author Omer Faruk KURT kurtomerfaruk@gmail.com
+ * @version 1.0.0
+ * @since 10.12.2025 13:33
+ */
 @Getter
 @Setter
 @Entity
@@ -50,5 +54,20 @@ public class GnlRaporModul extends BaseEntity {
     @OneToMany(mappedBy = "gnlRaporModul", fetch = FetchType.LAZY)
     @SQLRestriction("AKTIF=true")
     private List<GnlRaporModulEntityBaglanti> gnlRaporModulEntityBaglantiList = new ArrayList<>();
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (!(object instanceof GnlRaporModul other)) {
+            return false;
+        }
+        return (this.id != null || other.id == null) && (this.id == null || this.id.equals(other.id));
+    }
 
 }

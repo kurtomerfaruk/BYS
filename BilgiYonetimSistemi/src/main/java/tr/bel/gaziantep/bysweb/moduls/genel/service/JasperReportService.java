@@ -4,14 +4,15 @@ import jakarta.ejb.Stateless;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRMapCollectionDataSource;
 import net.sf.jasperreports.engine.design.*;
+import net.sf.jasperreports.engine.export.JRCsvExporter;
 import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
 import net.sf.jasperreports.engine.type.HorizontalTextAlignEnum;
 import net.sf.jasperreports.engine.type.ModeEnum;
 import net.sf.jasperreports.engine.type.VerticalTextAlignEnum;
-import net.sf.jasperreports.export.SimpleExporterInput;
-import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
-import net.sf.jasperreports.export.SimpleXlsxReportConfiguration;
-import tr.bel.gaziantep.bysweb.moduls.genel.report.GnlRaporIstek;
+import net.sf.jasperreports.export.*;
+import tr.bel.gaziantep.bysweb.core.enums.bys.EnumRaporTuru;
+import tr.bel.gaziantep.bysweb.moduls.genel.dtos.GnlRaporDto;
+import tr.bel.gaziantep.bysweb.moduls.genel.dtos.GnlRaporKolonDto;
 
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
@@ -29,7 +30,7 @@ import java.util.Map;
 @Stateless
 public class JasperReportService {
 
-    public byte[] generateReport(List<Map<String, Object>> data, GnlRaporIstek raporIstek) {
+    public byte[] generateReport(List<Map<String, Object>> data, GnlRaporDto raporIstek) {
         try {
             JasperDesign jasperDesign = createDynamicJasperDesign(raporIstek);
 
@@ -41,7 +42,7 @@ public class JasperReportService {
 
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
 
-            return exportReport(jasperPrint, raporIstek.getCiktiTipi());
+            return exportReport(jasperPrint, raporIstek.getRaporTuru());
 
         } catch (JRException e) {
             throw new RuntimeException("JasperReport hatası: " + e.getMessage(), e);
@@ -49,7 +50,7 @@ public class JasperReportService {
     }
 
 
-    private JasperDesign createDynamicJasperDesign(GnlRaporIstek raporIstek) throws JRException {
+    private JasperDesign createDynamicJasperDesign(GnlRaporDto raporIstek) throws JRException {
 
         JasperDesign design = new JasperDesign();
         design.setName("dynamic_report");
@@ -100,7 +101,7 @@ public class JasperReportService {
         int xPos = 50;
         int columnWidth = 505 / raporIstek.getKolonlar().size();
 
-        for (GnlRaporIstek.RaporKolonDto kolon : raporIstek.getKolonlar()) {
+        for (GnlRaporKolonDto kolon : raporIstek.getKolonlar()) {
 
             JRDesignField field = new JRDesignField();
             field.setName(kolon.getAlanAdi());
@@ -183,7 +184,7 @@ public class JasperReportService {
 //        int xPos = 0;
 //        int columnWidth = 555 / raporIstek.getKolonlar().size();
 //
-//        for (GnlRaporIstek.RaporKolonDto kolon : raporIstek.getKolonlar()) {
+//        for (GnlRaporKolonDto kolon : raporIstek.getKolonlar()) {
 //            JRDesignStaticText columnHeader = new JRDesignStaticText();
 //            columnHeader.setText(kolon.getGorunurAdi());
 //            columnHeader.setX(xPos);
@@ -234,7 +235,7 @@ public class JasperReportService {
 //        detailSection.addBand(detailBand);
 //
 //        xPos = 0;
-//        for (GnlRaporIstek.RaporKolonDto kolon : raporIstek.getKolonlar()) {
+//        for (GnlRaporKolonDto kolon : raporIstek.getKolonlar()) {
 //            JRDesignTextField textField = new JRDesignTextField();
 //            textField.setExpression(new JRDesignExpression("$F{" + kolon.getAlanAdi() + "}"));
 //            textField.setX(xPos);
@@ -263,7 +264,7 @@ public class JasperReportService {
 //    }
 
 
-    private Map<String, Object> prepareReportParameters(GnlRaporIstek raporIstek) {
+    private Map<String, Object> prepareReportParameters(GnlRaporDto raporIstek) {
         Map<String, Object> parameters = new HashMap<>();
 
         parameters.put("REPORT_TITLE", raporIstek.getModulAdi() + " Raporu");
@@ -279,10 +280,10 @@ public class JasperReportService {
     }
 
 
-    private byte[] exportReport(JasperPrint jasperPrint, String outputType) throws JRException {
+    private byte[] exportReport(JasperPrint jasperPrint, EnumRaporTuru outputType) throws JRException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
-        if ("EXCEL".equalsIgnoreCase(outputType)) {
+        if (outputType.equals(EnumRaporTuru.XLS)) {
             JRXlsxExporter exporter = new JRXlsxExporter();
             exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
             exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(outputStream));
@@ -294,12 +295,15 @@ public class JasperReportService {
             configuration.setWhitePageBackground(false);
             exporter.setConfiguration(configuration);
             exporter.exportReport();
-        } else if ("PDF".equalsIgnoreCase(outputType)) {
-            JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);
-        } else if ("HTML".equalsIgnoreCase(outputType)) {
-            JasperExportManager.exportReportToHtmlFile(jasperPrint, "rapor.html");
+        } else if (outputType.equals(EnumRaporTuru.CSV)) {
+            JRCsvExporter exporter = new JRCsvExporter();
+            exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+            exporter.setExporterOutput(new SimpleWriterExporterOutput(outputStream));
+            SimpleCsvExporterConfiguration configuration = new SimpleCsvExporterConfiguration();
+            configuration.setWriteBOM(Boolean.TRUE);
+            exporter.setConfiguration(configuration);
+            exporter.exportReport();
         } else {
-            // Default PDF
             JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);
         }
         return outputStream.toByteArray();

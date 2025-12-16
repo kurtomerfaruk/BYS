@@ -10,7 +10,11 @@ import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
 import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlRaporParametreTipi;
 
 import java.io.Serial;
-
+/**
+ * @author Omer Faruk KURT kurtomerfaruk@gmail.com
+ * @version 1.0.0
+ * @since 10.12.2025 13:33
+ */
 @Getter
 @Setter
 @Entity
@@ -80,6 +84,19 @@ public class GnlRaporParametre extends BaseEntity {
     @Column(name = "SIRALAMA")
     private Integer siralama;
 
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
 
+    @Override
+    public boolean equals(Object object) {
+        if (!(object instanceof GnlRaporParametre other)) {
+            return false;
+        }
+        return (this.id != null || other.id == null) && (this.id == null || this.id.equals(other.id));
+    }
 
 }

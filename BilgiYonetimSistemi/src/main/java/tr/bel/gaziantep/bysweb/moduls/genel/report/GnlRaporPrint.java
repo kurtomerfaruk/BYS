@@ -1,4 +1,4 @@
-package tr.bel.gaziantep.bysweb.moduls.genel.controller;
+package tr.bel.gaziantep.bysweb.moduls.genel.report;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.context.ExternalContext;
@@ -11,16 +11,18 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.primefaces.model.StreamedContent;
+import tr.bel.gaziantep.bysweb.core.enums.bys.EnumRaporTuru;
 import tr.bel.gaziantep.bysweb.core.service.EnumService;
 import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
 import tr.bel.gaziantep.bysweb.core.utils.StringUtil;
 import tr.bel.gaziantep.bysweb.core.utils.Util;
+import tr.bel.gaziantep.bysweb.moduls.genel.dtos.GnlRaporDto;
+import tr.bel.gaziantep.bysweb.moduls.genel.dtos.GnlRaporKolonDto;
+import tr.bel.gaziantep.bysweb.moduls.genel.dtos.GnlRaporParametreDegeriDto;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlRaporKolon;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlRaporKullaniciRaporSablon;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlRaporModul;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlRaporParametre;
-import tr.bel.gaziantep.bysweb.moduls.genel.report.GnlRaporIstek;
 import tr.bel.gaziantep.bysweb.moduls.genel.service.GnlRaporKullaniciRaporSablonService;
 import tr.bel.gaziantep.bysweb.moduls.genel.service.GnlRaporModulService;
 import tr.bel.gaziantep.bysweb.moduls.genel.service.GnlRaporService;
@@ -39,7 +41,7 @@ import java.util.*;
 @Named
 @ViewScoped
 @Slf4j
-public class GnlRaporController implements java.io.Serializable {
+public class GnlRaporPrint implements java.io.Serializable {
 
     @Serial
     private static final long serialVersionUID = -2889176134024945015L;
@@ -55,7 +57,7 @@ public class GnlRaporController implements java.io.Serializable {
 
     @Getter
     @Setter
-    private GnlRaporIstek raporIstek = new GnlRaporIstek();
+    private GnlRaporDto gnlRaporDto = new GnlRaporDto();
     @Getter
     @Setter
     private List<GnlRaporModul> modulListesi;
@@ -73,7 +75,7 @@ public class GnlRaporController implements java.io.Serializable {
     private GnlRaporModul seciliModul;
     @Getter
     @Setter
-    private String ciktiTipi = "PDF";
+    private EnumRaporTuru raporTuru = EnumRaporTuru.PDF;
     @Getter
     @Setter
     private String sablonAdi;
@@ -96,7 +98,7 @@ public class GnlRaporController implements java.io.Serializable {
     private Map<Long, List<String>> cokluEnumDegerleri = new HashMap<>();
     @Getter
     @Setter
-    private StreamedContent pdfContent;
+    private GnlRaporKullaniciRaporSablon kullaniciRaporSablon;
     @Getter
     @Setter
     private boolean pdfReady;
@@ -105,6 +107,7 @@ public class GnlRaporController implements java.io.Serializable {
     public void init() {
         modulListesi = gnlRaporModulService.findAll();
         loadUserTemplates();
+        secilebilirKolonlar=new ArrayList<>();
     }
 
     public void onModulChange() {
@@ -123,8 +126,8 @@ public class GnlRaporController implements java.io.Serializable {
             }
 
             for (GnlRaporParametre param : modulParametreleri) {
-                parametreDegerleri.put(param.getId(),param.getVarsayilanDeger());
-                parametreOperatorleri.put(param.getId(),param.getVarsayilanOperator());
+                parametreDegerleri.put(param.getId(), param.getVarsayilanDeger());
+                parametreOperatorleri.put(param.getId(), param.getVarsayilanOperator());
             }
 
 
@@ -134,10 +137,9 @@ public class GnlRaporController implements java.io.Serializable {
 
     public void raporOlustur() {
         try {
-            System.out.println("raporOlustur");
             prepareRaporIstek();
-            byte[] raporBytes = gnlRaporService.dinamikRaporOlustur(raporIstek);
-            if(ciktiTipi.equals("PDF")) {
+            byte[] raporBytes = gnlRaporService.dinamikRaporOlustur(gnlRaporDto);
+            if (raporTuru.equals(EnumRaporTuru.PDF)) {
 //                pdfContent = DefaultStreamedContent.builder()
 //                        .stream(()->new ByteArrayInputStream(raporBytes))
 //                        .contentType("application/pdf")
@@ -161,34 +163,28 @@ public class GnlRaporController implements java.io.Serializable {
                         .getExternalContext()
                         .getSessionMap()
                         .put("pdfData", raporBytes);
-                pdfReady=true;
-            }else{
-                String fileName = "rapor." + (ciktiTipi.equals("EXCEL") ? "xlsx" : ciktiTipi.toUpperCase());
+                pdfReady = true;
+            } else {
+                String fileName = "rapor." + (raporTuru.equals(EnumRaporTuru.XLS) ? "xlsx" : raporTuru.name().toLowerCase());
                 downloadFile(raporBytes, fileName);
             }
             FacesUtil.addSuccessMessage("Rapor başarıyla oluşturuldu");
         } catch (Exception ex) {
-           log.error(null,ex);
-           FacesUtil.addErrorMessage("Rapor oluşturulurken hata oluştu.");
+            log.error(null, ex);
+            FacesUtil.addErrorMessage("Rapor oluşturulurken hata oluştu.");
         }
     }
 
     public void sablonKaydet() {
         try {
-            if (sablonAdi == null || sablonAdi.trim().isEmpty()) {
+            if (StringUtil.isBlank(kullaniciRaporSablon.getSablonAdi())) {
                 FacesUtil.addExclamationMessage("Lütfen şablon için bir ad giriniz...");
                 return;
             }
 
-            GnlRaporKullaniciRaporSablon sablon = new GnlRaporKullaniciRaporSablon();
-            sablon.setSablonAdi(sablonAdi);
-            sablon.setGnlRaporModul(seciliModul);
-            sablon.setSyKullanici(Util.getSyKullanici());
-            sablon.setGenel(false);
-
-            List<GnlRaporIstek.RaporKolonDto> kolonDtoList = new ArrayList<>();
+            List<GnlRaporKolonDto> kolonDtoList = new ArrayList<>();
             for (GnlRaporKolon kolon : seciliKolonlar) {
-                GnlRaporIstek.RaporKolonDto dto = new GnlRaporIstek.RaporKolonDto();
+                GnlRaporKolonDto dto = new GnlRaporKolonDto();
                 dto.setId(kolon.getId());
                 dto.setAlanAdi(kolon.getAlanAdi());
                 dto.setGorunurAdi(kolon.getGorunurAdi());
@@ -196,11 +192,11 @@ public class GnlRaporController implements java.io.Serializable {
                 kolonDtoList.add(dto);
             }
 
-            List<GnlRaporIstek.ParametreDegeriDto> paramDtoList = new ArrayList<>();
+            List<GnlRaporParametreDegeriDto> paramDtoList = new ArrayList<>();
             for (GnlRaporParametre param : modulParametreleri) {
                 String deger = parametreDegerleri.get(param.getId());
                 if (deger != null && !deger.trim().isEmpty()) {
-                    GnlRaporIstek.ParametreDegeriDto dto = new GnlRaporIstek.ParametreDegeriDto();
+                    GnlRaporParametreDegeriDto dto = new GnlRaporParametreDegeriDto();
                     dto.setParametreId(param.getId());
                     dto.setParametreAdi(param.getParametreAdi());
                     dto.setGorunurAdi(param.getGorunurAdi());
@@ -212,26 +208,27 @@ public class GnlRaporController implements java.io.Serializable {
                 }
             }
 
-            gnlRaporKullaniciRaporSablonService.saveSablon(sablon, kolonDtoList, paramDtoList);
+            gnlRaporKullaniciRaporSablonService.saveSablon(kullaniciRaporSablon, kolonDtoList, paramDtoList);
             loadUserTemplates();
             FacesUtil.addSuccessMessage("Şablon başarıyla kaydedildi");
 
         } catch (Exception ex) {
-            log.error(null,ex);
+            log.error(null, ex);
             FacesUtil.addErrorMessage("Şablon kaydedilirken hata oluştu.");
         }
     }
 
     public void sablonYukle(Integer sablonId) {
         try {
-            GnlRaporIstek tempIstek = new GnlRaporIstek();
+            GnlRaporDto tempIstek = new GnlRaporDto();
             tempIstek.setSablonId(sablonId);
             tempIstek = gnlRaporKullaniciRaporSablonService.sablonuRaporIstegineCevir(tempIstek);
+            seciliModul = tempIstek.getModul();
 
             onModulChange();
 
-            seciliKolonlar.clear();
-            for (GnlRaporIstek.RaporKolonDto kolonDto : tempIstek.getKolonlar()) {
+
+            for (GnlRaporKolonDto kolonDto : tempIstek.getKolonlar()) {
                 for (GnlRaporKolon kolon : secilebilirKolonlar) {
                     if (kolon.getId().equals(kolonDto.getId())) {
                         seciliKolonlar.add(kolon);
@@ -241,7 +238,7 @@ public class GnlRaporController implements java.io.Serializable {
             }
 
             if (tempIstek.getParametreler() != null) {
-                for (GnlRaporIstek.ParametreDegeriDto paramDto : tempIstek.getParametreler()) {
+                for (GnlRaporParametreDegeriDto paramDto : tempIstek.getParametreler()) {
                     parametreDegerleri.put(paramDto.getParametreId(), paramDto.getDeger());
                     if (paramDto.getIkinciDeger() != null) {
                         ikinciDegerler.put(paramDto.getParametreId(), paramDto.getIkinciDeger());
@@ -255,7 +252,7 @@ public class GnlRaporController implements java.io.Serializable {
             FacesUtil.addSuccessMessage("Rapor şablonu başarıyla yüklendi");
 
         } catch (Exception ex) {
-            log.error(null,ex);
+            log.error(null, ex);
             FacesUtil.addErrorMessage("Rapor şablonu yüklenirken hata oluştu.");
         }
     }
@@ -264,40 +261,40 @@ public class GnlRaporController implements java.io.Serializable {
         try {
             GnlRaporKullaniciRaporSablon sablon = gnlRaporKullaniciRaporSablonService.find(sablonId);
             sablon.setAktif(false);
-            gnlRaporKullaniciRaporSablonService.remove(sablon);
+            gnlRaporKullaniciRaporSablonService.edit(sablon);
             loadUserTemplates();
 
             FacesUtil.addSuccessMessage("Rapor şablonu başarıyla silindi.");
 
         } catch (Exception ex) {
-            log.error(null,ex);
+            log.error(null, ex);
             FacesUtil.addErrorMessage("Rapor şablonu silinirken hata oluştu.");
         }
     }
 
     private void prepareRaporIstek() {
-        raporIstek.setModul(seciliModul);
-        raporIstek.setModulAdi(seciliModul != null ? seciliModul.getModulAdi() : "");
-        raporIstek.setCiktiTipi(ciktiTipi);
-        raporIstek.setKullaniciId(Util.getSyKullanici().getId());
-        raporIstek.setRaporTarihi(LocalDate.now());
+        gnlRaporDto.setModul(seciliModul);
+        gnlRaporDto.setModulAdi(seciliModul != null ? seciliModul.getModulAdi() : "");
+        gnlRaporDto.setRaporTuru(raporTuru);
+        gnlRaporDto.setKullaniciId(Objects.requireNonNull(Util.getSyKullanici()).getId());
+        gnlRaporDto.setRaporTarihi(LocalDate.now());
 
-        List<GnlRaporIstek.RaporKolonDto> kolonDtoList = new ArrayList<>();
+        List<GnlRaporKolonDto> kolonDtoList = new ArrayList<>();
         for (GnlRaporKolon kolon : seciliKolonlar) {
-            GnlRaporIstek.RaporKolonDto dto = new GnlRaporIstek.RaporKolonDto();
+            GnlRaporKolonDto dto = new GnlRaporKolonDto();
             dto.setId(kolon.getId());
             dto.setAlanAdi(kolon.getAlanAdi());
             dto.setGorunurAdi(kolon.getGorunurAdi());
             dto.setVeriTipi(kolon.getVeriTipi());
             kolonDtoList.add(dto);
         }
-        raporIstek.setKolonlar(kolonDtoList);
+        gnlRaporDto.setKolonlar(kolonDtoList);
 
-        List<GnlRaporIstek.ParametreDegeriDto> paramDtoList = new ArrayList<>();
+        List<GnlRaporParametreDegeriDto> paramDtoList = new ArrayList<>();
         for (GnlRaporParametre param : modulParametreleri) {
             String deger = parametreDegerleri.get(param.getId());
             if ((deger != null && !deger.trim().isEmpty()) || StringUtil.isNotBlank(param.getSqlKosul())) {
-                GnlRaporIstek.ParametreDegeriDto dto = new GnlRaporIstek.ParametreDegeriDto();
+                GnlRaporParametreDegeriDto dto = new GnlRaporParametreDegeriDto();
                 dto.setParametreId(param.getId());
                 dto.setParametreAdi(param.getParametreAdi());
                 dto.setGorunurAdi(param.getGorunurAdi());
@@ -310,7 +307,7 @@ public class GnlRaporController implements java.io.Serializable {
                 paramDtoList.add(dto);
             }
         }
-        raporIstek.setParametreler(paramDtoList);
+        gnlRaporDto.setParametreler(paramDtoList);
     }
 
     private void downloadFile(byte[] content, String fileName) {
@@ -320,7 +317,7 @@ public class GnlRaporController implements java.io.Serializable {
             HttpServletResponse response = (HttpServletResponse) externalContext.getResponse();
 
             response.reset();
-            response.setContentType(getContentType(ciktiTipi));
+            response.setContentType(getContentType(raporTuru));
             response.setHeader("Content-Disposition",
                     "attachment; filename=\"" + fileName + "\"");
             response.setContentLength(content.length);
@@ -336,18 +333,18 @@ public class GnlRaporController implements java.io.Serializable {
     }
 
 
-    private String getContentType(String outputType) {
-        return switch (outputType.toUpperCase()) {
-            case "PDF" -> "application/pdf";
-            case "EXCEL" -> "application/vnd.ms-excel";
-            case "CSV" -> "text/csv";
+    private String getContentType(EnumRaporTuru reportType) {
+        return switch (reportType) {
+            case PDF -> "application/pdf";
+            case XLS -> "application/vnd.ms-excel";
+            case CSV -> "text/csv;charset=windows-1254";
             default -> "application/octet-stream";
         };
     }
 
     private void loadUserTemplates() {
         try {
-            kullaniciSablonlari = gnlRaporKullaniciRaporSablonService.getKullaniciSablonlari(Objects.requireNonNull(Util.getSyKullanici()).getId());
+            kullaniciSablonlari = gnlRaporKullaniciRaporSablonService.findBySyKullaniciOrPublic(Util.getSyKullanici());
         } catch (Exception e) {
             kullaniciSablonlari = new ArrayList<>();
         }
@@ -396,6 +393,12 @@ public class GnlRaporController implements java.io.Serializable {
         }
 
         return items;
+    }
+
+    public  void prepareSablon(){
+        kullaniciRaporSablon = new GnlRaporKullaniciRaporSablon();
+        kullaniciRaporSablon.setGnlRaporModul(seciliModul);
+        kullaniciRaporSablon.setSyKullanici(Util.getSyKullanici());
     }
 
 

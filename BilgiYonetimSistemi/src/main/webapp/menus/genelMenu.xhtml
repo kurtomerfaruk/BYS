@@ -29,11 +29,11 @@
 
                             <li class="slide">
                                 <p:commandLink styleClass="side-menu__item sublevel2"
-                                               actionListener="#{menuController.setPageLink('/moduls/genel/gnlArama/index')}"
+                                               actionListener="#{menuController.setPageLink('/moduls/genel/gnlRapor/index')}"
                                                update="myPanel,:growl"
                                                onstart="PF('Loading').show()"
                                                onsuccess="PF('Loading').hide()"
-                                               value="Arama Listesi Oluştur"/>
+                                               value="Genel Dinamik Raporlar"/>
                             </li>
 
                             <ui:fragment rendered="#{syKullaniciController.hasPermission('gnlanket:goster')}">

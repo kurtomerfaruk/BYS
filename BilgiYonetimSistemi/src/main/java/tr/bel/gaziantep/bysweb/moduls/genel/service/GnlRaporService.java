@@ -1,18 +1,17 @@
 package tr.bel.gaziantep.bysweb.moduls.genel.service;
 
-import jakarta.ejb.Stateless;
-import jakarta.ejb.TransactionAttribute;
-import jakarta.ejb.TransactionAttributeType;
+import jakarta.ejb.*;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
-import jakarta.transaction.Transactional;
 import tr.bel.gaziantep.bysweb.core.service.EnumService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.core.utils.StringUtil;
+import tr.bel.gaziantep.bysweb.moduls.genel.dtos.GnlRaporDto;
+import tr.bel.gaziantep.bysweb.moduls.genel.dtos.GnlRaporKolonDto;
+import tr.bel.gaziantep.bysweb.moduls.genel.dtos.GnlRaporParametreDegeriDto;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlRaporModulEntityBaglanti;
-import tr.bel.gaziantep.bysweb.moduls.genel.report.GnlRaporIstek;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -23,7 +22,7 @@ import java.util.*;
  * @since 10.12.2025 13:33
  */
 @Stateless
-@Transactional
+@TransactionManagement(TransactionManagementType.CONTAINER)
 public class GnlRaporService {
 
     @PersistenceContext(unitName = Constants.UNIT_NAME)
@@ -37,7 +36,7 @@ public class GnlRaporService {
     private EnumService enumService;
 
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public byte[] dinamikRaporOlustur(GnlRaporIstek raporIstek) {
+    public byte[] dinamikRaporOlustur(GnlRaporDto raporIstek) {
         try {
             // 1. Şablon kontrolü
             if (raporIstek.getSablonId() != null) {
@@ -61,7 +60,7 @@ public class GnlRaporService {
             // 6. Sonuçları Map listesine çevir
             List<Map<String, Object>> reportData = convertResultsToMap(results, raporIstek.getKolonlar());
 
-           // 7. JasperReport ile rapor oluştur
+            // 7. JasperReport ile rapor oluştur
             return jasperReportService.generateReport(reportData, raporIstek);
 
         } catch (Exception e) {
@@ -70,13 +69,13 @@ public class GnlRaporService {
     }
 
 
-    private String buildDynamicJPQL( GnlRaporIstek raporIstek) {
+    private String buildDynamicJPQL(GnlRaporDto raporIstek) {
         StringBuilder jpql = new StringBuilder("SELECT ");
 
         // SELECT kısmı
-        List<GnlRaporIstek.RaporKolonDto> kolonlar = raporIstek.getKolonlar();
+        List<GnlRaporKolonDto> kolonlar = raporIstek.getKolonlar();
         for (int i = 0; i < kolonlar.size(); i++) {
-            GnlRaporIstek.RaporKolonDto kolon = kolonlar.get(i);
+            GnlRaporKolonDto kolon = kolonlar.get(i);
             jpql.append(kolon.getAlanAdi());
             if (i < kolonlar.size() - 1) {
                 jpql.append(", ");
@@ -86,7 +85,7 @@ public class GnlRaporService {
         String mainEntityCamel = StringUtil.toCamelCase(raporIstek.getModul().getAnaEntity());
         jpql.append(" FROM ").append(raporIstek.getModul().getAnaEntity()).append(" ").append(mainEntityCamel);
 
-        if(raporIstek.getModul().getGnlRaporModulEntityBaglantiList() !=null && !raporIstek.getModul().getGnlRaporModulEntityBaglantiList().isEmpty()){
+        if (raporIstek.getModul().getGnlRaporModulEntityBaglantiList() != null && !raporIstek.getModul().getGnlRaporModulEntityBaglantiList().isEmpty()) {
             for (GnlRaporModulEntityBaglanti connection : raporIstek.getModul().getGnlRaporModulEntityBaglantiList()) {
                 String entityClass = connection.getEntityClass();
                 String entityCamel = StringUtil.toCamelCase(entityClass);
@@ -108,18 +107,18 @@ public class GnlRaporService {
 //            }
 //        }
 
-        List<GnlRaporIstek.ParametreDegeriDto> parametreler = raporIstek.getParametreler();
+        List<GnlRaporParametreDegeriDto> parametreler = raporIstek.getParametreler();
         if (parametreler != null && !parametreler.isEmpty()) {
             jpql.append(" WHERE ");
             for (int i = 0; i < parametreler.size(); i++) {
-                GnlRaporIstek.ParametreDegeriDto param = parametreler.get(i);
+                GnlRaporParametreDegeriDto param = parametreler.get(i);
                 if (param.getDeger() != null && !param.getDeger().isEmpty()) {
                     jpql.append(buildWhereCondition(param, i));
                     if (i < parametreler.size() - 1) {
                         jpql.append(" AND ");
                     }
                 }
-                if(StringUtil.isNotBlank(param.getSqlKosul())){
+                if (StringUtil.isNotBlank(param.getSqlKosul())) {
                     jpql.append(param.getSqlKosul());
                 }
             }
@@ -130,7 +129,7 @@ public class GnlRaporService {
 //        StringBuilder jpql = new StringBuilder("SELECT ");
 //
 //        // 1. SELECT kısmı - Direkt entity.field formatında
-//        List<GnlRaporIstek.RaporKolonDto> kolonlar = raporIstek.getKolonlar();
+//        List<GnlRaporKolonDto> kolonlar = raporIstek.getKolonlar();
 //        for (int i = 0; i < kolonlar.size(); i++) {
 //            jpql.append(kolonlar.get(i).getAlanAdi()); // moralEvleri.evAdi
 //            if (i < kolonlar.size() - 1) {
@@ -164,38 +163,38 @@ public class GnlRaporService {
 //        return jpql.toString();
     }
 
-    private String buildWhereClause(List<GnlRaporIstek.ParametreDegeriDto> parametreler) {
-        if (parametreler == null || parametreler.isEmpty()) {
-            return "";
-        }
+//    private String buildWhereClause(List<GnlRaporParametreDegeriDto> parametreler) {
+//        if (parametreler == null || parametreler.isEmpty()) {
+//            return "";
+//        }
+//
+//        List<String> conditions = new ArrayList<>();
+//
+//        for (int i = 0; i < parametreler.size(); i++) {
+//            GnlRaporParametreDegeriDto param = parametreler.get(i);
+//            if (param.getDeger() != null && !param.getDeger().isEmpty()) {
+//                // Parametre adına göre field belirle
+//                String field = param.getParametreAdi();
+//                String operator = param.getOperator() != null ? param.getOperator() : "=";
+//
+//                String condition;
+//                if ("BETWEEN".equalsIgnoreCase(operator)) {
+//                    condition = String.format("%s BETWEEN :param%d_start AND :param%d_end",
+//                            field, i, i);
+//                } else if ("IN".equalsIgnoreCase(operator)) {
+//                    condition = String.format("%s IN (:%s)", field, param.getParametreAdi());
+//                } else {
+//                    condition = String.format("%s %s :param%d", field, operator, i);
+//                }
+//
+//                conditions.add(condition);
+//            }
+//        }
+//
+//        return String.join(" AND ", conditions);
+//    }
 
-        List<String> conditions = new ArrayList<>();
-
-        for (int i = 0; i < parametreler.size(); i++) {
-            GnlRaporIstek.ParametreDegeriDto param = parametreler.get(i);
-            if (param.getDeger() != null && !param.getDeger().isEmpty()) {
-                // Parametre adına göre field belirle
-                String field = param.getParametreAdi();
-                String operator = param.getOperator() != null ? param.getOperator() : "=";
-
-                String condition;
-                if ("BETWEEN".equalsIgnoreCase(operator)) {
-                    condition = String.format("%s BETWEEN :param%d_start AND :param%d_end",
-                            field, i, i);
-                } else if ("IN".equalsIgnoreCase(operator)) {
-                    condition = String.format("%s IN (:%s)", field, param.getParametreAdi());
-                } else {
-                    condition = String.format("%s %s :param%d", field, operator, i);
-                }
-
-                conditions.add(condition);
-            }
-        }
-
-        return String.join(" AND ", conditions);
-    }
-
-    private String buildWhereCondition(GnlRaporIstek.ParametreDegeriDto param, int index) {
+    private String buildWhereCondition(GnlRaporParametreDegeriDto param, int index) {
         String field = param.getParametreAdi();
         String operator = param.getOperator() != null ? param.getOperator() : "=";
 
@@ -210,25 +209,24 @@ public class GnlRaporService {
         }
     }
 
-    private String getAlias(String entityClass) {
-        String[] parts = entityClass.split("\\.");
-        String className = parts[parts.length - 1];
-        return className.substring(0, 1).toLowerCase();
-    }
+//    private String getAlias(String entityClass) {
+//        String[] parts = entityClass.split("\\.");
+//        String className = parts[parts.length - 1];
+//        return className.substring(0, 1).toLowerCase();
+//    }
 
-    private void bindParameters(Query query, List<GnlRaporIstek.ParametreDegeriDto> parametreler) {
+    private void bindParameters(Query query, List<GnlRaporParametreDegeriDto> parametreler) {
         if (parametreler == null) return;
 
         int paramIndex = 0;
-        for (GnlRaporIstek.ParametreDegeriDto param : parametreler) {
+        for (GnlRaporParametreDegeriDto param : parametreler) {
             if (param.getDeger() != null && !param.getDeger().isEmpty()) {
                 Object convertedValue = convertParameterValue(
                         param.getDeger(),
                         param.getVeriTipi(),
-                        param.getLookupEnumClass() // Yeni alan
+                        param.getLookupEnumClass()
                 );
 
-                // IN operatörü için özel işlem
                 if ("IN".equalsIgnoreCase(param.getOperator()) && convertedValue instanceof List) {
                     query.setParameter("param" + paramIndex, (List<?>) convertedValue);
                 } else {
@@ -240,11 +238,11 @@ public class GnlRaporService {
         }
     }
 
-//    private void bindParameters(Query query, List<GnlRaporIstek.ParametreDegeriDto> parametreler) {
+//    private void bindParameters(Query query, List<GnlRaporParametreDegeriDto> parametreler) {
 //        if (parametreler == null) return;
 //
 //        int paramIndex = 0;
-//        for (GnlRaporIstek.ParametreDegeriDto param : parametreler) {
+//        for (GnlRaporParametreDegeriDto param : parametreler) {
 //            if (param.getDeger() != null && !param.getDeger().isEmpty()) {
 //                String operator = param.getOperator() != null ? param.getOperator() : "=";
 //
@@ -338,8 +336,7 @@ public class GnlRaporService {
 //        }
     }
 
-    private List<Map<String, Object>> convertResultsToMap(List<?> results,
-                                                          List<GnlRaporIstek.RaporKolonDto> kolonlar) {
+    private List<Map<String, Object>> convertResultsToMap(List<?> results, List<GnlRaporKolonDto> kolonlar) {
         List<Map<String, Object>> mapList = new ArrayList<>();
 
         if (results == null || results.isEmpty() || kolonlar == null || kolonlar.isEmpty()) {
@@ -353,7 +350,7 @@ public class GnlRaporService {
                 Map<String, Object> rowMap = new HashMap<>();
 
                 if (isSingleColumn) {
-                    GnlRaporIstek.RaporKolonDto kolon = kolonlar.get(0);
+                    GnlRaporKolonDto kolon = kolonlar.get(0);
                     rowMap.put(kolon.getAlanAdi(), resultRow);
                 } else {
                     Object[] rowArray;
@@ -368,7 +365,7 @@ public class GnlRaporService {
 
                     int columnCount = Math.min(kolonlar.size(), rowArray.length);
                     for (int i = 0; i < columnCount; i++) {
-                        GnlRaporIstek.RaporKolonDto kolon = kolonlar.get(i);
+                        GnlRaporKolonDto kolon = kolonlar.get(i);
                         rowMap.put(kolon.getAlanAdi(), rowArray[i]);
                     }
                 }

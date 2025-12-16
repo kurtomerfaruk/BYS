@@ -39,7 +39,7 @@ import java.util.*;
 @Named
 @ViewScoped
 @Slf4j
-public class GnlAramaReport implements Serializable {
+public class GnlAramaReportOld implements Serializable {
     @Serial
     private static final long serialVersionUID = -2000288334750026244L;
 
