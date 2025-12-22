@@ -59,9 +59,6 @@ public class EnumService {
         return result;
     }
 
-    /**
-     * Enum değerini string'den enum'a çevir
-     */
     public Object convertToEnum(String enumClassName, String value) {
         try {
             Class<?> enumClass = Class.forName(enumClassName);

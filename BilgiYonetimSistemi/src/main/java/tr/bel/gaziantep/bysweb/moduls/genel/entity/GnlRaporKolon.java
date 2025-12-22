@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Nationalized;
 import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
+import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.EnumSyVeriTipi;
 
 import java.io.Serial;
 /**
@@ -28,8 +29,8 @@ public class GnlRaporKolon extends BaseEntity {
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "GNLRAPOR_MODUL_ID")
-    private GnlRaporModul gnlRaporModul;
+    @JoinColumn(name = "GNLRAPOR_ID")
+    private GnlRapor gnlRapor;
 
     @Size(max = 100)
     @Nationalized
@@ -41,10 +42,10 @@ public class GnlRaporKolon extends BaseEntity {
     @Column(name = "ALAN_ADI", length = 100)
     private String alanAdi;
 
-    @Size(max = 50)
-    @Nationalized
-    @Column(name = "VERI_TIPI", length = 50)
-    private String veriTipi;
+    @Column(name = "VERI_TIPI")
+    @Enumerated(EnumType.STRING)
+    private EnumSyVeriTipi veriTipi;
+
 
     @Size(max = 100)
     @Nationalized

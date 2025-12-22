@@ -2,6 +2,7 @@ package tr.bel.gaziantep.bysweb.moduls.genel.dtos;
 
 import lombok.Getter;
 import lombok.Setter;
+import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.EnumSyVeriTipi;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
@@ -18,7 +19,7 @@ public class GnlRaporParametreDegeriDto {
     private String deger;
     private String ikinciDeger;
     private String operator;
-    private String veriTipi;
+    private EnumSyVeriTipi veriTipi;
     private String lookupEnumClass;
     private String sqlKosul;
 

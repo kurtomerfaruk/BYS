@@ -2,6 +2,7 @@ package tr.bel.gaziantep.bysweb.moduls.genel.dtos;
 
 import lombok.Getter;
 import lombok.Setter;
+import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.EnumSyVeriTipi;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
@@ -15,7 +16,7 @@ public class GnlRaporKolonDto {
     private Integer id;
     private String alanAdi;
     private String gorunurAdi;
-    private String veriTipi;
+    private EnumSyVeriTipi veriTipi;
     private Integer genislik;
     private String format;
 }

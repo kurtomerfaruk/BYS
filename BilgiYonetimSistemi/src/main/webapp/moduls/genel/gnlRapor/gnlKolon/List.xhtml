@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:p="primefaces">
+
+    <h:form id="GnlKolonListForm">
+
+        <p:dataTable id="kolonDatalist"
+                     value="#{gnlRaporController.selected.gnlRaporKolonList}"
+                     var="kolon"
+                     rowKey="#{kolon.id}"
+                     selection="#{gnlRaporController.selectedKolon}"
+                     emptyMessage="Henüz kolon tanımlanmamış"
+                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                     currentPageReportTemplate="#{messages.currentPageTemplate}"
+                     paginatorPosition="bottom"
+                     paginator="true"
+                     rows="10"
+                     lazy="false">
+
+            <p:ajax event="rowSelect"
+                    update=":GnlKolonListForm:kolonDatalist:createButtonKolon,:GnlKolonListForm:kolonDatalist:editButtonKolon,:GnlKolonListForm:kolonDatalist:deleteButtonKolon"/>
+            <p:ajax event="rowDblselect" onsuccess="document.getElementById('GnlKolonListForm:kolonDatalist:editButtonKolon').click()"/>
+
+            <p:column headerText="#{messages.gorunurAdLabel}">
+                #{kolon.gorunurAdi}
+            </p:column>
+
+            <p:column headerText="#{messages.alanAdiLabel}">
+                #{kolon.alanAdi}
+            </p:column>
+
+            <p:column headerText="Tip" width="120">
+                <p:tag value="#{kolon.veriTipi.displayValue}" severity="info"/>
+            </p:column>
+
+            <p:column headerText="Zorunlu" width="100">
+                <p:selectBooleanCheckbox value="#{kolon.varsayilan}" disabled="true"/>
+            </p:column>
+
+            <p:column headerText="Sıra" width="70">
+                #{kolon.siralama}
+            </p:column>
+
+
+            <f:facet name="paginatorBottomLeft">
+                <p:commandButton id="createButtonKolon" styleClass="ui-button-primary" icon="pi pi-plus" title="#{messages.buttonEkle}"
+                                 actionListener="#{gnlRaporController.prepareCreateKolon}" update=":GnlKolonCreateForm"
+                                 oncomplete="PF('GnlKolonCreateDialog').show()" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                <p:commandButton id="editButtonKolon" styleClass="ui-button-success" icon="pi pi-pencil" title="#{messages.buttonGuncelle}"
+                                 update=":GnlKolonEditForm" oncomplete="PF('GnlKolonEditDialog').show()"
+                                 disabled="#{empty gnlRaporController.selectedKolon}" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                <p:commandButton id="deleteButtonKolon" styleClass="ui-button-danger" icon="pi pi-trash" title="#{messages.buttonSil}"
+                                 actionListener="#{gnlRaporController.deleteKolon}" update=":growl,kolonDatalist" disabled="#{empty
+                                 gnlRaporController.selectedKolon}">
+                    <p:confirm header="#{messages.ConfirmationHeader}" message="#{messages.ConfirmDeleteMessage}" icon="pi pi-exclamation-circle"/>
+                </p:commandButton>
+            </f:facet>
+
+        </p:dataTable>
+
+
+        <ui:include src="/confirmation.xhtml"/>
+
+    </h:form>
+
+</ui:composition>

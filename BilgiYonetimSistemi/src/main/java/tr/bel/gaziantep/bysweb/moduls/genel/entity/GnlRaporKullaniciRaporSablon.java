@@ -35,8 +35,8 @@ public class GnlRaporKullaniciRaporSablon extends BaseEntity {
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "GNLRAPOR_MODUL_ID")
-    private GnlRaporModul gnlRaporModul;
+    @JoinColumn(name = "GNLRAPOR_ID")
+    private GnlRapor gnlRapor;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "SYKULLANICI_ID")

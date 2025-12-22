@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces">
+<ui:composition>
+
+    <!-- YENİ ENTITY BAGLANTI EKLEME -->
+    <p:panel header="Yeni Entity Bağlantı Ekle" toggleable="true" collapsed="true">
+
+        <p:panelGrid id="panelGridEntityBaglanti" columns="2" rendered="#{gnlRaporController.selected!=null}" styleClass="w-100" layout="tabular">
+
+            <p:outputLabel value="#{messages.entityAdiLabel}" for="@next"/>
+            <p:inputText id="entityAdi" value="#{gnlRaporController.gnlRaporEntityBaglanti.entityAdi}"
+                         placeholder="Ör: EyKisi" readonly="true"/>
+
+            <p:outputLabel value="#{messages.entityClassLabel}" for="@next"/>
+            <p:selectOneMenu id="entityClass" value="#{gnlRaporController.gnlRaporEntityBaglanti.entityClass}"
+                             required="true" filter="true" converter="omnifaces.SelectItemsConverter" filterMatchMode="contains">
+                <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+                <f:selectItems value="#{entityRegistryController.entities}"
+                               var="entity"
+                               itemValue="#{entity.className}"
+                               itemLabel="#{entity.className}"/>
+                <p:ajax event="change" update="entityAdi" listener="#{gnlRaporController.onEntityClassChange()}"/>
+            </p:selectOneMenu>
+
+            <p:outputLabel value="#{messages.joinTipiLabel}" for="@next"/>
+            <p:selectOneMenu id="joinTipi" value="#{gnlRaporController.gnlRaporEntityBaglanti.joinTipi}" required="true" filter="true"
+                             converter="omnifaces.SelectItemsConverter" filterMatchMode="contains">
+                <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+                <f:selectItems value="#{enumJoinTipi.ALL_VALUES}"
+                               var="joinTips"
+                               itemValue="#{joinTips}"
+                               itemLabel="#{joinTips.displayValue}"/>
+            </p:selectOneMenu>
+
+            <p:outputLabel value="#{messages.joinKosuluLabel}" for="@next"/>
+            <p:inputText id="joinKosulu" value="#{gnlRaporController.gnlRaporEntityBaglanti.joinKosulu}"
+                         placeholder="Ör: gnlKisi.id=eyKisi.gnlKisi.id" required="true"/>
+
+
+
+            <p:outputLabel value="#{messages.siraLabel}"/>
+            <p:spinner id="entitySira"
+                       value="#{gnlRaporController.gnlRaporEntityBaglanti.siralama}"
+                       min="1" max="100"/>
+
+            <f:facet name="footer">
+                <div class="float-end">
+                    <p:commandButton value="Entity Bağlantı Ekle"
+                                     action="#{gnlRaporController.addEntityJoin()}"
+                                     update="entityBaglantiTable,panelGridEntityBaglanti,:growl"
+                                     icon="pi pi-plus"
+                                     process="@this,panelGridEntityBaglanti"
+                                     styleClass="ui-button-success"/>
+                </div>
+            </f:facet>
+        </p:panelGrid>
+
+
+    </p:panel>
+
+    <!-- ENTITY BAGLANTI LİSTESİ -->
+    <div class="section-header">
+        Tanımlı Entity Bağlantılar (#{gnlRaporController.selected.gnlRaporEntityBaglantiList.size()})
+    </div>
+
+    <p:dataTable id="entityBaglantiTable"
+                 value="#{gnlRaporController.selected.gnlRaporEntityBaglantiList}"
+                 var="entityBaglanti"
+                 emptyMessage="Henüz entity bağlantı tanımlanmamış"
+                 styleClass="data-table">
+
+        <p:column headerText="Entity Adı">
+            <strong>#{entityBaglanti.entityAdi}</strong>
+        </p:column>
+
+        <p:column headerText="Entity Class">
+            #{entityBaglanti.entityClass}
+        </p:column>
+
+        <p:column headerText="Join Tipi" width="60">
+            <p:tag value="#{entityBaglanti.joinTipi}"
+                   severity="info"/>
+        </p:column>
+
+        <p:column headerText="Join Koşulu" width="150">
+            #{entityBaglanti.joinKosulu}
+        </p:column>
+
+        <p:column headerText="Sıra" width="70">
+            #{entityBaglanti.siralama}
+        </p:column>
+
+        <p:column headerText="İşlemler" width="100">
+            <p:commandButton icon="pi pi-trash"
+                             title="Sil"
+                             action="#{gnlRaporController.removeEntityJoin(entityBaglanti)}"
+                             update="entityBaglantiTable ,:growl"
+                             process="@this"
+                             styleClass="ui-button-danger button-small"/>
+        </p:column>
+
+    </p:dataTable>
+
+</ui:composition>
+</html>

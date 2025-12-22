@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces">
+<ui:composition>
+
+
+        <p:panel header="Yeni Kolon Ekle" toggleable="true" collapsed="true">
+
+            <p:panelGrid id="kolonPanelGrid" columns="2" rendered="#{gnlRaporController.selected !=null}" layout="tabular" styleClass="w-100">
+
+                <p:outputLabel value="#{messages.gorunurAdLabel}" for="@next"/>
+                <p:inputText id="gorunurAdi" required="true"
+                             value="#{gnlRaporController.gnlRaporKolon.gorunurAdi}"
+                             placeholder="Ör: Ad, Soyad, Telefon No"/>
+
+                <p:outputLabel value="#{messages.alanAdiLabel}" for="@next"/>
+                <p:inputText id="alanAdi" required="true"
+                             value="#{gnlRaporController.gnlRaporKolon.alanAdi}"
+                             placeholder="Ör: ad, soyad, telefon"/>
+
+                <p:outputLabel value="#{messages.veriTipiLabel}" for="@next"/>
+                <p:selectOneMenu id="kolonVeriTipi" value="#{gnlRaporController.gnlRaporKolon.veriTipi}" required="true" filter="true"
+                                 converter="omnifaces.SelectItemsConverter" filterMatchMode="contains">
+                    <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+                    <f:selectItems value="#{enumVeriTipi.ALL_VALUES}"
+                                   var="veriTips"
+                                   itemValue="#{veriTips}"
+                                   itemLabel="#{veriTips.displayValue}"/>
+                </p:selectOneMenu>
+
+                <p:outputLabel value="#{messages.formatLabel}"/>
+                <p:inputText id="format"
+                             value="#{gnlRaporController.gnlRaporKolon.format}"
+                             placeholder="Ör: dd.MM.yyyy" />
+
+                <p:outputLabel value="#{messages.siraLabel}"/>
+                <p:spinner id="siralama"
+                           value="#{gnlRaporController.gnlRaporKolon.siralama}"
+                           min="1" max="100"/>
+
+                <p:outputLabel value="#{messages.varsayilanLabel}"/>
+                <p:selectBooleanCheckbox id="kolonVarsayilan" value="#{gnlRaporController.gnlRaporKolon.varsayilan}"/>
+
+                <f:facet name="footer">
+                    <div class="float-end">
+                        <p:commandButton value="Kolon Ekle"
+                                         action="#{gnlRaporController.addColumn()}"
+                                         update="kolonTable,kolonPanelGrid,:growl"
+                                         process="@this kolonPanelGrid"
+                                         icon="pi pi-plus"
+                                         styleClass="ui-button-success"/>
+                    </div>
+                </f:facet>
+            </p:panelGrid>
+
+        </p:panel>
+
+        <p:dataTable id="kolonTable"
+                     value="#{gnlRaporController.selected.gnlRaporKolonList}"
+                     var="kolon"
+                     emptyMessage="Henüz kolon tanımlanmamış">
+
+            <p:column headerText="Görünür Ad">
+                #{kolon.gorunurAdi}
+            </p:column>
+
+            <p:column headerText="Alan Adı">
+                <strong>#{kolon.alanAdi}</strong>
+            </p:column>
+
+            <p:column headerText="Veri Tipi" width="100">
+                <p:tag value="#{kolon.veriTipi}" severity="info"/>
+            </p:column>
+
+            <p:column headerText="Sıra" width="70">
+                #{kolon.siralama}
+            </p:column>
+
+            <p:column headerText="Varsayılan" width="100">
+                <p:selectBooleanCheckbox value="#{kolon.varsayilan}" disabled="true"/>
+            </p:column>
+
+            <p:column headerText="İşlemler" width="100">
+                <p:commandButton icon="pi pi-trash"
+                                 title="Sil"
+                                 action="#{gnlRaporController.removeColumn(kolon)}"
+                                 update="kolonTable :growl"
+                                 process="@this"
+                                 styleClass="ui-button-danger button-small"/>
+            </p:column>
+
+        </p:dataTable>
+
+</ui:composition>
+</html>

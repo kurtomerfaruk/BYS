@@ -18,8 +18,7 @@ public enum EnumGnlRaporParametreTipi implements BaseEnum {
     MULTI_SELECT("Çoklu seçim"),
     BOOLEAN("Evet/Hayır"),
     ENUM("Enum değer seçimi"),
-    MULTI_ENUM("Çoklu enum seçimi"),
-    ;
+    MULTI_ENUM("Çoklu enum seçimi");
 
     private final String label;
 

@@ -5,14 +5,18 @@ import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
+import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.EnumSyVeriTipi;
+import tr.bel.gaziantep.bysweb.core.service.AbstractService;
 import tr.bel.gaziantep.bysweb.core.service.EnumService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.core.utils.StringUtil;
 import tr.bel.gaziantep.bysweb.moduls.genel.dtos.GnlRaporDto;
 import tr.bel.gaziantep.bysweb.moduls.genel.dtos.GnlRaporKolonDto;
 import tr.bel.gaziantep.bysweb.moduls.genel.dtos.GnlRaporParametreDegeriDto;
-import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlRaporModulEntityBaglanti;
+import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlRapor;
+import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlRaporEntityBaglanti;
 
+import java.io.Serial;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -23,10 +27,9 @@ import java.util.*;
  */
 @Stateless
 @TransactionManagement(TransactionManagementType.CONTAINER)
-public class GnlRaporService {
-
-    @PersistenceContext(unitName = Constants.UNIT_NAME)
-    private EntityManager em;
+public class GnlRaporService extends AbstractService<GnlRapor> {
+    @Serial
+    private static final long serialVersionUID = 5330594353232284355L;
 
     @Inject
     private GnlRaporKullaniciRaporSablonService gnlRaporKullaniciRaporSablonService;
@@ -34,6 +37,18 @@ public class GnlRaporService {
     private JasperReportService jasperReportService;
     @Inject
     private EnumService enumService;
+
+    @PersistenceContext(unitName = Constants.UNIT_NAME)
+    private EntityManager em;
+
+    @Override
+    protected EntityManager getEntityManager() {
+        return em;
+    }
+
+    public GnlRaporService() {
+        super(GnlRapor.class);
+    }
 
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public byte[] dinamikRaporOlustur(GnlRaporDto raporIstek) {
@@ -85,8 +100,8 @@ public class GnlRaporService {
         String mainEntityCamel = StringUtil.toCamelCase(raporIstek.getModul().getAnaEntity());
         jpql.append(" FROM ").append(raporIstek.getModul().getAnaEntity()).append(" ").append(mainEntityCamel);
 
-        if (raporIstek.getModul().getGnlRaporModulEntityBaglantiList() != null && !raporIstek.getModul().getGnlRaporModulEntityBaglantiList().isEmpty()) {
-            for (GnlRaporModulEntityBaglanti connection : raporIstek.getModul().getGnlRaporModulEntityBaglantiList()) {
+        if (raporIstek.getModul().getGnlRaporEntityBaglantiList() != null && !raporIstek.getModul().getGnlRaporEntityBaglantiList().isEmpty()) {
+            for (GnlRaporEntityBaglanti connection : raporIstek.getModul().getGnlRaporEntityBaglantiList()) {
                 String entityClass = connection.getEntityClass();
                 String entityCamel = StringUtil.toCamelCase(entityClass);
                 jpql.append(" ").append(connection.getJoinTipi())
@@ -98,8 +113,8 @@ public class GnlRaporService {
 
 //        jpql.append(" FROM ").append(raporIstek.getModul().getAnaEntity()).append(" e");
 //
-//        if (raporIstek.getModul().getGnlRaporModulEntityBaglantiList() != null && !raporIstek.getModul().getGnlRaporModulEntityBaglantiList().isEmpty()) {
-//            for (GnlRaporModulEntityBaglanti baglanti : raporIstek.getModul().getGnlRaporModulEntityBaglantiList()) {
+//        if (raporIstek.getModul().getGnlRaporEntityBaglantiList() != null && !raporIstek.getModul().getGnlRaporEntityBaglantiList().isEmpty()) {
+//            for (GnlRaporEntityBaglanti baglanti : raporIstek.getModul().getGnlRaporEntityBaglantiList()) {
 //                jpql.append(" ").append(baglanti.getJoinTipi())
 //                        .append(" JOIN ").append(baglanti.getEntityClass())
 //                        .append(" ").append(getAlias(baglanti.getEntityClass()))
@@ -142,8 +157,8 @@ public class GnlRaporService {
 //        jpql.append(" FROM ").append(raporIstek.getModul().getAnaEntity()).append(" ").append(anaEntityCamel);
 //
 //        // 3. JOIN'ler - CamelCase entity isimleriyle
-//        if (raporIstek.getModul().getGnlRaporModulEntityBaglantiList() != null) {
-//            for (GnlRaporModulEntityBaglanti baglanti : raporIstek.getModul().getGnlRaporModulEntityBaglantiList()) {
+//        if (raporIstek.getModul().getGnlRaporEntityBaglantiList() != null) {
+//            for (GnlRaporEntityBaglanti baglanti : raporIstek.getModul().getGnlRaporEntityBaglantiList()) {
 //                String entityClass = baglanti.getEntityClass();
 //                String entityCamel = StringUtil.toCamelCase(entityClass);
 //
@@ -263,22 +278,20 @@ public class GnlRaporService {
 //        }
 //    }
 
-    private Object convertParameterValue(String value, String type, String lookupEnumClass) {
+    private Object convertParameterValue(String value, EnumSyVeriTipi type, String lookupEnumClass) {
         if (value == null || value.trim().isEmpty()) {
             return null;
         }
 
         try {
-            switch (type.toUpperCase()) {
-                case "ENUM":
-                    // Enum değerini çevir
+            switch (type) {
+                case ENUM:
                     if (lookupEnumClass != null && !lookupEnumClass.isEmpty()) {
                         return enumService.convertToEnum(lookupEnumClass, value);
                     }
                     return value;
 
-                case "MULTI_ENUM":
-                    // Çoklu enum değerleri (virgülle ayrılmış)
+                case MULTI_ENUM:
                     if (lookupEnumClass != null && !lookupEnumClass.isEmpty()) {
                         List<Object> enumList = new ArrayList<>();
                         String[] values = value.split(",");
@@ -288,19 +301,18 @@ public class GnlRaporService {
                         return enumList;
                     }
                     return Arrays.asList(value.split(","));
-                case "INTEGER":
-                case "INT":
+                case INTEGER:
                     return Integer.parseInt(value);
-                case "LONG":
+                case LONG:
                     return Long.parseLong(value);
-                case "DOUBLE":
+                case DOUBLE:
                     return Double.parseDouble(value);
-                case "BOOLEAN":
+                case BOOLEAN:
                     return Boolean.parseBoolean(value);
-                case "DATE":
+                case DATE:
                     SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
                     return sdf.parse(value);
-                case "DATETIME":
+                case DATE_TIME:
                     SimpleDateFormat sdf2 = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
                     return sdf2.parse(value);
                 default:
@@ -310,30 +322,6 @@ public class GnlRaporService {
             System.err.println("Parametre dönüşüm hatası: " + e.getMessage());
             return value;
         }
-
-//        try {
-//            switch (type.toUpperCase()) {
-//                case "INTEGER":
-//                case "INT":
-//                    return Integer.parseInt(value);
-//                case "LONG":
-//                    return Long.parseLong(value);
-//                case "DOUBLE":
-//                    return Double.parseDouble(value);
-//                case "BOOLEAN":
-//                    return Boolean.parseBoolean(value);
-//                case "DATE":
-//                    SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
-//                    return sdf.parse(value);
-//                case "DATETIME":
-//                    SimpleDateFormat sdf2 = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
-//                    return sdf2.parse(value);
-//                default:
-//                    return value;
-//            }
-//        } catch (Exception e) {
-//            return value;
-//        }
     }
 
     private List<Map<String, Object>> convertResultsToMap(List<?> results, List<GnlRaporKolonDto> kolonlar) {

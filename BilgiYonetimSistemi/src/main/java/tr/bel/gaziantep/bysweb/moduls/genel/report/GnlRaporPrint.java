@@ -19,12 +19,11 @@ import tr.bel.gaziantep.bysweb.core.utils.Util;
 import tr.bel.gaziantep.bysweb.moduls.genel.dtos.GnlRaporDto;
 import tr.bel.gaziantep.bysweb.moduls.genel.dtos.GnlRaporKolonDto;
 import tr.bel.gaziantep.bysweb.moduls.genel.dtos.GnlRaporParametreDegeriDto;
+import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlRapor;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlRaporKolon;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlRaporKullaniciRaporSablon;
-import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlRaporModul;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlRaporParametre;
 import tr.bel.gaziantep.bysweb.moduls.genel.service.GnlRaporKullaniciRaporSablonService;
-import tr.bel.gaziantep.bysweb.moduls.genel.service.GnlRaporModulService;
 import tr.bel.gaziantep.bysweb.moduls.genel.service.GnlRaporService;
 
 import java.io.IOException;
@@ -47,8 +46,6 @@ public class GnlRaporPrint implements java.io.Serializable {
     private static final long serialVersionUID = -2889176134024945015L;
 
     @Inject
-    private GnlRaporModulService gnlRaporModulService;
-    @Inject
     private GnlRaporService gnlRaporService;
     @Inject
     private GnlRaporKullaniciRaporSablonService gnlRaporKullaniciRaporSablonService;
@@ -60,9 +57,6 @@ public class GnlRaporPrint implements java.io.Serializable {
     private GnlRaporDto gnlRaporDto = new GnlRaporDto();
     @Getter
     @Setter
-    private List<GnlRaporModul> modulListesi;
-    @Getter
-    @Setter
     private List<GnlRaporKolon> secilebilirKolonlar;
     @Getter
     @Setter
@@ -72,7 +66,7 @@ public class GnlRaporPrint implements java.io.Serializable {
     private List<GnlRaporKullaniciRaporSablon> kullaniciSablonlari;
     @Getter
     @Setter
-    private GnlRaporModul seciliModul;
+    private GnlRapor selectedRapor;
     @Getter
     @Setter
     private EnumRaporTuru raporTuru = EnumRaporTuru.PDF;
@@ -105,19 +99,18 @@ public class GnlRaporPrint implements java.io.Serializable {
 
     @PostConstruct
     public void init() {
-        modulListesi = gnlRaporModulService.findAll();
         loadUserTemplates();
         secilebilirKolonlar=new ArrayList<>();
     }
 
-    public void onModulChange() {
+    public void onReportChange() {
         seciliKolonlar.clear();
         parametreDegerleri.clear();
         parametreOperatorleri.clear();
         ikinciDegerler.clear();
-        if (seciliModul != null) {
-            secilebilirKolonlar = seciliModul.getGnlRaporKolonList();
-            modulParametreleri = seciliModul.getGnlRaporParametreList();
+        if (selectedRapor != null) {
+            secilebilirKolonlar = selectedRapor.getGnlRaporKolonList();
+            modulParametreleri = selectedRapor.getGnlRaporParametreList();
 
             for (GnlRaporKolon kolon : secilebilirKolonlar) {
                 if (kolon.isVarsayilan()) {
@@ -223,10 +216,9 @@ public class GnlRaporPrint implements java.io.Serializable {
             GnlRaporDto tempIstek = new GnlRaporDto();
             tempIstek.setSablonId(sablonId);
             tempIstek = gnlRaporKullaniciRaporSablonService.sablonuRaporIstegineCevir(tempIstek);
-            seciliModul = tempIstek.getModul();
+            selectedRapor = tempIstek.getModul();
 
-            onModulChange();
-
+            onReportChange();
 
             for (GnlRaporKolonDto kolonDto : tempIstek.getKolonlar()) {
                 for (GnlRaporKolon kolon : secilebilirKolonlar) {
@@ -273,8 +265,8 @@ public class GnlRaporPrint implements java.io.Serializable {
     }
 
     private void prepareRaporIstek() {
-        gnlRaporDto.setModul(seciliModul);
-        gnlRaporDto.setModulAdi(seciliModul != null ? seciliModul.getModulAdi() : "");
+        gnlRaporDto.setModul(selectedRapor);
+        gnlRaporDto.setModulAdi(selectedRapor != null ? selectedRapor.getAd() : "");
         gnlRaporDto.setRaporTuru(raporTuru);
         gnlRaporDto.setKullaniciId(Objects.requireNonNull(Util.getSyKullanici()).getId());
         gnlRaporDto.setRaporTarihi(LocalDate.now());
@@ -397,7 +389,7 @@ public class GnlRaporPrint implements java.io.Serializable {
 
     public  void prepareSablon(){
         kullaniciRaporSablon = new GnlRaporKullaniciRaporSablon();
-        kullaniciRaporSablon.setGnlRaporModul(seciliModul);
+        kullaniciRaporSablon.setGnlRapor(selectedRapor);
         kullaniciRaporSablon.setSyKullanici(Util.getSyKullanici());
     }
 

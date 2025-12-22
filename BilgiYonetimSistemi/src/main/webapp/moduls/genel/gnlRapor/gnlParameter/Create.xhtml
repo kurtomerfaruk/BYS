@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+>
+
+<ui:composition>
+
+    <p:dialog widgetVar="GnlParameterCreateDialog"
+              id="GnlParameterCreateDialogId"
+              modal="true"
+              resizable="false"
+              closeOnEscape="true"
+              header="#{messages.dialogYeniKayit}"
+              appendTo="@(body)"
+              responsive="true"
+              onShow="PF('GnlParameterCreateDialog').initPosition();"
+              fitViewport="true"
+              position="top">
+
+        <h:form id="GnlParameterCreateForm">
+            <h:panelGroup id="display">
+                <p:focus context="display"/>
+                <p:panelGrid columns="2" columnClasses="column" rendered="#{gnlRaporController.selectedParametre!=null}" layout="tabular">
+
+                    <p:outputLabel value="#{messages.gorunurAdLabel}" for="@next"/>
+                    <p:inputText id="parametreGorunurAdi"
+                                 value="#{gnlRaporController.selectedParametre.gorunurAdi}"
+                                 placeholder="Ör: Ad, Başlangıç Tarihi"/>
+
+                    <p:outputLabel value="#{messages.parametreAdiLabel}" for="@next"/>
+                    <p:inputText id="parametreAdi"
+                                 value="#{gnlRaporController.selectedParametre.parametreAdi}"
+                                 placeholder="Ör: ad, baslangic_tarihi"/>
+
+                    <p:outputLabel value="#{messages.veriTipiLabel}" for="@next"/>
+                    <p:selectOneMenu id="paramVeriTipi" value="#{gnlRaporController.selectedParametre.veriTipi}" required="true" filter="true"
+                                     converter="omnifaces.SelectItemsConverter" filterMatchMode="contains">
+                        <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+                        <f:selectItems value="#{enumVeriTipi.ALL_VALUES}"
+                                       var="veriTips"
+                                       itemValue="#{veriTips}"
+                                       itemLabel="#{veriTips.displayValue}"/>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel value="#{messages.parametreTipiLabel}" for="@next"/>
+                    <p:selectOneMenu id="parametreTipi" value="#{gnlRaporController.selectedParametre.parametreTipi}" required="true" filter="true"
+                                     converter="omnifaces.SelectItemsConverter" filterMatchMode="contains">
+                        <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+                        <f:selectItems value="#{enumParametreTipi.ALL_VALUES}"
+                                       var="parameterTips"
+                                       itemValue="#{parameterTips}"
+                                       itemLabel="#{parameterTips.displayValue}"/>
+                        <p:ajax event="change" update="lookupEnumClass"/>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel value="#{messages.lookupEnumClassLabel}" for="@next"/>
+                    <p:selectOneMenu id="lookupEnumClass" value="#{gnlRaporController.selectedParametre.lookupEnumClass}"
+                                     required="#{gnlRaporController.selectedParametre.parametreTipi eq 'ENUM'}"
+                                     filter="true" converter="omnifaces.SelectItemsConverter" filterMatchMode="contains"
+                                     disabled="#{gnlRaporController.selectedParametre.parametreTipi ne 'ENUM'}">
+                        <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+                        <f:selectItems value="#{entityRegistryController.enums}"
+                                       var="enums"
+                                       itemValue="#{enums.className}"
+                                       itemLabel="#{enums.entityName}"/>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel value="#{messages.zorunluLabel}" for="@next"/>
+                    <p:selectBooleanCheckbox id="paramZorunlu" value="#{gnlRaporController.selectedParametre.zorunlu}"/>
+
+                    <p:outputLabel value="#{messages.varsayilanDegerLabel}" for="@next"/>
+                    <p:inputText id="varsayilanDeger"
+                                 value="#{gnlRaporController.selectedParametre.varsayilanDeger}"
+                                 placeholder="Ör: e.ad LIKE :param"/>
+
+                    <p:outputLabel value="#{messages.varsayilanOperatorLabel}" for="@next"/>
+                    <p:inputText id="varsayilanOperator"
+                                 value="#{gnlRaporController.selectedParametre.varsayilanOperator}"
+                                 placeholder="Ör: e.ad LIKE :param"/>
+
+                    <p:outputLabel value="#{messages.sqlKosulLabel}" for="@next"/>
+                    <p:inputTextarea id="paramSqlKosul" value="#{gnlRaporController.selectedParametre.sqlKosul}" placeholder="Ör: e.ad LIKE :param" autoResize="false"
+                                     rows="4" styleClass="w-100"/>
+
+                    <p:outputLabel value="#{messages.lookUpQueryLabel}" for="@next"/>
+                    <p:inputTextarea id="paramlookupQuery" value="#{gnlRaporController.selectedParametre.lookupQuery}" placeholder="Ör: e.ad LIKE :param" autoResize="false"
+                                     rows="4" styleClass="w-100"/>
+
+                    <p:outputLabel value="#{messages.siraLabel}"/>
+                    <p:spinner id="parametreSira"
+                               value="#{gnlRaporController.selectedParametre.siralama}"
+                               min="1" max="100"/>
+
+
+                    <f:facet name="footer">
+                        <div class="float-end">
+                            <p:commandButton icon="pi pi-check" styleClass="ui-button-success"
+                                             actionListener="#{gnlRaporController.editParameter()}"
+                                             value="#{messages.buttonKaydet}"
+                                             update="GnlParameterListForm:parametreDatalist,:growl,display"
+                                             oncomplete="handleSubmit(xhr,status,args,PF('GnlParameterCreateDialog'));"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                            <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                             value="#{messages.buttonIptal}"
+                                             onclick="PF('GnlParameterCreateDialog').hide()" immediate="true"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()">
+                                <p:resetInput target="@form"/>
+                            </p:commandButton>
+                        </div>
+                    </f:facet>
+                </p:panelGrid>
+            </h:panelGroup>
+        </h:form>
+    </p:dialog>
+
+</ui:composition>
+
+</html>

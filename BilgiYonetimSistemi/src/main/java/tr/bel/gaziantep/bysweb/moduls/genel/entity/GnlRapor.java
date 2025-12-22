@@ -19,8 +19,8 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "GNLRAPOR_MODUL")
-public class GnlRaporModul extends BaseEntity {
+@Table(name = "GNLRAPOR")
+public class GnlRapor extends BaseEntity {
     @Serial
     private static final long serialVersionUID = -3424431238659439869L;
 
@@ -31,8 +31,8 @@ public class GnlRaporModul extends BaseEntity {
 
     @Size(max = 100)
     @Nationalized
-    @Column(name = "MODUL_ADI", length = 100)
-    private String modulAdi;
+    @Column(name = "AD", length = 100)
+    private String ad;
 
     @Size(max = 100)
     @Nationalized
@@ -43,17 +43,17 @@ public class GnlRaporModul extends BaseEntity {
     @Column(name = "ACIKLAMA")
     private String aciklama;
 
-    @OneToMany(mappedBy = "gnlRaporModul", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "gnlRapor", fetch = FetchType.EAGER)
     @SQLRestriction("AKTIF=true")
     private List<GnlRaporKolon> gnlRaporKolonList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "gnlRaporModul", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "gnlRapor", fetch = FetchType.EAGER)
     @SQLRestriction("AKTIF=true")
     private List<GnlRaporParametre> gnlRaporParametreList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "gnlRaporModul", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "gnlRapor", fetch = FetchType.EAGER)
     @SQLRestriction("AKTIF=true")
-    private List<GnlRaporModulEntityBaglanti> gnlRaporModulEntityBaglantiList = new ArrayList<>();
+    private List<GnlRaporEntityBaglanti> gnlRaporEntityBaglantiList = new ArrayList<>();
 
     @Override
     public int hashCode() {
@@ -64,7 +64,7 @@ public class GnlRaporModul extends BaseEntity {
 
     @Override
     public boolean equals(Object object) {
-        if (!(object instanceof GnlRaporModul other)) {
+        if (!(object instanceof GnlRapor other)) {
             return false;
         }
         return (this.id != null || other.id == null) && (this.id == null || this.id.equals(other.id));

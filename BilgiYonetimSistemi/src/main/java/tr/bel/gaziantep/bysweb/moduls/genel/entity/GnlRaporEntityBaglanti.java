@@ -2,11 +2,11 @@ package tr.bel.gaziantep.bysweb.moduls.genel.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Nationalized;
 import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
+import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlJoinTipi;
 
 import java.io.Serial;
 /**
@@ -14,11 +14,14 @@ import java.io.Serial;
  * @version 1.0.0
  * @since 10.12.2025 13:33
  */
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 @Entity
-@Table(name = "GNLRAPOR_MODUL_ENTITY_BAGLANTI")
-public class GnlRaporModulEntityBaglanti extends BaseEntity {
+@Table(name = "GNLRAPOR_ENTITY_BAGLANTI")
+public class GnlRaporEntityBaglanti extends BaseEntity {
     @Serial
     private static final long serialVersionUID = -4867407215348357411L;
 
@@ -28,8 +31,8 @@ public class GnlRaporModulEntityBaglanti extends BaseEntity {
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "GNLRAPOR_MODUL_ID")
-    private GnlRaporModul gnlRaporModul;
+    @JoinColumn(name = "GNLRAPOR_ID")
+    private GnlRapor gnlRapor;
 
     @Size(max = 100)
     @Nationalized
@@ -46,10 +49,9 @@ public class GnlRaporModulEntityBaglanti extends BaseEntity {
     @Column(name = "JOIN_KOSULU", length = 500)
     private String joinKosulu;
 
-    @Size(max = 50)
-    @Nationalized
-    @Column(name = "JOIN_TIPI", length = 50)
-    private String joinTipi;
+    @Column(name = "JOIN_TIPI")
+    @Enumerated(EnumType.STRING)
+    private EnumGnlJoinTipi joinTipi;
 
     @ColumnDefault("0")
     @Column(name = "SIRALAMA")
@@ -64,7 +66,7 @@ public class GnlRaporModulEntityBaglanti extends BaseEntity {
 
     @Override
     public boolean equals(Object object) {
-        if (!(object instanceof GnlRaporModulEntityBaglanti other)) {
+        if (!(object instanceof GnlRaporEntityBaglanti other)) {
             return false;
         }
         return (this.id != null || other.id == null) && (this.id == null || this.id.equals(other.id));

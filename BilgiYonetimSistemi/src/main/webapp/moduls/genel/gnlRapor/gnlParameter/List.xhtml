@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:p="primefaces">
+
+    <h:form id="GnlParameterListForm">
+
+        <p:dataTable id="parametreDatalist"
+                     value="#{gnlRaporController.selected.gnlRaporParametreList}"
+                     var="parameter"
+                     rowKey="#{parameter.id}"
+                     selection="#{gnlRaporController.selectedParametre}"
+                     emptyMessage="Henüz parametre tanımlanmamış"
+                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                     currentPageReportTemplate="#{messages.currentPageTemplate}"
+                     paginatorPosition="bottom"
+                     paginator="true"
+                     rows="10"
+                     lazy="false">
+
+            <p:ajax event="rowSelect"
+                    update=":GnlParameterListForm:parametreDatalist:createButtonParameter,:GnlParameterListForm:parametreDatalist:editButtonParameter,:GnlParameterListForm:parametreDatalist:deleteButtonParameter"/>
+            <p:ajax event="rowDblselect" onsuccess="document.getElementById('GnlParameterListForm:parametreDatalist:editButtonParameter').click()"/>
+
+            <p:column headerText="Parametre Adı">
+                #{parameter.parametreAdi}
+            </p:column>
+
+            <p:column headerText="Görünür Ad">
+                #{parameter.gorunurAdi}
+            </p:column>
+
+            <p:column headerText="Tip" width="120">
+                <p:tag value="#{parameter.veriTipi.displayValue}" severity="info"/>
+            </p:column>
+
+            <p:column headerText="Zorunlu" width="100">
+                <p:selectBooleanCheckbox value="#{parameter.zorunlu}" disabled="true"/>
+            </p:column>
+
+            <p:column headerText="Sıra" width="70">
+                #{parameter.siralama}
+            </p:column>
+
+            <p:column headerText="SQL Koşul">
+                <small><code>#{parameter.sqlKosul}</code></small>
+            </p:column>
+
+            <f:facet name="paginatorBottomLeft">
+                <p:commandButton id="createButtonParameter" styleClass="ui-button-primary" icon="pi pi-plus" title="#{messages.buttonEkle}"
+                                 actionListener="#{gnlRaporController.prepareCreateParameter}" update=":GnlParameterCreateForm"
+                                 oncomplete="PF('GnlParameterCreateDialog').show()" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                <p:commandButton id="editButtonParameter" styleClass="ui-button-success" icon="pi pi-pencil" title="#{messages.buttonGuncelle}"
+                                 update=":GnlParameterEditForm" oncomplete="PF('GnlParameterEditDialog').show()"
+                                 disabled="#{empty gnlRaporController.selectedParametre}" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                <p:commandButton id="deleteButtonParameter" styleClass="ui-button-danger" icon="pi pi-trash" title="#{messages.buttonSil}"
+                                 actionListener="#{gnlRaporController.deleteParameter}" update=":growl,parametreDatalist" disabled="#{empty
+                                 gnlRaporController.selectedParametre}">
+                    <p:confirm header="#{messages.ConfirmationHeader}" message="#{messages.ConfirmDeleteMessage}" icon="pi pi-exclamation-circle"/>
+                </p:commandButton>
+            </f:facet>
+
+        </p:dataTable>
+
+
+        <ui:include src="/confirmation.xhtml"/>
+
+    </h:form>
+
+</ui:composition>

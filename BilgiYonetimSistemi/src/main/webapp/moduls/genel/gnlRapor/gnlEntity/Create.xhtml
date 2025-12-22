@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+>
+
+<ui:composition>
+
+    <p:dialog widgetVar="GnlEntityCreateDialog"
+              id="GnlEntityCreateDialogId"
+              modal="true"
+              resizable="false"
+              closeOnEscape="true"
+              header="#{messages.dialogYeniKayit}"
+              appendTo="@(body)"
+              responsive="true"
+              onShow="PF('GnlEntityCreateDialog').initPosition();"
+              fitViewport="true"
+              position="top">
+
+        <h:form id="GnlEntityCreateForm">
+            <h:panelGroup id="display">
+                <p:focus context="display"/>
+                <p:panelGrid columns="2" columnClasses="column" rendered="#{gnlRaporController.selectedEntity!=null}" layout="tabular">
+
+                    <p:outputLabel value="#{messages.gorunurAdLabel}" for="@next"/>
+                    <p:inputText id="entityAdi"
+                                 value="#{gnlRaporController.selectedEntity.entityAdi}"
+                                 placeholder="Ör: EyKisi" readonly="true"/>
+
+                    <p:outputLabel value="#{messages.entityClassLabel}" for="@next"/>
+                    <p:selectOneMenu id="entityClass" value="#{gnlRaporController.selectedEntity.entityClass}"
+                                     required="true" filter="true" converter="omnifaces.SelectItemsConverter" filterMatchMode="contains">
+                        <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+                        <f:selectItems value="#{entityRegistryController.entities}"
+                                       var="entity"
+                                       itemValue="#{entity.className}"
+                                       itemLabel="#{entity.className}"/>
+                        <p:ajax event="change" update="entityAdi" listener="#{gnlRaporController.onEntityClassChange()}"/>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel value="#{messages.joinTipiLabel}" for="@next"/>
+                    <p:selectOneMenu id="joinTipi" value="#{gnlRaporController.selectedEntity.joinTipi}" required="true" filter="true"
+                                     converter="omnifaces.SelectItemsConverter" filterMatchMode="contains">
+                        <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+                        <f:selectItems value="#{enumJoinTipi.ALL_VALUES}"
+                                       var="joinTips"
+                                       itemValue="#{joinTips}"
+                                       itemLabel="#{joinTips.displayValue}"/>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel value="#{messages.joinKosuluLabel}" for="@next"/>
+                    <p:inputText id="joinKosulu" value="#{gnlRaporController.selectedEntity.joinKosulu}"
+                                 placeholder="Ör: gnlKisi.id=eyKisi.gnlKisi.id" required="true"/>
+
+                    <p:outputLabel value="#{messages.siraLabel}"/>
+                    <p:spinner id="entitySira"
+                               value="#{gnlRaporController.selectedEntity.siralama}"
+                               min="1" max="100"/>
+
+
+                    <f:facet name="footer">
+                        <div class="float-end">
+                            <p:commandButton icon="pi pi-check" styleClass="ui-button-success"
+                                             actionListener="#{gnlRaporController.editEntity()}"
+                                             value="#{messages.buttonKaydet}"
+                                             update="GnlEntityListForm:entityDatalist,:growl,display"
+                                             oncomplete="handleSubmit(xhr,status,args,PF('GnlEntityCreateDialog'));"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                            <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                             value="#{messages.buttonIptal}"
+                                             onclick="PF('GnlEntityCreateDialog').hide()" immediate="true"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()">
+                                <p:resetInput target="@form"/>
+                            </p:commandButton>
+                        </div>
+                    </f:facet>
+                </p:panelGrid>
+            </h:panelGroup>
+        </h:form>
+    </p:dialog>
+
+</ui:composition>
+
+</html>

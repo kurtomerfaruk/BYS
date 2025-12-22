@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:h="jakarta.faces.html">
+
+<ui:composition>
+
+    <p:dialog widgetVar="GnlRaporEditDialog"
+              id="GnlRaporEditDlg"
+              modal="true"
+              resizable="false"
+              closeOnEscape="true"
+              header="#{messages.dialogKayitGuncelle}"
+              appendTo="@(body)"
+              responsive="true"
+              onShow="PF('GnlRaporEditDialog').initPosition();adjustMenuWidth();"
+              fitViewport="true"
+              position="top">
+
+        <h:form id="GnlRaporEditForm">
+            <h:panelGroup id="display">
+                <p:focus context="display"/>
+                <div class="card custom-card">
+
+                    <div class="card-body">
+
+                        <ul class="nav nav-tabs mb-3 tab-style-8 scaleX" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="raporTanimiEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#raporTanimiEditTabPane" type="button" role="tab"
+                                        aria-controls="raporTanimiEditTabPane" aria-selected="true">Rapor Tanımı
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="kolonTanimiEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#kolonTanimiEditTabPane" type="button" role="tab"
+                                        aria-controls="kolonTanimiEditTabPane" aria-selected="true">Kolon Tanımları
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="parametreTanimiEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#parametreTanimiEditTabPane" type="button" role="tab"
+                                        aria-controls="parametreTanimiEditTabPane" aria-selected="true">Parametre Tanımları
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="entityBaglantiEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#entityBaglantiEditTabPane" type="button" role="tab"
+                                        aria-controls="entityBaglantiEditTabPane" aria-selected="true">Entity Bağlantı
+                                </button>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content text-muted">
+                            <div class="tab-pane show active" id="raporTanimiEditTabPane">
+                                <p:panelGrid id="raporTanimiEditPanel" columns="2" styleClass="w-100"
+                                             rendered="#{gnlRaporController.selected!=null}" layout="tabular">
+
+                                    <ui:include src="/moduls/genel/gnlRapor/RaporTanimiTab.xhtml"/>
+
+                                    <f:facet name="footer">
+                                        <div class="float-end">
+                                            <p:commandButton icon="pi pi-check" styleClass="ui-button-success"
+                                                             actionListener="#{gnlRaporController.update}"
+                                                             value="#{messages.buttonKaydet}"
+                                                             update="display,:GnlRaporListForm:datalist:datalist,:growl"
+                                                             oncomplete="handleSubmit(xhr,status,args,PF('GnlRaporEditDialog'));"
+                                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                                            <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                                             value="#{messages.buttonIptal}" onclick="PF('GnlRaporEditDialog').hide()"
+                                                             immediate="true" onstart="PF('Loading').show()"
+                                                             onsuccess="PF('Loading').hide()"/>
+                                        </div>
+                                    </f:facet>
+                                </p:panelGrid>
+                            </div>
+                            <div class="tab-pane" id="kolonTanimiEditTabPane">
+                                <p:panelGrid id="kolonTanimiEditPanel" columns="1" styleClass="w-100"
+                                             rendered="#{gnlRaporController.selected!=null}" layout="tabular">
+
+                                    <ui:include src="/moduls/genel/gnlRapor/KolonTab.xhtml"/>
+                                </p:panelGrid>
+                            </div>
+                            <div class="tab-pane" id="parametreTanimiEditTabPane">
+                                <p:panelGrid id="parametreTanimiEditPanel" columns="1" styleClass="w-100"
+                                             rendered="#{gnlRaporController.selected!=null}" layout="tabular">
+
+                                    <ui:include src="/moduls/genel/gnlRapor/ParametreTab.xhtml"/>
+                                </p:panelGrid>
+                            </div>
+                            <div class="tab-pane" id="entityBaglantiEditTabPane">
+                                <p:panelGrid id="entityBaglantiEditPanel" columns="1" styleClass="w-100"
+                                             rendered="#{gnlRaporController.selected!=null}" layout="tabular">
+
+                                    <ui:include src="/moduls/genel/gnlRapor/EntityBaglantiTab.xhtml"/>
+                                </p:panelGrid>
+                            </div>
+                        </div>
+                    </div><!-- end card-body -->
+
+                </div>
+            </h:panelGroup>
+        </h:form>
+
+    </p:dialog>
+
+</ui:composition>
+
+</html>

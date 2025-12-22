@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:createpage id="GnlRaporCreateForm"
+                     renderedListener="#{gnlRaporController.selected != null}"
+                     widgetVar="GnlRaporCreateDialog"
+                     actionListener="#{gnlRaporController.saveNew}"
+                     listForm="GnlRaporListForm">
+
+
+        <p:outputLabel value="#{messages.raporAdiLabel}" for="@next"/>
+        <p:inputText id="ad" value="#{gnlRaporController.selected.ad}" title="#{messages.raporAdiText}" size="50" maxlength="50" required="true"/>
+
+                <p:outputLabel value="#{messages.anaEntityLabel}" for="@next"/>
+                <p:selectOneMenu id="anaEntity" value="#{gnlRaporController.selected.anaEntity}" filter="true">
+                    <f:selectItem itemLabel="#{messages.seciniz}"/>
+                    <f:selectItems value="#{entityRegistryController.entities}"
+                                   var="entity"
+                                   itemValue="#{entity.entityName}"
+                                   itemLabel="#{entity.entityName.toString()}"/>
+                </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.aciklamaLabel}" for="@next"/>
+        <p:inputTextarea rows="4" id="aciklama" value="#{gnlRaporController.selected.aciklama}" title="#{messages.aciklamaText}" styleClass="w-100"
+                         autoResize="false" required="true"/>
+
+
+    </coco:createpage>
+
+</ui:composition>
+
+</html>

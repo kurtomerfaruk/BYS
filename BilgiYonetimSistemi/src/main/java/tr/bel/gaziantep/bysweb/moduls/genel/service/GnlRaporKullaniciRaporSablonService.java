@@ -49,7 +49,7 @@ public class GnlRaporKullaniciRaporSablonService extends AbstractService<GnlRapo
                 return raporIstek;
             }
 
-            raporIstek.setModul(sablon.getGnlRaporModul());
+            raporIstek.setModul(sablon.getGnlRapor());
 
             // Kolonları yükle
 //            TypedQuery<GnlRaporSablonKolon> kolonQuery = em.createQuery(

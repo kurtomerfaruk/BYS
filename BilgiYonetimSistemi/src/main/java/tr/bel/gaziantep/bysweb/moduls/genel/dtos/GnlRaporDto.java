@@ -3,7 +3,7 @@ package tr.bel.gaziantep.bysweb.moduls.genel.dtos;
 import lombok.Getter;
 import lombok.Setter;
 import tr.bel.gaziantep.bysweb.core.enums.bys.EnumRaporTuru;
-import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlRaporModul;
+import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlRapor;
 
 import java.io.Serial;
 import java.time.LocalDate;
@@ -21,7 +21,7 @@ import java.util.Map;
 public class GnlRaporDto implements java.io.Serializable {
     @Serial
     private static final long serialVersionUID = -18570466310442357L;
-    private GnlRaporModul modul;
+    private GnlRapor modul;
     private String modulAdi;
     private List<GnlRaporKolonDto> kolonlar;
     private List<GnlRaporParametreDegeriDto> parametreler;

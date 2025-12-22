@@ -16,9 +16,12 @@ public enum EnumSyVeriTipi implements BaseEnum {
     DATE("Date"),
     BOOLEAN("Boolean"),
     ENUM("Enum"),
+    MULTI_ENUM("Multi Enum"),
     STRING("String"),
     INTEGER("Integer"),
-    DECIMAL("Decimal");
+    DECIMAL("Decimal"),
+    LONG("Long"),
+    DOUBLE("Double");
 
     private final String label;
 

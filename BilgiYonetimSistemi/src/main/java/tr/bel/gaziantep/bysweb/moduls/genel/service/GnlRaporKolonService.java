@@ -5,23 +5,23 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import tr.bel.gaziantep.bysweb.core.service.AbstractService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
-import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlRaporModul;
+import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlRaporKolon;
 
 import java.io.Serial;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
  * @version 1.0.0
- * @since 10.12.2025 13:39
+ * @since 16.12.2025 14:58
  */
 @Stateless
-public class GnlRaporModulService extends AbstractService<GnlRaporModul> {
+public class GnlRaporKolonService extends AbstractService<GnlRaporKolon> {
 
     @Serial
-    private static final long serialVersionUID = 1848155187176793969L;
+    private static final long serialVersionUID = 5895804308619373288L;
 
-    public GnlRaporModulService() {
-        super(GnlRaporModul.class);
+    public GnlRaporKolonService() {
+        super(GnlRaporKolon.class);
     }
 
     @PersistenceContext(unitName = Constants.UNIT_NAME)
@@ -31,6 +31,4 @@ public class GnlRaporModulService extends AbstractService<GnlRaporModul> {
     protected EntityManager getEntityManager() {
         return em;
     }
-
-
 }
