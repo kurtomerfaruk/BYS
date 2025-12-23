@@ -46,7 +46,6 @@ public class GnlRaporKolon extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private EnumSyVeriTipi veriTipi;
 
-
     @Size(max = 100)
     @Nationalized
     @Column(name = "FORMAT", length = 100)
@@ -72,6 +71,14 @@ public class GnlRaporKolon extends BaseEntity {
     @ColumnDefault("0")
     @Column(name = "SIRALAMA")
     private Integer siralama;
+
+    @ColumnDefault("0")
+    @Column(name = "GRUP")
+    private boolean grup;
+
+    @ColumnDefault("0")
+    @Column(name = "GRUP_SIRASI")
+    private Integer grupSirasi;
 
     @Override
     public int hashCode() {

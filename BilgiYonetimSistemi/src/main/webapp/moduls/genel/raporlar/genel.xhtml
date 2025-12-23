@@ -81,7 +81,7 @@
             <p:divider/>
 
             <div class="grid">
-                <div class="g-col-4">
+                <div class="g-col-5">
                     <p:panel header="Rapor Ayarları">
 
                         <!-- Rapor Seçimi -->
@@ -121,6 +121,30 @@
                                     <h:outputText value="#{kolon.veriTipi}"/>
                                 </p:column>
 
+                                <!-- Gruplama Checkbox -->
+                                <p:column headerText="Grupla" style="width: 80px">
+                                    <p:selectBooleanCheckbox value="#{gnlRaporPrint.gruplamaKolonlariMap[kolon.id]}"
+                                                             disabled="#{!gnlRaporPrint.seciliKolonlar.contains(kolon)}">
+                                        <p:ajax event="change" update="raporForm:gruplamaAyarlariPanel,@parent" listener="#{gnlRaporPrint.onGruplamaChange()}"/>
+                                    </p:selectBooleanCheckbox>
+                                </p:column>
+
+
+                                <!-- Gruplama Sırası -->
+                                <p:column headerText="Grup Sıra#{empty gnlRaporPrint.gruplamaKolonlariMap[kolon.id] or !gnlRaporPrint.gruplamaKolonlariMap[kolon.id]}" style="width: 60px">
+                                    <p:inputNumber id="gruplamaSirasi#{kolon.id}"
+                                                   value="#{gnlRaporPrint.gruplamaSirasiMap[kolon.id]}"
+                                                   disabled="#{empty gnlRaporPrint.gruplamaKolonlariMap[kolon.id] or !gnlRaporPrint.gruplamaKolonlariMap[kolon.id]}"
+                                                   minValue="1"
+                                                   maxValue="10"
+                                                   style="width: 60px">
+                                        <f:converter converterId="jakarta.faces.Integer" />
+                                        <p:ajax event="change"
+                                                listener="#{gnlRaporPrint.onGruplamaChange()}"
+                                                update="raporForm:gruplamaAyarlariPanel"/>
+                                    </p:inputNumber>
+                                </p:column>
+
                                 <f:facet name="footer">
                                     <p:commandButton value="Tümünü Seç"
                                                      onclick="selectAllColumnsTable()"
@@ -130,6 +154,23 @@
                                                      styleClass="ui-button-secondary"/>
                                 </f:facet>
                             </p:dataTable>
+                        </p:panel>
+
+                        <!-- Gruplama Ayarları Paneli -->
+                        <p:panel id="gruplamaAyarlariPanel"
+                                 header="Gruplama Ayarları"
+                                 style="margin-bottom: 15px;">
+                            <div class="grid">
+                                <!-- Seçilen gruplama kolonlarını göster -->
+                                <div class="g-col-12" style="margin-top: 10px;">
+                                    <p:outputLabel value="Seçili Gruplama Kolonları: #{gnlRaporPrint.gruplamaKolonlariList.size()}"/>
+                                    <p:dataList value="#{gnlRaporPrint.gruplamaKolonlariList}"
+                                                var="grupKolon"
+                                                style="margin-left: 20px;">
+                                        #{grupKolon.gorunurAdi} (Sıra: #{gnlRaporPrint.gruplamaSirasiMap[grupKolon.id]})
+                                    </p:dataList>
+                                </div>
+                            </div>
                         </p:panel>
 
                         <!-- Şablonlar -->
@@ -165,7 +206,7 @@
 
                     </p:panel>
                 </div>
-                <div class="g-col-8">
+                <div class="g-col-7">
                     <p:panel header="Rapor Parametreleri">
 
                         <p:dataTable id="parametreDt"
@@ -298,6 +339,7 @@
                         </p:dataTable>
 
                     </p:panel>
+
                 </div>
             </div>
         </p:panel>
@@ -421,6 +463,39 @@
             windowH -= 150;
             $("#pdfForm\\:viewer").css("height", windowH + "px");
         }
+
+        // function toggleGruplama(kolonId) {
+        //     var checkbox = $('[id*="gruplamaCheckbox' + kolonId + '"]');
+        //     var siralamaInput = $('[id*="gruplamaSirasi' + kolonId + '"]');
+        //
+        //     if (checkbox.is(':checked')) {
+        //         siralamaInput.prop('disabled', false);
+        //         siralamaInput.val(1); // Varsayılan sıra
+        //     } else {
+        //         siralamaInput.prop('disabled', true);
+        //         siralamaInput.val('');
+        //     }
+        //
+        //     // Gruplama seçildi mi kontrol et
+        //     updateGruplamaDurumu();
+        // }
+        //
+        // function updateGruplamaDurumu() {
+        //     var anyChecked = false;
+        //     $('[id*="gruplamaCheckbox"]').each(function() {
+        //         if ($(this).is(':checked')) {
+        //             anyChecked = true;
+        //             return false; // break
+        //         }
+        //     });
+        //
+        //     // Controller'ı güncelle
+        //     if (anyChecked) {
+        //         // Ajax çağrısı ile controller'ı güncelle
+        //         PrimeFaces.abort({source: 'raporForm:gruplamaCheckbox'});
+        //         PrimeFaces.invokeOnView('raporForm:gruplamaCheckbox', 'onchange');
+        //     }
+        // }
     </script>
 
 </h:body>

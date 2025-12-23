@@ -32,7 +32,7 @@ public class JasperReportService {
 
     public byte[] generateReport(List<Map<String, Object>> data, GnlRaporDto raporIstek) {
         try {
-            JasperDesign jasperDesign = createDynamicJasperDesign(raporIstek);
+            JasperDesign jasperDesign = createDynamicJasperDesign(raporIstek,data);
 
             JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
 
@@ -50,7 +50,7 @@ public class JasperReportService {
     }
 
 
-    private JasperDesign createDynamicJasperDesign(GnlRaporDto raporIstek) throws JRException {
+    private JasperDesign createDynamicJasperDesign(GnlRaporDto raporIstek,List<Map<String, Object>> data) throws JRException {
 
         JasperDesign design = new JasperDesign();
         design.setName("dynamic_report");
@@ -100,11 +100,12 @@ public class JasperReportService {
 
         int xPos = 50;
         int columnWidth = 505 / raporIstek.getKolonlar().size();
-
+        Map<String, Object> val = data.get(0);
         for (GnlRaporKolonDto kolon : raporIstek.getKolonlar()) {
 
             JRDesignField field = new JRDesignField();
             field.setName(kolon.getAlanAdi());
+            field.setValueClass(val.get(kolon.getAlanAdi()).getClass());
             design.addField(field);
 
             JRDesignStaticText headerText = new JRDesignStaticText();
@@ -115,6 +116,7 @@ public class JasperReportService {
             headerText.setHorizontalTextAlign(HorizontalTextAlignEnum.LEFT);
             headerText.setVerticalTextAlign(VerticalTextAlignEnum.MIDDLE);
             headerText.setText(kolon.getGorunurAdi());
+            headerText.setPdfEncoding("Cp1254");
 
             header.addElement(headerText);
 

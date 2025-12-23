@@ -2,6 +2,7 @@ package tr.bel.gaziantep.bysweb.moduls.genel.dtos;
 
 import lombok.Getter;
 import lombok.Setter;
+import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlRaporToplamTipi;
 import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.EnumSyVeriTipi;
 
 /**
@@ -19,4 +20,6 @@ public class GnlRaporKolonDto {
     private EnumSyVeriTipi veriTipi;
     private Integer genislik;
     private String format;
+    private Integer gruplamaSirasi;
+    private EnumGnlRaporToplamTipi grupTuru;
 }

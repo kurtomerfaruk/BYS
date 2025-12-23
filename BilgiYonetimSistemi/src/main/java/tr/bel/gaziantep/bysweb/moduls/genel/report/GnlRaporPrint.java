@@ -96,6 +96,23 @@ public class GnlRaporPrint implements java.io.Serializable {
     @Getter
     @Setter
     private List<GnlRaporOzelFiltre> seciliOzelFiltreler = new ArrayList<>();
+    @Getter
+    @Setter
+    private Map<Integer, Boolean> gruplamaKolonlariMap = new HashMap<>();
+    @Getter
+    @Setter
+    private Map<Integer, Integer> gruplamaSirasiMap = new HashMap<>();
+    @Getter
+    @Setter
+    private boolean gruplamaSecildi=false;
+    @Getter
+    @Setter
+    private List<GnlRaporKolon> gruplamaKolonlariList = new ArrayList<>();
+
+    public GnlRaporPrint() {
+        selectedRapor = null;
+        onReportChange();
+    }
 
     @PostConstruct
     public void init() {
@@ -108,6 +125,10 @@ public class GnlRaporPrint implements java.io.Serializable {
         parametreDegerleri.clear();
         parametreOperatorleri.clear();
         ikinciDegerler.clear();
+        gruplamaKolonlariMap.clear();
+        gruplamaSirasiMap.clear();
+        gruplamaKolonlariList.clear();
+        gruplamaSecildi = false;
         if (selectedRapor != null) {
             secilebilirKolonlar = selectedRapor.getGnlRaporKolonList();
             raporParametreleri = selectedRapor.getGnlRaporParametreList();
@@ -116,6 +137,9 @@ public class GnlRaporPrint implements java.io.Serializable {
                 if (kolon.isVarsayilan()) {
                     seciliKolonlar.add(kolon);
                 }
+
+                gruplamaKolonlariMap.put(kolon.getId(), false);
+                gruplamaSirasiMap.put(kolon.getId(), 0);
             }
 
             for (GnlRaporParametre param : raporParametreleri) {
@@ -127,6 +151,49 @@ public class GnlRaporPrint implements java.io.Serializable {
         }
     }
 
+    public void onGruplamaChange() {
+//        gruplamaSecildi = gruplamaKolonlariMap.values().stream().anyMatch(Boolean::booleanValue);
+        try {
+            // 1. Gruplama kolonlarını listele
+            gruplamaKolonlariList.clear();
+
+            for (GnlRaporKolon kolon : secilebilirKolonlar) {
+                Boolean grupla = gruplamaKolonlariMap.get(kolon.getId());
+                if (grupla != null && grupla) {
+                    gruplamaKolonlariList.add(kolon);
+                }
+            }
+
+            // 2. Gruplama sıralarını kontrol et ve düzenle
+            Map<Integer, Integer> siralar = new HashMap<>();
+            for (GnlRaporKolon kolon : gruplamaKolonlariList) {
+                Integer sira = gruplamaSirasiMap.get(kolon.getId());
+                if (sira == null || sira <= 0) {
+                    // Otomatik sıra ata
+                    sira = siralar.size() + 1;
+                    gruplamaSirasiMap.put(kolon.getId(), sira);
+                }
+                siralar.put(sira, kolon.getId());
+            }
+
+            // 3. Sıra numaralarını tekilleştir
+            List<Integer> siraliSiralamar = new ArrayList<>(siralar.keySet());
+            Collections.sort(siraliSiralamar);
+
+            for (int i = 0; i < siraliSiralamar.size(); i++) {
+                Integer originalSira = siraliSiralamar.get(i);
+                Integer kolonId = siralar.get(originalSira);
+                gruplamaSirasiMap.put(kolonId, i + 1);
+            }
+
+            // 4. Gruplama seçildi mi kontrol et
+            gruplamaSecildi = !gruplamaKolonlariList.isEmpty();
+
+        } catch (Exception e) {
+            log.error("Gruplama güncelleme hatası", e);
+            FacesUtil.addErrorMessage("Gruplama ayarları güncellenirken hata oluştu.");
+        }
+    }
 
     public void raporOlustur() {
         try {
@@ -262,6 +329,25 @@ public class GnlRaporPrint implements java.io.Serializable {
             kolonDtoList.add(dto);
         }
         gnlRaporDto.setKolonlar(kolonDtoList);
+
+        List<GnlRaporKolonDto> gruplamaDtoList = new ArrayList<>();
+        for (GnlRaporKolon kolon : secilebilirKolonlar) {
+            Boolean grupla = gruplamaKolonlariMap.get(kolon.getId());
+            if (grupla != null && grupla) {
+                GnlRaporKolonDto dto = new GnlRaporKolonDto();
+                dto.setId(kolon.getId());
+                dto.setAlanAdi(kolon.getAlanAdi());
+                dto.setGorunurAdi(kolon.getGorunurAdi());
+                dto.setVeriTipi(kolon.getVeriTipi());
+                dto.setGruplamaSirasi(gruplamaSirasiMap.get(kolon.getId()));
+                gruplamaDtoList.add(dto);
+            }
+        }
+
+        // Sıraya göre sırala
+        gruplamaDtoList.sort(Comparator.comparingInt(GnlRaporKolonDto::getGruplamaSirasi));
+        gnlRaporDto.setGruplamaKolonlari(gruplamaDtoList);
+        gnlRaporDto.setGruplamaYapilsin(!gruplamaDtoList.isEmpty());
 
         List<GnlRaporParametreDegeriDto> paramDtoList = new ArrayList<>();
         for (GnlRaporParametre param : raporParametreleri) {

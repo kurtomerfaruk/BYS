@@ -62,12 +62,12 @@ public class GnlRaporController extends AbstractController<GnlRapor> {
         GnlRaporKolon newItem;
         try {
             newItem = GnlRaporKolon.class.getDeclaredConstructor().newInstance();
-            newItem.setSiralama(this.getSelected().getGnlRaporKolonList().size()+1);
+            newItem.setSiralama(this.getSelected().getGnlRaporKolonList().size() + 1);
             this.setSelectedKolon(newItem);
             initializeEmbeddableKey();
             return newItem;
         } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException ex) {
-            log.error(null,ex);
+            log.error(null, ex);
         }
         return null;
     }
@@ -96,7 +96,7 @@ public class GnlRaporController extends AbstractController<GnlRapor> {
     }
 
     public void deleteKolon() {
-        if (this.getSelected() != null && this.getSelectedKolon()!=null) {
+        if (this.getSelected() != null && this.getSelectedKolon() != null) {
             try {
                 this.getSelectedKolon().setAktif(false);
                 gnlRaporKolonService.edit(this.getSelectedKolon());
@@ -113,11 +113,12 @@ public class GnlRaporController extends AbstractController<GnlRapor> {
         GnlRaporParametre newItem;
         try {
             newItem = GnlRaporParametre.class.getDeclaredConstructor().newInstance();
+            newItem.setSiralama(this.getSelected().getGnlRaporParametreList().size() + 1);
             this.setSelectedParametre(newItem);
             initializeEmbeddableKey();
             return newItem;
         } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException ex) {
-            log.error(null,ex);
+            log.error(null, ex);
         }
         return null;
     }
@@ -144,7 +145,7 @@ public class GnlRaporController extends AbstractController<GnlRapor> {
     }
 
     public void deleteParameter() {
-        if (this.getSelected() != null && this.getSelectedParametre()!=null) {
+        if (this.getSelected() != null && this.getSelectedParametre() != null) {
             try {
                 this.getSelectedParametre().setAktif(false);
                 gnlRaporParametreService.edit(this.getSelectedParametre());
@@ -161,11 +162,12 @@ public class GnlRaporController extends AbstractController<GnlRapor> {
         GnlRaporEntityBaglanti newItem;
         try {
             newItem = GnlRaporEntityBaglanti.class.getDeclaredConstructor().newInstance();
+            newItem.setSiralama(this.getSelected().getGnlRaporEntityBaglantiList().size() + 1);
             this.setSelectedEntity(newItem);
             initializeEmbeddableKey();
             return newItem;
         } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException ex) {
-            log.error(null,ex);
+            log.error(null, ex);
         }
         return null;
     }
@@ -192,7 +194,7 @@ public class GnlRaporController extends AbstractController<GnlRapor> {
     }
 
     public void deleteEntity() {
-        if (this.getSelected() != null && this.getSelectedEntity()!=null) {
+        if (this.getSelected() != null && this.getSelectedEntity() != null) {
             try {
                 this.getSelectedEntity().setAktif(false);
                 gnlRaporEntityBaglantiService.edit(this.getSelectedEntity());

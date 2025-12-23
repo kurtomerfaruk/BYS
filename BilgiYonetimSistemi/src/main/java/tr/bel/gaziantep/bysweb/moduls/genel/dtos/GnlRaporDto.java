@@ -7,6 +7,7 @@ import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlRapor;
 
 import java.io.Serial;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +32,9 @@ public class GnlRaporDto implements java.io.Serializable {
     private Integer kullaniciId;
     private LocalDate raporTarihi;
     private Map<String, Object> ekParametreler;
+    private List<GnlRaporToplamAlaniDto> toplamAlanlari = new ArrayList<>();
+    private List<GnlRaporKolonDto> gruplamaKolonlari;
+    private boolean gruplamaYapilsin = false;
 
     public GnlRaporDto() {
         this.raporTarihi = LocalDate.now();

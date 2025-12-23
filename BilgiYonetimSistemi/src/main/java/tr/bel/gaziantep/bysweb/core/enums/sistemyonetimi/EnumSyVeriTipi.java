@@ -21,7 +21,7 @@ public enum EnumSyVeriTipi implements BaseEnum {
     INTEGER("Integer"),
     DECIMAL("Decimal"),
     LONG("Long"),
-    DOUBLE("Double");
+    DOUBLE("Double"),;
 
     private final String label;
 
