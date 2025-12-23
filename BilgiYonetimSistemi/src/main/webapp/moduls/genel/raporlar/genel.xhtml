@@ -96,7 +96,7 @@
                                                itemValue="#{rapor}"
                                                itemDescription="#{rapor.aciklama}"/>
                                 <p:ajax listener="#{gnlRaporPrint.onReportChange}"
-                                        update=":raporForm:kolonPanel,:raporForm:parametrePanel,:sablonPanel,mainGrid"/>
+                                        update=":raporForm:kolonPanel,:raporForm:parametreDt,:sablonPanel,mainGrid"/>
                             </p:selectOneMenu>
                         </p:panel>
 
@@ -123,10 +123,10 @@
 
                                 <f:facet name="footer">
                                     <p:commandButton value="Tümünü Seç"
-                                                     onclick="selectAllColumns()"
+                                                     onclick="selectAllColumnsTable()"
                                                      styleClass="ui-button-secondary"/>
                                     <p:commandButton value="Tümünü Temizle"
-                                                     onclick="clearAllColumns()"
+                                                     onclick="clearAllColumnsKolon()"
                                                      styleClass="ui-button-secondary"/>
                                 </f:facet>
                             </p:dataTable>
@@ -151,13 +151,6 @@
                                                      process="@this"
                                                      update="@form,:growl"/>
 
-                                    <!--                                    <p:commandButton icon="pi pi-trash"-->
-                                    <!--                                                     styleClass="ui-button-danger"-->
-                                    <!--                                                     title="Sil"-->
-                                    <!--                                                     action="#{gnlRaporPrint.sablonSil(sablon.id)}"-->
-                                    <!--                                                     update=":growl,:raporForm:templateTable,sablonDt"-->
-                                    <!--                                                     onclick="return confirm('Şablon silinecek. Emin misiniz?')"/>-->
-
                                     <p:commandButton id="deleteButton" styleClass="ui-button-danger" icon="pi pi-trash"
                                                      title="#{messages.buttonSil}"
                                                      actionListener="#{gnlRaporPrint.sablonSil(sablon.id)}"
@@ -175,98 +168,134 @@
                 <div class="g-col-8">
                     <p:panel header="Rapor Parametreleri">
 
-                        <p:panel id="parametrePanel">
-                            <p:dataTable id="parametreDt"
-                                         value="#{gnlRaporPrint.modulParametreleri}"
-                                         var="paramVar"
-                                         rowKey="#{paramVar.id}"
-                                         emptyMessage="Rapor seçiniz veya bu Rapor için parametre tanımlanmamış"
-                                         style="width: 100%">
+                        <p:dataTable id="parametreDt"
+                                     value="#{gnlRaporPrint.raporParametreleri}"
+                                     var="paramVar"
+                                     rowKey="#{paramVar.id}"
+                                     emptyMessage="Rapor seçiniz veya bu Rapor için parametre tanımlanmamış"
+                                     style="width: 100%">
 
-                                <p:column headerText="Parametre" style="width: 35%">
-                                    <h:outputText value="#{paramVar.gorunurAdi}"/>
-                                    <h:outputText value=" *"
-                                                  style="color: red; font-weight: bold"
-                                                  rendered="#{paramVar.zorunlu}"/>
-                                </p:column>
+                            <p:column headerText="Parametre" style="width: 35%">
+                                <h:outputText value="#{paramVar.gorunurAdi}"/>
+                                <h:outputText value=" *"
+                                              style="color: red; font-weight: bold"
+                                              rendered="#{paramVar.zorunlu}"/>
+                            </p:column>
 
-                                <p:column headerText="Operatör" style="width: 15%">
-                                    <p:selectOneMenu value="#{gnlRaporPrint.parametreOperatorleri[paramVar.id]}" style="width: 100%">
-                                        <f:selectItem itemLabel="=" itemValue="="/>
-                                        <f:selectItem itemLabel=">" itemValue="&gt;"/>
-                                        <f:selectItem itemLabel="&lt;" itemValue="&lt;"/>
-                                        <f:selectItem itemLabel="&gt;=" itemValue="&gt;="/>
-                                        <f:selectItem itemLabel="&lt;=" itemValue="&lt;="/>
-                                        <f:selectItem itemLabel="LIKE" itemValue="LIKE"/>
-                                        <f:selectItem itemLabel="BETWEEN" itemValue="BETWEEN"/>
-                                        <f:selectItem itemLabel="IN" itemValue="IN"/>
-                                    </p:selectOneMenu>
-                                </p:column>
+                            <p:column headerText="Operatör" style="width: 15%">
+                                <p:selectOneMenu value="#{gnlRaporPrint.parametreOperatorleri[paramVar.id]}" style="width: 100%">
+                                    <f:selectItem itemLabel="=" itemValue="="/>
+                                    <f:selectItem itemLabel=">" itemValue="&gt;"/>
+                                    <f:selectItem itemLabel="&lt;" itemValue="&lt;"/>
+                                    <f:selectItem itemLabel="&gt;=" itemValue="&gt;="/>
+                                    <f:selectItem itemLabel="&lt;=" itemValue="&lt;="/>
+                                    <f:selectItem itemLabel="LIKE" itemValue="LIKE"/>
+                                    <f:selectItem itemLabel="BETWEEN" itemValue="BETWEEN"/>
+                                    <f:selectItem itemLabel="IN" itemValue="IN"/>
+                                </p:selectOneMenu>
+                            </p:column>
 
-                                <p:column headerText="Değer" style="width: 25%">
-                                    <!-- Text Input -->
-                                    <p:inputText value="#{gnlRaporPrint.parametreDegerleri[paramVar.id]}"
-                                                 rendered="#{paramVar.veriTipi == 'STRING' or paramVar.veriTipi == 'INTEGER'}"
-                                                 required="#{paramVar.zorunlu}"/>
+                            <p:column headerText="Değer" style="width: 25%">
+                                <!-- Text Input -->
+                                <p:inputText value="#{gnlRaporPrint.parametreDegerleri[paramVar.id]}"
+                                             rendered="#{paramVar.veriTipi == 'STRING' or paramVar.veriTipi == 'INTEGER'}"
+                                             required="#{paramVar.zorunlu}"/>
 
-                                    <!-- Date Input -->
-                                    <p:datePicker locale="tr" pattern="#{messages.tarihFormat}" value="#{gnlRaporPrint.parametreDegerleri[paramVar.id]}"
-                                                  mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
-                                                  showOnFocus="false" rendered="#{paramVar.veriTipi == 'DATE'}" required="#{paramVar.zorunlu}"/>
+                                <!-- Date Input -->
+                                <p:datePicker locale="tr" pattern="#{messages.tarihFormat}" value="#{gnlRaporPrint.parametreDegerleri[paramVar.id]}"
+                                              mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
+                                              showOnFocus="false" rendered="#{paramVar.veriTipi == 'DATE'}" required="#{paramVar.zorunlu}"/>
 
-                                    <!-- DateTime Input -->
-                                    <p:datePicker locale="tr" pattern="#{messages.tarihSaatFormat}"
-                                                  value="#{gnlRaporPrint.parametreDegerleri[paramVar.id]}"
-                                                  mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
-                                                  showOnFocus="false"
-                                                  rendered="#{paramVar.veriTipi == 'DATE_TIME'}" required="#{paramVar.zorunlu}"/>
+                                <!-- DateTime Input -->
+                                <p:datePicker locale="tr" pattern="#{messages.tarihSaatFormat}"
+                                              value="#{gnlRaporPrint.parametreDegerleri[paramVar.id]}"
+                                              mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
+                                              showOnFocus="false"
+                                              rendered="#{paramVar.veriTipi == 'DATE_TIME'}" required="#{paramVar.zorunlu}"/>
 
-                                    <!-- Boolean Select -->
-                                    <p:selectOneMenu value="#{gnlRaporPrint.parametreDegerleri[paramVar.id]}"
-                                                     rendered="#{paramVar.veriTipi == 'BOOLEAN'}"
-                                                     required="#{paramVar.zorunlu}" title="#{paramVar.gorunurAdi}">
-                                        <f:selectItem itemLabel="Seçiniz..." itemValue=""/>
-                                        <f:selectItem itemLabel="Evet" itemValue="true"/>
-                                        <f:selectItem itemLabel="Hayır" itemValue="false"/>
-                                    </p:selectOneMenu>
+                                <!-- Boolean Select -->
+                                <p:selectOneMenu value="#{gnlRaporPrint.parametreDegerleri[paramVar.id]}"
+                                                 rendered="#{paramVar.veriTipi == 'BOOLEAN'}"
+                                                 required="#{paramVar.zorunlu}" title="#{paramVar.gorunurAdi}">
+                                    <f:selectItem itemLabel="Seçiniz..." itemValue=""/>
+                                    <f:selectItem itemLabel="Evet" itemValue="true"/>
+                                    <f:selectItem itemLabel="Hayır" itemValue="false"/>
+                                </p:selectOneMenu>
 
-                                    <!-- Lookup için select -->
-                                    <p:selectOneMenu value="#{gnlRaporPrint.parametreDegerleri[paramVar.id]}"
-                                                     rendered="#{paramVar.lookupQuery != null}"
-                                                     required="#{paramVar.zorunlu}">
-                                        <f:selectItem itemLabel="Seçiniz..." itemValue=""/>
-                                    </p:selectOneMenu>
+                                <!-- Lookup için select -->
+                                <p:selectOneMenu value="#{gnlRaporPrint.parametreDegerleri[paramVar.id]}"
+                                                 rendered="#{paramVar.lookupQuery != null}"
+                                                 required="#{paramVar.zorunlu}">
+                                    <f:selectItem itemLabel="Seçiniz..." itemValue=""/>
+                                </p:selectOneMenu>
 
-                                    <!-- ENUM tipi için selectOneMenu -->
-                                    <p:selectOneMenu value="#{gnlRaporPrint.parametreDegerleri[paramVar.id]}" rendered="#{paramVar.veriTipi == 'ENUM'}"
-                                                     required="#{paramVar.zorunlu}" title="#{paramVar.gorunurAdi}" label="#{paramVar.gorunurAdi}"
-                                                     style="width:100% !important">
-                                        <f:selectItems value="#{gnlRaporPrint.getEnumSelectItems(paramVar)}"
-                                                       var="enumItem"
-                                                       itemLabel="#{enumItem.label}"
-                                                       itemValue="#{enumItem.value}"/>
-                                    </p:selectOneMenu>
+                                <!-- ENUM tipi için selectOneMenu -->
+                                <p:selectOneMenu value="#{gnlRaporPrint.parametreDegerleri[paramVar.id]}" rendered="#{paramVar.veriTipi == 'ENUM'}"
+                                                 required="#{paramVar.zorunlu}" title="#{paramVar.gorunurAdi}" label="#{paramVar.gorunurAdi}"
+                                                 style="width:100% !important">
+                                    <f:selectItems value="#{gnlRaporPrint.getEnumSelectItems(paramVar)}"
+                                                   var="enumItem"
+                                                   itemLabel="#{enumItem.label}"
+                                                   itemValue="#{enumItem.value}"/>
+                                </p:selectOneMenu>
 
-                                    <!-- MULTI_ENUM tipi için pickList -->
-                                    <p:pickList value="#{gnlRaporPrint.cokluEnumDegerleri[paramVar.id]}"
-                                                rendered="#{paramVar.veriTipi == 'MULTI_ENUM'}"
-                                                var="enumItem"
-                                                itemLabel="#{enumItem.aciklama}"
-                                                itemValue="#{enumItem.kod}"
-                                                style="width: 100%; height: 100px" required="#{paramVar.zorunlu}">
-                                        <f:selectItems value="#{gnlRaporPrint.getMultiEnumSelectItems(paramVar)}"/>
-                                    </p:pickList>
-                                </p:column>
+                                <!-- MULTI_ENUM tipi için pickList -->
+                                <p:pickList value="#{gnlRaporPrint.cokluEnumDegerleri[paramVar.id]}"
+                                            rendered="#{paramVar.veriTipi == 'MULTI_ENUM'}"
+                                            var="enumItem"
+                                            itemLabel="#{enumItem.aciklama}"
+                                            itemValue="#{enumItem.kod}"
+                                            style="width: 100%; height: 100px" required="#{paramVar.zorunlu}">
+                                    <f:selectItems value="#{gnlRaporPrint.getMultiEnumSelectItems(paramVar)}"/>
+                                </p:pickList>
+                            </p:column>
 
-                                <p:column headerText="2. Değer" style="width: 25%">
-                                    <p:inputText value="#{gnlRaporPrint.ikinciDegerler[paramVar.id]}"
-                                                 rendered="#{gnlRaporPrint.parametreOperatorleri[paramVar.id] == 'BETWEEN'}"
-                                                 style="width: 100%"/>
-                                </p:column>
+                            <p:column headerText="2. Değer" style="width: 25%">
+                                <p:inputText value="#{gnlRaporPrint.ikinciDegerler[paramVar.id]}"
+                                             rendered="#{gnlRaporPrint.parametreOperatorleri[paramVar.id] == 'BETWEEN'}"
+                                             style="width: 100%"/>
+                            </p:column>
 
-                            </p:dataTable>
-                        </p:panel>
+                        </p:dataTable>
 
+                    </p:panel>
+
+                    <p:panel header="Özel Filtreler">
+
+                        <p:dataTable id="ozelFiltreDt"
+                                     value="#{gnlRaporOzelFiltreController.items}"
+                                     var="ozelFiltreVar"
+                                     selection="#{gnlRaporPrint.seciliOzelFiltreler}"
+                                     rowKey="#{ozelFiltreVar.id}"
+                                     lazy="false"
+                                     scrollable="true"
+                                     scrollHeight="200"
+                                     emptyMessage="Tanımlı herhangi bir özel filtre bulunamadı.">
+
+                            <p:column selectionBox="true" style="width: 40px;text-align:left"/>
+
+                            <p:column headerText="Filtre Adı">
+                                <h:outputText value="#{ozelFiltreVar.filtreAdi}"/>
+                            </p:column>
+
+                            <p:column headerText="Açıklama">
+                                <h:outputText value="#{ozelFiltreVar.aciklama}"/>
+                            </p:column>
+
+                            <p:column headerText="SQL Koşulu">
+                                <h:outputText value="#{ozelFiltreVar.sqlKosulu}"/>
+                            </p:column>
+
+
+                            <f:facet name="footer">
+                                <p:commandButton value="Tümünü Seç"
+                                                 onclick="selectAllColumnsCustomFilter()"
+                                                 styleClass="ui-button-secondary"/>
+                                <p:commandButton value="Tümünü Temizle"
+                                                 onclick="clearAllColumnsCustomFilter()"
+                                                 styleClass="ui-button-secondary"/>
+                            </f:facet>
+                        </p:dataTable>
 
                     </p:panel>
                 </div>
@@ -307,16 +336,6 @@
 
                     <f:facet name="footer">
                         <div class="float-end">
-                            <!--                            <p:commandButton value="Kaydet"-->
-                            <!--                                             action="#{gnlRaporPrint.sablonKaydet}"-->
-                            <!--                                             update=":growl"-->
-                            <!--                                             oncomplete="if(!args.validationFailed) PF('saveTemplateDialog').hide()"-->
-                            <!--                                             styleClass="ui-button-success"/>-->
-
-                            <!--                            <p:commandButton value="İptal"-->
-                            <!--                                             onclick="PF('saveTemplateDialog').hide()"-->
-                            <!--                                             styleClass="ui-button-secondary"/>-->
-
                             <p:commandButton icon="pi pi-check" styleClass="ui-button-success"
                                              actionListener="#{gnlRaporPrint.sablonKaydet}"
                                              value="#{messages.buttonKaydet}"
@@ -364,7 +383,7 @@
     </p:dialog>
 
     <script type="text/javascript">
-        function selectAllColumns() {
+        function selectAllColumnsTable() {
             $('[id$="kolonTablosu"] .ui-chkbox-box').each(function () {
                 if (!$(this).hasClass('ui-state-active')) {
                     $(this).click();
@@ -372,9 +391,24 @@
             });
         }
 
-
-        function clearAllColumns() {
+        function clearAllColumnsKolon() {
             $('[id$="kolonTablosu"] .ui-chkbox-box').each(function () {
+                if ($(this).hasClass('ui-state-active')) {
+                    $(this).click();
+                }
+            });
+        }
+
+        function selectAllColumnsCustomFilter() {
+            $('[id$="ozelFiltreDt"] .ui-chkbox-box').each(function () {
+                if (!$(this).hasClass('ui-state-active')) {
+                    $(this).click();
+                }
+            });
+        }
+
+        function clearAllColumnsCustomFilter() {
+            $('[id$="ozelFiltreDt"] .ui-chkbox-box').each(function () {
                 if ($(this).hasClass('ui-state-active')) {
                     $(this).click();
                 }

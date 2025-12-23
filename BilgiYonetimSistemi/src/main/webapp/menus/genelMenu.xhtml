@@ -202,6 +202,17 @@
                                                    value="Rapor Tanımları"/>
                                 </li>
                             </ui:fragment>
+
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('gnlraporozelfiltre:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/genel/gnlRaporOzelFiltre/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="Rapor Özel Filtreler"/>
+                                </li>
+                            </ui:fragment>
                         </ul>
                     </li>
                 </ui:fragment>

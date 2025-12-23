@@ -25,6 +25,7 @@ public class GnlRaporDto implements java.io.Serializable {
     private String modulAdi;
     private List<GnlRaporKolonDto> kolonlar;
     private List<GnlRaporParametreDegeriDto> parametreler;
+    private List<String> ozelFiltreler;
     private EnumRaporTuru raporTuru;
     private Integer sablonId;
     private Integer kullaniciId;

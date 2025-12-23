@@ -19,10 +19,7 @@ import tr.bel.gaziantep.bysweb.core.utils.Util;
 import tr.bel.gaziantep.bysweb.moduls.genel.dtos.GnlRaporDto;
 import tr.bel.gaziantep.bysweb.moduls.genel.dtos.GnlRaporKolonDto;
 import tr.bel.gaziantep.bysweb.moduls.genel.dtos.GnlRaporParametreDegeriDto;
-import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlRapor;
-import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlRaporKolon;
-import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlRaporKullaniciRaporSablon;
-import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlRaporParametre;
+import tr.bel.gaziantep.bysweb.moduls.genel.entity.*;
 import tr.bel.gaziantep.bysweb.moduls.genel.service.GnlRaporKullaniciRaporSablonService;
 import tr.bel.gaziantep.bysweb.moduls.genel.service.GnlRaporService;
 
@@ -60,7 +57,7 @@ public class GnlRaporPrint implements java.io.Serializable {
     private List<GnlRaporKolon> secilebilirKolonlar;
     @Getter
     @Setter
-    private List<GnlRaporParametre> modulParametreleri;
+    private List<GnlRaporParametre> raporParametreleri;
     @Getter
     @Setter
     private List<GnlRaporKullaniciRaporSablon> kullaniciSablonlari;
@@ -96,11 +93,14 @@ public class GnlRaporPrint implements java.io.Serializable {
     @Getter
     @Setter
     private boolean pdfReady;
+    @Getter
+    @Setter
+    private List<GnlRaporOzelFiltre> seciliOzelFiltreler = new ArrayList<>();
 
     @PostConstruct
     public void init() {
         loadUserTemplates();
-        secilebilirKolonlar=new ArrayList<>();
+        secilebilirKolonlar = new ArrayList<>();
     }
 
     public void onReportChange() {
@@ -110,7 +110,7 @@ public class GnlRaporPrint implements java.io.Serializable {
         ikinciDegerler.clear();
         if (selectedRapor != null) {
             secilebilirKolonlar = selectedRapor.getGnlRaporKolonList();
-            modulParametreleri = selectedRapor.getGnlRaporParametreList();
+            raporParametreleri = selectedRapor.getGnlRaporParametreList();
 
             for (GnlRaporKolon kolon : secilebilirKolonlar) {
                 if (kolon.isVarsayilan()) {
@@ -118,7 +118,7 @@ public class GnlRaporPrint implements java.io.Serializable {
                 }
             }
 
-            for (GnlRaporParametre param : modulParametreleri) {
+            for (GnlRaporParametre param : raporParametreleri) {
                 parametreDegerleri.put(param.getId(), param.getVarsayilanDeger());
                 parametreOperatorleri.put(param.getId(), param.getVarsayilanOperator());
             }
@@ -133,25 +133,6 @@ public class GnlRaporPrint implements java.io.Serializable {
             prepareRaporIstek();
             byte[] raporBytes = gnlRaporService.dinamikRaporOlustur(gnlRaporDto);
             if (raporTuru.equals(EnumRaporTuru.PDF)) {
-//                pdfContent = DefaultStreamedContent.builder()
-//                        .stream(()->new ByteArrayInputStream(raporBytes))
-//                        .contentType("application/pdf")
-//                        .name("rapor.pdf")
-//                        .build();
-//                //PrimeFaces.current().ajax().update("pdfForm");
-//                PrimeFaces.current().executeScript("PF('pdfDialogWidget').show();");
-//                FacesContext.getCurrentInstance()
-//                        .getExternalContext()
-//                        .getSessionMap()
-//                        .put("pdfData", raporBytes);
-
-//                ServletContext sc = Util.getServletContext();
-//                HttpSession session = Util.getSession();
-//                session.setAttribute("pdfData",raporBytes);
-//                sc.getRequestDispatcher("/gnlDinamikReportServlet");
-//                PrimeFaces.current().executeScript("PF('pdfDialogWidget').show();");
-//                PrimeFaces.current().ajax().update("pdfForm");
-
                 FacesContext.getCurrentInstance()
                         .getExternalContext()
                         .getSessionMap()
@@ -186,7 +167,7 @@ public class GnlRaporPrint implements java.io.Serializable {
             }
 
             List<GnlRaporParametreDegeriDto> paramDtoList = new ArrayList<>();
-            for (GnlRaporParametre param : modulParametreleri) {
+            for (GnlRaporParametre param : raporParametreleri) {
                 String deger = parametreDegerleri.get(param.getId());
                 if (deger != null && !deger.trim().isEmpty()) {
                     GnlRaporParametreDegeriDto dto = new GnlRaporParametreDegeriDto();
@@ -283,7 +264,7 @@ public class GnlRaporPrint implements java.io.Serializable {
         gnlRaporDto.setKolonlar(kolonDtoList);
 
         List<GnlRaporParametreDegeriDto> paramDtoList = new ArrayList<>();
-        for (GnlRaporParametre param : modulParametreleri) {
+        for (GnlRaporParametre param : raporParametreleri) {
             String deger = parametreDegerleri.get(param.getId());
             if ((deger != null && !deger.trim().isEmpty()) || StringUtil.isNotBlank(param.getSqlKosul())) {
                 GnlRaporParametreDegeriDto dto = new GnlRaporParametreDegeriDto();
@@ -300,6 +281,12 @@ public class GnlRaporPrint implements java.io.Serializable {
             }
         }
         gnlRaporDto.setParametreler(paramDtoList);
+
+        List<String> customFilterList = new ArrayList<>();
+        for (GnlRaporOzelFiltre gnlRaporOzelFiltre : seciliOzelFiltreler) {
+            customFilterList.add(gnlRaporOzelFiltre.getSqlKosulu());
+        }
+        gnlRaporDto.setOzelFiltreler(customFilterList);
     }
 
     private void downloadFile(byte[] content, String fileName) {
@@ -387,7 +374,7 @@ public class GnlRaporPrint implements java.io.Serializable {
         return items;
     }
 
-    public  void prepareSablon(){
+    public void prepareSablon() {
         kullaniciRaporSablon = new GnlRaporKullaniciRaporSablon();
         kullaniciRaporSablon.setGnlRapor(selectedRapor);
         kullaniciRaporSablon.setSyKullanici(Util.getSyKullanici());

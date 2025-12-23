@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+    <ui:composition>
+
+        <coco:createpage id="GnlRaporOzelFiltreCreateForm"
+                         renderedListener="#{gnlRaporOzelFiltreController.selected != null}"
+                         widgetVar="GnlRaporOzelFiltreCreateDialog"
+                         actionListener="#{gnlRaporOzelFiltreController.saveNew}"
+                         listForm="GnlRaporOzelFiltreListForm">
+
+            <p:outputLabel value="#{messages.filtreAdiLabel}" for="@next"/>
+            <p:inputText id="filtreAdi" value="#{gnlRaporOzelFiltreController.selected.filtreAdi}" title="#{messages.filtreAdiText}" required="true" size="50"/>
+
+            <p:outputLabel value="#{messages.sqlKosulLabel}" for="@next"/>
+            <p:inputTextarea id="sqlKosulu" value="#{gnlRaporOzelFiltreController.selected.sqlKosulu}" title="#{messages.sqlKosulText}" rows="6"
+                             autoResize="false" styleClass="w-100" required="true"/>
+
+            <p:outputLabel value="#{messages.aciklamaLabel}" for="@next"/>
+            <p:inputTextarea id="aciklama" value="#{gnlRaporOzelFiltreController.selected.aciklama}" title="#{messages.aciklamaText}" rows="4"
+                             autoResize="false" styleClass="w-100" required="true"/>
+
+
+        </coco:createpage>
+
+    </ui:composition>
+
+</html>

@@ -33,6 +33,10 @@ public class GnlRaporParametre extends BaseEntity {
     @JoinColumn(name = "GNLRAPOR_ID")
     private GnlRapor gnlRapor;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "GNLRAPOR_OZEL_FILTRE_ID")
+    private GnlRaporOzelFiltre gnlRaporOzelFiltre;
+
     @Size(max = 50)
     @Nationalized
     @Column(name = "PARAMETRE_ADI", length = 50)

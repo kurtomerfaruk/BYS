@@ -58,55 +58,6 @@ public class GnlRaporController extends AbstractController<GnlRapor> {
         super(GnlRapor.class);
     }
 
-//    public void update() {
-//        try {
-//
-//        } catch (Exception ex) {
-//            log.error(ex.getMessage());
-//            FacesUtil.addErrorMessage("Rapor tanımı güncellenirken hata oluştu");
-//        }
-//    }
-
-//
-//    public String onWizardFlow(FlowEvent event) {
-//        String currentStep = event.getOldStep();
-//
-//        if (skip) {
-//            skip = false;
-//            return event.getNewStep();
-//        }
-//
-//        if ("1".equals(currentStep)) {
-//            boolean valid = validateStep1();
-//            if (!valid) {
-//                FacesUtil.addExclamationMessage("Temel bilgileri doldurun!");
-//                return currentStep;
-//            }
-//        } else if ("2".equals(currentStep)) {
-//            if (this.getSelected().getGnlRaporKolonList().isEmpty()) {
-//                FacesUtil.addExclamationMessage("En az bir kolon tanımlamalısınız!");
-//                return currentStep;
-//            }
-//        }
-//
-//        return event.getNewStep();
-//    }
-//
-//    private boolean validateStep1() {
-//        if (this.getSelected() == null) {
-//            return false;
-//        }
-//        if (this.getSelected().getAd() == null || this.getSelected().getAd().trim().isEmpty()) {
-//            return false;
-//        }
-//
-//        if (this.getSelected().getAnaEntity() == null || this.getSelected().getAnaEntity().trim().isEmpty()) {
-//            return false;
-//        }
-//
-//        return true;
-//    }
-
     public GnlRaporKolon prepareCreateKolon(ActionEvent event) {
         GnlRaporKolon newItem;
         try {
@@ -120,7 +71,6 @@ public class GnlRaporController extends AbstractController<GnlRapor> {
         }
         return null;
     }
-
 
     public void editKolon() {
         try {
@@ -254,42 +204,6 @@ public class GnlRaporController extends AbstractController<GnlRapor> {
             }
         }
     }
-
-//    public void addEntityJoin() {
-//        try {
-//            if (this.getSelected() != null) {
-//                GnlRaporEntityBaglanti newEntity = this.getSelected().getGnlRaporEntityBaglantiList()
-//                        .stream()
-//                        .filter(x -> x.getEntityClass().equals(gnlRaporEntityBaglanti.getEntityClass()) && x.getJoinKosulu().equals(gnlRaporEntityBaglanti.getJoinKosulu()))
-//                        .findFirst().orElse(null);
-//                if (newEntity == null) {
-//                    gnlRaporEntityBaglanti.setGnlRapor(this.getSelected());
-//                    gnlRaporEntityBaglantiService.create(gnlRaporEntityBaglanti);
-//                    this.getSelected().getGnlRaporEntityBaglantiList().add(gnlRaporEntityBaglanti);
-//                    gnlRaporEntityBaglanti = new GnlRaporEntityBaglanti();
-//                    FacesUtil.addSuccessMessage("Entity Bağlantı Eklendi");
-//                }
-//
-//            }
-//        } catch (Exception ex) {
-//            log.error(null, ex);
-//            FacesUtil.addErrorMessage("Entity Bağlantı eklenirken hata oluştu:" + ex.getMessage());
-//        }
-//    }
-//
-//    public void removeEntityJoin(GnlRaporEntityBaglanti entityBaglanti) {
-//        if (this.getSelected() != null) {
-//            try {
-//                entityBaglanti.setAktif(false);
-//                gnlRaporEntityBaglantiService.edit(entityBaglanti);
-//                this.getSelected().getGnlRaporEntityBaglantiList().remove(entityBaglanti);
-//                FacesUtil.addSuccessMessage("Entity Bağlantı silindi");
-//            } catch (Exception ex) {
-//                log.error(null, ex);
-//                FacesUtil.addErrorMessage("Entity Bağlantı silinirken hata oluştu:" + ex.getMessage());
-//            }
-//        }
-//    }
 
     public void onEntityClassChange() {
         if (this.getSelected() != null && selectedEntity != null) {

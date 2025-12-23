@@ -133,8 +133,22 @@ public class GnlRaporService extends AbstractService<GnlRapor> {
                         jpql.append(" AND ");
                     }
                 }
-                if (StringUtil.isNotBlank(param.getSqlKosul())) {
-                    jpql.append(param.getSqlKosul());
+//                if (StringUtil.isNotBlank(param.getSqlKosul())) {
+//                    jpql.append(param.getSqlKosul());
+//                }
+            }
+        }
+
+        if(raporIstek.getOzelFiltreler()!=null && !raporIstek.getOzelFiltreler().isEmpty()) {
+            boolean hasAnd = parametreler != null && !parametreler.isEmpty();
+            if(hasAnd) jpql.append(" AND ");
+            for (int i = 0; i < raporIstek.getOzelFiltreler().size(); i++) {
+                String ozelFiltre = raporIstek.getOzelFiltreler().get(i);
+                if(StringUtil.isNotBlank(ozelFiltre)){
+                    jpql.append(ozelFiltre);
+                    if (i < raporIstek.getOzelFiltreler().size() - 1) {
+                        jpql.append(" AND ");
+                    }
                 }
             }
         }

@@ -53,7 +53,7 @@
                                  update=":GnlEntityEditForm" oncomplete="PF('GnlEntityEditDialog').show()"
                                  disabled="#{empty gnlRaporController.selectedEntity}" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
                 <p:commandButton id="deleteButtonParameter" styleClass="ui-button-danger" icon="pi pi-trash" title="#{messages.buttonSil}"
-                                 actionListener="#{gnlRaporController.deleteParameter}" update=":growl,entityDatalist" disabled="#{empty
+                                 actionListener="#{gnlRaporController.deleteEntity()}" update=":growl,entityDatalist" disabled="#{empty
                                  gnlRaporController.selectedEntity}">
                     <p:confirm header="#{messages.ConfirmationHeader}" message="#{messages.ConfirmDeleteMessage}" icon="pi pi-exclamation-circle"/>
                 </p:commandButton>
