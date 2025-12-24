@@ -125,18 +125,22 @@
                                 <p:column headerText="Grupla" style="width: 80px">
                                     <p:selectBooleanCheckbox value="#{gnlRaporPrint.gruplamaKolonlariMap[kolon.id]}"
                                                              disabled="#{!gnlRaporPrint.seciliKolonlar.contains(kolon)}">
-                                        <p:ajax event="change" update="raporForm:gruplamaAyarlariPanel,@parent" listener="#{gnlRaporPrint.onGruplamaChange()}"/>
+                                        <p:ajax event="change" update="raporForm:gruplamaAyarlariPanel,:raporForm:kolonTablosu" listener="#{gnlRaporPrint.onGruplamaChange()}"/>
                                     </p:selectBooleanCheckbox>
                                 </p:column>
 
+                                <p:column>
+                                    #{kolon.id}
+                                </p:column>
 
                                 <!-- Gruplama Sırası -->
-                                <p:column headerText="Grup Sıra#{empty gnlRaporPrint.gruplamaKolonlariMap[kolon.id] or !gnlRaporPrint.gruplamaKolonlariMap[kolon.id]}" style="width: 60px">
+                                <p:column headerText="Grup Sıra#{kolon.id}" style="width: 60px">
                                     <p:inputNumber id="gruplamaSirasi#{kolon.id}"
                                                    value="#{gnlRaporPrint.gruplamaSirasiMap[kolon.id]}"
                                                    disabled="#{empty gnlRaporPrint.gruplamaKolonlariMap[kolon.id] or !gnlRaporPrint.gruplamaKolonlariMap[kolon.id]}"
                                                    minValue="1"
                                                    maxValue="10"
+                                                   title="#{kolon.id}"
                                                    style="width: 60px">
                                         <f:converter converterId="jakarta.faces.Integer" />
                                         <p:ajax event="change"
