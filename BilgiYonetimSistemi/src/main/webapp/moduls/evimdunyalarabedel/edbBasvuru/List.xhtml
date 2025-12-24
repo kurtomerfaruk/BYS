@@ -25,9 +25,9 @@
                         rowKey="#{item.id}"
                         selection="#{edbBasvuruController.selected}"
                         filtered="#{edbBasvuruController.filtered}"
-                        rowselect=":EdbBasvuruListForm:datalist:datalist:createButton,:EdbBasvuruListForm:datalist:datalist:viewButton,:EdbBasvuruListForm:datalist:datalist:editButton,:EdbBasvuruListForm:datalist:datalist:deleteButton"
+                        rowselect=":EdbBasvuruListForm:datalist:datalist:createButton,:EdbBasvuruListForm:datalist:datalist:viewButton,:EdbBasvuruListForm:datalist:datalist:editButton,:EdbBasvuruListForm:datalist:datalist:deleteButton,:EdbBasvuruListForm:datalist:datalist:printBasvuruButton,:EdbBasvuruListForm:datalist:datalist:printBilgiNotuButton"
                         rowDblselect="document.getElementById('EdbBasvuruListForm:datalist:datalist:editButton').click()"
-                        contextMenu=":EdbBasvuruListForm:datalist:datalist:createButton :EdbBasvuruListForm:datalist:datalist:viewButton :EdbBasvuruListForm:datalist:datalist:editButton :EdbBasvuruListForm:datalist:datalist:deleteButton"
+                        contextMenu=":EdbBasvuruListForm:datalist:datalist:createButton :EdbBasvuruListForm:datalist:datalist:viewButton :EdbBasvuruListForm:datalist:datalist:editButton :EdbBasvuruListForm:datalist:datalist:deleteButton :EdbBasvuruListForm:datalist:datalist:printBasvuruButton :EdbBasvuruListForm:datalist:datalist:printBilgiNotuButton"
                         selectListener="#{edbBasvuruController.resetParents}"
                         controller="#{edbBasvuruController}"
                         header="#{messages.basvuruListesi}">
@@ -53,6 +53,16 @@
                                  rendered="#{syKullaniciController.hasPermission('edbbasvuru:sil')}">
                     <p:confirm header="#{messages.ConfirmationHeader}" message="#{messages.ConfirmDeleteMessage}" icon="pi pi-exclamation-circle"/>
                 </p:commandButton>
+                <p:commandButton id="printBasvuruButton" icon="pi pi-print" styleClass="ui-button-info" pt:data-tooltip="Başvuru Yazdır"
+                                 update=":PrintForm,:growl"
+                                 actionListener="#{edbBasvuruPrint.printBasvuru(edbBasvuruController.selected.id)}" disabled="#{empty edbBasvuruController.selected}"
+                                 onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('edbbasvuru:yazdir')}"/>
+                <p:commandButton id="printBilgiNotuButton" icon="pi pi-print" styleClass="ui-button-primary" pt:data-tooltip="Bilgi Notu Yazdır"
+                                 update=":PrintForm,:growl"
+                                 actionListener="#{edbBasvuruPrint.printBilgiNotu(edbBasvuruController.selected.id)}" disabled="#{empty edbBasvuruController.selected}"
+                                 onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('edbbasvuru:yazdir')}"/>
 
             </f:facet>
 
@@ -62,5 +72,7 @@
         <ui:include src="/confirmation.xhtml"/>
 
     </h:form>
+
+    <ui:include src="/print/Print.xhtml"/>
 
 </ui:composition>

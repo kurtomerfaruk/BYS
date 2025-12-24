@@ -45,8 +45,31 @@ public class ImageController implements java.io.Serializable {
             File file = new File(dosya.getDosyaYolu());
             InputStream stream = new FileInputStream(file);
             preview = DefaultStreamedContent.builder().contentType("image/png").name(dosya.getDosyaAdi()).stream(() -> stream).build();
+
+//            try {
+//                Path path = Paths.get(dosya.getDosyaYolu());
+//                byte[] imageBytes = Files.readAllBytes(path);
+//                preview = DefaultStreamedContent.builder()
+//                        .contentType(getContentType(dosya.getDosyaAdi()))
+//                        .name(dosya.getDosyaAdi())
+//                        .stream(() -> new ByteArrayInputStream(imageBytes))
+//                        .build();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
         }
         return preview;
+    }
+
+    private String getContentType(String fileName) {
+        if (fileName == null) return "application/octet-stream";
+
+        fileName = fileName.toLowerCase();
+        if (fileName.endsWith(".png")) return "image/png";
+        if (fileName.endsWith(".jpg") || fileName.endsWith(".jpeg")) return "image/jpeg";
+        if (fileName.endsWith(".gif")) return "image/gif";
+        if (fileName.endsWith(".pdf")) return "application/pdf";
+        return "application/octet-stream";
     }
 
     public StreamedContent getOrtBasvuruDosyaImage(OrtBasvuruDosya dosya) throws FileNotFoundException {
