@@ -3,6 +3,7 @@ package tr.bel.gaziantep.bysweb.moduls.aktifyasam.service;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import tr.bel.gaziantep.bysweb.core.enums.aktifyasam.EnumAyGrup;
 import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlGun;
 import tr.bel.gaziantep.bysweb.core.service.AbstractService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
@@ -35,7 +36,11 @@ public class AyAramaService extends AbstractService<AyArama> {
         return em;
     }
 
-    public List<AyArama> findByGunByTarih(EnumGnlGun day, LocalDate date) {
-        return getEntityManager().createNamedQuery("AyArama.findByGunByTarih").setParameter("gun", day).setParameter("tarih", date).getResultList();
+    public List<AyArama> findByGunByTarihByGrup(EnumGnlGun day, LocalDate date, EnumAyGrup grup) {
+        return getEntityManager().createNamedQuery("AyArama.findByGunByTarihByGrup")
+                .setParameter("gun", day)
+                .setParameter("tarih", date)
+                .setParameter("grup", grup)
+                .getResultList();
     }
 }

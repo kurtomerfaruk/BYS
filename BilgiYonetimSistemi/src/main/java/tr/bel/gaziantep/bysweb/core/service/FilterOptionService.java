@@ -3,6 +3,7 @@ package tr.bel.gaziantep.bysweb.core.service;
 import jakarta.ejb.Stateless;
 import jakarta.faces.model.SelectItem;
 import jakarta.inject.Inject;
+import tr.bel.gaziantep.bysweb.core.enums.aktifyasam.EnumAyGrup;
 import tr.bel.gaziantep.bysweb.core.enums.bys.EnumModul;
 import tr.bel.gaziantep.bysweb.core.enums.bys.EnumSoruTuru;
 import tr.bel.gaziantep.bysweb.core.enums.engelsizler.*;
@@ -380,6 +381,12 @@ public class FilterOptionService implements java.io.Serializable{
 
     public List<SelectItem> getGnlGuns() {
         return Arrays.stream(EnumGnlGun.values())
+                .map(value -> new SelectItem(value,value.getDisplayValue()))
+                .collect(Collectors.toList());
+    }
+
+    public List<SelectItem> getAyGrups() {
+        return Arrays.stream(EnumAyGrup.values())
                 .map(value -> new SelectItem(value,value.getDisplayValue()))
                 .collect(Collectors.toList());
     }

@@ -9,6 +9,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.primefaces.event.SelectEvent;
 import tr.bel.gaziantep.bysweb.core.controller.AbstractController;
+import tr.bel.gaziantep.bysweb.core.enums.aktifyasam.EnumAyGrup;
 import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlGun;
 import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.EnumSyFiltreAnahtari;
 import tr.bel.gaziantep.bysweb.core.service.FilterOptionService;
@@ -17,8 +18,8 @@ import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
 import tr.bel.gaziantep.bysweb.moduls.aktifyasam.entity.AyArama;
 import tr.bel.gaziantep.bysweb.moduls.aktifyasam.entity.AyKisi;
 import tr.bel.gaziantep.bysweb.moduls.aktifyasam.service.AyAramaService;
+import tr.bel.gaziantep.bysweb.moduls.aktifyasam.service.AyKisiGrupService;
 import tr.bel.gaziantep.bysweb.moduls.aktifyasam.service.AyKisiGunService;
-import tr.bel.gaziantep.bysweb.moduls.aktifyasam.service.AyKisiService;
 
 import java.io.Serial;
 import java.time.LocalDate;
@@ -42,9 +43,9 @@ public class AyAramaController extends AbstractController<AyArama> {
     @Inject
     private AyAramaService ayAramaService;
     @Inject
-    private AyKisiService ayKisiService;
-    @Inject
     private AyKisiGunService ayKisiGunService;
+    @Inject
+    private AyKisiGrupService ayKisiGrupService;
     @Inject
     private FilterOptionService filterOptionService;
 
@@ -54,6 +55,9 @@ public class AyAramaController extends AbstractController<AyArama> {
     @Getter
     @Setter
     private EnumGnlGun day;
+    @Getter
+    @Setter
+    private EnumAyGrup group;
     @Getter
     @Setter
     private List<AyArama> ayAramaList;
@@ -71,6 +75,9 @@ public class AyAramaController extends AbstractController<AyArama> {
             case GNLGUN -> {
                 return filterOptionService.getGnlGuns();
             }
+            case AYGRUP -> {
+                return filterOptionService.getAyGrups();
+            }
             default -> {
                 return Collections.emptyList();
             }
@@ -84,14 +91,31 @@ public class AyAramaController extends AbstractController<AyArama> {
 
 
     public void changeDay() {
-        if (day == null) return;
+        if (group == null || day == null) return;
         List<AyKisi> ayKisiList = ayKisiGunService.findByGun(day);
-        List<AyArama> list = ayAramaService.findByGunByTarih(day, date);
+        List<AyArama> list = ayAramaService.findByGunByTarihByGrup(day, date, group);
         ayAramaList = new ArrayList<>();
         ayKisiList.forEach(ayKisi ->
                 ayAramaList.add(AyArama.builder()
                         .tarih(date)
                         .gun(day)
+                        .grup(group)
+                        .ayKisi(ayKisi)
+                        .build())
+        );
+        ayAramaList.removeIf(x -> list.stream().anyMatch(y -> y.getAyKisi().equals(x.getAyKisi())));
+    }
+
+    public void changeGroup() {
+        if (group == null || day == null) return;
+        List<AyKisi> ayKisiList = ayKisiGrupService.findByGroup(group);
+        List<AyArama> list = ayAramaService.findByGunByTarihByGrup(day, date, group);
+        ayAramaList = new ArrayList<>();
+        ayKisiList.forEach(ayKisi ->
+                ayAramaList.add(AyArama.builder()
+                        .tarih(date)
+                        .gun(day)
+                        .grup(group)
                         .ayKisi(ayKisi)
                         .build())
         );

@@ -44,6 +44,16 @@
                                            itemLabel="#{guns.displayValue}"/>
                             <p:ajax event="change" update="@form" listener="#{ayAramaController.changeDay()}"/>
                         </p:selectOneMenu>
+
+                        <p:outputLabel value="#{messages.grupLabel}" for="@next"/>
+                        <p:selectOneMenu id="group" value="#{ayAramaController.group}">
+                            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+                            <f:selectItems value="#{enumGrup.ALL_VALUES}"
+                                           var="grups"
+                                           itemValue="#{grups}"
+                                           itemLabel="#{grups.displayValue}"/>
+                            <p:ajax event="change" update="@form" listener="#{ayAramaController.changeGroup()}"/>
+                        </p:selectOneMenu>
                     </p:panelGrid>
                     <p:panelGrid columns="1">
                         <p:dataTable id="kisiId" var="kisi" value="#{ayAramaController.ayAramaList}">

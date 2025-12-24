@@ -56,7 +56,8 @@ public enum EnumSyFiltreAnahtari implements BaseEnum {
     ORTMALZEME_TALEP_ONAY_DURUMU("Ortez/Protez Malzeme Talep Onay Durumu"),
     ORTFIZIK_TEDAVI_DURUM("Ortez/Protez Fizik Tedavi Durumu"),
     METALEP_DURUMU("Moral Evi Talep Durumu"),
-    GNLGUN("Gün");
+    GNLGUN("Gün"),
+    AYGRUP("Aktif Yaşam Grup");
 
     private final String label;
 

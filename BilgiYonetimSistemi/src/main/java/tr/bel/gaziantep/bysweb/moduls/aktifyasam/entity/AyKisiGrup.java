@@ -17,6 +17,9 @@ import java.io.Serial;
 @Setter
 @Entity
 @Table(name = "AYKISI_GRUP")
+@NamedQuery(name = "AyKisiGrup.findByGroup", query = "SELECT a.ayKisi FROM AyKisiGrup a WHERE a.aktif=true " +
+        "AND a.ayKisi.gnlKisi.durum=tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlDurum.SAG AND a.grup =:grup " +
+        "AND a.ayKisi.devamDurumu =tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlDevamDurumu.DEVAM_EDIYOR")
 public class AyKisiGrup extends BaseEntity {
     @Serial
     private static final long serialVersionUID = 3534876161268220620L;

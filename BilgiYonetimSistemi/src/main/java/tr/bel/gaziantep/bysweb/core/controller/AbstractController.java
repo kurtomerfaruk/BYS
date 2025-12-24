@@ -23,6 +23,7 @@ import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortMeta;
 import org.primefaces.model.Visibility;
 import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
+import tr.bel.gaziantep.bysweb.core.enums.BaseEnum;
 import tr.bel.gaziantep.bysweb.core.service.AbstractService;
 import tr.bel.gaziantep.bysweb.core.utils.*;
 import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.entity.SyKolon;
@@ -34,6 +35,8 @@ import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.service.SyKullaniciKolonSer
 import java.io.Serial;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -188,8 +191,8 @@ public abstract class AbstractController<T> implements Serializable {
     }
 
     public SyKullanici getSyKullanici() {
-        if(syKullanici==null){
-            syKullanici= Util.getSyKullanici();
+        if (syKullanici == null) {
+            syKullanici = Util.getSyKullanici();
         }
         return syKullanici;
     }
@@ -255,7 +258,7 @@ public abstract class AbstractController<T> implements Serializable {
                     }
                 }
             } catch (Exception ex) {
-                log.error(null,ex);
+                log.error(null, ex);
                 FacesUtil.errorMessage(Constants.HATA_OLUSTU);
             }
         }
@@ -269,7 +272,7 @@ public abstract class AbstractController<T> implements Serializable {
             initializeEmbeddableKey();
             return newItem;
         } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException ex) {
-            log.error(null,ex);
+            log.error(null, ex);
         }
         return null;
     }
@@ -321,7 +324,7 @@ public abstract class AbstractController<T> implements Serializable {
                     count++;
                 }
             } catch (Exception ex) {
-                log.error(null,ex);
+                log.error(null, ex);
                 FacesUtil.errorMessage(Constants.HATA_OLUSTU);
             }
         }
@@ -335,7 +338,7 @@ public abstract class AbstractController<T> implements Serializable {
                 syKullaniciKolonService.edit(kullaniciKolon);
             }
         } catch (Exception ex) {
-            log.error(null,ex);
+            log.error(null, ex);
             FacesUtil.errorMessage(Constants.HATA_OLUSTU);
         }
     }
@@ -358,7 +361,7 @@ public abstract class AbstractController<T> implements Serializable {
                 syKullaniciKolonService.edit(kullaniciKolon);
             }
         } catch (Exception ex) {
-            log.error(null,ex);
+            log.error(null, ex);
 //            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
             throw ex;
         }
@@ -380,7 +383,7 @@ public abstract class AbstractController<T> implements Serializable {
                 count++;
             }
         } catch (Exception ex) {
-            log.error(null,ex);
+            log.error(null, ex);
             //FacesUtil.errorMessage(Constants.HATA_OLUSTU);
             throw ex;
         }
@@ -395,7 +398,7 @@ public abstract class AbstractController<T> implements Serializable {
                 }
                 FacesUtil.successMessage("kolonlarKaydedildi");
             } catch (Exception ex) {
-                log.error(null,ex);
+                log.error(null, ex);
                 throw ex;
             }
 
@@ -412,7 +415,7 @@ public abstract class AbstractController<T> implements Serializable {
                 });
                 FacesUtil.successMessage("kolonlarKaydedildi");
             } catch (Exception ex) {
-                log.error(null,ex);
+                log.error(null, ex);
 //                FacesUtil.errorMessage(Constants.HATA_OLUSTU);
                 throw ex;
             }
@@ -442,6 +445,15 @@ public abstract class AbstractController<T> implements Serializable {
 
     public String getResolvedValueText(Object item, String prop) {
         Object value = getResolvedValue(item, prop);
+        if (value instanceof Enum<?>) {
+            return ((BaseEnum) value).getDisplayValue();
+        } else if (value instanceof Boolean) {
+            return ((Boolean) value) ? "Evet" : "Hayır";
+        }else if(value instanceof LocalDate){
+            return DateUtil.localdateToString(((LocalDate) value),"dd.MM.yyyy");
+        }else if(value instanceof LocalDateTime){
+            return DateUtil.localdateToString(((LocalDate) value),"dd.MM.yyyy HH:mm:ss");
+        }
         return value != null ? value.toString() : "";
     }
 

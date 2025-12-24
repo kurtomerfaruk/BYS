@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
+import tr.bel.gaziantep.bysweb.core.enums.aktifyasam.EnumAyGrup;
 import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlGun;
 
 import java.io.Serial;
@@ -20,7 +21,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Entity
 @Table(name = "AYARAMA")
-@NamedQuery(name = "AyArama.findByGunByTarih",query = "SELECT a FROM AyArama a WHERE a.aktif=true AND a.tarih =:tarih AND a.gun=:gun")
+@NamedQuery(name = "AyArama.findByGunByTarihByGrup",query = "SELECT a FROM AyArama a WHERE a.aktif=true AND a.tarih =:tarih AND a.gun=:gun AND a.grup =:grup")
 public class AyArama extends BaseEntity {
     @Serial
     private static final long serialVersionUID = -7360048252207386816L;
@@ -44,6 +45,10 @@ public class AyArama extends BaseEntity {
     @Column(name = "GUN")
     @Enumerated(EnumType.STRING)
     private EnumGnlGun gun;
+
+    @Column(name = "GRUP")
+    @Enumerated(EnumType.STRING)
+    private EnumAyGrup grup;
 
     @Override
     public int hashCode() {

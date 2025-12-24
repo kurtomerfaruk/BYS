@@ -38,6 +38,15 @@
                            itemLabel="#{guns.displayValue}"/>
         </p:selectOneMenu>
 
+        <p:outputLabel value="#{messages.grupLabel}" for="@next"/>
+        <p:selectOneMenu id="gruop" value="#{ayAramaController.selected.grup}">
+            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{enumGrup.ALL_VALUES}"
+                           var="grups"
+                           itemValue="#{grups}"
+                           itemLabel="#{grups.displayValue}"/>
+        </p:selectOneMenu>
+
         <p:outputLabel value="#{messages.gelecekLabel}" for="@next"/>
         <p:selectBooleanCheckbox id="gelecek" value="#{ayAramaController.selected.gelecek}"/>
 
