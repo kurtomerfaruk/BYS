@@ -30,6 +30,7 @@
     <h:form id="raporForm">
 
         <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.bys.EnumRaporTuru" var="enumRaporTuru"/>
+        <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlRaporGrupTuru" var="enumGrupTuru"/>
 
         <!-- Ana Container -->
         <p:panel header="Dinamik Rapor Oluşturma">
@@ -122,19 +123,26 @@
                                 </p:column>
 
                                 <!-- Gruplama Checkbox -->
-                                <p:column headerText="Grupla" style="width: 80px">
+                                <p:column headerText="Grupla" width="60">
                                     <p:selectBooleanCheckbox value="#{gnlRaporPrint.gruplamaKolonlariMap[kolon.id]}"
                                                              disabled="#{!gnlRaporPrint.seciliKolonlar.contains(kolon)}">
-                                        <p:ajax event="change" update="raporForm:gruplamaAyarlariPanel,:raporForm:kolonTablosu" listener="#{gnlRaporPrint.onGruplamaChange()}"/>
+                                        <p:ajax event="change" update="raporForm:gruplamaAyarlariPanel,:raporForm:kolonTablosu"
+                                                listener="#{gnlRaporPrint.onGruplamaChange()}"/>
                                     </p:selectBooleanCheckbox>
                                 </p:column>
 
-                                <p:column>
-                                    #{kolon.id}
+                                <p:column headerText="Grup Türü" width="80">
+                                    <p:selectOneMenu value="#{gnlRaporPrint.grupTuruMap[kolon.id]}" converter="omnifaces.SelectItemsConverter"
+                                                     disabled="#{empty gnlRaporPrint.gruplamaKolonlariMap[kolon.id] or !gnlRaporPrint.gruplamaKolonlariMap[kolon.id]}">
+                                        <f:selectItems value="#{enumGrupTuru.ALL_VALUES}"
+                                                       var="grupTurs"
+                                                       itemLabel="#{grupTurs.displayValue}"
+                                                       itemValue="#{grupTurs}"/>
+                                    </p:selectOneMenu>
                                 </p:column>
 
                                 <!-- Gruplama Sırası -->
-                                <p:column headerText="Grup Sıra#{kolon.id}" style="width: 60px">
+                                <p:column headerText="Grup Sıra" style="width: 60px">
                                     <p:inputNumber id="gruplamaSirasi#{kolon.id}"
                                                    value="#{gnlRaporPrint.gruplamaSirasiMap[kolon.id]}"
                                                    disabled="#{empty gnlRaporPrint.gruplamaKolonlariMap[kolon.id] or !gnlRaporPrint.gruplamaKolonlariMap[kolon.id]}"
@@ -142,7 +150,7 @@
                                                    maxValue="10"
                                                    title="#{kolon.id}"
                                                    style="width: 60px">
-                                        <f:converter converterId="jakarta.faces.Integer" />
+                                        <f:converter converterId="jakarta.faces.Integer"/>
                                         <p:ajax event="change"
                                                 listener="#{gnlRaporPrint.onGruplamaChange()}"
                                                 update="raporForm:gruplamaAyarlariPanel"/>

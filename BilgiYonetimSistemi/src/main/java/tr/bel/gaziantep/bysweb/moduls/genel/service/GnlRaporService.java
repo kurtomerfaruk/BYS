@@ -488,7 +488,9 @@ public class GnlRaporService extends AbstractService<GnlRapor> {
         if (raporIstek.getKolonlar() != null && !raporIstek.getKolonlar().isEmpty()) {
 
 
+
             List<GnlRaporKolonDto> normalKolonlar = raporIstek.getKolonlar();
+            normalKolonlar.removeAll(raporIstek.getGruplamaKolonlari());
             for (int i = 0; i < normalKolonlar.size(); i++) {
                 GnlRaporKolonDto kolon = normalKolonlar.get(i);
                 jpql.append(kolon.getAlanAdi());
@@ -503,12 +505,15 @@ public class GnlRaporService extends AbstractService<GnlRapor> {
         }
 
         List<GnlRaporKolonDto> gruplamaKolonlari = raporIstek.getGruplamaKolonlari();
-        if (raporIstek.getKolonlar().size() > 0) {
+        assert raporIstek.getKolonlar() != null;
+
+        if (!raporIstek.getKolonlar().isEmpty()) {
             jpql.append(", ");
         }
         for (int i = 0; i < gruplamaKolonlari.size(); i++) {
             GnlRaporKolonDto kolon = gruplamaKolonlari.get(i);
-            jpql.append(kolon.getAlanAdi());
+
+            jpql.append(kolon.getGrupTuru()).append("(").append(kolon.getAlanAdi()).append(")");
             if (i < gruplamaKolonlari.size() - 1) {
                 jpql.append(", ");
             }

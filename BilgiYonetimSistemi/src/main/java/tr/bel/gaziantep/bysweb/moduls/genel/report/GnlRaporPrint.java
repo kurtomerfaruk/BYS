@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import tr.bel.gaziantep.bysweb.core.enums.bys.EnumRaporTuru;
+import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlRaporGrupTuru;
 import tr.bel.gaziantep.bysweb.core.service.EnumService;
 import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
 import tr.bel.gaziantep.bysweb.core.utils.StringUtil;
@@ -108,6 +109,12 @@ public class GnlRaporPrint implements java.io.Serializable {
     @Getter
     @Setter
     private List<GnlRaporKolon> gruplamaKolonlariList = new ArrayList<>();
+    @Getter
+    @Setter
+    private Map<Integer, EnumGnlRaporGrupTuru> grupTuruMap = new HashMap<>();
+    @Getter
+    @Setter
+    private List<EnumGnlRaporGrupTuru> grupTuruList = new ArrayList<>();
 
     public GnlRaporPrint() {
         selectedRapor = null;
@@ -129,6 +136,9 @@ public class GnlRaporPrint implements java.io.Serializable {
         gruplamaSirasiMap.clear();
         gruplamaKolonlariList.clear();
         gruplamaSecildi = false;
+
+        grupTuruMap.clear();
+
         if (selectedRapor != null) {
             secilebilirKolonlar = selectedRapor.getGnlRaporKolonList();
             raporParametreleri = selectedRapor.getGnlRaporParametreList();
@@ -140,6 +150,7 @@ public class GnlRaporPrint implements java.io.Serializable {
 
                 gruplamaKolonlariMap.put(kolon.getId(), false);
                 gruplamaSirasiMap.put(kolon.getId(), 0);
+                grupTuruMap.put(kolon.getId(),EnumGnlRaporGrupTuru.COUNT);
             }
 
             for (GnlRaporParametre param : raporParametreleri) {
@@ -169,7 +180,6 @@ public class GnlRaporPrint implements java.io.Serializable {
             for (GnlRaporKolon kolon : gruplamaKolonlariList) {
                 Integer sira = gruplamaSirasiMap.get(kolon.getId());
                 if (sira == null || sira <= 0) {
-                    // Otomatik sıra ata
                     sira = siralar.size() + 1;
                     gruplamaSirasiMap.put(kolon.getId(), sira);
                 }
@@ -340,6 +350,7 @@ public class GnlRaporPrint implements java.io.Serializable {
                 dto.setGorunurAdi(kolon.getGorunurAdi());
                 dto.setVeriTipi(kolon.getVeriTipi());
                 dto.setGruplamaSirasi(gruplamaSirasiMap.get(kolon.getId()));
+                dto.setGrupTuru(grupTuruMap.get(kolon.getId()));
                 gruplamaDtoList.add(dto);
             }
         }
