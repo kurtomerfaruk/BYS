@@ -152,6 +152,8 @@ public class GnlRaporService extends AbstractService<GnlRapor> {
         String mainEntityCamel = StringUtil.toCamelCase(raporIstek.getModul().getAnaEntity());
         jpql.append(" FROM ").append(raporIstek.getModul().getAnaEntity()).append(" ").append(mainEntityCamel);
 
+
+
         // JOIN'ler
         if (raporIstek.getModul().getGnlRaporEntityBaglantiList() != null &&
                 !raporIstek.getModul().getGnlRaporEntityBaglantiList().isEmpty()) {
@@ -165,7 +167,6 @@ public class GnlRaporService extends AbstractService<GnlRapor> {
             }
         }
 
-        // WHERE koşulları
         List<GnlRaporParametreDegeriDto> parametreler = raporIstek.getParametreler();
         if (parametreler != null && !parametreler.isEmpty()) {
             jpql.append(" WHERE ");
@@ -178,7 +179,37 @@ public class GnlRaporService extends AbstractService<GnlRapor> {
                     }
                 }
             }
+            jpql.append(" AND ").append(mainEntityCamel).append(".aktif=true ");
+        } else {
+            jpql.append(" WHERE ");
+            jpql.append(mainEntityCamel).append(".aktif=true ");
         }
+
+
+        if (raporIstek.getModul().getGnlRaporEntityBaglantiList() != null && !raporIstek.getModul().getGnlRaporEntityBaglantiList().isEmpty()) {
+            for (int i = 0; i < raporIstek.getModul().getGnlRaporEntityBaglantiList().size(); i++) {
+                GnlRaporEntityBaglanti connection = raporIstek.getModul().getGnlRaporEntityBaglantiList().get(i);
+                String entityClass = connection.getEntityClass();
+                String entityCamel = StringUtil.toCamelCase(entityClass);
+                jpql.append(" AND ");
+                jpql.append(entityCamel).append(".aktif=true ");
+            }
+        }
+
+//        // WHERE koşulları
+//        List<GnlRaporParametreDegeriDto> parametreler = raporIstek.getParametreler();
+//        if (parametreler != null && !parametreler.isEmpty()) {
+//            jpql.append(" WHERE ");
+//            for (int i = 0; i < parametreler.size(); i++) {
+//                GnlRaporParametreDegeriDto param = parametreler.get(i);
+//                if (param.getDeger() != null && !param.getDeger().isEmpty()) {
+//                    jpql.append(buildWhereCondition(param, i));
+//                    if (i < parametreler.size() - 1) {
+//                        jpql.append(" AND ");
+//                    }
+//                }
+//            }
+//        }
 
         // Özel filtreler
         if (raporIstek.getOzelFiltreler() != null && !raporIstek.getOzelFiltreler().isEmpty()) {
@@ -264,6 +295,21 @@ public class GnlRaporService extends AbstractService<GnlRapor> {
                         jpql.append(" AND ");
                     }
                 }
+            }
+            jpql.append(" AND ").append(mainEntityCamel).append(".aktif=true ");
+        } else {
+            jpql.append(" WHERE ");
+            jpql.append(mainEntityCamel).append(".aktif=true ");
+        }
+
+
+        if (raporIstek.getModul().getGnlRaporEntityBaglantiList() != null && !raporIstek.getModul().getGnlRaporEntityBaglantiList().isEmpty()) {
+            for (int i = 0; i < raporIstek.getModul().getGnlRaporEntityBaglantiList().size(); i++) {
+                GnlRaporEntityBaglanti connection = raporIstek.getModul().getGnlRaporEntityBaglantiList().get(i);
+                String entityClass = connection.getEntityClass();
+                String entityCamel = StringUtil.toCamelCase(entityClass);
+                jpql.append(" AND ");
+                jpql.append(entityCamel).append(".aktif=true ");
             }
         }
 

@@ -5,23 +5,23 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import tr.bel.gaziantep.bysweb.core.service.AbstractService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
-import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.entity.SyKullaniciGiris;
+import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.entity.SyKullaniciGirisSayfa;
 
 import java.io.Serial;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
  * @version 1.0.0
- * @since 16.06.2025 14:43
+ * @since 26.12.2025 15:50
  */
 @Stateless
-public class SyKullaniciGirisService extends AbstractService<SyKullaniciGiris> {
+public class SyKullaniciGirisSayfaService extends AbstractService<SyKullaniciGirisSayfa> {
 
     @Serial
-    private static final long serialVersionUID = -6128337807150066929L;
+    private static final long serialVersionUID = -7105108544605595642L;
 
-    public SyKullaniciGirisService() {
-        super(SyKullaniciGiris.class);
+    public SyKullaniciGirisSayfaService() {
+        super(SyKullaniciGirisSayfa.class);
     }
 
     @PersistenceContext(unitName = Constants.UNIT_NAME)

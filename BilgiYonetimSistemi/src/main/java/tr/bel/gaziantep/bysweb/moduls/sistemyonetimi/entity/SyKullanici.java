@@ -94,6 +94,11 @@ public class SyKullanici extends BaseEntityNoVersion {
     @Builder.Default
     private List<SyDuyuruKullanici> syDuyuruKullaniciList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "syKullanici")
+    private List<SyKullaniciGirisSayfa> syKullaniciGirisSayfaList = new ArrayList<>();
+
+
+
     public SyKullanici(Integer id){
         this.id = id;
     }

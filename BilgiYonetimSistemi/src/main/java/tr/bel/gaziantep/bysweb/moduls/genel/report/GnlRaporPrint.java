@@ -1,10 +1,10 @@
 package tr.bel.gaziantep.bysweb.moduls.genel.report;
 
 import jakarta.annotation.PostConstruct;
-import jakarta.enterprise.context.RequestScoped;
 import jakarta.faces.context.ExternalContext;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.model.SelectItem;
+import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.servlet.http.HttpServletResponse;
@@ -36,7 +36,7 @@ import java.util.*;
  * @since 10.12.2025 13:58
  */
 @Named
-@RequestScoped
+@ViewScoped
 @Slf4j
 public class GnlRaporPrint implements java.io.Serializable {
 
@@ -105,7 +105,7 @@ public class GnlRaporPrint implements java.io.Serializable {
     private Map<Integer, Integer> gruplamaSirasiMap = new HashMap<>();
     @Getter
     @Setter
-    private boolean gruplamaSecildi=false;
+    private boolean gruplamaSecildi = false;
     @Getter
     @Setter
     private List<GnlRaporKolon> gruplamaKolonlariList = new ArrayList<>();
@@ -152,7 +152,7 @@ public class GnlRaporPrint implements java.io.Serializable {
 
                 gruplamaKolonlariMap.put(kolon.getId(), false);
                 gruplamaSirasiMap.put(kolon.getId(), 0);
-                grupTuruMap.put(kolon.getId(),EnumGnlRaporGrupTuru.COUNT);
+                grupTuruMap.put(kolon.getId(), EnumGnlRaporGrupTuru.COUNT);
             }
 
             for (GnlRaporParametre param : raporParametreleri) {
@@ -362,24 +362,28 @@ public class GnlRaporPrint implements java.io.Serializable {
         gnlRaporDto.setGruplamaKolonlari(gruplamaDtoList);
         gnlRaporDto.setGruplamaYapilsin(!gruplamaDtoList.isEmpty());
 
-        List<GnlRaporParametreDegeriDto> paramDtoList = new ArrayList<>();
-        for (GnlRaporParametre param : raporParametreleri) {
-            String deger = parametreDegerleri.get(param.getId());
-            if ((deger != null && !deger.trim().isEmpty()) || StringUtil.isNotBlank(param.getSqlKosul())) {
-                GnlRaporParametreDegeriDto dto = new GnlRaporParametreDegeriDto();
-                dto.setParametreId(param.getId());
-                dto.setParametreAdi(param.getParametreAdi());
-                dto.setGorunurAdi(param.getGorunurAdi());
-                dto.setDeger(deger);
-                dto.setIkinciDeger(ikinciDegerler.get(param.getId()));
-                dto.setOperator(parametreOperatorleri.get(param.getId()));
-                dto.setVeriTipi(param.getVeriTipi());
-                dto.setLookupEnumClass(param.getLookupEnumClass());
-                dto.setSqlKosul(param.getSqlKosul());
-                paramDtoList.add(dto);
+        if (raporParametreleri != null && !raporParametreleri.isEmpty()) {
+
+
+            List<GnlRaporParametreDegeriDto> paramDtoList = new ArrayList<>();
+            for (GnlRaporParametre param : raporParametreleri) {
+                String deger = parametreDegerleri.get(param.getId());
+                if ((deger != null && !deger.trim().isEmpty()) || StringUtil.isNotBlank(param.getSqlKosul())) {
+                    GnlRaporParametreDegeriDto dto = new GnlRaporParametreDegeriDto();
+                    dto.setParametreId(param.getId());
+                    dto.setParametreAdi(param.getParametreAdi());
+                    dto.setGorunurAdi(param.getGorunurAdi());
+                    dto.setDeger(deger);
+                    dto.setIkinciDeger(ikinciDegerler.get(param.getId()));
+                    dto.setOperator(parametreOperatorleri.get(param.getId()));
+                    dto.setVeriTipi(param.getVeriTipi());
+                    dto.setLookupEnumClass(param.getLookupEnumClass());
+                    dto.setSqlKosul(param.getSqlKosul());
+                    paramDtoList.add(dto);
+                }
             }
+            gnlRaporDto.setParametreler(paramDtoList);
         }
-        gnlRaporDto.setParametreler(paramDtoList);
 
         List<String> customFilterList = new ArrayList<>();
         for (GnlRaporOzelFiltre gnlRaporOzelFiltre : seciliOzelFiltreler) {
