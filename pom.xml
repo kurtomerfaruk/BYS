@@ -38,7 +38,7 @@
         <primefaces.version>15.0.10</primefaces.version>
         <omnifaces.version>5.0-M4</omnifaces.version>
         <jackson.version>2.19.0</jackson.version>
-        <slf4j.version>2.0.12</slf4j.version>
+        <slf4j.version>2.0.17</slf4j.version>
         <eclipselink.version>5.0.0-B04</eclipselink.version>
         <hibernate.version>6.6.18.Final</hibernate.version>
         <jasperreport.version>7.0.1</jasperreport.version>
@@ -298,7 +298,7 @@
             <dependency>
                 <groupId>org.apache.logging.log4j</groupId>
                 <artifactId>log4j-core</artifactId>
-                <version>2.20.0</version>
+                <version>2.25.3</version>
             </dependency>
 
             <dependency>

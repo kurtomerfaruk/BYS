@@ -11,6 +11,7 @@ import net.sf.jasperreports.engine.type.ModeEnum;
 import net.sf.jasperreports.engine.type.VerticalTextAlignEnum;
 import net.sf.jasperreports.export.*;
 import tr.bel.gaziantep.bysweb.core.enums.bys.EnumRaporTuru;
+import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.moduls.genel.dtos.GnlRaporDto;
 import tr.bel.gaziantep.bysweb.moduls.genel.dtos.GnlRaporKolonDto;
 
@@ -32,7 +33,7 @@ public class JasperReportService {
 
     public byte[] generateReport(List<Map<String, Object>> data, GnlRaporDto raporIstek) {
         try {
-            JasperDesign jasperDesign = createDynamicJasperDesign(raporIstek,data);
+            JasperDesign jasperDesign = createDynamicJasperDesign(raporIstek, data);
 
             JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
 
@@ -50,7 +51,7 @@ public class JasperReportService {
     }
 
 
-    private JasperDesign createDynamicJasperDesign(GnlRaporDto raporIstek,List<Map<String, Object>> data) throws JRException {
+    private JasperDesign createDynamicJasperDesign(GnlRaporDto raporIstek, List<Map<String, Object>> data) throws JRException {
 
         JasperDesign design = new JasperDesign();
         design.setName("dynamic_report");
@@ -62,7 +63,7 @@ public class JasperReportService {
         design.setTopMargin(20);
         design.setBottomMargin(20);
 
-        design.setQuery(new JRDesignQuery()); // boş query
+        design.setQuery(new JRDesignQuery());
 
         JRDesignBand header = new JRDesignBand();
         header.setHeight(30);
@@ -72,10 +73,12 @@ public class JasperReportService {
         headerSeq.setX(0);
         headerSeq.setY(5);
         headerSeq.setWidth(50);
-        headerSeq.setHeight(20);
+        headerSeq.setHeight(15);
         headerSeq.setHorizontalTextAlign(HorizontalTextAlignEnum.LEFT);
         headerSeq.setText("Sıra No");
         headerSeq.setMode(ModeEnum.TRANSPARENT);
+        headerSeq.setPdfEncoding(Constants.CP1254);
+        addLine(headerSeq);
 
         header.addElement(headerSeq);
 
@@ -90,6 +93,8 @@ public class JasperReportService {
         sequenceField.setHorizontalTextAlign(HorizontalTextAlignEnum.LEFT);
         sequenceField.setVerticalTextAlign(VerticalTextAlignEnum.MIDDLE);
         sequenceField.setMode(ModeEnum.TRANSPARENT);
+
+        addLine(sequenceField);
 
         sequenceField.setExpression(new JRDesignExpression("$V{REPORT_COUNT}"));
 
@@ -116,7 +121,9 @@ public class JasperReportService {
             headerText.setHorizontalTextAlign(HorizontalTextAlignEnum.LEFT);
             headerText.setVerticalTextAlign(VerticalTextAlignEnum.MIDDLE);
             headerText.setText(kolon.getGorunurAdi());
-            headerText.setPdfEncoding("Cp1254");
+            headerText.setPdfEncoding(Constants.CP1254);
+
+            addLine(headerText);
 
             header.addElement(headerText);
 
@@ -129,7 +136,10 @@ public class JasperReportService {
             text.setVerticalTextAlign(VerticalTextAlignEnum.MIDDLE);
             text.setExpression(new JRDesignExpression("$F{" + kolon.getAlanAdi() + "}"));
             text.setBlankWhenNull(true);
-            text.setPdfEncoding("Cp1254");
+            text.setPdfEncoding(Constants.CP1254);
+
+            addLine(text);
+
             detailBand.addElement(text);
 
             xPos += columnWidth;
@@ -137,6 +147,17 @@ public class JasperReportService {
 
         return design;
     }
+
+    public void addLine(JRDesignTextField text) {
+        JRLineBox detailBox = text.getLineBox();
+        detailBox.getPen().setLineWidth(0.5f);
+    }
+
+    public void addLine(JRDesignStaticText text) {
+        JRLineBox detailBox = text.getLineBox();
+        detailBox.getPen().setLineWidth(0.5f);
+    }
+
 //    private JasperDesign createDynamicJasperDesign(GnlRaporIstek raporIstek) throws JRException {
 //        JasperDesign design = new JasperDesign();
 //        design.setName("DinamikRapor");

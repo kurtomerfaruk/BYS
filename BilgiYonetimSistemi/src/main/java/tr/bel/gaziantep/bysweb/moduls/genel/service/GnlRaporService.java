@@ -450,22 +450,22 @@ public class GnlRaporService extends AbstractService<GnlRapor> {
         for (Object[] row : results) {
             Map<String, Object> rowMap = new HashMap<>();
 
-            // Gruplama kolonlarını ekle
-            List<GnlRaporKolonDto> gruplamaKolonlari = raporIstek.getGruplamaKolonlari();
-            for (int i = 0; i < gruplamaKolonlari.size(); i++) {
-                GnlRaporKolonDto kolon = gruplamaKolonlari.get(i);
-                rowMap.put("GROUP_" + kolon.getAlanAdi(), row[i]);
-            }
-
+//            // Gruplama kolonlarını ekle
+//            List<GnlRaporKolonDto> gruplamaKolonlari = raporIstek.getGruplamaKolonlari();
+//            for (int i = 0; i < gruplamaKolonlari.size(); i++) {
+//                GnlRaporKolonDto kolon = gruplamaKolonlari.get(i);
+//                rowMap.put("GROUP_" + kolon.getAlanAdi(), row[i]);
+//            }
+//
             // Diğer kolonları ekle (aggregate değerleri)
             List<GnlRaporKolonDto> normalKolonlar = raporIstek.getKolonlar();
-            int offset = gruplamaKolonlari.size();
+            //int offset = gruplamaKolonlari.size();
 
             for (int i = 0; i < normalKolonlar.size(); i++) {
                 GnlRaporKolonDto kolon = normalKolonlar.get(i);
-                int dataIndex = offset + i;
-                if (dataIndex < row.length) {
-                    rowMap.put(kolon.getAlanAdi(), row[dataIndex].toString());
+                //int dataIndex = offset + i;
+                if (i < row.length) {
+                    rowMap.put(kolon.getAlanAdi(), row[i].toString());
                 }
             }
 
@@ -481,35 +481,23 @@ public class GnlRaporService extends AbstractService<GnlRapor> {
     private String buildGroupedJPQL(GnlRaporDto raporIstek) {
         StringBuilder jpql = new StringBuilder("SELECT ");
 
-        // Gruplama kolonlarını ekle
-
-
-        // Diğer kolonları aggregate fonksiyonları ile ekle
         if (raporIstek.getKolonlar() != null && !raporIstek.getKolonlar().isEmpty()) {
-
-
-
             List<GnlRaporKolonDto> normalKolonlar = raporIstek.getKolonlar();
-            normalKolonlar.removeAll(raporIstek.getGruplamaKolonlari());
             for (int i = 0; i < normalKolonlar.size(); i++) {
                 GnlRaporKolonDto kolon = normalKolonlar.get(i);
-                jpql.append(kolon.getAlanAdi());
-                // Veri tipine göre aggregate fonksiyonu seç
-//                String aggregateFunction = getAggregateFunctionForColumn(kolon);
-//                jpql.append(aggregateFunction).append("(").append(kolon.getAlanAdi()).append(")");
-
-                if (i < normalKolonlar.size() - 1) {
-                    jpql.append(", ");
+                GnlRaporKolonDto group = raporIstek.getGruplamaKolonlari()
+                        .stream().filter(x -> x.getAlanAdi().equals(kolon.getAlanAdi())).findFirst().orElse(null);
+                if (group == null) {
+                    jpql.append(kolon.getAlanAdi());
+                    if (i < normalKolonlar.size() - 1) {
+                        jpql.append(", ");
+                    }
                 }
             }
         }
 
         List<GnlRaporKolonDto> gruplamaKolonlari = raporIstek.getGruplamaKolonlari();
         assert raporIstek.getKolonlar() != null;
-
-        if (!raporIstek.getKolonlar().isEmpty()) {
-            jpql.append(", ");
-        }
         for (int i = 0; i < gruplamaKolonlari.size(); i++) {
             GnlRaporKolonDto kolon = gruplamaKolonlari.get(i);
 
@@ -567,24 +555,29 @@ public class GnlRaporService extends AbstractService<GnlRapor> {
         }
 
         // GROUP BY
-        jpql.append(" GROUP BY ");
-        for (int i = 0; i < gruplamaKolonlari.size(); i++) {
-            GnlRaporKolonDto kolon = gruplamaKolonlari.get(i);
-            jpql.append(kolon.getAlanAdi());
-            if (i < gruplamaKolonlari.size() - 1) {
-                jpql.append(", ");
-            }
-        }
+        List<String> groupColumns = raporIstek.getKolonlar().stream()
+                .map(GnlRaporKolonDto::getAlanAdi)
+                .filter(alanAdi -> raporIstek.getGruplamaKolonlari().stream()
+                        .noneMatch(g -> g.getAlanAdi().equals(alanAdi)))
+                .toList();
+
+        jpql.append(" GROUP BY ").append(String.join(", ", groupColumns));
 
         // ORDER BY (gruplama sırasına göre)
-        jpql.append(" ORDER BY ");
-        for (int i = 0; i < gruplamaKolonlari.size(); i++) {
-            GnlRaporKolonDto kolon = gruplamaKolonlari.get(i);
-            jpql.append(kolon.getAlanAdi());
-            if (i < gruplamaKolonlari.size() - 1) {
-                jpql.append(", ");
-            }
-        }
+//        jpql.append(" ORDER BY ");
+//        for (int i = 0; i < raporIstek.getKolonlar().size(); i++) {
+//            GnlRaporKolonDto kolon = raporIstek.getKolonlar().get(i);
+//
+//            GnlRaporKolonDto group = raporIstek.getGruplamaKolonlari()
+//                    .stream().filter(x -> x.getAlanAdi().equals(kolon.getAlanAdi())).findFirst().orElse(null);
+//            if (group != null) continue;
+//            jpql.append(kolon.getAlanAdi());
+//            if (i < raporIstek.getKolonlar().size() - 1) {
+//                jpql.append(", ");
+//            }
+//        }
+
+        jpql.append(" ORDER BY ").append(String.join(", ", groupColumns));
 
         return jpql.toString();
     }
@@ -592,74 +585,74 @@ public class GnlRaporService extends AbstractService<GnlRapor> {
     /**
      * Kolon veri tipine göre aggregate fonksiyonu belirle
      */
-    private String getAggregateFunctionForColumn(GnlRaporKolonDto kolon) {
-        if (kolon.getVeriTipi() == null) {
-            return "COUNT";
-        }
-
-        switch (kolon.getVeriTipi()) {
-            case INTEGER:
-            case LONG:
-            case DOUBLE:
-            case DECIMAL:
-                return "SUM"; // Sayısal tipler için SUM
-            case DATE:
-            case DATE_TIME:
-            case STRING:
-            case BOOLEAN:
-            case ENUM:
-            default:
-                return "COUNT"; // Diğer tipler için COUNT
-        }
-    }
-
-    /**
-     * Grup toplamlarını hesapla
-     */
-    private void calculateGroupTotals(List<Map<String, Object>> groupedData, GnlRaporDto raporIstek) {
-        if (groupedData == null || groupedData.isEmpty()) {
-            return;
-        }
-
-        // Toplamları hesapla
-        Map<String, Object> totals = new HashMap<>();
-        List<GnlRaporKolonDto> normalKolonlar = raporIstek.getKolonlar();
-
-        for (Map<String, Object> row : groupedData) {
-            for (GnlRaporKolonDto kolon : normalKolonlar) {
-                String columnName = kolon.getAlanAdi();
-                Object value = row.get(columnName);
-
-                if (value != null) {
-                    // Veri tipine göre toplam hesapla
-                    switch (kolon.getVeriTipi()) {
-                        case INTEGER:
-                        case LONG:
-                        case DOUBLE:
-                            Double currentTotal = (Double) totals.getOrDefault(columnName, 0.0);
-                            Double rowValue = ((Number) value).doubleValue();
-                            totals.put(columnName, currentTotal + rowValue);
-                            break;
-                        default:
-                            // Sayısal olmayanlar için COUNT
-                            Integer count = (Integer) totals.getOrDefault(columnName, 0);
-                            totals.put(columnName, count + 1);
-                            break;
-                    }
-                }
-            }
-        }
-
-        // Toplamları her satıra ekle
-        for (Map<String, Object> row : groupedData) {
-            row.put("_GROUP_TOTALS", totals);
-
-            // Ayrıca her kolon için grup toplamını da ekleyebilirsiniz
-            for (Map.Entry<String, Object> entry : totals.entrySet()) {
-                row.put("TOTAL_" + entry.getKey(), entry.getValue());
-            }
-        }
-    }
+//    private String getAggregateFunctionForColumn(GnlRaporKolonDto kolon) {
+//        if (kolon.getVeriTipi() == null) {
+//            return "COUNT";
+//        }
+//
+//        switch (kolon.getVeriTipi()) {
+//            case INTEGER:
+//            case LONG:
+//            case DOUBLE:
+//            case DECIMAL:
+//                return "SUM"; // Sayısal tipler için SUM
+//            case DATE:
+//            case DATE_TIME:
+//            case STRING:
+//            case BOOLEAN:
+//            case ENUM:
+//            default:
+//                return "COUNT"; // Diğer tipler için COUNT
+//        }
+//    }
+//
+//    /**
+//     * Grup toplamlarını hesapla
+//     */
+//    private void calculateGroupTotals(List<Map<String, Object>> groupedData, GnlRaporDto raporIstek) {
+//        if (groupedData == null || groupedData.isEmpty()) {
+//            return;
+//        }
+//
+//        // Toplamları hesapla
+//        Map<String, Object> totals = new HashMap<>();
+//        List<GnlRaporKolonDto> normalKolonlar = raporIstek.getKolonlar();
+//
+//        for (Map<String, Object> row : groupedData) {
+//            for (GnlRaporKolonDto kolon : normalKolonlar) {
+//                String columnName = kolon.getAlanAdi();
+//                Object value = row.get(columnName);
+//
+//                if (value != null) {
+//                    // Veri tipine göre toplam hesapla
+//                    switch (kolon.getVeriTipi()) {
+//                        case INTEGER:
+//                        case LONG:
+//                        case DOUBLE:
+//                            Double currentTotal = (Double) totals.getOrDefault(columnName, 0.0);
+//                            Double rowValue = ((Number) value).doubleValue();
+//                            totals.put(columnName, currentTotal + rowValue);
+//                            break;
+//                        default:
+//                            // Sayısal olmayanlar için COUNT
+//                            Integer count = (Integer) totals.getOrDefault(columnName, 0);
+//                            totals.put(columnName, count + 1);
+//                            break;
+//                    }
+//                }
+//            }
+//        }
+//
+//        // Toplamları her satıra ekle
+//        for (Map<String, Object> row : groupedData) {
+//            row.put("_GROUP_TOTALS", totals);
+//
+//            // Ayrıca her kolon için grup toplamını da ekleyebilirsiniz
+//            for (Map.Entry<String, Object> entry : totals.entrySet()) {
+//                row.put("TOTAL_" + entry.getKey(), entry.getValue());
+//            }
+//        }
+//    }
 
     /**
      * Normal (gruplanmamış) rapor verilerini getir
