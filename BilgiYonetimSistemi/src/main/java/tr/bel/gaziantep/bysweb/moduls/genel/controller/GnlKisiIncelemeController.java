@@ -1,6 +1,6 @@
 package tr.bel.gaziantep.bysweb.moduls.genel.controller;
 
-import jakarta.faces.view.ViewScoped;
+import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import lombok.Getter;
@@ -51,7 +51,7 @@ import java.util.List;
  * @since 15.08.2025 14:29
  */
 @Named
-@ViewScoped
+@RequestScoped
 @Slf4j
 public class GnlKisiIncelemeController extends AbstractController<GnlKisiInceleme> {
 

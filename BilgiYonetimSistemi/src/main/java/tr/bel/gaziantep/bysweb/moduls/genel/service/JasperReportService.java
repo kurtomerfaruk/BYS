@@ -17,7 +17,6 @@ import tr.bel.gaziantep.bysweb.moduls.genel.dtos.GnlRaporKolonDto;
 
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -158,135 +157,6 @@ public class JasperReportService {
         detailBox.getPen().setLineWidth(0.5f);
     }
 
-//    private JasperDesign createDynamicJasperDesign(GnlRaporIstek raporIstek) throws JRException {
-//        JasperDesign design = new JasperDesign();
-//        design.setName("DinamikRapor");
-//        design.setPageWidth(595);
-//        design.setPageHeight(842);
-//        design.setColumnWidth(555);
-//        design.setLeftMargin(20);
-//        design.setRightMargin(20);
-//        design.setTopMargin(20);
-//        design.setBottomMargin(20);
-//
-//        design.setQuery(new JRDesignQuery());
-//
-//        // Title band
-//        JRDesignBand titleBand = new JRDesignBand();
-//        titleBand.setHeight(50);
-//
-//        // Title text
-//        JRDesignStaticText titleText = new JRDesignStaticText();
-//        titleText.setText("Dinamik Rapor - " + raporIstek.getModulAdi());
-//        titleText.setX(0);
-//        titleText.setY(10);
-//        titleText.setWidth(555);
-//        titleText.setHeight(20);
-//        titleText.setHorizontalTextAlign(HorizontalTextAlignEnum.CENTER);
-//        titleText.setFontSize(Float.parseFloat("16"));
-//        titleText.setBold(true);
-//        titleBand.addElement(titleText);
-//
-//        // Date text
-//        JRDesignTextField dateField = new JRDesignTextField();
-//        dateField.setExpression(new JRDesignExpression("new java.util.Date()"));
-//        dateField.setPattern("dd.MM.yyyy HH:mm");
-//        dateField.setX(400);
-//        dateField.setY(30);
-//        dateField.setWidth(150);
-//        dateField.setHeight(15);
-//        dateField.setHorizontalTextAlign(HorizontalTextAlignEnum.CENTER);
-//        titleBand.addElement(dateField);
-//
-//        design.setTitle(titleBand);
-//
-//        // Column header band
-//        JRDesignBand columnHeaderBand = new JRDesignBand();
-//        columnHeaderBand.setHeight(20);
-//
-//        int xPos = 0;
-//        int columnWidth = 555 / raporIstek.getKolonlar().size();
-//
-//        for (GnlRaporKolonDto kolon : raporIstek.getKolonlar()) {
-//            JRDesignStaticText columnHeader = new JRDesignStaticText();
-//            columnHeader.setText(kolon.getGorunurAdi());
-//            columnHeader.setX(xPos);
-//            columnHeader.setY(0);
-//            columnHeader.setWidth(columnWidth);
-//            columnHeader.setHeight(20);
-//            columnHeader.setHorizontalTextAlign(HorizontalTextAlignEnum.CENTER);
-//            columnHeader.setVerticalTextAlign(VerticalTextAlignEnum.MIDDLE);
-//            columnHeader.setBackcolor(Color.LIGHT_GRAY);
-//            columnHeader.setMode(ModeEnum.OPAQUE);
-//            columnHeaderBand.addElement(columnHeader);
-//
-//            // Add field to design
-//            JRDesignField field = new JRDesignField();
-//            field.setName(kolon.getAlanAdi());
-//            field.setValueClass(getFieldClass(kolon.getVeriTipi()));
-//            design.addField(field);
-//
-//            xPos += columnWidth;
-//        }
-//
-//        design.setColumnHeader(columnHeaderBand);
-//
-//        // Detail band
-////        JRDesignBand detailBand = new JRDesignBand();
-////        detailBand.setHeight(20);
-////
-////        JRDesignSection detailSection = (JRDesignSection) design.getDetailSection();
-////        detailSection.addBand(detailBand);
-//        JRDesignBand detailBand = new JRDesignBand();
-//        detailBand.setHeight(20);
-//
-//        // Detail band içine ekle
-//        JRDesignTextField sequenceField = new JRDesignTextField();
-//        sequenceField.setX(0);                 // ilk kolon
-//        sequenceField.setY(0);
-//        sequenceField.setWidth(50);            // kolon genişliği
-//        sequenceField.setHeight(20);
-//        sequenceField.setHorizontalTextAlign(HorizontalTextAlignEnum.LEFT);
-//        sequenceField.setVerticalTextAlign(VerticalTextAlignEnum.MIDDLE);
-//        sequenceField.setMode(ModeEnum.TRANSPARENT);
-//
-//        sequenceField.setExpression(new JRDesignExpression("$V{REPORT_COUNT}"));
-//
-//        detailBand.addElement(sequenceField);
-//
-//        JRDesignSection detailSection = (JRDesignSection) design.getDetailSection();
-//        detailSection.addBand(detailBand);
-//
-//        xPos = 0;
-//        for (GnlRaporKolonDto kolon : raporIstek.getKolonlar()) {
-//            JRDesignTextField textField = new JRDesignTextField();
-//            textField.setExpression(new JRDesignExpression("$F{" + kolon.getAlanAdi() + "}"));
-//            textField.setX(xPos);
-//            textField.setY(0);
-//            textField.setWidth(columnWidth);
-//            textField.setHeight(20);
-////            textField.setStretchWithOverflow(true);
-//
-//            // Format based on data type
-//            if ("DATE".equalsIgnoreCase(kolon.getVeriTipi())) {
-//                textField.setPattern("dd.MM.yyyy");
-//            } else if ("DATETIME".equalsIgnoreCase(kolon.getVeriTipi())) {
-//                textField.setPattern("dd.MM.yyyy HH:mm:ss");
-//            } else if ("DECIMAL".equalsIgnoreCase(kolon.getVeriTipi()) ||
-//                    "DOUBLE".equalsIgnoreCase(kolon.getVeriTipi())) {
-//                textField.setPattern("#,##0.00");
-//            } else if ("INTEGER".equalsIgnoreCase(kolon.getVeriTipi())) {
-//                textField.setPattern("#,##0");
-//            }
-//
-//            detailBand.addElement(textField);
-//            xPos += columnWidth;
-//        }
-//
-//        return design;
-//    }
-
-
     private Map<String, Object> prepareReportParameters(GnlRaporDto raporIstek) {
         Map<String, Object> parameters = new HashMap<>();
 
@@ -330,29 +200,5 @@ public class JasperReportService {
             JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);
         }
         return outputStream.toByteArray();
-    }
-
-
-    private Class<?> getFieldClass(String dataType) {
-        if (dataType == null) return String.class;
-
-        switch (dataType.toUpperCase()) {
-            case "INTEGER":
-            case "INT":
-                return Integer.class;
-            case "LONG":
-                return Long.class;
-            case "DOUBLE":
-            case "DECIMAL":
-                return Double.class;
-            case "BOOLEAN":
-                return Boolean.class;
-            case "DATE":
-                return LocalDate.class;
-            case "DATETIME":
-                return LocalDateTime.class;
-            default:
-                return String.class;
-        }
     }
 }

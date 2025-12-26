@@ -61,11 +61,6 @@
                                      ajax="#{gnlRaporPrint.raporTuru eq 'PDF'}"
                                      oncomplete="#{gnlRaporPrint.raporTuru eq 'PDF' ? 'PF(\'pdfDialogWidget\').show()' :''}"/>
 
-                    <!--                    <p:commandButton onclick="PF('saveTemplateDialog').show()"-->
-                    <!--                                     icon="pi pi-save"-->
-                    <!--                                     title="Şablon Olarak Kaydet"-->
-                    <!--                                     update=":growl,sablonForm"-->
-                    <!--                                     styleClass="ui-button-info me-2"/>-->
                     <p:commandButton styleClass="ui-button-info me-2" icon="pi pi-save"
                                      title="Şablon Olarak Kaydet"
                                      actionListener="#{gnlRaporPrint.prepareSablon}"
@@ -468,46 +463,6 @@
                 }
             });
         }
-
-        function resizeViewer() {
-            console.log("resizeViewer");
-            var windowH = $(window).height();
-            windowH -= 150;
-            $("#pdfForm\\:viewer").css("height", windowH + "px");
-        }
-
-        // function toggleGruplama(kolonId) {
-        //     var checkbox = $('[id*="gruplamaCheckbox' + kolonId + '"]');
-        //     var siralamaInput = $('[id*="gruplamaSirasi' + kolonId + '"]');
-        //
-        //     if (checkbox.is(':checked')) {
-        //         siralamaInput.prop('disabled', false);
-        //         siralamaInput.val(1); // Varsayılan sıra
-        //     } else {
-        //         siralamaInput.prop('disabled', true);
-        //         siralamaInput.val('');
-        //     }
-        //
-        //     // Gruplama seçildi mi kontrol et
-        //     updateGruplamaDurumu();
-        // }
-        //
-        // function updateGruplamaDurumu() {
-        //     var anyChecked = false;
-        //     $('[id*="gruplamaCheckbox"]').each(function() {
-        //         if ($(this).is(':checked')) {
-        //             anyChecked = true;
-        //             return false; // break
-        //         }
-        //     });
-        //
-        //     // Controller'ı güncelle
-        //     if (anyChecked) {
-        //         // Ajax çağrısı ile controller'ı güncelle
-        //         PrimeFaces.abort({source: 'raporForm:gruplamaCheckbox'});
-        //         PrimeFaces.invokeOnView('raporForm:gruplamaCheckbox', 'onchange');
-        //     }
-        // }
     </script>
 
 </h:body>

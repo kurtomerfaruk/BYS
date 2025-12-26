@@ -1,10 +1,10 @@
 package tr.bel.gaziantep.bysweb.moduls.genel.report;
 
 import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.RequestScoped;
 import jakarta.faces.context.ExternalContext;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.model.SelectItem;
-import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.servlet.http.HttpServletResponse;
@@ -36,7 +36,7 @@ import java.util.*;
  * @since 10.12.2025 13:58
  */
 @Named
-@ViewScoped
+@RequestScoped
 @Slf4j
 public class GnlRaporPrint implements java.io.Serializable {
 
@@ -123,6 +123,8 @@ public class GnlRaporPrint implements java.io.Serializable {
 
     @PostConstruct
     public void init() {
+        selectedRapor = null;
+        onReportChange();
         loadUserTemplates();
         secilebilirKolonlar = new ArrayList<>();
     }
