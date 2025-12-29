@@ -26,10 +26,9 @@ import tr.bel.gaziantep.bysweb.webservice.kps.model.parameters.KisiParameters;
 
 import java.io.Serial;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
@@ -53,9 +52,9 @@ public class GaziKartSchedule implements java.io.Serializable{
 
     @Schedule(minute = "0",second = "0",dayOfMonth = "*",month = "*",year = "*",hour = "1",dayOfWeek = "Mon-Fri",persistent = false)
     public void updateGnlKisi() throws Exception {
-        System.out.println("Gazikart baslama tarihi :"+new Date());
+        log.info("Gazikart baslama tarihi :"+ LocalDateTime.now());
         listUpdate();
-        System.out.println("Gazikart Guncelle bitis tarihi:" + new Date());
+        log.info("Gazikart Guncelle bitis tarihi:" + LocalDateTime.now());
     }
 
     private void listUpdate() throws Exception {
@@ -72,7 +71,7 @@ public class GaziKartSchedule implements java.io.Serializable{
             List<String> hasNotTcKimlikList = new ArrayList<>();
 
             for (List<KisiParameter> kisiParameters : hasNotTcKimlikSplitList) {
-                List<String> tcNewList = kisiParameters.stream().map(parameter -> parameter.getTcKimlikNo() + "").collect(Collectors.toList());
+                List<String> tcNewList = kisiParameters.stream().map(parameter -> parameter.getTcKimlikNo() + "").toList();
                 hasNotTcKimlikList.addAll(service.findByTcKimlikNoList(tcNewList));
             }
 
@@ -83,8 +82,6 @@ public class GaziKartSchedule implements java.io.Serializable{
             List<List<KisiParameter>> splitList = ListUtil.partition(kisiParameterList, 70);
             KpsService kpsService = new KpsService();
             for (List<KisiParameter> kisiParameters : splitList) {
-
-                List<String> tcListSplit = kisiParameters.stream().map(x -> x.getTcKimlikNo() + "").toList();
                 KisiParameters parameters = new KisiParameters();
                 parameters.setKisiler(kisiParameters);
                 List<KpsModel> kpsModels = kpsService.getKpsFull(initApp.getProperty("webServisLink"), initApp.getProperty("webServisToken"), parameters);

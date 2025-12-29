@@ -11,6 +11,7 @@ import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlTalepTuru;
 
 import java.io.Serial;
 import java.time.LocalDateTime;
+
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
  * @version 1.0.0
@@ -20,6 +21,11 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 @Table(name = "EYTALEP")
+@NamedQuery(name = "EyTalep.findByDurum", query = "SELECT e FROM EyTalep e WHERE e.aktif=true AND e.durum =:durum AND " +
+        "(e.eyKisi.gnlKisi.durum IN (" +
+        "                               tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlDurum.OLU," +
+        "                               tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlDurum.OLUM," +
+        "                               tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlDurum.OLUMUN_TESPITI) )")
 public class EyTalep extends BaseEntity {
     @Serial
     private static final long serialVersionUID = 4136828300694352004L;

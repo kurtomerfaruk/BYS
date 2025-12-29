@@ -3,11 +3,13 @@ package tr.bel.gaziantep.bysweb.moduls.engelsizler.service;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlTalepDurumu;
 import tr.bel.gaziantep.bysweb.core.service.AbstractService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.moduls.engelsizler.entity.EyTalep;
 
 import java.io.Serial;
+import java.util.List;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
@@ -29,5 +31,9 @@ public class EyTalepService extends AbstractService<EyTalep> {
     @Override
     protected EntityManager getEntityManager() {
         return em;
+    }
+
+    public List<EyTalep> findByDurum(EnumGnlTalepDurumu durum) {
+        return getEntityManager().createNamedQuery("EyTalep.findByDurum").setParameter("durum", durum).getResultList();
     }
 }
