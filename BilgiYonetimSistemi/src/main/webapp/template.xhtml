@@ -198,19 +198,34 @@
 
     <p:dialog appendTo="@(body)" modal="true" resizable="false" closable="false" header="#{messages.lutfenBekleyin}"
               widgetVar="Loading">
-        <div class="spinner">
-            <div class="rect1"></div>
-            <div class="rect2"></div>
-            <div class="rect3"></div>
-            <div class="rect4"></div>
-            <div class="rect5"></div>
+        <div class="loader-wrapper text-center">
+            <div class="main-ring"></div>
+            <div class="icon-sequence">
+                <i class="ti ti-crutches icon"></i>
+                <i class="ti ti-disabled-2 icon"></i>
+                <i class="ti ti-ear icon"></i>
+                <i class="ti ti-braille icon"></i>
+                <i class="ti ti-stethoscope icon"></i>
+                <i class="ti ti-old icon"></i>
+                <i class="ti ti-eyeglass icon"></i>
+            </div>
         </div>
     </p:dialog>
 
     <!-- LOADER -->
     <div id="loader">
-        <h:graphicImage library="images" name="media/loader.svg" alt=""/>
-
+        <div class="loader-wrapper text-center">
+            <div class="main-ring"></div>
+            <div class="icon-sequence">
+                <i class="ti ti-crutches icon"></i>
+                <i class="ti ti-disabled-2 icon"></i>
+                <i class="ti ti-ear icon"></i>
+                <i class="ti ti-braille icon"></i>
+                <i class="ti ti-stethoscope icon"></i>
+                <i class="ti ti-old icon"></i>
+                <i class="ti ti-eyeglass icon"></i>
+            </div>
+        </div>
     </div>
     <!-- END LOADER -->
 
