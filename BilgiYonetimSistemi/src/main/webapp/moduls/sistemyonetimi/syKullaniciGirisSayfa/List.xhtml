@@ -15,7 +15,7 @@
                         onclick="document.getElementById('SyKullaniciGirisSayfaListForm:datalist:datalist:viewButton').click();"
                         icon="pi pi-search"/>
             <p:menuitem value="#{messages.buttonSil}" onclick="document.getElementById('SyKullaniciGirisSayfaListForm:datalist:datalist:deleteButton').click();"
-                        icon="pi pi-trash"/>
+                        icon="pi pi-trash" rendered="#{syKullaniciController.hasPermission('sykullanicigirissayfa:sil')}"/>
         </p:contextMenu>
         <coco:datatable id="datalist"
                         value="#{syKullaniciGirisSayfaController.lazyItems}"
@@ -40,7 +40,8 @@
                                  onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
                 <p:commandButton id="deleteButton" styleClass="ui-button-danger" icon="pi pi-trash" pt:data-tooltip="#{messages.buttonSil}"
                                  actionListener="#{syKullaniciGirisSayfaController.delete}" update=":growl,datalist"
-                                 disabled="#{empty syKullaniciGirisSayfaController.selected}">
+                                 disabled="#{empty syKullaniciGirisSayfaController.selected}"
+                                 rendered="#{syKullaniciController.hasPermission('sykullanicigirissayfa:sil')}">
                     <p:confirm header="#{messages.ConfirmationHeader}" message="#{messages.ConfirmDeleteMessage}" icon="pi pi-exclamation-circle"/>
                 </p:commandButton>
 
