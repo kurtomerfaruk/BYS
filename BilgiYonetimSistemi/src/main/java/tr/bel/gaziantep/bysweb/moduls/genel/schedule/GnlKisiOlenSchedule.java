@@ -17,10 +17,9 @@ import tr.bel.gaziantep.bysweb.webservice.mezarlik.model.VefatEdenRoot;
 
 import java.io.Serial;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
@@ -40,14 +39,14 @@ public class GnlKisiOlenSchedule implements java.io.Serializable {
 
     @Schedule(minute = "0", second = "0", dayOfMonth = "*", month = "*", year = "*", hour = "5", dayOfWeek = "Mon-Fri", persistent = false)
     public void updateGnlKisi() throws Exception {
-        System.out.println("Mernis Kayit Guncelle baslama tarihi :" + new Date());
+        log.info("Olen Kisi Guncelle baslama tarihi :" + LocalDateTime.now());
         listUpdate();
-        System.out.println("Mernis Kayit Guncellebitis tarihi:" + new Date());
+        log.info("Olen Kisi Guncellebitis tarihi:" + LocalDateTime.now());
     }
 
     private void listUpdate() throws JsonProcessingException {
-        LocalDate startDate = LocalDate.now().minusDays(15);
-        LocalDate endDate = LocalDate.now().minusDays(5);
+        LocalDate startDate = LocalDate.now().minusDays(1);
+        LocalDate endDate = LocalDate.now();
         MezarlikSorgulaService mezarlikSorgulaService = new MezarlikSorgulaService();
         VefatEdenRoot vefatEdenRoot = mezarlikSorgulaService.vefatEdenSorgula(initApp.getProperty("webServisLink"),
                 initApp.getProperty("webServisToken"),
@@ -64,7 +63,7 @@ public class GnlKisiOlenSchedule implements java.io.Serializable {
         }
 
         if (!vefatEdenKisiList.isEmpty()) {
-            List<String> tcList = vefatEdenKisiList.stream().map(VefatEdenKisi::getTcKimlikNo).collect(Collectors.toList());
+            List<String> tcList = vefatEdenKisiList.stream().map(VefatEdenKisi::getTcKimlikNo).toList();
             List<GnlKisi> kisilers = service.findByTcKimlikNoListToList(tcList);
             for (GnlKisi kisi : kisilers) {
 
