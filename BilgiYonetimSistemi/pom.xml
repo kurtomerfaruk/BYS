@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>BilgiYonetimSistemi</artifactId>
-    <version>1.0.0-RC13</version>
+    <version>1.0.0-RC14</version>
     <packaging>war</packaging>
     <name>BilgiYonetimSistemi</name>
 
