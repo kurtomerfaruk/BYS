@@ -31,6 +31,8 @@
                         <f:convertNumber pattern="#{messages.sayiFormat}"/>
                     </h:outputText>
 
+                    <composite:insertChildren/>
+
                     <h:outputText value="#{messages.ekleyenLabel}"/>
                     <h:outputText value="#{cc.attrs.model.ekleyen.gnlPersonel.gnlKisi.adSoyad}"/>
 
