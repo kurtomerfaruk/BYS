@@ -175,10 +175,10 @@
             <ui:fragment rendered="#{column.syKolon.tip eq 'DATE_TIME'}">
                 <h:outputText value="#{cc.attrs.controller.getResolvedValue(item,column.syKolon.columnProperty)}"
                               rendered="#{fn:contains(column.syKolon.columnProperty,'.')}">
-                    <f:convertDateTime pattern="#{messages.tarihSaatFormat}" type="localDateTime"/>
+                    <f:convertDateTime pattern="#{messages.tarihSaatKisaFormat}" type="localDateTime"/>
                 </h:outputText>
                 <h:outputText value="#{item[column.syKolon.columnProperty]}" rendered="#{!fn:contains(column.syKolon.columnProperty,'.')}">
-                    <f:convertDateTime pattern="#{messages.tarihSaatFormat}" type="localDateTime"/>
+                    <f:convertDateTime pattern="#{messages.tarihSaatKisaFormat}" type="localDateTime"/>
                 </h:outputText>
             </ui:fragment>
 
