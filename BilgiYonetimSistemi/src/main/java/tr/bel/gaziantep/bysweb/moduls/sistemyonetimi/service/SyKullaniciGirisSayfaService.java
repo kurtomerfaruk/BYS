@@ -31,4 +31,14 @@ public class SyKullaniciGirisSayfaService extends AbstractService<SyKullaniciGir
     protected EntityManager getEntityManager() {
         return em;
     }
+
+    @Override
+    public String getSortCol() {
+        return "eklemeTarihi";
+    }
+
+    @Override
+    public String getSorting(){
+        return "desc";
+    }
 }
