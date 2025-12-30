@@ -26,6 +26,9 @@ public class ImageController implements java.io.Serializable {
     private StreamedContent preview;
 
     public StreamedContent getPreview() {
+        if(preview == null) {
+            preview = DefaultStreamedContent.builder().build();
+        }
         return preview;
     }
 
