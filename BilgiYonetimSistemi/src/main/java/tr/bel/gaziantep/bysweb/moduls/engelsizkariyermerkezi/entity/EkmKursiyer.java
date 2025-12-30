@@ -21,6 +21,7 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "EKMKURSIYER")
+@NamedQuery(name = "EkmKursiyer.findByTcKimlikNo",query = "SELECT k FROM EkmKursiyer k WHERE k.aktif=true AND k.eyKisi.gnlKisi.tcKimlikNo=:tcKimlikNo")
 public class EkmKursiyer extends BaseEntity {
     @Serial
     private static final long serialVersionUID = -8078800836997715889L;

@@ -152,10 +152,10 @@ public class EkmKursiyerController extends AbstractController<EkmKursiyer> {
     public void update(ActionEvent event) {
         try {
             if (this.getSelected() != null) {
-                EyKisi existing = eyKisiService.findByTcKimlikNo(this.getSelected().getEyKisi().getGnlKisi().getTcKimlikNo());
+                EkmKursiyer existing = service.findByTcKimlikNo(this.getSelected().getEyKisi().getGnlKisi().getTcKimlikNo());
 
-                if (existing != null && !existing.getId().equals(this.getSelected().getEyKisi().getId())) {
-                    FacesUtil.addErrorMessage("Bu kişiye ait zaten Engelli kaydı var.");
+                if (existing != null && !existing.getId().equals(this.getSelected().getId())) {
+                    FacesUtil.addErrorMessage("Bu kişiye ait zaten Kursiyer kaydı var.");
                     return;
                 }
 

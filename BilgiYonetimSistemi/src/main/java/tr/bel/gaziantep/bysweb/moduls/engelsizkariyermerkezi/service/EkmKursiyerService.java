@@ -100,4 +100,13 @@ public class EkmKursiyerService extends AbstractService<EkmKursiyer> {
 
         return ekmKursiyer;
     }
+
+    public EkmKursiyer findByTcKimlikNo(String tcKimlikNo) {
+        return (EkmKursiyer) getEntityManager().createNamedQuery("EkmKursiyer.findByTcKimlikNo")
+                .setParameter("tcKimlikNo",tcKimlikNo)
+                .getResultList()
+                .stream().
+                findFirst()
+                .orElse(null);
+    }
 }
