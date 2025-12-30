@@ -87,6 +87,12 @@ public abstract class AbstractController<T> implements Serializable {
     private ExcelOptions excelOpt;
     @Setter
     private SyKullanici syKullanici;
+    private static final Map<Class<?>, java.util.function.Function<Object, String>> FORMATTERS = Map.of(
+            BaseEnum.class, v -> ((BaseEnum) v).getDisplayValue(),
+            Boolean.class, v -> Boolean.TRUE.equals((Boolean) v) ? "Evet" : "Hayır",
+            LocalDate.class, v -> DateUtil.localdateToString((LocalDate) v, FacesUtil.message("tarihFormat")),
+            LocalDateTime.class, v -> DateUtil.localdateTimeToString((LocalDateTime) v, FacesUtil.message("tarihSaatKisaFormat"))
+    );
 
     private enum PersistAction {
         CREATE,
@@ -445,17 +451,33 @@ public abstract class AbstractController<T> implements Serializable {
 
     public String getResolvedValueText(Object item, String prop) {
         Object value = getResolvedValue(item, prop);
-        if (value instanceof Enum<?>) {
-            return ((BaseEnum) value).getDisplayValue();
-        } else if (value instanceof Boolean) {
-            return ((Boolean) value) ? "Evet" : "Hayır";
-        }else if(value instanceof LocalDate){
-            return DateUtil.localdateToString(((LocalDate) value),"dd.MM.yyyy");
-        }else if(value instanceof LocalDateTime){
-            return DateUtil.localdateToString(((LocalDate) value),"dd.MM.yyyy HH:mm:ss");
+        if (value == null) {
+            return "";
         }
-        return value != null ? value.toString() : "";
+
+        return FORMATTERS.entrySet().stream()
+                .filter(e -> e.getKey().isInstance(value))
+                .map(e -> e.getValue().apply(value))
+                .findFirst()
+                .orElse(value.toString());
     }
+
+//    public String getResolvedValueText(Object item, String prop) {
+//        Object value = getResolvedValue(item, prop);
+//        if (value == null) {
+//            return "";
+//        }
+//        if (value instanceof BaseEnum e) {
+//            return e.getDisplayValue();
+//        } else if (value instanceof Boolean b) {
+//            return b ? "Evet" : "Hayır";
+//        } else if (value instanceof LocalDate d) {
+//            return DateUtil.localdateToString(d, FacesUtil.message("tarihFormat"));
+//        } else if (value instanceof LocalDateTime d) {
+//            return DateUtil.localdateTimeToString(d, FacesUtil.message("tarihSaatKisaFormat"));
+//        }
+//        return value.toString();
+//    }
 
     public void changeFilterMatchMode(SyKullaniciKolon kullaniciKolon) {
         if (kullaniciKolon == null) return;

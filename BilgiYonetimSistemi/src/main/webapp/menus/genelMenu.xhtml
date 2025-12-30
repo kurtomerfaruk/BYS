@@ -47,6 +47,17 @@
                                 </li>
                             </ui:fragment>
 
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('gnlkisi:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/genel/gnlKisi/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="Kişiler"/>
+                                </li>
+                            </ui:fragment>
+
                             <ui:fragment rendered="#{syKullaniciController.hasPermission('gnlkisiinceleme:goster')}">
                                 <li class="slide">
                                     <p:commandLink styleClass="side-menu__item sublevel2"
@@ -137,16 +148,7 @@
                                 </li>
                             </ui:fragment>
 
-                            <ui:fragment rendered="#{syKullaniciController.hasPermission('gnlkisi:goster')}">
-                                <li class="slide">
-                                    <p:commandLink styleClass="side-menu__item sublevel2"
-                                                   actionListener="#{menuController.setPageLink('/moduls/genel/gnlKisi/index')}"
-                                                   update="myPanel,:growl"
-                                                   onstart="PF('Loading').show()"
-                                                   onsuccess="PF('Loading').hide()"
-                                                   value="Kişiler"/>
-                                </li>
-                            </ui:fragment>
+
 
                             <ui:fragment rendered="#{syKullaniciController.hasPermission('gnlkurs:goster')}">
                                 <li class="slide">

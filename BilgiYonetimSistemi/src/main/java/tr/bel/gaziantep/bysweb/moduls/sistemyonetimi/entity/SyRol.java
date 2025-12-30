@@ -8,6 +8,7 @@ import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
 import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
+
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
  * @version 1.0.0
@@ -39,9 +40,13 @@ public class SyRol extends BaseEntity {
     @Column(name = "ACIKLAMA", length = 250)
     private String aciklama;
 
-    @OneToMany(mappedBy = "syRol",cascade = CascadeType.MERGE)
+    @OneToMany(mappedBy = "syRol", cascade = CascadeType.MERGE)
     @Builder.Default
     private List<SyRolYetki> syRolYetkis = new ArrayList<>();
+
+    @OneToMany(mappedBy = "syRol", cascade = CascadeType.MERGE)
+    @Builder.Default
+    private List<SyKullaniciRol> syKullaniciRolList = new ArrayList<>();
 
     @Override
     public int hashCode() {

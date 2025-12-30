@@ -7,248 +7,259 @@
 
 <ui:composition>
 
-        <!-- Engelsizler -->
-        <ui:fragment rendered="#{syKullaniciController.hasPermission('engelsiz:goster')}">
-            <li class="slide has-sub">
-                <a href="javascript:void(0);" class="side-menu__item main_menu">
-                    <i class="ri-wheelchair-line side-menu__icon"></i>
-                    <span class="side-menu__label">Engelsizler</span>
-                    <i class="ri-arrow-right-s-line side-menu__angle"></i>
-                </a>
-                <ul class="slide-menu child1">
-                    <li class="slide side-menu__label1">
-                        <a href="javascript:void(0)">Engelsizler</a>
+    <!-- Engelsizler -->
+    <ui:fragment rendered="#{syKullaniciController.hasPermission('engelsiz:goster')}">
+        <li class="slide has-sub">
+            <a href="javascript:void(0);" class="side-menu__item main_menu">
+                <i class="ri-wheelchair-line side-menu__icon"></i>
+                <span class="side-menu__label">Engelsizler</span>
+                <i class="ri-arrow-right-s-line side-menu__angle"></i>
+            </a>
+            <ul class="slide-menu child1">
+                <li class="slide side-menu__label1">
+                    <a href="javascript:void(0)">Engelsizler</a>
+                </li>
+
+                <ui:fragment rendered="#{syKullaniciController.hasPermission('engelsiz_dashboard:goster')}">
+                    <li class="slide">
+                        <p:commandLink styleClass="side-menu__item"
+                                       actionListener="#{menuController.setPageLink('/moduls/engelsizler/dashboard')}"
+                                       update="myPanel,:growl"
+                                       onstart="PF('Loading').show()"
+                                       onsuccess="PF('Loading').hide()"
+                                       value="Dashboard"/>
                     </li>
+                </ui:fragment>
 
-                    <!--    Islemler    -->
-                    <ui:fragment rendered="#{syKullaniciController.hasPermission('engelsiz_islemler:goster')}">
-                        <li class="slide has-sub">
-                            <a href="javascript:void(0);" class="side-menu__item sublevel1">İşlemler
-                                <i class="ri-arrow-right-s-line side-menu__angle"></i></a>
-                            <ul class="slide-menu child2">
+                <!--    Islemler    -->
+                <ui:fragment rendered="#{syKullaniciController.hasPermission('engelsiz_islemler:goster')}">
+                    <li class="slide has-sub">
+                        <a href="javascript:void(0);" class="side-menu__item sublevel1">İşlemler
+                            <i class="ri-arrow-right-s-line side-menu__angle"></i></a>
+                        <ul class="slide-menu child2">
 
-                                <ui:fragment
-                                        rendered="#{syKullaniciController.hasPermission('eyaraccihazteslimi:goster')}">
-                                    <li class="slide">
-                                        <p:commandLink styleClass="side-menu__item sublevel2"
-                                                       actionListener="#{menuController.setPageLink('/moduls/engelsizler/eyAracCihazTeslimi/index')}"
-                                                       update="myPanel,:growl"
-                                                       onstart="PF('Loading').show()"
-                                                       onsuccess="PF('Loading').hide()"
-                                                       value="Araç ve Cihaz Teslim Listesi"/>
-                                    </li>
-                                </ui:fragment>
+                            <ui:fragment
+                                    rendered="#{syKullaniciController.hasPermission('eyaraccihazteslimi:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/engelsizler/eyAracCihazTeslimi/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="Araç ve Cihaz Teslim Listesi"/>
+                                </li>
+                            </ui:fragment>
 
-                                <ui:fragment
-                                        rendered="#{syKullaniciController.hasPermission('eyaraccihazteslimivefateden:goster')}">
-                                    <li class="slide">
-                                        <p:commandLink styleClass="side-menu__item sublevel2"
-                                                       actionListener="#{menuController.setPageLink('/moduls/engelsizler/eyAracCihazTeslimiVefatEden/index')}"
-                                                       update="myPanel,:growl"
-                                                       onstart="PF('Loading').show()"
-                                                       onsuccess="PF('Loading').hide()"
-                                                       value="Araç ve Cihaz Teslimi Vefat Edenler"/>
-                                    </li>
-                                </ui:fragment>
+                            <ui:fragment
+                                    rendered="#{syKullaniciController.hasPermission('eyaraccihazteslimivefateden:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/engelsizler/eyAracCihazTeslimiVefatEden/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="Araç ve Cihaz Teslimi Vefat Edenler"/>
+                                </li>
+                            </ui:fragment>
 
-                                <ui:fragment rendered="#{syKullaniciController.hasPermission('eyaractamir:goster')}">
-                                    <li class="slide">
-                                        <p:commandLink styleClass="side-menu__item sublevel2"
-                                                       actionListener="#{menuController.setPageLink('/moduls/engelsizler/eyAracTamir/index')}"
-                                                       update="myPanel,:growl"
-                                                       onstart="PF('Loading').show()"
-                                                       onsuccess="PF('Loading').hide()"
-                                                       value="Araç Tamir Listesi"/>
-                                    </li>
-                                </ui:fragment>
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('eyaractamir:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/engelsizler/eyAracTamir/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="Araç Tamir Listesi"/>
+                                </li>
+                            </ui:fragment>
 
-                                <ui:fragment rendered="#{syKullaniciController.hasPermission('eygorusme:goster')}">
-                                    <li class="slide">
-                                        <p:commandLink styleClass="side-menu__item sublevel2"
-                                                       actionListener="#{menuController.setPageLink('/moduls/engelsizler/eyGorusme/index')}"
-                                                       update="myPanel,:growl"
-                                                       onstart="PF('Loading').show()"
-                                                       onsuccess="PF('Loading').hide()"
-                                                       value="Görüşme Listesi"/>
-                                    </li>
-                                </ui:fragment>
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('eygorusme:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/engelsizler/eyGorusme/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="Görüşme Listesi"/>
+                                </li>
+                            </ui:fragment>
 
-                                <ui:fragment rendered="#{syKullaniciController.hasPermission('eykisi:goster')}">
-                                    <li class="slide">
-                                        <p:commandLink styleClass="side-menu__item sublevel2"
-                                                       actionListener="#{menuController.setPageLink('/moduls/engelsizler/eyKisi/index')}"
-                                                       update="myPanel,:growl"
-                                                       onstart="PF('Loading').show()"
-                                                       onsuccess="PF('Loading').hide()"
-                                                       value="Kişiler"/>
-                                    </li>
-                                </ui:fragment>
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('eykisi:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/engelsizler/eyKisi/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="Kişiler"/>
+                                </li>
+                            </ui:fragment>
 
-                                <ui:fragment rendered="#{syKullaniciController.hasPermission('eyrota:goster')}">
-                                    <li class="slide">
-                                        <p:commandLink styleClass="side-menu__item sublevel2"
-                                                       actionListener="#{menuController.setPageLink('/moduls/engelsizler/eyRota/index')}"
-                                                       update="myPanel,:growl"
-                                                       onstart="PF('Loading').show()"
-                                                       onsuccess="PF('Loading').hide()"
-                                                       value="Rota Oluştur"/>
-                                    </li>
-                                </ui:fragment>
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('eyrota:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/engelsizler/eyRota/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="Rota Oluştur"/>
+                                </li>
+                            </ui:fragment>
 
-                                <ui:fragment rendered="#{syKullaniciController.hasPermission('eytalep:goster')}">
-                                    <li class="slide">
-                                        <p:commandLink styleClass="side-menu__item sublevel2"
-                                                       actionListener="#{menuController.setPageLink('/moduls/engelsizler/eyTalep/index')}"
-                                                       update="myPanel,:growl"
-                                                       onstart="PF('Loading').show()"
-                                                       onsuccess="PF('Loading').hide()"
-                                                       value="Talepler"/>
-                                    </li>
-                                </ui:fragment>
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('eytalep:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/engelsizler/eyTalep/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="Talepler"/>
+                                </li>
+                            </ui:fragment>
 
-                                <ui:fragment
-                                        rendered="#{syKullaniciController.hasPermission('eysosyalincelemeraporu:goster')}">
-                                    <li class="slide">
-                                        <p:commandLink styleClass="side-menu__item sublevel2"
-                                                       actionListener="#{menuController.setPageLink('/moduls/engelsizler/eySosyalIncelemeRaporu/index')}"
-                                                       update="myPanel,:growl"
-                                                       onstart="PF('Loading').show()"
-                                                       onsuccess="PF('Loading').hide()"
-                                                       value="Sosyal İnceleme Raporu Listesi"/>
-                                    </li>
-                                </ui:fragment>
+                            <ui:fragment
+                                    rendered="#{syKullaniciController.hasPermission('eysosyalincelemeraporu:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/engelsizler/eySosyalIncelemeRaporu/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="Sosyal İnceleme Raporu Listesi"/>
+                                </li>
+                            </ui:fragment>
 
-                            </ul>
-                        </li>
-                    </ui:fragment>
-                    <!--    Islemler    -->
+                        </ul>
+                    </li>
+                </ui:fragment>
+                <!--    Islemler    -->
 
-                    <!--    Tanimlamalar    -->
-                    <ui:fragment rendered="#{syKullaniciController.hasPermission('engelsiz_tanimlamalar:goster')}">
-                        <li class="slide has-sub">
-                            <a href="javascript:void(0);" class="side-menu__item sublevel1">Tanımlamalar
-                                <i class="ri-arrow-right-s-line side-menu__angle"></i></a>
-                            <ul class="slide-menu child2">
-                                <ui:fragment rendered="#{syKullaniciController.hasPermission('eyarac:goster')}">
-                                    <li class="slide">
-                                        <p:commandLink styleClass="side-menu__item sublevel2"
-                                                       actionListener="#{menuController.setPageLink('/moduls/engelsizler/eyArac/index')}"
-                                                       update="myPanel,:growl"
-                                                       onstart="PF('Loading').show()"
-                                                       onsuccess="PF('Loading').hide()"
-                                                       value="Araç Cihaz Listesi"/>
-                                    </li>
-                                </ui:fragment>
+                <!--    Tanimlamalar    -->
+                <ui:fragment rendered="#{syKullaniciController.hasPermission('engelsiz_tanimlamalar:goster')}">
+                    <li class="slide has-sub">
+                        <a href="javascript:void(0);" class="side-menu__item sublevel1">Tanımlamalar
+                            <i class="ri-arrow-right-s-line side-menu__angle"></i></a>
+                        <ul class="slide-menu child2">
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('eyarac:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/engelsizler/eyArac/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="Araç Cihaz Listesi"/>
+                                </li>
+                            </ui:fragment>
 
-                                <ui:fragment rendered="#{syKullaniciController.hasPermission('eycozger:goster')}">
-                                    <li class="slide">
-                                        <p:commandLink styleClass="side-menu__item sublevel2"
-                                                       actionListener="#{menuController.setPageLink('/moduls/engelsizler/eyCozger/index')}"
-                                                       update="myPanel,:growl"
-                                                       onstart="PF('Loading').show()"
-                                                       onsuccess="PF('Loading').hide()"
-                                                       value="Çözger Listesi"/>
-                                    </li>
-                                </ui:fragment>
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('eycozger:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/engelsizler/eyCozger/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="Çözger Listesi"/>
+                                </li>
+                            </ui:fragment>
 
-                                <ui:fragment rendered="#{syKullaniciController.hasPermission('eyengelgrubu:goster')}">
-                                    <li class="slide">
-                                        <p:commandLink styleClass="side-menu__item sublevel2"
-                                                       actionListener="#{menuController.setPageLink('/moduls/engelsizler/eyEngelGrubu/index')}"
-                                                       update="myPanel,:growl"
-                                                       onstart="PF('Loading').show()"
-                                                       onsuccess="PF('Loading').hide()"
-                                                       value="Engel Grubu Listesi"/>
-                                    </li>
-                                </ui:fragment>
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('eyengelgrubu:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/engelsizler/eyEngelGrubu/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="Engel Grubu Listesi"/>
+                                </li>
+                            </ui:fragment>
 
-                                <ui:fragment rendered="#{syKullaniciController.hasPermission('eygorusmekonu:goster')}">
-                                    <li class="slide">
-                                        <p:commandLink styleClass="side-menu__item sublevel2"
-                                                       actionListener="#{menuController.setPageLink('/moduls/engelsizler/eyGorusmeKonu/index')}"
-                                                       update="myPanel,:growl"
-                                                       onstart="PF('Loading').show()"
-                                                       onsuccess="PF('Loading').hide()"
-                                                       value="Görüşme Konuları"/>
-                                    </li>
-                                </ui:fragment>
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('eygorusmekonu:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/engelsizler/eyGorusmeKonu/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="Görüşme Konuları"/>
+                                </li>
+                            </ui:fragment>
 
-                                <ui:fragment
-                                        rendered="#{syKullaniciController.hasPermission('eyincelemenedeni:goster')}">
-                                    <li class="slide">
-                                        <p:commandLink styleClass="side-menu__item sublevel2"
-                                                       actionListener="#{menuController.setPageLink('/moduls/engelsizler/eyIncelemeNedeni/index')}"
-                                                       update="myPanel,:growl"
-                                                       onstart="PF('Loading').show()"
-                                                       onsuccess="PF('Loading').hide()"
-                                                       value="İnceleme Nedenleri"/>
-                                    </li>
-                                </ui:fragment>
+                            <ui:fragment
+                                    rendered="#{syKullaniciController.hasPermission('eyincelemenedeni:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/engelsizler/eyIncelemeNedeni/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="İnceleme Nedenleri"/>
+                                </li>
+                            </ui:fragment>
 
-                                <ui:fragment rendered="#{syKullaniciController.hasPermission('eytalepkonu:goster')}">
-                                    <li class="slide">
-                                        <p:commandLink styleClass="side-menu__item sublevel2"
-                                                       actionListener="#{menuController.setPageLink('/moduls/engelsizler/eyTalepKonu/index')}"
-                                                       update="myPanel,:growl"
-                                                       onstart="PF('Loading').show()"
-                                                       onsuccess="PF('Loading').hide()"
-                                                       value="Talep Konuları"/>
-                                    </li>
-                                </ui:fragment>
-                            </ul>
-                        </li>
-                    </ui:fragment>
-                    <!--    Tanimlamalar    -->
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('eytalepkonu:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/engelsizler/eyTalepKonu/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="Talep Konuları"/>
+                                </li>
+                            </ui:fragment>
+                        </ul>
+                    </li>
+                </ui:fragment>
+                <!--    Tanimlamalar    -->
 
 
-                    <!--    Raporlar    -->
-                    <ui:fragment rendered="#{syKullaniciController.hasPermission('engelsiz_rapor:goster')}">
-                        <li class="slide has-sub">
-                            <a href="javascript:void(0);" class="side-menu__item sublevel1">Raporlar
-                                <i class="ri-arrow-right-s-line side-menu__angle"></i></a>
-                            <ul class="slide-menu child2">
-                                <ui:fragment rendered="#{syKullaniciController.hasPermission('eydinamikrapor:goster')}">
-                                    <li class="slide">
-                                        <p:commandLink styleClass="side-menu__item sublevel2"
-                                                       actionListener="#{menuController.setPageLink('/moduls/engelsizler/raporlar/dinamik')}"
-                                                       update="myPanel,:growl"
-                                                       onstart="PF('Loading').show()"
-                                                       onsuccess="PF('Loading').hide()"
-                                                       value="Dinamik Rapor"/>
-                                    </li>
-                                </ui:fragment>
+                <!--    Raporlar    -->
+                <ui:fragment rendered="#{syKullaniciController.hasPermission('engelsiz_rapor:goster')}">
+                    <li class="slide has-sub">
+                        <a href="javascript:void(0);" class="side-menu__item sublevel1">Raporlar
+                            <i class="ri-arrow-right-s-line side-menu__angle"></i></a>
+                        <ul class="slide-menu child2">
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('eydinamikrapor:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/engelsizler/raporlar/dinamik')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="Dinamik Rapor"/>
+                                </li>
+                            </ui:fragment>
 
-                                <ui:fragment rendered="#{syKullaniciController.hasPermission('eygenelrapor:goster')}">
-                                    <li class="slide">
-                                        <p:commandLink styleClass="side-menu__item sublevel2"
-                                                       actionListener="#{menuController.setPageLink('/moduls/engelsizler/raporlar/genel')}"
-                                                       update="myPanel,:growl"
-                                                       onstart="PF('Loading').show()"
-                                                       onsuccess="PF('Loading').hide()"
-                                                       value="Genel Rapor"/>
-                                    </li>
-                                </ui:fragment>
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('eygenelrapor:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/engelsizler/raporlar/genel')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="Genel Rapor"/>
+                                </li>
+                            </ui:fragment>
 
-                                <ui:fragment rendered="#{syKullaniciController.hasPermission('eytaleprapor:goster')}">
-                                    <li class="slide">
-                                        <p:commandLink styleClass="side-menu__item sublevel2"
-                                                       actionListener="#{menuController.setPageLink('/moduls/engelsizler/raporlar/talep')}"
-                                                       update="myPanel,:growl"
-                                                       onstart="PF('Loading').show()"
-                                                       onsuccess="PF('Loading').hide()"
-                                                       value="Talep Rapor"/>
-                                    </li>
-                                </ui:fragment>
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('eytaleprapor:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/engelsizler/raporlar/talep')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="Talep Rapor"/>
+                                </li>
+                            </ui:fragment>
 
-                            </ul>
-                        </li>
-                    </ui:fragment>
-                    <!--    Raporlar    -->
+                        </ul>
+                    </li>
+                </ui:fragment>
+                <!--    Raporlar    -->
 
-                </ul>
-            </li>
-        </ui:fragment>
-        <!-- Engelsizler -->
+            </ul>
+        </li>
+    </ui:fragment>
+    <!-- Engelsizler -->
 
 </ui:composition>
 

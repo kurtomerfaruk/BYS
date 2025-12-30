@@ -5,9 +5,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import tr.bel.gaziantep.bysweb.core.service.AbstractService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
-import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.entity.SyRol;
-import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.entity.SyRolYetki;
-import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.entity.SyYetki;
+import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.entity.*;
 
 import java.io.Serial;
 import java.util.List;
@@ -40,7 +38,7 @@ public class SyRolService extends AbstractService<SyRol> {
     }
 
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void update(SyRol rol, List<SyYetki> yetkis) {
+    public void update(SyRol rol, List<SyYetki> yetkis, List<SyKullanici> kullanicis) {
         rol.getSyRolYetkis().forEach(rolYetki -> rolYetki.setAktif(false));
         Map<SyYetki, SyRolYetki> rolYetkiMap = rol.getSyRolYetkis().stream()
                 .collect(Collectors.toMap(SyRolYetki::getSyYetki, Function.identity()));
@@ -55,6 +53,23 @@ public class SyRolService extends AbstractService<SyRol> {
                 rol.getSyRolYetkis().add(rolYetki);
             } else {
                 rolYetki.setAktif(true);
+            }
+        }
+
+        rol.getSyKullaniciRolList().forEach(x -> x.setAktif(false));
+        Map<SyKullanici, SyKullaniciRol> kullaniciRolMap = rol.getSyKullaniciRolList().stream()
+                .collect(Collectors.toMap(SyKullaniciRol::getSyKullanici, Function.identity()));
+        for (SyKullanici kullanici : kullanicis) {
+            SyKullaniciRol rolKullanici = kullaniciRolMap.get(kullanici);
+            if (rolKullanici == null) {
+                rolKullanici = SyKullaniciRol.builder()
+                        .syRol(rol)
+                        .syKullanici(kullanici)
+                        .build();
+                rolKullanici.setAktif(true);
+                rol.getSyKullaniciRolList().add(rolKullanici);
+            } else {
+                rolKullanici.setAktif(true);
             }
         }
         edit(rol);
