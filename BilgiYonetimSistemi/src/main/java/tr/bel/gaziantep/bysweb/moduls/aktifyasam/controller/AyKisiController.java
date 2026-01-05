@@ -101,6 +101,9 @@ public class AyKisiController extends AbstractController<AyKisi> {
             case AYBIRIM -> {
                 return filterOptionService.getAyBirims();
             }
+            case KISI_DURUM -> {
+                return filterOptionService.getGnlKisiDurums();
+            }
             default -> {
                 return Collections.emptyList();
             }

@@ -41,7 +41,10 @@ public class EdbBasvuruService extends AbstractService<EdbBasvuru> {
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void merge(EdbBasvuru edbBasvuru) {
         GnlKisi gnlKisi = getEntityManager().merge(edbBasvuru.getGnlKisi());
-        EyKisi eyKisi = getEntityManager().merge(edbBasvuru.getEyKisi());
+        EyKisi eyKisi = null;
+        if(edbBasvuru.getEyKisi() != null) {
+            eyKisi = getEntityManager().merge(edbBasvuru.getEyKisi());
+        }
 
         edbBasvuru.setGnlKisi(gnlKisi);
         edbBasvuru.setEyKisi(eyKisi);

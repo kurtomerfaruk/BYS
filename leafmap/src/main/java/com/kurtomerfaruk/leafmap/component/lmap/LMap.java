@@ -3,6 +3,7 @@ package com.kurtomerfaruk.leafmap.component.lmap;
 import com.kurtomerfaruk.leafmap.utils.Constants;
 import jakarta.faces.FacesException;
 import jakarta.faces.application.ResourceDependency;
+import jakarta.faces.component.FacesComponent;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.event.AjaxBehaviorEvent;
 import jakarta.faces.event.BehaviorEvent;
@@ -25,6 +26,7 @@ import java.util.Map;
  * @version 1.0.0
  * @since 5.09.2025 13:35
  */
+@FacesComponent(Constants.COMPONENT_FAMILY + ".lmap.LMap")
 @ResourceDependency(library = Constants.LIBRARY, name = "leaflet.css")
 @ResourceDependency(library = Constants.LIBRARY, name = "leaflet.js")
 @ResourceDependency(library = Constants.LIBRARY, name = "loading/loading.css")

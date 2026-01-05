@@ -42,9 +42,9 @@
                             </li>
 
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="edbEkonomomikDurumEditTab" data-bs-toggle="tab"
-                                        data-bs-target="#edbEkonomomikDurumEditTabPane" type="button" role="tab"
-                                        aria-controls="edbEkonomomikDurumEditTabPane" aria-selected="true">Ekonomik Durumu
+                                <button class="nav-link" id="edbEkonomikDurumEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#edbEkonomikDurumEditTabPane" type="button" role="tab"
+                                        aria-controls="edbEkonomikDurumEditTabPane" aria-selected="true">Ekonomik Durumu
                                 </button>
                             </li>
 
@@ -95,8 +95,8 @@
                                 </p:panelGrid>
                             </div>
 
-                            <div class="tab-pane overflow-hidden" id="edbEvDurumEditTabPane" role="tabpanel"
-                                 aria-labelledby="edbEvDurumEditTab" tabindex="0">
+                            <div class="tab-pane overflow-hidden" id="edbEvDurumuEditTabPane" role="tabpanel"
+                                 aria-labelledby="edbEvDurumuEditTab" tabindex="0">
                                 <p:panelGrid id="evDurumuPanel" columns="2" styleClass="w-100" rendered="#{edbBasvuruController.selected!=null}"
                                              layout="tabular">
                                     <ui:include src="/moduls/evimdunyalarabedel/edbBasvuru/EvDurumuTab.xhtml"/>
@@ -149,7 +149,7 @@
 
             if (dialog &amp;&amp; menu) {
                 if (dialogWidth === 0) {
-                    dialogWidth = dialog.jq.innerWidth() - 30;
+                    dialogWidth = dialog.jq.innerWidth();
                 }
                 var menuContainer = $(menu).closest('.ui-selectcheckboxmenu');
                 menuContainer.width(dialogWidth);

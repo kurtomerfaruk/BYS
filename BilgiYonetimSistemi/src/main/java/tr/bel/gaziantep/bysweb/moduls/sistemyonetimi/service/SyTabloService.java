@@ -22,12 +22,12 @@ public class SyTabloService extends AbstractService<SyTablo> {
     @Serial
     private static final long serialVersionUID = -4610140214568294485L;
 
-    @PersistenceContext(unitName = Constants.UNIT_NAME)
-    private EntityManager em;
-
     public SyTabloService() {
         super(SyTablo.class);
     }
+
+    @PersistenceContext(unitName = Constants.UNIT_NAME)
+    private EntityManager em;
 
     @Override
     protected EntityManager getEntityManager() {

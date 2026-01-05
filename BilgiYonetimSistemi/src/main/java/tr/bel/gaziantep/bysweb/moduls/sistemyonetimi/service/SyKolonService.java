@@ -19,12 +19,13 @@ import java.util.List;
 public class SyKolonService extends AbstractService<SyKolon> {
     @Serial
     private static final long serialVersionUID = -6244747844722152094L;
-    @PersistenceContext(unitName = Constants.UNIT_NAME)
-    private EntityManager em;
 
     public SyKolonService() {
         super(SyKolon.class);
     }
+
+    @PersistenceContext(unitName = Constants.UNIT_NAME)
+    private EntityManager em;
 
     @Override
     protected EntityManager getEntityManager() {

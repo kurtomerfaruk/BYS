@@ -24,12 +24,14 @@ public class SyKullaniciService extends AbstractService<SyKullanici> {
 
     @Serial
     private static final long serialVersionUID = -8962450162815646089L;
-    @PersistenceContext(unitName = Constants.UNIT_NAME)
-    private EntityManager em;
 
     public SyKullaniciService() {
         super(SyKullanici.class);
     }
+
+    @PersistenceContext(unitName = Constants.UNIT_NAME)
+    private EntityManager em;
+
 
     @Override
     protected EntityManager getEntityManager() {

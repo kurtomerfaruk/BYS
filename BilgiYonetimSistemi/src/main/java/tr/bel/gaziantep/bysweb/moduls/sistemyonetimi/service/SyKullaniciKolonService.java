@@ -22,12 +22,12 @@ public class SyKullaniciKolonService extends AbstractService<SyKullaniciKolon> {
     @Serial
     private static final long serialVersionUID = 5488996345082313871L;
 
-    @PersistenceContext(unitName = Constants.UNIT_NAME)
-    private EntityManager em;
-
     public SyKullaniciKolonService() {
         super(SyKullaniciKolon.class);
     }
+
+    @PersistenceContext(unitName = Constants.UNIT_NAME)
+    private EntityManager em;
 
     @Override
     protected EntityManager getEntityManager() {

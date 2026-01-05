@@ -25,14 +25,18 @@ import java.util.Set;
 @Named
 @ViewScoped
 @Slf4j
-public class MenuController implements java.io.Serializable{
+public class MenuController implements java.io.Serializable {
     @Serial
     private static final long serialVersionUID = -4385432633087470640L;
 
     @Inject
     private SyKullaniciGirisSayfaService syKullaniciGirisSayfaService;
 
-    private static final Set<String> CONTROLLER_LIST= Set.of("menuController", "syDuyuruController", "syKullaniciController", "org.omnifaces.cdi.push.Socket");
+    private static final Set<String> CONTROLLER_LIST = Set.of("menuController",
+            "syDuyuruController",
+            "syKullaniciController",
+            "org.omnifaces.cdi.push.Socket",
+            "viewScope");
 
     @Setter
     @Getter
@@ -52,7 +56,7 @@ public class MenuController implements java.io.Serializable{
         try {
             SyKullaniciGirisSayfa sayfa = SyKullaniciGirisSayfa.builder().link(link).syKullanici(Util.getSyKullanici()).build();
             syKullaniciGirisSayfaService.create(sayfa);
-        }catch (Exception e) {
+        } catch (Exception e) {
             log.error(e.getMessage());
             FacesUtil.addErrorMessage(e.getMessage());
         }

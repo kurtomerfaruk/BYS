@@ -20,12 +20,12 @@ public class SyYetkiService extends AbstractService<SyYetki> {
     @Serial
     private static final long serialVersionUID = -6152787044387066387L;
 
-    @PersistenceContext(unitName = Constants.UNIT_NAME)
-    private EntityManager em;
-
     public SyYetkiService() {
         super(SyYetki.class);
     }
+
+    @PersistenceContext(unitName = Constants.UNIT_NAME)
+    private EntityManager em;
 
     @Override
     protected EntityManager getEntityManager() {

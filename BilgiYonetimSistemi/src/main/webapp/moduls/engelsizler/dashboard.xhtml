@@ -6,7 +6,7 @@
       xmlns:h="jakarta.faces.html"
       xmlns:f="jakarta.faces.core"
       xmlns:p="primefaces"
-xmlns:l="http://kurtomerfaruk.com/ui">
+>
 
 <ui:composition>
     <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlCinsiyet" var="enumCinsiyet"/>
@@ -174,12 +174,12 @@ xmlns:l="http://kurtomerfaruk.com/ui">
                                         <div class="col-xl-12">
                                             <h:panelGroup id="mapGroup">
                                                 <div style="position: relative; height: calc(100vh - 235px);">
-                                                    <l:map id="generalMap" center="37.069387, 37.374620" zoom="12"
-                                                           widgetVar="mapVar">
-                                                        <l:heatmap
-                                                                points="#{engelsizDashboardController.heatmapModels}"
-                                                                radius="25" blur="10"/>
-                                                    </l:map>
+<!--                                                    <l:map id="generalMap" center="37.069387, 37.374620" zoom="12"-->
+<!--                                                           widgetVar="mapVar">-->
+<!--                                                        <l:heatmap-->
+<!--                                                                points="#{engelsizDashboardController.heatmapModels}"-->
+<!--                                                                radius="25" blur="10"/>-->
+<!--                                                    </l:map>-->
                                                 </div>
                                             </h:panelGroup>
                                         </div>

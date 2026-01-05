@@ -257,9 +257,12 @@ public class EdbBasvuruController extends AbstractController<EdbBasvuru> {
     public void save(ActionEvent event) {
         if (this.getSelected() != null) {
             try {
-                List<EyKisiEngelGrubu> eyKisiEngelgrubus = checkKisiEngelGrubu(this.getSelected().getEyKisi().getEyKisiEngelGrubuList(),
-                        this.getSelected().getEyKisi());
-                this.getSelected().getEyKisi().setEyKisiEngelGrubuList(eyKisiEngelgrubus);
+                if (this.getSelected().getEyKisi() != null) {
+                    List<EyKisiEngelGrubu> eyKisiEngelgrubus = checkKisiEngelGrubu(this.getSelected().getEyKisi().getEyKisiEngelGrubuList(),
+                            this.getSelected().getEyKisi());
+                    this.getSelected().getEyKisi().setEyKisiEngelGrubuList(eyKisiEngelgrubus);
+                }
+
                 service.merge(this.getSelected());
                 FacesUtil.successMessage(Constants.KAYIT_GUNCELLENDI);
                 createTempObject();

@@ -47,7 +47,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
@@ -84,7 +83,7 @@ public class EyKisiController extends AbstractController<EyKisi> {
     @Push(channel = "eyKisiChannel")
     private PushContext pushContext;
 
-//    private SyKullanici syKullanici;
+    //    private SyKullanici syKullanici;
 //    @Getter
 //    @Setter
 //    private EyKisiRapor eyKisiRapor;
@@ -132,8 +131,11 @@ public class EyKisiController extends AbstractController<EyKisi> {
     @Getter
     @Setter
     private EyTalep eyTalep;
+    @Getter
+    @Setter
+    private boolean locked;
 
-//    private List<EyKisi> selecteds ;
+    //    private List<EyKisi> selecteds ;
 //
     public EyKisiController() {
         super(EyKisi.class);
@@ -217,7 +219,7 @@ public class EyKisiController extends AbstractController<EyKisi> {
             if (this.getSelected() != null) {
                 EyKisi existing = service.findByTcKimlikNo(this.getSelected().getGnlKisi().getTcKimlikNo());
 
-                if(existing != null && !existing.getId().equals(this.getSelected().getId())) {
+                if (existing != null && !existing.getId().equals(this.getSelected().getId())) {
                     FacesUtil.addErrorMessage("Bu kişiye ait zaten Engelli kaydı var.");
                     return;
                 }
@@ -371,7 +373,7 @@ public class EyKisiController extends AbstractController<EyKisi> {
         List<String> hasNotTcKimlikList = new ArrayList<>();
 
         for (List<KisiParameter> kisiParameters : hasNotTcKimlikSplitList) {
-            List<String> tcNewList = kisiParameters.stream().map(parameter -> parameter.getTcKimlikNo() + "").collect(Collectors.toList());
+            List<String> tcNewList = kisiParameters.stream().map(parameter -> parameter.getTcKimlikNo() + "").toList();
             hasNotTcKimlikList.addAll(service.findByTcKimlikNoList(tcNewList));
         }
 
@@ -388,11 +390,11 @@ public class EyKisiController extends AbstractController<EyKisi> {
         pushContext.send(post);
         for (List<KisiParameter> kisiParameters : splitList) {
 
-            List<String> tcListSplit = kisiParameters.stream().map(x -> x.getTcKimlikNo() + "").toList();
+            //List<String> tcListSplit = kisiParameters.stream().map(x -> x.getTcKimlikNo() + "").toList();
             KisiParameters parameters = new KisiParameters();
             parameters.setKisiler(kisiParameters);
             List<KpsModel> kpsModels = kpsService.getKpsFull(initApp.getProperty("webServisLink"), initApp.getProperty("webServisToken"), parameters);
-            addPerson(servisModels, kpsModels, EnumModul.ENGELSIZLER);
+            addPerson(servisModels, kpsModels, department);
 
         }
     }

@@ -25,12 +25,12 @@ public class SyRolService extends AbstractService<SyRol> {
     @Serial
     private static final long serialVersionUID = -8850564793887055960L;
 
-    @PersistenceContext(unitName = Constants.UNIT_NAME)
-    private EntityManager em;
-
     public SyRolService() {
         super(SyRol.class);
     }
+
+    @PersistenceContext(unitName = Constants.UNIT_NAME)
+    private EntityManager em;
 
     @Override
     protected EntityManager getEntityManager() {
