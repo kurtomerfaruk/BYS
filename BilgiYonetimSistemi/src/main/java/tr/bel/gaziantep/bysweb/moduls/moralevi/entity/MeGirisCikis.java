@@ -50,6 +50,16 @@ public class MeGirisCikis extends BaseEntity {
     @Column(name = "SEKER", length = 50)
     private String seker;
 
+    @Size(max = 50)
+    @Nationalized
+    @Column(name = "ATES", length = 50)
+    private String ates;
+
+    @Size(max = 50)
+    @Nationalized
+    @Column(name = "NABIZ", length = 50)
+    private String nabiz;
+
     @Override
     public int hashCode() {
         int hash = 0;

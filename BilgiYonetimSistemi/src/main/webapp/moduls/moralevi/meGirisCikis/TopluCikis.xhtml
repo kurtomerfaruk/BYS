@@ -57,7 +57,7 @@
                                                 <h:outputText value="#{messages.girisTarihiText}"/>
                                             </f:facet>
                                             <h:outputText value="#{item.girisTarihi}">
-                                                <f:convertDateTime pattern="#{messages.tarihSaatFormat}"/>
+                                                <f:convertDateTime pattern="#{messages.tarihSaatFormat}" type="localDateTime"/>
                                             </h:outputText>
                                         </p:column>
 
@@ -66,7 +66,7 @@
                                                 <h:outputText value="#{messages.cikisTarihiText}"/>
                                             </f:facet>
                                             <h:outputText value="#{item.cikisTarihi}">
-                                                <f:convertDateTime pattern="#{messages.tarihSaatFormat}"/>
+                                                <f:convertDateTime pattern="#{messages.tarihSaatFormat}" type="localDateTime"/>
                                             </h:outputText>
                                         </p:column>
 
@@ -88,6 +88,28 @@
                                                 </f:facet>
                                                 <f:facet name="input">
                                                     <p:inputText id="seker" value="#{item.seker}" style="width:100%"/>
+                                                </f:facet>
+                                            </p:cellEditor>
+                                        </p:column>
+
+                                        <p:column headerText="#{messages.atesText}">
+                                            <p:cellEditor>
+                                                <f:facet name="output">
+                                                    <h:outputText value="#{item.ates}"/>
+                                                </f:facet>
+                                                <f:facet name="input">
+                                                    <p:inputText id="ates" value="#{item.ates}" style="width:100%"/>
+                                                </f:facet>
+                                            </p:cellEditor>
+                                        </p:column>
+
+                                        <p:column headerText="#{messages.nabizText}">
+                                            <p:cellEditor>
+                                                <f:facet name="output">
+                                                    <h:outputText value="#{item.nabiz}"/>
+                                                </f:facet>
+                                                <f:facet name="input">
+                                                    <p:inputText id="nabiz" value="#{item.nabiz}" style="width:100%"/>
                                                 </f:facet>
                                             </p:cellEditor>
                                         </p:column>

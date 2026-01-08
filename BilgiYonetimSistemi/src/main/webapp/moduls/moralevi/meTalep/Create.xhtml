@@ -79,6 +79,16 @@
         <p:inputTextarea rows="4" id="aciklama" value="#{meTalepController.selected.aciklama}"
                          title="#{messages.aciklamaText}" styleClass="w-100" autoResize="false"/>
 
+        <p:outputLabel value="#{messages.durumuLabel}" for="@next"/>
+        <p:selectOneMenu id="durum" value="#{meTalepController.selected.durum}"
+                         required="true" converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{enumTalepDurumu.ALL_VALUES}"
+                           var="durums"
+                           itemLabel="#{durums.displayValue}"
+                           itemValue="#{durums}"/>
+        </p:selectOneMenu>
+
     </coco:createpage>
 
 </ui:composition>

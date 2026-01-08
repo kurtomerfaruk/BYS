@@ -16,20 +16,20 @@
 
         <p:outputLabel value="#{messages.tcKimlikNoLabel}" for="@next"/>
         <coco:inputWithButton id="inputWithButtonMeKisi" inputId="meKisiId"
-                              inputValue="#{meTalepController.selected.meKisi.eyKisi.gnlKisi.tcKimlikNo}"
+                              inputValue="#{meGirisCikisController.selected.meKisi.eyKisi.gnlKisi.tcKimlikNo}"
                               inputTitle="#{messages.tcKimlikNoText}"
                               actionListener="#{bysController.openCommonDialog('meKisiSec')}"
-                              ajaxListener="#{meTalepController.secilenMeKisi}"
+                              ajaxListener="#{meGirisCikisController.secilenMeKisi}"
                               buttonTitle="#{messages.kisiSecmelisiniz}"
                               size="50"
                               dialogId="MeTalepCreateDialogId"/>
 
         <p:outputLabel value="#{messages.adLabel}" for="@next"/>
-        <p:inputText id="ad" value="#{meTalepController.selected.meKisi.eyKisi.gnlKisi.ad}" title="#{messages.adText}"
+        <p:inputText id="ad" value="#{meGirisCikisController.selected.meKisi.eyKisi.gnlKisi.ad}" title="#{messages.adText}"
                      size="50" maxlength="50" readonly="true" styleClass="inputUpdate"/>
 
         <p:outputLabel value="#{messages.soyadLabel}" for="@next"/>
-        <p:inputText id="soyad" value="#{meTalepController.selected.meKisi.eyKisi.gnlKisi.soyad}"
+        <p:inputText id="soyad" value="#{meGirisCikisController.selected.meKisi.eyKisi.gnlKisi.soyad}"
                      title="#{messages.soyadText}" size="50" maxlength="50" readonly="true" styleClass="inputUpdate"/>
 
         <p:outputLabel value="#{messages.girisTarihiLabel}" for="@next"/>
@@ -47,6 +47,12 @@
 
         <p:outputLabel value="#{messages.sekerLabel}" for="@next"/>
         <p:inputText id="seker" value="#{meGirisCikisController.selected.seker}" title="#{messages.sekerText}" size="50" maxlength="50"/>
+
+        <p:outputLabel value="#{messages.atesLabel}" for="@next"/>
+        <p:inputText id="ates" value="#{meGirisCikisController.selected.ates}" title="#{messages.atesText}" size="50" maxlength="50"/>
+
+        <p:outputLabel value="#{messages.nabizLabel}" for="@next"/>
+        <p:inputText id="nabiz" value="#{meGirisCikisController.selected.nabiz}" title="#{messages.nabizText}" size="50" maxlength="50"/>
 
     </coco:editpage>
 

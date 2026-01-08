@@ -92,8 +92,7 @@
                         <p:column><p:outputLabel value="Aldığınız Ev Temizliği Hizmetinden Memnun Musunuz? Değilseniz Nedenini Belirtir Misiniz?"
                                                  styleClass="text-balanced"/></p:column>
                         <p:column colspan="5">
-                            <p:selectOneRadio id="evTemizligi" value="#{edbMemnuniyetAnketiController.selected.evTemizligi}" layout="responsive" columns="5"
-                                              required="true">
+                            <p:selectOneRadio id="evTemizligi" value="#{edbMemnuniyetAnketiController.selected.evTemizligi}" layout="responsive" columns="5">
                                 <f:selectItems value="#{of:createIntegerArray(1, 5)}"/>
                             </p:selectOneRadio>
                         </p:column>
@@ -108,8 +107,7 @@
                                 value="Aldığınız Kişisel Bakım (Saç-Sakal, Tırnak Kesimi) Hizmetinden Memnun Musunuz? Değilseniz Nedenini Belirtir Misiniz?"
                                 styleClass="text-balanced"/></p:column>
                         <p:column colspan="5">
-                            <p:selectOneRadio id="kisiselBakim" value="#{edbMemnuniyetAnketiController.selected.kisiselBakim}" layout="responsive" columns="5"
-                                              required="true">
+                            <p:selectOneRadio id="kisiselBakim" value="#{edbMemnuniyetAnketiController.selected.kisiselBakim}" layout="responsive" columns="5">
                                 <f:selectItems value="#{of:createIntegerArray(1, 5)}"/>
                             </p:selectOneRadio>
                         </p:column>
@@ -126,7 +124,7 @@
                                     styleClass="text-balanced"/></p:column>
                         <p:column colspan="5">
                             <p:selectOneRadio id="boyaBadana" value="#{edbMemnuniyetAnketiController.selected.boyaBadana}" layout="responsive" columns="5"
-                                              required="true">
+                                              >
                                 <f:selectItems value="#{of:createIntegerArray(1, 5)}"/>
                             </p:selectOneRadio>
                         </p:column>
@@ -144,7 +142,7 @@
                         </p:column>
                         <p:column colspan="5">
                             <p:selectOneRadio id="tadilatBakim" value="#{edbMemnuniyetAnketiController.selected.tadilatBakim}" layout="responsive" columns="5"
-                                              required="true">
+                                              >
                                 <f:selectItems value="#{of:createIntegerArray(1, 5)}"/>
                             </p:selectOneRadio>
                         </p:column>
@@ -162,7 +160,7 @@
                         </p:column>
                         <p:column colspan="5">
                             <p:selectOneRadio id="personelTutumDavranis" value="#{edbMemnuniyetAnketiController.selected.personelTutumDavranis}" layout="responsive" columns="5"
-                                              required="true">
+                                              >
                                 <f:selectItems value="#{of:createIntegerArray(1, 5)}"/>
                             </p:selectOneRadio>
                         </p:column>
@@ -180,7 +178,7 @@
                         </p:column>
                         <p:column colspan="5">
                             <p:selectOneRadio id="personelUslup" value="#{edbMemnuniyetAnketiController.selected.personelUslup}" layout="responsive" columns="5"
-                                              required="true">
+                                              >
                                 <f:selectItems value="#{of:createIntegerArray(1, 5)}"/>
                             </p:selectOneRadio>
                         </p:column>
@@ -196,7 +194,7 @@
                         </p:column>
                         <p:column colspan="5">
                             <p:selectOneRadio id="guvendeHissetme" value="#{edbMemnuniyetAnketiController.selected.guvendeHissetme}" layout="responsive" columns="5"
-                                              required="true">
+                                              >
                                 <f:selectItems value="#{of:createIntegerArray(1, 5)}"/>
                             </p:selectOneRadio>
                         </p:column>
@@ -214,7 +212,7 @@
                         </p:column>
                         <p:column colspan="5">
                             <p:selectOneRadio id="malzemeYeterliligi" value="#{edbMemnuniyetAnketiController.selected.malzemeYeterliligi}" layout="responsive" columns="5"
-                                              required="true">
+                                              >
                                 <f:selectItems value="#{of:createIntegerArray(1, 5)}"/>
                             </p:selectOneRadio>
                         </p:column>
@@ -232,7 +230,7 @@
                         </p:column>
                         <p:column colspan="5">
                             <p:selectOneRadio id="iletisimKuranPersonel" value="#{edbMemnuniyetAnketiController.selected.iletisimKuranPersonel}" layout="responsive" columns="5"
-                                              required="true">
+                                              >
                                 <f:selectItems value="#{of:createIntegerArray(1, 5)}"/>
                             </p:selectOneRadio>
                         </p:column>
