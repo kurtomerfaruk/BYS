@@ -11,13 +11,15 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.util.IOUtils;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
-import tr.bel.gaziantep.bysweb.core.utils.StringUtil;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serial;
 import java.sql.Connection;
@@ -35,39 +37,64 @@ public class ReportServlet extends HttpServlet {
 
     @Serial
     private static final long serialVersionUID = -7274124838339720811L;
-    private String persistenceName = Constants.PERSISTENCE_NAME;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+
         try {
-            HttpSession session = request.getSession(false);
-
-            Map<String,Object> parameters = (Map<String,Object>) session.getAttribute("parameterMap");
-
+            @SuppressWarnings("unchecked")
+            Map<String,Object> parameters = (Map<String, Object>) session.getAttribute("parameterMap");
             String fileName = (String) session.getAttribute("reportName");
 
-            if(!StringUtil.isBlank(fileName) && !parameters.isEmpty()){
-                if (!StringUtil.isBlank((String) session.getAttribute("persistName"))) {
-                    persistenceName = (String) session.getAttribute("persistName");
-                }
+            session.removeAttribute("parameterMap");
+            session.removeAttribute("reportName");
+
+            if (StringUtils.isNotBlank(fileName) && parameters!=null && !parameters.isEmpty()) {
+//                if (StringUtils.isNotBlank((String) session.getAttribute("persistName"))) {
+//                    persistenceName = (String) session.getAttribute("persistName");
+//                }
 
                 InitialContext initialContext = new InitialContext();
-                DataSource dataSource = (DataSource) initialContext.lookup(persistenceName);
+                DataSource dataSource = (DataSource) initialContext.lookup(Constants.PERSISTENCE_NAME);
                 Connection conn = dataSource.getConnection();
-
                 JasperPrint print = JasperFillManager.fillReport(fileName, parameters, conn);
-                byte[] document = JasperExportManager.exportReportToPdf(print);
-                OutputStream outputStream = response.getOutputStream();
+
                 response.setContentType("application/pdf");
-                response.setContentLength(document.length);
-                outputStream.write(document, 0, document.length);
+                response.setHeader("Content-Disposition", "inline; filename=\"report.pdf\"");
+                response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+                response.setHeader("Pragma", "no-cache");
+                response.setDateHeader("Expires", 0);
+
+                OutputStream out = response.getOutputStream();
+                JasperExportManager.exportReportToPdfStream(print, out);
+                response.setContentType("application/pdf");
+                response.setContentLength((int) print.getPages().size() * 1024);
+                out.flush();
+                out.close();
 
                 if (!conn.isClosed()) {
                     conn.close();
                 }
+            }else{
+//                InputStream emptyPdf = getServletContext().getResourceAsStream("/resources/pdf/emptypdf.pdf");
+//                OutputStream out = response.getOutputStream();
+//                IOUtils.copy(emptyPdf,out);
+
+                sendEmptyPDF(response);
             }
         } catch (NamingException | SQLException | JRException ex) {
             log.error(null,ex);
+        }
+    }
+
+    private void sendEmptyPDF(HttpServletResponse response) throws IOException {
+        try (InputStream emptyPdf = getServletContext().getResourceAsStream("/resources/pdf/emptypdf.pdf")) {
+            if (emptyPdf != null) {
+                response.setContentType("application/pdf");
+                response.setHeader("Content-Disposition", "inline");
+                IOUtils.copy(emptyPdf, response.getOutputStream());
+            }
         }
     }
 

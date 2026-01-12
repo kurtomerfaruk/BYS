@@ -19,6 +19,9 @@
                         icon="pi pi-search"/>
             <p:menuitem value="#{messages.buttonSil}" onclick="document.getElementById('HfHafriyatIsListForm:datalist:datalist:deleteButton').click();"
                         icon="pi pi-trash" rendered="#{syKullaniciController.hasPermission('hfhafriyatis:sil')}"/>
+            <p:menuitem value="#{messages.buttonEvrakTeslimEt}"
+                        onclick="document.getElementById('HfHafriyatIsListForm:datalist:datalist:deliveryDocumentButton').click();"
+                        icon="pi pi-check" rendered="#{syKullaniciController.hasPermission('hfhafriyatis:evrakteslimet')}"/>
         </p:contextMenu>
 
         <coco:datatable id="datalist"
@@ -26,9 +29,9 @@
                         rowKey="#{item.id}"
                         selection="#{hfHafriyatIsController.selected}"
                         filtered="#{hfHafriyatIsController.filtered}"
-                        rowselect=":HfHafriyatIsListForm:datalist:datalist:createButton,:HfHafriyatIsListForm:datalist:datalist:viewButton,:HfHafriyatIsListForm:datalist:datalist:editButton,:HfHafriyatIsListForm:datalist:datalist:deleteButton,:HfHafriyatIsListForm:HfHafriyatIsDataTableContextMenu"
+                        rowselect=":HfHafriyatIsListForm:datalist:datalist:createButton,:HfHafriyatIsListForm:datalist:datalist:viewButton,:HfHafriyatIsListForm:datalist:datalist:editButton,:HfHafriyatIsListForm:datalist:datalist:deleteButton,:@form:datalist:datalist:deliveryDocumentButton,:HfHafriyatIsListForm:HfHafriyatIsDataTableContextMenu"
                         rowDblselect="document.getElementById('HfHafriyatIsListForm:datalist:datalist:editButton').click()"
-                        contextMenu=":HfHafriyatIsListForm:datalist:datalist:createButton :HfHafriyatIsListForm:datalist:datalist:viewButton :HfHafriyatIsListForm:datalist:datalist:editButton :HfHafriyatIsListForm:datalist:datalist:deleteButton"
+                        contextMenu=":HfHafriyatIsListForm:datalist:datalist:createButton :HfHafriyatIsListForm:datalist:datalist:viewButton :HfHafriyatIsListForm:datalist:datalist:editButton :HfHafriyatIsListForm:datalist:datalist:deleteButton :@form:datalist:datalist:deliveryDocumentButton"
                         selectListener="#{hfHafriyatIsController.resetParents}"
                         controller="#{hfHafriyatIsController}"
                         header="#{messages.hafriyatIsListesi}">
@@ -53,6 +56,16 @@
                                  actionListener="#{hfHafriyatIsController.delete}" update=":growl,datalist" disabled="#{empty hfHafriyatIsController.selected}"
                                  rendered="#{syKullaniciController.hasPermission('hfhafriyatis:sil')}">
                     <p:confirm header="#{messages.ConfirmationHeader}" message="#{messages.ConfirmDeleteMessage}" icon="pi pi-exclamation-circle"/>
+                </p:commandButton>
+                <p:commandButton id="deliveryDocumentButton" icon="pi pi-book" styleClass="ui-button-warning"
+                                 pt:data-tooltip="#{messages.buttonEvrakTeslimEt}"
+                                 actionListener="#{hfHafriyatIsController.deliverDocument()}" update=":growl,datalist"
+                                 disabled="#{empty hfHafriyatIsController.selected or hfHafriyatIsController.selected.evrakTeslimEdildiMi}"
+                                 onstart="PF('Loading').show()"
+                                 onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('hfhafriyatis:evrakteslimet')}">
+                    <p:confirm header="Evrak Teslimi" message="Evrak Teslim etmek istediğinizden emin misiniz?"
+                               icon="pi pi-exclamation-circle"/>
                 </p:commandButton>
             </f:facet>
 

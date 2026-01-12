@@ -13,6 +13,7 @@ import tr.bel.gaziantep.bysweb.core.service.FilterOptionService;
 import tr.bel.gaziantep.bysweb.moduls.hafriyat.entity.HfFirma;
 import tr.bel.gaziantep.bysweb.moduls.hafriyat.entity.HfHafriyatIs;
 import tr.bel.gaziantep.bysweb.moduls.hafriyat.entity.HfKasa;
+import tr.bel.gaziantep.bysweb.moduls.hafriyat.service.HfHafriyatIsService;
 
 import java.io.Serial;
 import java.lang.reflect.InvocationTargetException;
@@ -34,7 +35,10 @@ public class HfKasaController extends AbstractController<HfKasa> {
     private static final long serialVersionUID = 1181510381467907989L;
 
     @Inject
+    private HfHafriyatIsService hfHafriyatIsService;
+    @Inject
     private FilterOptionService filterOptionService;
+
 
     public HfKasaController() {
         super(HfKasa.class);
@@ -75,5 +79,13 @@ public class HfKasaController extends AbstractController<HfKasa> {
     public void secilenHafriyatIs(SelectEvent<HfHafriyatIs> event) {
         HfHafriyatIs hafriyatIs = event.getObject();
         this.getSelected().setHfHafriyatIs(hafriyatIs);
+        this.getSelected().setHfFirma(hafriyatIs.getUreticiHfFirma());
+    }
+
+    public List<HfHafriyatIs> getHafriyatList(){
+        if(this.getSelected()==null) Collections.emptyList();
+
+        assert this.getSelected() != null;
+        return hfHafriyatIsService.findByFirma(this.getSelected().getHfFirma());
     }
 }

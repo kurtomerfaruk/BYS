@@ -5,9 +5,11 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import tr.bel.gaziantep.bysweb.core.service.AbstractService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
+import tr.bel.gaziantep.bysweb.moduls.hafriyat.entity.HfFirma;
 import tr.bel.gaziantep.bysweb.moduls.hafriyat.entity.HfHafriyatIs;
 
 import java.io.Serial;
+import java.util.List;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
@@ -30,5 +32,9 @@ public class HfHafriyatIsService extends AbstractService<HfHafriyatIs> {
     @Override
     protected EntityManager getEntityManager() {
         return em;
+    }
+
+    public List<HfHafriyatIs> findByFirma(HfFirma hfFirma) {
+        return getEntityManager().createNamedQuery("HfHafriyatIs.findByFirma").setParameter("firma",hfFirma).getResultList();
     }
 }

@@ -26,6 +26,8 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
@@ -249,5 +251,21 @@ public class HfHafriyatIsController extends AbstractController<HfHafriyatIs> {
     public void onRowDblSelect(SelectEvent<HfHafriyatIs> event) {
         HfHafriyatIs hfHafriyatIs = event.getObject();
         hfHafriyatIsSecKapat(hfHafriyatIs);
+    }
+
+    public void deliverDocument() {
+        try {
+            if (this.getSelected() != null) {
+                if (!this.getSelected().isEvrakTeslimEdildiMi()) {
+                    this.getSelected().setEvrakTeslimEdildiMi(true);
+                    service.edit(this.getSelected());
+                    FacesUtil.successMessage("evrakTeslimEdildi");
+                } else {
+                    FacesUtil.warningMessage("evrakZatenTeslimEdilmis");
+                }
+            }
+        } catch (Exception e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);
+        }
     }
 }

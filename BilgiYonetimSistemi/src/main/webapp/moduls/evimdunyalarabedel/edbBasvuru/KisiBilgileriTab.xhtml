@@ -6,7 +6,7 @@
       xmlns:f="jakarta.faces.core"
       xmlns:p="primefaces"
       xmlns:coco="jakarta.faces.composite/ui"
-      xmlns:of="http://omnifaces.org/functions">
+>
 <ui:composition>
 
     <p:outputLabel value="#{messages.basvuruTarihiLabel}" for="@next"/>
@@ -104,11 +104,8 @@
                      styleClass="w-100 tcUpdate" autoResize="false"/>
 
     <p:outputLabel value="#{messages.cocukSayisiLabel}" for="@next"/>
-    <p:selectOneMenu id="cocukSayisi" value="#{edbBasvuruController.selected.gnlKisi.cocukSayisi}"
-                     converter="omnifaces.SelectItemsConverter">
-        <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
-        <f:selectItems value="#{of:createIntegerArray(0,13)}"/>
-    </p:selectOneMenu>
+    <p:spinner id="cocukSayisi" value="#{edbBasvuruController.selected.gnlKisi.cocukSayisi}" title="#{messages.cocukSayisiText}" styleClass="tcUpdate"
+               stepFactor="1" min="0"/>
 
     <p:outputLabel value="#{messages.referansLabel}" for="@next"/>
     <p:inputText id="referans" value="#{edbBasvuruController.selected.referans}" title="#{messages.referansText}" size="50"/>

@@ -25,14 +25,15 @@
         </p:selectOneMenu>
 
         <p:outputLabel value="#{messages.firmaUnvaniLabel}" for="@next"/>
-        <coco:inputWithButton id="inputWithButtonFirmaId" inputId="firma"
-                              inputValue="#{hfKasaController.selected.hfFirma.firmaUnvani}"
-                              inputTitle="#{messages.firmaText}"
-                              actionListener="#{bysController.openCommonDialog('hfFirmaSec')}"
-                              ajaxListener="#{hfKasaController.secilenFirma}"
-                              buttonTitle="#{messages.firmaSecmelisiniz}"
-                              size="50"
-                              dialogId="HfKasaCreateDialogId"/>
+        <p:inputText value="#{hfKasaController.selected.hfFirma.firmaUnvani}" readonly="true" styleClass="inputUpdate"/>
+<!--        <coco:inputWithButton id="inputWithButtonFirmaId" inputId="firma"-->
+<!--                              inputValue="#{hfKasaController.selected.hfFirma.firmaUnvani}"-->
+<!--                              inputTitle="#{messages.firmaText}"-->
+<!--                              actionListener="#{bysController.openCommonDialog('hfFirmaSec')}"-->
+<!--                              ajaxListener="#{hfKasaController.secilenFirma}"-->
+<!--                              buttonTitle="#{messages.firmaSecmelisiniz}"-->
+<!--                              size="50"-->
+<!--                              dialogId="HfKasaCreateDialogId"/>-->
 
         <p:outputLabel value="#{messages.sozlesmeNoLabel}" for="@next"/>
         <coco:inputWithButton id="inputWithButtonHafriyatIsId" inputId="hafriyatIs"

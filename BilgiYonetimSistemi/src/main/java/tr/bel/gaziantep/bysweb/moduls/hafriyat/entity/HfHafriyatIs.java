@@ -25,6 +25,7 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "HFHAFRIYAT_IS")
+@NamedQuery(name = "HfHafriyatIs.findByFirma",query = "SELECT h FROM HfHafriyatIs h WHERE h.aktif=true and h.ureticiHfFirma=:firma")
 public class HfHafriyatIs extends BaseEntity {
     @Serial
     private static final long serialVersionUID = -1556455013264749102L;
