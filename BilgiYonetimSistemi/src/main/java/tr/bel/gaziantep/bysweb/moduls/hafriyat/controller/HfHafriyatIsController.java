@@ -17,6 +17,7 @@ import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
 import tr.bel.gaziantep.bysweb.moduls.hafriyat.entity.*;
 import tr.bel.gaziantep.bysweb.moduls.hafriyat.service.HfAracService;
+import tr.bel.gaziantep.bysweb.moduls.hafriyat.service.HfHafriyatIsFaturaService;
 import tr.bel.gaziantep.bysweb.moduls.hafriyat.service.HfHafriyatIsService;
 
 import java.io.Serial;
@@ -47,6 +48,8 @@ public class HfHafriyatIsController extends AbstractController<HfHafriyatIs> {
     private HfHafriyatIsService service;
     @Inject
     private HfAracService hfAracService;
+    @Inject
+    private HfHafriyatIsFaturaService hfHafriyatIsFaturaService;
     @Inject
     private FilterOptionService filterOptionService;
 
@@ -219,9 +222,16 @@ public class HfHafriyatIsController extends AbstractController<HfHafriyatIs> {
     }
 
     public void removeInvoice(HfHafriyatIsFatura item) {
-        if (this.getSelected().getHfHafriyatIsFaturaList().contains(item)) {
-            this.getSelected().getHfHafriyatIsFaturaList().remove(item);
-            FacesUtil.successMessage(Constants.KAYIT_SILINDI);
+        try {
+            if (this.getSelected().getHfHafriyatIsFaturaList().contains(item)) {
+                this.getSelected().getHfHafriyatIsFaturaList().remove(item);
+                FacesUtil.successMessage(Constants.KAYIT_SILINDI);
+                item.setAktif(false);
+                hfHafriyatIsFaturaService.edit(item);
+            }
+        } catch (Exception ex) {
+            log.error(null, ex);
+            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
         }
     }
 

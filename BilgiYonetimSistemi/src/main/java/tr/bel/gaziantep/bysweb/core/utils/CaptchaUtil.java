@@ -18,7 +18,8 @@ public class CaptchaUtil implements java.io.Serializable {
     }
 
     public static String generateCaptchaText(int length) {
-        String chars = "ABCDEFGHJKMNOPQRSTUVWXYZabcdefghjkmnopqrstuvwxyz0123456789";
+        //String chars = "ABCDEFGHJKMNOPQRSTUVWXYZabcdefghjkmnopqrstuvwxyz0123456789";
+        String chars = "abcdefghjkmnopqrstuvwxyz0123456789";
         StringBuilder captcha = new StringBuilder();
         Random random = new Random();
         for (int i = 0; i < length; i++) {

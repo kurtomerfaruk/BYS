@@ -108,7 +108,7 @@
 
 <h:body>
 
-    <o:socket channel="syKullaniciChannel" onmessage="syKullaniciMessage" user="#{syKullanici.id}"/>
+    <o:socket channel="syKullaniciChannel" onmessage="syKullaniciMessage" user="#{syKullanici.id}" scope="view"/>
     <h:form>
         <p:remoteCommand name="updateKullanici" update="userSize,userForm:userPanelGroup"/>
 

@@ -28,7 +28,7 @@ public class CaptchaServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int width = 200;
         int height = 50;
-        String captchaText = CaptchaUtil.generateCaptchaText(6);
+        String captchaText = CaptchaUtil.generateCaptchaText(5);
 
         // CAPTCHA metnini oturumda sakla
         request.getSession().setAttribute("captcha", captchaText);

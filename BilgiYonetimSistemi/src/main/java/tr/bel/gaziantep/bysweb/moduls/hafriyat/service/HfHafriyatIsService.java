@@ -34,6 +34,16 @@ public class HfHafriyatIsService extends AbstractService<HfHafriyatIs> {
         return em;
     }
 
+    @Override
+    public String getSortCol() {
+        return "id";
+    }
+
+    @Override
+    public String getSorting(){
+        return "desc";
+    }
+
     public List<HfHafriyatIs> findByFirma(HfFirma hfFirma) {
         return getEntityManager().createNamedQuery("HfHafriyatIs.findByFirma").setParameter("firma",hfFirma).getResultList();
     }

@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
+import org.hibernate.annotations.SQLRestriction;
 import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
 import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlBelediye;
 import tr.bel.gaziantep.bysweb.core.enums.hafriyat.EnumHfAracTuru;
@@ -149,13 +150,16 @@ public class HfHafriyatIs extends BaseEntity {
     @Column(name = "TASIMA_ARAC_MIKTARI")
     private Integer tasimaAracMiktari=0;
 
-    @OneToMany(mappedBy = "hfHafriyatIs")
+    @OneToMany(mappedBy = "hfHafriyatIs",cascade = CascadeType.ALL)
+    @SQLRestriction("AKTIF=true")
     private List<HfHafriyatIsArac> hfHafriyatIsAracList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "hfHafriyatIs")
+    @OneToMany(mappedBy = "hfHafriyatIs",cascade = CascadeType.ALL)
+    @SQLRestriction("AKTIF=true")
     private List<HfHafriyatIsFatura> hfHafriyatIsFaturaList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "hfHafriyatIs")
+    @OneToMany(mappedBy = "hfHafriyatIs",cascade = CascadeType.ALL)
+    @SQLRestriction("AKTIF=true")
     private List<HfKasa> hfKasaList = new ArrayList<>();
 
     @Override
