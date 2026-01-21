@@ -53,7 +53,8 @@
                                         </div>
                                         <div class="ui-g-8">
                                             <p:selectOneMenu id="kursId" value="#{ekmTopluGirisCikisController.selected.gnlKurs}"
-                                                             converter="omnifaces.SelectItemsConverter" required="true" filter="true">
+                                                             converter="omnifaces.SelectItemsConverter" required="true" filter="true"
+                                                             filterMatchMode="contains">
                                                 <f:selectItem itemLabel="#{messages.seciniz}"/>
                                                 <f:selectItems value="#{gnlKursController.items}"
                                                                var="kursIdItem"
@@ -70,24 +71,6 @@
                                             <p:outputLabel value="#{messages.kursaGirisYapanlarLabel}" for="@next"/>
                                         </div>
                                         <div class="ui-g-8">
-                                            <!--                                            <p:pickList id="kisiler" value="#{ekmTopluGirisCikisController.dualEyKisi}"-->
-                                            <!--                                                        var="item"-->
-                                            <!--                                                        itemValue="#{item}"-->
-                                            <!--                                                        itemLabel="#{item.gnlKisi.adSoyad}"-->
-                                            <!--                                                        showSourceControls="true"-->
-                                            <!--                                                        showTargetControls="true"-->
-                                            <!--                                                        showCheckbox="true"-->
-                                            <!--                                                        responsive="true"-->
-                                            <!--                                                        showSourceFilter="true"-->
-                                            <!--                                                        showTargetFilter="true"-->
-                                            <!--                                                        filterMatchMode="contains"-->
-                                            <!--                                                        addAllLabel="#{messages.tumunuEkle}"-->
-                                            <!--                                                        addLabel="#{messages.ekle}"-->
-                                            <!--                                                        removeAllLabel="#{messages.tumunuCikar}"-->
-                                            <!--                                                        removeLabel="#{messages.cikar}"-->
-                                            <!--                                                        converter="eyKisiConverter">-->
-
-                                            <!--                                            </p:pickList>-->
                                             <p:dataTable id="girisCikisId"
                                                          value="#{ekmTopluGirisCikisController.ekmGirisCikisList}"
                                                          var="girisCikisVar"
@@ -112,8 +95,7 @@
                                                 <p:column width="60" headerText="#{messages.buttonSil}">
                                                     <p:commandButton icon="pi pi-trash" title="#{messages.buttonSil}"
                                                                      actionListener="#{ekmTopluGirisCikisController.removeItem(girisCikisVar)}"
-                                                                     update="girisCikisId,:growl"
-                                                                     process="girisCikisId"/>
+                                                                     update="girisCikisId,:growl" process="girisCikisId"/>
                                                 </p:column>
 
                                                 <f:facet name="footer">

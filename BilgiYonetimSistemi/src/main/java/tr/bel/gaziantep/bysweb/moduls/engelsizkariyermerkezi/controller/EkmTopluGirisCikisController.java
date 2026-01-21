@@ -80,8 +80,9 @@ public class EkmTopluGirisCikisController extends AbstractController<EkmGirisCik
                                 .filter(x -> x.getEkmKursiyer().equals(ekmKursiyer) && x.getGnlKurs().equals(this.getSelected().getGnlKurs()))
                                 .findFirst().orElse(null);
                         if (ekmGirisCikis == null) {
-                            ekmGirisCikis=new EkmGirisCikis();
+                            ekmGirisCikis = new EkmGirisCikis();
                             ekmGirisCikis.setGirisTarihi(this.getSelected().getGirisTarihi());
+                            ekmGirisCikis.setGnlKurs(this.getSelected().getGnlKurs());
                             ekmGirisCikis.setEkmKursiyer(ekmKursiyer);
                             ekmGirisCikisList.add(ekmGirisCikis);
                         }
@@ -97,7 +98,7 @@ public class EkmTopluGirisCikisController extends AbstractController<EkmGirisCik
     }
 
     public void removeItem(EkmGirisCikis item) {
-        ekmGirisCikisList.remove(item);
+        ekmGirisCikisList.removeIf(x->x.getEkmKursiyer().equals(item.getEkmKursiyer()));
         FacesUtil.successMessage("satirSilindi");
     }
 
@@ -105,16 +106,16 @@ public class EkmTopluGirisCikisController extends AbstractController<EkmGirisCik
     public void save(ActionEvent event) {
         try {
             for (EkmGirisCikis ekmGirisCikis : ekmGirisCikisList) {
-                if(girisCikis.equals(EnumGirisCikis.GIRIS)) {
-                   ekmGirisCikis.setGnlKurs(this.getSelected().getGnlKurs());
-                }else{
+                if (girisCikis.equals(EnumGirisCikis.GIRIS)) {
+                    ekmGirisCikis.setGnlKurs(this.getSelected().getGnlKurs());
+                } else {
                     ekmGirisCikis.setCikisTarihi(this.getSelected().getGirisTarihi());
                 }
                 service.edit(ekmGirisCikis);
             }
             FacesUtil.successMessage(Constants.KAYIT_GUNCELLENDI);
             createNew();
-            girisCikis=EnumGirisCikis.GIRIS;
+            girisCikis = EnumGirisCikis.GIRIS;
             ekmGirisCikisList.clear();
         } catch (Exception ex) {
             log.error(null, ex);
