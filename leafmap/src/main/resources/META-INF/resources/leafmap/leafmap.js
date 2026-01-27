@@ -1,6 +1,8 @@
 /**
  * PrimeFaces OpenStreetMap Widget
  */
+
+
 PrimeFaces.widget.LMap = class extends PrimeFaces.widget.BaseWidget {
 
     init(cfg) {
@@ -39,6 +41,7 @@ PrimeFaces.widget.LMap = class extends PrimeFaces.widget.BaseWidget {
         }
 
         if (this.cfg.heatmap) {
+            console.log(this.cfg.heatmap.points);
             L.heatLayer(this.cfg.heatmap.points,
                 {
                     radius: this.cfg.heatmap.radius,
