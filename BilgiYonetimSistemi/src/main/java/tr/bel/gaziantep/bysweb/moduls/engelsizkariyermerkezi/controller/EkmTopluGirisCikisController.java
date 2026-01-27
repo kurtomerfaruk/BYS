@@ -108,6 +108,7 @@ public class EkmTopluGirisCikisController extends AbstractController<EkmGirisCik
             for (EkmGirisCikis ekmGirisCikis : ekmGirisCikisList) {
                 if (girisCikis.equals(EnumGirisCikis.GIRIS)) {
                     ekmGirisCikis.setGnlKurs(this.getSelected().getGnlKurs());
+                    ekmGirisCikis.setGirisTarihi(this.getSelected().getGirisTarihi());
                 } else {
                     ekmGirisCikis.setCikisTarihi(this.getSelected().getGirisTarihi());
                 }
