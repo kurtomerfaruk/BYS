@@ -104,15 +104,41 @@
     <p:inputTextarea rows="4" id="adres"
                      value="#{eyKisiController.selected.gnlKisi.adres}"
                      title="#{messages.adresText}"
-                     styleClass="w-100 tcUpdate" autoResize="false"
-                     readonly="true"/>
+                     styleClass="w-100 tcUpdate" autoResize="false" />
+
+    <p:outputLabel value="#{messages.sehirLabel}" for="@next"/>
+    <p:selectOneMenu id="sehir" value="#{eyKisiController.selected.gnlKisi.gnlIl}" filter="true" filterMatchMode="contains" required="true"
+                     converter="omnifaces.SelectItemsConverter" styleClass="tcUpdate">
+        <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+        <f:selectItems value="#{gnlIlController.items}"
+                       var="sehirItem"
+                       itemValue="#{sehirItem}"
+                       itemLabel="#{sehirItem.tanim}"/>
+        <p:ajax event="change" update="ilce"/>
+    </p:selectOneMenu>
 
     <p:outputLabel value="#{messages.ilceLabel}" for="@next"/>
-    <p:inputText id="ilce" value="#{eyKisiController.selected.gnlKisi.gnlIlce.tanim}" title="#{messages.ilceText}" readonly="true" styleClass="tcUpdate"/>
+    <p:selectOneMenu id="ilce" value="#{eyKisiController.selected.gnlKisi.gnlIlce}" filter="true" filterMatchMode="contains" required="true"
+                     converter="omnifaces.SelectItemsConverter" styleClass="tcUpdate">
+        <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+        <f:selectItems value="#{gnlIlceController.getIlceByIlId(eyKisiController.selected.gnlKisi.gnlIl)}"
+                       var="ilceItem"
+                       itemValue="#{ilceItem}"
+                       itemLabel="#{ilceItem.tanim}"/>
+        <p:ajax event="change" update="mahalle"/>
+    </p:selectOneMenu>
+
 
     <p:outputLabel value="#{messages.mahalleLabel}" for="@next"/>
-    <p:inputText id="mahalle" value="#{eyKisiController.selected.gnlKisi.gnlMahalle.tanim}" title="#{messages.mahalleText}" readonly="true"
-                 styleClass="tcUpdate"/>
+    <p:selectOneMenu id="mahalle" value="#{eyKisiController.selected.gnlKisi.gnlMahalle}" filter="true" filterMatchMode="contains" required="true"
+                     converter="omnifaces.SelectItemsConverter" styleClass="tcUpdate">
+        <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+        <f:selectItems value="#{gnlMahalleController.getMahalleByIlce(eyKisiController.selected.gnlKisi.gnlIlce)}"
+                       var="mahalleItem"
+                       itemValue="#{mahalleItem}"
+                       itemLabel="#{mahalleItem.tanim}"/>
+    </p:selectOneMenu>
+
 
     <p:outputLabel value="#{messages.cocukSayisiLabel}" for="@next"/>
     <p:spinner id="cocukSayisi" value="#{eyKisiController.selected.gnlKisi.cocukSayisi}" title="#{messages.cocukSayisiText}" styleClass="tcUpdate"

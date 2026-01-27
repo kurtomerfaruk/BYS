@@ -27,6 +27,11 @@ public class GnlIlService extends AbstractService<GnlIl> {
     }
 
     @Override
+    public String getSortCol() {
+        return "tanim";
+    }
+
+    @Override
     protected EntityManager getEntityManager() {
         return em;
     }
