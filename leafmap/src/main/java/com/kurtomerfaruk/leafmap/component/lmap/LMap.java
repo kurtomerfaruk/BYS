@@ -33,6 +33,7 @@ import java.util.Map;
 @ResourceDependency(library = Constants.LIBRARY, name = "loading/loading.js")
 @ResourceDependency(library = Constants.LIBRARY, name = "Leaflet.fullscreen.css")
 @ResourceDependency(library = Constants.LIBRARY, name = "Leaflet.fullscreen.min.js")
+@ResourceDependency(library = Constants.LIBRARY, name = "heatmap/leaflet-heat.js")
 @ResourceDependency(library = Constants.LIBRARY, name = "routemachine/leaflet-routing-machine.css")
 @ResourceDependency(library = Constants.LIBRARY, name = "routemachine/leaflet-routing-machine.js")
 @ResourceDependency(library = Constants.LIBRARY, name = "routemachine/Control.Geocoder.js")

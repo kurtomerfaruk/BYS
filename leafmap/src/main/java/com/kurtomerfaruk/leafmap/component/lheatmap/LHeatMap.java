@@ -1,7 +1,5 @@
 package com.kurtomerfaruk.leafmap.component.lheatmap;
 
-import com.kurtomerfaruk.leafmap.utils.Constants;
-import jakarta.faces.application.ResourceDependency;
 import jakarta.faces.component.UIComponentBase;
 import org.primefaces.model.map.LatLng;
 
@@ -12,7 +10,7 @@ import java.util.List;
  * @version 1.0.0
  * @since 6.09.2025 21:49
  */
-@ResourceDependency(library = Constants.LIBRARY, name = "heatmap/leaflet-heat.js")
+
 public class LHeatMap extends UIComponentBase {
 
     public static final String COMPONENT_FAMILY = "com.kurtomerfaruk.leafmap.component";
