@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -129,7 +130,8 @@ public abstract class AbstractService<T> implements java.io.Serializable {
         CriteriaQuery<T> cq = cb.createQuery(entityClass);
         Root<T> root = cq.from(entityClass);
         cq.select(root);
-        cq.where(getFilterCondition(cb, root, filters));
+        Map<String, Join<?, ?>> joins = new HashMap<>();
+        cq.where(getFilterCondition(cb, root, filters,joins));
         if (!StringUtil.isBlank(getSortCol())) {
             cq.orderBy(cb.asc(root.get(getSortCol())));
         }
@@ -159,7 +161,8 @@ public abstract class AbstractService<T> implements java.io.Serializable {
         CriteriaBuilder cb = this.getEntityManager().getCriteriaBuilder();
         CriteriaQuery<T> cq = cb.createQuery(entityClass);
         Root<T> root = cq.from(entityClass);
-        cq.where(getFilterCondition(cb, root, filters));
+        Map<String, Join<?, ?>> joins = new HashMap<>();
+        cq.where(getFilterCondition(cb, root, filters,joins));
 
         if (!sortMetaMap.isEmpty()) {
             List<Order> orderList = new ArrayList();
@@ -167,7 +170,7 @@ public abstract class AbstractService<T> implements java.io.Serializable {
                 String sortField = sortMeta.getField();
                 if (sortField.contains(".")) {
                     String[] sortFields = sortField.split(Pattern.quote("."));
-                    Path path = pathGenerate(root, sortFields);
+                    Path path = pathGenerate(root, sortFields,joins);
                     if (sortMeta.getOrder().equals(SortOrder.ASCENDING)) {
                         orderList.add(cb.asc(path));
                     } else if (sortMeta.getOrder().equals(SortOrder.DESCENDING)) {
@@ -190,7 +193,7 @@ public abstract class AbstractService<T> implements java.io.Serializable {
             if (StringUtil.isBlank(getSorting())) {
                 if (getSortCol().contains(".")) {
                     String[] sortFields = getSortCol().split(Pattern.quote("."));
-                    Path path = pathGenerate(root, sortFields);
+                    Path path = pathGenerate(root, sortFields,joins);
                     cq.orderBy(cb.asc(path));
                 } else {
                     cq.orderBy(cb.asc(root.get(getSortCol())));
@@ -204,7 +207,7 @@ public abstract class AbstractService<T> implements java.io.Serializable {
         return this.getEntityManager().createQuery(cq).setFirstResult(first).setMaxResults(pageSize).getResultList();
     }
 
-    protected Predicate getFilterCondition(CriteriaBuilder cb, Root<T> root, Map<String, FilterMeta> filters) {
+    protected Predicate getFilterCondition(CriteriaBuilder cb, Root<T> root, Map<String, FilterMeta> filters,Map<String, Join<?, ?>> joins) {
         Predicate filterCondition = cb.conjunction();
 
         for (FilterMeta filter : filters.values()) {
@@ -219,7 +222,7 @@ public abstract class AbstractService<T> implements java.io.Serializable {
             }
 
             MatchMode matchMode = filter.getMatchMode();
-            Path<?> path = pathGenerate(root, filterField.split(Pattern.quote(".")));
+            Path<?> path = pathGenerate(root, filterField.split("\\."),joins);
 
             if ("BigDecimal".equals(path.getJavaType().getSimpleName()) && "-".equals(value)) {
                 continue;
@@ -357,22 +360,45 @@ public abstract class AbstractService<T> implements java.io.Serializable {
         return cb.between(path.as(LocalDateTime.class), before, after);
     }
 
-    private Path pathGenerate(Root<T> root, String[] parts) {
-        Path expression = null;
+//    Map<String, Join<?, ?>> joins = new HashMap<>();
 
-        expression = root.get(parts[0]);
-        for (int i = 1; i < parts.length; i++) {
+    private Path<?> pathGenerate(
+            Root<T> root,
+            String[] parts,
+            Map<String, Join<?, ?>> joins
+    ) {
+        From<?, ?> from = root;
+
+        for (int i = 0; i < parts.length - 1; i++) {
             String part = parts[i];
-            expression = expression.get(part);
+
+            From<?, ?> finalFrom = from;
+            from = (From<?, ?>) joins.computeIfAbsent(
+                    part,
+                    p -> finalFrom.join(p, JoinType.LEFT)
+            );
         }
-        return expression;
+
+        return from.get(parts[parts.length - 1]);
     }
+
+//    private Path pathGenerate(Root<T> root, String[] parts) {
+//        Path expression = null;
+//
+//        expression = root.get(parts[0]);
+//        for (int i = 1; i < parts.length; i++) {
+//            String part = parts[i];
+//            expression = expression.get(part);
+//        }
+//        return expression;
+//    }
 
     public int count(Map<String, FilterMeta> filters) {
         CriteriaBuilder cb = this.getEntityManager().getCriteriaBuilder();
         CriteriaQuery<Long> cq = cb.createQuery(Long.class);
         Root<T> myObj = cq.from(entityClass);
-        cq.where(getFilterCondition(cb, myObj, filters));
+        Map<String, Join<?, ?>> joins = new HashMap<>();
+        cq.where(getFilterCondition(cb, myObj, filters,joins));
         cq.select(cb.count(myObj));
         return this.getEntityManager().createQuery(cq).getSingleResult().intValue();
     }

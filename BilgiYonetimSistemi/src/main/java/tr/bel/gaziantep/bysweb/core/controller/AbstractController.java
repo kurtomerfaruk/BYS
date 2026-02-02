@@ -329,6 +329,12 @@ public abstract class AbstractController<T> implements Serializable {
                     }
                     count++;
                 }
+//                if(this.getSyKullanici().getKullaniciTuru().equals(EnumSyKullaniciTuru.SISTEM_YONETICISI)){
+//                    SyKullaniciKolon kullaniciKolon = SyKullaniciKolon.builder()
+//                            .syKullanici(this.getSyKullanici())
+//                            .syKolon(SyKolon.builder().baslik(A).build())
+//                            .build();
+//                }
             } catch (Exception ex) {
                 log.error(null, ex);
                 FacesUtil.errorMessage(Constants.HATA_OLUSTU);

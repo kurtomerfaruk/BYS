@@ -265,6 +265,20 @@
 
         </p:columns>
 
+<!--        <ui:fragment rendered="#{syKullanici.kullaniciTuru eq 'SISTEM_YONETICISI'}">-->
+<!--            <p:column headerText="#{messages.aktifText}">-->
+<!--                <f:facet name="filter">-->
+<!--                    <p:selectOneMenu onchange="PF('#{cc.attrs.widgetVar}').filter()">-->
+<!--                        <f:selectItem itemLabel="#{messages.tumuText}" itemValue="#{null}" noSelectionOption="true"/>-->
+<!--                        <f:selectItem itemLabel="#{messages.aktifText}" itemValue="1" noSelectionOption="true"/>-->
+<!--                        <f:selectItem itemLabel="#{messages.pasifText}" itemValue="0" noSelectionOption="true"/>-->
+<!--                    </p:selectOneMenu>-->
+<!--                </f:facet>-->
+<!--                <h:outputText rendered="#{item.aktif}"/>-->
+<!--                <h:outputText rendered="#{!item.aktif}"/>-->
+<!--            </p:column>-->
+<!--        </ui:fragment>-->
+
         <composite:insertFacet name="paginatorBottomLeft"/>
         <composite:insertFacet name="header"/>
         <composite:insertFacet name="filter"/>

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.Nationalized;
+import org.hibernate.annotations.SQLRestriction;
 import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
 import tr.bel.gaziantep.bysweb.core.enums.engelsizler.EnumEyAnketDurumu;
 import tr.bel.gaziantep.bysweb.core.enums.engelsizler.EnumEyHizmetlerdenMemnun;
@@ -216,18 +217,22 @@ public class EyKisi extends BaseEntity  {
 
     @OneToMany(mappedBy = "eyKisi", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @Builder.Default
+    @SQLRestriction("AKTIF=true")
     private List<EyKisiDosya> eyKisiDosyaList = new ArrayList<>();
 
     @OneToMany(mappedBy = "eyKisi", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @Builder.Default
+    @SQLRestriction("AKTIF=true")
     private List<EyKisiEngelGrubu> eyKisiEngelGrubuList = new ArrayList<>();
 
     @OneToMany(mappedBy = "eyKisi", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @Builder.Default
+    @SQLRestriction("AKTIF=true")
     private List<EyKisiKullandigiCihaz> eyKisiKullandigiCihazList = new ArrayList<>();
 
     @OneToMany(mappedBy = "eyKisi", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @Builder.Default
+    @SQLRestriction("AKTIF=true")
     private List<EyKisiMaddeKullanimi> eyKisiMaddeKullanimiList = new ArrayList<>();
 
 //    @OneToMany(mappedBy = "eyKisi", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
@@ -236,6 +241,7 @@ public class EyKisi extends BaseEntity  {
 
     @OneToMany(mappedBy = "eyKisi")
     @Builder.Default
+    @SQLRestriction("AKTIF=true")
     private List<EyTalep> eyTalepList = new ArrayList<>();
 
     @Transient
