@@ -3,6 +3,7 @@ package tr.bel.gaziantep.bysweb.moduls.engelsizler.service;
 import jakarta.ejb.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import tr.bel.gaziantep.bysweb.core.enums.engelsizler.EnumEyAnketDurumu;
 import tr.bel.gaziantep.bysweb.core.enums.engelsizler.EnumEyKullandigiCihaz;
 import tr.bel.gaziantep.bysweb.core.enums.engelsizler.EnumEyMaddeKullanimi;
 import tr.bel.gaziantep.bysweb.core.enums.genel.*;
@@ -14,6 +15,7 @@ import tr.bel.gaziantep.bysweb.moduls.genel.entity.*;
 
 import java.io.Serial;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -66,6 +68,10 @@ public class EyKisiService extends AbstractService<EyKisi> {
 
 
         eyKisi = processAllUpdates(eyKisi, engelGrubus, faydalandigiHakList,maddeKullanimis,aileninGelirKaynagis,yardimAlinanYerlers,yardimTurus,kullandigiCihazs);
+        if(eyKisi.getAnketDurumu().equals(EnumEyAnketDurumu.ANKET_YAPILDI) || eyKisi.getAnketDurumu().equals(EnumEyAnketDurumu.ANKET_YAPILMADI)) {
+            eyKisi.setAnketBaslangicTarihi(LocalDateTime.now());
+            eyKisi.setAnketBitisTarihi(LocalDateTime.now());
+        }
         edit(eyKisi);
     }
 
