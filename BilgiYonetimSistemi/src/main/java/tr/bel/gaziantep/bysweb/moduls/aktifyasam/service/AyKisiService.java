@@ -3,11 +3,15 @@ package tr.bel.gaziantep.bysweb.moduls.aktifyasam.service;
 import jakarta.ejb.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
 import tr.bel.gaziantep.bysweb.core.enums.aktifyasam.EnumAyGrup;
 import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlGun;
 import tr.bel.gaziantep.bysweb.core.service.AbstractService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.moduls.aktifyasam.entity.*;
+import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
+import tr.bel.gaziantep.bysweb.webservice.api.dto.PageResponse;
+import tr.bel.gaziantep.bysweb.webservice.api.dto.aktifyasam.AyKisiDTO;
 
 import java.io.Serial;
 import java.util.*;
@@ -218,6 +222,85 @@ public class AyKisiService extends AbstractService<AyKisi> {
         }
 
         return ayKisi;
+    }
+
+    public PageResponse<AyKisiDTO> findAll(int page, int size) {
+        TypedQuery<AyKisi> query = em.createQuery(
+                "SELECT p FROM AyKisi p " +
+                        "WHERE p.aktif=true " +
+                        "AND p.gnlKisi.durum=tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlDurum.SAG " +
+                        "AND p.gnlKisi.aktif=true " +
+                        "ORDER BY p.id",
+                AyKisi.class);
+
+        query.setFirstResult(page * size);
+        query.setMaxResults(size);
+
+        List<AyKisi> eyKisiList = query.getResultList();
+
+        List<AyKisiDTO> content = new ArrayList<>();
+        for (AyKisi ayKisi : eyKisiList) {
+            AyKisiDTO dto = new AyKisiDTO();
+            GnlKisi gnlKisi = ayKisi.getGnlKisi();
+            dto.setTcKimlikNo(gnlKisi.getTcKimlikNo());
+            dto.setDogumTarihi(gnlKisi.getDogumTarihi());
+            dto.setAd(gnlKisi.getAd());
+            dto.setSoyad(gnlKisi.getSoyad());
+            dto.setDogumYeri(gnlKisi.getDogumYeri());
+            dto.setIlce(gnlKisi.getGnlIlce() == null ? "-" : gnlKisi.getGnlIlce().getTanim());
+            dto.setMahalle(gnlKisi.getGnlMahalle() == null ? "-" : gnlKisi.getGnlMahalle().getTanim());
+            dto.setAdres(gnlKisi.getAdres());
+            dto.setCinsiyet(gnlKisi.getCinsiyet().getDisplayValue());
+            dto.setMedeniDurum(gnlKisi.getMedeniDurum().getDisplayValue());
+            dto.setTelefon(gnlKisi.getTelefon());
+            dto.setTelefon2(gnlKisi.getTelefon2());
+            dto.setKoordinat(gnlKisi.getLatLng());
+            dto.setKayitTarihi(ayKisi.getKayitTarihi());
+            dto.setBirim(ayKisi.getAyBirim().getTanim());
+            dto.setDevamDurumu(ayKisi.getDevamDurumu().getDisplayValue());
+            dto.setEklemeTarihi(ayKisi.getEklemeTarihi());
+            dto.setGuncellemeTarihi(ayKisi.getGuncellemeTarihi());
+
+            List<String> saglikBilgis = new ArrayList<>();
+            for (AyKisiSaglikBilgi ayKisiSaglikBilgi : ayKisi.getAyKisiSaglikBilgileriList()) {
+                if(!ayKisiSaglikBilgi.isAktif() || !ayKisiSaglikBilgi.isSecili()) continue;
+                saglikBilgis.add(ayKisiSaglikBilgi.getAySaglikBilgi().getTanim());
+            }
+            dto.setSaglikBilgi(saglikBilgis);
+
+            List<String> aktivites = new ArrayList<>();
+            for (AyKisiAktivite ayKisiAktivite : ayKisi.getAyKisiAktiviteList()) {
+                if(!ayKisiAktivite.isAktif() || !ayKisiAktivite.isSecili()) continue;
+                aktivites.add(ayKisiAktivite.getAyAktivite().getTanim());
+            }
+            dto.setAktivite(aktivites);
+
+            List<String> sanatsalBeceris = new ArrayList<>();
+            for (AyKisiSanatsalBeceri ayKisiSanatsalBeceri : ayKisi.getAyKisiSanatsalBeceriList()) {
+                if(!ayKisiSanatsalBeceri.isAktif() || !ayKisiSanatsalBeceri.isSecili()) continue;
+                sanatsalBeceris.add(ayKisiSanatsalBeceri.getAySanatsalBeceri().getTanim());
+            }
+            dto.setSanatsalBeceri(sanatsalBeceris);
+
+            content.add(dto);
+        }
+
+        Long total = em.createQuery(
+                "SELECT COUNT(p) FROM AyKisi p " +
+                        "WHERE p.aktif=true " +
+                        "AND p.gnlKisi.durum=tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlDurum.SAG " +
+                        "AND p.gnlKisi.aktif=true ",
+                Long.class).getSingleResult();
+
+        int totalPages = (int) Math.ceil((double) total / size);
+
+        return new PageResponse<>(
+                content,
+                total,
+                totalPages,
+                page,
+                size
+        );
     }
 
 }

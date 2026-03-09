@@ -19,13 +19,14 @@ public class AuthorizationFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        HttpServletRequest req = (HttpServletRequest) request;
+            HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
         HttpSession session = req.getSession(false);
         String loginURI = req.getContextPath() + "/giris";
         String flushURI = req.getContextPath() + "/flush";
         String captchaURI = req.getContextPath() + "/captcha";
         String surveyURI = req.getContextPath() + "/anket";
+        String apiURI = req.getContextPath() + "/api";
 
         boolean loggedIn = session != null && session.getAttribute("syKullanici") != null;
         boolean loginRequest = req.getRequestURI().equals(loginURI);
@@ -33,6 +34,7 @@ public class AuthorizationFilter implements Filter {
         boolean flushRequest = req.getRequestURI().equals(flushURI);
         boolean captchaRequest = req.getRequestURI().equals(captchaURI);
         boolean surveyRequest = req.getRequestURI().equals(surveyURI);
+        boolean apiRequest = req.getRequestURI().contains(apiURI);
 
         if (flushRequest) {
             chain.doFilter(req, response);
@@ -45,6 +47,11 @@ public class AuthorizationFilter implements Filter {
         }
 
         if(captchaRequest) {
+            chain.doFilter(req, response);
+            return;
+        }
+
+        if(apiRequest) {
             chain.doFilter(req, response);
             return;
         }

@@ -68,7 +68,7 @@ public class EyTalepRaporuPrint extends AbstractReportController {
             parameterMap.put("ilceId", gnlIlce == null ? -1 : gnlIlce.getId());
             parameterMap.put("konuId", eyTalepKonu == null ? -1 : eyTalepKonu.getId());
             parameterMap.put("engelGrubuId", eyEngelGrubu == null ? -1 : eyEngelGrubu.getId());
-            parameterMap.put("durum", durum == null ? -1 : durum.name());
+            parameterMap.put("durum", durum == null ? "-1" : durum.name());
 
 
             if (raporTuru == EnumRaporTuru.PDF) {

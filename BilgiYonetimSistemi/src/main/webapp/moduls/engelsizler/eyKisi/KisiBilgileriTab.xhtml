@@ -30,7 +30,7 @@
 
     <p:outputLabel value="#{messages.anketDurumuLabel}" for="@next"/>
     <p:selectOneMenu id="anketDurumu" value="#{eyKisiController.selected.anketDurumu}"
-                     converter="omnifaces.SelectItemsConverter">
+                     converter="omnifaces.SelectItemsConverter" required="true">
         <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
         <f:selectItems value="#{enumAnketDurumus.ALL_VALUES}"
                        var="anketDurums"

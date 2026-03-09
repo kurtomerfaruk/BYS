@@ -18,7 +18,8 @@ public enum EnumGnlDurum implements BaseEnum {
     VATANDASLIKTAN_CIKMA("Vatandaşlıktan Çıkma"),
     IKAMET_SURESI_BITTI("İkamet Süresi Bitti"),
     OLUMUN_TESPITI("Ölümün Tespiti"),
-    KAPALI("Kapalı");
+    KAPALI("Kapalı"),
+    YABANCI_KISI_IPTAL_KALDIRMA("Yabancı Kişi İptal/Kaldırma");
 
     private final String label;
 
@@ -34,6 +35,9 @@ public enum EnumGnlDurum implements BaseEnum {
     public static EnumGnlDurum fromValue(String value) throws Exception {
         if(value.equals("Açık")){
             return EnumGnlDurum.SAG;
+        }
+        if(value.equals("Ölü") || value.equals("Ölüm") || value.equals("Ölümün Tespiti")){
+            return EnumGnlDurum.OLU;
         }
         for (EnumGnlDurum durum : EnumGnlDurum.values()) {
             if(durum.getDisplayValue().equals(value)){

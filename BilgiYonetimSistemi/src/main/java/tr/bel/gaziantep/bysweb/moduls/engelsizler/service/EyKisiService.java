@@ -3,6 +3,7 @@ package tr.bel.gaziantep.bysweb.moduls.engelsizler.service;
 import jakarta.ejb.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
 import tr.bel.gaziantep.bysweb.core.enums.engelsizler.EnumEyAnketDurumu;
 import tr.bel.gaziantep.bysweb.core.enums.engelsizler.EnumEyKullandigiCihaz;
 import tr.bel.gaziantep.bysweb.core.enums.engelsizler.EnumEyMaddeKullanimi;
@@ -12,6 +13,10 @@ import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.core.utils.DateUtil;
 import tr.bel.gaziantep.bysweb.moduls.engelsizler.entity.*;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.*;
+import tr.bel.gaziantep.bysweb.webservice.api.dto.PageResponse;
+import tr.bel.gaziantep.bysweb.webservice.api.dto.engelsiz.EyCihazTeslimiDTO;
+import tr.bel.gaziantep.bysweb.webservice.api.dto.engelsiz.EyKisiDTO;
+import tr.bel.gaziantep.bysweb.webservice.api.dto.engelsiz.EyTalepDto;
 
 import java.io.Serial;
 import java.time.LocalDate;
@@ -67,8 +72,8 @@ public class EyKisiService extends AbstractService<EyKisi> {
                        List<EnumEyKullandigiCihaz> kullandigiCihazs) {
 
 
-        eyKisi = processAllUpdates(eyKisi, engelGrubus, faydalandigiHakList,maddeKullanimis,aileninGelirKaynagis,yardimAlinanYerlers,yardimTurus,kullandigiCihazs);
-        if(eyKisi.getAnketDurumu().equals(EnumEyAnketDurumu.ANKET_YAPILDI) || eyKisi.getAnketDurumu().equals(EnumEyAnketDurumu.ANKET_YAPILMADI)) {
+        eyKisi = processAllUpdates(eyKisi, engelGrubus, faydalandigiHakList, maddeKullanimis, aileninGelirKaynagis, yardimAlinanYerlers, yardimTurus, kullandigiCihazs);
+        if (eyKisi.getAnketDurumu().equals(EnumEyAnketDurumu.ANKET_YAPILDI) || eyKisi.getAnketDurumu().equals(EnumEyAnketDurumu.ANKET_YAPILMADI)) {
             eyKisi.setAnketBaslangicTarihi(LocalDateTime.now());
             eyKisi.setAnketBitisTarihi(LocalDateTime.now());
         }
@@ -76,13 +81,13 @@ public class EyKisiService extends AbstractService<EyKisi> {
     }
 
     public EyKisi processAllUpdates(EyKisi eyKisi,
-                                     List<EyEngelGrubu> engelGrubus,
-                                     List<EnumGnlFaydalandigiHak> faydalandigiHakList,
-                                     List<EnumEyMaddeKullanimi> maddeKullanimis,
-                                     List<EnumGnlGelirKaynagi> aileninGelirKaynagis,
-                                     List<EnumGnlYardimAlinanYerler> yardimAlinanYerlers,
-                                     List<EnumGnlYardimTuru> yardimTurus,
-                                     List<EnumEyKullandigiCihaz> kullandigiCihazs) {
+                                    List<EyEngelGrubu> engelGrubus,
+                                    List<EnumGnlFaydalandigiHak> faydalandigiHakList,
+                                    List<EnumEyMaddeKullanimi> maddeKullanimis,
+                                    List<EnumGnlGelirKaynagi> aileninGelirKaynagis,
+                                    List<EnumGnlYardimAlinanYerler> yardimAlinanYerlers,
+                                    List<EnumGnlYardimTuru> yardimTurus,
+                                    List<EnumEyKullandigiCihaz> kullandigiCihazs) {
 
         eyKisi = checkKisiEngelGrubu(eyKisi, engelGrubus);
         eyKisi = checkGnlKisiFaydalandigiHak(eyKisi, faydalandigiHakList);
@@ -130,7 +135,7 @@ public class EyKisiService extends AbstractService<EyKisi> {
             return eyKisi;
         }
 
-        List<EyKisiMaddeKullanimi> existingMaddeKullanimi =eyKisi.getEyKisiMaddeKullanimiList();
+        List<EyKisiMaddeKullanimi> existingMaddeKullanimi = eyKisi.getEyKisiMaddeKullanimiList();
 
         Set<EnumEyMaddeKullanimi> newMaddeKullanimiSet = new HashSet<>(maddeKullanimis);
 
@@ -217,7 +222,7 @@ public class EyKisiService extends AbstractService<EyKisi> {
         return eyKisi;
     }
 
-    private EyKisi checkGnlKisiYardimTuru(EyKisi eyKisi,List<EnumGnlYardimTuru> yardimTurus) {
+    private EyKisi checkGnlKisiYardimTuru(EyKisi eyKisi, List<EnumGnlYardimTuru> yardimTurus) {
         if (yardimTurus == null || yardimTurus.isEmpty()) {
             return eyKisi;
         }
@@ -248,12 +253,12 @@ public class EyKisiService extends AbstractService<EyKisi> {
         return eyKisi;
     }
 
-    private EyKisi checkEyKisiKullandigiCihaz(EyKisi eyKisi,List<EnumEyKullandigiCihaz> kullandigiCihazs) {
+    private EyKisi checkEyKisiKullandigiCihaz(EyKisi eyKisi, List<EnumEyKullandigiCihaz> kullandigiCihazs) {
         if (kullandigiCihazs == null || kullandigiCihazs.isEmpty()) {
             return eyKisi;
         }
 
-        List<EyKisiKullandigiCihaz> existingMaddeKullanimi =eyKisi.getEyKisiKullandigiCihazList();
+        List<EyKisiKullandigiCihaz> existingMaddeKullanimi = eyKisi.getEyKisiKullandigiCihazList();
 
         Set<EnumEyKullandigiCihaz> newMaddeKullanimiSet = new HashSet<>(kullandigiCihazs);
 
@@ -537,4 +542,107 @@ public class EyKisiService extends AbstractService<EyKisi> {
 //        eyKisi.setEyKisiEngelGrubuList(eyKisiEngelgrubus);
 //        return eyKisi;
 //    }
+
+    public PageResponse<EyKisiDTO> findAll(int page, int size) {
+        TypedQuery<EyKisi> query = em.createQuery(
+                "SELECT p FROM EyKisi p " +
+                        "WHERE p.aktif=true " +
+                        "AND p.gnlKisi.durum=tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlDurum.SAG " +
+                        "AND p.gnlKisi.aktif=true " +
+                        "ORDER BY p.id",
+                EyKisi.class);
+
+        query.setFirstResult(page * size);
+        query.setMaxResults(size);
+
+        List<EyKisi> eyKisiList = query.getResultList();
+
+        List<EyKisiDTO> content = new ArrayList<>();
+        for (EyKisi eyKisi : eyKisiList) {
+            EyKisiDTO dto = new EyKisiDTO();
+            GnlKisi gnlKisi = eyKisi.getGnlKisi();
+            dto.setTcKimlikNo(gnlKisi.getTcKimlikNo());
+            dto.setDogumTarihi(gnlKisi.getDogumTarihi());
+            dto.setAd(gnlKisi.getAd());
+            dto.setSoyad(gnlKisi.getSoyad());
+            dto.setDogumYeri(gnlKisi.getDogumYeri());
+            dto.setIlce(gnlKisi.getGnlIlce() == null ? "-" : gnlKisi.getGnlIlce().getTanim());
+            dto.setMahalle(gnlKisi.getGnlMahalle() == null ? "-" : gnlKisi.getGnlMahalle().getTanim());
+            dto.setAdres(gnlKisi.getAdres());
+            dto.setCinsiyet(gnlKisi.getCinsiyet().getDisplayValue());
+            dto.setMedeniDurum(gnlKisi.getMedeniDurum().getDisplayValue());
+            dto.setTelefon(gnlKisi.getTelefon());
+            dto.setTelefon2(gnlKisi.getTelefon2());
+            dto.setKoordinat(gnlKisi.getLatLng());
+            dto.setEklemeTarihi(eyKisi.getEklemeTarihi());
+            dto.setGuncellemeTarihi(eyKisi.getGuncellemeTarihi());
+
+            List<EyTalepDto> talepList = new ArrayList<>();
+            for (EyTalep eyTalep : eyKisi.getEyTalepList()) {
+                if(!eyTalep.isAktif()) continue;
+                EyTalepDto eyTalepDto = EyTalepDto.builder()
+                        .konu(eyTalep.getEyTalepKonu().getTanim())
+                        .tarih(eyTalep.getTarih())
+                        .talepTuru(eyTalep.getTalepTuru().getDisplayValue())
+                        .talepTipi(eyTalep.getTalepTipi().getDisplayValue())
+                        .durum(eyTalep.getDurum().getDisplayValue())
+                        .durumAciklama(eyTalep.getDurumAciklama())
+                        .aciklama(eyTalep.getAciklama())
+                        .build();
+                talepList.add(eyTalepDto);
+            }
+            dto.setTalep(talepList);
+
+            List<String> engelGrubus = new ArrayList<>();
+            for (EyKisiEngelGrubu eyKisiEngelGrubu : eyKisi.getEyKisiEngelGrubuList()) {
+                if(!eyKisiEngelGrubu.isAktif() || !eyKisiEngelGrubu.isSecili()) continue;
+                engelGrubus.add(eyKisiEngelGrubu.getEyEngelGrubu().getTanim());
+            }
+            dto.setEngelGrubu(engelGrubus);
+
+            dto.setToplamVucutKayipOrani(eyKisi.getToplamVucutKayipOrani());
+
+            List<String> maddeKullanimis = new ArrayList<>();
+            for (EyKisiMaddeKullanimi maddeKullanimi : eyKisi.getEyKisiMaddeKullanimiList()) {
+                if(!maddeKullanimi.isAktif() || !maddeKullanimi.isSecili()) continue;
+                maddeKullanimis.add(maddeKullanimi.getTanim().getDisplayValue());
+            }
+            dto.setMaddeKullanimi(maddeKullanimis);
+
+            List<EyAracCihazTeslimi> eyAracCihazTeslimiList = getEntityManager().createNamedQuery("EyAracCihazTeslimi.findByEyKisi").setParameter("eyKisi",
+                    eyKisi).getResultList();
+            List<EyCihazTeslimiDTO> cihazTeslimiList = new ArrayList<>();
+            for (EyAracCihazTeslimi cihazTeslimi : eyAracCihazTeslimiList) {
+                EyCihazTeslimiDTO cihazTeslimiDTO =EyCihazTeslimiDTO.builder()
+                        .arac(cihazTeslimi.getEyArac().getTanim())
+                        .aciklama(cihazTeslimi.getAciklama())
+                        .verilisTarihi(cihazTeslimi.getVerilisTarihi())
+                        .cihazDurumu(cihazTeslimi.getCihazDurum().getDisplayValue())
+                        .geriAlimAciklamasi(cihazTeslimi.getGeriAlimAciklamasi())
+                        .geriAlimTarihi(cihazTeslimi.getGeriAlimTarihi())
+                        .build();
+                cihazTeslimiList.add(cihazTeslimiDTO);
+            }
+            dto.setCihazTeslimi(cihazTeslimiList);
+
+            content.add(dto);
+        }
+
+        Long total = em.createQuery(
+                "SELECT COUNT(p) FROM EyKisi p " +
+                        "WHERE p.aktif=true " +
+                        "AND p.gnlKisi.durum=tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlDurum.SAG " +
+                        "AND p.gnlKisi.aktif=true ",
+                Long.class).getSingleResult();
+
+        int totalPages = (int) Math.ceil((double) total / size);
+
+        return new PageResponse<>(
+                content,
+                total,
+                totalPages,
+                page,
+                size
+        );
+    }
 }

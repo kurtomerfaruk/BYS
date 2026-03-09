@@ -132,8 +132,6 @@ public class AyKisi extends BaseEntity {
     @Column(name = "AILEDEKI_SEHIT_DURUMU")
     private boolean ailedekiSehitDurumu;
 
-
-
     @OneToMany(mappedBy = "ayKisi", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @SQLRestriction("AKTIF=true")
     @Builder.Default

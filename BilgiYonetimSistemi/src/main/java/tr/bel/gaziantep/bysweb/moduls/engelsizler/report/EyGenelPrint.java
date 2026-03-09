@@ -59,6 +59,8 @@ public class EyGenelPrint extends AbstractReportController {
             parameterMap.put("ilceId", ilceId);
             parameterMap.put("engelGrubuId", engelGrubuId);
             parameterMap.put("durum", durum.name());
+            parameterMap.put("yasBaslangic",yasBaslangic);
+            parameterMap.put("yasBitis",yasBitis);
             setExportOption(raporTuru);
 
             if (raporTuru == EnumRaporTuru.PDF) {

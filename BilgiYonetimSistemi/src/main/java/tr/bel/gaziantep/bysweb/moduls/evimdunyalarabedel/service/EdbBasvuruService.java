@@ -43,6 +43,8 @@ public class EdbBasvuruService extends AbstractService<EdbBasvuru> {
         GnlKisi gnlKisi = getEntityManager().merge(edbBasvuru.getGnlKisi());
         EyKisi eyKisi = null;
         if(edbBasvuru.getEyKisi() != null) {
+            EyKisi oldEyKisi = edbBasvuru.getEyKisi();
+            oldEyKisi.setGnlKisi(gnlKisi);
             eyKisi = getEntityManager().merge(edbBasvuru.getEyKisi());
         }
 

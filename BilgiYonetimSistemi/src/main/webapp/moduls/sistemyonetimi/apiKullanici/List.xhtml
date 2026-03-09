@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:p="primefaces"
+                xmlns:pt="jakarta.faces.passthrough"
+                xmlns:coco="jakarta.faces.composite/ui">
+
+    <h:form id="ApiKullaniciListForm" styleClass="form-height">
+
+
+        <coco:datatable id="datalist"
+                        value="#{apiKullaniciController.lazyItems}"
+                        rowKey="#{item.id}"
+                        selection="#{apiKullaniciController.selected}"
+                        filtered="#{apiKullaniciController.filtered}"
+                        rowselect=":ApiKullaniciListForm:datalist:datalist:createButton,:ApiKullaniciListForm:datalist:datalist:viewButton,:ApiKullaniciListForm:datalist:datalist:editButton,:ApiKullaniciListForm:datalist:datalist:deleteButton,:ApiKullaniciListForm:ApiKullaniciDataTableContextMenu"
+                        rowDblselect="document.getElementById('ApiKullaniciListForm:datalist:datalist:editButton').click()"
+                        contextMenu=":ApiKullaniciListForm:datalist:datalist:createButton :ApiKullaniciListForm:datalist:datalist:viewButton :ApiKullaniciListForm:datalist:datalist:editButton :ApiKullaniciListForm:datalist:datalist:deleteButton"
+                        selectListener="#{apiKullaniciController.resetParents}"
+                        controller="#{apiKullaniciController}"
+                        header="#{messages.apiKullaniciListesi}">
+
+            <p:ajax event="colResize" listener="#{apiKullaniciController.onResize}"/>
+
+            <f:facet name="paginatorBottomLeft">
+
+                <p:commandButton id="createButton" styleClass="ui-button-primary" icon="pi pi-plus" pt:data-tooltip="#{messages.buttonEkle}"
+                                 actionListener="#{apiKullaniciController.prepareCreate}" update=":ApiKullaniciCreateForm:ApiKullaniciCreateForm"
+                                 oncomplete="PF('ApiKullaniciCreateDialog').show()" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('apikullanici:ekle')}"/>
+                <p:commandButton id="editButton" styleClass="ui-button-success" icon="pi pi-pencil" pt:data-tooltip="#{messages.buttonGuncelle}"
+                                 update=":ApiKullaniciEditForm:ApiKullaniciEditForm" oncomplete="PF('ApiKullaniciEditDialog').show()" disabled="#{empty
+                                 apiKullaniciController.selected}"
+                                 onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('apikullanici:guncelle')}"/>
+                <p:commandButton id="viewButton" styleClass="ui-button-info" icon="pi pi-search" pt:data-tooltip="#{messages.buttonKayitBilgisi}"
+                                 update=":ApiKullaniciViewForm:ApiKullaniciViewForm" oncomplete="PF('ApiKullaniciViewDialog').show()" disabled="#{empty
+                                 apiKullaniciController.selected}"
+                                 onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                <p:commandButton id="deleteButton" styleClass="ui-button-danger" icon="pi pi-trash" pt:data-tooltip="#{messages.buttonSil}"
+                                 actionListener="#{apiKullaniciController.delete}" update=":growl,datalist" disabled="#{empty apiKullaniciController.selected}"
+                                 rendered="#{syKullaniciController.hasPermission('apikullanici:sil')}">
+                    <p:confirm header="#{messages.ConfirmationHeader}" message="#{messages.ConfirmDeleteMessage}" icon="pi pi-exclamation-circle"/>
+                </p:commandButton>
+            </f:facet>
+
+        </coco:datatable>
+
+        <p:contextMenu id="ApiKullaniciDataTableContextMenu" for="datalist:datalist">
+            <p:menuitem value="#{messages.buttonEkle}" onclick="document.getElementById('ApiKullaniciListForm:datalist:datalist:createButton').click();"
+                        icon="pi pi-plus" rendered="#{syKullaniciController.hasPermission('apikullanici:ekle')}"/>
+            <p:menuitem value="#{messages.buttonGuncelle}" onclick="document.getElementById('ApiKullaniciListForm:datalist:datalist:editButton').click();"
+                        icon="pi pi-pencil" rendered="#{syKullaniciController.hasPermission('apikullanici:guncelle')}"/>
+            <p:menuitem value="#{messages.buttonKayitBilgisi}" onclick="document.getElementById('ApiKullaniciListForm:datalist:datalist:viewButton').click();"
+                        icon="pi pi-search"/>
+            <p:menuitem value="#{messages.buttonSil}" onclick="document.getElementById('ApiKullaniciListForm:datalist:datalist:deleteButton').click();"
+                        icon="pi pi-trash" rendered="#{syKullaniciController.hasPermission('apikullanici:sil')}"/>
+        </p:contextMenu>
+
+        <ui:include src="/confirmation.xhtml"/>
+
+    </h:form>
+
+</ui:composition>

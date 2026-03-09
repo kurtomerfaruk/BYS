@@ -19,12 +19,14 @@ public class AyAktiviteService extends AbstractService<AyAktivite> {
 
     @Serial
     private static final long serialVersionUID = 4732504664202568675L;
-    @PersistenceContext(unitName = Constants.UNIT_NAME)
-    private EntityManager em;
+
 
     public AyAktiviteService() {
         super(AyAktivite.class);
     }
+
+    @PersistenceContext(unitName = Constants.UNIT_NAME)
+    private EntityManager em;
 
     @Override
     protected EntityManager getEntityManager() {
