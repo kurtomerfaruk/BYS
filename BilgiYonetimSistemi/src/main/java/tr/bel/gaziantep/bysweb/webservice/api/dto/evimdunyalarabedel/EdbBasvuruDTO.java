@@ -1,4 +1,4 @@
-package tr.bel.gaziantep.bysweb.webservice.api.dto.engelsizkariyermerkezi;
+package tr.bel.gaziantep.bysweb.webservice.api.dto.evimdunyalarabedel;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -9,12 +9,12 @@ import java.util.List;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
- * @version 1.20.0
- * @since 9.03.2026 23:15
+ * @version 1.0.0
+ * @since 12.03.2026 23:39
  */
 @Getter
 @Setter
-public class EkmKursiyerDto {
+public class EdbBasvuruDTO {
     private String tcKimlikNo;
     private LocalDate dogumTarihi;
     private String ad;
@@ -28,8 +28,12 @@ public class EkmKursiyerDto {
     private String telefon;
     private String telefon2;
     private String koordinat;
-    private String devamDurumu;
-    private List<String> kurs;
     private LocalDateTime eklemeTarihi;
     private LocalDateTime guncellemeTarihi;
+    private LocalDateTime basvuruTarihi;
+    private String kisiTuru;
+    private String hizmetDurumu;
+    private String basvuruDurumu;
+    private List<EdbTalepDTO> talep;
+
 }

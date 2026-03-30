@@ -21,7 +21,7 @@ import tr.bel.gaziantep.bysweb.moduls.engelsizler.service.EyKisiService;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKurs;
 import tr.bel.gaziantep.bysweb.webservice.api.dto.PageResponse;
-import tr.bel.gaziantep.bysweb.webservice.api.dto.engelsizkariyermerkezi.EkmKursiyerDto;
+import tr.bel.gaziantep.bysweb.webservice.api.dto.engelsizkariyermerkezi.EkmKursiyerDTO;
 
 import java.io.Serial;
 import java.util.*;
@@ -111,7 +111,7 @@ public class EkmKursiyerService extends AbstractService<EkmKursiyer> {
                 .orElse(null);
     }
 
-    public PageResponse<EkmKursiyerDto> findAll(int page, int size) {
+    public PageResponse<EkmKursiyerDTO> findAll(int page, int size) {
         TypedQuery<EkmKursiyer> query = em.createQuery(
                 "SELECT p FROM EkmKursiyer p " +
                         "WHERE p.aktif=true " +
@@ -126,9 +126,9 @@ public class EkmKursiyerService extends AbstractService<EkmKursiyer> {
 
         List<EkmKursiyer> eyKisiList = query.getResultList();
 
-        List<EkmKursiyerDto> content = new ArrayList<>();
+        List<EkmKursiyerDTO> content = new ArrayList<>();
         for (EkmKursiyer ekmKursiyer : eyKisiList) {
-            EkmKursiyerDto dto = new EkmKursiyerDto();
+            EkmKursiyerDTO dto = new EkmKursiyerDTO();
             GnlKisi gnlKisi = ekmKursiyer.getEyKisi().getGnlKisi();
             dto.setTcKimlikNo(gnlKisi.getTcKimlikNo());
             dto.setDogumTarihi(gnlKisi.getDogumTarihi());

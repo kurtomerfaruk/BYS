@@ -16,7 +16,7 @@ import tr.bel.gaziantep.bysweb.moduls.genel.entity.*;
 import tr.bel.gaziantep.bysweb.webservice.api.dto.PageResponse;
 import tr.bel.gaziantep.bysweb.webservice.api.dto.engelsiz.EyCihazTeslimiDTO;
 import tr.bel.gaziantep.bysweb.webservice.api.dto.engelsiz.EyKisiDTO;
-import tr.bel.gaziantep.bysweb.webservice.api.dto.engelsiz.EyTalepDto;
+import tr.bel.gaziantep.bysweb.webservice.api.dto.engelsiz.EyTalepDTO;
 
 import java.io.Serial;
 import java.time.LocalDate;
@@ -577,10 +577,10 @@ public class EyKisiService extends AbstractService<EyKisi> {
             dto.setEklemeTarihi(eyKisi.getEklemeTarihi());
             dto.setGuncellemeTarihi(eyKisi.getGuncellemeTarihi());
 
-            List<EyTalepDto> talepList = new ArrayList<>();
+            List<EyTalepDTO> talepList = new ArrayList<>();
             for (EyTalep eyTalep : eyKisi.getEyTalepList()) {
                 if(!eyTalep.isAktif()) continue;
-                EyTalepDto eyTalepDto = EyTalepDto.builder()
+                EyTalepDTO eyTalepDto = EyTalepDTO.builder()
                         .konu(eyTalep.getEyTalepKonu().getTanim())
                         .tarih(eyTalep.getTarih())
                         .talepTuru(eyTalep.getTalepTuru().getDisplayValue())

@@ -32,6 +32,8 @@ import tr.bel.gaziantep.bysweb.moduls.engelsizler.service.EyTalepService;
 import tr.bel.gaziantep.bysweb.moduls.genel.controller.GnlKisiController;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.*;
 import tr.bel.gaziantep.bysweb.moduls.genel.service.GnlKisiService;
+import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.entity.SyGenelAyar;
+import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.service.SyGenelAyarService;
 import tr.bel.gaziantep.bysweb.webservice.gazikart.controller.GaziKartService;
 import tr.bel.gaziantep.bysweb.webservice.gazikart.model.ServisModel;
 import tr.bel.gaziantep.bysweb.webservice.gazikart.model.ServisSonucu;
@@ -71,6 +73,8 @@ public class EyKisiController extends AbstractController<EyKisi> {
     private EyTalepService eyTalepService;
     @Inject
     private FilterOptionService filterOptionService;
+    @Inject
+    private SyGenelAyarService syGenelAyarService;
     @Inject
     private KpsController kpsController;
     @Inject
@@ -217,6 +221,13 @@ public class EyKisiController extends AbstractController<EyKisi> {
     public void update(ActionEvent event) {
         try {
             if (this.getSelected() != null) {
+
+                SyGenelAyar ayar =syGenelAyarService.findByTanim("SendNotification");
+                if (ayar != null && (ayar.getDeger().equals("False"))) {
+                    FacesUtil.errorMessage("hataOlustu");
+                    return;
+                }
+
                 EyKisi existing = service.findByTcKimlikNo(this.getSelected().getGnlKisi().getTcKimlikNo());
 
                 if (existing != null && !existing.getId().equals(this.getSelected().getId())) {

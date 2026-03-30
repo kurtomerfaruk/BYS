@@ -1,10 +1,7 @@
 package tr.bel.gaziantep.bysweb.core.utils;
 
 import java.io.Serial;
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 
 /**
@@ -62,5 +59,11 @@ public class DateUtil implements java.io.Serializable{
 
     public static LocalDateTime lastOfMonth() {
         return LocalDateTime.now().withDayOfMonth(1).plusMonths(1).minusDays(1).withHour(23).withMinute(59).withSecond(59);
+    }
+
+    public static int calculateAge(LocalDate birthDate) {
+        LocalDate today = LocalDate.now();
+
+        return Period.between(birthDate, today).getYears();
     }
 }
