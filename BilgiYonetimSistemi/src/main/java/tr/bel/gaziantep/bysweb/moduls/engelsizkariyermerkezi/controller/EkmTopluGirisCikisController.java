@@ -72,6 +72,7 @@ public class EkmTopluGirisCikisController extends AbstractController<EkmGirisCik
 
     public void createTraineeList() {
         try {
+            ekmGirisCikisList.clear();
             if (this.getSelected() != null && this.getSelected().getGnlKurs() != null) {
                 if (girisCikis.equals(EnumGirisCikis.GIRIS)) {
                     ekmKursiyerList = ekmKursiyerKursService.findByKurs(this.getSelected().getGnlKurs());
