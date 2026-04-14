@@ -70,6 +70,16 @@
                        itemLabel="#{engelGrubus.tanim.toString()}"/>
     </p:selectCheckboxMenu>
 
+    <p:outputLabel value="#{messages.hastalikLabel}" for="@next"/>
+    <p:selectCheckboxMenu id="hastalik" value="#{eyKisiController.hastalikList}"
+                          label="Hastalıklar" multiple="true" filter="true"
+                          filterMatchMode="startsWith" styleClass="checkboxMenu">
+        <f:selectItems value="#{gnlHastalikController.items}"
+                       var="hastalikItem"
+                       itemValue="#{hastalikItem}"
+                       itemLabel="#{hastalikItem.tanim.toString()}"/>
+    </p:selectCheckboxMenu>
+
     <p:outputLabel value="#{messages.toplamVucutKayipOraniLabel}" for="@next"/>
     <p:inputText id="toplamVucutKayipOrani"
                  value="#{eyKisiController.selected.toplamVucutKayipOrani}"

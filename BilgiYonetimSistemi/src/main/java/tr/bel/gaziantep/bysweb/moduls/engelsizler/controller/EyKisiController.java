@@ -117,6 +117,9 @@ public class EyKisiController extends AbstractController<EyKisi> {
     private List<EnumEyKullandigiCihaz> kullandigiCihazs;
     @Getter
     @Setter
+    private List<GnlHastalik> hastalikList;
+    @Getter
+    @Setter
     private String qrText;
     @Getter
     @Setter
@@ -235,7 +238,8 @@ public class EyKisiController extends AbstractController<EyKisi> {
                     return;
                 }
 
-                service.update(this.getSelected(), engelGrubus, faydalandigiHaklars, maddeKullanimis, aileninGelirKaynagis, yardimAlinanYerlers, yardimTurus, kullandigiCihazs);
+                service.update(this.getSelected(), engelGrubus, faydalandigiHaklars, maddeKullanimis, aileninGelirKaynagis, yardimAlinanYerlers, yardimTurus,
+                        kullandigiCihazs,hastalikList);
                 FacesUtil.successMessage(Constants.KAYIT_GUNCELLENDI);
             }
         } catch (Exception ex) {
@@ -270,6 +274,7 @@ public class EyKisiController extends AbstractController<EyKisi> {
         yardimAlinanYerlers = new ArrayList<>();
         yardimTurus = new ArrayList<>();
         kullandigiCihazs = new ArrayList<>();
+        hastalikList=new ArrayList<>();
     }
 
     public void readInfo() {
@@ -312,6 +317,7 @@ public class EyKisiController extends AbstractController<EyKisi> {
             yardimAlinanYerlers = Function.filterAndCollect(this.getSelected().getGnlKisi().getGnlKisiYardimAlinanYerlerList(), GnlKisiYardimAlinanYerler::isSecili, GnlKisiYardimAlinanYerler::getTanim);
             yardimTurus = Function.filterAndCollect(this.getSelected().getGnlKisi().getGnlKisiAldigiYardimlarList(), GnlKisiAldigiYardimlar::isSecili, GnlKisiAldigiYardimlar::getTanim);
             kullandigiCihazs = Function.filterAndCollect(this.getSelected().getEyKisiKullandigiCihazList(), EyKisiKullandigiCihaz::isSecili, EyKisiKullandigiCihaz::getTanim);
+            hastalikList = Function.filterAndCollect(this.getSelected().getEyKisiHastalikList(),EyKisiHastalik::isSecili,EyKisiHastalik::getGnlHastalik);
 
             if (this.getSelected().getIrtibatKuranGnlPersonel() == null) {
                 this.getSelected().setIrtibatKuranGnlPersonel(this.getSyKullanici().getGnlPersonel());

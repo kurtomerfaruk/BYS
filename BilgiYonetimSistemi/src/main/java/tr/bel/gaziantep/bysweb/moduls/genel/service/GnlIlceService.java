@@ -21,12 +21,12 @@ public class GnlIlceService extends AbstractService<GnlIlce> {
 
     @Serial
     private static final long serialVersionUID = -7497121258878605924L;
-    @PersistenceContext(unitName = Constants.UNIT_NAME)
-    private EntityManager em;
-
     public GnlIlceService() {
         super(GnlIlce.class);
     }
+
+    @PersistenceContext(unitName = Constants.UNIT_NAME)
+    private EntityManager em;
 
     @Override
     protected EntityManager getEntityManager() {

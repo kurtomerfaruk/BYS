@@ -61,6 +61,25 @@ public class EyKisiService extends AbstractService<EyKisi> {
         return getEntityManager().createNamedQuery("EyKisi.getTcList").setMaxResults(recordCount).getResultList();
     }
 
+//    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+//    public void update(EyKisi eyKisi,
+//                       List<EyEngelGrubu> engelGrubus,
+//                       List<EnumGnlFaydalandigiHak> faydalandigiHakList,
+//                       List<EnumEyMaddeKullanimi> maddeKullanimis,
+//                       List<EnumGnlGelirKaynagi> aileninGelirKaynagis,
+//                       List<EnumGnlYardimAlinanYerler> yardimAlinanYerlers,
+//                       List<EnumGnlYardimTuru> yardimTurus,
+//                       List<EnumEyKullandigiCihaz> kullandigiCihazs) {
+//
+//
+//        eyKisi = processAllUpdates(eyKisi, engelGrubus, faydalandigiHakList, maddeKullanimis, aileninGelirKaynagis, yardimAlinanYerlers, yardimTurus, kullandigiCihazs);
+//        if (eyKisi.getAnketDurumu().equals(EnumEyAnketDurumu.ANKET_YAPILDI) || eyKisi.getAnketDurumu().equals(EnumEyAnketDurumu.ANKET_YAPILMADI)) {
+//            eyKisi.setAnketBaslangicTarihi(LocalDateTime.now());
+//            eyKisi.setAnketBitisTarihi(LocalDateTime.now());
+//        }
+//        edit(eyKisi);
+//    }
+
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void update(EyKisi eyKisi,
                        List<EyEngelGrubu> engelGrubus,
@@ -69,10 +88,12 @@ public class EyKisiService extends AbstractService<EyKisi> {
                        List<EnumGnlGelirKaynagi> aileninGelirKaynagis,
                        List<EnumGnlYardimAlinanYerler> yardimAlinanYerlers,
                        List<EnumGnlYardimTuru> yardimTurus,
-                       List<EnumEyKullandigiCihaz> kullandigiCihazs) {
+                       List<EnumEyKullandigiCihaz> kullandigiCihazs,
+                       List<GnlHastalik> hastalikList) {
 
 
-        eyKisi = processAllUpdates(eyKisi, engelGrubus, faydalandigiHakList, maddeKullanimis, aileninGelirKaynagis, yardimAlinanYerlers, yardimTurus, kullandigiCihazs);
+        eyKisi = processAllUpdates(eyKisi, engelGrubus, faydalandigiHakList, maddeKullanimis, aileninGelirKaynagis, yardimAlinanYerlers, yardimTurus,
+                kullandigiCihazs,hastalikList);
         if (eyKisi.getAnketDurumu().equals(EnumEyAnketDurumu.ANKET_YAPILDI) || eyKisi.getAnketDurumu().equals(EnumEyAnketDurumu.ANKET_YAPILMADI)) {
             eyKisi.setAnketBaslangicTarihi(LocalDateTime.now());
             eyKisi.setAnketBitisTarihi(LocalDateTime.now());
@@ -98,6 +119,57 @@ public class EyKisiService extends AbstractService<EyKisi> {
         eyKisi = checkEyKisiKullandigiCihaz(eyKisi, kullandigiCihazs);
         return eyKisi;
     }
+
+    public EyKisi processAllUpdates(EyKisi eyKisi,
+                                    List<EyEngelGrubu> engelGrubus,
+                                    List<EnumGnlFaydalandigiHak> faydalandigiHakList,
+                                    List<EnumEyMaddeKullanimi> maddeKullanimis,
+                                    List<EnumGnlGelirKaynagi> aileninGelirKaynagis,
+                                    List<EnumGnlYardimAlinanYerler> yardimAlinanYerlers,
+                                    List<EnumGnlYardimTuru> yardimTurus,
+                                    List<EnumEyKullandigiCihaz> kullandigiCihazs,
+                                    List<GnlHastalik> hastalikList) {
+
+        eyKisi = checkKisiEngelGrubu(eyKisi, engelGrubus);
+        eyKisi = checkGnlKisiFaydalandigiHak(eyKisi, faydalandigiHakList);
+        eyKisi = checkEyKisiMaddeKullanimi(eyKisi, maddeKullanimis);
+        eyKisi = checkGnlKisiGelirKaynagi(eyKisi, aileninGelirKaynagis);
+        eyKisi = checkGnlKisiYardimAlinanYerler(eyKisi, yardimAlinanYerlers);
+        eyKisi = checkGnlKisiYardimTuru(eyKisi, yardimTurus);
+        eyKisi = checkEyKisiKullandigiCihaz(eyKisi, kullandigiCihazs);
+        eyKisi = chekcEyKisiHastalik(eyKisi,hastalikList);
+        return eyKisi;
+    }
+
+    private EyKisi chekcEyKisiHastalik(EyKisi eyKisi, List<GnlHastalik> hastalikList) {
+        if (hastalikList == null || hastalikList.isEmpty()) {
+            return eyKisi;
+        }
+
+        List<EyKisiHastalik> kisiHastalikList = eyKisi.getEyKisiHastalikList();
+        Set<Integer> newGrubuIds = hastalikList.stream()
+                .map(GnlHastalik::getId)
+                .collect(Collectors.toSet());
+
+        Map<Integer, EyKisiHastalik> existingMap = new HashMap<>();
+        for (EyKisiHastalik keg : kisiHastalikList) {
+            existingMap.put(keg.getGnlHastalik().getId(), keg);
+            keg.setSecili(newGrubuIds.contains(keg.getGnlHastalik().getId()));
+        }
+
+        for (GnlHastalik hastalik : hastalikList) {
+            if (!existingMap.containsKey(hastalik.getId())) {
+                EyKisiHastalik newKeg = new EyKisiHastalik();
+                newKeg.setEyKisi(eyKisi);
+                newKeg.setGnlHastalik(hastalik);
+                newKeg.setSecili(true);
+                kisiHastalikList.add(newKeg);
+            }
+        }
+
+        return eyKisi;
+    }
+
 
     private EyKisi checkGnlKisiFaydalandigiHak(EyKisi eyKisi, List<EnumGnlFaydalandigiHak> faydalandigiHakList) {
         if (faydalandigiHakList == null || faydalandigiHakList.isEmpty()) {
