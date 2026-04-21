@@ -180,12 +180,13 @@ public class EkmKursiyerController extends AbstractController<EkmKursiyer> {
         try {
             if (this.getSelected() != null) {
                 String tcKimlikNo = this.getSelected().getEyKisi().getGnlKisi().getTcKimlikNo();
+                EyKisi eyKisi = eyKisiService.findByTcKimlikNo(tcKimlikNo);
+                if (eyKisi == null) eyKisi = new EyKisi();
                 GnlKisi kisi = gnlKisiService.findByTckimlikNo(tcKimlikNo);
                 if (kisi == null) kisi = this.getSelected().getEyKisi().getGnlKisi();
                 kisi = kpsController.findByTcKimlikNo(kisi, EnumModul.EKM);
-                if (kisi != null) {
-                    this.getSelected().getEyKisi().setGnlKisi(kisi);
-                }
+                eyKisi.setGnlKisi(kisi);
+                this.getSelected().setEyKisi(eyKisi);
 
             }
         } catch (Exception ex) {

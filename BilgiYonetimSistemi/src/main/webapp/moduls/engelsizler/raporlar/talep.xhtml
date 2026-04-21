@@ -11,7 +11,8 @@
 
     <h:form id="EyTalepYazdirForm">
         <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.bys.EnumRaporTuru" var="enumRaporTuru"/>
-        <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlTalepDurumu" var="enumGnlDurum"/>
+        <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlTalepDurumu" var="enumTalepDurum"/>
+        <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlDurum" var="enumGnlDurum"/>
         <div class="row">
             <div class="col-xxl-6">
                 <div class="card custom-card">
@@ -113,9 +114,9 @@
                                     </div>
                                     <div class="col-xxl-9">
                                         <div class="form-group">
-                                            <p:selectOneMenu id="durum" value="#{eyTalepRaporuPrint.durum}">
+                                            <p:selectOneMenu id="durum" value="#{eyTalepRaporuPrint.talepDurumu}">
                                                 <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
-                                                <f:selectItems value="#{enumGnlDurum.ALL_VALUES}"
+                                                <f:selectItems value="#{enumTalepDurum.ALL_VALUES}"
                                                                var="durums"
                                                                itemValue="#{durums}"
                                                                itemLabel="#{durums.displayValue}"/>
@@ -156,6 +157,23 @@
                                                                var="engelGrubus"
                                                                itemValue="#{engelGrubus}"
                                                                itemLabel="#{engelGrubus.tanim}"/>
+                                            </p:selectOneMenu>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3 clearfix">
+                                    <div class="col-xxl-3">
+                                        <label for="raporTuruYas">#{messages.engelGrubuLabel}</label>
+                                    </div>
+                                    <div class="col-xxl-9">
+                                        <div class="form-group">
+                                            <p:selectOneMenu id="kisiDurum" value="#{eyTalepRaporuPrint.kisiDurum}"
+                                                             converter="omnifaces.SelectItemsConverter">
+                                                <f:selectItems value="#{enumGnlDurum.ALL_VALUES}"
+                                                               var="durums"
+                                                               itemValue="#{durums}"
+                                                               itemLabel="#{durums.displayValue}"/>
                                             </p:selectOneMenu>
                                         </div>
                                     </div>

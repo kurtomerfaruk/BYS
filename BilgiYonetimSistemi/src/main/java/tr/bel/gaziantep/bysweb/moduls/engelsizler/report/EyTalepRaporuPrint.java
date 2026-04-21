@@ -11,6 +11,7 @@ import net.sf.jasperreports.engine.JRException;
 import org.primefaces.PrimeFaces;
 import tr.bel.gaziantep.bysweb.core.controller.AbstractReportController;
 import tr.bel.gaziantep.bysweb.core.enums.bys.EnumRaporTuru;
+import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlDurum;
 import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlTalepDurumu;
 import tr.bel.gaziantep.bysweb.core.utils.DateUtil;
 import tr.bel.gaziantep.bysweb.core.utils.Util;
@@ -48,11 +49,12 @@ public class EyTalepRaporuPrint extends AbstractReportController {
     private LocalDate baslangicTarihi;
     private LocalDate bitisTarihi;
     private EyTalepKonu eyTalepKonu;
-    private EnumGnlTalepDurumu durum;
+    private EnumGnlTalepDurumu talepDurumu;
     private EyEngelGrubu eyEngelGrubu;
+    private EnumGnlDurum kisiDurum;
 
     @PostConstruct
-    public void init(){
+    public void init() {
         bitisTarihi = LocalDate.now();
         baslangicTarihi = bitisTarihi.minusDays(7);
     }
@@ -68,7 +70,8 @@ public class EyTalepRaporuPrint extends AbstractReportController {
             parameterMap.put("ilceId", gnlIlce == null ? -1 : gnlIlce.getId());
             parameterMap.put("konuId", eyTalepKonu == null ? -1 : eyTalepKonu.getId());
             parameterMap.put("engelGrubuId", eyEngelGrubu == null ? -1 : eyEngelGrubu.getId());
-            parameterMap.put("durum", durum == null ? "-1" : durum.name());
+            parameterMap.put("talepDurumu", talepDurumu == null ? "-1" : talepDurumu.name());
+            parameterMap.put("kisiDurum", kisiDurum == null ? EnumGnlDurum.SAG.name() : kisiDurum.name());
 
 
             if (raporTuru == EnumRaporTuru.PDF) {
@@ -81,7 +84,7 @@ public class EyTalepRaporuPrint extends AbstractReportController {
             }
 
         } catch (JRException | IOException e) {
-           log.error(null,e);
+            log.error(null, e);
         }
         return null;
     }
