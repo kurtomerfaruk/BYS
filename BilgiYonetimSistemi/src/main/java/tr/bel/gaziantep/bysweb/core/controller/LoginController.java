@@ -99,15 +99,16 @@ public class LoginController implements java.io.Serializable {
     public void login() {
         try {
             HttpSession session = Util.getSession();
-            String captcha = (String) session.getAttribute("captcha");
+            if (!initApp.getProperty("profile").equals("test")) {
+                String captcha = (String) session.getAttribute("captcha");
 
-            if (captcha == null || !captcha.equals(captchaInput)) {
-                Util.getFacesContext().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Doğrulama Kodunu hatalı girdiniz", null));
-               // fc.validationFailed(); // <-- önemli: JSF'ye validation hatası olduğunu bildirir
-                Util.getFacesContext().validationFailed();
-                PrimeFaces.current().ajax().addCallbackParam("loggedIn", false);
-                captchaInput = "";
-                return;
+                if (captcha == null || !captcha.equals(captchaInput)) {
+                    Util.getFacesContext().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Doğrulama Kodunu hatalı girdiniz", null));
+                    Util.getFacesContext().validationFailed();
+                    PrimeFaces.current().ajax().addCallbackParam("loggedIn", false);
+                    captchaInput = "";
+                    return;
+                }
             }
 
             if (StringUtil.isNotBlank(kullaniciAdi) && StringUtil.isNotBlank(parola)) {
@@ -181,7 +182,7 @@ public class LoginController implements java.io.Serializable {
                 ExternalContext externalContext = Util.getExternalContext();
                 if (StringUtil.isBlank(param)) {
                     externalContext.redirect("index.xhtml");
-                }else{
+                } else {
                     String viewId = FacesContext.getCurrentInstance().getViewRoot().getViewId();
                     externalContext.redirect(viewId);
                 }
@@ -222,7 +223,7 @@ public class LoginController implements java.io.Serializable {
             ExternalContext context = Util.getExternalContext();
             if (StringUtil.isBlank(param)) {
                 context.redirect("index.xhtml");
-            }else{
+            } else {
                 PrimeFaces.current().ajax().addCallbackParam("loggedOut", true);
             }
         } catch (IOException ex) {

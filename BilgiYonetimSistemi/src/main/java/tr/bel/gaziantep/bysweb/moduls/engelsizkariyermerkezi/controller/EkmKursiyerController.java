@@ -16,10 +16,7 @@ import tr.bel.gaziantep.bysweb.core.enums.bys.EnumModul;
 import tr.bel.gaziantep.bysweb.core.enums.engelsizler.EnumEyAnketDurumu;
 import tr.bel.gaziantep.bysweb.core.enums.engelsizler.EnumEyKullandigiCihaz;
 import tr.bel.gaziantep.bysweb.core.enums.engelsizler.EnumEyMaddeKullanimi;
-import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlFaydalandigiHak;
-import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlGelirKaynagi;
-import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlYardimAlinanYerler;
-import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlYardimTuru;
+import tr.bel.gaziantep.bysweb.core.enums.genel.*;
 import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.EnumSyFiltreAnahtari;
 import tr.bel.gaziantep.bysweb.core.service.FilterOptionService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
@@ -30,6 +27,7 @@ import tr.bel.gaziantep.bysweb.moduls.engelsizkariyermerkezi.entity.EkmKursiyerK
 import tr.bel.gaziantep.bysweb.moduls.engelsizkariyermerkezi.service.EkmKursiyerService;
 import tr.bel.gaziantep.bysweb.moduls.engelsizler.entity.*;
 import tr.bel.gaziantep.bysweb.moduls.engelsizler.service.EyKisiService;
+import tr.bel.gaziantep.bysweb.moduls.engelsizler.service.EyTalepService;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.*;
 import tr.bel.gaziantep.bysweb.moduls.genel.service.GnlKisiService;
 
@@ -61,6 +59,8 @@ public class EkmKursiyerController extends AbstractController<EkmKursiyer> {
     @Inject
     private GnlKisiService gnlKisiService;
     @Inject
+    private EyTalepService eyTalepService;
+    @Inject
     private KpsController kpsController;
     @Inject
     private FilterOptionService filterOptionService;
@@ -89,6 +89,9 @@ public class EkmKursiyerController extends AbstractController<EkmKursiyer> {
     @Getter
     @Setter
     private List<GnlKurs> gnlKursList;
+    @Getter
+    @Setter
+    private EyTalep eyTalep;
 
     public EkmKursiyerController() {
         super(EkmKursiyer.class);
@@ -227,5 +230,41 @@ public class EkmKursiyerController extends AbstractController<EkmKursiyer> {
     public void onRowDblSelect(SelectEvent<EkmKursiyer> event) {
         EkmKursiyer ekmKursiyer = event.getObject();
         ekmKursiyerSecKapat(ekmKursiyer);
+    }
+
+    public void addTalep(ActionEvent event) {
+        if (eyTalep != null) {
+            try {
+                if (this.getSelected().getEyKisi().getEyTalepList() == null) {
+                    this.getSelected().getEyKisi().setEyTalepList(new ArrayList<>());
+                }
+                eyTalepService.create(eyTalep);
+                FacesUtil.successMessage(Constants.KAYIT_EKLENDI);
+                this.getSelected().getEyKisi().getEyTalepList().add(eyTalep);
+            } catch (Exception ex) {
+                log.error(null, ex);
+                FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+            }
+        }
+    }
+
+    public EyTalep prepareCreateTalep(ActionEvent event) {
+        EyTalep newItem;
+        try {
+            if (this.getSelected().getEyKisi().getEyTalepList() == null) {
+                this.getSelected().getEyKisi().setEyTalepList(new ArrayList<>());
+            }
+            newItem = EyTalep.class.getDeclaredConstructor().newInstance();
+            newItem.setEyKisi(this.getSelected().getEyKisi());
+            newItem.setTarih(LocalDateTime.now());
+            newItem.setDurum(EnumGnlTalepDurumu.BEKLIYOR);
+            this.setEyTalep(newItem);
+            return newItem;
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException |
+                 InvocationTargetException ex) {
+            log.error(null, ex);
+            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+        }
+        return null;
     }
 }

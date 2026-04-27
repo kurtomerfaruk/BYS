@@ -58,6 +58,12 @@
                                         aria-controls="ekmKursiyerEngellilikEditTabPane" aria-selected="false">Engellilik Durumu
                                 </button>
                             </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="ekmKursiyerTalepEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#ekmKursiyerTalepEditTabPane" type="button" role="tab"
+                                        aria-controls="ekmKursiyerTalepEditTabPane" aria-selected="false">Talepler
+                                </button>
+                            </li>
                         </ul>
 
                         <div class="tab-content text-muted">
@@ -101,6 +107,10 @@
                                              layout="tabular">
                                     <ui:include src="/moduls/engelsizkariyermerkezi/ekmKursiyer/EngellilikTab.xhtml"/>
                                 </p:panelGrid>
+                            </div>
+
+                            <div class="tab-pane" id="ekmKursiyerTalepEditTabPane">
+                                <ui:include src="/moduls/engelsizkariyermerkezi/ekmKursiyer/TalepListesiTab.xhtml"/>
                             </div>
 
                         </div>

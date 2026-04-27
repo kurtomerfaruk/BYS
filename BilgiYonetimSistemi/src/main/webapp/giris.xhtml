@@ -135,21 +135,22 @@
                                                     </a>
                                                 </div>
                                             </div>
+                                            <ui:fragment rendered="#{initApp.getProperty('profile') ne 'test'}">
+                                                <div class="col-xl-12 mb-2">
 
-                                            <div class="col-xl-12 mb-2">
-
-                                                <div class="ui-inputgroup w-100">
-                                                    <h:graphicImage id="captchaImg" value="/captcha" alt="CAPTCHA Image"
-                                                                    styleClass="text-center" tabindex="-1"/>
-                                                    <div class="ui-inputgroup-addon">
-                                                        <p:commandButton icon="pi pi-refresh" type="button" tabindex="-1"
-                                                                         onclick="document.getElementById('captchaImg').src='#{request.contextPath}/captcha?ts=' + new Date().getTime();" />
+                                                    <div class="ui-inputgroup w-100">
+                                                        <h:graphicImage id="captchaImg" value="/captcha" alt="CAPTCHA Image"
+                                                                        styleClass="text-center" tabindex="-1"/>
+                                                        <div class="ui-inputgroup-addon">
+                                                            <p:commandButton icon="pi pi-refresh" type="button" tabindex="-1"
+                                                                             onclick="document.getElementById('captchaImg').src='#{request.contextPath}/captcha?ts=' + new Date().getTime();"/>
+                                                        </div>
                                                     </div>
+                                                    <p:inputText id="captchaInput" value="#{loginController.captchaInput}"
+                                                                 styleClass="form-control" required="true"
+                                                                 label="Doğrulama Kodu"/>
                                                 </div>
-                                                <p:inputText id="captchaInput" value="#{loginController.captchaInput}"
-                                                             styleClass="form-control" required="true"
-                                                             label="Doğrulama Kodu"/>
-                                            </div>
+                                            </ui:fragment>
                                         </div>
                                         <div class="d-grid mt-2 mb-2">
                                             <p:defaultCommand target="loginButton"/>
@@ -169,7 +170,7 @@
                                             </div>
                                             <div class="min-w-fit-content">
                                                 <div class="d-flex gap-2">
-                                                  <span class="badge bg-success">#{initApp.version}</span>
+                                                    <span class="badge bg-success">#{initApp.version}</span>
                                                 </div>
                                             </div>
                                         </div>
