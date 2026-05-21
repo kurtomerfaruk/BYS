@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:h="jakarta.faces.html"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <p:dialog widgetVar="ShRandevuCreateDialog"
+              modal="true"
+              resizable="false"
+              closeOnEscape="true"
+              header="#{messages.dialogYeniKayit}"
+              appendTo="@(body)"
+              responsive="true"
+              onShow="PF('ShRandevuCreateDialog').initPosition();"
+              fitViewport="true">
+
+        <h:form id="ShRandevuCreateForm">
+            <h:panelGroup id="display">
+                <p:focus context="display"/>
+                <p:panelGrid columns="2" columnClasses="column" rendered="#{shRandevuController.selected!=null}"
+                             layout="tabular">
+
+                    <p:outputLabel value="#{messages.tcKimlikNoLabel}" for="@next"/>
+                    <h:panelGroup>
+                        <div class="ui-inputgroup">
+                            <coco:inputWithButton id="inputWithButtonShKisi" inputId="shKisiId"
+                                                  inputValue="#{shRandevuController.selected.shKisi.gnlKisi.tcKimlikNo}"
+                                                  inputTitle="#{messages.tcKimlikNoText}"
+                                                  actionListener="#{bysController.openCommonDialog('shKisiSec')}"
+                                                  ajaxListener="#{shRandevuController.secilenShKisi}"
+                                                  buttonTitle="#{messages.kisiSecmelisiniz}"
+                                                  size="50"
+                                                  dialogId="ShRandevuCreateFormId"/>
+                            <p:commandButton icon="pi pi-plus" styleClass="ui-button-success"
+                                             title="#{messages.buttonKisiEkle}"
+                                             actionListener="#{shKisiController.prepareCreate}"
+                                             update=":ShKisiCreateForm:ShKisiCreateForm"
+                                             process="@this"
+                                             oncomplete="PF('ShKisiCreateDialog').show()"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                        </div>
+                    </h:panelGroup>
+
+                    <p:outputLabel value="#{messages.adSoyadLabel}" for="@next"/>
+                    <p:inputText id="adSoyad" value="#{shRandevuController.selected.shKisi.gnlKisi.adSoyad}"
+                                 title="#{messages.adSoyadText}" size="50"
+                                 readonly="#{facesContext.renderResponse}" styleClass="inputUpdate"/>
+
+                    <p:outputLabel value="#{messages.randevuTarihiLabel}" for="@next"/>
+                    <p:datePicker id="randevuTarihi" locale="tr" pattern="#{messages.tarihFormat}"
+                                  value="#{shRandevuController.selected.randevuTarihi}"
+                                  title="#{messages.randevuTarihiText}" mask="true" monthNavigator="true"
+                                  yearNavigator="true" showButtonBar="true"
+                                  showIcon="true" showOnFocus="false"/>
+
+                    <p:outputLabel value="#{messages.konuLabel}" for="@next"/>
+                    <p:inputText id="konu" value="#{shRandevuController.selected.konu}" title="#{messages.konuText}"
+                                 size="50" required="true"/>
+
+                    <p:outputLabel value="#{messages.icerikLabel}" for="@next"/>
+                    <p:inputTextarea id="aciklama" value="#{shRandevuController.selected.aciklama}"
+                                     title="#{messages.aciklamaText}" rows="4" autoResize="false"
+                                     styleClass="w-100"/>
+
+                    <p:outputLabel value="#{messages.tumGunLabel}"/>
+                    <p:selectBooleanCheckbox id="tumGun" value="#{shRandevuController.event.allDay}"/>
+
+                    <p:outputLabel value="#{messages.diyetisyenLabel}" for="@next"/>
+                    <p:selectOneMenu value="#{shRandevuController.selected.gnlPersonel}" filter="true" converter="omnifaces.SelectItemsConverter">
+                        <f:selectItems value="#{gnlPersonelController.items}"
+                                       var="personel"
+                                       itemLabel="#{personel.gnlKisi.adSoyad}"
+                                       itemValue="#{personel}"/>
+                    </p:selectOneMenu>
+
+                    <f:facet name="footer">
+                        <div class="float-end">
+                            <p:commandButton icon="pi pi-check" styleClass="ui-button-success"
+                                             style="margin-right: 10px"
+                                             actionListener="#{shRandevuController.update}"
+                                             value="#{messages.buttonKaydet}"
+                                             update=":growl,display,:ShRandevuListForm:schedule"
+                                             oncomplete="handleSubmit(xhr,status,args,PF('ShRandevuCreateDialog'));"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                            <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                             value="#{messages.buttonIptal}"
+                                             onclick="PF('ShRandevuCreateDialog').hide()" immediate="true"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()">
+                                <p:resetInput target="@form"/>
+                            </p:commandButton>
+                        </div>
+                    </f:facet>
+                </p:panelGrid>
+            </h:panelGroup>
+        </h:form>
+    </p:dialog>
+
+</ui:composition>
+
+</html>

@@ -8,6 +8,9 @@
 
 <ui:composition>
 
+    <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.saglikhizmetleri.EnumShDanismanlikHizmeti" var="enumDanismanlik"/>
+    <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.saglikhizmetleri.EnumShObeziteHizmet" var="enumObezite"/>
+
     <coco:createpage id="ShKisiCreateForm"
                      renderedListener="#{shKisiController.selected != null}"
                      widgetVar="ShKisiCreateDialog"

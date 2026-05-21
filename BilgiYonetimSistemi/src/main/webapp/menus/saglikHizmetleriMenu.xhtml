@@ -72,6 +72,17 @@
                                     </li>
                                 </ui:fragment>
 
+                                <ui:fragment rendered="#{syKullaniciController.hasPermission('shrandevu:goster')}">
+                                    <li class="slide">
+                                        <p:commandLink styleClass="side-menu__item sublevel2"
+                                                       actionListener="#{menuController.setPageLink('/moduls/saglikhizmetleri/shRandevu/index')}"
+                                                       update="myPanel,:growl"
+                                                       onstart="PF('Loading').show()"
+                                                       onsuccess="PF('Loading').hide()"
+                                                       value="Randevu Takvimi"/>
+                                    </li>
+                                </ui:fragment>
+
                             </ul>
                         </li>
                     </ui:fragment>

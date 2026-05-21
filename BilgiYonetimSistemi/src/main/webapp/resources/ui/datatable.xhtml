@@ -232,7 +232,7 @@
                     </p:datePicker>
                 </ui:fragment>
                 <ui:fragment rendered="#{column.syKolon.filtreTuru eq 'SELECT_ONE_MENU'}">
-                    <p:selectOneMenu onchange="PF('#{cc.attrs.widgetVar}').filter()" converter="omnifaces.SelectItemsConverter">
+                    <p:selectOneMenu onchange="PF('#{cc.attrs.widgetVar}').filter()" converter="omnifaces.SelectItemsConverter" filter="true">
                         <f:selectItem itemLabel="#{messages.tumuText}" itemValue="#{null}" noSelectionOption="true"/>
                         <f:selectItems value="#{cc.attrs.controller.getFilterOptions(column.syKolon.filtreAnahtari)}" var="option"
                                        itemValue="#{option.value}" itemLabel="#{option.label}"/>
