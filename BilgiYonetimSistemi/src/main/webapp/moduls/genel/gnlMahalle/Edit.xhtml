@@ -28,7 +28,7 @@
 
         <p:outputLabel value="#{messages.ilceLabel}" for="@next"/>
         <p:selectOneMenu id="ilce" value="#{gnlMahalleController.selected.gnlIlce}" filter="true" converter="omnifaces.SelectItemsConverter"
-                         disabled="#{!ortHastaController.sehirDisi}" styleClass="tcUpdate" required="true">
+                          styleClass="tcUpdate" required="true">
             <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
             <f:selectItems value="#{gnlIlceController.getIlceByIlId(gnlMahalleController.selected.gnlIlce.gnlIl)}"
                            var="ilces"

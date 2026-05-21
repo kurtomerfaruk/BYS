@@ -104,6 +104,9 @@ public class GnlKisiController extends AbstractController<GnlKisi> {
             case KISI_DURUM -> {
                 return filterOptionService.getGnlKisiDurums();
             }
+            case ILCE -> {
+                return filterOptionService.getGnlIlces();
+            }
             default -> {
                 return Collections.emptyList();
             }

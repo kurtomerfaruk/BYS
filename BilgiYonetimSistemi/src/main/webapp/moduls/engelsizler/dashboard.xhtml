@@ -6,9 +6,13 @@
       xmlns:h="jakarta.faces.html"
       xmlns:f="jakarta.faces.core"
       xmlns:p="primefaces"
-      xmlns:k="http://kurtomerfaruk.com/ui">
+      xmlns:k="http://kurtomerfaruk.com/ui"
+      xmlns:coco="jakarta.faces.composite/ui">
 
 <ui:composition>
+
+
+
     <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlCinsiyet" var="enumCinsiyet"/>
 
     <h:form id="MapForm" prependId="false">
@@ -186,6 +190,7 @@
                                     </div>
 
                                 </div>
+
                                 <div class="tab-pane overflow-hidden"
                                      id="engelsizler-kayit-ozeti-tab-pane"
                                      role="tabpanel" aria-labelledby="engelsizler-kayit-ozeti-tab" tabindex="0">
@@ -324,10 +329,13 @@
                                     </div>
 
                                 </div>
+
                                 <div class="tab-pane overflow-hidden" id="engelsizler-grafik-tab-pane"
                                      role="tabpanel"
                                      aria-labelledby="engelsizler-grafik-tab" tabindex="0">
-                                    Engelsizler Grafik
+                                    <div class="row">
+                                        <coco:chartpage listModel="#{engelsizDashboardController.grafikDataList}"/>
+                                    </div>
                                 </div>
                             </div>
                         </div>

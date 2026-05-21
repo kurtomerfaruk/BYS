@@ -362,6 +362,12 @@
                 <scope>compile</scope>
             </dependency>
 
+            <dependency>
+                <groupId>com.kurtomerfaruk</groupId>
+                <artifactId>AmChartFaces</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+
         </dependencies>
 
     </dependencyManagement>

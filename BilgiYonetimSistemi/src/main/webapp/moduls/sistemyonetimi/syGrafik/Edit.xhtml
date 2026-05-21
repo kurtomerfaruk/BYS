@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:editpage id="SyGrafikEditForm"
+                   widgetVar="SyGrafikEditDialog"
+                   actionListener="#{syGrafikController.save}"
+                   listForm="SyGrafikListForm"
+                   model="#{syGrafikController.selected}">
+
+        <p:outputLabel value="#{messages.baslikLabel}" for="@next"/>
+        <p:inputText id="baslik" value="#{syGrafikController.selected.baslik}" title="#{messages.baslikText}" required="true" size="50" maxlength="50"/>
+
+        <p:outputLabel value="#{messages.sorguLabel}" for="@next"/>
+        <p:inputTextarea rows="4" id="sorgu" value="#{syGrafikController.selected.sorgu}" title="#{messages.sorguText}" styleClass="w-100"
+                         autoResize="false" required="true"/>
+
+        <p:outputLabel value="#{messages.modulLabel}" for="@next"/>
+        <p:selectOneMenu id="gosterilecekModul" value="#{syGrafikController.selected.gosterilecekModul}" filter="true"
+                         converter="omnifaces.SelectItemsConverter" required="true">
+            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{enumModul.ALL_VALUES}"
+                           var="enumModuls"
+                           itemLabel="#{enumModuls.displayValue}"
+                           itemValue="#{enumModuls}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.grafikTuruLabel}" for="@next"/>
+        <p:selectOneMenu id="grafikTuru" value="#{syGrafikController.selected.grafikTuru}" filter="true"
+                         converter="omnifaces.SelectItemsConverter" required="true">
+            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{enumGrafikTuru.ALL_VALUES}"
+                           var="grafikTurs"
+                           itemLabel="#{grafikTurs.displayValue}"
+                           itemValue="#{grafikTurs}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.disaAktarLabel}" for="@next"/>
+        <p:selectBooleanCheckbox id="disaAktar" value="#{syGrafikController.selected.disaAktar}"/>
+
+        <p:outputLabel value="#{messages.yonlendirmeLabel}" for="@next"/>
+        <p:inputText id="yonlendirme" value="#{syGrafikController.selected.yonlendirme}" title="#{messages.yonlendirmeText}"/>
+
+        <p:outputLabel value="#{messages.kaydirmaCubuguLabel}" for="@next"/>
+        <p:selectBooleanCheckbox id="kaydirmaCubugu" value="#{syGrafikController.selected.kaydirmaCubugu}"/>
+
+    </coco:editpage>
+
+</ui:composition>
+
+</html>

@@ -105,6 +105,12 @@ public class EkmKursiyerController extends AbstractController<EkmKursiyer> {
             case ILCE -> {
                 return filterOptionService.getGnlIlces();
             }
+            case CINSIYET -> {
+                return filterOptionService.getGnlCinsiyets();
+            }
+            case KISI_DURUM -> {
+                return filterOptionService.getGnlKisiDurums();
+            }
             default -> {
                 return Collections.emptyList();
             }
@@ -149,7 +155,7 @@ public class EkmKursiyerController extends AbstractController<EkmKursiyer> {
         yardimAlinanYerlers = new ArrayList<>();
         yardimTurus = new ArrayList<>();
         kullandigiCihazs = new ArrayList<>();
-        gnlKursList=new ArrayList<>();
+        gnlKursList = new ArrayList<>();
     }
 
     public void update(ActionEvent event) {
@@ -215,7 +221,7 @@ public class EkmKursiyerController extends AbstractController<EkmKursiyer> {
                     GnlKisiAldigiYardimlar::getTanim);
             kullandigiCihazs = Function.filterAndCollect(this.getSelected().getEyKisi().getEyKisiKullandigiCihazList(), EyKisiKullandigiCihaz::isSecili,
                     EyKisiKullandigiCihaz::getTanim);
-            gnlKursList = Function.filterAndCollect(this.getSelected().getEkmKursiyerKursList(), EkmKursiyerKurs::isSecili,EkmKursiyerKurs::getGnlKurs);
+            gnlKursList = Function.filterAndCollect(this.getSelected().getEkmKursiyerKursList(), EkmKursiyerKurs::isSecili, EkmKursiyerKurs::getGnlKurs);
 
             if (this.getSelected().getEyKisi().getIrtibatKuranGnlPersonel() == null) {
                 this.getSelected().getEyKisi().setIrtibatKuranGnlPersonel(this.getSyKullanici().getGnlPersonel());

@@ -294,6 +294,11 @@
             <scope>compile</scope>
         </dependency>
 
+        <dependency>
+            <groupId>com.kurtomerfaruk</groupId>
+            <artifactId>AmChartFaces</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>

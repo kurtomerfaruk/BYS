@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:viewpage id="SyGrafikViewForm"
+                   widgetVar="SyGrafikViewDialog"
+                   model="#{syGrafikController.selected}">
+
+        <h:outputText value="#{messages.duyuruTurLabel}"/>
+        <h:outputText value="#{syGrafikController.selected.duyuruTur.displayValue}"/>
+
+        <h:outputText value="#{messages.baslikLabel}"/>
+        <h:outputText value="#{syGrafikController.selected.baslik}"/>
+
+        <h:outputText value="#{messages.icerikLabel}"/>
+        <h:outputText value="#{syGrafikController.selected.icerik}"/>
+
+        <h:outputText value="#{messages.yayinlanmaTarihiLabel}"/>
+        <h:outputText value="#{syGrafikController.selected.yayinlanmaTarihi}">
+            <f:convertDateTime pattern="#{messages.tarihSaatFormat}" type="localDateTime"/>
+        </h:outputText>
+    </coco:viewpage>
+
+</ui:composition>
+
+</html>
+

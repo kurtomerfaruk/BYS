@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="jakarta.faces.facelets"
+                xmlns:p="primefaces">
+
+    <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.bys.EnumModul" var="enumModul"/>
+    <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.bys.EnumGrafikTuru" var="enumGrafikTuru"/>
+
+    <ui:include src="/moduls/sistemyonetimi/syGrafik/List.xhtml"/>
+    <ui:include src="/moduls/sistemyonetimi/syGrafik/View.xhtml"/>
+    <ui:include src="/moduls/sistemyonetimi/syGrafik/Edit.xhtml"/>
+    <ui:include src="/moduls/sistemyonetimi/syGrafik/Create.xhtml"/>
+
+</ui:composition>

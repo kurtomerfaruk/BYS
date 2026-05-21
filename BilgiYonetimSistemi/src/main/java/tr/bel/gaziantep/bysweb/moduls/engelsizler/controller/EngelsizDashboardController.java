@@ -1,6 +1,9 @@
 package tr.bel.gaziantep.bysweb.moduls.engelsizler.controller;
 
 import com.google.gson.Gson;
+import com.kurtomerfaruk.amchartfaces.model.ChartData;
+import com.kurtomerfaruk.amchartfaces.model.ChartModel;
+import com.kurtomerfaruk.amchartfaces.model.DefaultChartModel;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
@@ -9,6 +12,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.primefaces.model.map.LatLng;
+import tr.bel.gaziantep.bysweb.core.dtos.GrafikDataDTO;
+import tr.bel.gaziantep.bysweb.core.enums.bys.EnumModul;
 import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlCinsiyet;
 import tr.bel.gaziantep.bysweb.moduls.engelsizler.entity.EyEngelGrubu;
 import tr.bel.gaziantep.bysweb.moduls.engelsizler.service.EyAracCihazTeslimiService;
@@ -17,6 +22,8 @@ import tr.bel.gaziantep.bysweb.moduls.engelsizler.service.EyKisiService;
 import tr.bel.gaziantep.bysweb.moduls.engelsizler.service.EyTalepService;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlIlce;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlMahalle;
+import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.entity.SyGrafik;
+import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.service.SyGrafikService;
 
 import java.io.Serial;
 import java.util.ArrayList;
@@ -42,6 +49,8 @@ public class EngelsizDashboardController implements java.io.Serializable {
     private EyAracCihazTeslimiService eyAracCihazTeslimiService;
     @Inject
     private EyTalepService eyTalepService;
+    @Inject
+    private SyGrafikService syGrafikService;
 
     @Getter
     @Setter
@@ -92,6 +101,9 @@ public class EngelsizDashboardController implements java.io.Serializable {
     @Setter
     private EyEngelGrubu eyEngelGrubu;
     private Gson gson;
+    @Getter
+    @Setter
+    private List<GrafikDataDTO> grafikDataList;
 
     @PostConstruct
     public void init() {
@@ -105,6 +117,8 @@ public class EngelsizDashboardController implements java.io.Serializable {
         repairedVehicle = getTotalRepairedVehicle();
         deliveredVehicle = getTotalDeliveredVehicle();
         request = getTotalRequest();
+        if (grafikDataList == null) grafikDataList = new ArrayList<>();
+        getAllGraphics();
     }
 
     private int getTotalCount() {
@@ -165,6 +179,26 @@ public class EngelsizDashboardController implements java.io.Serializable {
 //        String newScript = "refreshHeatMap(" + heatmapModels.size() + "," + dataJson + ")";
 //        PrimeFaces.current().executeScript(newScript);
 
+    }
+
+    private void getAllGraphics() {
+        try {
+            List<SyGrafik> grafikler = syGrafikService.findByModul(EnumModul.ENGELSIZLER);
+
+            grafikler.forEach(grafik -> {
+                List<ChartData> sonuclar = syGrafikService.executeQuery(grafik.getSorgu());
+                GrafikDataDTO grafikData = new GrafikDataDTO();
+                ChartModel chartModel = new DefaultChartModel();
+                sonuclar.forEach(chartModel::addData);
+                grafikData.setChartModel(chartModel);
+                grafikData.setSyGrafik(grafik);
+                grafikDataList.add(grafikData);
+            });
+
+
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
     }
 
 }

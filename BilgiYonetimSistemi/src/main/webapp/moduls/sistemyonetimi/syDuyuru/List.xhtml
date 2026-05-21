@@ -14,16 +14,16 @@
         <p:contextMenu id="SyDuyuruDataTableContextMenu" for="datalist:datalist">
             <p:menuitem value="#{messages.buttonEkle}"
                         onclick="document.getElementById('SyDuyuruListForm:datalist:datalist:createButton').click();"
-                        icon="pi-plus" rendered="#{syKullaniciController.hasPermission('syduyuru:ekle')}"/>
+                        icon="pi pi-plus" rendered="#{syKullaniciController.hasPermission('syduyuru:ekle')}"/>
             <p:menuitem value="#{messages.buttonGuncelle}"
                         onclick="document.getElementById('SyDuyuruListForm:datalist:datalist:editButton').click();"
-                        icon="pi-pencil" rendered="#{syKullaniciController.hasPermission('syduyuru:guncelle')}"/>
+                        icon="pi pi-pencil" rendered="#{syKullaniciController.hasPermission('syduyuru:guncelle')}"/>
             <p:menuitem value="#{messages.buttonDetay}"
                         onclick="document.getElementById('SyDuyuruListForm:datalist:datalist:viewButton').click();"
-                        icon="pi-search"/>
+                        icon="pi pi-search"/>
             <p:menuitem value="#{messages.buttonSil}"
                         onclick="document.getElementById('SyDuyuruListForm:datalist:datalist:deleteButton').click();"
-                        icon="pi-trash" rendered="#{syKullaniciController.hasPermission('syduyuru:sil')}"/>
+                        icon="pi pi-trash" rendered="#{syKullaniciController.hasPermission('syduyuru:sil')}"/>
             <p:menuitem value="#{messages.buttonOnayla}"
                         onclick="document.getElementById('SyDuyuruListForm:datalist:datalist:confirmButton').click();"
                         icon="pi pi-check" rendered="#{syKullaniciController.hasPermission('syduyuru:onayla')}"/>
@@ -72,7 +72,7 @@
                                  disabled="#{empty syDuyuruController.selected or syDuyuruController.selected.onaylandi}"
                                  rendered="#{syKullaniciController.hasPermission('syduyuru:sil')}">
                     <p:confirm header="#{messages.ConfirmationHeader}" message="#{messages.ConfirmDeleteMessage}"
-                               icon="pi-warning"/>
+                               icon="pi pi-warning"/>
                 </p:commandButton>
                 <p:commandButton id="confirmButton" styleClass="ui-button-warning" icon="pi pi-check"
                                  pt:data-tooltip="#{messages.buttonOnayla}"
@@ -83,7 +83,7 @@
                                  rendered="#{syKullaniciController.hasPermission('syduyuru:onayla')}">
                     <p:confirm header="Kayıt Onayla"
                                message="Seçmiş olduğunuz kayıdını onaylamak istediğinizden emin misiniz?"
-                               icon="pi-warning"/>
+                               icon="pi pi-warning"/>
                 </p:commandButton>
             </f:facet>
 

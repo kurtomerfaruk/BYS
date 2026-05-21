@@ -10,7 +10,9 @@
 </composite:interface>
 
 
+
 <composite:implementation>
+
     <ui:repeat value="#{cc.attrs.listModel}" var="item" varStatus="status">
         <div class="col-xl-#{(status.last and status.first) or (status.last and (status.index-1)%2 ==1) ? '12' :'6'} ">
             <div class="card border card-border-info card-height-100">
