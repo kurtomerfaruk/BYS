@@ -109,7 +109,8 @@ public class JasperReportService {
 
             JRDesignField field = new JRDesignField();
             field.setName(kolon.getAlanAdi());
-            field.setValueClass(val.get(kolon.getAlanAdi()).getClass());
+            Object valueClass = val.get(kolon.getAlanAdi());
+            field.setValueClass(valueClass==null ? String.class:valueClass.getClass());
             design.addField(field);
 
             JRDesignStaticText headerText = new JRDesignStaticText();

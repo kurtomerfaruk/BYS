@@ -49,6 +49,14 @@
                     <p:outputLabel value="#{messages.tumGunLabel}"/>
                     <p:selectBooleanCheckbox id="tumGun" value="#{shRandevuController.event.allDay}"/>
 
+                    <p:outputLabel value="#{messages.diyetisyenLabel}" for="@next"/>
+                    <p:selectOneMenu value="#{shRandevuController.selected.gnlPersonel}" filter="true" converter="omnifaces.SelectItemsConverter" disabled="#{syKullanici.kullaniciTuru ne 'SISTEM_YONETICISI'}">
+                        <f:selectItems value="#{gnlPersonelController.items}"
+                                       var="personel"
+                                       itemLabel="#{personel.gnlKisi.adSoyad}"
+                                       itemValue="#{personel}"/>
+                    </p:selectOneMenu>
+
                     <f:facet name="footer">
                         <div class="float-end">
                             <p:commandButton icon="pi pi-check" styleClass="ui-button-success" style="margin-right: 10px !important;"

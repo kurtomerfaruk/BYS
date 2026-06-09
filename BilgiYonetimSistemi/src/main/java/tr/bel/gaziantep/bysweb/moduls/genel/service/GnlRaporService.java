@@ -5,6 +5,7 @@ import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
+import org.apache.commons.lang3.StringUtils;
 import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.EnumSyVeriTipi;
 import tr.bel.gaziantep.bysweb.core.service.AbstractService;
 import tr.bel.gaziantep.bysweb.core.service.EnumService;
@@ -341,6 +342,9 @@ public class GnlRaporService extends AbstractService<GnlRapor> {
         } else if ("IN".equalsIgnoreCase(operator)) {
             return field + " IN (:" + param.getParametreAdi() + ")";
         } else {
+            if(StringUtils.isNotBlank(param.getSqlKosul())){
+                return param.getSqlKosul() + " " + operator + " :param" + index;
+            }
             return field + " " + operator + " :param" + index;
         }
     }

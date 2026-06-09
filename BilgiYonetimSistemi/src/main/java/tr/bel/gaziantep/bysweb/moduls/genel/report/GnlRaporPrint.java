@@ -222,6 +222,7 @@ public class GnlRaporPrint implements java.io.Serializable {
                 downloadFile(raporBytes, fileName);
             }
             FacesUtil.addSuccessMessage("Rapor başarıyla oluşturuldu");
+            gnlRaporService.clearCache();
         } catch (Exception ex) {
             log.error(null, ex);
             FacesUtil.addErrorMessage("Rapor oluşturulurken hata oluştu.");
