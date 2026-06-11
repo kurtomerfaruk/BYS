@@ -41,6 +41,7 @@ import java.util.List;
         "ORDER BY g.mernisGuncellemeTarihi")
 @NamedQuery(name = "GnlKisi.findByTcKimlikNoListToList", query = "SELECT k FROM GnlKisi k WHERE k.tcKimlikNo IN :tcList " +
         "AND k.aktif=true AND k.durum = tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlDurum.SAG ")
+@NamedQuery(name = "GnlKisi.findByYasByYasli", query = "SELECT k FROM GnlKisi k WHERE k.aktif=true and k.yasli=false AND k.dogumTarihi <= :date ")
 public class GnlKisi extends BaseEntity {
     @Serial
     private static final long serialVersionUID = -4297582255151551064L;
@@ -281,6 +282,9 @@ public class GnlKisi extends BaseEntity {
 
     @Column(name = "KIRA_BEDELI", precision = 8, scale = 2)
     private BigDecimal kiraBedeli;
+
+    @Column(name = "YASLI")
+    private boolean yasli;
 
     @OneToMany(mappedBy = "gnlKisi", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @Builder.Default

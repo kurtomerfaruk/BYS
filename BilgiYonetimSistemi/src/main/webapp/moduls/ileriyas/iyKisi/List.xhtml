@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:p="primefaces"
+                xmlns:pt="jakarta.faces.passthrough"
+                xmlns:coco="jakarta.faces.composite/ui">
+
+    <h:form id="IyKisiListForm" styleClass="form-height">
+
+
+        <p:contextMenu id="IyKisiDataTableContextMenu" for="datalist:datalist">
+            <p:menuitem value="#{messages.buttonEkle}"
+                        onclick="document.getElementById('IyKisiListForm:datalist:datalist:createButton').click();"
+                        icon="pi pi-plus" rendered="#{syKullaniciController.hasPermission('iykisi:ekle')}"/>
+            <p:menuitem value="#{messages.buttonDetay}"
+                        onclick="document.getElementById('IyKisiListForm:datalist:datalist:viewButton').click();"
+                        icon="pi pi-search"/>
+            <p:menuitem value="#{messages.buttonGuncelle}"
+                        onclick="document.getElementById('IyKisiListForm:datalist:datalist:editButton').click();"
+                        icon="pi pi-pencil" rendered="#{syKullaniciController.hasPermission('iykisi:guncelle')}"/>
+            <p:menuitem value="#{messages.buttonSil}"
+                        onclick="document.getElementById('IyKisiListForm:datalist:datalist:deleteButton').click();"
+                        icon="pi pi-trash" rendered="#{syKullaniciController.hasPermission('iykisi:sil')}"/>
+            <p:menuitem value="#{messages.buttonNvidenGuncelle}"
+                        onclick="document.getElementById('IyKisiListForm:datalist:datalist:nviUpdateButton').click();"
+                        icon="pi pi-refresh"
+                        rendered="#{syKullaniciController.hasPermission('iykisi:nvidenGuncelle')}"/>
+            <p:menuitem value="#{messages.buttonListeyiGuncelle}"
+                        onclick="document.getElementById('IyKisiListForm:datalist:datalist:updateListButton').click();"
+                        icon="pi pi-list" rendered="#{syKullaniciController.hasPermission('iykisi:listeGuncelle')}"/>
+            <p:menuitem value="#{messages.buttonAdresGuncelle}"
+                        onclick="document.getElementById('IyKisiListForm:datalist:datalist:addressUpdateButton').click();"
+                        icon="pi pi-sync" rendered="#{syKullaniciController.hasPermission('iykisi:adresGuncelle')}"/>
+            <p:menuitem value="#{messages.buttonOluleriGuncelle}"
+                        onclick="document.getElementById('IyKisiListForm:datalist:datalist:updateDeadsButton').click();"
+                        icon="pi pi-sync" rendered="#{syKullaniciController.hasPermission('iykisi:oluleriGuncelle')}"/>
+        </p:contextMenu>
+        <coco:datatable id="datalist"
+                        value="#{iyKisiController.lazyItems}"
+                        rowKey="#{item.id}"
+                        selection="#{iyKisiController.selected}"
+                        filtered="#{iyKisiController.filtered}"
+                        rowselect=":IyKisiListForm:datalist:datalist:createButton,:IyKisiListForm:datalist:datalist:viewButton,:IyKisiListForm:datalist:datalist:editButton,:IyKisiListForm:datalist:datalist:deleteButton,:IyKisiListForm:datalist:datalist:nviUpdateButton"
+                        rowDblselect="document.getElementById('IyKisiListForm:datalist:datalist:editButton').click()"
+                        contextMenu=":IyKisiListForm:datalist:datalist:createButton :IyKisiListForm:datalist:datalist:viewButton :IyKisiListForm:datalist:datalist:editButton :IyKisiListForm:datalist:datalist:deleteButton :IyKisiListForm:datalist:datalist:nviUpdateButton"
+                        selectListener="#{iyKisiController.resetParents}"
+                        controller="#{iyKisiController}"
+                        header="#{messages.kisiListesi}">
+
+            <p:ajax event="colResize" listener="#{iyKisiController.onResize}"/>
+
+            <f:facet name="paginatorBottomLeft">
+                <p:commandButton id="createButton" styleClass="ui-button-primary" icon="pi pi-plus"
+                                 pt:data-tooltip="#{messages.buttonEkle}"
+                                 actionListener="#{iyKisiController.prepareCreate}"
+                                 update=":IyKisiCreateForm"
+                                 oncomplete="PF('IyKisiCreateDialog').show()" onstart="PF('Loading').show()"
+                                 onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('iykisi:ekle')}"/>
+                <p:commandButton id="editButton" styleClass="ui-button-success" icon="pi pi-pencil"
+                                 pt:data-tooltip="#{messages.buttonGuncelle}" update=":IyKisiEditForm"
+                                 oncomplete="PF('IyKisiEditDialog').show()"
+                                 disabled="#{empty iyKisiController.selected}" onstart="PF('Loading').show()"
+                                 onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('iykisi:guncelle')}"/>
+                <p:commandButton id="viewButton" styleClass="ui-button-info" icon="pi pi-search"
+                                 pt:data-tooltip="#{messages.buttonDetay}" update=":IyKisiViewForm"
+                                 oncomplete="PF('IyKisiViewDialog').show()"
+                                 disabled="#{empty iyKisiController.selected}" onstart="PF('Loading').show()"
+                                 onsuccess="PF('Loading').hide()"/>
+                <p:commandButton id="deleteButton" styleClass="ui-button-danger" icon="pi pi-trash"
+                                 pt:data-tooltip="#{messages.buttonSil}"
+                                 actionListener="#{iyKisiController.delete}"
+                                 update=":growl,datalist" disabled="#{empty iyKisiController.selected}"
+                                 rendered="#{syKullaniciController.hasPermission('iykisi:sil')}">
+                    <p:confirm header="#{messages.ConfirmationHeader}" message="#{messages.ConfirmDeleteMessage}"
+                               icon="pi pi-warning"/>
+                </p:commandButton>
+                <p:commandButton id="nviUpdateButton" styleClass="ui-button-success" icon="pi pi-refresh"
+                                 pt:data-tooltip="#{messages.buttonNvidenGuncelle}" update="datalist,:growl"
+                                 actionListener="#{iyKisiController.nviUpdate}"
+                                 disabled="#{empty iyKisiController.selected}" onstart="PF('Loading').show()"
+                                 onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('iykisi:nvidenGuncelle')}"/>
+                <p:commandButton id="updateListButton" styleClass="ui-button-teal" icon="pi pi-list"
+                                 pt:data-tooltip="#{messages.buttonListeyiGuncelle}" update=":ListeGuncelleForm"
+                                 onsuccess="PF('ListeGuncelleDialog').show()"
+                                 rendered="#{syKullaniciController.hasPermission('iykisi:listeGuncelle')}"/>
+                <p:commandButton id="addressUpdateButton" icon="pi pi-sync" styleClass="ui-button-pink"
+                                 pt:data-tooltip="#{messages.buttonAdresGuncelle}"
+                                 update=":AdresListeGuncelleForm" onsuccess="PF('AdresListeGuncelleDialog').show()"
+                                 rendered="#{syKullaniciController.hasPermission('iykisi:adresGuncelle')}"/>
+                <p:commandButton id="updateDeadsButton" styleClass="ui-button-orange" icon="pi pi-hammer"
+                                 pt:data-tooltip="#{messages.buttonOluleriGuncelle}" update=":OlumListeGuncelleForm"
+                                 onsuccess="PF('OlumListeGuncelleDialog').show()"
+                                 rendered="#{syKullaniciController.hasPermission('iykisi:oluleriGuncelle')}"/>
+            </f:facet>
+
+        </coco:datatable>
+
+
+        <ui:include src="/confirmation.xhtml"/>
+
+    </h:form>
+
+</ui:composition>
