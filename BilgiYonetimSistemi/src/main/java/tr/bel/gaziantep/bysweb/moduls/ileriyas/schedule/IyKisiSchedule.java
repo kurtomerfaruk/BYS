@@ -1,4 +1,4 @@
-package tr.bel.gaziantep.bysweb.moduls.ileriyas.service;
+package tr.bel.gaziantep.bysweb.moduls.ileriyas.schedule;
 
 import jakarta.ejb.EJB;
 import jakarta.ejb.Schedule;
@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
 import tr.bel.gaziantep.bysweb.moduls.genel.service.GnlKisiService;
 import tr.bel.gaziantep.bysweb.moduls.ileriyas.entity.IyKisi;
+import tr.bel.gaziantep.bysweb.moduls.ileriyas.service.IyKisiService;
 import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.entity.SyKullanici;
 
 import java.io.Serial;
@@ -50,7 +51,7 @@ public class IyKisiSchedule implements java.io.Serializable {
         LocalDateTime now = LocalDateTime.now();
         SyKullanici ekleyen = new SyKullanici(1);
 
-        int pageSize = 1000;
+        int pageSize = 100;
         int first = 0;
 
         while (true) {
@@ -75,19 +76,6 @@ public class IyKisiSchedule implements java.io.Serializable {
                         return iyKisi;
                     })
                     .forEach(service::create);
-//
-//            for (GnlKisi gnlKisi : kisiler) {
-//                if (!mevcutKisiIdleri.contains(gnlKisi.getId())) {
-//                    gnlKisi.setYasli(true);
-//                    IyKisi iyKisi = IyKisi.builder()
-//                            .gnlKisi(gnlKisi)
-//                            .build();
-//
-//                    iyKisi.setEkleyen(ekleyen);
-//                    iyKisi.setEklemeTarihi(now);
-//                    service.create(iyKisi);
-//                }
-//            }
 
             first += pageSize;
         }

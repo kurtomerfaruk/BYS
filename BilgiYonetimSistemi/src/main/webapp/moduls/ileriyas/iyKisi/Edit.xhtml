@@ -58,7 +58,7 @@
                                     </p:selectOneMenu>
 
                                     <p:outputLabel value="#{messages.tcKimlikNoLabel}" for="@next"/>
-                                    <coco:tcKimlikNoDogumTarihi actionListener="#{iyKisiController.getTcKim.gnlKisilik()}"
+                                    <coco:tcKimlikNoDogumTarihi actionListener="#{iyKisiController.getTcKimlik()}"
                                                                 update=":growl,@(.tcUpdate)"
                                                                 value="#{iyKisiController.selected.gnlKisi.tcKimlikNo}"
                                                                 dateValue="#{iyKisiController.selected.gnlKisi.dogumTarihi}"/>
