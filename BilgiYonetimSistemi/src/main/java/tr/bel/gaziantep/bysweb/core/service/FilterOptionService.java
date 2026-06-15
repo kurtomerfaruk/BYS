@@ -27,6 +27,8 @@ import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlIl;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlIlce;
 import tr.bel.gaziantep.bysweb.moduls.genel.service.GnlIlService;
 import tr.bel.gaziantep.bysweb.moduls.genel.service.GnlIlceService;
+import tr.bel.gaziantep.bysweb.moduls.ileriyas.entity.IyTalepKonu;
+import tr.bel.gaziantep.bysweb.moduls.ileriyas.service.IyTalepKonuService;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtOlcuSablon;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.service.OrtOlcuSablonService;
 
@@ -56,6 +58,8 @@ public class FilterOptionService implements java.io.Serializable{
     private AyBirimService ayBirimService;
     @Inject
     private OrtOlcuSablonService ortOlcuSablonService;
+    @Inject
+    private IyTalepKonuService iyTalepKonuService;
 
     public List<SelectItem> getSyFilterTurs() {
         List<SelectItem> result = new ArrayList<>();
@@ -402,5 +406,14 @@ public class FilterOptionService implements java.io.Serializable{
         return Arrays.stream(EnumGrafikTuru.values())
                 .map(value -> new SelectItem(value,value.getDisplayValue()))
                 .collect(Collectors.toList());
+    }
+
+    public List<SelectItem> getIyTalepKonus() {
+        List<SelectItem> result = new ArrayList<>();
+        List<IyTalepKonu> list = iyTalepKonuService.findAll();
+        for (IyTalepKonu value : list) {
+            result.add(new SelectItem(value.getTanim(), value.getTanim()));
+        }
+        return result;
     }
 }

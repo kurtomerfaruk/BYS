@@ -1,4 +1,4 @@
-package tr.bel.gaziantep.bysweb.moduls.engelsizler.service;
+package tr.bel.gaziantep.bysweb.moduls.ileriyas.service;
 
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
@@ -6,24 +6,24 @@ import jakarta.persistence.PersistenceContext;
 import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlTalepDurumu;
 import tr.bel.gaziantep.bysweb.core.service.AbstractService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
-import tr.bel.gaziantep.bysweb.moduls.engelsizler.entity.EyTalep;
+import tr.bel.gaziantep.bysweb.moduls.ileriyas.entity.IyTalep;
 
 import java.io.Serial;
 import java.util.List;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
- * @version 1.0.0
- * @since 23.06.2025 15:18
+ * @version 1.11.0
+ * @since 15.06.2026 08:28
  */
 @Stateless
-public class EyTalepService extends AbstractService<EyTalep> {
+public class IyTalepService extends AbstractService<IyTalep> {
 
     @Serial
-    private static final long serialVersionUID = 2937742197686315394L;
+    private static final long serialVersionUID = 7408610609223671348L;
 
-    public EyTalepService() {
-        super(EyTalep.class);
+    public IyTalepService() {
+        super(IyTalep.class);
     }
 
     @PersistenceContext(unitName = Constants.UNIT_NAME)
@@ -34,7 +34,7 @@ public class EyTalepService extends AbstractService<EyTalep> {
         return em;
     }
 
-    public List<EyTalep> findByDurum(EnumGnlTalepDurumu durum) {
-        return getEntityManager().createNamedQuery("EyTalep.findByDurum", EyTalep.class).setParameter("durum", durum).getResultList();
+    public List<IyTalep> findByDurum(EnumGnlTalepDurumu durum) {
+        return getEntityManager().createNamedQuery("IyTalep.findByDurum",IyTalep.class).setParameter("durum", durum).getResultList();
     }
 }

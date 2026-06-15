@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="jakarta.faces.facelets"
       xmlns:h="jakarta.faces.html"
@@ -10,43 +11,46 @@
 <ui:composition>
 
 
-    <coco:editpage id="EyTalepEditForm"
-                   widgetVar="EyTalepEditDialog"
-                   actionListener="#{eyTalepController.save}"
-                   listForm="EyTalepListForm"
-                   model="#{eyTalepController.selected}">
+    <coco:editpage id="IyTalepEditForm"
+                   widgetVar="IyTalepEditDialog"
+                   actionListener="#{iyTalepController.save}"
+                   listForm="IyTalepListForm"
+                   model="#{iyTalepController.selected}">
 
         <p:outputLabel value="#{messages.tcKimlikNoLabel}" for="@next"/>
-        <coco:inputWithButton id="inputWithButtonEyKisi" inputId="eyKisiId"
-                              inputValue="#{eyTalepController.selected.eyKisi.gnlKisi.tcKimlikNo}"
+        <coco:inputWithButton id="inputWithButtonEyKisi" inputId="iyKisiId"
+                              inputValue="#{iyTalepController.selected.iyKisi.gnlKisi.tcKimlikNo}"
                               inputTitle="#{messages.tcKimlikNoText}"
-                              actionListener="#{bysController.openCommonDialog('eyKisiSec')}"
-                              ajaxListener="#{eyTalepController.secilenEyKisi}"
+                              actionListener="#{bysController.openCommonDialog('iyKisiSec')}"
+                              ajaxListener="#{iyTalepController.secilenIyKisi}"
                               buttonTitle="#{messages.kisiSecmelisiniz}"
                               size="50"
-                              dialogId="EyTalepEditDialogId"/>
+                              dialogId="IyTalepEditDialogId"/>
 
         <p:outputLabel value="#{messages.adLabel}" for="@next"/>
-        <p:inputText id="ad" value="#{eyTalepController.selected.eyKisi.gnlKisi.ad}" title="#{messages.adText}"
+        <p:inputText id="ad" value="#{iyTalepController.selected.iyKisi.gnlKisi.ad}" title="#{messages.adText}"
                      size="50" maxlength="50" readonly="true" styleClass="inputUpdate"/>
 
         <p:outputLabel value="#{messages.soyadLabel}" for="@next"/>
-        <p:inputText id="soyad" value="#{eyTalepController.selected.eyKisi.gnlKisi.soyad}"
+        <p:inputText id="soyad" value="#{iyTalepController.selected.iyKisi.gnlKisi.soyad}"
                      title="#{messages.soyadText}" size="50" maxlength="50" readonly="true" styleClass="inputUpdate"/>
 
         <p:outputLabel value="#{messages.telefonLabel}" for="@next"/>
         <h:panelGroup>
-            <p:inputText value="#{eyTalepController.selected.eyKisi.gnlKisi.telefon}" styleClass="inputUpdate" readonly="true"/>
-            <p:inputText value="#{eyTalepController.selected.eyKisi.gnlKisi.telefon2}" styleClass="inputUpdate" readonly="true"/>
+            <p:inputText value="#{iyTalepController.selected.iyKisi.gnlKisi.telefon}" styleClass="inputUpdate"
+                         readonly="true"/>
+            <p:inputText value="#{iyTalepController.selected.iyKisi.gnlKisi.telefon2}" styleClass="inputUpdate"
+                         readonly="true"/>
         </h:panelGroup>
 
         <p:outputLabel value="#{messages.tarihLabel}" for="@next"/>
         <p:datePicker id="tarih" locale="tr" pattern="#{messages.tarihSaatFormat}"
-                      value="#{eyTalepController.selected.tarih}" title="#{messages.tarihText}" mask="true"
-                      monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"/>
+                      value="#{iyTalepController.selected.tarih}" title="#{messages.tarihText}" mask="true"
+                      monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
+                      showOnFocus="false"/>
 
         <p:outputLabel value="#{messages.talepTuruLabel}" for="@next"/>
-        <p:selectOneMenu id="talepTuru" value="#{eyTalepController.selected.talepTuru}"
+        <p:selectOneMenu id="talepTuru" value="#{iyTalepController.selected.talepTuru}"
                          required="true" converter="omnifaces.SelectItemsConverter">
             <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
             <f:selectItems value="#{enumTalepTuru.ALL_VALUES}"
@@ -56,7 +60,7 @@
         </p:selectOneMenu>
 
         <p:outputLabel value="#{messages.talepTipiLabel}" for="@next"/>
-        <p:selectOneMenu id="talepTipi" value="#{eyTalepController.selected.talepTipi}"
+        <p:selectOneMenu id="talepTipi" value="#{iyTalepController.selected.talepTipi}"
                          required="true" converter="omnifaces.SelectItemsConverter">
             <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
             <f:selectItems value="#{enumTalepTipi.ALL_VALUES}"
@@ -66,21 +70,21 @@
         </p:selectOneMenu>
 
         <p:outputLabel value="#{messages.konuLabel}" for="@next"/>
-        <p:selectOneMenu id="konu" value="#{eyTalepController.selected.eyTalepKonu}" required="true" filter="true"
+        <p:selectOneMenu id="konu" value="#{iyTalepController.selected.iyTalepKonu}" required="true" filter="true"
                          converter="omnifaces.SelectItemsConverter">
             <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
-            <f:selectItems value="#{eyTalepKonuController.items}"
+            <f:selectItems value="#{iyTalepKonuController.items}"
                            var="konulars"
                            itemLabel="#{konulars.tanim}"
                            itemValue="#{konulars}"/>
         </p:selectOneMenu>
 
         <p:outputLabel value="#{messages.aciklamaLabel}" for="@next"/>
-        <p:inputTextarea rows="4" id="aciklama" value="#{eyTalepController.selected.aciklama}"
+        <p:inputTextarea rows="4" id="aciklama" value="#{iyTalepController.selected.aciklama}"
                          title="#{messages.aciklamaText}" styleClass="w-100" autoResize="false"/>
 
         <p:outputLabel value="#{messages.durumuLabel}" for="@next"/>
-        <p:selectOneMenu id="durum" value="#{eyTalepController.selected.durum}"
+        <p:selectOneMenu id="durum" value="#{iyTalepController.selected.durum}"
                          required="true" converter="omnifaces.SelectItemsConverter">
             <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
             <f:selectItems value="#{enumTalepDurumu.ALL_VALUES}"
@@ -90,7 +94,7 @@
         </p:selectOneMenu>
 
         <p:outputLabel value="#{messages.durumAciklamaLabel}" for="@next"/>
-        <p:inputTextarea rows="4" id="durumAciklama" value="#{eyTalepController.selected.durumAciklama}"
+        <p:inputTextarea rows="4" id="durumAciklama" value="#{iyTalepController.selected.durumAciklama}"
                          title="#{messages.durumAciklamaText}" styleClass="w-100" autoResize="false"/>
 
 

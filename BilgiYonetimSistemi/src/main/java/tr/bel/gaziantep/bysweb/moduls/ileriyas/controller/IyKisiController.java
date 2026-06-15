@@ -331,12 +331,14 @@ public class IyKisiController extends AbstractController<IyKisi> {
         }
     }
 
-    public void gnlKisiSecKapat(GnlKisi gnlKisi) {
-        PrimeFaces.current().dialog().closeDynamic(gnlKisi);
+
+
+    public void onRowDblSelect(SelectEvent<IyKisi> event) {
+        IyKisi iyKisi = event.getObject();
+        iyKisiSecKapat(iyKisi);
     }
 
-    public void onRowDblSelect(SelectEvent<GnlKisi> event) {
-        GnlKisi gnlKisi = event.getObject();
-        gnlKisiSecKapat(gnlKisi);
+    public void iyKisiSecKapat(IyKisi iyKisi) {
+        PrimeFaces.current().dialog().closeDynamic(iyKisi);
     }
 }

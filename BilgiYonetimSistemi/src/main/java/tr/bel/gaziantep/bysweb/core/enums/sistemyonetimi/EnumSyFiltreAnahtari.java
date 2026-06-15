@@ -59,7 +59,8 @@ public enum EnumSyFiltreAnahtari implements BaseEnum {
     GNLGUN("Gün"),
     AYGRUP("Aktif Yaşam Grup"),
     MODUL("Modül"),
-    GRAFIK_TURU("Grafik Türü");
+    GRAFIK_TURU("Grafik Türü"),
+    IYTALEP_KONU("İleri Yaş Talep Konu"),;
 
     private final String label;
 

@@ -38,11 +38,42 @@
                                                        value="Kişi Listesi"/>
                                     </li>
                                 </ui:fragment>
+
+                                <ui:fragment rendered="#{syKullaniciController.hasPermission('iytalep:goster')}">
+                                    <li class="slide">
+                                        <p:commandLink styleClass="side-menu__item sublevel2"
+                                                       actionListener="#{menuController.setPageLink('/moduls/ileriyas/iyTalep/index')}"
+                                                       update="myPanel,:growl"
+                                                       onstart="PF('Loading').show()"
+                                                       onsuccess="PF('Loading').hide()"
+                                                       value="Talepler"/>
+                                    </li>
+                                </ui:fragment>
                             </ul>
                         </li>
                     </ui:fragment>
                     <!--    Islemler    -->
 
+                    <!--    Tanimlamalar    -->
+                    <ui:fragment rendered="#{syKullaniciController.hasPermission('ileriyas_tanimlamalar:goster')}">
+                        <li class="slide has-sub">
+                            <a href="javascript:void(0);" class="side-menu__item sublevel1">Tanımlamalar
+                                <i class="ri-arrow-right-s-line side-menu__angle"></i></a>
+                            <ul class="slide-menu child2">
+                                <ui:fragment rendered="#{syKullaniciController.hasPermission('iytalepkonu:goster')}">
+                                    <li class="slide">
+                                        <p:commandLink styleClass="side-menu__item sublevel2"
+                                                       actionListener="#{menuController.setPageLink('/moduls/ileriyas/iyTalepKonu/index')}"
+                                                       update="myPanel,:growl"
+                                                       onstart="PF('Loading').show()"
+                                                       onsuccess="PF('Loading').hide()"
+                                                       value="Talep Konuları"/>
+                                    </li>
+                                </ui:fragment>
+                            </ul>
+                        </li>
+                    </ui:fragment>
+                    <!--    Tanimlamalar    -->
 
                 </ul>
             </li>
