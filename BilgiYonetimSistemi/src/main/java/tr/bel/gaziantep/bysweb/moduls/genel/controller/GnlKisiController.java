@@ -20,13 +20,15 @@ import tr.bel.gaziantep.bysweb.core.enums.bys.EnumModul;
 import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlDurum;
 import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.EnumSyFiltreAnahtari;
 import tr.bel.gaziantep.bysweb.core.service.FilterOptionService;
-import tr.bel.gaziantep.bysweb.core.utils.Constants;
-import tr.bel.gaziantep.bysweb.core.utils.DateUtil;
-import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
-import tr.bel.gaziantep.bysweb.core.utils.StringUtil;
+import tr.bel.gaziantep.bysweb.core.utils.*;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.VefatEdenKisi;
 import tr.bel.gaziantep.bysweb.moduls.genel.service.GnlKisiService;
+import tr.bel.gaziantep.bysweb.moduls.ileriyas.entity.IyKisi;
+import tr.bel.gaziantep.bysweb.moduls.ileriyas.service.IyKisiService;
+import tr.bel.gaziantep.bysweb.webservice.gazikart.controller.GaziKartService;
+import tr.bel.gaziantep.bysweb.webservice.gazikart.model.ServisModel;
+import tr.bel.gaziantep.bysweb.webservice.gazikart.model.ServisSonucu;
 import tr.bel.gaziantep.bysweb.webservice.kps.controller.KpsService;
 import tr.bel.gaziantep.bysweb.webservice.kps.model.KpsModel;
 import tr.bel.gaziantep.bysweb.webservice.kps.model.parameters.KisiParameter;
@@ -38,9 +40,7 @@ import tr.bel.gaziantep.bysweb.webservice.mezarlik.model.VefatEdenRoot;
 import java.io.Serial;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -67,6 +67,8 @@ public class GnlKisiController extends AbstractController<GnlKisi> {
     @Inject
     private InitApp initApp;
     @Inject
+    private IyKisiService iyKisiService;
+    @Inject
     @Push(channel = "gnlKisiChannel")
     private PushContext pushContext;
 
@@ -82,9 +84,17 @@ public class GnlKisiController extends AbstractController<GnlKisi> {
     @Getter
     @Setter
     private LocalDate endDate = LocalDate.now();
+    @Getter
+    @Setter
+    private List<LocalDate> range;
+    @Getter
+    @Setter
+    private LocalDate maxDate;
+    private String post;
 
     public GnlKisiController() {
         super(GnlKisi.class);
+        maxDate = LocalDate.now();
     }
 
     public List<SelectItem> getFilterOptions(EnumSyFiltreAnahtari key) {
@@ -311,6 +321,212 @@ public class GnlKisiController extends AbstractController<GnlKisi> {
     public void onRowDblSelect(SelectEvent<GnlKisi> event) {
         GnlKisi gnlKisi = event.getObject();
         gnlKisiSecKapat(gnlKisi);
+    }
+
+//    public void updateFromGaziKart() {
+//        try {
+//            if (range.size() != 2) {
+//                return;
+//            }
+//            post = ",,,,Servisten bilgiler Okunuyor";
+//            pushContext.send(post);
+//            GaziKartService gaziKartService = new GaziKartService();
+//            String format = "yyyyMMdd";
+//            ServisSonucu sonuc = gaziKartService.getList(initApp.getProperty("gazikart.webServisLink"), DateUtil.localdateToString(range.get(0),
+//                    format), DateUtil.localdateToString(range.get(1), format));
+//            if (sonuc != null && sonuc.getData() != null) {
+//                post = ",,,,Servisten bilgiler okundu";
+//                pushContext.send(post);
+//                count = 0;
+//                addTcKimlik(sonuc.getData(), EnumModul.GAZIKART);
+//                PrimeFaces.current().executeScript("PF('TarihSecDialog').hide()");
+//            }
+//            FacesUtil.successMessage(Constants.KAYIT_GUNCELLENDI);
+//        } catch (Exception ex) {
+//            log.error(null, ex);
+//            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+//        } finally {
+//            PrimeFaces.current().executeScript("PF('KisiMernisListeGuncelle').hide()");
+//        }
+//    }
+//
+//    private void addTcKimlik(List<ServisModel> servisModels, EnumModul department) throws Exception {
+//        post = ",,,,Mernis için parametreler oluşturuluyor";
+//        pushContext.send(post);
+//        List<KisiParameter> kisiParameterList = converter.servisModelToKisiParametersYasli(servisModels, department);
+//        if (kisiParameterList.isEmpty()) {
+//            return;
+//        }
+//        List<List<KisiParameter>> hasNotTcKimlikSplitList = ListUtil.partition(kisiParameterList, 100);
+//        List<String> hasNotTcKimlikList = new ArrayList<>();
+//
+//        for (List<KisiParameter> kisiParameters : hasNotTcKimlikSplitList) {
+//            List<String> tcNewList = kisiParameters.stream().map(parameter -> parameter.getTcKimlikNo() + "").toList();
+//            hasNotTcKimlikList.addAll(service.findByTcKimlikNoList(tcNewList));
+//        }
+//
+//        for (String str : hasNotTcKimlikList) {
+//            kisiParameterList.removeIf(x -> x.getTcKimlikNo() == Long.parseLong(str));
+//        }
+//
+//        List<List<KisiParameter>> splitList = ListUtil.partition(kisiParameterList, 70);
+//        recordCount = kisiParameterList.size();
+//        post = ",,,,Mernis için parametreler oluşturuldu";
+//        pushContext.send(post);
+//        KpsService kpsService = new KpsService();
+//        post = ",,,,Mernis'ten sorgulama yapmak için hazırlık yapılıyor";
+//        pushContext.send(post);
+//        for (List<KisiParameter> kisiParameters : splitList) {
+//            KisiParameters parameters = new KisiParameters();
+//            parameters.setKisiler(kisiParameters);
+//            List<KpsModel> kpsModels = kpsService.getKpsFull(initApp.getProperty("webServisLink"), initApp.getProperty("webServisToken"), parameters);
+//            addPerson(servisModels, kpsModels, department);
+//
+//        }
+//    }
+//
+//    private void addPerson(List<ServisModel> servisModels, List<KpsModel> kpsModels, EnumModul modul) throws Exception {
+//
+//        for (KpsModel kpsModel : kpsModels) {
+//            GnlKisi gnlKisi = service.findByTckimlikNo(kpsModel.getKutukModel().getTcKimlikNo().toString());
+//            if (gnlKisi == null) {
+//                gnlKisi = new GnlKisi();
+//            }
+//            gnlKisi = converter.convertKpsModelToGnlKisi(gnlKisi, kpsModel, modul);
+//            ServisModel servisModel = isExistServisModel(gnlKisi.getTcKimlikNo(), servisModels);
+//
+//            if (servisModel != null) {
+//                String phoneNumber = Function.phoneValidate(servisModel.getTelMobile());
+//                gnlKisi.setTelefon(phoneNumber);
+//
+//                IyKisi iyKisi = iyKisiService.findByTcKimlikNo(gnlKisi.getTcKimlikNo());
+//                if (iyKisi == null) {
+//                    iyKisi = IyKisi.builder().gnlKisi(gnlKisi).build();
+//                    iyKisiService.create(iyKisi);
+//                    gnlKisi.setYasli(true);
+//                }
+//                service.edit(gnlKisi);
+//                count++;
+//                post = gnlKisi.getAdSoyad() + "," + gnlKisi.getTcKimlikNo() + "," + count + "," + recordCount + ", ";
+//                pushContext.send(post);
+//            }
+//        }
+//    }
+//
+//    private ServisModel isExistServisModel(String tcKimlikNo, List<ServisModel> servisModels) {
+//        return servisModels.stream()
+//                .filter(servisModel -> StringUtil.isNotBlank(servisModel.getIdentityNo()) && servisModel.getIdentityNo().equals(tcKimlikNo))
+//                .findFirst()
+//                .orElse(null);
+//    }
+
+    public void updateFromGaziKart() {
+        if (range.size() != 2) return;
+
+        try {
+            pushContext.send("Servisten bilgiler Okunuyor");
+
+            GaziKartService gaziKartService = new GaziKartService();
+            String format = "yyyyMMdd";
+            String start = DateUtil.localdateToString(range.get(0), format);
+            String end = DateUtil.localdateToString(range.get(1), format);
+            ServisSonucu sonuc = gaziKartService.getList(  initApp.getProperty("gazikart.webServisLink"), start, end);
+
+            if (sonuc == null || sonuc.getData() == null) {
+                FacesUtil.warningMessage("Servisten veri alınamadı");
+                return;
+            }
+
+            pushContext.send("Servisten bilgiler okundu");
+            processGaziKartData(sonuc.getData());
+            PrimeFaces.current().executeScript("PF('TarihSecDialog').hide()");
+            FacesUtil.successMessage(Constants.KAYIT_GUNCELLENDI);
+        } catch (Exception ex) {
+            log.error(null, ex);
+            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+        } finally {
+            PrimeFaces.current().executeScript("PF('KisiMernisListeGuncelle').hide()");
+        }
+    }
+
+    private void processGaziKartData(List<ServisModel> servisModels) throws Exception {
+        pushContext.send("KPS için parametreler oluşturuluyor");
+
+        List<KisiParameter> allParams = converter.servisModelToKisiParametersYasli(servisModels, EnumModul.GAZIKART);
+        if (allParams.isEmpty()) return;
+
+        Map<String, ServisModel> servisMap = buildServisMap(servisModels);
+        List<KisiParameter> newParams = filterExistingTcKimlikNos(allParams);
+
+        if (newParams.isEmpty()) {
+            pushContext.send("Tüm kayıtlar zaten mevcut");
+            return;
+        }
+
+        pushContext.send("MERNIS sorgulanıyor: " + newParams.size() + " kişi");
+        recordCount = newParams.size();
+        syncWithMernis(newParams, servisMap);
+    }
+
+    private Map<String, ServisModel> buildServisMap(List<ServisModel> servisModels) {
+        return servisModels.stream()
+                .filter(s -> StringUtil.isNotBlank(s.getIdentityNo()))
+                .collect(Collectors.toMap(ServisModel::getIdentityNo, s -> s, (a, b) -> a));
+    }
+
+    private List<KisiParameter> filterExistingTcKimlikNos(List<KisiParameter> params) {
+        List<String> tcList = params.stream()
+                .map(p -> String.valueOf(p.getTcKimlikNo()))
+                .toList();
+
+        Set<String> existingTcSet = new HashSet<>(service.findByTcKimlikNoList(tcList));
+
+        return params.stream()
+                .filter(p -> !existingTcSet.contains(String.valueOf(p.getTcKimlikNo())))
+                .toList();
+    }
+
+    private void syncWithMernis(List<KisiParameter> params, Map<String, ServisModel> servisMap) throws Exception {
+        KpsService kpsService = new KpsService();
+        String wsLink = initApp.getProperty("webServisLink");
+        String wsToken = initApp.getProperty("webServisToken");
+
+        List<List<KisiParameter>> batches = ListUtil.partition(params, 70);
+
+        for (List<KisiParameter> batch : batches) {
+            KisiParameters parameters = new KisiParameters();
+            parameters.setKisiler(batch);
+
+            List<KpsModel> kpsModels = kpsService.getKpsByKutukByAdres(wsLink, wsToken, parameters);
+            savePersons(kpsModels, servisMap);
+        }
+    }
+
+    private void savePersons(List<KpsModel> kpsModels, Map<String, ServisModel> servisMap) throws Exception {
+        for (KpsModel kpsModel : kpsModels) {
+            String tcKimlikNo = kpsModel.getKutukModel().getTcKimlikNo().toString();
+
+
+
+            ServisModel servisModel = servisMap.get(tcKimlikNo);
+            if (servisModel == null) continue;
+
+            GnlKisi gnlKisi = converter.convertKpsModelToGnlKisi(new GnlKisi(), kpsModel, EnumModul.GAZIKART);
+
+            String phone = Function.phoneValidate(servisModel.getTelMobile());
+            gnlKisi.setTelefon(phone);
+
+            IyKisi iyKisi = iyKisiService.findByTcKimlikNo(tcKimlikNo);
+            if (iyKisi == null) {
+                iyKisi = IyKisi.builder().gnlKisi(gnlKisi).build();
+                iyKisiService.create(iyKisi);
+                gnlKisi.setYasli(true);
+            }
+            service.edit(gnlKisi);
+
+            count++;
+            pushContext.send(gnlKisi.getAdSoyad() + "," + tcKimlikNo + "," + count + "," + recordCount + ",");
+        }
     }
 
 

@@ -48,13 +48,13 @@ public class EyKisiService extends AbstractService<EyKisi> {
     }
 
     public List<String> findByTcKimlikNoList(List<String> tcList) {
-        return getEntityManager().createNamedQuery("EyKisi.findByKisiTcKimlikNoList").setParameter("tcList", tcList).getResultList();
+        return getEntityManager().createNamedQuery("EyKisi.findByKisiTcKimlikNoList",String.class).setParameter("tcList", tcList).getResultList();
     }
 
     public List<EyKisi> findByAddress(int recordCount) {
         Random random = new Random();
         int first = random.nextInt(recordCount);
-        return getEntityManager().createNamedQuery("EyKisi.findByAdress").setFirstResult(first).setMaxResults(recordCount).getResultList();
+        return getEntityManager().createNamedQuery("EyKisi.findByAdress",EyKisi.class).setFirstResult(first).setMaxResults(recordCount).getResultList();
     }
 
     public List<GnlKisi> getTcList(int recordCount) {

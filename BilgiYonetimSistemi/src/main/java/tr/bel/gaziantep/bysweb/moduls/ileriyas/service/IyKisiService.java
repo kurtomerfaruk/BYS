@@ -31,4 +31,12 @@ public class IyKisiService extends AbstractService<IyKisi> {
     protected EntityManager getEntityManager() {
         return em;
     }
+
+    public IyKisi findByTcKimlikNo(String  tcKimlikNo) {
+        return getEntityManager().createNamedQuery("IyKisi.findByTcKimlikNo",IyKisi.class)
+                .setParameter("tcKimlikNo",tcKimlikNo)
+                .getResultStream()
+                .findFirst()
+                .orElse(null);
+    }
 }

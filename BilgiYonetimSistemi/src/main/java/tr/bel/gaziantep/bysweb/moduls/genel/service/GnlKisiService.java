@@ -98,4 +98,15 @@ public class GnlKisiService extends AbstractService<GnlKisi> {
                 .setMaxResults(max)
                 .getResultList();
     }
+
+    public List<GnlKisi> findByYasByYasli(int age) {
+        LocalDate date = LocalDate.now().minusYears(age);
+        return getEntityManager().createNamedQuery("GnlKisi.findByYasByYasli",GnlKisi.class)
+                .setParameter("date",date)
+                .getResultList();
+    }
+
+    public List<String> findByTcKimlikNoList(List<String> tcList) {
+        return getEntityManager().createNamedQuery("GnlKisi.findByKisiTcKimlikNoList",String.class).setParameter("tcList", tcList).getResultList();
+    }
 }

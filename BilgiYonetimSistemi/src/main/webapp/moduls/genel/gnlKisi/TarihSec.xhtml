@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces">
+
+<ui:composition>
+
+    <p:dialog widgetVar="TarihSecDialog"
+              modal="true"
+              id="TarihSecDlg"
+              resizable="false"
+              closeOnEscape="true"
+              header="Liste Güncelle"
+              appendTo="@(body)"
+              styleClass="box box-pink"
+              responsive="true"
+              style="overflow: auto;max-height: 500px;min-width: 390px">
+
+        <h:form id="TarihSecForm">
+            <h:panelGroup id="display">
+                <p:focus context="display"/>
+                <p:panelGrid columns="2" layout="tabular" styleClass="w-100">
+                    <p:outputLabel value="#{messages.tarihLabel}" for="@next"/>
+                    <p:datePicker value="#{gnlKisiController.range}"
+                                  title="#{messages.kayitTarihiText}" mask="true" maxdate="#{gnlKisiController.maxDate}"
+                                  pattern="#{messages.tarihSaatFormat}" monthNavigator="true"
+                                  yearNavigator="true" showIcon="true" showButtonBar="true" required="true"
+                                  showOnFocus="false" selectionMode="range"
+                                  readonlyInput="true" hideOnRangeSelection="true"
+                    styleClass="w-100"/>
+
+                    <f:facet name="footer">
+                        <div class="float-end">
+                            <p:commandButton id="listeGuncelleButton" value="#{messages.buttonListeyiGuncelle}"
+                                             icon="pi pi-refresh"
+                                             styleClass="ui-button-success"
+                                             actionListener="#{gnlKisiController.updateFromGaziKart()}"
+                                             onclick="PF('KisiMernisListeGuncelle').show()"
+                                             update="display,:GnlKisiListForm:datalist:datalist,:growl"/>
+                            <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                             value="#{messages.buttonKapat}" onclick="PF('TarihSecDialog').hide()"
+                                             immediate="true" onstart="PF('Loading').show()"
+                                             onsuccess="PF('Loading').hide()"/>
+                        </div>
+                    </f:facet>
+                </p:panelGrid>
+            </h:panelGroup>
+        </h:form>
+
+    </p:dialog>
+
+</ui:composition>
+
+</html>

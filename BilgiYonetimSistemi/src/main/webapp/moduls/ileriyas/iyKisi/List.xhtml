@@ -98,6 +98,14 @@
                                  pt:data-tooltip="#{messages.buttonOluleriGuncelle}" update=":OlumListeGuncelleForm"
                                  onsuccess="PF('OlumListeGuncelleDialog').show()"
                                  rendered="#{syKullaniciController.hasPermission('iykisi:oluleriGuncelle')}"/>
+                <p:commandButton styleClass="ui-button-danger" icon="pi pi-arrow-right"
+                                 pt:data-tooltip="Yaşlıları Aktar"
+                                 onclick="PF('KisiMernisListeGuncelle').show()"
+                                 actionListener="#{iyKisiController.transferElderly()}"
+                                 update=":growl,datalist">
+                    <p:confirm header="Yaşlıları aktar" message="Yaşlıları aktarmak istediğinizden emin misiniz?"
+                               icon="pi pi-warning"/>
+                </p:commandButton>
             </f:facet>
 
         </coco:datatable>

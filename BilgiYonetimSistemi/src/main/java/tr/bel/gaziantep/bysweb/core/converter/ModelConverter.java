@@ -63,7 +63,7 @@ public class ModelConverter implements java.io.Serializable {
     public GnlKisi convertKpsModelToGnlKisi(GnlKisi kisi, KpsModel kpsModel, EnumModul modul) throws Exception {
         if (kisi == null) kisi = new GnlKisi();
         if (kpsModel.getKutukModel() != null) {
-            if(!StringUtil.isBlank(kpsModel.getKutukModel().getUyruk())){
+            if (!StringUtil.isBlank(kpsModel.getKutukModel().getUyruk())) {
                 kisi.setUyruk(EnumGnlUyruk.fromValue(kpsModel.getKutukModel().getUyruk()));
             }
 
@@ -124,10 +124,10 @@ public class ModelConverter implements java.io.Serializable {
 
         if (kpsModel.getKisiAdresModel() != null) {
             KisiAdresModel model = kpsModel.getKisiAdresModel();
-            if(StringUtil.isNotBlank(model.getX()) && StringUtil.isNotBlank(model.getY())) {
+            if (StringUtil.isNotBlank(model.getX()) && StringUtil.isNotBlank(model.getY())) {
                 kisi.setLatLng(model.getX() + "," + model.getY());
             }
-            
+
         }
 
         kisi.setMernisGuncellemeTarihi(LocalDateTime.now());
@@ -148,7 +148,7 @@ public class ModelConverter implements java.io.Serializable {
         if (koordinatModel.getHata() != null) return null;
         if (StringUtil.isBlank(koordinatModel.getLatitude()) && StringUtil.isBlank(koordinatModel.getLongitude()))
             return null;
-        if(koordinatModel.getLatitude().equals("null") || koordinatModel.getLongitude().equals("null")) return null;
+        if (koordinatModel.getLatitude().equals("null") || koordinatModel.getLongitude().equals("null")) return null;
         return koordinatModel.getLatitude() + "," + koordinatModel.getLongitude();
     }
 
@@ -159,9 +159,35 @@ public class ModelConverter implements java.io.Serializable {
                 if (StringUtil.isBlank(model.getDisabledDegree())) {
                     continue;
                 }
-                if (result.stream().noneMatch(x -> x.getTcKimlikNo() == Long.parseLong(model.getIdentityNo()))
+                String identityNo = model.getIdentityNo();
+
+                if (identityNo != null && identityNo.matches("\\d{11}") && result.stream().noneMatch(x -> x.getTcKimlikNo() == Long.parseLong(identityNo))
                         && !model.getDisabledDegree().equals("-")) {
                     LocalDate date = DateUtil.stringToLocalDate(model.getBirthDate(), "dd.MM.yyyy");
+                    KisiParameter parameter = KpsUtil.setDate(date);
+                    parameter.setTcKimlikNo(Long.parseLong(model.getIdentityNo()));
+                    result.add(parameter);
+                }
+
+            } else {
+                System.out.println("Enum Servis Tur Tanimlanmadi:" + department);
+            }
+        }
+        return result;
+    }
+
+    public List<KisiParameter> servisModelToKisiParametersYasli(List<ServisModel> models, EnumModul department) {
+        List<KisiParameter> result = new ArrayList<>();
+        for (ServisModel model : models) {
+            if (department.equals(EnumModul.GAZIKART)) {
+                String identityNo = model.getIdentityNo();
+
+                if (identityNo != null && identityNo.matches("\\d{11}") &&
+                        result.stream().noneMatch(x -> x.getTcKimlikNo() == Long.parseLong(identityNo))) {
+                    LocalDate date = DateUtil.stringToLocalDate(model.getBirthDate(), "dd.MM.yyyy");
+                    if (DateUtil.calculateAge(date) < 60) {
+                        continue;
+                    }
                     KisiParameter parameter = KpsUtil.setDate(date);
                     parameter.setTcKimlikNo(Long.parseLong(model.getIdentityNo()));
                     result.add(parameter);

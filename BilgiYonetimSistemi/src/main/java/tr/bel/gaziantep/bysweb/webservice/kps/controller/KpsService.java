@@ -33,23 +33,47 @@ public class KpsService {
         BilesikKutukModel kutukModel = this.kutukServis.tcKimlikNoSorgula(link, token, parameter);
         if (kutukModel == null) return null;
         model.setKutukModel(kutukModel);
-        if(StringUtil.isNotBlank(model.getKutukModel().getHataBilgisi())){
+        if (StringUtil.isNotBlank(model.getKutukModel().getHataBilgisi())) {
             return model;
         }
         model.setAdresModel(this.adresSorgulaServis.adresSorgula(link, token, parameter));
-        model.setKisiAdresModel(this.kisiAdresSorgulaServis.kisiAdresSorgula(link, token, parameter));
         return model;
+    }
+
+    public List<KpsModel> getKpsByKutukByAdres(String link, String token, KisiParameters parameters) {
+        List<KpsModel> models = new ArrayList<>();
+        List<BilesikKutukModel> kutukModels = kutukServis.tcKimlikNolariSorgula(link, token, parameters);
+        List<AdresModel> adresModels=adresSorgulaServis.adresleriSorgula(link, token, parameters);
+        for (BilesikKutukModel kutukModel : kutukModels) {
+            KpsModel kpsModel = new KpsModel();
+            kpsModel.setKutukModel(kutukModel);
+            AdresModel adresModel = adresModels.stream().filter(x->x.getTcKimlikNo().equals(kutukModel.getTcKimlikNo())).findFirst().orElse(null);
+            kpsModel.setAdresModel(adresModel);
+            models.add(kpsModel);
+        }
+        return models;
     }
 
 
     public List<KpsModel> getKpsFull(String link, String token, KisiParameters parameters) {
         List<KpsModel> models = new ArrayList<>();
-        for (KisiParameter parameter : parameters.getKisiler()) {
-            KpsModel model = new KpsModel();
-            model.setKutukModel(this.kutukServis.tcKimlikNoSorgula(link, token, parameter));
-            model.setAdresModel(this.adresSorgulaServis.adresSorgula(link, token, parameter));
-            model.setKisiAdresModel(this.kisiAdresSorgulaServis.kisiAdresSorgula(link,token,parameter));
-            models.add(model);
+//        for (KisiParameter parameter : parameters.getKisiler()) {
+//            KpsModel model = new KpsModel();
+//            model.setKutukModel(this.kutukServis.tcKimlikNoSorgula(link, token, parameter));
+//            model.setAdresModel(this.adresSorgulaServis.adresSorgula(link, token, parameter));
+//            model.setKisiAdresModel(this.kisiAdresSorgulaServis.kisiAdresSorgula(link, token, parameter));
+//            models.add(model);
+//        }
+
+        List<BilesikKutukModel> kutukModels = kutukServis.tcKimlikNolariSorgula(link, token, parameters);
+        List<AdresModel> adresModels=adresSorgulaServis.adresleriSorgula(link, token, parameters);
+        for (BilesikKutukModel kutukModel : kutukModels) {
+            KpsModel kpsModel = new KpsModel();
+            kpsModel.setKutukModel(kutukModel);
+            AdresModel adresModel = adresModels.stream().filter(x->x.getTcKimlikNo().equals(kutukModel.getTcKimlikNo())).findFirst().orElse(null);
+            kpsModel.setAdresModel(adresModel);
+//            kpsModel.setKisiAdresModel(this.kisiAdresSorgulaServis.kisiAdresSorgula(link, token, parameter));
+            models.add(kpsModel);
         }
 
         return models;
@@ -62,19 +86,14 @@ public class KpsService {
         for (BilesikKutukModel kutukModel : kutukModels) {
             KpsModel model = new KpsModel();
             model.setKutukModel(kutukModel);
-            AdresModel adresModel = adresModels.stream()
+            adresModels.stream()
                     .filter(a -> a.getTcKimlikNo().equals(kutukModel.getTcKimlikNo()))
-                    .findFirst()
-                    .orElse(null);
-            if (adresModel != null) {
-                model.setAdresModel(adresModel);
-            }
+                    .findFirst().ifPresent(model::setAdresModel);
             models.add(model);
         }
 
         return models;
     }
-
 
 
 }

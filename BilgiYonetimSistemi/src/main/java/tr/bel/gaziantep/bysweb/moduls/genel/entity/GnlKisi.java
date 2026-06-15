@@ -42,6 +42,7 @@ import java.util.List;
 @NamedQuery(name = "GnlKisi.findByTcKimlikNoListToList", query = "SELECT k FROM GnlKisi k WHERE k.tcKimlikNo IN :tcList " +
         "AND k.aktif=true AND k.durum = tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlDurum.SAG ")
 @NamedQuery(name = "GnlKisi.findByYasByYasli", query = "SELECT k FROM GnlKisi k WHERE k.aktif=true and k.yasli=false AND k.dogumTarihi <= :date ")
+@NamedQuery(name = "GnlKisi.findByKisiTcKimlikNoList", query = "SELECT DISTINCT e.tcKimlikNo FROM GnlKisi e WHERE e.tcKimlikNo IN :tcList")
 public class GnlKisi extends BaseEntity {
     @Serial
     private static final long serialVersionUID = -4297582255151551064L;

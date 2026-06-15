@@ -28,6 +28,7 @@ import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.VefatEdenKisi;
 import tr.bel.gaziantep.bysweb.moduls.genel.service.GnlKisiService;
 import tr.bel.gaziantep.bysweb.moduls.ileriyas.entity.IyKisi;
+import tr.bel.gaziantep.bysweb.moduls.ileriyas.service.IyKisiService;
 import tr.bel.gaziantep.bysweb.webservice.kps.controller.KpsService;
 import tr.bel.gaziantep.bysweb.webservice.kps.model.KpsModel;
 import tr.bel.gaziantep.bysweb.webservice.kps.model.parameters.KisiParameter;
@@ -59,7 +60,9 @@ public class IyKisiController extends AbstractController<IyKisi> {
     private static final long serialVersionUID = -7391188171619610742L;
 
     @Inject
-    private GnlKisiService service;
+    private IyKisiService service;
+    @Inject
+    private GnlKisiService gnlKisiService;
     @Inject
     private FilterOptionService filterOptionService;
     @Inject
@@ -154,7 +157,7 @@ public class IyKisiController extends AbstractController<IyKisi> {
 
     public void create(ActionEvent event) {
         if (this.getSelected() != null) {
-            boolean exist = service.existByTcKimlikNo(this.getSelected().getGnlKisi().getTcKimlikNo());
+            boolean exist = gnlKisiService.existByTcKimlikNo(this.getSelected().getGnlKisi().getTcKimlikNo());
             if (exist) {
                 FacesUtil.errorMessage("mukerrerKisiKayit");
                 return;
@@ -185,13 +188,13 @@ public class IyKisiController extends AbstractController<IyKisi> {
             count = 0;
             String post = "";
             try {
-                List<GnlKisi> kisiList = service.findByLatLngIsNull(recordCount);
+                List<GnlKisi> kisiList = gnlKisiService.findByLatLngIsNull(recordCount);
 
                 for (GnlKisi gnlKisi : kisiList) {
                     String coordinate = converter.addLatLng(gnlKisi.getBinaNo());
                     if (StringUtils.isNotBlank(coordinate) && !coordinate.equals("null,null")) {
                         gnlKisi.setLatLng(coordinate);
-                        service.updateLatLng(gnlKisi);
+                        gnlKisiService.updateLatLng(gnlKisi);
                         count++;
                         post = gnlKisi.getAdSoyad() + "," + gnlKisi.getTcKimlikNo() + "," + count + "," + recordCount + ", ";
                         pushContext.send(post);
@@ -218,14 +221,14 @@ public class IyKisiController extends AbstractController<IyKisi> {
             KpsService kpsService = new KpsService();
             if (limit > 0) {
                 for (int i = 0; i < limit; i++) {
-                    List<GnlKisi> tcList = service.getTcList(70);
+                    List<GnlKisi> tcList = gnlKisiService.getTcList(70);
                     if (!tcList.isEmpty()) {
                         updateTc(tcList, kpsService);
                     }
 
                 }
             } else {
-                List<GnlKisi> tcList = service.getTcList(recordCount);
+                List<GnlKisi> tcList = gnlKisiService.getTcList(recordCount);
                 if (!tcList.isEmpty()) {
                     updateTc(tcList, kpsService);
                 }
@@ -256,7 +259,7 @@ public class IyKisiController extends AbstractController<IyKisi> {
                 kisi = converter.convertKpsModelToGnlKisi(kisi, kpsModel, EnumModul.GENEL);
                 kisi.setLatLng(converter.addLatLng(kisi.getBinaNo()));
                 kisi.setMernisGuncellemeTarihi(LocalDateTime.now());
-                service.edit(kisi);
+                gnlKisiService.edit(kisi);
                 count++;
                 String post = kisi.getAdSoyad() + "," + kisi.getTcKimlikNo() + "," + count + "," + recordCount;
                 pushContext.send(post);
@@ -302,7 +305,7 @@ public class IyKisiController extends AbstractController<IyKisi> {
 
                 if (!vefatEdenKisiList.isEmpty()) {
                     List<String> tcList = vefatEdenKisiList.stream().map(VefatEdenKisi::getTcKimlikNo).collect(Collectors.toList());
-                    List<GnlKisi> kisilers = service.findByTcKimlikNoListToList(tcList);
+                    List<GnlKisi> kisilers = gnlKisiService.findByTcKimlikNoListToList(tcList);
                     int guncellenenKayitSayisi = 0;
                     String post;
                     for (GnlKisi kisi : kisilers) {
@@ -312,7 +315,7 @@ public class IyKisiController extends AbstractController<IyKisi> {
                         if (vefatEdenKisi == null) continue;
                         kisi.setOlumTarihi(vefatEdenKisi.getOlumTarihi());
                         kisi.setDurum(EnumGnlDurum.OLU);
-                        service.edit(kisi);
+                        gnlKisiService.edit(kisi);
                         guncellenenKayitSayisi++;
                         post = kisi.getTcKimlikNo() + "," + kisi.getAdSoyad() + "," + guncellenenKayitSayisi + "," + kisilers.size();
                         pushContext.send(post);
@@ -332,7 +335,6 @@ public class IyKisiController extends AbstractController<IyKisi> {
     }
 
 
-
     public void onRowDblSelect(SelectEvent<IyKisi> event) {
         IyKisi iyKisi = event.getObject();
         iyKisiSecKapat(iyKisi);
@@ -340,5 +342,41 @@ public class IyKisiController extends AbstractController<IyKisi> {
 
     public void iyKisiSecKapat(IyKisi iyKisi) {
         PrimeFaces.current().dialog().closeDynamic(iyKisi);
+    }
+
+    public void transferElderly() {
+        try {
+            String post;
+            int updateCount = 0;
+            int first = 0;
+            int pageSize = 250;
+            while (true) {
+                List<GnlKisi> gnlKisiList = gnlKisiService.findByYasByYasli(60, first, pageSize);
+                if (gnlKisiList.isEmpty()) {
+                    FacesUtil.addSuccessMessage("Yaşlıar başarıyla aktarıldı");
+                    break;
+                }
+                for (GnlKisi gnlKisi : gnlKisiList) {
+                    IyKisi iyKisi = service.findByTcKimlikNo(gnlKisi.getTcKimlikNo());
+                    if (iyKisi == null) {
+                        iyKisi = IyKisi.builder().gnlKisi(gnlKisi).build();
+                        gnlKisi.setYasli(true);
+                    } else {
+                        iyKisi.getGnlKisi().setYasli(true);
+                    }
+
+                    service.edit(iyKisi);
+                    updateCount++;
+                    post = gnlKisi.getTcKimlikNo() + "," + gnlKisi.getAdSoyad() + "," + updateCount + "," + updateCount;
+                    pushContext.send(post);
+                }
+                first += pageSize;
+            }
+        } catch (Exception ex) {
+            log.error(null, ex);
+            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+        } finally {
+            PrimeFaces.current().executeScript("PF('KisiMernisListeGuncelle').hide()");
+        }
     }
 }

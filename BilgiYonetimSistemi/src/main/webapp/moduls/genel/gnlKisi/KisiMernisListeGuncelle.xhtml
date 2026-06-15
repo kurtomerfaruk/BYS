@@ -12,9 +12,14 @@
     <script type="text/javascript">
         function kisi(data) {
             var sonuc = data.split(",");
-            $('.kisi').html(sonuc[0]);
-            $('.tc').html(sonuc[1]);
-            $('.sayi').html(sonuc[2] + "/" + sonuc[3]);
+            if(sonuc.length===1){
+                $('.kisi').html(sonuc[0]);
+            }else{
+                $('.kisi').html(sonuc[0]);
+                $('.tc').html(sonuc[1]);
+                $('.sayi').html(sonuc[2] + "/" + sonuc[3]);
+            }
+
         }
     </script>
 

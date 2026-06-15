@@ -98,6 +98,10 @@
                                  pt:data-tooltip="#{messages.buttonOluleriGuncelle}" update=":OlumListeGuncelleForm"
                                  onsuccess="PF('OlumListeGuncelleDialog').show()"
                                  rendered="#{syKullaniciController.hasPermission('gnlkisi:oluleriGuncelle')}"/>
+                <p:commandButton id="gaziKartVeriAlButton" icon="pi pi-check-circle" styleClass="ui-button-secondary"
+                                 pt:data-tooltip="#{messages.buttonGaziKartVeriAl}" update=":TarihSecForm"
+                                 oncomplete="PF('TarihSecDialog').show()" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('gnlkisi:gaziKarttanGuncelle')}"/>
             </f:facet>
 
         </coco:datatable>
