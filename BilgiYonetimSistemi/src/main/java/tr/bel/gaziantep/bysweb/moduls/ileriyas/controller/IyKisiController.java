@@ -87,6 +87,8 @@ public class IyKisiController extends AbstractController<IyKisi> {
     @Getter
     @Setter
     private LocalDate endDate = LocalDate.now();
+    @Getter
+    private volatile boolean cancelled;
 
     public IyKisiController() {
         super(IyKisi.class);
@@ -345,38 +347,63 @@ public class IyKisiController extends AbstractController<IyKisi> {
     }
 
     public void transferElderly() {
-        try {
-            String post;
-            int updateCount = 0;
-            int first = 0;
-            int pageSize = 250;
-            while (true) {
-                List<GnlKisi> gnlKisiList = gnlKisiService.findByYasByYasli(60, first, pageSize);
-                if (gnlKisiList.isEmpty()) {
-                    FacesUtil.addSuccessMessage("Yaşlıar başarıyla aktarıldı");
-                    break;
-                }
-                for (GnlKisi gnlKisi : gnlKisiList) {
-                    IyKisi iyKisi = service.findByTcKimlikNo(gnlKisi.getTcKimlikNo());
-                    if (iyKisi == null) {
-                        iyKisi = IyKisi.builder().gnlKisi(gnlKisi).build();
-                        gnlKisi.setYasli(true);
-                    } else {
-                        iyKisi.getGnlKisi().setYasli(true);
+        cancelled = false;
+        Integer kullaniciId = getSyKullanici().getId();
+
+        new Thread(() -> {
+            try {
+                String post;
+                int updateCount = 0;
+                int first = 0;
+                int pageSize = 250;
+                int count = 0;
+                while (true) {
+                    if (cancelled) {
+                        pushContext.send("CANCELLED", kullaniciId);
+                        return;
                     }
 
-                    service.edit(iyKisi);
-                    updateCount++;
-                    post = gnlKisi.getTcKimlikNo() + "," + gnlKisi.getAdSoyad() + "," + updateCount + "," + updateCount;
-                    pushContext.send(post);
+                    List<GnlKisi> gnlKisiList = gnlKisiService.findByYasByYasli(60, 0, pageSize);
+                    if (gnlKisiList.isEmpty()) {
+                        if (!cancelled) {
+                            pushContext.send("Yaşlılar başarıyla aktarıldı", kullaniciId);
+                            pushContext.send("COMPLETED", kullaniciId);
+                        }
+                        break;
+                    }
+                    if (count > 2000) {
+                        service.clearCache();
+                        count = 0;
+                    }
+                    for (GnlKisi gnlKisi : gnlKisiList) {
+                        if (cancelled) {
+                            pushContext.send("CANCELLED", kullaniciId);
+                            return;
+                        }
+
+                        IyKisi iyKisi = service.findByTcKimlikNo(gnlKisi.getTcKimlikNo());
+                        if (iyKisi == null) {
+                            iyKisi = IyKisi.builder().gnlKisi(gnlKisi).build();
+                        }
+                        iyKisi.getGnlKisi().setYasli(true);
+
+                        service.edit(iyKisi);
+                        updateCount++;
+                        post = gnlKisi.getTcKimlikNo() + "," + gnlKisi.getAdSoyad() + "," + updateCount + "," + updateCount;
+                        pushContext.send(post, kullaniciId);
+                    }
+                    first += pageSize;
+                    count += pageSize;
                 }
-                first += pageSize;
+            } catch (Exception ex) {
+                log.error(null, ex);
+                pushContext.send("Hata: " + ex.getMessage(), kullaniciId);
+                pushContext.send("COMPLETED", kullaniciId);
             }
-        } catch (Exception ex) {
-            log.error(null, ex);
-            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
-        } finally {
-            PrimeFaces.current().executeScript("PF('KisiMernisListeGuncelle').hide()");
-        }
+        }).start();
+    }
+
+    public void cancelTransferElderly() {
+        cancelled = true;
     }
 }

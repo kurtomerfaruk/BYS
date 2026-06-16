@@ -11,10 +11,28 @@
 
     <script type="text/javascript">
         function kisi(data) {
+            var person=$('.kisi');
+            var tc = $('.tc');
+            var sayi = $('.sayi');
+            if (data === "CANCELLED") {
+                person.html('İşlem kullanıcı tarafından iptal edildi');
+                tc.html('');
+                sayi.html('');
+                PF('KisiMernisListeGuncelle').hide();
+                return;
+            }
+            if (data === "COMPLETED") {
+                PF('growlWidget').add({
+                    "detail": 'İşlem başarıyla tamamlandı',
+                    "severity": "info"
+                })
+                PF('KisiMernisListeGuncelle').hide();
+                return;
+            }
             var sonuc = data.split(",");
-            $('.kisi').html(sonuc[0]);
-            $('.tc').html(sonuc[1]);
-            $('.sayi').html(sonuc[2] + "/" + sonuc[3]);
+            person.html(sonuc[0]);
+            tc.html(sonuc[1]);
+            sayi.html(sonuc[2] + "/" + sonuc[3]);
         }
     </script>
 
@@ -46,6 +64,14 @@
                     </div> <!-- end card-->
                     <!-- end card -->
                 </div><!-- end col -->
+            </div>
+            <div class="row mt-2">
+                <div class="col-12 text-center">
+                    <p:commandButton id="iptalButton" value="#{messages.buttonIptal}"
+                                     actionListener="#{iyKisiController.cancelTransferElderly}"
+                                     icon="pi pi-times" styleClass="ui-button-danger"
+                                     update="@form"/>
+                </div>
             </div>
         </h:form>
 

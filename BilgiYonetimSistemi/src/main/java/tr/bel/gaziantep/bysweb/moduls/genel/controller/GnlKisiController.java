@@ -91,6 +91,8 @@ public class GnlKisiController extends AbstractController<GnlKisi> {
     @Setter
     private LocalDate maxDate;
     private String post;
+    @Getter
+    private volatile boolean cancelled;
 
     public GnlKisiController() {
         super(GnlKisi.class);
@@ -420,52 +422,118 @@ public class GnlKisiController extends AbstractController<GnlKisi> {
 //                .orElse(null);
 //    }
 
+//    public void updateFromGaziKart() {
+//        if (range.size() != 2) return;
+//
+//        try {
+//            count=0;
+//            pushContext.send("Servisten bilgiler Okunuyor");
+//
+//            GaziKartService gaziKartService = new GaziKartService();
+//            String format = "yyyyMMdd";
+//            String start = DateUtil.localdateToString(range.get(0), format);
+//            String end = DateUtil.localdateToString(range.get(1), format);
+//            ServisSonucu sonuc = gaziKartService.getList(initApp.getProperty("gazikart.webServisLink"), start, end);
+//
+//            if (sonuc == null || sonuc.getData() == null) {
+//                FacesUtil.warningMessage("Servisten veri alınamadı");
+//                return;
+//            }
+//
+//            pushContext.send("Servisten bilgiler okundu");
+//            processGaziKartData(sonuc.getData());
+//            PrimeFaces.current().executeScript("PF('TarihSecDialog').hide()");
+//            FacesUtil.successMessage(Constants.KAYIT_GUNCELLENDI);
+//        } catch (Exception ex) {
+//            log.error(null, ex);
+//            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+//        } finally {
+//            PrimeFaces.current().executeScript("PF('KisiMernisListeGuncelle').hide()");
+//        }
+//    }
+
+    public void cancelGaziKartUpdate() {
+        cancelled = true;
+    }
+
     public void updateFromGaziKart() {
         if (range.size() != 2) return;
 
+
+        LocalDate start = range.get(0);
+        LocalDate end = range.get(1);
+        cancelled = false;
+        count = 0;
+
+        new Thread(() -> {
+            try {
+                Integer kullaniciId = this.getSyKullanici().getId();
+                pushContext.send("Servisten bilgiler Okunuyor");
+
+                GaziKartService gaziKartService = new GaziKartService();
+                String format = "yyyyMMdd";
+                ServisSonucu sonuc = gaziKartService.getList(
+                        initApp.getProperty("gazikart.webServisLink"),
+                        DateUtil.localdateToString(start, format),
+                        DateUtil.localdateToString(end, format)
+                );
+
+                if (cancelled) {
+                    pushContext.send("CANCELLED", kullaniciId);
+                    return;
+                }
+
+                if (sonuc == null || sonuc.getData() == null) {
+                    pushContext.send("Servisten veri alınamadı", kullaniciId);
+                    pushContext.send("COMPLETED", kullaniciId);
+                    return;
+                }
+
+                pushContext.send("Servisten bilgiler okundu", kullaniciId);
+                processGaziKartDataBg(sonuc.getData());
+
+                if (!cancelled) {
+                    pushContext.send("COMPLETED", kullaniciId);
+                }
+            } catch (Exception ex) {
+                log.error(null, ex);
+                pushContext.send("Hata: " + ex.getMessage());
+                pushContext.send("COMPLETED");
+            }
+        }).start();
+
+    }
+
+    private void processGaziKartDataBg(List<ServisModel> servisModels) {
         try {
-            pushContext.send("Servisten bilgiler Okunuyor");
+            pushContext.send("KPS için parametreler oluşturuluyor");
 
-            GaziKartService gaziKartService = new GaziKartService();
-            String format = "yyyyMMdd";
-            String start = DateUtil.localdateToString(range.get(0), format);
-            String end = DateUtil.localdateToString(range.get(1), format);
-            ServisSonucu sonuc = gaziKartService.getList(  initApp.getProperty("gazikart.webServisLink"), start, end);
-
-            if (sonuc == null || sonuc.getData() == null) {
-                FacesUtil.warningMessage("Servisten veri alınamadı");
+            List<KisiParameter> allParams = converter.servisModelToKisiParametersYasli(servisModels, EnumModul.GAZIKART);
+            if (allParams.isEmpty() || cancelled) {
+                if (cancelled) pushContext.send("CANCELLED", this.getSyKullanici().getId());
                 return;
             }
 
-            pushContext.send("Servisten bilgiler okundu");
-            processGaziKartData(sonuc.getData());
-            PrimeFaces.current().executeScript("PF('TarihSecDialog').hide()");
-            FacesUtil.successMessage(Constants.KAYIT_GUNCELLENDI);
+            Map<String, ServisModel> servisMap = buildServisMap(servisModels);
+            List<KisiParameter> newParams = filterExistingTcKimlikNos(allParams);
+
+            if (cancelled) {
+                pushContext.send("CANCELLED", this.getSyKullanici().getId());
+                return;
+            }
+
+            if (newParams.isEmpty()) {
+                pushContext.send("Tüm kayıtlar zaten mevcut");
+                return;
+            }
+
+            pushContext.send("MERNIS sorgulanıyor: " + newParams.size() + " kişi");
+            recordCount = newParams.size();
+            syncWithMernisBg(newParams, servisMap);
         } catch (Exception ex) {
             log.error(null, ex);
-            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
-        } finally {
-            PrimeFaces.current().executeScript("PF('KisiMernisListeGuncelle').hide()");
+            pushContext.send("Hata: " + ex.getMessage(), this.getSyKullanici().getId());
         }
-    }
-
-    private void processGaziKartData(List<ServisModel> servisModels) throws Exception {
-        pushContext.send("KPS için parametreler oluşturuluyor");
-
-        List<KisiParameter> allParams = converter.servisModelToKisiParametersYasli(servisModels, EnumModul.GAZIKART);
-        if (allParams.isEmpty()) return;
-
-        Map<String, ServisModel> servisMap = buildServisMap(servisModels);
-        List<KisiParameter> newParams = filterExistingTcKimlikNos(allParams);
-
-        if (newParams.isEmpty()) {
-            pushContext.send("Tüm kayıtlar zaten mevcut");
-            return;
-        }
-
-        pushContext.send("MERNIS sorgulanıyor: " + newParams.size() + " kişi");
-        recordCount = newParams.size();
-        syncWithMernis(newParams, servisMap);
     }
 
     private Map<String, ServisModel> buildServisMap(List<ServisModel> servisModels) {
@@ -486,30 +554,49 @@ public class GnlKisiController extends AbstractController<GnlKisi> {
                 .toList();
     }
 
-    private void syncWithMernis(List<KisiParameter> params, Map<String, ServisModel> servisMap) throws Exception {
-        KpsService kpsService = new KpsService();
-        String wsLink = initApp.getProperty("webServisLink");
-        String wsToken = initApp.getProperty("webServisToken");
+    private void syncWithMernisBg(List<KisiParameter> params, Map<String, ServisModel> servisMap) {
+        try {
+            KpsService kpsService = new KpsService();
+            String wsLink = initApp.getProperty("webServisLink");
+            String wsToken = initApp.getProperty("webServisToken");
 
-        List<List<KisiParameter>> batches = ListUtil.partition(params, 70);
+            List<List<KisiParameter>> batches = ListUtil.partition(params, 70);
 
-        for (List<KisiParameter> batch : batches) {
-            KisiParameters parameters = new KisiParameters();
-            parameters.setKisiler(batch);
+            for (List<KisiParameter> batch : batches) {
+                if (cancelled) {
+                    pushContext.send("CANCELLED", this.getSyKullanici().getId());
+                    return;
+                }
 
-            List<KpsModel> kpsModels = kpsService.getKpsByKutukByAdres(wsLink, wsToken, parameters);
-            savePersons(kpsModels, servisMap);
+                KisiParameters parameters = new KisiParameters();
+                parameters.setKisiler(batch);
+
+                List<KpsModel> kpsModels = kpsService.getKpsByKutukByAdres(wsLink, wsToken, parameters);
+                savePersonsBg(kpsModels, servisMap);
+            }
+        } catch (Exception ex) {
+            log.error(null, ex);
+            pushContext.send("Hata: " + ex.getMessage(), this.getSyKullanici().getId());
         }
     }
 
-    private void savePersons(List<KpsModel> kpsModels, Map<String, ServisModel> servisMap) throws Exception {
+    private void savePersonsBg(List<KpsModel> kpsModels, Map<String, ServisModel> servisMap) throws Exception {
         for (KpsModel kpsModel : kpsModels) {
+            if (cancelled) {
+                pushContext.send("CANCELLED", this.getSyKullanici());
+                return;
+            }
+            if(kpsModel.getKutukModel().getTcKimlikNo()==null){
+                count++;
+                continue;
+            }
             String tcKimlikNo = kpsModel.getKutukModel().getTcKimlikNo().toString();
 
-
-
             ServisModel servisModel = servisMap.get(tcKimlikNo);
-            if (servisModel == null) continue;
+            if (servisModel == null) {
+                count++;
+                continue;
+            }
 
             GnlKisi gnlKisi = converter.convertKpsModelToGnlKisi(new GnlKisi(), kpsModel, EnumModul.GAZIKART);
 

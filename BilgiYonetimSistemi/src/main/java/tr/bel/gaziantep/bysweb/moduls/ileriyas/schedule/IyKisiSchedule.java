@@ -4,6 +4,7 @@ import jakarta.ejb.EJB;
 import jakarta.ejb.Schedule;
 import jakarta.ejb.Stateless;
 import lombok.extern.slf4j.Slf4j;
+import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
 import tr.bel.gaziantep.bysweb.moduls.genel.service.GnlKisiService;
 import tr.bel.gaziantep.bysweb.moduls.ileriyas.entity.IyKisi;
@@ -13,8 +14,6 @@ import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.entity.SyKullanici;
 import java.io.Serial;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
@@ -44,10 +43,6 @@ public class IyKisiSchedule implements java.io.Serializable {
     }
 
     private void addList() {
-        Set<Integer> mevcutKisiIdleri = service.findAll().stream()
-                .map(k -> k.getGnlKisi().getId())
-                .collect(Collectors.toSet());
-
         LocalDateTime now = LocalDateTime.now();
         SyKullanici ekleyen = new SyKullanici(1);
 
@@ -56,27 +51,25 @@ public class IyKisiSchedule implements java.io.Serializable {
 
         while (true) {
 
-            List<GnlKisi> kisiler = gnlKisiService.findByYasByYasli(60, first, pageSize);
-
-            if (kisiler.isEmpty()) {
+            List<GnlKisi> gnlKisiList = gnlKisiService.findByYasByYasli(60, 0, pageSize);
+            if (gnlKisiList.isEmpty()) {
+                FacesUtil.addSuccessMessage("Yaşlıar başarıyla aktarıldı");
                 break;
             }
+            if (first > 2000) {
+                service.clearCache();
+            }
+            for (GnlKisi gnlKisi : gnlKisiList) {
+                IyKisi iyKisi = service.findByTcKimlikNo(gnlKisi.getTcKimlikNo());
+                if (iyKisi == null) {
+                    iyKisi = IyKisi.builder().gnlKisi(gnlKisi).build();
+                    iyKisi.setEkleyen(ekleyen);
+                    iyKisi.setEklemeTarihi(now);
+                }
+                iyKisi.getGnlKisi().setYasli(true);
 
-            kisiler.stream()
-                    .filter(k -> !mevcutKisiIdleri.contains(k.getId()))
-                    .map(k -> {
-                        k.setYasli(true);
-                        IyKisi iyKisi = IyKisi.builder()
-                                .gnlKisi(k)
-                                .build();
-
-                        iyKisi.setEkleyen(ekleyen);
-                        iyKisi.setEklemeTarihi(now);
-
-                        return iyKisi;
-                    })
-                    .forEach(service::create);
-
+                service.edit(iyKisi);
+            }
             first += pageSize;
         }
     }
