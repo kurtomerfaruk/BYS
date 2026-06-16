@@ -1,6 +1,6 @@
 package tr.bel.gaziantep.bysweb.core.converter;
 
-import jakarta.enterprise.context.RequestScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import tr.bel.gaziantep.bysweb.core.controller.InitApp;
@@ -40,8 +40,8 @@ import java.util.List;
  * @version 1.0.0
  * @since 19.06.2025 16:39
  */
-@Named(value = "modelConverter")
-@RequestScoped
+@Named
+@ApplicationScoped
 public class ModelConverter implements java.io.Serializable {
 
     @Serial
