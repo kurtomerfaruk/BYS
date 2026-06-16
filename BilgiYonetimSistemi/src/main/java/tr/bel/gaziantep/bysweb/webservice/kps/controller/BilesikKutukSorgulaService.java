@@ -62,7 +62,11 @@ public class BilesikKutukSorgulaService extends KpsAbstractService<BilesikKutukS
                         result.setOlumTarihi(convertToDate(olumTarihi));
                     }
 
-                    result.setTcKimlikNo(kisiBilgi.getKimlikNo());
+                    if (kisiBilgi.getTcKimlikNo() == null) {
+                        result.setTcKimlikNo(kisiBilgi.getKimlikNo());
+                    } else {
+                        result.setTcKimlikNo(kisiBilgi.getTcKimlikNo());
+                    }
                 } else {
                     KisiBilgisi kisiBilgi = sorguSonucu.getTcVatandasiKisiKutukleri().getKisiBilgisi();
 
@@ -86,8 +90,12 @@ public class BilesikKutukSorgulaService extends KpsAbstractService<BilesikKutukS
                     if (olumTarihi != null && result.getDurum() == 3) {
                         result.setOlumTarihi(convertToDate(olumTarihi));
                     }
+                    if (kisiBilgi.getTcKimlikNo() == null) {
+                        result.setTcKimlikNo(kisiBilgi.getKimlikNo());
+                    } else {
+                        result.setTcKimlikNo(kisiBilgi.getTcKimlikNo());
+                    }
 
-                    result.setTcKimlikNo(kisiBilgi.getTcKimlikNo());
                 }
             }
             resultList.add(result);
@@ -134,7 +142,7 @@ public class BilesikKutukSorgulaService extends KpsAbstractService<BilesikKutukS
                     result.setSonGecerlilikTarihi(convertToDate(bilgi.getMaviKartliKisiKutukleri().getYeniMaviKartBilgisi().getSonGecerlilikTarih()));
                     result.setUyruk(bilgi.getMaviKartliKisiKutukleri().getYeniMaviKartBilgisi().getUyruk().getAciklama());
                     result.setTcKimlikNo(kisiBilgi.getKimlikNo());
-                }else{
+                } else {
                     result.setUyruk("Türkiye Cumhuriyeti");
                     result.setKimlikSeriNo(bilgi.getTcVatandasiKisiKutukleri().getTCKKBilgisi().getSeriNo());
                     result.setSonGecerlilikTarihi(convertToDate(bilgi.getTcVatandasiKisiKutukleri().getTCKKBilgisi().getSonGecerlilikTarih()));
