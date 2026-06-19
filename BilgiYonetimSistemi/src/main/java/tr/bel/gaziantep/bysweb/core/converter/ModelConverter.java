@@ -58,6 +58,7 @@ public class ModelConverter implements java.io.Serializable {
     @Inject
     private InitApp initApp;
 
+
     private KoordinatService koordinatService = new KoordinatService();
 
     public GnlKisi convertKpsModelToGnlKisi(GnlKisi kisi, KpsModel kpsModel, EnumModul modul) throws Exception {

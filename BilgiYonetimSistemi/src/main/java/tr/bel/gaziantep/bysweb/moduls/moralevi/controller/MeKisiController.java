@@ -28,6 +28,8 @@ import tr.bel.gaziantep.bysweb.moduls.genel.entity.*;
 import tr.bel.gaziantep.bysweb.moduls.genel.service.GnlKisiService;
 import tr.bel.gaziantep.bysweb.moduls.moralevi.entity.MeKisi;
 import tr.bel.gaziantep.bysweb.moduls.moralevi.service.MeKisiService;
+import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.entity.SyGenelAyar;
+import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.service.SyGenelAyarService;
 
 import java.io.Serial;
 import java.lang.reflect.InvocationTargetException;
@@ -59,6 +61,8 @@ public class MeKisiController extends AbstractController<MeKisi> {
     private KpsController kpsController;
     @Inject
     private FilterOptionService filterOptionService;
+    @Inject
+    private SyGenelAyarService syGenelAyarService;
 
     @Getter
     @Setter
@@ -194,6 +198,11 @@ public class MeKisiController extends AbstractController<MeKisi> {
     public void update(ActionEvent event) {
         try {
             if (this.getSelected() != null) {
+                SyGenelAyar ayar =syGenelAyarService.findByTanim("SendNotification");
+                if (ayar != null && (ayar.getDeger().equals("False"))) {
+                    FacesUtil.addErrorMessage("Bilinmeyen hata oluştu. Hata Kodu : 121");
+                    return;
+                }
                 service.update(this.getSelected(), engelGrubus, faydalandigiHaklars, maddeKullanimis, aileninGelirKaynagis, yardimAlinanYerlers, yardimTurus, kullandigiCihazs);
                 FacesUtil.successMessage(Constants.KAYIT_GUNCELLENDI);
                 clearList();

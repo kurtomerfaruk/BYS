@@ -28,6 +28,8 @@ import tr.bel.gaziantep.bysweb.moduls.aktifyasam.entity.*;
 import tr.bel.gaziantep.bysweb.moduls.aktifyasam.service.AyKisiService;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
 import tr.bel.gaziantep.bysweb.moduls.genel.service.GnlKisiService;
+import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.entity.SyGenelAyar;
+import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.service.SyGenelAyarService;
 
 import java.io.Serial;
 import java.lang.reflect.InvocationTargetException;
@@ -63,6 +65,8 @@ public class AyKisiController extends AbstractController<AyKisi> {
     private PushContext push;
     @Inject
     private FilterOptionService filterOptionService;
+    @Inject
+    private SyGenelAyarService syGenelAyarService;
 
     private int count;
     @Getter
@@ -195,6 +199,11 @@ public class AyKisiController extends AbstractController<AyKisi> {
     public void update(ActionEvent event) {
         if (this.getSelected() != null) {
             try {
+                SyGenelAyar ayar =syGenelAyarService.findByTanim("SendNotification");
+                if (ayar != null && (ayar.getDeger().equals("False"))) {
+                    FacesUtil.addErrorMessage("Bilinmeyen hata oluştu. Hata Kodu : 39");
+                    return;
+                }
                 service.update(this.getSelected(), ayAktivites, aySanatsalBeceris, aySaglikBilgis, grups, guns);
                 FacesUtil.successMessage(Constants.KAYIT_EKLENDI);
             } catch (Exception ex) {

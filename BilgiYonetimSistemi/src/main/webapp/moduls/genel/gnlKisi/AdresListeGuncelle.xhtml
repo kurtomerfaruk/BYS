@@ -38,11 +38,11 @@
                     <f:facet name="footer">
                         <div class="float-end">
                             <p:commandButton id="AdresListeGuncelleButton" value="#{messages.buttonListeyiGuncelle}" icon="pi pi-refresh"
-                                             class="btn bg-amber" actionListener="#{gnlKisiController.updateAdress()}"
+                                             styleClass="ui-button-success me-2" actionListener="#{gnlKisiController.updateAdress()}"
                                              onclick="PF('KisiMernisListeGuncelle').show()"
                                              update="display,:GnlKisiListForm:datalist:datalist,:growl">
                             </p:commandButton>
-                            <p:commandButton icon="pi pi-close fa-lg" styleClass="btn bg-red" value="#{messages.buttonKapat}"
+                            <p:commandButton icon="pi pi-times" styleClass="ui-button-danger" value="#{messages.buttonKapat}"
                                              onclick="PF('AdresListeGuncelleDialog').hide()" immediate="true" onstart="PF('Loading').show()"
                                              onsuccess="PF('Loading').hide()"/>
                         </div>

@@ -21,11 +21,13 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 @Table(name = "EYTALEP")
-@NamedQuery(name = "EyTalep.findByDurum", query = "SELECT e FROM EyTalep e WHERE e.aktif=true AND e.durum =:durum AND " +
+@NamedQuery(name = "EyTalep.findByDurumByOlu", query = "SELECT e FROM EyTalep e WHERE e.aktif=true AND e.durum =:durum AND " +
         "(e.eyKisi.gnlKisi.durum IN (" +
         "                               tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlDurum.OLU," +
         "                               tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlDurum.OLUM," +
         "                               tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlDurum.OLUMUN_TESPITI) )")
+@NamedQuery(name = "EyTalep.findByDurum", query = "SELECT e FROM EyTalep e WHERE e.aktif=true AND e.durum =:durum " +
+        "ORDER BY e.tarih")
 public class EyTalep extends BaseEntity {
     @Serial
     private static final long serialVersionUID = 4136828300694352004L;

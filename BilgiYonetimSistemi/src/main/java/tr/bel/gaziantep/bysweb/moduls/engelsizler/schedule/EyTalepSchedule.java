@@ -39,7 +39,7 @@ public class EyTalepSchedule implements java.io.Serializable {
     }
 
     private void listUpdate() {
-        List<EyTalep> list = eyTalepService.findByDurum(EnumGnlTalepDurumu.BEKLIYOR);
+        List<EyTalep> list = eyTalepService.findByDurumByOlu(EnumGnlTalepDurumu.BEKLIYOR);
         for (EyTalep talep : list) {
             talep.setDurum(EnumGnlTalepDurumu.TAMAMLANMADI);
             talep.setDurumAciklama("Talep kişinin vefat etmesi sebebiyle tamamlanamadı. Bu işlem sistem tarafından otomatik olarak güncellendi.");

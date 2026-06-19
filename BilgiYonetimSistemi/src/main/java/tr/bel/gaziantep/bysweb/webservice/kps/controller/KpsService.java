@@ -4,6 +4,7 @@ import tr.bel.gaziantep.bysweb.core.utils.StringUtil;
 import tr.bel.gaziantep.bysweb.webservice.kps.model.KpsModel;
 import tr.bel.gaziantep.bysweb.webservice.kps.model.adres.AdresModel;
 import tr.bel.gaziantep.bysweb.webservice.kps.model.bilesikkutuk.BilesikKutukModel;
+import tr.bel.gaziantep.bysweb.webservice.kps.model.kisi.KisiAdresModel;
 import tr.bel.gaziantep.bysweb.webservice.kps.model.parameters.KisiParameter;
 import tr.bel.gaziantep.bysweb.webservice.kps.model.parameters.KisiParameters;
 
@@ -37,7 +38,12 @@ public class KpsService {
             return model;
         }
         model.setAdresModel(this.adresSorgulaServis.adresSorgula(link, token, parameter));
+        model.setKisiAdresModel(this.kisiAdresSorgulaServis.kisiAdresSorgula(link, token, parameter));
         return model;
+    }
+
+    public KisiAdresModel kisiAdresSorgula(String link, String token, KisiParameter parameter) {
+        return kisiAdresSorgulaServis.kisiAdresSorgula(link, token, parameter);
     }
 
     public List<KpsModel> getKpsByKutukByAdres(String link, String token, KisiParameters parameters) {

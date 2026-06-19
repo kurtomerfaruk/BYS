@@ -31,6 +31,7 @@ import tr.bel.gaziantep.bysweb.webservice.gazikart.model.ServisModel;
 import tr.bel.gaziantep.bysweb.webservice.gazikart.model.ServisSonucu;
 import tr.bel.gaziantep.bysweb.webservice.kps.controller.KpsService;
 import tr.bel.gaziantep.bysweb.webservice.kps.model.KpsModel;
+import tr.bel.gaziantep.bysweb.webservice.kps.model.kisi.KisiAdresModel;
 import tr.bel.gaziantep.bysweb.webservice.kps.model.parameters.KisiParameter;
 import tr.bel.gaziantep.bysweb.webservice.kps.model.parameters.KisiParameters;
 import tr.bel.gaziantep.bysweb.webservice.mezarlik.controller.MezarlikSorgulaService;
@@ -168,31 +169,94 @@ public class GnlKisiController extends AbstractController<GnlKisi> {
     public void updateAdress() {
         if (recordCount > 0) {
             count = 0;
-            String post = "";
-            try {
-                List<GnlKisi> kisiList = service.findByLatLngIsNull(recordCount);
 
-                for (GnlKisi gnlKisi : kisiList) {
-                    String coordinate = converter.addLatLng(gnlKisi.getBinaNo());
-                    if (StringUtil.isNotBlank(coordinate) && !coordinate.equals("null,null")) {
-                        gnlKisi.setLatLng(coordinate);
-                        service.updateLatLng(gnlKisi);
-                        count++;
-                        post = gnlKisi.getAdSoyad() + "," + gnlKisi.getTcKimlikNo() + "," + count + "," + recordCount + ", ";
-                        pushContext.send(post);
-                    } else {
-                        count++;
-                        post = "Uyarı :Adres Bulunamadı" + "," + gnlKisi.getAdSoyad() + "-" + gnlKisi.getTcKimlikNo() + "," + count + "," + recordCount + ", ";
-                        pushContext.send(post);
+
+//                for (GnlKisi gnlKisi : kisiList) {
+//
+//                    if (cancelled) {
+//                        pushContext.send("CANCELLED", kullaniciId);
+//                        return;
+//                    }
+//
+//                    KisiAdresModel adresModel = kpsController.kisiAdresSorgula(gnlKisi);
+//                    String coordinate = "";
+//                    if(adresModel != null) {
+//                        coordinate=adresModel.getX()+","+adresModel.getY();
+//                    }
+//                    if (StringUtil.isNotBlank(coordinate) && !coordinate.equals("null,null")) {
+//                        gnlKisi.setLatLng(coordinate);
+//                        service.updateLatLng(gnlKisi);
+//                        List<GnlKisi> binaNos = service.findByBinaNo(gnlKisi.getBinaNo());
+//                        binaNos.removeIf(x->x.getTcKimlikNo().equals(gnlKisi.getTcKimlikNo()));
+//                        service.editAll(binaNos);
+//                        count++;
+//                        post = gnlKisi.getAdSoyad() + "," + gnlKisi.getTcKimlikNo() + "," + count + "," + recordCount + ", ";
+//                        pushContext.send(post);
+//                    } else {
+//                        count++;
+//                        post = "Uyarı :Adres Bulunamadı" + "," + gnlKisi.getAdSoyad() + "-" + gnlKisi.getTcKimlikNo() + "," + count + "," + recordCount + ", ";
+//                        pushContext.send(post);
+//                    }
+//                }
+//                FacesUtil.successMessage(Constants.KAYIT_GUNCELLENDI);
+            cancelled = false;
+            new Thread(() -> {
+                try {
+
+                    String post = "";
+                    Integer kullaniciId = this.getSyKullanici().getId();
+                    pushContext.send("Servisten bilgiler Okunuyor");
+
+                    List<GnlKisi> kisiList = service.findByLatLngIsNull(recordCount);
+
+
+                    if (kisiList.isEmpty()) {
+                        pushContext.send("Servisten veri alınamadı", kullaniciId);
+                        pushContext.send("COMPLETED", kullaniciId);
+                        return;
                     }
+
+                    pushContext.send("Servisten bilgiler okundu", kullaniciId);
+
+                    for (GnlKisi gnlKisi : kisiList) {
+                        if (cancelled) {
+                            pushContext.send("CANCELLED", kullaniciId);
+                            return;
+                        }
+
+                        KisiAdresModel adresModel = kpsController.kisiAdresSorgula(gnlKisi);
+                        String coordinate = "";
+                        if (adresModel != null) {
+                            coordinate = adresModel.getX() + "," + adresModel.getY();
+                        }
+                        if (StringUtil.isNotBlank(coordinate) && !coordinate.equals("null,null")) {
+                            gnlKisi.setLatLng(coordinate);
+                            service.updateLatLng(gnlKisi);
+                            List<GnlKisi> binaNos = service.findByBinaNo(gnlKisi.getBinaNo());
+                            binaNos.removeIf(x -> x.getTcKimlikNo().equals(gnlKisi.getTcKimlikNo()));
+                            if (!binaNos.isEmpty()) {
+                                service.editAll(binaNos);
+                            }
+
+                            count++;
+                            post = gnlKisi.getAdSoyad() + "," + gnlKisi.getTcKimlikNo() + "," + count + "," + recordCount;
+                            pushContext.send(post);
+                        } else {
+                            count++;
+                            post = "Uyarı :Adres Bulunamadı" + "," + gnlKisi.getAdSoyad() + "-" + gnlKisi.getTcKimlikNo() + "," + count + "," + recordCount;
+                            pushContext.send(post);
+                        }
+                    }
+
+                    if (!cancelled) {
+                        pushContext.send("COMPLETED", kullaniciId);
+                    }
+                } catch (Exception ex) {
+                    log.error(null, ex);
+                    pushContext.send("Hata: " + ex.getMessage());
+                    pushContext.send("COMPLETED");
                 }
-                FacesUtil.successMessage(Constants.KAYIT_GUNCELLENDI);
-            } catch (Exception ex) {
-                log.error(null, ex);
-                FacesUtil.errorMessage(Constants.HATA_OLUSTU);
-            } finally {
-                PrimeFaces.current().executeScript("PF('KisiMernisListeGuncelle').hide()");
-            }
+            }).start();
         }
     }
 
@@ -586,7 +650,7 @@ public class GnlKisiController extends AbstractController<GnlKisi> {
                 pushContext.send("CANCELLED", this.getSyKullanici());
                 return;
             }
-            if(kpsModel.getKutukModel().getTcKimlikNo()==null){
+            if (kpsModel.getKutukModel().getTcKimlikNo() == null) {
                 count++;
                 continue;
             }

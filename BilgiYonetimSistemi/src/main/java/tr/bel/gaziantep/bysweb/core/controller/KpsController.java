@@ -1,6 +1,6 @@
 package tr.bel.gaziantep.bysweb.core.controller;
 
-import jakarta.enterprise.context.RequestScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +11,7 @@ import tr.bel.gaziantep.bysweb.core.utils.StringUtil;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
 import tr.bel.gaziantep.bysweb.webservice.kps.controller.KpsService;
 import tr.bel.gaziantep.bysweb.webservice.kps.model.KpsModel;
+import tr.bel.gaziantep.bysweb.webservice.kps.model.kisi.KisiAdresModel;
 import tr.bel.gaziantep.bysweb.webservice.kps.model.parameters.KisiParameter;
 import tr.bel.gaziantep.bysweb.webservice.kps.util.KpsUtil;
 
@@ -23,7 +24,7 @@ import java.time.LocalDateTime;
  * @since 19.06.2025 15:36
  */
 @Named
-@RequestScoped
+@ApplicationScoped
 @Slf4j
 public class KpsController implements java.io.Serializable{
     @Serial
@@ -69,6 +70,15 @@ public class KpsController implements java.io.Serializable{
         kisi = converter.convertKpsModelToGnlKisi(kisi, kpsModel, modul);
         kisi.setMernisGuncellemeTarihi(LocalDateTime.now());
         return kisi;
+    }
+
+    public KisiAdresModel kisiAdresSorgula(GnlKisi kisi){
+        String tcKimlikNo = kisi.getTcKimlikNo();
+
+        KisiParameter parameter = KpsUtil.setDate(kisi.getDogumTarihi());
+        parameter.setTcKimlikNo(Long.parseLong(tcKimlikNo));
+        KpsService kpsService = new KpsService();
+        return kpsService.kisiAdresSorgula(initApp.getProperty("webServisLink"), initApp.getProperty("webServisToken"), parameter);
     }
 
 }

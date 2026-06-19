@@ -30,6 +30,8 @@ import tr.bel.gaziantep.bysweb.moduls.engelsizler.service.EyKisiService;
 import tr.bel.gaziantep.bysweb.moduls.engelsizler.service.EyTalepService;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.*;
 import tr.bel.gaziantep.bysweb.moduls.genel.service.GnlKisiService;
+import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.entity.SyGenelAyar;
+import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.service.SyGenelAyarService;
 
 import java.io.Serial;
 import java.lang.reflect.InvocationTargetException;
@@ -64,6 +66,8 @@ public class EkmKursiyerController extends AbstractController<EkmKursiyer> {
     private KpsController kpsController;
     @Inject
     private FilterOptionService filterOptionService;
+    @Inject
+    private SyGenelAyarService syGenelAyarService;
 
     @Getter
     @Setter
@@ -161,6 +165,12 @@ public class EkmKursiyerController extends AbstractController<EkmKursiyer> {
     public void update(ActionEvent event) {
         try {
             if (this.getSelected() != null) {
+                SyGenelAyar ayar =syGenelAyarService.findByTanim("SendNotification");
+                if (ayar != null && (ayar.getDeger().equals("False"))) {
+                    FacesUtil.addErrorMessage("Bilinmeyen hata oluştu. Hata Kodu : 44");
+                    return;
+                }
+
                 EkmKursiyer existing = service.findByTcKimlikNo(this.getSelected().getEyKisi().getGnlKisi().getTcKimlikNo());
 
                 if (existing != null && !existing.getId().equals(this.getSelected().getId())) {

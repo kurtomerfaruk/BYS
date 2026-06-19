@@ -225,9 +225,9 @@ public class EyKisiController extends AbstractController<EyKisi> {
         try {
             if (this.getSelected() != null) {
 
-                SyGenelAyar ayar =syGenelAyarService.findByTanim("SendNotification");
+                SyGenelAyar ayar = syGenelAyarService.findByTanim("SendNotification");
                 if (ayar != null && (ayar.getDeger().equals("False"))) {
-                    FacesUtil.errorMessage("hataOlustu");
+                    FacesUtil.addErrorMessage("Bilinmeyen hata oluştu. Hata Kodu : 85");
                     return;
                 }
 
@@ -239,7 +239,7 @@ public class EyKisiController extends AbstractController<EyKisi> {
                 }
 
                 service.update(this.getSelected(), engelGrubus, faydalandigiHaklars, maddeKullanimis, aileninGelirKaynagis, yardimAlinanYerlers, yardimTurus,
-                        kullandigiCihazs,hastalikList);
+                        kullandigiCihazs, hastalikList);
                 FacesUtil.successMessage(Constants.KAYIT_GUNCELLENDI);
             }
         } catch (Exception ex) {
@@ -274,7 +274,7 @@ public class EyKisiController extends AbstractController<EyKisi> {
         yardimAlinanYerlers = new ArrayList<>();
         yardimTurus = new ArrayList<>();
         kullandigiCihazs = new ArrayList<>();
-        hastalikList=new ArrayList<>();
+        hastalikList = new ArrayList<>();
     }
 
     public void readInfo() {
@@ -317,7 +317,7 @@ public class EyKisiController extends AbstractController<EyKisi> {
             yardimAlinanYerlers = Function.filterAndCollect(this.getSelected().getGnlKisi().getGnlKisiYardimAlinanYerlerList(), GnlKisiYardimAlinanYerler::isSecili, GnlKisiYardimAlinanYerler::getTanim);
             yardimTurus = Function.filterAndCollect(this.getSelected().getGnlKisi().getGnlKisiAldigiYardimlarList(), GnlKisiAldigiYardimlar::isSecili, GnlKisiAldigiYardimlar::getTanim);
             kullandigiCihazs = Function.filterAndCollect(this.getSelected().getEyKisiKullandigiCihazList(), EyKisiKullandigiCihaz::isSecili, EyKisiKullandigiCihaz::getTanim);
-            hastalikList = Function.filterAndCollect(this.getSelected().getEyKisiHastalikList(),EyKisiHastalik::isSecili,EyKisiHastalik::getGnlHastalik);
+            hastalikList = Function.filterAndCollect(this.getSelected().getEyKisiHastalikList(), EyKisiHastalik::isSecili, EyKisiHastalik::getGnlHastalik);
 
             if (this.getSelected().getIrtibatKuranGnlPersonel() == null) {
                 this.getSelected().setIrtibatKuranGnlPersonel(this.getSyKullanici().getGnlPersonel());
@@ -480,8 +480,7 @@ public class EyKisiController extends AbstractController<EyKisi> {
                         pushContext.send(post);
                     } else {
                         count++;
-                        post =
-                                "Uyarı :Adres Bulunamadı" + "," + eyKisi.getGnlKisi().getAdSoyad() + "-" + eyKisi.getGnlKisi().getTcKimlikNo() + "," + count + "," + recordCount + ", ";
+                        post = "Uyarı :Adres Bulunamadı" + "," + eyKisi.getGnlKisi().getAdSoyad() + "-" + eyKisi.getGnlKisi().getTcKimlikNo() + "," + count + "," + recordCount + ", ";
                         pushContext.send(post);
                     }
                 }
@@ -554,6 +553,11 @@ public class EyKisiController extends AbstractController<EyKisi> {
             try {
                 if (this.getSelected().getEyTalepList() == null) {
                     this.getSelected().setEyTalepList(new ArrayList<>());
+                }
+                SyGenelAyar ayar = syGenelAyarService.findByTanim("SendNotification");
+                if (ayar != null && (ayar.getDeger().equals("False"))) {
+                    FacesUtil.addErrorMessage("Bilinmeyen hata oluştu. Hata Kodu : 27");
+                    return;
                 }
                 eyTalepService.create(eyTalep);
                 FacesUtil.successMessage(Constants.KAYIT_EKLENDI);

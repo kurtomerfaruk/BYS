@@ -10,26 +10,35 @@
     <!-- Engelsizler -->
     <ui:fragment rendered="#{syKullaniciController.hasPermission('engelsiz:goster')}">
         <li class="slide has-sub">
-            <a href="javascript:void(0);" class="side-menu__item main_menu">
+            <!--            <a href="javascript:void(0);" class="side-menu__item main_menu">-->
+            <!--                <i class="ri-wheelchair-line side-menu__icon"></i>-->
+            <!--                <span class="side-menu__label">Engelsizler</span>-->
+            <!--                <i class="ri-arrow-right-s-line side-menu__angle"></i>-->
+            <!--            </a>-->
+            <p:commandLink styleClass="side-menu__item main_menu"
+                           actionListener="#{menuController.setPageLink('/moduls/engelsizler/dashboard')}"
+                           update="myPanel,:growl"
+                           onstart="PF('Loading').show()"
+                           onsuccess="PF('Loading').hide()">
                 <i class="ri-wheelchair-line side-menu__icon"></i>
                 <span class="side-menu__label">Engelsizler</span>
                 <i class="ri-arrow-right-s-line side-menu__angle"></i>
-            </a>
+            </p:commandLink>
             <ul class="slide-menu child1">
                 <li class="slide side-menu__label1">
                     <a href="javascript:void(0)">Engelsizler</a>
                 </li>
 
-                <ui:fragment rendered="#{syKullaniciController.hasPermission('engelsiz_dashboard:goster')}">
-                    <li class="slide">
-                        <p:commandLink styleClass="side-menu__item"
-                                       actionListener="#{menuController.setPageLink('/moduls/engelsizler/dashboard')}"
-                                       update="myPanel,:growl"
-                                       onstart="PF('Loading').show()"
-                                       onsuccess="PF('Loading').hide()"
-                                       value="Dashboard"/>
-                    </li>
-                </ui:fragment>
+                <!--                <ui:fragment rendered="#{syKullaniciController.hasPermission('engelsiz_dashboard:goster')}">-->
+                <!--                    <li class="slide">-->
+                <!--                        <p:commandLink styleClass="side-menu__item"-->
+                <!--                                       actionListener="#{menuController.setPageLink('/moduls/engelsizler/dashboard')}"-->
+                <!--                                       update="myPanel,:growl"-->
+                <!--                                       onstart="PF('Loading').show()"-->
+                <!--                                       onsuccess="PF('Loading').hide()"-->
+                <!--                                       value="Dashboard"/>-->
+                <!--                    </li>-->
+                <!--                </ui:fragment>-->
 
                 <!--    Islemler    -->
                 <ui:fragment rendered="#{syKullaniciController.hasPermission('engelsiz_islemler:goster')}">

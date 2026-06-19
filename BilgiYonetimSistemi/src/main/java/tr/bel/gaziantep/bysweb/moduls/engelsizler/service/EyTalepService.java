@@ -34,6 +34,10 @@ public class EyTalepService extends AbstractService<EyTalep> {
         return em;
     }
 
+    public List<EyTalep> findByDurumByOlu(EnumGnlTalepDurumu durum) {
+        return getEntityManager().createNamedQuery("EyTalep.findByDurumByOlu", EyTalep.class).setParameter("durum", durum).getResultList();
+    }
+
     public List<EyTalep> findByDurum(EnumGnlTalepDurumu durum) {
         return getEntityManager().createNamedQuery("EyTalep.findByDurum", EyTalep.class).setParameter("durum", durum).getResultList();
     }

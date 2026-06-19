@@ -5,17 +5,23 @@ import com.kurtomerfaruk.amchartfaces.model.ChartData;
 import com.kurtomerfaruk.amchartfaces.model.ChartModel;
 import com.kurtomerfaruk.amchartfaces.model.DefaultChartModel;
 import jakarta.annotation.PostConstruct;
+import jakarta.faces.application.FacesMessage;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.primefaces.PrimeFaces;
 import org.primefaces.model.map.LatLng;
 import tr.bel.gaziantep.bysweb.core.dtos.GrafikDataDTO;
 import tr.bel.gaziantep.bysweb.core.enums.bys.EnumModul;
 import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlCinsiyet;
+import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlTalepDurumu;
+import tr.bel.gaziantep.bysweb.core.utils.DateUtil;
 import tr.bel.gaziantep.bysweb.moduls.engelsizler.entity.EyEngelGrubu;
+import tr.bel.gaziantep.bysweb.moduls.engelsizler.entity.EyTalep;
+import tr.bel.gaziantep.bysweb.moduls.engelsizler.entity.EyTalepKonu;
 import tr.bel.gaziantep.bysweb.moduls.engelsizler.service.EyAracCihazTeslimiService;
 import tr.bel.gaziantep.bysweb.moduls.engelsizler.service.EyAracTamirService;
 import tr.bel.gaziantep.bysweb.moduls.engelsizler.service.EyKisiService;
@@ -28,6 +34,8 @@ import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.service.SyGrafikService;
 import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
@@ -73,7 +81,7 @@ public class EngelsizDashboardController implements java.io.Serializable {
     @Getter
     @Setter
     private List<LatLng> heatmapModels;
-//    @Getter
+    //    @Getter
 //    @Setter
 //    private List<ClusterModel> clusterModels;
     @Getter
@@ -119,6 +127,37 @@ public class EngelsizDashboardController implements java.io.Serializable {
         request = getTotalRequest();
         if (grafikDataList == null) grafikDataList = new ArrayList<>();
         getAllGraphics();
+        getInfoDisabledRequests();
+    }
+
+    private void getInfoDisabledRequests() {
+        List<EyTalep> taleps = eyTalepService.findByDurum(EnumGnlTalepDurumu.BEKLIYOR);
+        if (!taleps.isEmpty()) {
+            StringBuilder messageStr = new StringBuilder("Sistemde bekleyen toplam talep sayısı : " + taleps.size() + "\n\n");
+            messageStr.append(DateUtil.localdateTimeToString(taleps.get(0).getTarih(), "dd.MM.yyyy")).append(" tarihinden beri bekleyen talebiniz bulunmaktadır.\n\n");
+            List<Map.Entry<EyTalepKonu, Long>> ilk10 = taleps.stream()
+                    .filter(t -> t.getEyTalepKonu() != null)
+                    .collect(Collectors.groupingBy(
+                            EyTalep::getEyTalepKonu,
+                            Collectors.counting()))
+                    .entrySet()
+                    .stream()
+                    .sorted(Map.Entry.<EyTalepKonu, Long>comparingByValue().reversed())
+                    .limit(10)
+                    .toList();
+            messageStr.append("Bekleyen taleplerin ilk 10 konusu aşağıda listelenmiştir.\n\n");
+            for (Map.Entry<EyTalepKonu, Long> item : ilk10) {
+                String format = "Konu : %-" + (32) + "s Sayı : %d%n";
+                messageStr.append(String.format(
+                        format,
+                        item.getKey().getTanim(),
+                        item.getValue()
+                ));
+                messageStr.append("\n");
+            }
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Engelsizler Talep Uyarı", messageStr.toString());
+            PrimeFaces.current().dialog().showMessageDynamic(message);
+        }
     }
 
     private int getTotalCount() {
@@ -149,7 +188,7 @@ public class EngelsizDashboardController implements java.io.Serializable {
         List<String> coordinates = eyKisiService.getAllCoordinates();
         int count = 0;
         for (String coordinate : coordinates) {
-            if(coordinate.equals("null,null")) continue;
+            if (coordinate.equals("null,null")) continue;
             String[] parts = coordinate.split("\\s*,\\s*");
             LatLng heatmapModel = new LatLng(Double.parseDouble(parts[1]), Double.parseDouble(parts[0]));
             heatmapModels.add(heatmapModel);

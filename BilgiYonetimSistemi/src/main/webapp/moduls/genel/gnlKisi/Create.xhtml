@@ -63,6 +63,19 @@
                                                                 value="#{gnlKisiController.selected.tcKimlikNo}"
                                                                 dateValue="#{gnlKisiController.selected.dogumTarihi}"/>
 
+                                    <p:outputLabel value="#{messages.kimlikSeriNoLabel}" for="@next"/>
+                                    <p:inputText id="kimlikSeriNo" value="#{gnlKisiController.selected.kimlikSeriNo}"
+                                                 title="#{messages.kimlikSeriNoText}"
+                                                 readonly="true" styleClass="tcUpdate"/>
+
+                                    <p:outputLabel value="#{messages.sonGecerlilikTarihiLabel}" for="@next"/>
+                                    <p:inputText id="sonGecerlilikTarihi"
+                                                 value="#{gnlKisiController.selected.sonGecerlilikTarihi}"
+                                                 title="#{messages.sonGecerlilikTarihiText}"
+                                                 readonly="true" styleClass="tcUpdate">
+                                        <f:convertDateTime pattern="#{messages.tarihFormat}" type="localDate"/>
+                                    </p:inputText>
+
                                     <p:outputLabel value="#{messages.adLabel}" for="@next"/>
                                     <p:inputText id="ad" value="#{gnlKisiController.selected.ad}"
                                                  title="#{messages.adText}"
