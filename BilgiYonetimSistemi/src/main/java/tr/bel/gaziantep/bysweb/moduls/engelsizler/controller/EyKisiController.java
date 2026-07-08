@@ -87,10 +87,6 @@ public class EyKisiController extends AbstractController<EyKisi> {
     @Push(channel = "eyKisiChannel")
     private PushContext pushContext;
 
-    //    private SyKullanici syKullanici;
-//    @Getter
-//    @Setter
-//    private EyKisiRapor eyKisiRapor;
     @Getter
     @Setter
     private LocalDate maxDate;
@@ -142,22 +138,15 @@ public class EyKisiController extends AbstractController<EyKisi> {
     @Setter
     private boolean locked;
 
-    //    private List<EyKisi> selecteds ;
-//
     public EyKisiController() {
         super(EyKisi.class);
     }
-//
-//    public List<EyKisi> getSelecteds() {
-//        return selecteds;
-//    }
-//
-//    public void setSelecteds(List<EyKisi> selecteds) {
-//        this.selecteds = selecteds;
-//    }
 
     public List<SelectItem> getFilterOptions(EnumSyFiltreAnahtari key) {
         switch (key) {
+            case EVET_HAYIR -> {
+                return filterOptionService.getEvetHayirs();
+            }
             case ILCE -> {
                 return filterOptionService.getGnlIlces();
             }
@@ -185,9 +174,6 @@ public class EyKisiController extends AbstractController<EyKisi> {
     @PostConstruct
     @Override
     public void init() {
-//        syKullanici = Util.getSyKullanici();
-//        this.setTableName("EyKisi");
-//        readColumns(syKullanici);
         super.init();
         maxDate = LocalDate.now();
     }
@@ -208,8 +194,6 @@ public class EyKisiController extends AbstractController<EyKisi> {
                     .build();
             newItem.setGnlKisi(kisi);
             newItem.setIrtibatKuranGnlPersonel(this.getSyKullanici().getGnlPersonel());
-//            eyKisiRapor = new EyKisiRapor();
-//            eyKisiRapor.setEyKisi(newItem);
             clearList();
             this.setSelected(newItem);
             initializeEmbeddableKey();
@@ -278,37 +262,7 @@ public class EyKisiController extends AbstractController<EyKisi> {
     }
 
     public void readInfo() {
-//        if (this.getSelected() != null) {
-//            List<EyKisiEngelGrubu> eyKisiEngelgrubuList = this.getSelected().getEyKisiEngelGrubuList();
-//            engelGrubus = new ArrayList<>();
-//            eyKisiEngelgrubuList.stream().filter(EyKisiEngelGrubu::isSecili).forEachOrdered(kisiEngelgrubu -> engelGrubus.add(kisiEngelgrubu.getEyEngelGrubu()));
-//
-//            List<EyKisiMaddeKullanimi> eyKisiMaddeKullanimiList = this.getSelected().getEyKisiMaddeKullanimiList();
-//            maddeKullanimis = new ArrayList<>();
-//            eyKisiMaddeKullanimiList.stream().filter(EyKisiMaddeKullanimi::isSecili).forEachOrdered(x -> maddeKullanimis.add(x.getTanim()));
-//
-//            List<GnlKisiGelirKaynagi> gnlKisiGelirKaynagiList = this.getSelected().getGnlKisi().getGnlKisiGelirKaynagiList();
-//            aileninGelirKaynagis = new ArrayList<>();
-//            gnlKisiGelirKaynagiList.stream().filter(GnlKisiGelirKaynagi::isSecili).forEachOrdered(x -> aileninGelirKaynagis.add(x.getTanim()));
-//
-//            List<GnlKisiYardimAlinanYerler> gnlKisiYardimAlinanYerlerList = this.getSelected().getGnlKisi().getGnlKisiYardimAlinanYerlerList();
-//            yardimAlinanYerlers = new ArrayList<>();
-//            gnlKisiYardimAlinanYerlerList.stream().filter(GnlKisiYardimAlinanYerler::isSecili).forEachOrdered(x -> yardimAlinanYerlers.add(x.getTanim()));
-//
-//            List<GnlKisiAldigiYardimlar> gnlKisiAldigiYardimlarList = this.getSelected().getGnlKisi().getGnlKisiAldigiYardimlarList();
-//            yardimTurus = new ArrayList<>();
-//            gnlKisiAldigiYardimlarList.stream().filter(GnlKisiAldigiYardimlar::isSecili).forEachOrdered(x -> yardimTurus.add(x.getTanim()));
-//
-//            List<EyKisiKullandigiCihaz> eyKisiKullandigiCihazList = this.getSelected().getEyKisiKullandigiCihazList();
-//            kullandigiCihazs = new ArrayList<>();
-//            eyKisiKullandigiCihazList.stream().filter(EyKisiKullandigiCihaz::isSecili).forEachOrdered(x -> kullandigiCihazs.add(x.getTanim()));
-//
-//            if (this.getSelected().getIrtibatKuranGnlPersonel() == null) {
-//                this.getSelected().setIrtibatKuranGnlPersonel(syKullanici.getGnlPersonel());
-//            }
-//        }
         if (this.getSelected() != null) {
-            // Ortak filtreleme işlemini metodlaştırıyoruz.
             engelGrubus = Function.filterAndCollect(this.getSelected().getEyKisiEngelGrubuList(), EyKisiEngelGrubu::isSecili, EyKisiEngelGrubu::getEyEngelGrubu);
             faydalandigiHaklars = Function.filterAndCollect(this.getSelected().getGnlKisi().getGnlKisiFaydalandigiHaklarList(), GnlKisiFaydalandigiHaklar::isSecili,
                     GnlKisiFaydalandigiHaklar::getTanim);
@@ -329,7 +283,11 @@ public class EyKisiController extends AbstractController<EyKisi> {
         try {
             if (this.getSelected() != null) {
                 if (this.getSelected().getGnlKisi().getDogumTarihi() == null) {
-                    FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+                    String message = "Doğum tarihi boş olduğundan dolayı sorgulama yapılamaz...";
+                    FacesUtil.addErrorMessage(message);
+                    this.getSelected().getGnlKisi().setHatali(true);
+                    this.getSelected().getGnlKisi().setHataAciklama(message);
+                    gnlKisiService.edit(this.getSelected().getGnlKisi());
                     return;
                 }
                 GnlKisi kisi = kpsController.findByTcKimlikNo(this.getSelected().getGnlKisi(), EnumModul.ENGELSIZLER);
@@ -406,8 +364,6 @@ public class EyKisiController extends AbstractController<EyKisi> {
         post = ",,,,Mernis'ten sorgulama yapmak için hazırlık yapılıyor";
         pushContext.send(post);
         for (List<KisiParameter> kisiParameters : splitList) {
-
-            //List<String> tcListSplit = kisiParameters.stream().map(x -> x.getTcKimlikNo() + "").toList();
             KisiParameters parameters = new KisiParameters();
             parameters.setKisiler(kisiParameters);
             List<KpsModel> kpsModels = kpsService.getKpsFull(initApp.getProperty("webServisLink"), initApp.getProperty("webServisToken"), parameters);
@@ -479,6 +435,10 @@ public class EyKisiController extends AbstractController<EyKisi> {
                         post = eyKisi.getGnlKisi().getAdSoyad() + "," + eyKisi.getGnlKisi().getTcKimlikNo() + "," + count + "," + recordCount + ", ";
                         pushContext.send(post);
                     } else {
+                        String message = "Uyarı : Adres Bulunamadı";
+                        eyKisi.getGnlKisi().setHatali(true);
+                        eyKisi.getGnlKisi().setHataAciklama(message);
+                        gnlKisiService.edit(eyKisi.getGnlKisi());
                         count++;
                         post = "Uyarı :Adres Bulunamadı" + "," + eyKisi.getGnlKisi().getAdSoyad() + "-" + eyKisi.getGnlKisi().getTcKimlikNo() + "," + count + "," + recordCount + ", ";
                         pushContext.send(post);
@@ -600,12 +560,6 @@ public class EyKisiController extends AbstractController<EyKisi> {
     public void eyKisiSecKapat(EyKisi eyKisi) {
         PrimeFaces.current().dialog().closeDynamic(eyKisi);
     }
-
-//    public void selectAndClose() {
-//        Map<String, Object> params = new HashMap<>();
-//        params.put("selectedList", selecteds);
-//        PrimeFaces.current().dialog().closeDynamic(params);
-//    }
 
     public void onRowDblSelect(SelectEvent<EyKisi> event) {
         EyKisi eyKisi = event.getObject();

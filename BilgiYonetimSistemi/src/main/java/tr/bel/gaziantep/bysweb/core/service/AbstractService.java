@@ -382,17 +382,6 @@ public abstract class AbstractService<T> implements java.io.Serializable {
         return from.get(parts[parts.length - 1]);
     }
 
-//    private Path pathGenerate(Root<T> root, String[] parts) {
-//        Path expression = null;
-//
-//        expression = root.get(parts[0]);
-//        for (int i = 1; i < parts.length; i++) {
-//            String part = parts[i];
-//            expression = expression.get(part);
-//        }
-//        return expression;
-//    }
-
     public int count(Map<String, FilterMeta> filters) {
         CriteriaBuilder cb = this.getEntityManager().getCriteriaBuilder();
         CriteriaQuery<Long> cq = cb.createQuery(Long.class);

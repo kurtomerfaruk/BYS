@@ -58,8 +58,6 @@ public class SurveyPublicController implements java.io.Serializable {
     private GnlAnket gnlAnket;
     private Map<Integer, Object> answers = new HashMap<>();
     private Map<Integer, Object> otherAnswers = new HashMap<>();
-//    private String tcKimlikNo;
-//    private LocalDate dogumTarihi;
     private String anonToken;
     private String[] selectedManyCheckbox;
     private GnlKisi gnlKisi;
@@ -156,36 +154,6 @@ public class SurveyPublicController implements java.io.Serializable {
         // Örnek: SecurityContext, SessionMap veya custom user bean.
         return null;
     }
-
-//    public void manyCheckboxChanged(List<GnlAnketSoruSecenek> list) {
-//        String message = "";
-//        if (list != null) {
-//            for (int i = 0; i < list.size(); i++) {
-//                if (i > 0) {
-//                    message += ", ";
-//                }
-//                message += list.get(i).getId();
-//            }
-//        }
-//    }
-
-//    public void validateRadio(FacesContext ctx, UIComponent comp, Object value) {
-//        String qid = comp.getId().split("_")[1]; // veya başka yöntemle questionId al
-//        if ("OTHER".equals(value)) {
-//            String otherText = otherAnswers.get(Integer.valueOf(qid)).toString();
-//            if (otherText == null || otherText.trim().isEmpty()) {
-//                throw new ValidatorException(
-//                        new FacesMessage(FacesMessage.SEVERITY_ERROR,
-//                                "Diğer seçildiğinde açıklama zorunludur", null));
-//            }
-//        }
-//    }
-
-//    public void deneme(Integer id) {
-//        System.out.println("answer:" + answers.size());
-//        System.out.println(answers.get(id));
-//        System.out.println("otheranswers: " + otherAnswers.size());
-//    }
 
     public boolean isOtherSelected(Integer questionId) {
         Object[] selected = (Object[]) answers.get(questionId); // Array alıyoruz

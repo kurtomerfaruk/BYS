@@ -132,6 +132,10 @@ public class ModelConverter implements java.io.Serializable {
         }
 
         kisi.setMernisGuncellemeTarihi(LocalDateTime.now());
+        if(kisi.isHatali()){
+            kisi.setHatali(false);
+            kisi.setHataAciklama(null);
+        }
         return kisi;
     }
 

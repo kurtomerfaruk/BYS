@@ -102,6 +102,9 @@ public class GnlKisiController extends AbstractController<GnlKisi> {
 
     public List<SelectItem> getFilterOptions(EnumSyFiltreAnahtari key) {
         switch (key) {
+            case EVET_HAYIR -> {
+                return filterOptionService.getEvetHayirs();
+            }
             case UYRUK -> {
                 return filterOptionService.getGnlUyruks();
             }
@@ -153,7 +156,11 @@ public class GnlKisiController extends AbstractController<GnlKisi> {
         try {
             if (this.getSelected() != null) {
                 if (this.getSelected().getDogumTarihi() == null) {
-                    FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+                    String message = "Doğum tarihi boş olduğundan dolayı sorgulama yapılamaz...";
+                    FacesUtil.addErrorMessage(message);
+                    this.getSelected().setHatali(true);
+                    this.getSelected().setHataAciklama(message);
+                    service.edit(this.getSelected());
                     return;
                 }
                 GnlKisi kisi = kpsController.findByTcKimlikNo(this.getSelected(), EnumModul.GENEL);
@@ -209,7 +216,6 @@ public class GnlKisiController extends AbstractController<GnlKisi> {
 
                     List<GnlKisi> kisiList = service.findByLatLngIsNull(recordCount);
 
-
                     if (kisiList.isEmpty()) {
                         pushContext.send("Servisten veri alınamadı", kullaniciId);
                         pushContext.send("COMPLETED", kullaniciId);
@@ -232,18 +238,23 @@ public class GnlKisiController extends AbstractController<GnlKisi> {
                         if (StringUtil.isNotBlank(coordinate) && !coordinate.equals("null,null")) {
                             gnlKisi.setLatLng(coordinate);
                             service.updateLatLng(gnlKisi);
-                            List<GnlKisi> binaNos = service.findByBinaNo(gnlKisi.getBinaNo());
-                            binaNos.removeIf(x -> x.getTcKimlikNo().equals(gnlKisi.getTcKimlikNo()));
-                            if (!binaNos.isEmpty()) {
-                                service.editAll(binaNos);
-                            }
+                            // Mukerrer islem oldugundan dolayi kapatildi
+//                            List<GnlKisi> binaNos = service.findByBinaNo(gnlKisi.getBinaNo());
+//                            binaNos.removeIf(x -> x.getTcKimlikNo().equals(gnlKisi.getTcKimlikNo()));
+//                            if (!binaNos.isEmpty()) {
+//                                service.editAll(binaNos);
+//                            }
 
                             count++;
                             post = gnlKisi.getAdSoyad() + "," + gnlKisi.getTcKimlikNo() + "," + count + "," + recordCount;
                             pushContext.send(post);
                         } else {
+                            String message="Uyarı : Adres Bulunamadı";
+                            gnlKisi.setHatali(true);
+                            gnlKisi.setHataAciklama(message);
+                            service.edit(gnlKisi);
                             count++;
-                            post = "Uyarı :Adres Bulunamadı" + "," + gnlKisi.getAdSoyad() + "-" + gnlKisi.getTcKimlikNo() + "," + count + "," + recordCount;
+                            post = message + "," + gnlKisi.getAdSoyad() + "-" + gnlKisi.getTcKimlikNo() + "," + count + "," + recordCount;
                             pushContext.send(post);
                         }
                     }

@@ -46,11 +46,6 @@ public class JwtAuthenticationFilter implements ContainerRequestFilter {
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
 
-//        if (resourceInfo.getResourceMethod()
-//                .isAnnotationPresent(PermitAll.class)) {
-//            return;
-//        }
-
         String path = requestContext.getUriInfo().getPath();
 
         if (path.contains("auth/token")) {

@@ -63,14 +63,6 @@ public class KpsService {
 
     public List<KpsModel> getKpsFull(String link, String token, KisiParameters parameters) {
         List<KpsModel> models = new ArrayList<>();
-//        for (KisiParameter parameter : parameters.getKisiler()) {
-//            KpsModel model = new KpsModel();
-//            model.setKutukModel(this.kutukServis.tcKimlikNoSorgula(link, token, parameter));
-//            model.setAdresModel(this.adresSorgulaServis.adresSorgula(link, token, parameter));
-//            model.setKisiAdresModel(this.kisiAdresSorgulaServis.kisiAdresSorgula(link, token, parameter));
-//            models.add(model);
-//        }
-
         List<BilesikKutukModel> kutukModels = kutukServis.tcKimlikNolariSorgula(link, token, parameters);
         List<AdresModel> adresModels=adresSorgulaServis.adresleriSorgula(link, token, parameters);
         for (BilesikKutukModel kutukModel : kutukModels) {

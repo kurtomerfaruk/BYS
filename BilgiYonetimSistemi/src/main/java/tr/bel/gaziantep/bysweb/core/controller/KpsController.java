@@ -9,6 +9,7 @@ import tr.bel.gaziantep.bysweb.core.enums.bys.EnumModul;
 import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
 import tr.bel.gaziantep.bysweb.core.utils.StringUtil;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
+import tr.bel.gaziantep.bysweb.moduls.genel.service.GnlKisiService;
 import tr.bel.gaziantep.bysweb.webservice.kps.controller.KpsService;
 import tr.bel.gaziantep.bysweb.webservice.kps.model.KpsModel;
 import tr.bel.gaziantep.bysweb.webservice.kps.model.kisi.KisiAdresModel;
@@ -34,6 +35,8 @@ public class KpsController implements java.io.Serializable{
     private InitApp initApp;
     @Inject
     private ModelConverter converter;
+    @Inject
+    private GnlKisiService gnlKisiService;
 
     public GnlKisi findByTcKimlikNo(GnlKisi kisi,  EnumModul modul) throws Exception {
         String tcKimlikNo = kisi.getTcKimlikNo();
@@ -46,6 +49,9 @@ public class KpsController implements java.io.Serializable{
         if (kpsModel == null) return null;
 
         if (!StringUtil.isBlank(kpsModel.getKutukModel().getHataBilgisi())) {
+            kisi.setHatali(true);
+            kisi.setHataAciklama(kpsModel.getKutukModel().getHataBilgisi());
+            gnlKisiService.edit(kisi);
             FacesUtil.addErrorMessage(kpsModel.getKutukModel().getHataBilgisi());
             return null;
         }

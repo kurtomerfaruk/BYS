@@ -165,7 +165,6 @@ public class GnlRaporPrint implements java.io.Serializable {
     }
 
     public void onGruplamaChange() {
-//        gruplamaSecildi = gruplamaKolonlariMap.values().stream().anyMatch(Boolean::booleanValue);
         try {
             // 1. Gruplama kolonlarını listele
             gruplamaKolonlariList.clear();

@@ -30,16 +30,6 @@ public class EnumService {
 
                     // Enum'un adını al
                     enumMap.put("name", ((Enum<?>) enumConstant).name());
-
-                    // Getter metodlarını çağır
-//                    try {
-//                        Method getKodMethod = enumClass.getMethod("getLabel");
-//                        enumMap.put("kod", getKodMethod.invoke(enumConstant));
-//                    } catch (NoSuchMethodException e) {
-//                        // getKod yoksa name'i kullan
-//                        enumMap.put("kod", ((Enum<?>) enumConstant).name());
-//                    }
-
                     enumMap.put("kod", ((Enum<?>) enumConstant).name());
 
                     try {

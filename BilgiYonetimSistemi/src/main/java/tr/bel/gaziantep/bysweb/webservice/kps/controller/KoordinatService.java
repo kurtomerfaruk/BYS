@@ -6,10 +6,8 @@ import com.fasterxml.jackson.databind.cfg.CoercionAction;
 import com.fasterxml.jackson.databind.cfg.CoercionInputShape;
 import com.fasterxml.jackson.databind.type.LogicalType;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.google.gson.Gson;
 import kong.unirest.core.GetRequest;
 import kong.unirest.core.Unirest;
-import org.apache.poi.ss.formula.functions.T;
 import tr.bel.gaziantep.bysweb.core.utils.StringUtil;
 import tr.bel.gaziantep.bysweb.webservice.kps.model.koordinat.KoordinatModel;
 
@@ -42,7 +40,7 @@ public class KoordinatService extends KpsAbstractService<KoordinatModel> {
             ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
             objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             objectMapper.coercionConfigFor(LogicalType.POJO).setCoercion(CoercionInputShape.EmptyString, CoercionAction.AsEmpty);
-            return (KoordinatModel) objectMapper.readValue(json, KoordinatModel.class);
+            return objectMapper.readValue(json, KoordinatModel.class);
         } catch (Exception ex) {
             System.out.println("Sorgulama yapılırken hata oluştu:" + ex.getMessage());
             return null;

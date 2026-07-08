@@ -329,12 +329,6 @@ public abstract class AbstractController<T> implements Serializable {
                     }
                     count++;
                 }
-//                if(this.getSyKullanici().getKullaniciTuru().equals(EnumSyKullaniciTuru.SISTEM_YONETICISI)){
-//                    SyKullaniciKolon kullaniciKolon = SyKullaniciKolon.builder()
-//                            .syKullanici(this.getSyKullanici())
-//                            .syKolon(SyKolon.builder().baslik(A).build())
-//                            .build();
-//                }
             } catch (Exception ex) {
                 log.error(null, ex);
                 FacesUtil.errorMessage(Constants.HATA_OLUSTU);
@@ -374,7 +368,6 @@ public abstract class AbstractController<T> implements Serializable {
             }
         } catch (Exception ex) {
             log.error(null, ex);
-//            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
             throw ex;
         }
 
@@ -428,7 +421,6 @@ public abstract class AbstractController<T> implements Serializable {
                 FacesUtil.successMessage("kolonlarKaydedildi");
             } catch (Exception ex) {
                 log.error(null, ex);
-//                FacesUtil.errorMessage(Constants.HATA_OLUSTU);
                 throw ex;
             }
         }
@@ -467,23 +459,6 @@ public abstract class AbstractController<T> implements Serializable {
                 .findFirst()
                 .orElse(value.toString());
     }
-
-//    public String getResolvedValueText(Object item, String prop) {
-//        Object value = getResolvedValue(item, prop);
-//        if (value == null) {
-//            return "";
-//        }
-//        if (value instanceof BaseEnum e) {
-//            return e.getDisplayValue();
-//        } else if (value instanceof Boolean b) {
-//            return b ? "Evet" : "Hayır";
-//        } else if (value instanceof LocalDate d) {
-//            return DateUtil.localdateToString(d, FacesUtil.message("tarihFormat"));
-//        } else if (value instanceof LocalDateTime d) {
-//            return DateUtil.localdateTimeToString(d, FacesUtil.message("tarihSaatKisaFormat"));
-//        }
-//        return value.toString();
-//    }
 
     public void changeFilterMatchMode(SyKullaniciKolon kullaniciKolon) {
         if (kullaniciKolon == null) return;

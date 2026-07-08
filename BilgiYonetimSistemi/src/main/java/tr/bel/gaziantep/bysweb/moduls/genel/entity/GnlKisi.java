@@ -30,7 +30,7 @@ import java.util.List;
 @Table(name = "GNLKISI")
 @NamedQuery(name = "GnlKisi.existByTcKimlikNo", query = "SELECT k FROM GnlKisi k WHERE k.tcKimlikNo=:tcKimlikNo")
 @NamedQuery(name = "GnlKisi.findByLatLngIsNull", query = "SELECT k FROM GnlKisi k WHERE k.aktif=true AND k.latLng IS NULL " +
-        "AND k.gnlIl.id=27 AND k.binaNo IS NOT NULL AND k.tcKimlikNo IS NOT NULL AND k.dogumTarihi IS NOT NULL")
+        "AND k.gnlIl.id=27 AND k.binaNo IS NOT NULL AND k.tcKimlikNo IS NOT NULL AND k.dogumTarihi IS NOT NULL AND k.hatali = false")
 @NamedQuery(name = "GnlKisi.findByBinaNo", query = "SELECT g FROM GnlKisi g WHERE g.aktif=true AND g.binaNo = :binaNo")
 @NamedQuery(name = "GnlKisi.getTcList", query = "SELECT g FROM GnlKisi g WHERE g.tcKimlikNo IS NOT NULL AND " +
         "LENGTH(g.tcKimlikNo)=11 AND g.dogumTarihi IS NOT NULL ORDER BY g.mernisGuncellemeTarihi ASC")
@@ -287,6 +287,14 @@ public class GnlKisi extends BaseEntity {
 
     @Column(name = "YASLI")
     private boolean yasli;
+
+    @Column(name = "HATALI")
+    private boolean hatali;
+
+    @Size(max = 2147483647)
+    @Nationalized
+    @Column(name = "HATA_ACIKLAMA")
+    private String hataAciklama;
 
     @OneToMany(mappedBy = "gnlKisi", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @Builder.Default

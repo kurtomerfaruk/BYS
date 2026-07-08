@@ -10,6 +10,7 @@ import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
 import java.io.Serial;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 /**
@@ -48,10 +49,29 @@ public class GnlKisiService extends AbstractService<GnlKisi> {
         return getEntityManager().createNamedQuery("GnlKisi.findByLatLngIsNull",GnlKisi.class).setFirstResult(first).setMaxResults(kayitSayisi).getResultList();
     }
 
-    public void updateLatLng(GnlKisi gnlkisiId) {
-        List<GnlKisi> gnlKisis = findByBinaNo(gnlkisiId.getBinaNo());
-        gnlKisis.forEach(gnlKisi -> gnlKisi.setLatLng(gnlkisiId.getLatLng()));
-        this.editAll(gnlKisis);
+    public void updateLatLng(GnlKisi source) {
+        if (source == null || source.getBinaNo() == null) {
+            return;
+        }
+
+        List<GnlKisi> kisiler = findByBinaNo(source.getBinaNo());
+
+        if (kisiler == null || kisiler.isEmpty()) {
+            return;
+        }
+
+        List<GnlKisi> degisenler = kisiler.stream()
+                .filter(kisi -> !Objects.equals(kisi.getLatLng(), source.getLatLng()) || kisi.isHatali())
+                .peek(kisi -> {
+                    kisi.setLatLng(source.getLatLng());
+                    kisi.setHatali(false);
+                    kisi.setHataAciklama(null);
+                })
+                .toList();
+
+        if (!degisenler.isEmpty()) {
+            editAll(degisenler);
+        }
     }
 
     public List<GnlKisi> findByBinaNo(Integer binaNo) {
