@@ -427,6 +427,9 @@ public class EyKisiController extends AbstractController<EyKisi> {
                 List<EyKisi> kisiList = service.findByAddress(recordCount);
 
                 for (EyKisi eyKisi : kisiList) {
+//                    KisiParameter parameter = KpsUtil.setDate(eyKisi.getGnlKisi().getDogumTarihi());
+//                    parameter.setTcKimlikNo(Long.parseLong(eyKisi.getGnlKisi().getTcKimlikNo()));
+//                    String coordinate = converter.addLatLng(parameter);
                     String coordinate = converter.addLatLng(eyKisi.getGnlKisi().getBinaNo());
                     if (!StringUtil.isBlank(coordinate) && !coordinate.equals("null,null")) {
                         eyKisi.getGnlKisi().setLatLng(coordinate);
@@ -440,7 +443,7 @@ public class EyKisiController extends AbstractController<EyKisi> {
                         eyKisi.getGnlKisi().setHataAciklama(message);
                         gnlKisiService.edit(eyKisi.getGnlKisi());
                         count++;
-                        post = "Uyarı :Adres Bulunamadı" + "," + eyKisi.getGnlKisi().getAdSoyad() + "-" + eyKisi.getGnlKisi().getTcKimlikNo() + "," + count + "," + recordCount + ", ";
+                        post = message + "," + eyKisi.getGnlKisi().getAdSoyad() + "-" + eyKisi.getGnlKisi().getTcKimlikNo() + "," + count + "," + recordCount + ", ";
                         pushContext.send(post);
                     }
                 }

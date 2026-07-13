@@ -51,7 +51,7 @@
 
         <p:outputLabel value="#{messages.filtreAnahtariLabel}" for="@next"/>
         <p:selectOneMenu id="filtreAnahtari" value="#{syKolonController.selected.filtreAnahtari}" filter="true"
-                         converter="omnifaces.SelectItemsConverter">
+                         converter="omnifaces.SelectItemsConverter" filterMatchMode="contains">
             <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
             <f:selectItems value="#{enumFiltreAnahtari.ALL_VALUES}"
                            var="filtreAnahtars"
@@ -61,7 +61,7 @@
 
         <p:outputLabel value="#{messages.veriTipiLabel}" for="@next"/>
         <p:selectOneMenu id="tip" value="#{syKolonController.selected.tip}" required="true" filter="true"
-                         converter="omnifaces.SelectItemsConverter">
+                         converter="omnifaces.SelectItemsConverter" filterMatchMode="contains">
             <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
             <f:selectItems value="#{enumVeriTipi.ALL_VALUES}"
                            var="veriTips"

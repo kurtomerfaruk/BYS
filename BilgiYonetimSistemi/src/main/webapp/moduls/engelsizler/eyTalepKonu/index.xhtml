@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition xmlns:ui="jakarta.faces.facelets">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="jakarta.faces.facelets"
+                xmlns:p="primefaces">
 
-        <ui:include src="/moduls/engelsizler/eyTalepKonu/List.xhtml"/>
-        <ui:include src="/moduls/engelsizler/eyTalepKonu/View.xhtml"/>
-        <ui:include src="/moduls/engelsizler/eyTalepKonu/Edit.xhtml"/>
-        <ui:include src="/moduls/engelsizler/eyTalepKonu/Create.xhtml"/>
+    <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.bys.EnumModul" var="enumModul"/>
+
+    <ui:include src="/moduls/engelsizler/eyTalepKonu/List.xhtml"/>
+    <ui:include src="/moduls/engelsizler/eyTalepKonu/View.xhtml"/>
+    <ui:include src="/moduls/engelsizler/eyTalepKonu/Edit.xhtml"/>
+    <ui:include src="/moduls/engelsizler/eyTalepKonu/Create.xhtml"/>
 
 </ui:composition>

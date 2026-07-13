@@ -39,6 +39,28 @@
                                     </li>
                                 </ui:fragment>
 
+                                <ui:fragment rendered="#{syKullaniciController.hasPermission('ekmtalep:goster')}">
+                                    <li class="slide">
+                                        <p:commandLink styleClass="side-menu__item sublevel2"
+                                                       actionListener="#{menuController.setPageLink('/moduls/engelsizkariyermerkezi/ekmTalep/index')}"
+                                                       update="myPanel,:growl"
+                                                       onstart="PF('Loading').show()"
+                                                       onsuccess="PF('Loading').hide()"
+                                                       value="Talepler"/>
+                                    </li>
+                                </ui:fragment>
+
+                                <ui:fragment rendered="#{syKullaniciController.hasPermission('ekmkursiyerkurs:goster')}">
+                                    <li class="slide">
+                                        <p:commandLink styleClass="side-menu__item sublevel2"
+                                                       actionListener="#{menuController.setPageLink('/moduls/engelsizkariyermerkezi/ekmKursiyerKurs/index')}"
+                                                       update="myPanel,:growl"
+                                                       onstart="PF('Loading').show()"
+                                                       onsuccess="PF('Loading').hide()"
+                                                       value="Kursiyer Kurs Listesi"/>
+                                    </li>
+                                </ui:fragment>
+
                                 <ui:fragment rendered="#{syKullaniciController.hasPermission('ekmisbasvuru:goster')}">
                                     <li class="slide">
                                         <p:commandLink styleClass="side-menu__item sublevel2"

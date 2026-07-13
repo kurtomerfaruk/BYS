@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:pt="jakarta.faces.passthrough"
+                xmlns:p="primefaces"
+                xmlns:coco="jakarta.faces.composite/ui">
+
+    <h:form id="EkmKursiyerKursListForm" styleClass="form-height">
+
+        <p:contextMenu id="EkmKursiyerKursDataTableContextMenu" for="datalist:datalist">
+            <p:menuitem value="#{messages.buttonEkle}" onclick="document.getElementById('EkmKursiyerKursListForm:datalist:datalist:createButton').click();"
+                        icon="pi pi-plus" rendered="#{syKullaniciController.hasPermission('ekmkursiyerkurs:ekle')}"/>
+            <p:menuitem value="#{messages.buttonGuncelle}" onclick="document.getElementById('EkmKursiyerKursListForm:datalist:datalist:editButton').click();"
+                        icon="pi pi-pencil" rendered="#{syKullaniciController.hasPermission('ekmkursiyerkurs:guncelle')}"/>
+            <p:menuitem value="#{messages.buttonDetay}" onclick="document.getElementById('EkmKursiyerKursListForm:datalist:datalist:viewButton').click();"
+                        icon="pi pi-search"/>
+            <p:menuitem value="#{messages.buttonSil}" onclick="document.getElementById('EkmKursiyerKursListForm:datalist:datalist:deleteButton').click();"
+                        icon="pi pi-trash" rendered="#{syKullaniciController.hasPermission('ekmkursiyerkurs:sil')}"/>
+        </p:contextMenu>
+        <coco:datatable id="datalist"
+                        value="#{ekmKursiyerKursController.lazyItems}"
+                        rowKey="#{item.id}"
+                        selection="#{ekmKursiyerKursController.selected}"
+                        filtered="#{ekmKursiyerKursController.filtered}"
+                        rowselect=":EkmKursiyerKursListForm:datalist:datalist:createButton,:EkmKursiyerKursListForm:datalist:datalist:viewButton,:EkmKursiyerKursListForm:datalist:datalist:editButton,:EkmKursiyerKursListForm:datalist:datalist:deleteButton"
+                        rowDblselect="document.getElementById('EkmKursiyerKursListForm:datalist:datalist:editButton').click()"
+                        contextMenu=":EkmKursiyerKursListForm:datalist:datalist:createButton :EkmKursiyerKursListForm:datalist:datalist:viewButton :EkmKursiyerKursListForm:datalist:datalist:editButton :EkmKursiyerKursListForm:datalist:datalist:deleteButton"
+                        selectListener="#{ekmKursiyerKursController.resetParents}"
+                        controller="#{ekmKursiyerKursController}"
+                        header="#{messages.gorusmeListesi}">
+
+            <p:ajax event="colResize" listener="#{ekmKursiyerKursController.onResize}"/>
+
+            <f:facet name="paginatorBottomLeft">
+                    <p:commandButton id="createButton" styleClass="btn btn-primary" icon="pi pi-plus" pt:data-tooltip="#{messages.buttonEkle}"
+                                     actionListener="#{ekmKursiyerKursController.prepareCreate}" update=":EkmKursiyerKursCreateForm:EkmKursiyerKursCreateForm"
+                                     oncomplete="PF('EkmKursiyerKursCreateDialog').show()" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                     rendered="#{syKullaniciController.hasPermission('ekmkursiyerkurs:ekle')}"/>
+                    <p:commandButton id="editButton" styleClass="btn btn-success" icon="pi pi-pencil" pt:data-tooltip="#{messages.buttonGuncelle}"
+                                     update=":EkmKursiyerKursEditForm:EkmKursiyerKursEditForm" oncomplete="PF('EkmKursiyerKursEditDialog').show()"
+                                     disabled="#{empty ekmKursiyerKursController.selected}" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                     rendered="#{syKullaniciController.hasPermission('ekmkursiyerkurs:guncelle')}"/>
+                    <p:commandButton id="viewButton" styleClass="btn btn-info" icon="pi pi-search" pt:data-tooltip="#{messages.buttonDetay}"
+                                     update=":EkmKursiyerKursViewForm:EkmKursiyerKursViewForm" oncomplete="PF('EkmKursiyerKursViewDialog').show()"
+                                     disabled="#{empty ekmKursiyerKursController.selected}" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                    <p:commandButton id="deleteButton" styleClass="btn btn-danger" icon="pi pi-trash" pt:data-tooltip="#{messages.buttonSil}"
+                                     actionListener="#{ekmKursiyerKursController.delete}" update=":growl,datalist" disabled="#{empty ekmKursiyerKursController.selected}"
+                                     rendered="#{syKullaniciController.hasPermission('ekmkursiyerkurs:sil')}">
+                        <p:confirm header="#{messages.ConfirmationHeader}" message="#{messages.ConfirmDeleteMessage}" icon="pi pi-warning"/>
+                    </p:commandButton>
+            </f:facet>
+
+        </coco:datatable>
+
+
+        <ui:include src="/confirmation.xhtml"/>
+
+    </h:form>
+
+</ui:composition>

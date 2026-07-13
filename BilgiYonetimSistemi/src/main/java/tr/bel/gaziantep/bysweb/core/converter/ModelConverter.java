@@ -3,6 +3,7 @@ package tr.bel.gaziantep.bysweb.core.converter;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import org.apache.commons.lang3.StringUtils;
 import tr.bel.gaziantep.bysweb.core.controller.InitApp;
 import tr.bel.gaziantep.bysweb.core.enums.bys.EnumModul;
 import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlCinsiyet;
@@ -21,6 +22,7 @@ import tr.bel.gaziantep.bysweb.moduls.genel.service.GnlIlceService;
 import tr.bel.gaziantep.bysweb.moduls.genel.service.GnlKisiService;
 import tr.bel.gaziantep.bysweb.moduls.genel.service.GnlMahalleService;
 import tr.bel.gaziantep.bysweb.webservice.gazikart.model.ServisModel;
+import tr.bel.gaziantep.bysweb.webservice.kps.controller.KisiAdresSorgulaService;
 import tr.bel.gaziantep.bysweb.webservice.kps.controller.KoordinatService;
 import tr.bel.gaziantep.bysweb.webservice.kps.model.KpsModel;
 import tr.bel.gaziantep.bysweb.webservice.kps.model.adres.AdresModel;
@@ -60,6 +62,7 @@ public class ModelConverter implements java.io.Serializable {
 
 
     private KoordinatService koordinatService = new KoordinatService();
+    private KisiAdresSorgulaService kisiAdresSorgulaService = new KisiAdresSorgulaService();
 
     public GnlKisi convertKpsModelToGnlKisi(GnlKisi kisi, KpsModel kpsModel, EnumModul modul) throws Exception {
         if (kisi == null) kisi = new GnlKisi();
@@ -132,7 +135,7 @@ public class ModelConverter implements java.io.Serializable {
         }
 
         kisi.setMernisGuncellemeTarihi(LocalDateTime.now());
-        if(kisi.isHatali()){
+        if (kisi.isHatali()) {
             kisi.setHatali(false);
             kisi.setHataAciklama(null);
         }
@@ -144,6 +147,15 @@ public class ModelConverter implements java.io.Serializable {
             return findCoordinate(binaNo);
         }
         return null;
+    }
+
+    public String addLatLng(KisiParameter kisiParameter) {
+        KisiAdresModel model = kisiAdresSorgulaService.kisiAdresSorgula(initApp.getProperty("webServisLink"),
+                initApp.getProperty("webServisToken"), kisiParameter);
+        if (model == null) return null;
+        if (StringUtils.isBlank(model.getX()) || StringUtils.isBlank(model.getY())) return null;
+        if (model.getX().equals("null") || model.getY().equals("null")) return null;
+        return model.getX() + "," + model.getY();
     }
 
     public String findCoordinate(Integer binaNo) {

@@ -3,6 +3,7 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
       xmlns:p="primefaces"
       xmlns:coco="jakarta.faces.composite/ui">
 
@@ -17,6 +18,15 @@
         <p:outputLabel value="#{messages.konuLabel}" for="@next"/>
         <p:inputText id="tanim" value="#{eyTalepKonuController.selected.tanim}" title="#{messages.konuText}" size="50"
                      maxlength="150" required="true"/>
+
+        <p:outputLabel value="#{messages.modulLabel}" for="@next"/>
+        <p:selectManyCheckbox id="modulList" value="#{eyTalepKonuController.selected.modulList}" layout="responsive"
+                              columns="3">
+            <f:selectItems value="#{enumModul.ALL_VALUES}"
+                           var="modulItem"
+                           itemLabel="#{modulItem.displayValue}"
+                           itemValue="#{modulItem}"/>
+        </p:selectManyCheckbox>
 
     </coco:editpage>
 

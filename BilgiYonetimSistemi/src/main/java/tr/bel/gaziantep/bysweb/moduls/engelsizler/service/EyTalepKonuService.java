@@ -3,11 +3,14 @@ package tr.bel.gaziantep.bysweb.moduls.engelsizler.service;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
+import tr.bel.gaziantep.bysweb.core.enums.bys.EnumModul;
 import tr.bel.gaziantep.bysweb.core.service.AbstractService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.moduls.engelsizler.entity.EyTalepKonu;
 
 import java.io.Serial;
+import java.util.List;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
@@ -35,5 +38,11 @@ public class EyTalepKonuService extends AbstractService<EyTalepKonu> {
     @Override
     public String getSortCol() {
         return "tanim";
+    }
+
+    public List<EyTalepKonu> findByModul(EnumModul modul) {
+        TypedQuery<EyTalepKonu> query = em.createNamedQuery("EyTalepKonu.findByModul", EyTalepKonu.class);
+        query.setParameter("modul", "%" + modul.name() + "%");
+        return query.getResultList();
     }
 }
