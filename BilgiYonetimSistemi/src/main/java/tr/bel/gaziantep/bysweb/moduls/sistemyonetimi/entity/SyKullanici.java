@@ -78,6 +78,10 @@ public class SyKullanici extends BaseEntityNoVersion {
     @Column(name = "KILITLI")
     private boolean kilitli;
 
+    @Size(max = 50)
+    @Column(name = "GRAFIK_TEMA", length = 50)
+    private String grafikTema;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "syKullanici", fetch = FetchType.LAZY)
     @Builder.Default
     private List<SyKullaniciGiris> syKullaniciGirisList = new ArrayList<>();

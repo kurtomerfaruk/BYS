@@ -80,6 +80,7 @@ typography
   --pink-rgb: 254, 84, 155;
   --teal-rgb: 0, 216, 216;
   --purple-rgb: 123, 118, 254;
+  --indigo-rgb: 77, 93, 219;
   --green-rgb: 1, 239, 140;
   --default-body-bg-color: rgb(var(--body-bg-rgb));
   --primary-color: rgb(var(--primary-rgb));
@@ -25298,6 +25299,14 @@ ul.files-main-nav li div.filemanager-upgrade-storage img {
 }
 .border.border-orange.border-opacity-100 {
   border-color: rgba(var(--orange-rgb), 1) !important;
+}
+.border.border-purple {
+  border: 1px solid rgb(var(--purple-rgb)) !important;
+  opacity: 1;
+}
+.border.border-indigo {
+  border: 1px solid rgb(var(--indigo-rgb)) !important;
+  opacity: 1;
 }
 .border.border-white {
   border: 1px solid #fff !important;

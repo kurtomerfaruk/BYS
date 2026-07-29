@@ -149,6 +149,9 @@ public class LoginController implements java.io.Serializable {
                 if (StringUtil.isBlank(syKullanici.getTema())) {
                     syKullanici.setTema("saga-blue");
                 }
+                if(StringUtil.isBlank(syKullanici.getGrafikTema())){
+                    syKullanici.setGrafikTema("material");
+                }
                 syKullanici.setSonGirilenIp(ipAddress);
                 syKullanici.setSonGirisZamani(LocalDateTime.now());
                 syKullanici.getSyKullaniciGirisList().add(giris);

@@ -1,0 +1,422 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:ac="http://kurtomerfaruk.com/amchartfaces">
+
+<ui:composition>
+
+    <h:form id="mahalleKartiForm" prependId="false">
+        <div class="col-xl-12">
+            <div class="card custom-card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="ti ti-map-pin me-1"></i> Mahalle Kartı
+                    </div>
+                </div>
+                <div class="card-body">
+
+                    <!-- Arama Kriterleri -->
+                    <div class="row mb-4">
+                        <div class="col-xl-4">
+                            <p:outputLabel value="İlçe" for="@next" style="font-weight:600"/>
+                            <p:selectOneMenu id="gnlIlce"
+                                             value="#{mahalleKartiController.gnlIlce}"
+                                             filter="true" filterMatchMode="contains"
+                                             converter="omnifaces.SelectItemsConverter"
+                                             style="width:100%">
+                                <f:selectItem itemLabel="-- İlçe Seçiniz --" itemValue="#{null}"/>
+                                <f:selectItems value="#{gnlIlceController.getIlceByIl()}"
+                                               var="ilce"
+                                               itemValue="#{ilce}"
+                                               itemLabel="#{ilce.tanim}"/>
+                                <p:ajax event="change" update="gnlMahalle,:growl"/>
+                            </p:selectOneMenu>
+                        </div>
+                        <div class="col-xl-4">
+                            <p:outputLabel value="Mahalle" for="@next" style="font-weight:600"/>
+                            <p:selectOneMenu id="gnlMahalle"
+                                             value="#{mahalleKartiController.gnlMahalle}"
+                                             filter="true" filterMatchMode="contains"
+                                             converter="omnifaces.SelectItemsConverter"
+                                             style="width:100%">
+                                <f:selectItem itemLabel="-- Mahalle Seçiniz --" itemValue="#{null}"/>
+                                <f:selectItems
+                                        value="#{gnlMahalleController.getMahalleByIlce(mahalleKartiController.gnlIlce)}"
+                                        var="mah"
+                                        itemValue="#{mah}"
+                                        itemLabel="#{mah.tanim}"/>
+                            </p:selectOneMenu>
+                        </div>
+                        <div class="col-xl-2 d-flex align-items-end">
+                            <p:commandButton value="Getir" icon="pi pi-search"
+                                             styleClass="btn btn-primary"
+                                             actionListener="#{mahalleKartiController.mahalleKartiGetir()}"
+                                             update="mahalleKartiPanel,:growl"
+                                             process="@this gnlMahalle"
+                                             onstart="PF('Loading').show()"
+                                             onsuccess="PF('Loading').hide()"/>
+                        </div>
+                    </div>
+
+                    <!-- Sonuç Paneli -->
+                    <h:panelGroup id="mahalleKartiPanel">
+                        <ui:fragment rendered="#{mahalleKartiController.yuklendi}">
+
+                            <!-- Mahalle Başlık -->
+                            <div class="row mb-3">
+                                <div class="col-12">
+                                    <div class="alert alert-info fw-semibold mb-0">
+                                        <i class="ti ti-map-pin me-1"></i>
+                                        #{mahalleKartiController.gnlMahalle.tanim} Mahalle Kartı
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- KPI Kartları Satır 1 -->
+                            <div class="row mb-3">
+                                <div class="col-xl-3 col-lg-6">
+                                    <div class="card custom-card border border-primary">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center flex-wrap gap-3">
+                                                <div class="avatar avatar-lg bg-primary-transparent">
+                                                    <i class="ti ti-disabled fs-25"></i>
+                                                </div>
+                                                <div class="flex-fill">
+                                                    <h3 class="fw-semibold mb-1">
+                                                        <h:outputText
+                                                                value="#{mahalleKartiController.mahalleKartiDTO.toplamEngelli}">
+                                                            <f:convertNumber type="number"/>
+                                                        </h:outputText>
+                                                    </h3>
+                                                    <span class="text-muted">Toplam Engelli</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-lg-6">
+                                    <div class="card custom-card border border-success">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center flex-wrap gap-3">
+                                                <div class="avatar avatar-lg bg-success-transparent">
+                                                    <i class="ti ti-disabled-2 fs-25"></i>
+                                                </div>
+                                                <div class="flex-fill">
+                                                    <h3 class="fw-semibold mb-1">
+                                                        <h:outputText
+                                                                value="#{mahalleKartiController.mahalleKartiDTO.aktifEngelli}">
+                                                            <f:convertNumber type="number"/>
+                                                        </h:outputText>
+                                                    </h3>
+                                                    <span class="text-muted">Yaşayan Kişi Sayısı</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-lg-6">
+                                    <div class="card custom-card border border-danger">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center flex-wrap gap-3">
+                                                <div class="avatar avatar-lg bg-danger-transparent">
+                                                    <i class="ti ti-heart-off fs-25"></i>
+                                                </div>
+                                                <div class="flex-fill">
+                                                    <h3 class="fw-semibold mb-1">
+                                                        <h:outputText
+                                                                value="#{mahalleKartiController.mahalleKartiDTO.olenEngelli}">
+                                                            <f:convertNumber type="number"/>
+                                                        </h:outputText>
+                                                    </h3>
+                                                    <span class="text-muted">Ölen Kişi Sayısı</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-lg-6">
+                                    <div class="card custom-card border border-warning">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center flex-wrap gap-3">
+                                                <div class="avatar avatar-lg bg-warning-transparent">
+                                                    <i class="ti ti-alert-triangle fs-25"></i>
+                                                </div>
+                                                <div class="flex-fill">
+                                                    <h3 class="fw-semibold mb-1">
+                                                        <h:outputText
+                                                                value="#{mahalleKartiController.mahalleKartiDTO.agirOzurluSayisi}">
+                                                            <f:convertNumber type="number"/>
+                                                        </h:outputText>
+                                                    </h3>
+                                                    <span class="text-muted">Ağır Özürlü Sayısı</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- KPI Kartları Satır 2 -->
+                            <div class="row mb-3">
+                                <div class="col-xl-3 col-lg-6">
+                                    <div class="card custom-card border border-info">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center flex-wrap gap-3">
+                                                <div class="avatar avatar-lg bg-info-transparent">
+                                                    <i class="ti ti-wheelchair fs-25"></i>
+                                                </div>
+                                                <div class="flex-fill">
+                                                    <h3 class="fw-semibold mb-1">
+                                                        <h:outputText
+                                                                value="#{mahalleKartiController.mahalleKartiDTO.toplamTamir}">
+                                                            <f:convertNumber type="number"/>
+                                                        </h:outputText>
+                                                    </h3>
+                                                    <span class="text-muted">Toplam Tamir Sayısı</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-lg-6">
+                                    <div class="card custom-card border border-purple">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center flex-wrap gap-3">
+                                                <div class="avatar avatar-lg bg-purple-transparent">
+                                                    <i class="ti ti-school fs-25"></i>
+                                                </div>
+                                                <div class="flex-fill">
+                                                    <h3 class="fw-semibold mb-1">
+                                                        <h:outputText
+                                                                value="#{mahalleKartiController.mahalleKartiDTO.kursiyerSayisi}">
+                                                            <f:convertNumber type="number"/>
+                                                        </h:outputText>
+                                                    </h3>
+                                                    <span class="text-muted">Kursiyer Sayısı</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-lg-6">
+                                    <div class="card custom-card border border-indigo">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center flex-wrap gap-3">
+                                                <div class="avatar avatar-lg bg-indigo-transparent">
+                                                    <i class="ti ti-checklist fs-25"></i>
+                                                </div>
+                                                <div class="flex-fill">
+                                                    <h3 class="fw-semibold mb-1">
+                                                        <h:outputText
+                                                                value="#{mahalleKartiController.mahalleKartiDTO.bekleyenTalep}">
+                                                            <f:convertNumber type="number"/>
+                                                        </h:outputText>
+                                                    </h3>
+                                                    <span class="text-muted">Bekleyen Talep</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-lg-6">
+                                    <div class="card custom-card border border-orange">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center flex-wrap gap-3">
+                                                <div class="avatar avatar-lg bg-orange-transparent">
+                                                    <i class="ti ti-gender-male fs-25"></i>
+                                                </div>
+                                                <div class="flex-fill">
+                                                    <h3 class="fw-semibold mb-1">
+                                                        <h:outputText
+                                                                value="#{mahalleKartiController.mahalleKartiDTO.erkekSayisi}">
+                                                            <f:convertNumber type="number"/>
+                                                        </h:outputText>
+                                                    </h3>
+                                                    <span class="text-muted">Erkek</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- KPI Kartları Satır 3 -->
+                            <div class="row mb-4">
+                                <div class="col-xl-3 col-lg-6">
+                                    <div class="card custom-card border border-pink">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center flex-wrap gap-3">
+                                                <div class="avatar avatar-lg bg-pink-transparent">
+                                                    <i class="ti ti-gender-female fs-25"></i>
+                                                </div>
+                                                <div class="flex-fill">
+                                                    <h3 class="fw-semibold mb-1">
+                                                        <h:outputText
+                                                                value="#{mahalleKartiController.mahalleKartiDTO.kadinSayisi}">
+                                                            <f:convertNumber type="number"/>
+                                                        </h:outputText>
+                                                    </h3>
+                                                    <span class="text-muted">Kadın</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Grafikler Satır 1 -->
+                            <div class="row mb-3">
+                                <div class="col-xl-4">
+                                    <div class="card border card-border-info card-height-100">
+                                        <div class="card-header align-items-center d-flex">
+                                            <h4 class="card-title mb-0 flex-grow-1">Cinsiyet Dağılımı</h4>
+                                        </div>
+                                        <div class="card-body p-0">
+                                            <ac:pie style="height: 350px;" widgetVar="mkCinsiyetPie"
+                                                    model="#{mahalleKartiController.cinsiyetPieModel}"
+                                                    x="value" y="label" theme="#{syKullanici.grafikTema.toString()}"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4">
+                                    <div class="card border card-border-info card-height-100">
+                                        <div class="card-header align-items-center d-flex">
+                                            <h4 class="card-title mb-0 flex-grow-1">Yaş Dağılımı</h4>
+                                        </div>
+                                        <div class="card-body p-0">
+                                            <ac:column3d style="height: 350px;" widgetVar="yasBar"
+                                                         model="#{mahalleKartiController.yasBarModel}"
+                                                         x="value" y="label" theme="#{syKullanici.grafikTema.toString()}"
+                                                         exportable="true"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4">
+                                    <div class="card border card-border-info card-height-100">
+                                        <div class="card-header align-items-center d-flex">
+                                            <h4 class="card-title mb-0 flex-grow-1">Engel Oranı Dağılımı</h4>
+                                        </div>
+                                        <div class="card-body p-0">
+                                            <ac:pie style="height: 350px;" widgetVar="engelOraniPie"
+                                                    model="#{mahalleKartiController.engelOraniPieModel}"
+                                                    x="value" y="label" theme="#{syKullanici.grafikTema.toString()}"
+                                                    exportable="true"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Grafikler Satır 2 -->
+                            <div class="row mb-3">
+                                <div class="col-xl-4">
+                                    <div class="card border card-border-info card-height-100">
+                                        <div class="card-header align-items-center d-flex">
+                                            <h4 class="card-title mb-0 flex-grow-1">Engel Grubu Dağılımı (İlk 5)</h4>
+                                        </div>
+                                        <div class="card-body p-0">
+                                            <ac:pie style="height: 350px;" widgetVar="engelGrubuPie"
+                                                    model="#{mahalleKartiController.engelGrubuPieModel}"
+                                                    x="value" y="label" theme="#{syKullanici.grafikTema.toString()}"
+                                                    exportable="true"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4">
+                                    <div class="card border card-border-info card-height-100">
+                                        <div class="card-header align-items-center d-flex">
+                                            <h4 class="card-title mb-0 flex-grow-1">Cihaz Teslim Dağılımı (İlk 5)</h4>
+                                        </div>
+                                        <div class="card-body p-0">
+                                            <ac:column3d style="height: 350px;" widgetVar="cihazBar"
+                                                         model="#{mahalleKartiController.cihazBarModel}"
+                                                         x="value" y="label" categoryLabelDegree="-60"
+                                                         theme="#{syKullanici.grafikTema.toString()}"
+                                                         exportable="true"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4">
+                                    <div class="card border card-border-info card-height-100">
+                                        <div class="card-header align-items-center d-flex">
+                                            <h4 class="card-title mb-0 flex-grow-1">Talep Durumu</h4>
+                                        </div>
+                                        <div class="card-body p-0">
+                                            <ac:pie style="height: 350px;" widgetVar="talepPie"
+                                                    model="#{mahalleKartiController.talepPieModel}"
+                                                    x="value" y="label" theme="#{syKullanici.grafikTema.toString()}"
+                                                    exportable="true"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Grafikler Satır 3 -->
+                            <div class="row mb-3">
+                                <div class="col-xl-4">
+                                    <div class="card border card-border-info card-height-100">
+                                        <div class="card-header align-items-center d-flex">
+                                            <h4 class="card-title mb-0 flex-grow-1">Eğitim Durumu (İlk 5)</h4>
+                                        </div>
+                                        <div class="card-body p-0">
+                                            <ac:pie style="height: 350px;" widgetVar="egitimPie"
+                                                    model="#{mahalleKartiController.egitimPieModel}"
+                                                    x="value" y="label" theme="#{syKullanici.grafikTema.toString()}"
+                                                    exportable="true"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4">
+                                    <div class="card border card-border-info card-height-100">
+                                        <div class="card-header align-items-center d-flex">
+                                            <h4 class="card-title mb-0 flex-grow-1">Medeni Durum</h4>
+                                        </div>
+                                        <div class="card-body p-0">
+                                            <ac:pie style="height: 350px;" widgetVar="medeniPie"
+                                                    model="#{mahalleKartiController.medeniPieModel}"
+                                                    x="value" y="label" theme="#{syKullanici.grafikTema.toString()}"
+                                                    exportable="true"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4">
+                                    <div class="card border card-border-info card-height-100">
+                                        <div class="card-header align-items-center d-flex">
+                                            <h4 class="card-title mb-0 flex-grow-1">Tamir Dağılımı</h4>
+                                        </div>
+                                        <div class="card-body p-0">
+                                            <ac:column3d style="height: 350px;" widgetVar="tamirBar"
+                                                         model="#{mahalleKartiController.tamirBarModel}"
+                                                         x="value" y="label" theme="#{syKullanici.grafikTema.toString()}"
+                                                         exportable="true"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ui:fragment>
+
+                        <!-- Veri Yok Uyarısı -->
+                        <ui:fragment rendered="#{mahalleKartiController.yuklendi == false}">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="alert alert-warning text-center">
+                                        <i class="ti ti-info-circle me-1"></i>
+                                        Lütfen bir mahalle seçip "Getir" butonuna basınız.
+                                    </div>
+                                </div>
+                            </div>
+                        </ui:fragment>
+                    </h:panelGroup>
+
+                </div>
+            </div>
+        </div>
+    </h:form>
+
+</ui:composition>
+
+</html>

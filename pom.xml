@@ -96,23 +96,23 @@
 
             <!-- Jakarta End -->
 
-<!--            <dependency>-->
-<!--                <groupId>org.eclipse.persistence</groupId>-->
-<!--                <artifactId>eclipselink</artifactId>-->
-<!--                <version>${eclipselink.version}</version>-->
-<!--            </dependency>-->
+            <!--            <dependency>-->
+            <!--                <groupId>org.eclipse.persistence</groupId>-->
+            <!--                <artifactId>eclipselink</artifactId>-->
+            <!--                <version>${eclipselink.version}</version>-->
+            <!--            </dependency>-->
 
-<!--            <dependency>-->
-<!--                <groupId>org.eclipse.persistence</groupId>-->
-<!--                <artifactId>org.eclipse.persistence.jpa.modelgen.processor</artifactId>-->
-<!--                <version>${eclipselink.version}</version>-->
-<!--            </dependency>-->
+            <!--            <dependency>-->
+            <!--                <groupId>org.eclipse.persistence</groupId>-->
+            <!--                <artifactId>org.eclipse.persistence.jpa.modelgen.processor</artifactId>-->
+            <!--                <version>${eclipselink.version}</version>-->
+            <!--            </dependency>-->
 
-<!--            <dependency>-->
-<!--                <groupId>org.locationtech.jts</groupId>-->
-<!--                <artifactId>jts-core</artifactId>-->
-<!--                <version>1.19.0</version>-->
-<!--            </dependency>-->
+            <!--            <dependency>-->
+            <!--                <groupId>org.locationtech.jts</groupId>-->
+            <!--                <artifactId>jts-core</artifactId>-->
+            <!--                <version>1.19.0</version>-->
+            <!--            </dependency>-->
 
             <dependency>
                 <groupId>org.hibernate.orm</groupId>
@@ -128,7 +128,7 @@
             </dependency>
             <!-- Spatial -->
 
-
+            <!-- PrimeFaces-->
             <dependency>
                 <groupId>org.primefaces</groupId>
                 <artifactId>primefaces</artifactId>
@@ -143,11 +143,11 @@
                 <version>${primefaces.version}</version>
             </dependency>
 
-<!--            <dependency>-->
-<!--                <groupId>org.webjars.npm</groupId>-->
-<!--                <artifactId>primeflex</artifactId>-->
-<!--                <version>4.0.0</version>-->
-<!--            </dependency>-->
+            <!--            <dependency>-->
+            <!--                <groupId>org.webjars.npm</groupId>-->
+            <!--                <artifactId>primeflex</artifactId>-->
+            <!--                <version>4.0.0</version>-->
+            <!--            </dependency>-->
 
             <!--PrimeFaces Text Editor-->
             <dependency>
@@ -168,6 +168,16 @@
                 <artifactId>resources-monacoeditor</artifactId>
                 <version>${primefaces.version}</version>
             </dependency>
+
+            <!-- Source: https://mvnrepository.com/artifact/software.xdev/chartjs-java-model -->
+            <dependency>
+                <groupId>software.xdev</groupId>
+                <artifactId>chartjs-java-model</artifactId>
+                <version>3.0.2</version>
+                <scope>compile</scope>
+            </dependency>
+            <!-- PrimeFaces-->
+
 
             <dependency>
                 <groupId>org.omnifaces</groupId>
@@ -319,11 +329,11 @@
             </dependency>
 
             <!-- https://mvnrepository.com/artifact/org.openpnp/opencv -->
-<!--            <dependency>-->
-<!--                <groupId>org.openpnp</groupId>-->
-<!--                <artifactId>opencv</artifactId>-->
-<!--                <version>4.9.0-0</version>-->
-<!--            </dependency>-->
+            <!--            <dependency>-->
+            <!--                <groupId>org.openpnp</groupId>-->
+            <!--                <artifactId>opencv</artifactId>-->
+            <!--                <version>4.9.0-0</version>-->
+            <!--            </dependency>-->
 
             <dependency>
                 <groupId>io.jsonwebtoken</groupId>
@@ -364,8 +374,8 @@
 
             <dependency>
                 <groupId>com.kurtomerfaruk</groupId>
-                <artifactId>AmChartFaces</artifactId>
-                <version>1.0.0</version>
+                <artifactId>amchartfaces</artifactId>
+                <version>2.0.0</version>
             </dependency>
 
         </dependencies>

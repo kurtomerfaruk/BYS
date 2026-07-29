@@ -21,6 +21,12 @@
                         </li>
                         <li class="nav-item m-1">
                             <a class="nav-link" data-bs-toggle="tab" role="tab" aria-current="page"
+                               href="#theme-info" aria-selected="true">
+                                Tema
+                            </a>
+                        </li>
+                        <li class="nav-item m-1">
+                            <a class="nav-link" data-bs-toggle="tab" role="tab" aria-current="page"
                                href="#password-change" aria-selected="true">
                                 Parola Güncelle
                             </a>
@@ -102,6 +108,44 @@
                                             <p:commandButton value="#{messages.buttonGuncelle}" icon="pi pi-check"
                                                              styleClass="ui-button-success float-end" update="@form"/>
                                         </div>
+                                    </div>
+                                </div>
+                            </h:form>
+                        </div>
+                        <div class="tab-pane" id="theme-info" role="tabpanel">
+                            <p:importConstants type="tr.bel.gaziantep.bysweb.core.utils.Constants" var="sabit"/>
+                            <h:form prependId="false">
+                                <div class="p-sm-3 p-0">
+                                    <h6 class="fw-medium mb-3">
+                                        Tema
+                                    </h6>
+                                    <div class="row gy-4 mb-4">
+                                        <div class="col-xl-6">
+                                            <p:outputLabel value="#{messages.temaLabel}" for="@next"/>
+                                            <p:selectOneMenu id="tema" value="#{loginController.syKullanici.tema}" required="true" filter="true">
+                                                <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+                                                <f:selectItems value="#{sabit.THEMES.entrySet()}" var="entry"
+                                                               itemValue="#{entry.key}" itemLabel="#{entry.value}" />
+                                                <p:ajax process="@this" oncomplete="PrimeFaces.changeTheme($('#tema_input').find(':selected').val());"/>
+                                            </p:selectOneMenu>
+                                        </div>
+                                        <div class="col-xl-6">
+                                            <p:outputLabel value="#{messages.temaLabel}" for="@next"/>
+                                            <p:selectOneMenu id="grafikTema" value="#{loginController.syKullanici.grafikTema}" required="true" filter="true">
+                                                <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+                                                <f:selectItems value="#{sabit.GRAPHIC_THEMES.entrySet()}" var="entry"
+                                                               itemValue="#{entry.key}" itemLabel="#{entry.value}" />
+                                            </p:selectOneMenu>
+                                        </div>
+
+                                        <div class="col-xl-12">
+                                            <p:commandButton icon="pi pi-check" styleClass="ui-button-success"
+                                                             actionListener="#{loginController.saveTheme}"
+                                                             value="#{messages.buttonKaydet}"
+                                                             update=":growl,@form"
+                                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                                        </div>
+
                                     </div>
                                 </div>
                             </h:form>
