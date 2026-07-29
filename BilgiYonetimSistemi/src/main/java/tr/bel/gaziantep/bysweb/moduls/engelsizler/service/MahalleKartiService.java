@@ -33,6 +33,7 @@ public class MahalleKartiService implements java.io.Serializable {
         dto.setAktifEngelli(getAktifEngelli(mahalle));
         dto.setOlenEngelli(getOlenEngelli(mahalle));
         dto.setAgirOzurluSayisi(getAgirOzurluSayisi(mahalle));
+        dto.setToplamCihazTeslimi(getToplamCihazTeslimi(mahalle));
         dto.setToplamTamir(getToplamTamir(mahalle));
         dto.setKursiyerSayisi(getKursiyerSayisi(mahalle));
         dto.setErkekSayisi(getCinsiyetSayisi(mahalle, "ERKEK"));
@@ -110,6 +111,12 @@ public class MahalleKartiService implements java.io.Serializable {
         return count.intValue();
     }
 
+    private int getToplamCihazTeslimi(GnlMahalle mahalle) {
+        Long count = em.createQuery(
+                "SELECT COUNT(t) FROM EyAracCihazTeslimi t WHERE t.aktif=true AND t.eyKisi.gnlKisi.gnlMahalle=:mahalle",
+                Long.class).setParameter("mahalle", mahalle).getSingleResult();
+        return count.intValue();
+    }
     private int getToplamTamir(GnlMahalle mahalle) {
         Long count = em.createQuery(
                 "SELECT COUNT(t) FROM EyAracTamir t WHERE t.aktif=true AND t.eyKisi.gnlKisi.gnlMahalle=:mahalle",

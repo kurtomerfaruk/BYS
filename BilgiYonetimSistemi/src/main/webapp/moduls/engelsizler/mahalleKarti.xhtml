@@ -173,6 +173,26 @@
                                                 <div class="flex-fill">
                                                     <h3 class="fw-semibold mb-1">
                                                         <h:outputText
+                                                                value="#{mahalleKartiController.mahalleKartiDTO.toplamCihazTeslimi}">
+                                                            <f:convertNumber type="number"/>
+                                                        </h:outputText>
+                                                    </h3>
+                                                    <span class="text-muted">Toplam Cihaz Teslimi</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-lg-6">
+                                    <div class="card custom-card border border-info">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center flex-wrap gap-3">
+                                                <div class="avatar avatar-lg bg-info-transparent">
+                                                    <i class="ti ti-wheelchair fs-25"></i>
+                                                </div>
+                                                <div class="flex-fill">
+                                                    <h3 class="fw-semibold mb-1">
+                                                        <h:outputText
                                                                 value="#{mahalleKartiController.mahalleKartiDTO.toplamTamir}">
                                                             <f:convertNumber type="number"/>
                                                         </h:outputText>
@@ -223,6 +243,11 @@
                                         </div>
                                     </div>
                                 </div>
+
+                            </div>
+
+                            <!-- KPI Kartları Satır 3 -->
+                            <div class="row mb-4">
                                 <div class="col-xl-3 col-lg-6">
                                     <div class="card custom-card border border-orange">
                                         <div class="card-body">
@@ -243,10 +268,6 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-
-                            <!-- KPI Kartları Satır 3 -->
-                            <div class="row mb-4">
                                 <div class="col-xl-3 col-lg-6">
                                     <div class="card custom-card border border-pink">
                                         <div class="card-body">
@@ -272,7 +293,7 @@
                             <!-- Grafikler Satır 1 -->
                             <div class="row mb-3">
                                 <div class="col-xl-4">
-                                    <div class="card border card-border-info card-height-100">
+                                    <div class="card custom-card border border-primary card-height-100">
                                         <div class="card-header align-items-center d-flex">
                                             <h4 class="card-title mb-0 flex-grow-1">Cinsiyet Dağılımı</h4>
                                         </div>
@@ -284,7 +305,7 @@
                                     </div>
                                 </div>
                                 <div class="col-xl-4">
-                                    <div class="card border card-border-info card-height-100">
+                                    <div class="card custom-card border border-primary card-height-100">
                                         <div class="card-header align-items-center d-flex">
                                             <h4 class="card-title mb-0 flex-grow-1">Yaş Dağılımı</h4>
                                         </div>
@@ -297,7 +318,7 @@
                                     </div>
                                 </div>
                                 <div class="col-xl-4">
-                                    <div class="card border card-border-info card-height-100">
+                                    <div class="card custom-card border border-primary card-height-100">
                                         <div class="card-header align-items-center d-flex">
                                             <h4 class="card-title mb-0 flex-grow-1">Engel Oranı Dağılımı</h4>
                                         </div>
@@ -314,7 +335,7 @@
                             <!-- Grafikler Satır 2 -->
                             <div class="row mb-3">
                                 <div class="col-xl-4">
-                                    <div class="card border card-border-info card-height-100">
+                                    <div class="card custom-card border border-primary card-height-100">
                                         <div class="card-header align-items-center d-flex">
                                             <h4 class="card-title mb-0 flex-grow-1">Engel Grubu Dağılımı (İlk 5)</h4>
                                         </div>
@@ -327,21 +348,21 @@
                                     </div>
                                 </div>
                                 <div class="col-xl-4">
-                                    <div class="card border card-border-info card-height-100">
+                                    <div class="card custom-card border border-primary card-height-100">
                                         <div class="card-header align-items-center d-flex">
                                             <h4 class="card-title mb-0 flex-grow-1">Cihaz Teslim Dağılımı (İlk 5)</h4>
                                         </div>
                                         <div class="card-body p-0">
                                             <ac:column3d style="height: 350px;" widgetVar="cihazBar"
                                                          model="#{mahalleKartiController.cihazBarModel}"
-                                                         x="value" y="label" categoryLabelDegree="-60"
+                                                         x="value" y="label" categoryLabelDegree="-70"
                                                          theme="#{syKullanici.grafikTema.toString()}"
                                                          exportable="true"/>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-xl-4">
-                                    <div class="card border card-border-info card-height-100">
+                                    <div class="card custom-card border border-primary card-height-100">
                                         <div class="card-header align-items-center d-flex">
                                             <h4 class="card-title mb-0 flex-grow-1">Talep Durumu</h4>
                                         </div>
@@ -358,7 +379,7 @@
                             <!-- Grafikler Satır 3 -->
                             <div class="row mb-3">
                                 <div class="col-xl-4">
-                                    <div class="card border card-border-info card-height-100">
+                                    <div class="card custom-card border border-primary card-height-100">
                                         <div class="card-header align-items-center d-flex">
                                             <h4 class="card-title mb-0 flex-grow-1">Eğitim Durumu (İlk 5)</h4>
                                         </div>
@@ -371,7 +392,7 @@
                                     </div>
                                 </div>
                                 <div class="col-xl-4">
-                                    <div class="card border card-border-info card-height-100">
+                                    <div class="card custom-card border border-primary card-height-100">
                                         <div class="card-header align-items-center d-flex">
                                             <h4 class="card-title mb-0 flex-grow-1">Medeni Durum</h4>
                                         </div>
@@ -384,7 +405,7 @@
                                     </div>
                                 </div>
                                 <div class="col-xl-4">
-                                    <div class="card border card-border-info card-height-100">
+                                    <div class="card custom-card border border-primary card-height-100">
                                         <div class="card-header align-items-center d-flex">
                                             <h4 class="card-title mb-0 flex-grow-1">Tamir Dağılımı</h4>
                                         </div>

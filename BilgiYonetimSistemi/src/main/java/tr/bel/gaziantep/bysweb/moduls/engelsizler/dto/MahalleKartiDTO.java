@@ -28,6 +28,7 @@ public class MahalleKartiDTO implements Serializable {
     private int kadinSayisi;
     private int agirOzurluSayisi;
     private int toplamTamir;
+    private int toplamCihazTeslimi;
     private int kursiyerSayisi;
     private int bekleyenTalep;
     private int tamamlananTalep;
