@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="primefaces">
+
+<h:body>
+
+    <h:form id="EyAnketGuncellemeRaporuYazdirForm">
+        <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.bys.EnumRaporTuru" var="enumRaporTuru"/>
+        <div class="row">
+            <div class="col-xxl-6">
+                <div class="card custom-card">
+                    <div class="card-header">
+                        <div class="card-title">
+                           Anket Güncelleme Raporu
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <div class="row">
+                            <div class="col-xxl-12">
+                                <div class="row mb-3 clearfix">
+                                    <div class="col-xxl-3">
+                                        <label for="tarih">#{messages.tarihLabel}</label>
+                                    </div>
+                                    <div class="col-xxl-9">
+                                        <div class="form-group">
+                                            <h:panelGroup id="tarih">
+                                                <p:datePicker locale="tr" pattern="#{messages.tarihFormat}"
+                                                              selectionMode="range"
+                                                              value="#{eyAnketGuncellemePrint.tarih}" mask="true"
+                                                              monthNavigator="true" yearNavigator="true" showButtonBar="true" showIcon="true"
+                                                              showOnFocus="false" required="true"/>
+                                            </h:panelGroup>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3 clearfix">
+                                    <div class="col-xxl-3">
+                                        <label for="raporTuruYas">#{messages.raporTuruLabel}</label>
+                                    </div>
+                                    <div class="col-xxl-9">
+                                        <div class="form-group">
+                                            <p:selectOneMenu id="raporTuruYas"
+                                                             value="#{eyAnketGuncellemePrint.raporTuru}"
+                                                             required="true">
+                                                <f:selectItems value="#{enumRaporTuru.ALL_VALUES}"
+                                                               var="raporTurs"
+                                                               itemValue="#{raporTurs}"
+                                                               itemLabel="#{raporTurs.displayValue}"/>
+                                                <p:ajax event="change" update="raporButton"/>
+                                            </p:selectOneMenu>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="card-footer border-top-0">
+                        <div class="px-4 py-3 border-top border-block-start-dashed d-sm-flex justify-content-start float-end">
+                            <p:commandButton id="raporButton"
+                                             icon="pi pi-print"
+                                             class="btn btn-primary"
+                                             update=":growl,@form,:PrintForm"
+                                             actionListener="#{eyAnketGuncellemePrint.print()}"
+                                             value="#{messages.buttonRaporla}"
+                                             ajax="#{eyAnketGuncellemePrint.raporTuru eq 'PDF' or eyAnketGuncellemePrint.raporTuru eq '' or
+                                                         eyAnketGuncellemePrint.raporTuru eq null}"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </h:form>
+    <ui:include src="/print/Print.xhtml"/>
+</h:body>
+</html>
+

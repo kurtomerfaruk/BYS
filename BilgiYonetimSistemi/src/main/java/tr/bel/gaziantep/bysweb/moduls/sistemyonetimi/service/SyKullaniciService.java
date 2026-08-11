@@ -39,7 +39,7 @@ public class SyKullaniciService extends AbstractService<SyKullanici> {
     }
 
     public SyKullanici findByKullaniciAdiByParola(String kullaniciAdi, String parola) {
-        return (SyKullanici) getEntityManager().createNamedQuery("SyKullanici.findByKullaniciAdiByParola")
+        return  getEntityManager().createNamedQuery("SyKullanici.findByKullaniciAdiByParola",SyKullanici.class)
                 .setParameter("kullaniciAdi", kullaniciAdi)
                 .setParameter("parola", Function.encrypt(parola))
                 .getResultList()
@@ -49,7 +49,7 @@ public class SyKullaniciService extends AbstractService<SyKullanici> {
     }
 
     public SyKullanici findByKullaniciAdi(String kullaniciAdi) {
-        return (SyKullanici) getEntityManager().createNamedQuery("SyKullanici.findByKullaniciAdi")
+        return getEntityManager().createNamedQuery("SyKullanici.findByKullaniciAdi",SyKullanici.class)
                 .setParameter("kullaniciAdi", kullaniciAdi)
                 .getResultList()
                 .stream()
@@ -105,6 +105,10 @@ public class SyKullaniciService extends AbstractService<SyKullanici> {
 
 
     public List<SyKullanici> findByKilitli() {
-        return getEntityManager().createNamedQuery("SyKullanici.findByKilitli").getResultList();
+        return getEntityManager().createNamedQuery("SyKullanici.findByKilitli",SyKullanici.class).getResultList();
+    }
+
+    public List<SyKullanici> findByParolaDegistirilsin() {
+        return getEntityManager().createNamedQuery("SyKullanici.findByParolaDegistirilsin",SyKullanici.class).getResultList();
     }
 }

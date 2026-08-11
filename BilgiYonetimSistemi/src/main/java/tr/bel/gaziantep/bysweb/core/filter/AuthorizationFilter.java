@@ -33,8 +33,11 @@ public class AuthorizationFilter implements Filter {
         boolean resourceRequest = Servlets.isFacesResourceRequest(req);
         boolean flushRequest = req.getRequestURI().equals(flushURI);
         boolean captchaRequest = req.getRequestURI().equals(captchaURI);
-        boolean surveyRequest = req.getRequestURI().equals(surveyURI);
+        boolean surveyRequest = req.getRequestURI().contains(surveyURI);
         boolean apiRequest = req.getRequestURI().contains(apiURI);
+        String sifreDegistirURI = req.getContextPath() + "/sifreDegistir";
+        boolean sifreDegistirRequest = req.getRequestURI().equals(sifreDegistirURI) || req.getRequestURI().equals(sifreDegistirURI + ".xhtml");
+        boolean parolaDegistirilmesiGerekli = loggedIn && Boolean.TRUE.equals(session.getAttribute(tr.bel.gaziantep.bysweb.core.utils.Constants.PAROLA_DEGISTIRILMESI_GEREKLI));
 
         if (flushRequest) {
             chain.doFilter(req, response);
@@ -58,7 +61,9 @@ public class AuthorizationFilter implements Filter {
 
         if (loggedIn || loginRequest || resourceRequest) {
             if (loggedIn && loginRequest) {
-                res.sendRedirect(req.getContextPath() + "/index");
+                res.sendRedirect(parolaDegistirilmesiGerekli ? sifreDegistirURI : req.getContextPath() + "/index");
+            } else if (loggedIn && parolaDegistirilmesiGerekli && !sifreDegistirRequest && !resourceRequest) {
+                res.sendRedirect(sifreDegistirURI);
             } else {
                 chain.doFilter(req, response);
             }

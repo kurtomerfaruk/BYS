@@ -13,7 +13,6 @@ import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
 import net.sf.jasperreports.export.SimpleExporterInput;
 import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
 import net.sf.jasperreports.export.SimplePrintServiceExporterConfiguration;
-import net.sf.jasperreports.poi.export.JRXlsExporter;
 
 import javax.print.PrintService;
 import javax.print.PrintServiceLookup;
@@ -89,7 +88,7 @@ public class ReportConfigUtil implements java.io.Serializable{
 
     public static void exportReportAsExcel(JasperPrint jasperPrint, String fileName) throws JRException, IOException {
         HttpServletResponse httpServletResponse = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-        httpServletResponse.addHeader("Content-disposition", "attachment; filename=" + fileName + ".xls");
+        httpServletResponse.addHeader("Content-disposition", "attachment; filename=" + fileName + ".xlsx");
         ServletOutputStream servletOutputStream = httpServletResponse.getOutputStream();
         JRXlsxExporter xlsxExporter = new JRXlsxExporter();
         xlsxExporter.setExporterInput(new SimpleExporterInput(jasperPrint));

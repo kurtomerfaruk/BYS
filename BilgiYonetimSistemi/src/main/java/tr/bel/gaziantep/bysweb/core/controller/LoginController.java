@@ -183,7 +183,10 @@ public class LoginController implements java.io.Serializable {
                 pushContext.send(new FacesMessage(message), kullaniciIds);
                 String param = Util.getParameter("surveyLogin");
                 ExternalContext externalContext = Util.getExternalContext();
-                if (StringUtil.isBlank(param)) {
+                if (syKullanici.isParolaDegistirilsin()) {
+                    session.setAttribute(Constants.PAROLA_DEGISTIRILMESI_GEREKLI, Boolean.TRUE);
+                    externalContext.redirect("sifreDegistir.xhtml");
+                } else if (StringUtil.isBlank(param)) {
                     externalContext.redirect("index.xhtml");
                 } else {
                     String viewId = FacesContext.getCurrentInstance().getViewRoot().getViewId();
@@ -210,6 +213,14 @@ public class LoginController implements java.io.Serializable {
     }
 
     public void logout() {
+        if (syKullanici != null && syKullanici.isParolaDegistirilsin()) {
+            try {
+                syKullanici.setKilitli(true);
+                syKullaniciService.edit(syKullanici);
+            } catch (Exception ex) {
+                log.error("Şifresini değiştirmeyen kullanıcı kilitlenirken hata oluştu.", ex);
+            }
+        }
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         try {
             initApp.getSyKullanicis().remove(syKullanici);

@@ -1,13 +1,14 @@
 package tr.bel.gaziantep.bysweb.core.schedule;
 
+import jakarta.ejb.Schedule;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
-import tr.bel.gaziantep.bysweb.core.utils.DateUtil;
 import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.entity.SyKullanici;
 import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.service.SyKullaniciService;
 
 import java.io.Serial;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -25,19 +26,21 @@ public class PasswordCheckTimerBean implements java.io.Serializable {
     @Inject
     private SyKullaniciService syKullaniciService;
 
-//    @Schedule(minute = "0", second = "0", dayOfMonth = "*", month = "*", year = "*", hour = "7", dayOfWeek = "Mon-Fri", persistent = false)
-    public void checkPassword() {
+    @Schedule(minute = "*/10", hour = "*", persistent = false)
+    public void checkPasswordChange() {
         try {
-            List<SyKullanici> syKullanicis = syKullaniciService.findByKilitli();
+            List<SyKullanici> syKullanicis = syKullaniciService.findByParolaDegistirilsin();
             for (SyKullanici syKullanici : syKullanicis) {
-                LocalDateTime lastLoginTime = syKullanici.getSonGirisZamani() == null ? syKullanici.getEklemeTarihi() : syKullanici.getSonGirisZamani();
-                long days = DateUtil.dateDifferenceDays(lastLoginTime.toLocalDate());
-                if (days > 29) {
-                    syKullanici.setKilitli(true);
-                    syKullaniciService.edit(syKullanici);
+                LocalDateTime lastLoginTime = syKullanici.getSonGirisZamani();
+                if (lastLoginTime != null) {
+                    long days = Duration.between(lastLoginTime, LocalDateTime.now()).toDays();
+                    if (days >= 1) {
+                        syKullanici.setKilitli(true);
+                        syKullaniciService.edit(syKullanici);
+                    }
                 }
             }
-            log.info("User checked time : "+LocalDateTime.now());
+            log.info("Password change control done : " + LocalDateTime.now());
         } catch (Exception e) {
             log.error(e.getMessage());
         }

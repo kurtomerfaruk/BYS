@@ -11,8 +11,10 @@ import tr.bel.gaziantep.bysweb.core.enums.genel.*;
 import tr.bel.gaziantep.bysweb.core.service.AbstractService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.core.utils.DateUtil;
+import tr.bel.gaziantep.bysweb.core.utils.Util;
 import tr.bel.gaziantep.bysweb.moduls.engelsizler.entity.*;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.*;
+import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.entity.SyKullanici;
 import tr.bel.gaziantep.bysweb.webservice.api.dto.PageResponse;
 import tr.bel.gaziantep.bysweb.webservice.api.dto.engelsiz.EyCihazTeslimiDTO;
 import tr.bel.gaziantep.bysweb.webservice.api.dto.engelsiz.EyKisiDTO;
@@ -97,6 +99,9 @@ public class EyKisiService extends AbstractService<EyKisi> {
         if (eyKisi.getAnketDurumu().equals(EnumEyAnketDurumu.ANKET_YAPILDI) || eyKisi.getAnketDurumu().equals(EnumEyAnketDurumu.ANKET_YAPILMADI)) {
             eyKisi.setAnketBaslangicTarihi(LocalDateTime.now());
             eyKisi.setAnketBitisTarihi(LocalDateTime.now());
+            SyKullanici kullanici = Util.getSyKullanici();
+            assert kullanici != null;
+            eyKisi.setAnketiYapanGnlpersonel(kullanici.getGnlPersonel());
         }
         edit(eyKisi);
     }

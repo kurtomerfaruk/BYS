@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      dir="ltr"
+      lang="tr"
+      data-nav-layout="vertical" data-vertical-style="overlay" data-theme-mode="light" data-header-styles="light"
+      data-menu-styles="light"
+      data-toggled="close">
+<h:head>
+    <meta charset="UTF-8"/>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport"/>
+
+    <f:facet name="first">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <meta name="viewport"
+              content="user-scalable=no,
+                  width=device-width,
+                  initial-scale=1.0,
+                  maximum-scale=1.0"/>
+    </f:facet>
+
+    <title>#{messages.sifreDegistirTitle}</title>
+
+    <link rel="icon" href="assets/images/brand-logos/favicon.ico" type="image/x-icon"/>
+
+    <h:outputStylesheet library="libs" name="bootstrap/css/bootstrap.min.css"/>
+    <h:outputStylesheet library="css" name="styles.css"/>
+    <h:outputStylesheet library="icon-fonts" name="icons.css"/>
+    <h:outputStylesheet library="css" name="pfcrud.css"/>
+</h:head>
+<h:body class="authenticationcover-background bg-primary-transparent position-relative" id="particles-js">
+    <h:form prependId="false">
+        <p:growl id="growlSifreDegistir" life="4000"/>
+
+        <div class="d-flex align-items-center justify-content-center authentication">
+            <div class="col-xl-4 col-md-6 col-11">
+                <div class="row authentication-cover-main mx-0 border rounded bg-white">
+                    <div class="col-12 px-0">
+                        <div class="card custom-card shadow-none my-auto">
+                            <div class="card-body p-5">
+                                <div class="text-center">
+                                    <h:graphicImage library="images" name="gbb_logo.png" alt=""
+                                                    styleClass="authentication-brand mb-3"
+                                                    style="max-height: 60px;"/>
+                                </div>
+                                <p class="h4 fw-semibold mb-0 text-center">#{messages.sifreDegistirTitle}</p>
+                                <p class="mb-3 text-muted fw-normal text-center">#{messages.sifreDegistirZorunlu}</p>
+                                <div class="alert alert-warning" role="alert">
+                                    #{messages.sifreDegistirUyari}
+                                </div>
+                                <div class="row gy-3">
+                                    <div class="col-xl-12">
+                                        <label class="form-label text-default"
+                                               for="currentPassword">#{messages.eskiParolaLabel}</label>
+                                        <div class="position-relative">
+                                            <p:password id="currentPassword"
+                                                        value="#{syKullaniciController.currentPassword}"
+                                                        title="#{messages.eskiParolaText}"
+                                                        required="true"
+                                                        styleClass="form-control"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-12">
+                                        <label class="form-label text-default"
+                                               for="newPassword">#{messages.yeniParolaLabel}</label>
+                                        <div class="position-relative">
+                                            <p:password id="newPassword"
+                                                        value="#{syKullaniciController.newPassword}"
+                                                        title="#{messages.yeniParolaText}"
+                                                        label="#{messages.yeniParolaText}"
+                                                        required="true"
+                                                        feedback="true"
+                                                        promptLabel="#{messages.lutfenSifreGiriniz}"
+                                                        weakLabel="#{messages.zayif}"
+                                                        goodLabel="#{messages.ortaSeviye}"
+                                                        strongLabel="#{messages.guclu}"
+                                                        styleClass="form-control parola"
+                                                        match="newPasswordRepeat">
+                                                <f:validateBean>
+                                                    <f:attribute name="jakarta.faces.validator" value="true"/>
+                                                </f:validateBean>
+                                            </p:password>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-12">
+                                        <label class="form-label text-default"
+                                               for="newPasswordRepeat">#{messages.yeniParolaTekrarLabel}</label>
+                                        <div class="position-relative">
+                                            <p:password id="newPasswordRepeat"
+                                                        value="#{syKullaniciController.newPasswordRepeat}"
+                                                        title="#{messages.yeniParolaText}"
+                                                        label="#{messages.yeniParolaText}"
+                                                        required="true"
+                                                        feedback="true"
+                                                        promptLabel="#{messages.lutfenSifreGiriniz}"
+                                                        weakLabel="#{messages.zayif}"
+                                                        goodLabel="#{messages.ortaSeviye}"
+                                                        strongLabel="#{messages.guclu}"
+                                                        styleClass="form-control parola"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-grid mt-4 mb-2">
+                                    <p:commandButton id="parolaKaydet" ajax="false"
+                                                     styleClass="btn btn-primary btn-lg"
+                                                     value="#{messages.buttonParolaKaydet}"
+                                                     action="#{syKullaniciController.forcedPasswordUpdate}"/>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <div class="flex-grow-1">
+                                        <h6 class="fs-12 mb-0 fw-semibold">#{syKullaniciController.syKullanici.kullaniciAdi}</h6>
+                                    </div>
+                                    <div class="min-w-fit-content">
+                                        <p:commandLink ajax="false"
+                                                       styleClass="text-danger"
+                                                       actionListener="#{loginController.logout()}">
+                                            <h:outputText value="#{messages.buttonCikisYap}"/>
+                                        </p:commandLink>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </h:form>
+
+    <h:outputScript library="primefaces" name="jquery/jquery.js"/>
+    <h:outputScript library="libs" name="bootstrap/js/bootstrap.bundle.min.js"/>
+    <h:outputScript library="js" name="pfcrud.js"/>
+</h:body>
+</html>

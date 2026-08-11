@@ -29,6 +29,7 @@ import java.util.List;
 @NamedQuery(name = "SyKullanici.findByKullaniciAdiByParola", query = "SELECT s FROM SyKullanici s WHERE s.kullaniciAdi=:kullaniciAdi AND s.parola=:parola")
 @NamedQuery(name = "SyKullanici.findByKullaniciAdi", query = "SELECT s FROM SyKullanici s WHERE s.kullaniciAdi=:kullaniciAdi")
 @NamedQuery(name = "SyKullanici.findByKilitli", query = "SELECT s FROM SyKullanici s WHERE s.aktif=true AND s.kilitli=false")
+@NamedQuery(name = "SyKullanici.findByParolaDegistirilsin", query = "SELECT s FROM SyKullanici s WHERE s.aktif=true AND s.kilitli=false AND s.parolaDegistirilsin=true")
 public class SyKullanici extends BaseEntityNoVersion {
     @Serial
     private static final long serialVersionUID = -9216898786963405162L;

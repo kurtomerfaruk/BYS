@@ -19,6 +19,7 @@ import tr.bel.gaziantep.bysweb.core.service.FilterOptionService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
 import tr.bel.gaziantep.bysweb.core.utils.Function;
+import tr.bel.gaziantep.bysweb.core.utils.Util;
 import tr.bel.gaziantep.bysweb.core.validation.StrongPassword;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlPersonel;
@@ -254,12 +255,43 @@ public class SyKullaniciController extends AbstractController<SyKullanici> {
                     return;
                 }
                 this.getSyKullanici().setParola(Function.encrypt(newPassword));
+                this.getSyKullanici().setParolaDegistirilsin(false);
                 this.setSelected(this.getSyKullanici());
                 this.save(event);
                 currentPassword = "";
                 newPassword = "";
                 newPasswordRepeat = "";
             }
+        } catch (Exception ex) {
+            log.error(null, ex);
+            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+        }
+    }
+
+    public void forcedPasswordUpdate() {
+        if (this.getSyKullanici() == null) return;
+        try {
+            if (!this.getSyKullanici().getParola().equals(Function.encrypt(currentPassword))) {
+                FacesUtil.warningMessage("parolaHatali");
+                return;
+            }
+            if (!Function.isPasswordStrong(newPassword)) {
+                FacesUtil.warningMessage("gucluParolaKontrol");
+                return;
+            }
+            if (!newPassword.equals(newPasswordRepeat)) {
+                FacesUtil.warningMessage("parolaEslesmiyor");
+                return;
+            }
+            this.getSyKullanici().setParola(Function.encrypt(newPassword));
+            this.getSyKullanici().setParolaDegistirilsin(false);
+            service.edit(this.getSyKullanici());
+            Util.getSession().removeAttribute(Constants.PAROLA_DEGISTIRILMESI_GEREKLI);
+            currentPassword = "";
+            newPassword = "";
+            newPasswordRepeat = "";
+            FacesUtil.successMessage(Constants.KAYIT_GUNCELLENDI);
+            Util.getExternalContext().redirect("index.xhtml");
         } catch (Exception ex) {
             log.error(null, ex);
             FacesUtil.errorMessage(Constants.HATA_OLUSTU);
