@@ -12,6 +12,7 @@ import org.primefaces.PrimeFaces;
 import tr.bel.gaziantep.bysweb.core.controller.AbstractReportController;
 import tr.bel.gaziantep.bysweb.core.enums.bys.EnumRaporTuru;
 import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlDurum;
+import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlEgitimDurumu;
 import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlTalepDurumu;
 import tr.bel.gaziantep.bysweb.core.utils.DateUtil;
 import tr.bel.gaziantep.bysweb.core.utils.Util;
@@ -52,6 +53,7 @@ public class EyTalepRaporuPrint extends AbstractReportController {
     private EnumGnlTalepDurumu talepDurumu;
     private EyEngelGrubu eyEngelGrubu;
     private EnumGnlDurum kisiDurum;
+    private EnumGnlEgitimDurumu egitimDurumu;
 
     @PostConstruct
     public void init() {
@@ -72,6 +74,7 @@ public class EyTalepRaporuPrint extends AbstractReportController {
             parameterMap.put("engelGrubuId", eyEngelGrubu == null ? -1 : eyEngelGrubu.getId());
             parameterMap.put("talepDurumu", talepDurumu == null ? "-1" : talepDurumu.name());
             parameterMap.put("kisiDurum", kisiDurum == null ? EnumGnlDurum.SAG.name() : kisiDurum.name());
+            parameterMap.put("egitimDurumu",egitimDurumu==null ? "-1" : egitimDurumu.name());
 
 
             if (raporTuru == EnumRaporTuru.PDF) {

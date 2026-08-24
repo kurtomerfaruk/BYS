@@ -13,6 +13,7 @@
         <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.bys.EnumRaporTuru" var="enumRaporTuru"/>
         <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlTalepDurumu" var="enumTalepDurum"/>
         <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlDurum" var="enumGnlDurum"/>
+        <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlEgitimDurumu" var="enumGnlEgitimDurum"/>
         <div class="row">
             <div class="col-xxl-6">
                 <div class="card custom-card">
@@ -162,6 +163,22 @@
                                     </div>
                                 </div>
 
+                                <div class="row mb-3 clearfix">
+                                    <div class="col-xxl-3">
+                                        <label for="kisiDurum">Eğitim Durumu</label>
+                                    </div>
+                                    <div class="col-xxl-9">
+                                        <div class="form-group">
+                                            <p:selectOneMenu id="egitimDurumu" value="#{eyTalepRaporuPrint.egitimDurumu}"
+                                                             converter="omnifaces.SelectItemsConverter">
+                                                <f:selectItems value="#{enumGnlEgitimDurum.ALL_VALUES}"
+                                                               var="egitims"
+                                                               itemValue="#{egitims}"
+                                                               itemLabel="#{egitims.displayValue}"/>
+                                            </p:selectOneMenu>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="row mb-3 clearfix">
                                     <div class="col-xxl-3">
                                         <label for="kisiDurum">Kişi Durum</label>
