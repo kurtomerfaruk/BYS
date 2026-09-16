@@ -27,7 +27,8 @@
             <p:divider/>
             <p:menuitem value="#{messages.buttonNvidenGuncelle}"
                         onclick="document.getElementById('EyKisiListForm:datalist:datalist:nviUpdateButton').click();"
-                        icon="pi pi-refresh" rendered="#{syKullaniciController.hasPermission('eykisi:nvidenGuncelle')}"/>
+                        icon="pi pi-refresh"
+                        rendered="#{syKullaniciController.hasPermission('eykisi:nvidenGuncelle')}"/>
             <p:divider/>
             <p:menuitem value="#{messages.buttonQrCodeOlustur}"
                         onclick="document.getElementById('EyKisiListForm:datalist:datalist:qrCodeButton').click();"
@@ -38,10 +39,11 @@
             <p:divider/>
             <p:menuitem value="#{messages.buttonListeyiGuncelle}"
                         onclick="document.getElementById('EyKisiListForm:datalist:datalist:updateListButton').click();"
-                        icon="pi pi-check"  rendered="#{syKullaniciController.hasPermission('eykisi:listeyiGuncelle')}"/>
+                        icon="pi pi-check" rendered="#{syKullaniciController.hasPermission('eykisi:listeyiGuncelle')}"/>
             <p:menuitem value="#{messages.buttonGaziKartVeriAl}"
                         onclick="document.getElementById('EyKisiListForm:datalist:datalist:gaziKartVeriAlButton').click();"
-                        icon="pi pi-check-circle" rendered="#{syKullaniciController.hasPermission('eykisi:gaziKarttanGuncelle')}"/>
+                        icon="pi pi-check-circle"
+                        rendered="#{syKullaniciController.hasPermission('eykisi:gaziKarttanGuncelle')}"/>
             <p:menuitem value="#{messages.buttonAdresGuncelle}"
                         onclick="document.getElementById('EyKisiListForm:datalist:datalist:addressUpdateButton').click();"
                         icon="pi pi-list" rendered="#{syKullaniciController.hasPermission('eykisi:adresGuncelle')}"/>
@@ -51,9 +53,9 @@
                         rowKey="#{item.id}"
                         selection="#{eyKisiController.selected}"
                         filtered="#{eyKisiController.filtered}"
-                        rowselect=":EyKisiListForm:datalist:datalist:createButton,:EyKisiListForm:datalist:datalist:viewButton,:EyKisiListForm:datalist:datalist:editButton,:EyKisiListForm:datalist:datalist:deleteButton,:EyKisiListForm:datalist:datalist:nviUpdateButton,:EyKisiListForm:datalist:datalist:qrCodeButton,:EyKisiListForm:datalist:datalist:printButton"
+                        rowselect=":EyKisiListForm:datalist:datalist:createButton,:EyKisiListForm:datalist:datalist:viewButton,:EyKisiListForm:datalist:datalist:editButton,:EyKisiListForm:datalist:datalist:deleteButton,:EyKisiListForm:datalist:datalist:moreActionsButton"
                         rowDblselect="document.getElementById('EyKisiListForm:datalist:datalist:editButton').click()"
-                        contextMenu=":EyKisiListForm:datalist:datalist:createButton :EyKisiListForm:datalist:datalist:viewButton :EyKisiListForm:datalist:datalist:editButton :EyKisiListForm:datalist:datalist:deleteButton :EyKisiListForm:datalist:datalist:nviUpdateButton :EyKisiListForm:datalist:datalist:qrCodeButton :EyKisiListForm:datalist:datalist:printButton"
+                        contextMenu=":EyKisiListForm:datalist:datalist:createButton :EyKisiListForm:datalist:datalist:viewButton :EyKisiListForm:datalist:datalist:editButton :EyKisiListForm:datalist:datalist:deleteButton :EyKisiListForm:datalist:datalist:moreActionsButton"
                         selectListener="#{eyKisiController.resetParents}"
                         controller="#{eyKisiController}"
                         header="#{messages.kisiListesi}">
@@ -91,33 +93,52 @@
                         <p:confirm header="#{messages.ConfirmationHeader}" message="#{messages.ConfirmDeleteMessage}"
                                    icon="pi pi-warning"/>
                     </p:commandButton>
-                    <p:commandButton id="nviUpdateButton" icon="pi pi-refresh" styleClass="ui-button-secondary"
-                                     pt:data-tooltip="#{messages.buttonNvidenGuncelle}" update="datalist,:growl"
-                                     actionListener="#{eyKisiController.nviUpdate}" disabled="#{empty eyKisiController.selected}"
-                                     onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
-                                     rendered="#{syKullaniciController.hasPermission('eykisi:nvidenGuncelle')}"/>
-                    <p:commandButton id="qrCodeButton" icon="pi pi-qrcode" styleClass="ui-button-success" pt:data-tooltip="#{messages.buttonQrCodeOlustur}"
-                                     update=":QrCodeForm,:growl"
-                                     actionListener="#{eyKisiController.createQRCode()}" disabled="#{empty eyKisiController.selected}"
-                                     onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
-                                     rendered="#{syKullaniciController.hasPermission('eykisi:qrOlustur')}"/>
-                    <p:commandButton id="printButton" icon="pi pi-print" styleClass="ui-button-info" pt:data-tooltip="#{messages.buttonYazdir}"
-                                     update=":PrintForm,:growl"
-                                     actionListener="#{eyKisiPrint.print(eyKisiController.selected.id)}" disabled="#{empty eyKisiController.selected}"
-                                     onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
-                                     rendered="#{syKullaniciController.hasPermission('eykisi:yazdir')}"/>
-                    <p:commandButton id="updateListButton" icon="pi pi-check" styleClass="ui-button-warning" pt:data-tooltip="#{messages.buttonListeyiGuncelle}"
-                                     update=":ListeGuncelleForm" oncomplete="PF('ListeGuncelleDialog').show()" onstart="PF('Loading').show()"
-                                     onsuccess="PF('Loading').hide()"
-                                     rendered="#{syKullaniciController.hasPermission('eykisi:listeGuncelle')}"/>
-                    <p:commandButton id="gaziKartVeriAlButton" icon="pi pi-check-circle" styleClass="ui-button-secondary"
-                                     pt:data-tooltip="#{messages.buttonGaziKartVeriAl}" update=":TarihSecForm"
-                                     oncomplete="PF('TarihSecDialog').show()" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
-                                     rendered="#{syKullaniciController.hasPermission('eykisi:gaziKarttanGuncelle')}"/>
-                    <p:commandButton id="addressUpdateButton" icon="pi pi-list" styleClass="ui-button-info" pt:data-tooltip="#{messages.buttonAdresGuncelle}"
-                                     update=":AdresListeGuncelleForm" oncomplete="PF('AdresListeGuncelleDialog').show()" onstart="PF('Loading').show()"
-                                     onsuccess="PF('Loading').hide()"
-                                     rendered="#{syKullaniciController.hasPermission('eykisi:adresGuncelle')}"/>
+
+
+                    <p:splitButton id="moreActionsButton"
+                                   icon="pi pi-ellipsis-h"
+                                   styleClass="ui-button-secondary"
+                                   pt:data-tooltip="Diğer İşlemler">
+                        <p:menuitem icon="pi pi-refresh"
+                                    value="#{messages.buttonNvidenGuncelle}" update="datalist,:growl"
+                                    actionListener="#{eyKisiController.nviUpdate}"
+                                    disabled="#{empty eyKisiController.selected}"
+                                    onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                    rendered="#{syKullaniciController.hasPermission('eykisi:nvidenGuncelle')}"/>
+                        <p:menuitem icon="pi pi-qrcode"
+                                    value="#{messages.buttonQrCodeOlustur}"
+                                    update=":QrCodeForm,:growl"
+                                    actionListener="#{eyKisiController.createQRCode()}"
+                                    disabled="#{empty eyKisiController.selected}"
+                                    onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                    rendered="#{syKullaniciController.hasPermission('eykisi:qrOlustur')}"/>
+                        <p:divider/>
+                        <p:menuitem icon="pi pi-print"
+                                    value="#{messages.buttonYazdir}"
+                                    update=":PrintForm,:growl"
+                                    actionListener="#{eyKisiPrint.print(eyKisiController.selected.id)}"
+                                    disabled="#{empty eyKisiController.selected}"
+                                    onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                    rendered="#{syKullaniciController.hasPermission('eykisi:yazdir')}"/>
+                        <p:divider/>
+                        <p:menuitem icon="pi pi-check"
+                                    value="#{messages.buttonListeyiGuncelle}"
+                                    update=":ListeGuncelleForm" oncomplete="PF('ListeGuncelleDialog').show()"
+                                    onstart="PF('Loading').show()"
+                                    onsuccess="PF('Loading').hide()"
+                                    rendered="#{syKullaniciController.hasPermission('eykisi:listeGuncelle')}"/>
+                        <p:menuitem icon="pi pi-check-circle"
+                                    value="#{messages.buttonGaziKartVeriAl}" update=":TarihSecForm"
+                                    oncomplete="PF('TarihSecDialog').show()" onstart="PF('Loading').show()"
+                                    onsuccess="PF('Loading').hide()"
+                                    rendered="#{syKullaniciController.hasPermission('eykisi:gaziKarttanGuncelle')}"/>
+                        <p:menuitem icon="pi pi-list"
+                                    value="#{messages.buttonAdresGuncelle}"
+                                    update=":AdresListeGuncelleForm" oncomplete="PF('AdresListeGuncelleDialog').show()"
+                                    onstart="PF('Loading').show()"
+                                    onsuccess="PF('Loading').hide()"
+                                    rendered="#{syKullaniciController.hasPermission('eykisi:adresGuncelle')}"/>
+                    </p:splitButton>
                 </div>
             </f:facet>
 

@@ -22,6 +22,8 @@
 
         <h:form id="TarihSecForm">
             <h:panelGroup id="display">
+                <p:staticMessage severity="info" icon="pi pi-info-circle" style="width: 100%"
+                                 detail="Sorgulamak yapmak için tarih aralığı seçiniz..."/>
                 <p:focus context="display"/>
                 <p:panelGrid columns="2" layout="tabular" styleClass="w-100">
                     <p:outputLabel value="#{messages.tarihLabel}" for="@next"/>

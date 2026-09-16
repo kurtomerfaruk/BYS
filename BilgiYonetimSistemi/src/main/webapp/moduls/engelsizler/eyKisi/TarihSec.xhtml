@@ -16,13 +16,14 @@
               closeOnEscape="true"
               header="Liste Güncelle"
               appendTo="@(body)"
-              styleClass="box box-pink"
               responsive="true"
               style="overflow: auto;max-height: 500px;min-width: 390px">
 
         <h:form id="TarihSecForm">
             <h:panelGroup id="display">
                 <p:focus context="display"/>
+                <p:staticMessage severity="info" icon="pi pi-info-circle" styleClass="w-100"
+                                 detail="Sorgulamak yapmak için tarih aralığı seçiniz..."/>
                 <p:panelGrid columns="2" layout="tabular">
                     <p:outputLabel value="#{messages.baslangicTarihiLabel}" for="@next"/>
                     <p:datePicker id="baslangicTarihi" value="#{eyKisiController.baslangicTarihi}"

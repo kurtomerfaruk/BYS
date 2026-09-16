@@ -231,7 +231,7 @@ public abstract class AbstractService<T> implements java.io.Serializable {
             filterCondition = cb.and(filterCondition, applyMatchMode(cb, path, value, filter, matchMode));
         }
 
-        if(!"SyKullanici".equals(entityClass.getSimpleName())){
+        if(!"SyKullanici".equals(entityClass.getSimpleName()) && !"GnlKisi".equals(entityClass.getSimpleName())){
             filterCondition = cb.and(filterCondition, cb.equal(root.get(Constants.AKTIF), true));
         }
 

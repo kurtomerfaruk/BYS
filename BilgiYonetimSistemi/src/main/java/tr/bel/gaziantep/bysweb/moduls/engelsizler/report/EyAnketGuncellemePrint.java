@@ -59,7 +59,7 @@ public class EyAnketGuncellemePrint extends AbstractReportController {
             if (raporTuru == EnumRaporTuru.PDF) {
                 ServletContext sc = Util.getServletContext();
                 generateAttribute(sc, parameterMap);
-                sc.getRequestDispatcher("/ReportServlet");
+//                sc.getRequestDispatcher("/ReportServlet");
                 PrimeFaces.current().executeScript("PF('PrintDialog').show()");
             } else {
                 super.prepareReport(parameterMap);

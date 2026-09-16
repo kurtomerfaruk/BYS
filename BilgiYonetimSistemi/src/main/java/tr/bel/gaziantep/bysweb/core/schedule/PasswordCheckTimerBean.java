@@ -26,7 +26,7 @@ public class PasswordCheckTimerBean implements java.io.Serializable {
     @Inject
     private SyKullaniciService syKullaniciService;
 
-    @Schedule(minute = "*/10", hour = "*", persistent = false)
+    @Schedule( hour = "*/2", persistent = false)
     public void checkPasswordChange() {
         try {
             List<SyKullanici> syKullanicis = syKullaniciService.findByParolaDegistirilsin();

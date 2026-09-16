@@ -133,7 +133,7 @@ public class EyDinamikPrint extends AbstractReportController {
 
                 ServletContext sc = Util.getServletContext();
                 generateAttribute(sc, parameterMap);
-                sc.getRequestDispatcher("/ReportServlet");
+//                sc.getRequestDispatcher("/ReportServlet");
                 PrimeFaces.current().executeScript("PF('PrintDialog').show()");
             } else {
                 super.prepareReport(parameterMap);

@@ -36,7 +36,7 @@ public class EyKisiPrint extends AbstractReportController {
             parameterMap.put("kisiId", eyKisiId);
             ServletContext sc = Util.getServletContext();
             generateAttribute(sc, parameterMap);
-            sc.getRequestDispatcher("/ReportServlet");
+//            sc.getRequestDispatcher("/ReportServlet");
             PrimeFaces.current().executeScript("PF('PrintDialog').show()");
         } catch (Exception ex) {
             log.error(null,ex);

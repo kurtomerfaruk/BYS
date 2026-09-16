@@ -54,6 +54,10 @@ public class EyTalepRaporuPrint extends AbstractReportController {
     private EyEngelGrubu eyEngelGrubu;
     private EnumGnlDurum kisiDurum;
     private EnumGnlEgitimDurumu egitimDurumu;
+    private int engelOraniBaslangic = 0;
+    private int engelOraniBitis = 100;
+    private int yasBaslangic = 0;
+    private int yasBitis = 100;
 
     @PostConstruct
     public void init() {
@@ -74,13 +78,17 @@ public class EyTalepRaporuPrint extends AbstractReportController {
             parameterMap.put("engelGrubuId", eyEngelGrubu == null ? -1 : eyEngelGrubu.getId());
             parameterMap.put("talepDurumu", talepDurumu == null ? "-1" : talepDurumu.name());
             parameterMap.put("kisiDurum", kisiDurum == null ? EnumGnlDurum.SAG.name() : kisiDurum.name());
-            parameterMap.put("egitimDurumu",egitimDurumu==null ? "-1" : egitimDurumu.name());
+            parameterMap.put("egitimDurumu", egitimDurumu == null ? "-1" : egitimDurumu.name());
+            parameterMap.put("engelOraniBaslangic",engelOraniBaslangic);
+            parameterMap.put("engelOraniBitis", engelOraniBitis);
+            parameterMap.put("yasBaslangic", yasBaslangic);
+            parameterMap.put("yasBitis", yasBitis);
 
 
             if (raporTuru == EnumRaporTuru.PDF) {
                 ServletContext sc = Util.getServletContext();
                 generateAttribute(sc, parameterMap);
-                sc.getRequestDispatcher("/ReportServlet");
+//                sc.getRequestDispatcher("/ReportServlet");
                 PrimeFaces.current().executeScript("PF('PrintDialog').show()");
             } else {
                 super.prepareReport(parameterMap);

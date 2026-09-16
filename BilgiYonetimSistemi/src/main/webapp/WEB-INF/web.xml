@@ -259,4 +259,10 @@
         <param-name>primefaces.DYNAMIC_CONTENT_LIMIT</param-name>
         <param-value>500</param-value>
     </context-param>
+
+    <context-param>
+        <param-name>org.omnifaces.VERSIONED_RESOURCE_HANDLER_VERSION</param-name>
+        <!-- Version parameter value could be any hardcoded string here, or any object property from managed bean -->
+        <param-value>#{initApp.version}</param-value>
+    </context-param>
 </web-app>

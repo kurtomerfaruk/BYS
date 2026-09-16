@@ -35,7 +35,7 @@ public class AyKisiPrint extends AbstractReportController {
             Map<String,Object> parameterMap = new HashMap<>();
             parameterMap.put("aykisi_id", ayKisiId);
             generateAttribute(sc, parameterMap);
-            sc.getRequestDispatcher("/ReportServlet");
+//            sc.getRequestDispatcher("/ReportServlet");
             PrimeFaces.current().executeScript("PF('PrintDialog').show()");
 
         } catch (Exception ex) {

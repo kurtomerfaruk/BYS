@@ -130,7 +130,7 @@
                                             </p:selectOneMenu>
                                         </div>
                                         <div class="col-xl-6">
-                                            <p:outputLabel value="#{messages.temaLabel}" for="@next"/>
+                                            <p:outputLabel value="Grafik #{messages.temaLabel}" for="@next"/>
                                             <p:selectOneMenu id="grafikTema" value="#{loginController.syKullanici.grafikTema}" required="true" filter="true">
                                                 <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
                                                 <f:selectItems value="#{sabit.GRAPHIC_THEMES.entrySet()}" var="entry"

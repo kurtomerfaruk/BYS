@@ -5,16 +5,6 @@
       xmlns:h="jakarta.faces.html"
       xmlns:p="primefaces"
       xmlns:pe="primefaces.extensions">
-<h:head>
-    <style type="text/css">
-        #PrintDlg{
-            top: 70px !important;
-            width: 100% !important;
-            height: 90% !important;
-            max-width: 100% !important;
-        }
-    </style>
-</h:head>
 <h:body>
     <p:dialog id="PrintDlg"
               widgetVar="PrintDialog"
@@ -23,23 +13,26 @@
               header="Yazdır"
               modal="true"
               resizable="false"
-              onShow="resizeViewer();"
               draggable="false"
               responsive="true"
-              styleClass="box box-pink"
-              minHeight="400"
-              fitViewport="true">
+              fitViewport="true"
+              width="98vw"
+              height="95vh"
+              onShow="updateViewer();">
 
-        <h:form id="PrintForm" style="height: 100%">
+        <h:form id="PrintForm" style="height: calc(95vh - 80px);">
+
             <p:remoteCommand name="updateViewer" update="viewer"/>
-            <script type="text/javascript">
-                function resizeViewer() {
-                    var windowH = $(window).height();
-                    windowH -= 150;
-                    $("#PrintForm\\:viewer").css("height", windowH + "px");
-                }
-            </script>
-            <pe:documentViewer id="viewer" url="/ReportServlet" download="Rapor.pdf" zoom="auto" transient="true"/>
+
+            <pe:documentViewer id="viewer"
+                               url="/ReportServlet?ts=#{now.time}"
+                               download="Rapor.pdf"
+                               zoom="auto"
+                               transient="true"
+                               locale="tr"
+                               height="100%"
+                               width="100%"
+                               cache="false"/>
 
         </h:form>
 

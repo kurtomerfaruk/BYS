@@ -34,7 +34,7 @@ public class EdbBasvuruPrint extends AbstractReportController {
             Map<String, Object> parameterMap = new HashMap<>();
             parameterMap.put("edbbasvuru_id", edbBasvuruId);
             generateAttribute(sc, parameterMap);
-            sc.getRequestDispatcher("/ReportServlet");
+//            sc.getRequestDispatcher("/ReportServlet");
             PrimeFaces.current().executeScript("PF('PrintDialog').show()");
 
         } catch (Exception ex) {
@@ -52,7 +52,7 @@ public class EdbBasvuruPrint extends AbstractReportController {
             Map<String, Object> parameterMap = new HashMap<>();
             parameterMap.put("edbbasvuru_id", edbBasvuruId);
             generateAttribute(sc, parameterMap);
-            sc.getRequestDispatcher("/ReportServlet");
+//            sc.getRequestDispatcher("/ReportServlet");
             PrimeFaces.current().executeScript("PF('PrintDialog').show()");
 
         } catch (Exception ex) {

@@ -34,7 +34,7 @@ public class EyAracTamirPrint extends AbstractReportController {
             Map<String,Object> parameterMap = new HashMap<>();
             parameterMap.put("tamirId", id);
             generateAttribute(sc, parameterMap);
-            sc.getRequestDispatcher("/ReportServlet");
+//            sc.getRequestDispatcher("/ReportServlet");
 
         } catch (Exception ex) {
             log.error(null,ex);

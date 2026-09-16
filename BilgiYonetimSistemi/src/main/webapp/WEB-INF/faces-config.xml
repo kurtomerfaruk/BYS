@@ -43,4 +43,8 @@
         </exception-handler-factory>
     </factory>
 
+    <application>
+        <resource-handler>org.omnifaces.resourcehandler.VersionedResourceHandler</resource-handler>
+    </application>
+
 </faces-config>
