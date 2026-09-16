@@ -48,6 +48,9 @@ public class Constants implements java.io.Serializable{
     public static final Map<String, String> THEMES ;
     public static final Map<String, String> GRAPHIC_THEMES ;
 
+    public static final String CAPTCHA_DENEME_SAYISI = "captchaDenemeSayisi";
+    public static final String CAPTCHA_DENENEN_KULLANICI = "captchaDenenenKullanici";
+
     static {
         Map<String, String> themes = new LinkedHashMap<>();
         themes.put("arya-blue", "Arya Blue");

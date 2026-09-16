@@ -93,13 +93,46 @@ public class LoginController implements java.io.Serializable {
     @Setter
     private String captchaInput;
 
+    private static final int CAPTCHA_TRY_LIMIT = 3;
+
     public LoginController() {
+    }
+
+    public boolean isCaptchaRequired() {
+        HttpSession session = Util.getSession();
+        if (session == null) {
+            return false;
+        }
+        Object denenenKullanici = session.getAttribute(Constants.CAPTCHA_DENENEN_KULLANICI);
+        if (denenenKullanici == null || !denenenKullanici.equals(kullaniciAdi)) {
+            return false;
+        }
+        Object attempts = session.getAttribute(Constants.CAPTCHA_DENEME_SAYISI);
+        return attempts != null && ((Integer) attempts) >= CAPTCHA_TRY_LIMIT;
+    }
+
+    private void resetCaptchaRequired() {
+        HttpSession session = Util.getSession();
+        if (session != null) {
+            session.removeAttribute(Constants.CAPTCHA_DENEME_SAYISI);
+            session.removeAttribute(Constants.CAPTCHA_DENENEN_KULLANICI);
+        }
+    }
+
+    private void incrementCaptchaRequired() {
+        HttpSession session = Util.getSession();
+        if (session != null) {
+            session.setAttribute(Constants.CAPTCHA_DENENEN_KULLANICI, kullaniciAdi);
+            Object attempts = session.getAttribute(Constants.CAPTCHA_DENEME_SAYISI);
+            int count = attempts == null ? 0 : (Integer) attempts;
+            session.setAttribute(Constants.CAPTCHA_DENEME_SAYISI, count + 1);
+        }
     }
 
     public void login() {
         try {
             HttpSession session = Util.getSession();
-            if (!initApp.getProperty("profile").equals("test")) {
+            if (isCaptchaRequired()) {
                 String captcha = (String) session.getAttribute("captcha");
 
                 if (captcha == null || !captcha.equals(captchaInput)) {
@@ -124,7 +157,7 @@ public class LoginController implements java.io.Serializable {
             }
 
             if (syKullanici != null) {
-
+                resetCaptchaRequired();
                 if (!syKullanici.isAktif()) {
                     FacesUtil.warningMessage("girisYapanKullaniciPasif");
                     return;
@@ -203,6 +236,7 @@ public class LoginController implements java.io.Serializable {
                     giris.setAciklama("Hatalı giriş");
                     girisService.create(giris);
                 }
+                incrementCaptchaRequired();
                 FacesUtil.warningMessage("kullaniciAdiParolaHatali");
             }
         } catch (Exception ex) {
