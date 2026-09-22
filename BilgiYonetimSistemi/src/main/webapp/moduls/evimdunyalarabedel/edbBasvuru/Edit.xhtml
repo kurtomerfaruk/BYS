@@ -15,7 +15,7 @@
               header="#{messages.dialogKayitGuncelle}"
               appendTo="@(body)"
               responsive="true"
-              onShow="PF('EdbBasvuruEditDialog').initPosition();adjustMenuWidth();"
+              onShow="PF('EdbBasvuruEditDialog').initPosition();adjustMenuWidth('EdbBasvuruEditForm');"
               fitViewport="true"
               position="top">
 
@@ -141,25 +141,23 @@
     </p:dialog>
 
     <script type="text/javascript">
-        var dialogWidth = 0;
-
-        function adjustMenuWidth() {
-            var dialog = PF('EdbBasvuruEditDialog');
-            var menu = $(".checkboxMenu");
-
-            if (dialog &amp;&amp; menu) {
-                if (dialogWidth === 0) {
-                    dialogWidth = dialog.jq.innerWidth();
-                }
-                var menuContainer = $(menu).closest('.ui-selectcheckboxmenu');
-                menuContainer.width(dialogWidth);
-            }
-        }
+        // var dialogWidth = 0;
+        //
+        // function adjustMenuWidth() {
+        //     var dialog = PF('EdbBasvuruEditDialog');
+        //     var menu = $(".checkboxMenu");
+        //
+        //     if (dialog &amp;&amp; menu) {
+        //         if (dialogWidth === 0) {
+        //             dialogWidth = dialog.jq.innerWidth();
+        //         }
+        //         var menuContainer = $(menu).closest('.ui-selectcheckboxmenu');
+        //         menuContainer.width(dialogWidth);
+        //     }
+        // }
 
         document.addEventListener('shown.bs.tab', function (event) {
-            adjustMenuWidth();
-            var width = $("#EdbBasvuruEditDialogId").width();
-            $("#EdbBasvuruEditDialogId").css("width", width);
+            adjustMenuWidth('EdbBasvuruEditForm');
         });
     </script>
 

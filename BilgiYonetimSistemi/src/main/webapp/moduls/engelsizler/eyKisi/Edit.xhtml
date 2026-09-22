@@ -16,9 +16,8 @@
               header="#{messages.dialogKayitGuncelle}"
               appendTo="@(body)"
               responsive="true"
-              onShow="PF('EyKisiEditDialog').initPosition();adjustMenuWidth();"
-              fitViewport="true"
-              position="top">
+              onShow="PF('EyKisiEditDialog').initPosition();adjustMenuWidth('EyKisiEditForm');"
+              fitViewport="true">
 
         <h:form id="EyKisiEditForm" enctype="multipart/form-data">
             <h:panelGroup id="display">
@@ -49,7 +48,8 @@
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link" id="sosyalYardimEditTab" data-bs-toggle="tab"
                                         data-bs-target="#sosyalYardimEditTabPane" type="button" role="tab"
-                                        aria-controls="sosyalYardimEditTabPane" aria-selected="false">Sosyal Yardım Durumu
+                                        aria-controls="sosyalYardimEditTabPane"
+                                        aria-selected="false">Sosyal Yardım Durumu
                                 </button>
                             </li>
                             <li class="nav-item" role="presentation">
@@ -101,7 +101,8 @@
                             </div>
 
                             <div class="tab-pane" id="sosyalYardimEditTabPane">
-                                <p:panelGrid id="sosyalYardimPanel" columns="2" styleClass="w-100" rendered="#{eyKisiController.selected!=null}"
+                                <p:panelGrid id="sosyalYardimPanel" columns="2" styleClass="w-100"
+                                             rendered="#{eyKisiController.selected!=null}"
                                              layout="tabular">
                                     <ui:include src="/moduls/engelsizler/eyKisi/SosyalYardimTab.xhtml"/>
 
@@ -109,12 +110,13 @@
                             </div>
 
                             <div class="tab-pane" id="engellilikEditTabPane">
-                                <p:panelGrid id="engellilikPanel" columns="2" styleClass="w-100" rendered="#{eyKisiController.selected!=null}" layout="tabular">
+                                <p:panelGrid id="engellilikPanel" columns="2" styleClass="w-100"
+                                             rendered="#{eyKisiController.selected!=null}" layout="tabular">
                                     <ui:include src="/moduls/engelsizler/eyKisi/EngellilikTab.xhtml"/>
                                 </p:panelGrid>
                             </div>
 
-                           <div class="tab-pane" id="talepEditTabPane">
+                            <div class="tab-pane" id="talepEditTabPane">
                                 <ui:include src="/moduls/engelsizler/eyKisi/TalepListesiTab.xhtml"/>
                             </div>
 
@@ -144,16 +146,9 @@
     </p:dialog>
 
     <script type="text/javascript">
-        function adjustMenuWidth() {
-            var dialog = PF('EyKisiEditDialog');
-            var menu = $(".checkboxMenu");
-
-            if (dialog &amp;&amp; menu) {
-                var dialogWidth = dialog.jq.innerWidth();
-                var menuContainer = $(menu).closest('.ui-selectcheckboxmenu');
-                menuContainer.width(dialogWidth - 30);
-            }
-        }
+        document.addEventListener('shown.bs.tab', function (event) {
+            adjustMenuWidth("EyKisiEditForm");
+        });
     </script>
 
 </ui:composition>

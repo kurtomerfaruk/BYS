@@ -54,6 +54,8 @@ public class Constants implements java.io.Serializable{
     static {
         Map<String, String> themes = new LinkedHashMap<>();
         themes.put("arya-blue", "Arya Blue");
+        themes.put("aura-dark-emerald", "Aura Dark Emerald");
+        themes.put("aura-light-emerald", "Aura Light Emerald");
         themes.put("bootstrap4-blue-dark", "Bootstrap4 Blue Dark");
         themes.put("bootstrap4-blue-light", "Bootstrap4 Blue Light");
         themes.put("bootstrap4-purple-dark", "Bootstrap4 Purple Dark");

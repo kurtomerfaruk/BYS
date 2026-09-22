@@ -658,7 +658,7 @@ public class GnlKisiController extends AbstractController<GnlKisi> {
     private void savePersonsBg(List<KpsModel> kpsModels, Map<String, ServisModel> servisMap) throws Exception {
         for (KpsModel kpsModel : kpsModels) {
             if (cancelled) {
-                pushContext.send("CANCELLED", this.getSyKullanici());
+                pushContext.send("CANCELLED", this.getSyKullanici().getId());
                 return;
             }
             if (kpsModel.getKutukModel().getTcKimlikNo() == null) {

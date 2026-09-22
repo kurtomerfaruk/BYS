@@ -14,7 +14,7 @@
                    widgetVar="EdbVerilecekHizmetEditDialog"
                    actionListener="#{edbVerilecekHizmetController.save}"
                    listForm="EdbVerilecekHizmetListForm"
-                   onShow="adjustMenuWidth();">
+                   onShow="adjustMenuWidth('EdbVerilecekHizmetEditForm');">
 
 
         <p:outputLabel value="#{messages.tcKimlikNoLabel}" for="@next"/>
@@ -143,25 +143,25 @@
     </coco:editpage>
 
     <script type="text/javascript">
-        var dialogWidth = 0;
-
-        function adjustMenuWidth() {
-            setTimeout(function () {
-                var dialog = PF('EdbVerilecekHizmetCreateDialog');
-                var menu = $(".checkboxMenu");
-                var galleria = $(".galleria-style");
-                var removeWidth = dialog.jq.innerWidth() - galleria.width();
-
-                if (dialog &amp;&amp; menu) {
-                    if (dialogWidth === 0) {
-                        dialogWidth = dialog.jq.innerWidth() - removeWidth;
-                    }
-                    var menuContainer = $(menu).closest('.ui-selectcheckboxmenu');
-                    menuContainer.width(dialogWidth);
-                }
-            }, 500);
-
-        }
+        // var dialogWidth = 0;
+        //
+        // function adjustMenuWidth() {
+        //     setTimeout(function () {
+        //         var dialog = PF('EdbVerilecekHizmetCreateDialog');
+        //         var menu = $(".checkboxMenu");
+        //         var galleria = $(".galleria-style");
+        //         var removeWidth = dialog.jq.innerWidth() - galleria.width();
+        //
+        //         if (dialog &amp;&amp; menu) {
+        //             if (dialogWidth === 0) {
+        //                 dialogWidth = dialog.jq.innerWidth() - removeWidth;
+        //             }
+        //             var menuContainer = $(menu).closest('.ui-selectcheckboxmenu');
+        //             menuContainer.width(dialogWidth);
+        //         }
+        //     }, 500);
+        //
+        // }
 
         function onShow() {
             setTimeout(function () {

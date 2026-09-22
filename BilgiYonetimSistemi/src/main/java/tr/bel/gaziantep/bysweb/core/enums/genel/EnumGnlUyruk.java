@@ -17,7 +17,7 @@ public enum EnumGnlUyruk implements BaseEnum {
     DIGER("Diğer"),
     YABANCI("Yabancı"),
     ALMANYA("Almanya Federal Cumhuriyeti"),
-    AVUSTURYA("AVUSTURYA CUMHURİYETİ");
+    AVUSTURYA("Avusturya Cumhuriyeti");
 
     private final String label;
 

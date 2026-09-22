@@ -16,7 +16,7 @@
               header="#{messages.dialogKayitGuncelle}"
               appendTo="@(body)"
               responsive="true"
-              onShow="PF('MeKisiEditDialog').initPosition();adjustMenuWidth();"
+              onShow="PF('MeKisiEditDialog').initPosition();adjustMenuWidth('MeKisiEditForm');"
               fitViewport="true"
               position="top">
 
@@ -120,18 +120,18 @@
 
     </p:dialog>
 
-    <script type="text/javascript">
-        function adjustMenuWidth() {
-            var dialog = PF('MeKisiEditDialog');
-            var menu = $(".checkboxMenu");
+<!--    <script type="text/javascript">-->
+<!--        function adjustMenuWidth() {-->
+<!--            var dialog = PF('MeKisiEditDialog');-->
+<!--            var menu = $(".checkboxMenu");-->
 
-            if (dialog &amp;&amp; menu) {
-                var dialogWidth = dialog.jq.innerWidth();
-                var menuContainer = $(menu).closest('.ui-selectcheckboxmenu');
-                menuContainer.width(dialogWidth - 30);
-            }
-        }
-    </script>
+<!--            if (dialog &amp;&amp; menu) {-->
+<!--                var dialogWidth = dialog.jq.innerWidth();-->
+<!--                var menuContainer = $(menu).closest('.ui-selectcheckboxmenu');-->
+<!--                menuContainer.width(dialogWidth - 30);-->
+<!--            }-->
+<!--        }-->
+<!--    </script>-->
 
 </ui:composition>
 

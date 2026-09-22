@@ -15,7 +15,7 @@
               header="#{messages.dialogYeniKayit}"
               appendTo="@(body)"
               responsive="true"
-              onShow="PF('EkmKursiyerCreateDialog').initPosition();adjustMenuWidth()"
+              onShow="PF('EkmKursiyerCreateDialog').initPosition();adjustMenuWidth('EkmKursiyerCreateForm')"
               fitViewport="true"
               position="top">
 
@@ -133,18 +133,18 @@
 
     </p:dialog>
 
-    <script type="text/javascript">
-        function adjustMenuWidth() {
-            var dialog = PF('EkmKursiyerCreateDialog');
-            var menu = $(".checkboxMenu");
+<!--    <script type="text/javascript">-->
+<!--        function adjustMenuWidth() {-->
+<!--            var dialog = PF('EkmKursiyerCreateDialog');-->
+<!--            var menu = $(".checkboxMenu");-->
 
-            if (dialog &amp;&amp; menu) {
-                var dialogWidth = dialog.jq.innerWidth();
-                var menuContainer = $(menu).closest('.ui-selectcheckboxmenu');
-                menuContainer.width(dialogWidth - 30); // 30px padding/margin için
-            }
-        }
-    </script>
+<!--            if (dialog &amp;&amp; menu) {-->
+<!--                var dialogWidth = dialog.jq.innerWidth();-->
+<!--                var menuContainer = $(menu).closest('.ui-selectcheckboxmenu');-->
+<!--                menuContainer.width(dialogWidth - 30); // 30px padding/margin için-->
+<!--            }-->
+<!--        }-->
+<!--    </script>-->
 
 </ui:composition>
 

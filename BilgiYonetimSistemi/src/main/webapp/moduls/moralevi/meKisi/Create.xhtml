@@ -15,7 +15,7 @@
               header="#{messages.dialogYeniKayit}"
               appendTo="@(body)"
               responsive="true"
-              onShow="PF('MeKisiCreateDialog').initPosition();adjustMenuWidth()"
+              onShow="PF('MeKisiCreateDialog').initPosition();adjustMenuWidth('MeKisiCreateForm')"
               fitViewport="true"
               position="top">
 
@@ -129,18 +129,18 @@
 
     </p:dialog>
 
-    <script type="text/javascript">
-        function adjustMenuWidth() {
-            var dialog = PF('MeKisiCreateDialog');
-            var menu = $(".checkboxMenu");
+<!--    <script type="text/javascript">-->
+<!--        function adjustMenuWidth() {-->
+<!--            var dialog = PF('MeKisiCreateDialog');-->
+<!--            var menu = $(".checkboxMenu");-->
 
-            if (dialog &amp;&amp; menu) {
-                var dialogWidth = dialog.jq.innerWidth();
-                var menuContainer = $(menu).closest('.ui-selectcheckboxmenu');
-                menuContainer.width(dialogWidth - 30); // 30px padding/margin için
-            }
-        }
-    </script>
+<!--            if (dialog &amp;&amp; menu) {-->
+<!--                var dialogWidth = dialog.jq.innerWidth();-->
+<!--                var menuContainer = $(menu).closest('.ui-selectcheckboxmenu');-->
+<!--                menuContainer.width(dialogWidth - 30); // 30px padding/margin için-->
+<!--            }-->
+<!--        }-->
+<!--    </script>-->
 
 </ui:composition>
 

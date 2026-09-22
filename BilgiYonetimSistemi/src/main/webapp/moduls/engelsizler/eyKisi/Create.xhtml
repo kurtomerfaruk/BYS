@@ -8,16 +8,15 @@
 
 <ui:composition>
 
-    <p:dialog widgetVar="EyKisiCreateDialog"
+    <p:dialog id="EyKisiCreateDialogId" widgetVar="EyKisiCreateDialog"
               modal="true"
               resizable="false"
               closeOnEscape="true"
               header="#{messages.dialogYeniKayit}"
               appendTo="@(body)"
               responsive="true"
-              onShow="PF('EyKisiCreateDialog').initPosition();adjustMenuWidth()"
-              fitViewport="true"
-              position="top">
+              onShow="PF('EyKisiCreateDialog').initPosition();adjustMenuWidth('EyKisiCreateForm')"
+              fitViewport="true">
 
         <h:form id="EyKisiCreateForm">
             <h:panelGroup id="display">
@@ -42,13 +41,15 @@
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link" id="ekonomomikDurumCreateTab" data-bs-toggle="tab"
                                         data-bs-target="#ekonomomikDurumCreateTabPane" type="button" role="tab"
-                                        aria-controls="ekonomomikDurumCreateTabPane" aria-selected="false">Ekonomik Durum
+                                        aria-controls="ekonomomikDurumCreateTabPane"
+                                        aria-selected="false">Ekonomik Durum
                                 </button>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link" id="sosyalYardimCreateTab" data-bs-toggle="tab"
                                         data-bs-target="#sosyalYardimCreateTabPane" type="button" role="tab"
-                                        aria-controls="sosyalYardimCreateTabPane" aria-selected="false">Sosyal Yardım Durumu
+                                        aria-controls="sosyalYardimCreateTabPane"
+                                        aria-selected="false">Sosyal Yardım Durumu
                                 </button>
                             </li>
                             <li class="nav-item" role="presentation">
@@ -60,18 +61,22 @@
                         </ul>
 
                         <div class="tab-content">
-                            <div class="tab-pane overflow-hidden active show" id="eykisiBilgileriCreateTabPane" role="tabpanel"
-                                 aria-labelledby="eykisiBilgileriCreateTab"  tabindex="0">
-                                <p:panelGrid id="kisiPanel" columns="2" styleClass="w-100" rendered="#{eyKisiController.selected!=null}" layout="tabular">
+                            <div class="tab-pane overflow-hidden active show" id="eykisiBilgileriCreateTabPane"
+                                 role="tabpanel"
+                                 aria-labelledby="eykisiBilgileriCreateTab" tabindex="0">
+                                <p:panelGrid id="kisiPanel" columns="2" styleClass="w-100"
+                                             rendered="#{eyKisiController.selected!=null}" layout="tabular">
 
                                     <ui:include src="/moduls/engelsizler/eyKisi/KisiBilgileriTab.xhtml"/>
                                 </p:panelGrid>
                             </div>
 
-                            <div class="tab-pane overflow-hidden" id="aileDurumuCreateTabPane" role="tabpanel" aria-labelledby="aileDurumuCreateTab"
+                            <div class="tab-pane overflow-hidden" id="aileDurumuCreateTabPane" role="tabpanel"
+                                 aria-labelledby="aileDurumuCreateTab"
                                  tabindex="0">
 
-                                <p:panelGrid id="aileDurumuPanel" columns="2" styleClass="w-100" rendered="#{eyKisiController.selected!=null}"
+                                <p:panelGrid id="aileDurumuPanel" columns="2" styleClass="w-100"
+                                             rendered="#{eyKisiController.selected!=null}"
                                              layout="tabular">
 
                                     <ui:include src="/moduls/engelsizler/eyKisi/AileDurumuTab.xhtml"/>
@@ -79,9 +84,11 @@
                                 </p:panelGrid>
                             </div>
 
-                            <div class="tab-pane overflow-hidden" id="ekonomomikDurumCreateTabPane" role="tabpanel" aria-labelledby="ekonomomikDurumCreateTab"
+                            <div class="tab-pane overflow-hidden" id="ekonomomikDurumCreateTabPane" role="tabpanel"
+                                 aria-labelledby="ekonomomikDurumCreateTab"
                                  tabindex="0">
-                                <p:panelGrid id="ekonomikDurumPanel" columns="2" styleClass="w-100" rendered="#{eyKisiController.selected!=null}"
+                                <p:panelGrid id="ekonomikDurumPanel" columns="2" styleClass="w-100"
+                                             rendered="#{eyKisiController.selected!=null}"
                                              layout="tabular">
 
                                     <ui:include src="/moduls/engelsizler/eyKisi/EkonomikDurumTab.xhtml"/>
@@ -89,7 +96,8 @@
                                 </p:panelGrid>
                             </div>
 
-                            <div class="tab-pane overflow-hidden" id="sosyalYardimCreateTabPane" role="tabpanel" aria-labelledby="sosyalYardimCreateTab"
+                            <div class="tab-pane overflow-hidden" id="sosyalYardimCreateTabPane" role="tabpanel"
+                                 aria-labelledby="sosyalYardimCreateTab"
                                  tabindex="0">
                                 <p:panelGrid id="sosyalYardimPanel" columns="2" styleClass="w-100"
                                              rendered="#{eyKisiController.selected!=null}" layout="tabular">
@@ -98,7 +106,8 @@
                                 </p:panelGrid>
                             </div>
 
-                            <div class="tab-pane overflow-hidden" id="engellilikCreateTabPane" role="tabpanel" aria-labelledby="engellilikCreateTab"
+                            <div class="tab-pane overflow-hidden" id="engellilikCreateTabPane" role="tabpanel"
+                                 aria-labelledby="engellilikCreateTab"
                                  tabindex="0">
                                 <p:panelGrid id="engellilikPanel" columns="2" styleClass="w-100"
                                              rendered="#{eyKisiController.selected!=null}" layout="tabular">
@@ -130,16 +139,20 @@
     </p:dialog>
 
     <script type="text/javascript">
-        function adjustMenuWidth() {
-            var dialog = PF('EyKisiCreateDialog');
-            var menu = $(".checkboxMenu");
+        // function adjustMenuWidth() {
+        //     var display = $("#EyKisiCreateForm\\:display").width();
+        //     var menu = $(".checkboxMenu");
+        //
+        //     if (menu) {
+        //         var dialogWidth = display - 30;
+        //         var menuContainer = $(menu).closest('.ui-selectcheckboxmenu');
+        //         menuContainer.width(dialogWidth);
+        //     }
+        // }
 
-            if (dialog &amp;&amp; menu) {
-                var dialogWidth = dialog.jq.innerWidth();
-                var menuContainer = $(menu).closest('.ui-selectcheckboxmenu');
-                menuContainer.width(dialogWidth - 30); // 30px padding/margin için
-            }
-        }
+        document.addEventListener('shown.bs.tab', function (event) {
+            adjustMenuWidth("EyKisiCreateForm");
+        });
     </script>
 
 </ui:composition>

@@ -14,7 +14,7 @@
                    actionListener="#{gnlPersonelController.save}"
                    listForm="GnlPersonelListForm"
                    model="#{gnlPersonelController.selected}"
-                   onShow="adjustMenuWidth();">
+                   onShow="adjustMenuWidth('GnlPersonelEditForm');">
 
         <p:outputLabel value="#{messages.kisiLabel}" for="inputWithButtonKisiId"/>
         <coco:inputWithButton id="inputWithButtonKisiId" inputId="kisiId"
@@ -48,18 +48,18 @@
 
     </coco:editpage>
 
-    <script type="text/javascript">
-        function adjustMenuWidth() {
-            var dialog = PF('GnlPersonelEditDialog');
-            var menu = $(".checkboxMenu");
+<!--    <script type="text/javascript">-->
+<!--        function adjustMenuWidth() {-->
+<!--            var dialog = PF('GnlPersonelEditDialog');-->
+<!--            var menu = $(".checkboxMenu");-->
 
-            if (dialog &amp;&amp; menu) {
-                var dialogWidth = dialog.jq.innerWidth();
-                var menuContainer = $(menu).closest('.ui-selectcheckboxmenu');
-                menuContainer.width(dialogWidth - 30);
-            }
-        }
-    </script>
+<!--            if (dialog &amp;&amp; menu) {-->
+<!--                var dialogWidth = dialog.jq.innerWidth();-->
+<!--                var menuContainer = $(menu).closest('.ui-selectcheckboxmenu');-->
+<!--                menuContainer.width(dialogWidth - 30);-->
+<!--            }-->
+<!--        }-->
+<!--    </script>-->
 
 </ui:composition>
 

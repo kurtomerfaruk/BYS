@@ -15,7 +15,7 @@
               header="#{messages.dialogYeniKayit}"
               appendTo="@(body)"
               responsive="true"
-              onShow="PF('EdbBasvuruCreateDialog').initPosition();adjustMenuWidth()"
+              onShow="PF('EdbBasvuruCreateDialog').initPosition();adjustMenuWidth('EdbBasvuruCreateForm')"
               fitViewport="true"
               position="top">
 
@@ -141,25 +141,23 @@
     </p:dialog>
 
     <script type="text/javascript">
-        var dialogWidth = 0;
-
-        function adjustMenuWidth() {
-            var dialog = PF('EdbBasvuruCreateDialog');
-            var menu = $(".checkboxMenu");
-
-            if (dialog &amp;&amp; menu) {
-                if (dialogWidth === 0) {
-                    dialogWidth = dialog.jq.innerWidth() - 30;
-                }
-                var menuContainer = $(menu).closest('.ui-selectcheckboxmenu');
-                menuContainer.width(dialogWidth);
-            }
-        }
+        // var dialogWidth = 0;
+        //
+        // function adjustMenuWidth() {
+        //     var dialog = PF('EdbBasvuruCreateDialog');
+        //     var menu = $(".checkboxMenu");
+        //
+        //     if (dialog &amp;&amp; menu) {
+        //         if (dialogWidth === 0) {
+        //             dialogWidth = dialog.jq.innerWidth() - 30;
+        //         }
+        //         var menuContainer = $(menu).closest('.ui-selectcheckboxmenu');
+        //         menuContainer.width(dialogWidth);
+        //     }
+        // }
 
         document.addEventListener('shown.bs.tab', function (event) {
-            adjustMenuWidth();
-           var width = $("#EdbBasvuruCreateDialogId").width();
-            $("#EdbBasvuruCreateDialogId").css("width",width);
+            adjustMenuWidth("EdbBasvuruCreateForm");
         });
     </script>
 

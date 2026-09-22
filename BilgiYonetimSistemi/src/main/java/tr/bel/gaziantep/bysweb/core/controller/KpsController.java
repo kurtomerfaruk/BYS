@@ -51,7 +51,10 @@ public class KpsController implements java.io.Serializable{
         if (!StringUtil.isBlank(kpsModel.getKutukModel().getHataBilgisi())) {
             kisi.setHatali(true);
             kisi.setHataAciklama(kpsModel.getKutukModel().getHataBilgisi());
-            gnlKisiService.edit(kisi);
+            if(kisi.getId()!=null){
+                gnlKisiService.edit(kisi);
+            }
+
             FacesUtil.addErrorMessage(kpsModel.getKutukModel().getHataBilgisi());
             return null;
         }

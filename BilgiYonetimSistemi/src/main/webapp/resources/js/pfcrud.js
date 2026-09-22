@@ -32,12 +32,24 @@ function isNumber(evt) {
     return true;
 }
 
-function adjustMenuWidth(dialogWidget,componentClass,width = 30) {
+function adjustMenuWidth(dialogWidget, componentClass, width = 30) {
     var dialog = PF(dialogWidget);
     if (dialog) {
         var dialogWidth = dialog.jq.innerWidth();
-        $("."+componentClass).width(dialogWidth-width);
+        $("." + componentClass).width(dialogWidth - width);
     }
+}
+
+function adjustMenuWidth(formName) {
+    console.log("form",formName)
+    var display = $("#" + formName + "\\:display").width();
+    if(display===undefined){
+        display = $("#"+formName+"\\:"+formName+"\\:display").width();
+    }
+    var menu = $(".checkboxMenu");
+    var dialogWidth = display - 30;
+    var menuContainer = $(menu).closest('.ui-selectcheckboxmenu');
+    menuContainer.width(dialogWidth);
 }
 
 
@@ -119,7 +131,7 @@ if (!PrimeFaces.validator['StrongPassword']) {
             special: /[^a-zA-Z0-9]/
         },
 
-        validate: function(element, value) {
+        validate: function (element, value) {
             var $element = $(element);
             var cfg = $element.data('p-strongpassword');
             console.log(cfg);
@@ -273,15 +285,14 @@ let createpassword = (type, ele) => {
     if (stringIcon.includes("ri-eye-line")) {
         ele.childNodes[1].classList.remove("ri-eye-line")
         ele.childNodes[1].classList.add("ri-eye-off-line")
-    }
-    else {
+    } else {
         ele.childNodes[1].classList.add("ri-eye-line")
         ele.childNodes[1].classList.remove("ri-eye-off-line")
     }
 }
 
-function fitTabWidth(div){
-    var width = $("#"+div).width();
+function fitTabWidth(div) {
+    var width = $("#" + div).width();
     $(".tab-pane").width(width);
 }
 
