@@ -8,6 +8,7 @@ import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
 import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
+
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
  * @version 1.0.0
@@ -29,7 +30,7 @@ public class GnlPersonel extends BaseEntity {
     @Column(name = "ID", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "GNLKISI_ID")
     private GnlKisi gnlKisi;
 
@@ -41,7 +42,7 @@ public class GnlPersonel extends BaseEntity {
     @Column(name = "DAHILI", length = 5)
     private String dahili;
 
-    @OneToMany(mappedBy = "gnlPersonel", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE,CascadeType.PERSIST})
+    @OneToMany(mappedBy = "gnlPersonel", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @Builder.Default
     private List<GnlPersonelBirim> gnlPersonelBirimList = new ArrayList<>();
 

@@ -1,0 +1,559 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:o="omnifaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <p:outputLabel value="#{messages.basvuruTarihiLabel}" for="@next"/>
+    <p:datePicker locale="tr" pattern="#{messages.tarihFormat}"
+                  value="#{pkHastaController.selected.basvuruTarihi}"
+                  title="#{messages.basvuruTarihiText}" mask="true"
+                  monthNavigator="true" yearNavigator="true" showButtonBar="true"
+                  showIcon="true" showOnFocus="false"/>
+
+    <p:outputLabel value="#{messages.uyrukLabel}" for="@next"/>
+    <p:selectOneMenu id="uyruk" value="#{pkHastaController.selected.gnlKisi.uyruk}"
+                     required="true" converter="omnifaces.SelectItemsConverter">
+        <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+        <f:selectItems value="#{enumUyruk.ALL_VALUES}"
+                       var="enumUyruks"
+                       itemLabel="#{enumUyruks.displayValue}"
+                       itemValue="#{enumUyruks}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.tcKimlikNoLabel}" for="@next"/>
+    <coco:tcKimlikNoDogumTarihi actionListener="#{pkHastaController.getTcKimlik()}"
+                                update=":growl,@(.tcUpdate)"
+                                value="#{pkHastaController.selected.gnlKisi.tcKimlikNo}"
+                                dateValue="#{pkHastaController.selected.gnlKisi.dogumTarihi}"/>
+
+    <p:outputLabel value="#{messages.adLabel}" for="@next"/>
+    <p:inputText id="ad" value="#{pkHastaController.selected.gnlKisi.ad}"
+                 size="50"
+                 title="#{messages.adText}"
+                 required="true"
+                 readonly="#{facesContext.renderResponse}" styleClass="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.soyadLabel}" for="@next"/>
+    <p:inputText id="soyad" value="#{pkHastaController.selected.gnlKisi.soyad}"
+                 title="#{messages.soyadText}"
+                 required="true" readonly="#{facesContext.renderResponse}"
+                 styleClass="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.dogumYeriLabel}" for="@next"/>
+    <p:inputText id="dogumYeri" value="#{pkHastaController.selected.gnlKisi.dogumYeri}"
+                 required="true"
+                 readonly="#{facesContext.renderResponse}" styleClass="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.cinsiyetLabel}" for="@next"/>
+    <p:inputText id="cinsiyet" value="#{pkHastaController.selected.gnlKisi.cinsiyet}" required="true"
+                 readonly="#{facesContext.renderResponse}" styleClass="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.medeniDurumLabel}" for="@next"/>
+    <p:inputText id="medeniDurum" value="#{pkHastaController.selected.gnlKisi.medeniDurum}"
+                 title="#{messages.medeniDurumText}" required="true"
+                 readonly="#{facesContext.renderResponse}"
+                 styleClass="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.anneKizlikSoyadiLabel}" for="@next"/>
+    <p:inputText value="#{pkHastaController.selected.anneKizlikSoyadi}"
+                 title="#{messages.anneKizlikSoyadiText}"
+                 required="true"/>
+
+    <p:outputLabel value="#{messages.egitimDurumuLabel}" for="@next"/>
+    <p:selectOneMenu id="egitimDurumu" value="#{pkHastaController.selected.gnlKisi.egitimDurumu}"
+                     converter="omnifaces.SelectItemsConverter" styleClass="tcUpdate">
+        <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+        <f:selectItems value="#{enumEgitimDurumu.ALL_VALUES}"
+                       var="enumEgitimDurumus"
+                       itemLabel="#{enumEgitimDurumus.displayValue}"
+                       itemValue="#{enumEgitimDurumus}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.telefonLabel}" for="@next"/>
+    <p:inputMask id="telefon" value="#{pkHastaController.selected.gnlKisi.telefon}"
+                 mask="#{messages.telefonFormat}"
+                 required="true"
+                 title="#{messages.telefonText}" size="14" styleClass="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.telefonLabel}" for="telefon2"/>
+    <p:inputMask id="telefon2" value="#{pkHastaController.selected.gnlKisi.telefon2}"
+                 mask="#{messages.telefonFormat}" title="#{messages.telefonText}" size="14" styleClass="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.ilceLabel}" for="@next"/>
+    <p:inputText id="ilce" value="#{pkHastaController.selected.gnlKisi.gnlIlce.tanim}" title="#{messages.ilceText}"
+                 readonly="true" styleClass="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.mahalleLabel}" for="@next"/>
+    <p:inputText id="mahalle" value="#{pkHastaController.selected.gnlKisi.gnlMahalle.tanim}"
+                 title="#{messages.mahalleText}" readonly="true"
+                 styleClass="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.ailenizGocIleMiGeldiLabel}" for="@next"/>
+    <h:panelGroup>
+        <p:selectOneMenu value="#{pkHastaController.selected.aileGocIleGeldi}"
+                         converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{enumEvetHayir.ALL_VALUES}"
+                           var="evethayir"
+                           itemLabel="#{evethayir.displayValue}"
+                           itemValue="#{evethayir}"/>
+            <p:ajax event="change" update="aileGocIleGeldiAciklama"/>
+        </p:selectOneMenu>
+        <p:inputText id="aileGocIleGeldiAciklama" value="#{pkHastaController.selected.aileGocIleGeldiAciklama}"
+                     required="#{pkHastaController.selected.aileGocIleGeldi eq 'EVET'}"
+                     disabled="#{pkHastaController.selected.aileGocIleGeldi ne 'EVET'}"/>
+    </h:panelGroup>
+
+    <p:outputLabel value="#{messages.siniftaKalmaLabel}" for="@next"/>
+    <p:selectOneMenu value="#{pkHastaController.selected.siniftaKalma}"
+                     converter="omnifaces.SelectItemsConverter">
+        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+        <f:selectItems value="#{enumVarYok.ALL_VALUES}"
+                       var="varyok"
+                       itemLabel="#{varyok.displayValue}"
+                       itemValue="#{varyok}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.disiplinSucuLabel}" for="@next"/>
+    <p:selectOneMenu value="#{pkHastaController.selected.disiplinSucu}"
+                     converter="omnifaces.SelectItemsConverter">
+        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+        <f:selectItems value="#{enumVarYok.ALL_VALUES}"
+                       var="varyok"
+                       itemLabel="#{varyok.displayValue}"
+                       itemValue="#{varyok}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.okulaDevamEtmemeNedeniLabel}" for="@next"/>
+    <h:panelGroup>
+        <p:selectOneMenu value="#{pkHastaController.selected.okulaDevamEtmemeNedeni}"
+                         converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{enumOkulaDevamEtmemeNedeni.ALL_VALUES}"
+                           var="devamNedeni"
+                           itemLabel="#{devamNedeni.displayValue}"
+                           itemValue="#{devamNedeni}"/>
+            <p:ajax event="change" update="okulaDevamEtmemeNedeniAciklama"/>
+        </p:selectOneMenu>
+        <p:inputText id="okulaDevamEtmemeNedeniAciklama"
+                     value="#{pkHastaController.selected.okulaDevamEtmemeNedeniAciklama}"
+                     required="#{pkHastaController.selected.okulaDevamEtmemeNedeni eq 'DIGER'}"
+                     disabled="#{pkHastaController.selected.okulaDevamEtmemeNedeni ne 'DIGER'}"/>
+    </h:panelGroup>
+
+    <h:outputText/>
+    <h:panelGroup>
+        <p:outputLabel value="#{messages.maddeKullanimininOkuluBirakmasindaEtkisiVarmiLabel}" for="@next"/>
+        <p:selectOneMenu value="#{pkHastaController.selected.maddeKullanimininOkuluBirakmasindaEtkisiVarMi}"
+                         converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{enumVarYok.ALL_VALUES}"
+                           var="varyok"
+                           itemLabel="#{varyok.displayValue}"
+                           itemValue="#{varyok}"/>
+        </p:selectOneMenu>
+    </h:panelGroup>
+
+    <p:outputLabel value="#{messages.isYasamiLabel}" for="@next"/>
+    <p:selectOneMenu value="#{pkHastaController.selected.isYasami}"
+                     converter="omnifaces.SelectItemsConverter">
+        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+        <f:selectItems value="#{enumVarYok.ALL_VALUES}"
+                       var="varyok"
+                       itemLabel="#{varyok.displayValue}"
+                       itemValue="#{varyok}"/>
+    </p:selectOneMenu>
+
+    <h:outputText/>
+    <h:panelGroup>
+        <p:outputLabel value="#{messages.enUzunCalismaSuresiLabel}" for="@next"/>
+        <p:selectOneMenu value="#{pkHastaController.selected.enUzunCalismaSuresi}"
+                         converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{enumVarYok.ALL_VALUES}"
+                           var="varyok"
+                           itemLabel="#{varyok.displayValue}"
+                           itemValue="#{varyok}"/>
+        </p:selectOneMenu>
+    </h:panelGroup>
+
+    <p:outputLabel value="#{messages.meslekiYeterliligiVarMiLabel}" for="@next"/>
+    <h:panelGroup>
+        <p:selectOneMenu value="#{pkHastaController.selected.meslekiYeterlilikVarMi}"
+                         converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{enumVarYok.ALL_VALUES}"
+                           var="varYok"
+                           itemLabel="#{varYok.displayValue}"
+                           itemValue="#{varYok}"/>
+            <p:ajax event="change" update="meslekiYeterlilikVarMiAciklama"/>
+        </p:selectOneMenu>
+        <p:inputText id="meslekiYeterlilikVarMiAciklama"
+                     value="#{pkHastaController.selected.meslekiYeterlilikVarMiAciklama}"
+                     required="#{pkHastaController.selected.meslekiYeterlilikVarMi eq 'VAR'}"
+                     disabled="#{pkHastaController.selected.meslekiYeterlilikVarMi ne 'VAR'}"/>
+    </h:panelGroup>
+
+    <p:outputLabel value="#{messages.neredeVeKimlerleYasiyorLabel}" for="@next"/>
+    <h:panelGroup>
+        <p:selectOneMenu value="#{pkHastaController.selected.neredeVeKimlerleYasiyor}"
+                         converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{enumNeredeKimlerleYasiyor.ALL_VALUES}"
+                           var="yasiyor"
+                           itemLabel="#{yasiyor.displayValue}"
+                           itemValue="#{yasiyor}"/>
+            <p:ajax event="change" update="neredeVeKimlerleYasiyorAciklama"/>
+        </p:selectOneMenu>
+        <p:inputText id="neredeVeKimlerleYasiyorAciklama"
+                     value="#{pkHastaController.selected.neredeVeKimlerleYasiyorAciklama}"
+                     required="#{pkHastaController.selected.neredeVeKimlerleYasiyor eq 'DIGER'}"
+                     disabled="#{pkHastaController.selected.neredeVeKimlerleYasiyor ne 'DIGER'}"/>
+    </h:panelGroup>
+
+    <p:outputLabel value="#{messages.sokakYasamiVarMiLabel}" for="@next"/>
+    <h:panelGroup>
+        <p:selectOneMenu value="#{pkHastaController.selected.sokakYasamiVarMi}"
+                         converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{enumVarYok.ALL_VALUES}"
+                           var="varYok"
+                           itemLabel="#{varYok.displayValue}"
+                           itemValue="#{varYok}"/>
+            <p:ajax event="change" update="sokakYasamiVarMiAciklama"/>
+        </p:selectOneMenu>
+        <p:inputText id="sokakYasamiVarMiAciklama"
+                     value="#{pkHastaController.selected.sokakYasamiVarMiAciklama}"
+                     required="#{pkHastaController.selected.sokakYasamiVarMi eq 'VAR'}"
+                     disabled="#{pkHastaController.selected.sokakYasamiVarMi ne 'VAR'}"/>
+    </h:panelGroup>
+
+    <p:outputLabel value="#{messages.basvuruSekliLabel}" for="@next"/>
+    <p:selectOneMenu value="#{pkHastaController.selected.basvuruSekli}"
+                     converter="omnifaces.SelectItemsConverter">
+        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+        <f:selectItems value="#{enumBasvuruSekli.ALL_VALUES}"
+                       var="bavuruSekli"
+                       itemLabel="#{bavuruSekli.displayValue}"
+                       itemValue="#{bavuruSekli}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.sigaraKullanimiLabel}" for="@next"/>
+    <p:selectOneMenu value="#{pkHastaController.selected.sigaraKullanimi}"
+                     converter="omnifaces.SelectItemsConverter">
+        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+        <f:selectItems value="#{enumVarYok.ALL_VALUES}"
+                       var="varyok"
+                       itemLabel="#{varyok.displayValue}"
+                       itemValue="#{varyok}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.sikKullandigiMaddelerLabel}" for="@next"/>
+    <p:selectCheckboxMenu value="#{pkHastaController.maddeList}"
+                          converter="omnifaces.SelectItemsConverter"
+                          label="Madde Türleri" multiple="true" filter="true"
+                          filterMatchMode="startsWith" styleClass="checkboxMenu">
+        <f:selectItems value="#{pkMaddeController.items}"
+                       var="maddeTurs"
+                       itemValue="#{maddeTurs}"
+                       itemLabel="#{maddeTurs.tanim}"/>
+    </p:selectCheckboxMenu>
+
+    <h:outputText/>
+    <h:panelGroup>
+        <p:outputLabel value="#{messages.enSikKullanilanMadde1Label}" for="@next"/>
+        <p:selectOneMenu value="#{pkHastaController.selected.enSikKullanilanMadde1}"
+                         converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{pkMaddeController.items}"
+                           var="maddeTurs"
+                           itemLabel="#{maddeTurs.tanim}"
+                           itemValue="#{maddeTurs}"/>
+        </p:selectOneMenu>
+    </h:panelGroup>
+
+    <h:outputText/>
+    <h:panelGroup>
+        <p:outputLabel value="#{messages.enSikKullanilanMadde2Label}" for="@next"/>
+        <p:selectOneMenu value="#{pkHastaController.selected.enSikKullanilanMadde2}"
+                         converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{pkMaddeController.items}"
+                           var="maddeTurs"
+                           itemLabel="#{maddeTurs.tanim}"
+                           itemValue="#{maddeTurs}"/>
+        </p:selectOneMenu>
+    </h:panelGroup>
+
+    <p:outputLabel value="#{messages.maddeyeBaslamaYasiLabel}" for="@next"/>
+    <p:selectOneMenu value="#{pkHastaController.selected.maddeyeBaslamaYasi}"
+                     converter="omnifaces.SelectItemsConverter">
+        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+        <f:selectItems value="#{o:createIntegerArray(8, 18)}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.maddeyeBaslamaSebebiLabel}" for="@next"/>
+    <h:panelGroup>
+        <p:selectOneMenu value="#{pkHastaController.selected.maddeyeBaslamaSebebi}"
+                         converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{enumMaddeyeBaslamaSebebi.ALL_VALUES}"
+                           var="maddeSebebi"
+                           itemLabel="#{maddeSebebi.displayValue}"
+                           itemValue="#{maddeSebebi}"/>
+            <p:ajax event="change" update="maddeyeBaslamaSebebiAciklama"/>
+        </p:selectOneMenu>
+        <p:inputText id="maddeyeBaslamaSebebiAciklama"
+                     value="#{pkHastaController.selected.maddeyeBaslamaSebebiAciklama}"
+                     required="#{pkHastaController.selected.maddeyeBaslamaSebebi eq 'DIGER'}"
+                     disabled="#{pkHastaController.selected.maddeyeBaslamaSebebi ne 'DIGER'}"/>
+    </h:panelGroup>
+
+    <p:outputLabel value="#{messages.maddeKullanimMiktariVeYontemiLabel}" for="@next"/>
+    <p:inputTextarea value="#{pkHastaController.selected.maddeKullanimMiktariVeYontemi}" rows="4" autoResize="false"
+                     styleClass="w-100"/>
+
+    <p:outputLabel value="#{messages.yoksunlukEntoksikasyonRemisyonLabel}" for="@next"/>
+    <p:inputTextarea value="#{pkHastaController.selected.yoksunlukEntoksikasyonRemisyon}" rows="4" autoResize="false"
+                     styleClass="w-100"/>
+
+    <p:outputLabel value="#{messages.maddeyeBaslamaSebebiLabel}" for="@next"/>
+    <h:panelGroup>
+        <p:selectOneMenu value="#{pkHastaController.selected.aileDurumBilgisi}"
+                         converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{enumAileDurum.ALL_VALUES}"
+                           var="aileDurum"
+                           itemLabel="#{aileDurum.displayValue}"
+                           itemValue="#{aileDurum}"/>
+            <p:ajax event="change" update="aileDurumBilgisiAciklama"/>
+        </p:selectOneMenu>
+        <p:inputText id="aileDurumBilgisiAciklama"
+                     value="#{pkHastaController.selected.aileDurumBilgisiAciklama}"
+                     required="#{pkHastaController.selected.aileDurumBilgisi eq 'ANNE_BABA_VEFAT'}"
+                     disabled="#{pkHastaController.selected.aileDurumBilgisi ne 'ANNE_BABA_VEFAT'}"/>
+    </h:panelGroup>
+
+    <p:outputLabel value="#{messages.ailedeMaddeKullanimiOlanBireyLabel}" for="@next"/>
+    <p:selectCheckboxMenu value="#{pkHastaController.maddeKullananBireyler}"
+                          converter="omnifaces.SelectItemsConverter"
+                          label="Birey" multiple="true" filter="true"
+                          filterMatchMode="startsWith" styleClass="checkboxMenu">
+        <f:selectItems value="#{enumAileBirey.ALL_VALUES}"
+                       var="aileBireys"
+                       itemValue="#{aileBireys}"
+                       itemLabel="#{aileBireys.displayValue}"/>
+    </p:selectCheckboxMenu>
+
+    <p:outputLabel value="#{messages.ailedeAlkolKullanimiOlanBireyLabel}" for="@next"/>
+    <p:selectCheckboxMenu value="#{pkHastaController.alkolKullananBireyler}"
+                          converter="omnifaces.SelectItemsConverter"
+                          label="Birey" multiple="true" filter="true"
+                          filterMatchMode="startsWith" styleClass="checkboxMenu">
+        <f:selectItems value="#{enumAileBirey.ALL_VALUES}"
+                       var="aileBireys"
+                       itemValue="#{aileBireys}"
+                       itemLabel="#{aileBireys.displayValue}"/>
+    </p:selectCheckboxMenu>
+
+    <p:outputLabel value="#{messages.ailedeIntiharOykusuLabel}" for="@next"/>
+    <h:panelGroup>
+        <p:selectOneMenu value="#{pkHastaController.selected.ailedeIntiharOykusu}"
+                         converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{enumVarYok.ALL_VALUES}"
+                           var="varYok"
+                           itemLabel="#{varYok.displayValue}"
+                           itemValue="#{varYok}"/>
+            <p:ajax event="change" update="ailedeIntiharOykusuAciklama"/>
+        </p:selectOneMenu>
+        <p:inputText id="ailedeIntiharOykusuAciklama"
+                     value="#{pkHastaController.selected.ailedeIntiharOykusuAciklama}"
+                     required="#{pkHastaController.selected.ailedeIntiharOykusu eq 'VAR'}"
+                     disabled="#{pkHastaController.selected.ailedeIntiharOykusu ne 'VAR'}"/>
+    </h:panelGroup>
+
+    <p:outputLabel value="#{messages.intiharGirisimiLabel}" for="@next"/>
+    <h:panelGroup>
+        <p:selectOneMenu value="#{pkHastaController.selected.intiharGirisimi}"
+                         converter="omnifaces.SelectItemsConverter">
+            <f:selectItems value="#{enumIntiharGirisimi.ALL_VALUES}"
+                           var="intiharGirisimi"
+                           itemLabel="#{intiharGirisimi.displayValue}"
+                           itemValue="#{intiharGirisimi}"/>
+            <p:ajax event="change" update="intiharGirisimiAciklama"/>
+        </p:selectOneMenu>
+        <p:inputText id="intiharGirisimiAciklama"
+                     value="#{pkHastaController.selected.intiharGirisimiAciklama}"
+                     required="#{pkHastaController.selected.intiharGirisimi eq 'YONTEMI'}"
+                     disabled="#{pkHastaController.selected.intiharGirisimi ne 'YONTEMI'}"/>
+    </h:panelGroup>
+
+    <p:outputLabel value="#{messages.sucIslediMiLabel}" for="@next"/>
+    <h:panelGroup>
+        <p:selectOneMenu value="#{pkHastaController.selected.herhangiBirSucIslediMi}"
+                         converter="omnifaces.SelectItemsConverter">
+            <f:selectItems value="#{enumSucIsleme.ALL_VALUES}"
+                           var="sucIsleme"
+                           itemLabel="#{sucIsleme.displayValue}"
+                           itemValue="#{sucIsleme}"/>
+            <p:ajax event="change" update="herhangiBirSucIslediMiAciklama"/>
+        </p:selectOneMenu>
+        <p:inputText id="herhangiBirSucIslediMiAciklama"
+                     value="#{pkHastaController.selected.herhangiBirSucIslediMiAciklama}"
+                     required="#{pkHastaController.selected.herhangiBirSucIslediMi eq 'DIGER'}"
+                     disabled="#{pkHastaController.selected.herhangiBirSucIslediMi ne 'DIGER'}"/>
+    </h:panelGroup>
+
+    <p:outputLabel value="#{messages.devamEdenMahkemesiVarMiLabel}" for="@next"/>
+    <p:selectOneMenu value="#{pkHastaController.selected.devamEdenMahkemesiVarMi}"
+                     converter="omnifaces.SelectItemsConverter">
+        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+        <f:selectItems value="#{enumVarYok.ALL_VALUES}"
+                       var="varyok"
+                       itemLabel="#{varyok.displayValue}"
+                       itemValue="#{varyok}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.cezaEviGecmisiVarMiLabel}" for="@next"/>
+    <h:panelGroup>
+        <p:selectOneMenu value="#{pkHastaController.selected.cezaeviGecmisiVarMi}"
+                         converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{enumEvetHayir.ALL_VALUES}"
+                           var="evethayir"
+                           itemLabel="#{evethayir.displayValue}"
+                           itemValue="#{evethayir}"/>
+            <p:ajax event="change" update="cezaeviGecmisiSuresi"/>
+        </p:selectOneMenu>
+        <p:inputText id="cezaeviGecmisiSuresi"
+                     value="#{pkHastaController.selected.cezaeviGecmisiSuresi}"
+                     required="#{pkHastaController.selected.cezaeviGecmisiVarMi eq 'EVET'}"
+                     disabled="#{pkHastaController.selected.cezaeviGecmisiVarMi ne 'EVET'}"/>
+    </h:panelGroup>
+
+    <p:outputLabel value="#{messages.ailedeSucOykusuVarMiLabel}" for="@next"/>
+    <h:panelGroup>
+        <p:selectOneMenu value="#{pkHastaController.selected.ailedeSucOykusu}"
+                         converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{enumEvetHayir.ALL_VALUES}"
+                           var="evethayir"
+                           itemLabel="#{evethayir.displayValue}"
+                           itemValue="#{evethayir}"/>
+            <p:ajax event="change" update="ailedeSucOykusuAciklama"/>
+        </p:selectOneMenu>
+        <p:selectOneMenu id="ailedeSucOykusuAciklama"
+                         value="#{pkHastaController.selected.ailedeSucOykusuAciklama}"
+                         converter="omnifaces.SelectItemsConverter"
+                         required="#{pkHastaController.selected.cezaeviGecmisiVarMi eq 'EVET'}"
+                         disabled="#{pkHastaController.selected.cezaeviGecmisiVarMi ne 'EVET'}">
+            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{enumAileBirey.ALL_VALUES}"
+                           var="aileBirey"
+                           itemLabel="#{aileBirey.displayValue}"
+                           itemValue="#{aileBirey}"/>
+        </p:selectOneMenu>
+    </h:panelGroup>
+
+    <p:outputLabel value="#{messages.fizikselHastalikVarMiLabel}" for="@next"/>
+    <h:panelGroup>
+        <p:selectOneMenu value="#{pkHastaController.selected.fizikselBirHastaligiVarMi}"
+                         converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{enumVarYok.ALL_VALUES}"
+                           var="varyok"
+                           itemLabel="#{varyok.displayValue}"
+                           itemValue="#{varyok}"/>
+            <p:ajax event="change" update="fizikselBirHastaligiVarMiAciklama"/>
+        </p:selectOneMenu>
+        <p:inputText id="fizikselBirHastaligiVarMiAciklama"
+                     value="#{pkHastaController.selected.fizikselBirHastaligiVarMiAciklama}"
+                     required="#{pkHastaController.selected.fizikselBirHastaligiVarMi eq 'VAR'}"
+                     disabled="#{pkHastaController.selected.fizikselBirHastaligiVarMi ne 'VAR'}"/>
+    </h:panelGroup>
+
+    <p:outputLabel value="#{messages.bedenindeAnomaliVarMiLabel}" for="@next"/>
+    <h:panelGroup>
+        <p:selectOneMenu value="#{pkHastaController.selected.bedenindeAnomaliVarMi}"
+                         converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{enumVarYok.ALL_VALUES}"
+                           var="varyok"
+                           itemLabel="#{varyok.displayValue}"
+                           itemValue="#{varyok}"/>
+            <p:ajax event="change" update="bedenindeAnomaliVarMiAciklama"/>
+        </p:selectOneMenu>
+        <p:inputText id="bedenindeAnomaliVarMiAciklama"
+                     value="#{pkHastaController.selected.bedenindeAnomaliVarMiAciklama}"
+                     required="#{pkHastaController.selected.bedenindeAnomaliVarMi eq 'VAR'}"
+                     disabled="#{pkHastaController.selected.bedenindeAnomaliVarMi ne 'VAR'}"/>
+    </h:panelGroup>
+
+    <p:outputLabel value="#{messages.bedenindeKesiIziVarMiLabel}" for="@next"/>
+    <h:panelGroup>
+        <p:selectOneMenu value="#{pkHastaController.selected.bedenindeKesiIziVarMi}"
+                         converter="omnifaces.SelectItemsConverter">
+            <f:selectItems value="#{enumVarYok.ALL_VALUES}"
+                           var="varYok"
+                           itemLabel="#{varYok.displayValue}"
+                           itemValue="#{varYok}"/>
+            <p:ajax event="change" update="bedenindeKesiIziVarMiAciklama"/>
+        </p:selectOneMenu>
+        <p:selectOneMenu id="bedenindeKesiIziVarMiAciklama"
+                         value="#{pkHastaController.selected.bedenindeKesiIziVarMiAciklama}"
+                         converter="omnifaces.SelectItemsConverter"
+                         required="#{pkHastaController.selected.bedenindeKesiIziVarMi eq 'VAR'}"
+                         disabled="#{pkHastaController.selected.bedenindeKesiIziVarMi ne 'VAR'}">
+            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{enumBeden.ALL_VALUES}"
+                           var="beden"
+                           itemLabel="#{beden.displayValue}"
+                           itemValue="#{beden}"/>
+        </p:selectOneMenu>
+    </h:panelGroup>
+
+    <p:outputLabel value="#{messages.kesiIziSiddetiLabel}" for="@next"/>
+    <p:selectOneMenu value="#{pkHastaController.selected.bedenindeKesiIziSiddeti}"
+                     converter="omnifaces.SelectItemsConverter">
+        <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+        <f:selectItems value="#{enumKesiSiddeti.ALL_VALUES}"
+                       var="kesiSiddeti"
+                       itemLabel="#{kesiSiddeti.displayValue}"
+                       itemValue="#{kesiSiddeti}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.bedenindeDovmeVarMiLabel}" for="@next"/>
+    <p:selectOneMenu value="#{pkHastaController.selected.bedenindeDovmeVarMi}"
+                     converter="omnifaces.SelectItemsConverter">
+        <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+        <f:selectItems value="#{enumVarYok.ALL_VALUES}"
+                       var="varYok"
+                       itemLabel="#{varYok.displayValue}"
+                       itemValue="#{varYok}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.psikiyatrikMuayeneLabel}" for="@next"/>
+    <p:inputTextarea value="#{pkHastaController.selected.psikiyatrikMuayene}" rows="4" autoResize="false"
+                     styleClass="w-100"/>
+
+    <p:outputLabel value="#{messages.muayeneYapanLabel}" for="@next"/>
+    <p:selectOneMenu value="#{pkHastaController.selected.psikiyatrikMuayeneYapanPersonel}" filter="true"
+                     converter="omnifaces.SelectItemsConverter">
+        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+        <f:selectItems value="#{pkPersonelController.items}"
+                       var="personel"
+                       itemLabel="#{personel.gnlPersonel.gnlKisi.adSoyad}"
+                       itemValue="#{personel}"/>
+    </p:selectOneMenu>
+
+</ui:composition>
+</html>

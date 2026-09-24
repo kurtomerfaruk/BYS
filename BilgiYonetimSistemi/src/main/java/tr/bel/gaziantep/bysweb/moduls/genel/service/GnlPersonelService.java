@@ -5,6 +5,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import tr.bel.gaziantep.bysweb.core.service.AbstractService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
+import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlPersonel;
 
 import java.io.Serial;
@@ -30,5 +31,15 @@ public class GnlPersonelService extends AbstractService<GnlPersonel> {
     @Override
     protected EntityManager getEntityManager() {
         return em;
+    }
+
+    public GnlPersonel findByGnlKisi(GnlKisi gnlKisi) {
+        return getEntityManager()
+                .createQuery("SELECT gp FROM GnlPersonel gp WHERE gp.gnlKisi = :gnlKisi", GnlPersonel.class)
+                .setParameter("gnlKisi", gnlKisi)
+                .getResultList()
+                .stream()
+                .findFirst()
+                .orElse(null);
     }
 }

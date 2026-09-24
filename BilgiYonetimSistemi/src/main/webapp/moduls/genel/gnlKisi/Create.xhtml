@@ -125,13 +125,13 @@
                                                  required="true" readonly="#{facesContext.renderResponse}"
                                                  styleClass="tcUpdate"/>
 
-                                    <p:outputLabel value="#{messages.telefonLabel}" for="telefon"/>
+                                    <p:outputLabel value="#{messages.telefonLabel}" for="@next"/>
                                     <p:inputMask id="telefon" value="#{gnlKisiController.selected.telefon}"
                                                  mask="#{messages.telefonFormat}"
                                                  required="true"
                                                  title="#{messages.telefonText}" size="14"/>
 
-                                    <p:outputLabel value="#{messages.telefonLabel}" for="telefon2"/>
+                                    <p:outputLabel value="#{messages.telefonLabel}" for="@next"/>
                                     <p:inputMask id="telefon2" value="#{gnlKisiController.selected.telefon2}"
                                                  mask="#{messages.telefonFormat}" title="#{messages.telefonText}" size="14"/>
 

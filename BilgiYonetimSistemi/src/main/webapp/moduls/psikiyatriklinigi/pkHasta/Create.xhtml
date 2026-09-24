@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="primefaces"
+      xmlns:h="jakarta.faces.html">
+
+<ui:composition>
+
+    <p:dialog id="PkHastaCreateDialogId"
+              widgetVar="PkHastaCreateDialog"
+              modal="true"
+              resizable="false"
+              closeOnEscape="true"
+              header="#{messages.dialogYeniKayit}"
+              appendTo="@(body)"
+              responsive="true"
+              onShow="PF('PkHastaCreateDialog').initPosition();adjustMenuWidth('PkHastaCreateForm')"
+              fitViewport="true">
+
+        <h:form id="PkHastaCreateForm">
+            <h:panelGroup id="display">
+                <p:focus context="display"/>
+                <div class="card">
+
+                    <div class="card-body">
+
+                        <ul class="nav nav-tabs mb-3 tab-style-8 scaleX" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="pkhastaBilgileriCreateTab" data-bs-toggle="tab"
+                                        data-bs-target="#pkhastaBilgileriCreateTabPane" type="button" role="tab"
+                                        aria-controls="pkhastaBilgileriCreateTabPane"
+                                        aria-selected="true">Hasta Bilgileri
+                                </button>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content">
+                            <div class="tab-pane overflow-hidden active show" id="pkhastaBilgileriCreateTabPane"
+                                 role="tabpanel" aria-labelledby="pkhastaBilgileriCreateTab" tabindex="0">
+
+                                <p:panelGrid id="hastaPanel" columns="2" styleClass="w-100"
+                                             rendered="#{pkHastaController.selected!=null}" layout="tabular">
+
+                                    <ui:include src="/moduls/psikiyatriklinigi/pkHasta/HastaBilgileriTab.xhtml"/>
+                                </p:panelGrid>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="float-end">
+                            <p:commandButton icon="pi pi-check" styleClass="ui-button-success"
+                                             actionListener="#{pkHastaController.saveNew}"
+                                             value="#{messages.buttonKaydet}"
+                                             update="display,:PkHastaListForm:datalist:datalist,:growl"
+                                             oncomplete="handleSubmit(xhr,status,args,PF('PkHastaCreateDialog'));"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                            <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                             value="#{messages.buttonIptal}" onclick="PF('PkHastaCreateDialog').hide()"
+                                             immediate="true" onstart="PF('Loading').show()"
+                                             onsuccess="PF('Loading').hide()"/>
+                        </div>
+                    </div>
+                </div>
+            </h:panelGroup>
+        </h:form>
+
+    </p:dialog>
+
+    <script type="text/javascript">
+        document.addEventListener('shown.bs.tab', function (event) {
+            adjustMenuWidth("PkHastaCreateForm");
+        });
+    </script>
+
+</ui:composition>
+
+</html>

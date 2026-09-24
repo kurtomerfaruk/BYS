@@ -1,40 +1,34 @@
-package tr.bel.gaziantep.bysweb.moduls.genel.service;
+package tr.bel.gaziantep.bysweb.moduls.psikiyatriklinigi.service;
 
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import tr.bel.gaziantep.bysweb.core.service.AbstractService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
-import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlUnvan;
+import tr.bel.gaziantep.bysweb.moduls.psikiyatriklinigi.entity.PkHasta;
 
 import java.io.Serial;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
- * @version 1.0.0
- * @since 2.07.2025 07:58
+ * @version 1.21.0
+ * @since 22.09.2026 14:20
  */
 @Stateless
-public class GnlUnvanService extends AbstractService<GnlUnvan> {
+public class PkHastaService  extends AbstractService<PkHasta> {
 
     @Serial
-    private static final long serialVersionUID = 4771434694148296030L;
+    private static final long serialVersionUID = -8365947549596330975L;
+
+    public PkHastaService() {
+        super(PkHasta.class);
+    }
 
     @PersistenceContext(unitName = Constants.UNIT_NAME)
     private EntityManager em;
-
-    public GnlUnvanService() {
-        super(GnlUnvan.class);
-    }
 
     @Override
     protected EntityManager getEntityManager() {
         return em;
     }
-
-    @Override
-    public String getSortCol() {
-        return "tanim";
-    }
-
 }

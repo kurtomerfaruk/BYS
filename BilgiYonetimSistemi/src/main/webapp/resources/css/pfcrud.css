@@ -388,3 +388,99 @@ body .ui-button.ui-button-indigo,body .ui-splitbutton.ui-button-indigo>.ui-butto
 body .ui-dialog {
     padding: 0 !important;
 }
+.kf-form-grid {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.kf-form-field {
+    display: flex;
+    flex-direction: column;
+    gap: .4rem;
+    min-width: 0;
+}
+
+/* Kolon geniþlikleri */
+
+.kf-col-1 {
+    grid-column: span 1;
+}
+
+.kf-col-2 {
+    grid-column: span 2;
+}
+
+.kf-col-3 {
+    grid-column: span 3;
+}
+
+.kf-col-4 {
+    grid-column: span 4;
+}
+
+.kf-col-5 {
+    grid-column: span 5;
+}
+
+.kf-col-6 {
+    grid-column: span 6;
+}
+
+.kf-col-7 {
+    grid-column: span 7;
+}
+
+.kf-col-8 {
+    grid-column: span 8;
+}
+
+.kf-col-9 {
+    grid-column: span 9;
+}
+
+.kf-col-10 {
+    grid-column: span 10;
+}
+
+.kf-col-11 {
+    grid-column: span 11;
+}
+
+.kf-col-12 {
+    grid-column: span 12;
+}
+
+
+/* Tablet */
+
+@media (max-width: 1024px) {
+
+    .kf-col-1,
+    .kf-col-2,
+    .kf-col-3,
+    .kf-col-4,
+    .kf-col-5,
+    .kf-col-6 {
+        grid-column: span 6;
+    }
+
+    .kf-col-7,
+    .kf-col-8,
+    .kf-col-9,
+    .kf-col-10,
+    .kf-col-11,
+    .kf-col-12 {
+        grid-column: span 12;
+    }
+}
+
+
+/* Mobil */
+
+@media (max-width: 768px) {
+
+    .kf-form-grid > .kf-form-field {
+        grid-column: span 12;
+    }
+}

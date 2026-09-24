@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+>
+<ui:composition>
+
+    <ui:fragment rendered="#{pkHastaController.selected!=null}">
+        <div class="kf-form-grid">
+            <div class="kf-form-field kf-col-3">
+                <p:outputLabel value="#{messages.basvuruTarihiLabel}" for="@next"/>
+                <p:datePicker locale="tr" pattern="#{messages.tarihFormat}"
+                              value="#{pkHastaController.selected.basvuruTarihi}"
+                              title="#{messages.basvuruTarihiText}" mask="true"
+                              monthNavigator="true" yearNavigator="true" showButtonBar="true"
+                              showIcon="true" showOnFocus="false"/>
+            </div>
+
+            <div class="kf-form-field kf-col-3">
+                <p:outputLabel value="#{messages.uyrukLabel}" for="@next"/>
+                <p:selectOneMenu id="uyruk" value="#{pkHastaController.selected.gnlKisi.uyruk}"
+                                 required="true" converter="omnifaces.SelectItemsConverter">
+                    <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+                    <f:selectItems value="#{enumUyruk.ALL_VALUES}"
+                                   var="enumUyruks"
+                                   itemLabel="#{enumUyruks.displayValue}"
+                                   itemValue="#{enumUyruks}"/>
+                </p:selectOneMenu>
+            </div>
+
+            <div class="kf-form-field kf-col-3">
+                <p:outputLabel value="#{messages.dogumTarihiLabel}" for="@next"/>
+                <p:datePicker id="dogumTarihi" value="#{pkHastaController.selected.gnlKisi.dogumTarihi}"
+                              label="#{messages.dogumTarihiText}"
+                              title="#{messages.dogumTarihiText}" mask="true" required="true"
+                              pattern="#{messages.tarihFormat}" monthNavigator="true"
+                              yearNavigator="true" showIcon="true" showButtonBar="true" showOnFocus="false"/>
+
+            </div>
+
+            <div class="kf-form-field kf-col-3">
+                <p:outputLabel value="#{messages.tcKimlikNoLabel}" for="@next"/>
+                <div class="ui-inputgroup">
+                    <p:inputMask id="tcKimlikNo"
+                                 value="#{pkHastaController.selected.gnlKisi.tcKimlikNo}"
+                                 label="#{messages.tcKimlikNoText}"
+                                 required="true"
+                                 title="#{messages.tcKimlikNoText}" mask="99999999999"/>
+                    <p:commandButton icon="pi pi-search" process="tcKimlikNo,:growl"
+                                     update=":growl,@(.tcUpdate)"
+                                     actionListener="#{pkHastaController.getTcKimlik()}"
+                                     styleClass="btn-xs btn btn-info" onstart="PF('Loading').show()"
+                                     onsuccess="PF('Loading').hide()" resetValues="true"/>
+                </div>
+            </div>
+
+            <div class="kf-form-field kf-col-3">
+                <p:outputLabel value="#{messages.adLabel}" for="@next"/>
+                <p:inputText id="ad" value="#{pkHastaController.selected.gnlKisi.ad}"
+                             size="50"
+                             title="#{messages.adText}"
+                             required="true"
+                             readonly="#{facesContext.renderResponse}" styleClass="tcUpdate"/>
+            </div>
+
+            <div class="kf-form-field kf-col-3">
+                <p:outputLabel value="#{messages.soyadLabel}" for="@next"/>
+                <p:inputText id="soyad" value="#{pkHastaController.selected.gnlKisi.soyad}"
+                             title="#{messages.soyadText}"
+                             required="true" readonly="#{facesContext.renderResponse}"
+                             styleClass="tcUpdate"/>
+
+            </div>
+
+            <div class="kf-form-field kf-col-3">
+                <p:outputLabel value="#{messages.dogumYeriLabel}" for="@next"/>
+                <p:inputText id="dogumYeri" value="#{pkHastaController.selected.gnlKisi.dogumYeri}"
+                             required="true"
+                             readonly="#{facesContext.renderResponse}" styleClass="tcUpdate"/>
+            </div>
+
+            <div class="kf-form-field kf-col-3">
+                <p:outputLabel value="#{messages.cinsiyetLabel}" for="@next"/>
+                <p:inputText id="cinsiyet" value="#{pkHastaController.selected.gnlKisi.cinsiyet}" required="true"
+                             readonly="#{facesContext.renderResponse}" styleClass="tcUpdate"/>
+            </div>
+
+            <div class="kf-form-field kf-col-3">
+                <p:outputLabel value="#{messages.medeniDurumLabel}" for="@next"/>
+                <p:inputText id="medeniDurum" value="#{pkHastaController.selected.gnlKisi.medeniDurum}"
+                             title="#{messages.medeniDurumText}" required="true"
+                             readonly="#{facesContext.renderResponse}"
+                             styleClass="tcUpdate"/>
+            </div>
+
+            <div class="kf-form-field kf-col-3">
+                <p:outputLabel value="#{messages.anneKizlikSoyadiLabel}" for="@next"/>
+                <p:inputText value="#{pkHastaController.selected.anneKizlikSoyadi}"
+                             title="#{messages.anneKizlikSoyadiText}"
+                             required="true"/>
+            </div>
+
+            <div class="kf-form-field kf-col-3">
+                <p:outputLabel value="#{messages.egitimDurumuLabel}" for="@next"/>
+                <p:selectOneMenu id="egitimDurumu" value="#{pkHastaController.selected.gnlKisi.egitimDurumu}"
+                                 converter="omnifaces.SelectItemsConverter" styleClass="tcUpdate">
+                    <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+                    <f:selectItems value="#{enumEgitimDurumu.ALL_VALUES}"
+                                   var="enumEgitimDurumus"
+                                   itemLabel="#{enumEgitimDurumus.displayValue}"
+                                   itemValue="#{enumEgitimDurumus}"/>
+                </p:selectOneMenu>
+            </div>
+
+            <div class="kf-form-field kf-col-3">
+                <p:outputLabel value="#{messages.telefonLabel}" for="@next"/>
+                <p:inputMask id="telefon" value="#{pkHastaController.selected.gnlKisi.telefon}"
+                             mask="#{messages.telefonFormat}"
+                             required="true"
+                             title="#{messages.telefonText}" size="14" styleClass="tcUpdate"/>
+            </div>
+
+            <div class="kf-form-field kf-col-3">
+                <p:outputLabel value="#{messages.telefonLabel}" for="telefon2"/>
+                <p:inputMask id="telefon2" value="#{pkHastaController.selected.gnlKisi.telefon2}"
+                             mask="#{messages.telefonFormat}" title="#{messages.telefonText}" size="14" styleClass="tcUpdate"/>
+            </div>
+
+            <div class="kf-form-field kf-col-3">
+                <p:outputLabel value="#{messages.ilceLabel}" for="@next"/>
+                <p:inputText id="ilce" value="#{pkHastaController.selected.gnlKisi.gnlIlce.tanim}" title="#{messages.ilceText}"
+                             readonly="true" styleClass="tcUpdate"/>
+            </div>
+
+            <div class="kf-form-field kf-col-3">
+                <p:outputLabel value="#{messages.mahalleLabel}" for="@next"/>
+                <p:inputText id="mahalle" value="#{pkHastaController.selected.gnlKisi.gnlMahalle.tanim}"
+                             title="#{messages.mahalleText}" readonly="true"
+                             styleClass="tcUpdate"/>
+            </div>
+
+            <div class="kf-form-field kf-col-3">
+                <p:outputLabel value="#{messages.ailenizGocIleMiGeldiLabel}" for="@next"/>
+                <h:panelGroup>
+                    <div class="input-group">
+            <span class="input-group-text">
+                <p:selectOneMenu value="#{pkHastaController.selected.aileGocIleGeldi}" required="true" converter="omnifaces.SelectItemsConverter">
+                    <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+                    <f:selectItems value="#{enumEvetHayir.ALL_VALUES}"
+                                   var="evethayir"
+                                   itemLabel="#{evethayir.displayValue}"
+                                   itemValue="#{evethayir}"/>
+                    <p:ajax event="change" update="aileGocIleGeldiAciklama"/>
+                </p:selectOneMenu>
+            </span>
+                        <p:inputText id="aileGocIleGeldiAciklama" value="#{pkHastaController.selected.aileGocIleGeldiAciklama}"
+                                     required="#{pkHastaController.selected.aileGocIleGeldi eq 'EVET'}"
+                                     disabled="#{pkHastaController.selected.aileGocIleGeldi ne 'EVET'}" style="width:67% !important"/>
+                    </div>
+                </h:panelGroup>
+            </div>
+
+            <div class="kf-form-field kf-col-3">
+
+            </div>
+
+            <div class="kf-form-field kf-col-3">
+
+            </div>
+
+            <div class="kf-form-field kf-col-3">
+
+            </div>
+
+            <div class="kf-form-field kf-col-3">
+
+            </div>
+
+            <div class="kf-form-field kf-col-3">
+
+            </div>
+
+            <div class="kf-form-field kf-col-3">
+
+            </div>
+
+            <div class="kf-form-field kf-col-3">
+
+            </div>
+
+        </div>
+    </ui:fragment>
+</ui:composition>
+</html>
