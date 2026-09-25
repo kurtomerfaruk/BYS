@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+>
+
+<ui:composition>
+
+    <p:dataTable value="#{pkHastaController.selected.pkBireyselTedaviPlaniList}"
+                 var="planVar"
+                 id="planDt"
+                 scrollable="true"
+                 paginator="true"
+                 widgetVar="planWidget"
+                 rows="3"
+                 emptyMessage="#{messages.kayitBulunamadi}"
+                 paginatorPosition="bottom"
+                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                 currentPageReportTemplate="#{messages.currentPageTemplate}"
+                 style="max-width:800px">
+
+        <p:column sortBy="#{planVar.tarih}">
+            <f:facet name="header">
+                <h:outputText value="#{messages.tarihText}"/>
+            </f:facet>
+            <f:facet name="filter">
+                <p:datePicker pattern="#{messages.tarihFormat}" locale="tr" mask="true"
+                              onkeyup="PF('planWidget').filter()" monthNavigator="true" yearNavigator="true"
+                              showButtonBar="true">
+                    <p:ajax event="dateSelect" oncomplete="PF('planWidget').filter()"/>
+                </p:datePicker>
+            </f:facet>
+            <h:outputText value="#{planVar.tarih}">
+                <f:convertDateTime pattern="#{messages.tarihSaatKisaFormat}" type="localDateTime"/>
+            </h:outputText>
+        </p:column>
+
+    </p:dataTable>
+
+</ui:composition>
+</html>
