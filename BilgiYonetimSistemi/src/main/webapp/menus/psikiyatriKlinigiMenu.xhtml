@@ -49,6 +49,17 @@
                                 </li>
                             </ui:fragment>
 
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('pkhastatedavisekli:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/psikiyatriklinigi/pkHastaTedaviSekli/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="Hasta Tedavi Şekli"/>
+                                </li>
+                            </ui:fragment>
+
                         </ul>
                     </li>
                 </ui:fragment>
@@ -80,6 +91,17 @@
                                                    onstart="PF('Loading').show()"
                                                    onsuccess="PF('Loading').hide()"
                                                    value="Madde Türleri"/>
+                                </li>
+                            </ui:fragment>
+
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('pktaburcunedeni:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/psikiyatriklinigi/pkTaburcuNedeni/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="Taburcu Nedenleri"/>
                                 </li>
                             </ui:fragment>
                         </ul>
