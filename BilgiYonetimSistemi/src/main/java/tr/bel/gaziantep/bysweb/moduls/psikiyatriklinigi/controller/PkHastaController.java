@@ -8,6 +8,8 @@ import jakarta.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.primefaces.PrimeFaces;
+import org.primefaces.event.SelectEvent;
 import tr.bel.gaziantep.bysweb.core.controller.AbstractController;
 import tr.bel.gaziantep.bysweb.core.controller.KpsController;
 import tr.bel.gaziantep.bysweb.core.enums.bys.EnumModul;
@@ -140,5 +142,14 @@ public class PkHastaController extends AbstractController<PkHasta> {
             maddeKullananBireyler = Arrays.asList(this.getSelected().getAiledeMaddeKullanimiOlanBireyler().split("\\|"));
             alkolKullananBireyler = Arrays.asList(this.getSelected().getAiledeAlkolKullanimiOlanBirey().split("\\|"));
         }
+    }
+
+    public void hastaSecKapat(PkHasta pkHasta) {
+        PrimeFaces.current().dialog().closeDynamic(pkHasta);
+    }
+
+    public void onRowDblSelect(SelectEvent<PkHasta> event) {
+        PkHasta pkHasta = event.getObject();
+        hastaSecKapat(pkHasta);
     }
 }

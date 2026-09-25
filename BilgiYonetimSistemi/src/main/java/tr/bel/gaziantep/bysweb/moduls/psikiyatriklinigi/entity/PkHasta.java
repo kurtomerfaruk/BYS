@@ -278,6 +278,10 @@ public class PkHasta extends BaseEntity {
     @SQLRestriction("AKTIF=true")
     private List<PkHastaMaddeKullanimi> pkHastaMaddeKullanimiList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "pkHasta", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @SQLRestriction("AKTIF=true")
+    private List<PkBireyselTedaviPlani> pkBireyselTedaviPlaniList = new ArrayList<>();
+
     @Override
     public int hashCode() {
         int hash = 0;

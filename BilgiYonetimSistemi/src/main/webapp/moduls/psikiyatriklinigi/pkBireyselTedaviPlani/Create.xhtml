@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:createpage id="PkBireyselTedaviPlaniCreateForm"
+                     renderedListener="#{pkBireyselTedaviPlaniController.selected != null}"
+                     widgetVar="PkBireyselTedaviPlaniCreateDialog"
+                     actionListener="#{pkBireyselTedaviPlaniController.saveNew}"
+                     listForm="PkBireyselTedaviPlaniListForm">
+
+        <p:outputLabel value="#{messages.basvuruTarihiLabel}" for="@next"/>
+        <p:datePicker locale="tr" pattern="#{messages.tarihFormat}"
+                      value="#{pkBireyselTedaviPlaniController.selected.tarih}"
+                      title="#{messages.basvuruTarihiText}" mask="true"
+                      monthNavigator="true" yearNavigator="true" showButtonBar="true"
+                      showIcon="true" showOnFocus="false"/>
+
+        <p:outputLabel value="#{messages.tcKimlikNoLabel}" for="@next"/>
+        <coco:inputWithButton id="inputWithButtonPkHasta" inputId="pkHastaId"
+                              inputValue="#{pkBireyselTedaviPlaniController.selected.pkHasta.gnlKisi.tcKimlikNo}"
+                              inputTitle="#{messages.tcKimlikNoText}"
+                              actionListener="#{bysController.openCommonDialog('pkHastaSec')}"
+                              ajaxListener="#{pkBireyselTedaviPlaniController.secilenPkHasta}"
+                              buttonTitle="#{messages.hastaSecmelisiniz}"
+                              size="50"
+                              dialogId="PkBireyselTedaviPlaniCreateDialogId"/>
+
+
+        <p:outputLabel value="#{messages.adLabel}" for="@next"/>
+        <p:inputText id="ad" value="#{pkBireyselTedaviPlaniController.selected.pkHasta.gnlKisi.ad}"
+                     title="#{messages.adText}"
+                     size="50" maxlength="50" readonly="true" styleClass="inputUpdate"/>
+
+        <p:outputLabel value="#{messages.soyadLabel}" for="@next"/>
+        <p:inputText id="soyad" value="#{pkBireyselTedaviPlaniController.selected.pkHasta.gnlKisi.soyad}"
+                     title="#{messages.soyadText}" size="50" maxlength="50" readonly="true" styleClass="inputUpdate"/>
+
+        <p:outputLabel value="#{messages.telefonLabel}" for="@next"/>
+        <h:panelGroup>
+            <p:inputText value="#{pkBireyselTedaviPlaniController.selected.pkHasta.gnlKisi.telefon}"
+                         styleClass="inputUpdate" readonly="true"/>
+            <p:inputText value="#{pkBireyselTedaviPlaniController.selected.pkHasta.gnlKisi.telefon2}"
+                         styleClass="inputUpdate" readonly="true"/>
+        </h:panelGroup>
+
+        <p:outputLabel value="#{messages.tedaviSureciLabel}" for="@next"/>
+        <p:inputTextarea value="#{pkBireyselTedaviPlaniController.selected.tedaviSureci}" rows="4" autoResize="false"
+                         styleClass="w-100"/>
+
+        <p:outputLabel value="#{messages.gecmisTedavileriLabel}" for="@next"/>
+        <p:inputTextarea value="#{pkBireyselTedaviPlaniController.selected.gecmisTedavileri}" rows="4" autoResize="false"
+                         styleClass="w-100"/>
+
+        <p:outputLabel value="#{messages.egitimLabel}" for="@next"/>
+        <p:inputTextarea value="#{pkBireyselTedaviPlaniController.selected.egitim}" rows="4" autoResize="false"
+                         styleClass="w-100"/>
+
+        <p:outputLabel value="#{messages.calismaLabel}" for="@next"/>
+        <p:inputTextarea value="#{pkBireyselTedaviPlaniController.selected.calisma}" rows="4" autoResize="false"
+                         styleClass="w-100"/>
+
+        <p:outputLabel value="#{messages.sokakYasamiLabel}" for="@next"/>
+        <p:inputTextarea value="#{pkBireyselTedaviPlaniController.selected.sokakYasami}" rows="4" autoResize="false"
+                         styleClass="w-100"/>
+
+        <p:outputLabel value="#{messages.yasalDurumLabel}" for="@next"/>
+        <p:inputTextarea value="#{pkBireyselTedaviPlaniController.selected.yasalDurum}" rows="4" autoResize="false"
+                         styleClass="w-100"/>
+
+        <p:outputLabel value="#{messages.tibbiOykuLabel}" for="@next"/>
+        <p:inputTextarea value="#{pkBireyselTedaviPlaniController.selected.tibbiOyku}" rows="4" autoResize="false"
+                         styleClass="w-100"/>
+
+        <p:outputLabel value="#{messages.maddeKullanimiLabel}" for="@next"/>
+        <p:inputTextarea value="#{pkBireyselTedaviPlaniController.selected.maddeKullanimi}" rows="4" autoResize="false"
+                         styleClass="w-100"/>
+
+        <p:outputLabel value="#{messages.psikolojikTestSonuclariLabel}" for="@next"/>
+        <p:inputTextarea value="#{pkBireyselTedaviPlaniController.selected.psikolojikTestSonuclari}" rows="4" autoResize="false"
+                         styleClass="w-100"/>
+
+        <p:outputLabel value="#{messages.dsm5MaddeKullanimBozukluguTanisiLabel}" for="@next"/>
+        <p:inputTextarea value="#{pkBireyselTedaviPlaniController.selected.dsm5MaddeKullanimBozukluguTanisi}" rows="4" autoResize="false"
+                         styleClass="w-100"/>
+
+        <p:outputLabel value="#{messages.amacHedefLabel}" for="@next"/>
+        <p:inputTextarea value="#{pkBireyselTedaviPlaniController.selected.amacHedef}" rows="4" autoResize="false"
+                         styleClass="w-100"/>
+
+        <p:outputLabel value="#{messages.sorunLabel}" for="@next"/>
+        <p:inputTextarea value="#{pkBireyselTedaviPlaniController.selected.sorun}" rows="4" autoResize="false"
+                         styleClass="w-100"/>
+
+        <p:outputLabel value="#{messages.mudahalelerLabel}" for="@next"/>
+        <p:inputTextarea value="#{pkBireyselTedaviPlaniController.selected.mudahaleler}" rows="4" autoResize="false"
+                         styleClass="w-100"/>
+
+        <p:outputLabel value="#{messages.aileDemografikVeSaglikDurumuLabel}" for="@next"/>
+        <p:inputTextarea value="#{pkBireyselTedaviPlaniController.selected.aileDemografikVeSaglikDurumu}" rows="4" autoResize="false"
+                         styleClass="w-100"/>
+
+        <p:outputLabel value="#{messages.aileEkonomikVeKonutDurumuLabel}" for="@next"/>
+        <p:inputTextarea value="#{pkBireyselTedaviPlaniController.selected.aileEkonomikVeKonutDurumu}" rows="4" autoResize="false"
+                         styleClass="w-100"/>
+
+        <p:outputLabel value="#{messages.toplumsalCevreninDurumuLabel}" for="@next"/>
+        <p:inputTextarea value="#{pkBireyselTedaviPlaniController.selected.toplumsalCevreninDurumu}" rows="4" autoResize="false"
+                         styleClass="w-100"/>
+
+        <p:outputLabel value="#{messages.hastaninSaglikDurumuVeMaddeKullanimiLabel}" for="@next"/>
+        <p:inputTextarea value="#{pkBireyselTedaviPlaniController.selected.hastaninSaglikDurumuVeMaddeKullanimi}" rows="4" autoResize="false"
+                         styleClass="w-100"/>
+
+        <p:outputLabel value="#{messages.aileSorunLabel}" for="@next"/>
+        <p:inputTextarea value="#{pkBireyselTedaviPlaniController.selected.aileSorun}" rows="4" autoResize="false"
+                         styleClass="w-100"/>
+
+        <p:outputLabel value="#{messages.aileMudahaleLabel}" for="@next"/>
+        <p:inputTextarea value="#{pkBireyselTedaviPlaniController.selected.aileMudahale}" rows="4" autoResize="false"
+                         styleClass="w-100"/>
+
+    </coco:createpage>
+
+</ui:composition>
+
+</html>
