@@ -26,7 +26,7 @@ public class PkPersonel extends BaseEntity {
     @Column(name = "ID", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST,CascadeType.MERGE})
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "GNLPERSONEL_ID")
     private GnlPersonel gnlPersonel;
 

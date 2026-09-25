@@ -12,7 +12,7 @@ import tr.bel.gaziantep.bysweb.core.utils.Constants;
 @Getter
 public enum EnumGnlUyruk implements BaseEnum {
     TC("Türkiye Cumhuriyeti"),
-    SRY("Suriye"),
+    SRY("Suriye Arap Cumhuriyeti"),
     IRAK("Irak"),
     DIGER("Diğer"),
     YABANCI("Yabancı"),

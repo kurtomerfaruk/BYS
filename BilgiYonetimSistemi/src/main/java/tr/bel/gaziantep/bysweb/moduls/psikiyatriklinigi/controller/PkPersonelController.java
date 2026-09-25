@@ -7,9 +7,6 @@ import jakarta.inject.Named;
 import lombok.extern.slf4j.Slf4j;
 import tr.bel.gaziantep.bysweb.core.controller.AbstractController;
 import tr.bel.gaziantep.bysweb.core.controller.KpsController;
-import tr.bel.gaziantep.bysweb.core.enums.bys.EnumModul;
-import tr.bel.gaziantep.bysweb.core.utils.Constants;
-import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlPersonel;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlUnvan;
@@ -63,34 +60,34 @@ public class PkPersonelController extends AbstractController<PkPersonel> {
         return null;
     }
 
-    public void getTcKimlik() {
-        try {
-            if (this.getSelected() != null) {
-                GnlKisi gnlKisi = this.getSelected().getGnlPersonel().getGnlKisi();
-                GnlKisi kisiFromMernis = kpsController.findByTcKimlikNo(gnlKisi, EnumModul.PSIKIYATRI_KLINIGI);
-                if (kisiFromMernis != null) {
-                    GnlKisi existingKisi = gnlKisiService.findByTckimlikNoByDogumTarihi(kisiFromMernis.getTcKimlikNo(), kisiFromMernis.getDogumTarihi());
-                    if (existingKisi != null) {
-                        kisiFromMernis.setId(existingKisi.getId());
-                    }
-
-                    GnlPersonel existingPersonel = kisiFromMernis.getId() == null ? null : gnlPersonelService.findByGnlKisi(kisiFromMernis);
-                    GnlPersonel personel;
-                    if (existingPersonel != null) {
-                        existingPersonel.setGnlKisi(kisiFromMernis);
-                        personel = existingPersonel;
-                    } else {
-                        personel = new GnlPersonel();
-                        personel.setGnlKisi(kisiFromMernis);
-                    }
-                    this.getSelected().setGnlPersonel(personel);
-                }
-            }
-        } catch (Exception ex) {
-            log.error(null, ex);
-            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
-        }
-    }
+//    public void getTcKimlik() {
+//        try {
+//            if (this.getSelected() != null) {
+//                GnlKisi gnlKisi = this.getSelected().getGnlPersonel().getGnlKisi();
+//                GnlKisi kisiFromMernis = kpsController.findByTcKimlikNo(gnlKisi, EnumModul.PSIKIYATRI_KLINIGI);
+//                if (kisiFromMernis != null) {
+//                    GnlKisi existingKisi = gnlKisiService.findByTckimlikNoByDogumTarihi(kisiFromMernis.getTcKimlikNo(), kisiFromMernis.getDogumTarihi());
+//                    if (existingKisi != null) {
+//                        kisiFromMernis.setId(existingKisi.getId());
+//                    }
+//
+//                    GnlPersonel existingPersonel = kisiFromMernis.getId() == null ? null : gnlPersonelService.findByGnlKisi(kisiFromMernis);
+//                    GnlPersonel personel;
+//                    if (existingPersonel != null) {
+//                        existingPersonel.setGnlKisi(kisiFromMernis);
+//                        personel = existingPersonel;
+//                    } else {
+//                        personel = new GnlPersonel();
+//                        personel.setGnlKisi(kisiFromMernis);
+//                    }
+//                    this.getSelected().setGnlPersonel(personel);
+//                }
+//            }
+//        } catch (Exception ex) {
+//            log.error(null, ex);
+//            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+//        }
+//    }
 
 
 }

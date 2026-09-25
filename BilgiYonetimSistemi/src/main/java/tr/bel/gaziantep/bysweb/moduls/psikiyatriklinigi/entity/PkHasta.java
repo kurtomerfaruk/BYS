@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
+import org.hibernate.annotations.SQLRestriction;
 import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
 import tr.bel.gaziantep.bysweb.core.enums.bys.EnumEvetHayir;
 import tr.bel.gaziantep.bysweb.core.enums.bys.EnumVarYok;
@@ -13,6 +14,8 @@ import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
 
 import java.io.Serial;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
@@ -23,6 +26,7 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 @Table(name = "PKHASTA")
+@NamedQuery(name = "PkHasta.findByKisiTcKimlikNo", query = "SELECT e FROM PkHasta e WHERE e.aktif=true AND e.gnlKisi.tcKimlikNo = :tcKimlikNo")
 public class PkHasta extends BaseEntity {
 
     @Serial
@@ -32,7 +36,7 @@ public class PkHasta extends BaseEntity {
     @Column(name = "ID", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "GNLKISI_ID")
     private GnlKisi gnlKisi;
 
@@ -269,6 +273,10 @@ public class PkHasta extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PSIKIYATRIK_MUAYENE_YAPAN_PKPERSONEL_ID")
     private PkPersonel psikiyatrikMuayeneYapanPersonel;
+
+    @OneToMany(mappedBy = "pkHasta", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @SQLRestriction("AKTIF=true")
+    private List<PkHastaMaddeKullanimi> pkHastaMaddeKullanimiList = new ArrayList<>();
 
     @Override
     public int hashCode() {

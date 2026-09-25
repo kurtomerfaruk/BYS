@@ -76,7 +76,7 @@ public class KisiBilgisi implements java.io.Serializable{
     @JsonProperty("Statu")
     public Object statu;
     @JsonProperty("Uyruk")
-    public Object uyruk;
+    public Bilgi uyruk;
     @JsonProperty("VeliVasiTur")
     public Object veliVasiTur;
     @JsonProperty("VeliVasiVar")

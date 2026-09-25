@@ -133,6 +133,8 @@ public class BilesikKutukSorgulaService extends KpsAbstractService<BilesikKutukS
                     result.setOlumTarihi(convertToDate(olumTarihi));
                 }
 
+                result.setUyruk(kisiBilgi.getUyruk().getAciklama());
+
                 result.setTcKimlikNo(kisiBilgi.getKimlikNo());
             } else {
                 KisiBilgisi kisiBilgi = bilgi.getTcVatandasiKisiKutukleri().getKisiBilgisi();

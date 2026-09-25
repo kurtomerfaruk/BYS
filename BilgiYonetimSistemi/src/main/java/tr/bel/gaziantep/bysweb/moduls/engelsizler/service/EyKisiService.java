@@ -390,8 +390,8 @@ public class EyKisiService extends AbstractService<EyKisi> {
     }
 
     public EyKisi findByTcKimlikNo(String tcKimlikNo) {
-        return (EyKisi) getEntityManager()
-                .createNamedQuery("EyKisi.findByKisiTcKimlikNo")
+        return getEntityManager()
+                .createNamedQuery("EyKisi.findByKisiTcKimlikNo",EyKisi.class)
                 .setParameter("tcKimlikNo", tcKimlikNo)
                 .getResultList()
                 .stream()
@@ -400,8 +400,8 @@ public class EyKisiService extends AbstractService<EyKisi> {
     }
 
     public EyKisi findByKisi(GnlKisi gnlKisi) {
-        return (EyKisi) getEntityManager()
-                .createNamedQuery("EyKisi.findByKisi")
+        return getEntityManager()
+                .createNamedQuery("EyKisi.findByKisi",EyKisi.class)
                 .setParameter("gnlKisi", gnlKisi)
                 .getResultList()
                 .stream()
@@ -411,7 +411,7 @@ public class EyKisiService extends AbstractService<EyKisi> {
 
     public List<EyKisi> findByKisiList(GnlKisi kisi) {
         return getEntityManager()
-                .createNamedQuery("EyKisi.findByKisi")
+                .createNamedQuery("EyKisi.findByKisi",EyKisi.class)
                 .setParameter("gnlKisi", kisi)
                 .getResultList();
     }

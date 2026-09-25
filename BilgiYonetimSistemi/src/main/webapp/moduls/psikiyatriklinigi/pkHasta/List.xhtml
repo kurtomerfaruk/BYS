@@ -41,7 +41,8 @@
                                  oncomplete="PF('PkHastaCreateDialog').show()" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
                                  rendered="#{syKullaniciController.hasPermission('pkhasta:ekle')}"/>
                 <p:commandButton id="editButton" styleClass="ui-button-success" icon="pi pi-pencil" pt:data-tooltip="#{messages.buttonGuncelle}"
-                                 update=":PkHastaEditForm:PkHastaEditForm" oncomplete="PF('PkHastaEditDialog').show()"
+                                 update=":PkHastaEditForm" oncomplete="PF('PkHastaEditDialog').show()"
+                                 actionListener="#{pkHastaController.readInfo()}"
                                  disabled="#{empty pkHastaController.selected}" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
                                  rendered="#{syKullaniciController.hasPermission('pkhasta:guncelle')}"/>
                 <p:commandButton id="viewButton" styleClass="ui-button-info" icon="pi pi-search" pt:data-tooltip="#{messages.buttonDetay}"

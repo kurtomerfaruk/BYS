@@ -41,13 +41,13 @@ function adjustMenuWidth(dialogWidget, componentClass, width = 30) {
 }
 
 function adjustMenuWidth(formName) {
-    console.log("form",formName)
+    console.log(formName);
     var display = $("#" + formName + "\\:display").width();
-    if(display===undefined){
-        display = $("#"+formName+"\\:"+formName+"\\:display").width();
+    if (display === undefined) {
+        display = $("#" + formName + "\\:" + formName + "\\:display").width();
     }
     var menu = $(".checkboxMenu");
-    var dialogWidth = display - 30;
+    var dialogWidth = display > 800 ? 800 : display - 30;
     var menuContainer = $(menu).closest('.ui-selectcheckboxmenu');
     menuContainer.width(dialogWidth);
 }

@@ -502,11 +502,12 @@
     <h:panelGroup>
         <p:selectOneMenu value="#{pkHastaController.selected.bedenindeKesiIziVarMi}"
                          converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
             <f:selectItems value="#{enumVarYok.ALL_VALUES}"
                            var="varYok"
                            itemLabel="#{varYok.displayValue}"
                            itemValue="#{varYok}"/>
-            <p:ajax event="change" update="bedenindeKesiIziVarMiAciklama"/>
+            <p:ajax event="change" update="bedenindeKesiIziVarMiAciklama,bedenindeKesiIziSiddeti"/>
         </p:selectOneMenu>
         <p:selectOneMenu id="bedenindeKesiIziVarMiAciklama"
                          value="#{pkHastaController.selected.bedenindeKesiIziVarMiAciklama}"
@@ -522,8 +523,10 @@
     </h:panelGroup>
 
     <p:outputLabel value="#{messages.kesiIziSiddetiLabel}" for="@next"/>
-    <p:selectOneMenu value="#{pkHastaController.selected.bedenindeKesiIziSiddeti}"
-                     converter="omnifaces.SelectItemsConverter">
+    <p:selectOneMenu id="bedenindeKesiIziSiddeti"
+                     value="#{pkHastaController.selected.bedenindeKesiIziSiddeti}"
+                     converter="omnifaces.SelectItemsConverter"
+                     disabled="#{pkHastaController.selected.bedenindeKesiIziVarMi ne 'VAR'}">
         <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
         <f:selectItems value="#{enumKesiSiddeti.ALL_VALUES}"
                        var="kesiSiddeti"
