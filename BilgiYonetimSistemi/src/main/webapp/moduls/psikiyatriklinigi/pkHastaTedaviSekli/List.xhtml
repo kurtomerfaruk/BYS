@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:p="primefaces"
+                xmlns:pt="jakarta.faces.passthrough"
+                xmlns:coco="jakarta.faces.composite/ui">
+
+    <h:form id="PkHastaTedaviSekliListForm" class="form-height">
+
+        <p:contextMenu id="PkHastaTedaviSekliDataTableContextMenu" for="datalist:datalist">
+            <p:menuitem value="#{messages.buttonEkle}" onclick="document.getElementById('PkHastaTedaviSekliListForm:datalist:datalist:createButton').click();"
+                        icon="pi pi-plus" rendered="#{syKullaniciController.hasPermission('pkhastatedavisekli:ekle')}"/>
+            <p:menuitem value="#{messages.buttonGuncelle}" onclick="document.getElementById('PkHastaTedaviSekliListForm:datalist:datalist:editButton').click();"
+                        icon="pi pi-pencil" rendered="#{syKullaniciController.hasPermission('pkhastatedavisekli:guncelle')}"/>
+            <p:menuitem value="#{messages.buttonDetay}" onclick="document.getElementById('PkHastaTedaviSekliListForm:datalist:datalist:viewButton').click();"
+                        icon="pi pi-search"/>
+            <p:menuitem value="#{messages.buttonSil}" onclick="document.getElementById('PkHastaTedaviSekliListForm:datalist:datalist:deleteButton').click();"
+                        icon="pi pi-trash" rendered="#{syKullaniciController.hasPermission('pkhastatedavisekli:sil')}"/>
+            <p:menuitem value="#{messages.buttonTaburcuEt}" onclick="document.getElementById('PkHastaTedaviSekliListForm:datalist:datalist:taburcuButton').click();"
+                        icon="pi pi-arrow-right" rendered="#{syKullaniciController.hasPermission('pkhastatedavisekli:taburcuet')}"/>
+        </p:contextMenu>
+
+        <coco:datatable id="datalist"
+                        value="#{pkHastaTedaviSekliController.lazyItems}"
+                        rowKey="#{item.id}"
+                        selection="#{pkHastaTedaviSekliController.selected}"
+                        filtered="#{pkHastaTedaviSekliController.filtered}"
+                        rowselect=":PkHastaTedaviSekliListForm:datalist:datalist:createButton,:PkHastaTedaviSekliListForm:datalist:datalist:viewButton,:PkHastaTedaviSekliListForm:datalist:datalist:editButton,:PkHastaTedaviSekliListForm:datalist:datalist:deleteButton,:PkHastaTedaviSekliListForm:datalist:datalist:taburcuButton"
+                        rowDblselect="document.getElementById('PkHastaTedaviSekliListForm:datalist:datalist:editButton').click()"
+                        contextMenu=":PkHastaTedaviSekliListForm:datalist:datalist:createButton :PkHastaTedaviSekliListForm:datalist:datalist:viewButton :PkHastaTedaviSekliListForm:datalist:datalist:editButton :PkHastaTedaviSekliListForm:datalist:datalist:deleteButton :PkHastaTedaviSekliListForm:datalist:datalist:taburcuButton"
+                        selectListener="#{pkHastaTedaviSekliController.resetParents}"
+                        controller="#{pkHastaTedaviSekliController}"
+                        header="#{messages.tedaviSekliListesi}">
+
+            <p:ajax event="colResize" listener="#{pkHastaTedaviSekliController.onResize}"/>
+
+
+            <f:facet name="paginatorBottomLeft">
+                <p:commandButton id="createButton" styleClass="ui-button-primary" icon="pi pi-plus" pt:data-tooltip="#{messages.buttonEkle}"
+                                 actionListener="#{pkHastaTedaviSekliController.prepareCreate}" update=":PkHastaTedaviSekliCreateForm:PkHastaTedaviSekliCreateForm"
+                                 oncomplete="PF('PkHastaTedaviSekliCreateDialog').show()" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('pkhastatedavisekli:ekle')}"/>
+                <p:commandButton id="editButton" styleClass="ui-button-success" icon="pi pi-pencil" pt:data-tooltip="#{messages.buttonGuncelle}"
+                                 update=":PkHastaTedaviSekliEditForm:PkHastaTedaviSekliEditForm"
+                                 oncomplete="PF('PkHastaTedaviSekliEditDialog').show()" disabled="#{empty pkHastaTedaviSekliController.selected}" onstart="PF('Loading').show()"
+                                 onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('pkhastatedavisekli:guncelle')}"/>
+                <p:commandButton id="viewButton" styleClass="ui-button-info" icon="pi pi-search" pt:data-tooltip="#{messages.buttonDetay}"
+                                 update=":PkHastaTedaviSekliViewForm:PkHastaTedaviSekliViewForm"
+                                 oncomplete="PF('PkHastaTedaviSekliViewDialog').show()" disabled="#{empty pkHastaTedaviSekliController.selected}" onstart="PF('Loading').show()"
+                                 onsuccess="PF('Loading').hide()"/>
+                <p:commandButton id="deleteButton" styleClass="ui-button-danger" pt:data-tooltip="#{messages.buttonSil}" icon="pi pi-trash"
+                                 actionListener="#{pkHastaTedaviSekliController.delete}"
+                                 update=":growl,datalist" disabled="#{empty pkHastaTedaviSekliController.selected}"
+                                 rendered="#{syKullaniciController.hasPermission('pkhastatedavisekli:sil')}">
+                    <p:confirm header="#{messages.ConfirmationHeader}" message="#{messages.ConfirmDeleteMessage}" icon="pi pi-warning"/>
+                </p:commandButton>
+
+                <p:commandButton id="taburcuButton" styleClass="ui-button-orange" icon="pi pi-arrow-right"
+                                 pt:data-tooltip="#{messages.buttonTaburcuEt}"
+                                 update=":PkHastaTedaviSekliTaburcuForm:PkHastaTedaviSekliTaburcuForm"
+                                 oncomplete="PF('PkHastaTedaviSekliTaburcuDialog').show()"
+                                 disabled="#{empty pkHastaTedaviSekliController.selected or pkHastaTedaviSekliController.selected.tedaviSekli ne 'YATILI'}"
+                                 onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('pkhastatedavisekli:taburcuet')}"/>
+            </f:facet>
+
+        </coco:datatable>
+
+
+        <ui:include src="/confirmation.xhtml"/>
+
+    </h:form>
+
+</ui:composition>
