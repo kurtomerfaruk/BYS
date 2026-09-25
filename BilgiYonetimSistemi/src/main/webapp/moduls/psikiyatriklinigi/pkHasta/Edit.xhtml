@@ -17,7 +17,8 @@
               appendTo="@(body)"
               responsive="true"
               onShow="PF('PkHastaEditDialog').initPosition();adjustMenuWidth('PkHastaEditForm')"
-              fitViewport="true">
+              fitViewport="true"
+              position="top">
 
         <h:form id="PkHastaEditForm">
             <h:panelGroup id="display">
@@ -28,17 +29,24 @@
 
                         <ul class="nav nav-tabs mb-3 tab-style-8 scaleX" role="tablist">
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link active" id="pkhastaBilgileriCreateTab" data-bs-toggle="tab"
-                                        data-bs-target="#pkhastaBilgileriCreateTabPane" type="button" role="tab"
-                                        aria-controls="pkhastaBilgileriCreateTabPane"
+                                <button class="nav-link active" id="pkhastaBilgileriEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#pkhastaBilgileriEditTabPane" type="button" role="tab"
+                                        aria-controls="pkhastaBilgileriEditTabPane"
                                         aria-selected="true">Hasta Bilgileri
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="pkBireyselTedaviPlaniEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#pkBireyselTedaviPlaniEditTabPane" type="button" role="tab"
+                                        aria-controls="pkBireyselTedaviPlaniEditTabPane"
+                                        aria-selected="true">Bireysel Tedavi Planı
                                 </button>
                             </li>
                         </ul>
 
                         <div class="tab-content">
-                            <div class="tab-pane overflow-hidden active show" id="pkhastaBilgileriCreateTabPane"
-                                 role="tabpanel" aria-labelledby="pkhastaBilgileriCreateTab" tabindex="0">
+                            <div class="tab-pane overflow-hidden active show" id="pkhastaBilgileriEditTabPane"
+                                 role="tabpanel" aria-labelledby="pkhastaBilgileriEditTab" tabindex="0">
 
                                 <p:panelGrid id="hastaPanel" columns="2" styleClass="w-100"
                                              rendered="#{pkHastaController.selected!=null}" layout="tabular">
@@ -47,6 +55,15 @@
                                 </p:panelGrid>
                             </div>
 
+                            <div class="tab-pane overflow-hidden" id="pkBireyselTedaviPlaniEditTabPane"
+                                 role="tabpanel" aria-labelledby="pkBireyselTedaviPlaniEditTab" tabindex="0">
+
+                                <p:panelGrid id="bireyselTedaviPlaniPanel" columns="2" styleClass="w-100"
+                                             rendered="#{pkHastaController.selected!=null}" layout="tabular">
+
+                                    <ui:include src="/moduls/psikiyatriklinigi/pkHasta/BireyselTedaviPlaniTab.xhtml"/>
+                                </p:panelGrid>
+                            </div>
                         </div>
                     </div>
                     <div class="card-footer">
