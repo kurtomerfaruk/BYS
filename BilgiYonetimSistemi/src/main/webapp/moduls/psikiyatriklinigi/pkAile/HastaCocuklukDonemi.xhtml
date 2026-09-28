@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+>
+
+<ui:composition>
+
+    <p:outputLabel value="#{messages.konusmasiVeYurumesiLabel}" for="@next"/>
+    <p:inputTextarea value="#{pkAileController.selected.pkHastaCocuklukDonemi.konusmasiVeYurumesi}" rows="4"
+                     autoResize="false" styleClass="w-100"/>
+
+    <p:outputLabel value="#{messages.istahVeUykuLabel}" for="@next"/>
+    <p:inputTextarea value="#{pkAileController.selected.pkHastaCocuklukDonemi.istahVeUyku}" rows="4"
+                     autoResize="false" styleClass="w-100"/>
+
+    <p:outputLabel value="#{messages.atesliHavaleMenenjitLabel}" for="@next"/>
+    <p:selectOneMenu value="#{pkAileController.selected.pkHastaCocuklukDonemi.atesliHavaleMenenjit}"
+                     converter="omnifaces.SelectItemsConverter">
+        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+        <f:selectItems value="#{enumVarYok.ALL_VALUES}"
+                       var="varyok"
+                       itemLabel="#{varyok.displayValue}"
+                       itemValue="#{varyok}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.yuksektenDusmeLabel}" for="@next"/>
+    <p:selectOneMenu value="#{pkAileController.selected.pkHastaCocuklukDonemi.yuksektenDusme}"
+                     converter="omnifaces.SelectItemsConverter">
+        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+        <f:selectItems value="#{enumVarYok.ALL_VALUES}"
+                       var="varyok"
+                       itemLabel="#{varyok.displayValue}"
+                       itemValue="#{varyok}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.istenilenCocukLabel}" for="@next"/>
+    <p:selectOneMenu value="#{pkAileController.selected.pkHastaCocuklukDonemi.istenilenCocuk}"
+                     converter="omnifaces.SelectItemsConverter">
+        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+        <f:selectItems value="#{enumEvetHayir.ALL_VALUES}"
+                       var="evethayir"
+                       itemLabel="#{evethayir.displayValue}"
+                       itemValue="#{evethayir}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.buyukKazaYaralanmaKirikLabel}" for="@next"/>
+    <p:inputTextarea value="#{pkAileController.selected.pkHastaCocuklukDonemi.buyukKazaYaralanmaKirik}" rows="4"
+                     autoResize="false" styleClass="w-100"/>
+
+    <p:outputLabel value="#{messages.egitimLabel}" for="@next"/>
+    <p:inputTextarea value="#{pkAileController.selected.pkHastaCocuklukDonemi.egitim}" rows="4"
+                     autoResize="false" styleClass="w-100"/>
+
+    <p:outputLabel value="#{messages.kisilikOzellikleriLabel}" for="@next"/>
+    <p:inputTextarea value="#{pkAileController.selected.pkHastaCocuklukDonemi.kisilikOzellikleri}" rows="4"
+                     autoResize="false" styleClass="w-100"/>
+
+    <p:outputLabel value="#{messages.uyumSorunuVarMiLabel}" for="@next"/>
+    <p:selectOneMenu value="#{pkAileController.selected.pkHastaCocuklukDonemi.uyumSorunuVarMi}"
+                     converter="omnifaces.SelectItemsConverter">
+        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+        <f:selectItems value="#{enumVarYok.ALL_VALUES}"
+                       var="varyok"
+                       itemLabel="#{varyok.displayValue}"
+                       itemValue="#{varyok}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.intiharGirisimiVeyaDusuncesiOlduMuLabel}" for="@next"/>
+    <p:selectOneMenu value="#{pkAileController.selected.pkHastaCocuklukDonemi.intiharGirisimiVeyaDusuncesiOlduMu}"
+                     converter="omnifaces.SelectItemsConverter">
+        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+        <f:selectItem itemValue="VAR" itemLabel="VAR"/>
+        <f:selectItem itemValue="YOK" itemLabel="YOK"/>
+        <f:selectItem itemValue="DUSUNCESI_OLMUS" itemLabel="DUSUNCESI_OLMUS"/>
+    </p:selectOneMenu>
+
+</ui:composition>
+</html>

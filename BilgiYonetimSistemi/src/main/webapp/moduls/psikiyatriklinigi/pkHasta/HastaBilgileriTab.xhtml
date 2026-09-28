@@ -347,7 +347,7 @@
                           converter="omnifaces.SelectItemsConverter"
                           label="Birey" multiple="true" filter="true"
                           filterMatchMode="startsWith" styleClass="checkboxMenu">
-        <f:selectItems value="#{enumAileBirey.ALL_VALUES}"
+        <f:selectItems value="#{enumAkraba.ALL_VALUES}"
                        var="aileBireys"
                        itemValue="#{aileBireys}"
                        itemLabel="#{aileBireys.displayValue}"/>
@@ -358,7 +358,7 @@
                           converter="omnifaces.SelectItemsConverter"
                           label="Birey" multiple="true" filter="true"
                           filterMatchMode="startsWith" styleClass="checkboxMenu">
-        <f:selectItems value="#{enumAileBirey.ALL_VALUES}"
+        <f:selectItems value="#{enumAkraba.ALL_VALUES}"
                        var="aileBireys"
                        itemValue="#{aileBireys}"
                        itemLabel="#{aileBireys.displayValue}"/>
@@ -457,7 +457,7 @@
                          required="#{pkHastaController.selected.cezaeviGecmisiVarMi eq 'EVET'}"
                          disabled="#{pkHastaController.selected.cezaeviGecmisiVarMi ne 'EVET'}">
             <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
-            <f:selectItems value="#{enumAileBirey.ALL_VALUES}"
+            <f:selectItems value="#{enumAkraba.ALL_VALUES}"
                            var="aileBirey"
                            itemLabel="#{aileBirey.displayValue}"
                            itemValue="#{aileBirey}"/>

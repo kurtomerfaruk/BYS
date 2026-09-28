@@ -229,7 +229,7 @@ public class PkHasta extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "AILEDE_SUC_OYKUSU_ACIKLAMA")
-    private EnumPkAileBirey ailedeSucOykusuAciklama;
+    private EnumPkAkraba ailedeSucOykusuAciklama;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "FIZIKSEL_BIR_HASTALIGI_VAR_MI")

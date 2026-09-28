@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <p:outputLabel value="#{messages.basvuruTarihiLabel}" for="@next"/>
+    <p:datePicker locale="tr" pattern="#{messages.tarihFormat}"
+                  value="#{pkAileController.selected.basvuruTarihi}"
+                  title="#{messages.basvuruTarihiText}" mask="true"
+                  monthNavigator="true" yearNavigator="true" showButtonBar="true"
+                  showIcon="true" showOnFocus="false"/>
+
+    <p:outputLabel value="#{messages.tcKimlikNoLabel}" for="@next"/>
+    <coco:inputWithButton id="inputWithButtonPkHasta" inputId="pkHastaId"
+                          inputValue="#{pkAileController.selected.pkHasta.gnlKisi.tcKimlikNo}"
+                          inputTitle="#{messages.tcKimlikNoText}"
+                          actionListener="#{bysController.openCommonDialog('pkHastaSec')}"
+                          ajaxListener="#{pkAileController.secilenPkHasta}"
+                          buttonTitle="#{messages.hastaSecmelisiniz}"
+                          size="50"
+                          dialogId="PkAileCreateDialogId"/>
+
+    <p:outputLabel value="#{messages.hastaAdSoyadLabel}" for="@next"/>
+    <p:inputText value="#{pkAileController.selected.pkHasta.gnlKisi.adSoyad}"
+                 title="#{messages.hastaAdSoyadText}"
+                 size="50" maxlength="50" readonly="true" styleClass="inputUpdate"/>
+
+    <p:outputLabel value="#{messages.uyrukLabel}" for="@next"/>
+    <p:selectOneMenu id="uyruk" value="#{pkAileController.selected.gnlKisi.uyruk}"
+                     required="true" converter="omnifaces.SelectItemsConverter">
+        <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+        <f:selectItems value="#{enumUyruk.ALL_VALUES}"
+                       var="enumUyruks"
+                       itemLabel="#{enumUyruks.displayValue}"
+                       itemValue="#{enumUyruks}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.tcKimlikNoLabel}" for="@next"/>
+    <coco:tcKimlikNoDogumTarihi actionListener="#{pkAileController.getTcKimlik()}"
+                                update=":growl,@(.tcUpdate)"
+                                value="#{pkAileController.selected.gnlKisi.tcKimlikNo}"
+                                dateValue="#{pkAileController.selected.gnlKisi.dogumTarihi}"/>
+
+    <p:outputLabel value="#{messages.adLabel}" for="@next"/>
+    <p:inputText id="ad" value="#{pkAileController.selected.gnlKisi.ad}"
+                 size="50"
+                 title="#{messages.adText}"
+                 required="true"
+                 readonly="#{facesContext.renderResponse}" styleClass="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.soyadLabel}" for="@next"/>
+    <p:inputText id="soyad" value="#{pkAileController.selected.gnlKisi.soyad}"
+                 title="#{messages.soyadText}"
+                 required="true" readonly="#{facesContext.renderResponse}"
+                 styleClass="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.dogumYeriLabel}" for="@next"/>
+    <p:inputText id="dogumYeri" value="#{pkAileController.selected.gnlKisi.dogumYeri}"
+                 required="true"
+                 readonly="#{facesContext.renderResponse}" styleClass="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.cinsiyetLabel}" for="@next"/>
+    <p:inputText id="cinsiyet" value="#{pkAileController.selected.gnlKisi.cinsiyet}" required="true"
+                 readonly="#{facesContext.renderResponse}" styleClass="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.medeniDurumLabel}" for="@next"/>
+    <p:inputText id="medeniDurum" value="#{pkAileController.selected.gnlKisi.medeniDurum}"
+                 title="#{messages.medeniDurumText}" required="true"
+                 readonly="#{facesContext.renderResponse}"
+                 styleClass="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.telefonLabel}" for="@next"/>
+    <p:inputMask id="telefon" value="#{pkAileController.selected.gnlKisi.telefon}"
+                 mask="#{messages.telefonFormat}"
+                 required="true"
+                 title="#{messages.telefonText}" size="14" styleClass="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.telefonLabel}" for="telefon2"/>
+    <p:inputMask id="telefon2" value="#{pkAileController.selected.gnlKisi.telefon2}"
+                 mask="#{messages.telefonFormat}" title="#{messages.telefonText}" size="14" styleClass="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.ilceLabel}" for="@next"/>
+    <p:inputText value="#{pkAileController.selected.gnlKisi.gnlIlce.tanim}"
+                 title="#{messages.ilceText}" required="true"
+                 readonly="#{facesContext.renderResponse}"
+                 styleClass="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.mahalleLabel}" for="@next"/>
+    <p:inputText value="#{pkAileController.selected.gnlKisi.gnlMahalle.tanim}"
+                 title="#{messages.mahalleText}" required="true"
+                 readonly="#{facesContext.renderResponse}"
+                 styleClass="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.yakinlikDerecesiLabel}" for="@next"/>
+    <h:panelGroup>
+        <p:selectOneMenu value="#{pkAileController.selected.yakinlikDerecesi}"
+                         converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{enumYakinlikDerecesi.ALL_VALUES}"
+                           var="yakinlikDerecesi"
+                           itemLabel="#{yakinlikDerecesi.displayValue}"
+                           itemValue="#{yakinlikDerecesi}"/>
+            <p:ajax event="change" update="yakinlikDerecesiAciklama"/>
+        </p:selectOneMenu>
+        <p:inputText id="yakinlikDerecesiAciklama"
+                     value="#{pkAileController.selected.yakinlikDerecesiAciklama}"
+                     required="#{pkAileController.selected.yakinlikDerecesi eq 'DIGER'}"
+                     disabled="#{pkAileController.selected.yakinlikDerecesi ne 'DIGER'}"/>
+    </h:panelGroup>
+
+</ui:composition>
+</html>

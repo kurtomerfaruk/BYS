@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+>
+
+<ui:composition>
+
+    <p:outputLabel value="#{messages.ebeveynlerArasiIliskiLabel}" for="@next"/>
+    <h:panelGroup>
+        <p:selectOneMenu value="#{pkAileController.selected.pkHastaAileIciIliski.ebeveynlerArasiIliski}"
+                         converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{enumEbeveynIliski.ALL_VALUES}"
+                           var="ebeveynIliski"
+                           itemLabel="#{ebeveynIliski.displayValue}"
+                           itemValue="#{ebeveynIliski}"/>
+            <p:ajax event="change" update="ebeveynlerArasiIliskiAciklama"/>
+        </p:selectOneMenu>
+        <p:inputText id="ebeveynlerArasiIliskiAciklama"
+                     value="#{pkAileController.selected.pkHastaAileIciIliski.ebeveynlerArasiIliskiAciklama}"
+                     required="#{pkAileController.selected.pkHastaAileIciIliski.ebeveynlerArasiIliski eq 'DIGER'}"
+                     disabled="#{pkAileController.selected.pkHastaAileIciIliski.ebeveynlerArasiIliski ne 'DIGER'}"/>
+    </h:panelGroup>
+
+    <p:outputLabel value="#{messages.anneninHastaylaIliskisiLabel}" for="@next"/>
+    <p:selectOneMenu value="#{pkAileController.selected.pkHastaAileIciIliski.anneninHastaylaIliskisi}"
+                     converter="omnifaces.SelectItemsConverter">
+        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+        <f:selectItems value="#{enumPuanlama.ALL_VALUES}"
+                       var="puanlama"
+                       itemLabel="#{puanlama.displayValue}"
+                       itemValue="#{puanlama}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.babaninHastaylaIliskisiLabel}" for="@next"/>
+    <p:selectOneMenu value="#{pkAileController.selected.pkHastaAileIciIliski.babaninHastaylaIliskisi}"
+                     converter="omnifaces.SelectItemsConverter">
+        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+        <f:selectItems value="#{enumPuanlama.ALL_VALUES}"
+                       var="puanlama"
+                       itemLabel="#{puanlama.displayValue}"
+                       itemValue="#{puanlama}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.ailedeEnCokKiminleAnlasirLabel}" for="@next"/>
+    <h:panelGroup>
+        <p:selectOneMenu value="#{pkAileController.selected.pkHastaAileIciIliski.ailedeEnCokKiminleAnlasir}"
+                         converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{enumEbeveynIliski.ALL_VALUES}"
+                           var="ebeveynIliski"
+                           itemLabel="#{ebeveynIliski.displayValue}"
+                           itemValue="#{ebeveynIliski}"/>
+            <p:ajax event="change" update="ailedeEnCokKiminleAnlasirAciklama"/>
+        </p:selectOneMenu>
+        <p:inputText id="ailedeEnCokKiminleAnlasirAciklama"
+                     value="#{pkAileController.selected.pkHastaAileIciIliski.ailedeEnCokKiminleAnlasirAciklama}"
+                     required="#{pkAileController.selected.pkHastaAileIciIliski.ailedeEnCokKiminleAnlasir eq 'DIGER'}"
+                     disabled="#{pkAileController.selected.pkHastaAileIciIliski.ailedeEnCokKiminleAnlasir ne 'DIGER'}"/>
+    </h:panelGroup>
+
+    <p:outputLabel value="#{messages.hastaBuDurumaNasilGeldiLabel}" for="@next"/>
+    <p:inputTextarea value="#{pkAileController.selected.pkHastaAileIciIliski.hastaBuDurumaNasilGeldi}" rows="4"
+                     autoResize="false" styleClass="w-100"/>
+
+    <p:outputLabel value="#{messages.maddeOykusuLabel}" for="@next"/>
+    <p:inputTextarea value="#{pkAileController.selected.pkHastaAileIciIliski.maddeOykusu}" rows="4"
+                     autoResize="false" styleClass="w-100"/>
+
+    <p:outputLabel value="#{messages.zararLabel}" for="@next"/>
+    <p:inputTextarea value="#{pkAileController.selected.pkHastaAileIciIliski.zarar}" rows="4"
+                     autoResize="false" styleClass="w-100"/>
+
+</ui:composition>
+</html>

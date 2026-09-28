@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="primefaces"
+      xmlns:h="jakarta.faces.html">
+
+<ui:composition>
+
+    <p:dialog id="PkAileCreateDialogId"
+              widgetVar="PkAileCreateDialog"
+              modal="true"
+              resizable="false"
+              closeOnEscape="true"
+              header="#{messages.dialogYeniKayit}"
+              appendTo="@(body)"
+              responsive="true"
+              onShow="PF('PkAileCreateDialog').initPosition();adjustMenuWidth('PkAileCreateForm')"
+              fitViewport="true"
+              position="top">
+
+        <h:form id="PkAileCreateForm">
+            <h:panelGroup id="display">
+                <p:focus context="display"/>
+                <div class="card">
+
+                    <div class="card-body">
+
+                        <ul class="nav nav-tabs mb-3 tab-style-8 scaleX" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="pkaileBilgileriCreateTab" data-bs-toggle="tab"
+                                        data-bs-target="#pkaileBilgileriCreateTabPane" type="button" role="tab"
+                                        aria-controls="pkaileBilgileriCreateTabPane"
+                                        aria-selected="true">Aile Bilgileri
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="pkaileHastaCocuklukDonemiCreateTab" data-bs-toggle="tab"
+                                        data-bs-target="#pkaileHastaCocuklukDonemiCreateTabPane" type="button" role="tab"
+                                        aria-controls="pkaileHastaCocuklukDonemiCreateTabPane"
+                                        aria-selected="true">Hasta Çocukluk Dönemi
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="pkaileIciIliskilerCreateTab" data-bs-toggle="tab"
+                                        data-bs-target="#pkaileIciIliskilerCreateTabPane" type="button" role="tab"
+                                        aria-controls="pkaileIciIliskilerCreateTabPane"
+                                        aria-selected="true">Aile İçi İlişkiler
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="pkaileAdliSicilCreateTab" data-bs-toggle="tab"
+                                        data-bs-target="#pkaileAdliSicilCreateTabPane" type="button" role="tab"
+                                        aria-controls="pkaileAdliSicilCreateTabPane"
+                                        aria-selected="true">Adli Sicil
+                                </button>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content">
+                            <div class="tab-pane overflow-hidden active show" id="pkaileBilgileriCreateTabPane"
+                                 role="tabpanel" aria-labelledby="pkaileBilgileriCreateTab" tabindex="0">
+
+                                <p:panelGrid id="ailePanel" columns="2" styleClass="w-100"
+                                             rendered="#{pkAileController.selected!=null}" layout="tabular">
+
+                                    <ui:include src="/moduls/psikiyatriklinigi/pkAile/AileBilgileriTab.xhtml"/>
+                                </p:panelGrid>
+                            </div>
+
+                            <div class="tab-pane overflow-hidden" id="pkaileHastaCocuklukDonemiCreateTabPane"
+                                 role="tabpanel" aria-labelledby="pkaileHastaCocuklukDonemiCreateTab" tabindex="0">
+
+                                <p:panelGrid id="hastaCocuklukDonemiPanel" columns="2" styleClass="w-100"
+                                             rendered="#{pkAileController.selected!=null}" layout="tabular">
+
+                                    <ui:include src="/moduls/psikiyatriklinigi/pkAile/HastaCocuklukDonemi.xhtml"/>
+                                </p:panelGrid>
+                            </div>
+
+                            <div class="tab-pane overflow-hidden" id="pkaileIciIliskilerCreateTabPane"
+                                 role="tabpanel" aria-labelledby="pkaileIciIliskilerCreateTab" tabindex="0">
+
+                                <p:panelGrid id="aileIciIliskilerPanel" columns="2" styleClass="w-100"
+                                             rendered="#{pkAileController.selected!=null}" layout="tabular">
+
+                                    <ui:include src="/moduls/psikiyatriklinigi/pkAile/HastaAileIciIliskiler.xhtml"/>
+                                </p:panelGrid>
+                            </div>
+
+                            <div class="tab-pane overflow-hidden" id="pkaileAdliSicilCreateTabPane"
+                                 role="tabpanel" aria-labelledby="pkaileAdliSicilCreateTab" tabindex="0">
+
+                                <p:panelGrid id="aileAdliSicilPanel" columns="2" styleClass="w-100"
+                                             rendered="#{pkAileController.selected!=null}" layout="tabular">
+
+                                    <ui:include src="/moduls/psikiyatriklinigi/pkAile/HastaAdliSicil.xhtml"/>
+                                </p:panelGrid>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="float-end">
+                            <p:commandButton icon="pi pi-check" styleClass="ui-button-success"
+                                             actionListener="#{pkAileController.saveNew}"
+                                             value="#{messages.buttonKaydet}"
+                                             update="display,:PkAileListForm:datalist:datalist,:growl"
+                                             oncomplete="handleSubmit(xhr,status,args,PF('PkAileCreateDialog'));"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                            <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                             value="#{messages.buttonIptal}" onclick="PF('PkAileCreateDialog').hide()"
+                                             immediate="true" onstart="PF('Loading').show()"
+                                             onsuccess="PF('Loading').hide()"/>
+                        </div>
+                    </div>
+                </div>
+            </h:panelGroup>
+        </h:form>
+
+    </p:dialog>
+
+    <script type="text/javascript">
+        document.addEventListener('shown.bs.tab', function (event) {
+            adjustMenuWidth("PkAileCreateForm");
+        });
+    </script>
+
+</ui:composition>
+
+</html>

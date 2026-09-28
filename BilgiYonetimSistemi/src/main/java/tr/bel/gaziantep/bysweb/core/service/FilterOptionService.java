@@ -424,4 +424,9 @@ public class FilterOptionService implements java.io.Serializable{
                 .collect(Collectors.toList());
     }
 
+    public List<SelectItem> getGnlYakinlikDerecesis() {
+        return Arrays.stream(EnumGnlYakinlikDerecesi.values())
+                .map(value -> new SelectItem(value,value.getDisplayValue()))
+                .collect(Collectors.toList());
+    }
 }
