@@ -1,17 +1,23 @@
 package tr.bel.gaziantep.bysweb.moduls.psikiyatriklinigi.controller;
 
 import jakarta.faces.event.ActionEvent;
+import jakarta.faces.model.SelectItem;
 import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import lombok.extern.slf4j.Slf4j;
 import org.primefaces.event.SelectEvent;
 import tr.bel.gaziantep.bysweb.core.controller.AbstractController;
+import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.EnumSyFiltreAnahtari;
+import tr.bel.gaziantep.bysweb.core.service.FilterOptionService;
 import tr.bel.gaziantep.bysweb.moduls.psikiyatriklinigi.entity.PkHasta;
 import tr.bel.gaziantep.bysweb.moduls.psikiyatriklinigi.entity.PkHastaTedaviSekli;
 
 import java.io.Serial;
 import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
@@ -26,8 +32,22 @@ public class PkHastaTedaviSekliController extends AbstractController<PkHastaTeda
     @Serial
     private static final long serialVersionUID = -147202773805226019L;
 
+    @Inject
+    private FilterOptionService filterOptionService;
+
     public PkHastaTedaviSekliController() {
         super(PkHastaTedaviSekli.class);
+    }
+
+    public List<SelectItem> getFilterOptions(EnumSyFiltreAnahtari key) {
+        switch (key) {
+            case PKTEDAVI_SEKLI -> {
+                return filterOptionService.getPkTedaviSeklis();
+            }
+            default -> {
+                return Collections.emptyList();
+            }
+        }
     }
 
     @Override

@@ -60,7 +60,8 @@ public enum EnumSyFiltreAnahtari implements BaseEnum {
     AYGRUP("Aktif Yaşam Grup"),
     MODUL("Modül"),
     GRAFIK_TURU("Grafik Türü"),
-    IYTALEP_KONU("İleri Yaş Talep Konu"),;
+    IYTALEP_KONU("İleri Yaş Talep Konu"),
+    PKTEDAVI_SEKLI("Psikiyatri Kliniği Tedavi Şekli");
 
     private final String label;
 

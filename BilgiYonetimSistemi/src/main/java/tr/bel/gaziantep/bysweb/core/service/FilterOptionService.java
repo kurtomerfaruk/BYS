@@ -16,6 +16,7 @@ import tr.bel.gaziantep.bysweb.core.enums.hafriyat.EnumHfMalCinsi;
 import tr.bel.gaziantep.bysweb.core.enums.hafriyat.EnumHfTahsilatTuru;
 import tr.bel.gaziantep.bysweb.core.enums.moralevi.EnumMeTalepDurumu;
 import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.*;
+import tr.bel.gaziantep.bysweb.core.enums.psikiyatriklinigi.EnumPkTedaviSekli;
 import tr.bel.gaziantep.bysweb.core.enums.saglikhizmetleri.EnumShDanismanlikHizmeti;
 import tr.bel.gaziantep.bysweb.core.enums.saglikhizmetleri.EnumShObeziteHizmet;
 import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.*;
@@ -416,4 +417,11 @@ public class FilterOptionService implements java.io.Serializable{
         }
         return result;
     }
+
+    public List<SelectItem> getPkTedaviSeklis() {
+        return Arrays.stream(EnumPkTedaviSekli.values())
+                .map(value -> new SelectItem(value,value.getDisplayValue()))
+                .collect(Collectors.toList());
+    }
+
 }
