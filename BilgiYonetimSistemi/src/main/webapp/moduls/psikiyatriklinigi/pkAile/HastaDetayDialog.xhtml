@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:viewpage id="PkAileHastaDetayForm"
+                   widgetVar="PkAileHastaDetayDialog"
+                   columns="2"
+                   model="#{pkAileController.secilenHasta}">
+
+        <h:outputText value="#{messages.tcKimlikNoLabel}"/>
+        <h:outputText value="#{pkAileController.secilenHasta.gnlKisi.tcKimlikNo}"/>
+
+        <h:outputText value="#{messages.adLabel}"/>
+        <h:outputText value="#{pkAileController.secilenHasta.gnlKisi.ad}"/>
+
+        <h:outputText value="#{messages.soyadLabel}"/>
+        <h:outputText value="#{pkAileController.secilenHasta.gnlKisi.soyad}"/>
+
+        <h:outputText value="#{messages.dogumTarihiLabel}"/>
+        <h:outputText value="#{pkAileController.secilenHasta.gnlKisi.dogumTarihi}">
+            <f:convertDateTime type="localDate" pattern="#{messages.tarihFormat}"/>
+        </h:outputText>
+
+        <h:outputText value="#{messages.anaAdiLabel}"/>
+        <h:outputText value="#{pkAileController.secilenHasta.gnlKisi.anaAdi}"/>
+
+        <h:outputText value="#{messages.babaAdiLabel}"/>
+        <h:outputText value="#{pkAileController.secilenHasta.gnlKisi.babaAdi}"/>
+
+        <h:outputText value="#{messages.cinsiyetLabel}"/>
+        <h:outputText value="#{pkAileController.secilenHasta.gnlKisi.cinsiyet}"/>
+
+        <h:outputText value="#{messages.telefonLabel}"/>
+        <h:outputText value="#{pkAileController.secilenHasta.gnlKisi.telefon}"/>
+
+        <h:outputText value="#{messages.basvuruTarihiLabel}"/>
+        <h:outputText value="#{pkAileController.secilenHasta.basvuruTarihi}">
+            <f:convertDateTime type="localDate" pattern="#{messages.tarihFormat}"/>
+        </h:outputText>
+
+        <h:outputText value="#{messages.sehirLabel}"/>
+        <h:outputText value="#{pkAileController.secilenHasta.gnlKisi.gnlIl.tanim}"/>
+
+        <h:outputText value="#{messages.ilceLabel}"/>
+        <h:outputText value="#{pkAileController.secilenHasta.gnlKisi.gnlIlce.tanim}"/>
+
+        <h:outputText value="#{messages.mahalleLabel}"/>
+        <h:outputText value="#{pkAileController.secilenHasta.gnlKisi.gnlMahalle.tanim}"/>
+
+        <h:outputText value="#{messages.adresLabel}"/>
+        <h:outputText value="#{pkAileController.secilenHasta.gnlKisi.adres}"/>
+
+        <h:outputText value="#{messages.anneKizlikSoyadiLabel}"/>
+        <h:outputText value="#{pkAileController.secilenHasta.anneKizlikSoyadi}"/>
+
+        <h:outputText value="#{messages.sigaraKullanimiLabel}"/>
+        <h:outputText value="#{pkAileController.secilenHasta.sigaraKullanimi.displayValue}"/>
+
+        <h:outputText value="#{messages.aileDurumBilgisiLabel}"/>
+        <h:outputText value="#{pkAileController.secilenHasta.aileDurumBilgisi.displayValue}"/>
+
+        <h:outputText value="#{messages.maddeKullanimMiktariVeYontemiLabel}"/>
+        <h:outputText value="#{pkAileController.secilenHasta.maddeKullanimMiktariVeYontemi}"/>
+
+        <h:outputText value="#{messages.yoksunlukEntoksikasyonRemisyonLabel}"/>
+        <h:outputText value="#{pkAileController.secilenHasta.yoksunlukEntoksikasyonRemisyon}"/>
+
+        <h:outputText value="#{messages.intiharGirisimiLabel}"/>
+        <h:outputText value="#{pkAileController.secilenHasta.intiharGirisimi.displayValue}"/>
+
+        <h:outputText value="#{messages.cezaEviGecmisiVarMiLabel}"/>
+        <h:outputText value="#{pkAileController.secilenHasta.cezaeviGecmisiVarMi}"/>
+
+        <h:outputText value="#{messages.psikiyatrikMuayeneLabel}"/>
+        <h:outputText value="#{pkAileController.secilenHasta.psikiyatrikMuayene}"/>
+
+    </coco:viewpage>
+
+</ui:composition>
+
+</html>

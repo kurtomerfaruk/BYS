@@ -17,21 +17,6 @@
                   monthNavigator="true" yearNavigator="true" showButtonBar="true"
                   showIcon="true" showOnFocus="false"/>
 
-    <p:outputLabel value="#{messages.tcKimlikNoLabel}" for="@next"/>
-    <coco:inputWithButton id="inputWithButtonPkHasta" inputId="pkHastaId"
-                          inputValue="#{pkAileController.selected.pkHasta.gnlKisi.tcKimlikNo}"
-                          inputTitle="#{messages.tcKimlikNoText}"
-                          actionListener="#{bysController.openCommonDialog('pkHastaSec')}"
-                          ajaxListener="#{pkAileController.secilenPkHasta}"
-                          buttonTitle="#{messages.hastaSecmelisiniz}"
-                          size="50"
-                          dialogId="PkAileCreateDialogId"/>
-
-    <p:outputLabel value="#{messages.hastaAdSoyadLabel}" for="@next"/>
-    <p:inputText value="#{pkAileController.selected.pkHasta.gnlKisi.adSoyad}"
-                 title="#{messages.hastaAdSoyadText}"
-                 size="50" maxlength="50" readonly="true" styleClass="inputUpdate"/>
-
     <p:outputLabel value="#{messages.uyrukLabel}" for="@next"/>
     <p:selectOneMenu id="uyruk" value="#{pkAileController.selected.gnlKisi.uyruk}"
                      required="true" converter="omnifaces.SelectItemsConverter">

@@ -40,6 +40,10 @@ public class PkHasta extends BaseEntity {
     @JoinColumn(name = "GNLKISI_ID")
     private GnlKisi gnlKisi;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PKAILE_ID")
+    private PkAile pkAile;
+
     @Column(name = "BASVURU_TARIHI")
     private LocalDateTime basvuruTarihi;
 

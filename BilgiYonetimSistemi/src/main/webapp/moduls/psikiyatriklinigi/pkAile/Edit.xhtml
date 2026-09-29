@@ -36,6 +36,13 @@
                                 </button>
                             </li>
                             <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="pkaileHastaListesiEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#pkaileHastaListesiEditTabPane" type="button" role="tab"
+                                        aria-controls="pkaileHastaListesiEditTabPane"
+                                        aria-selected="true">Hasta Listesi
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
                                 <button class="nav-link" id="pkaileHastaCocuklukDonemiEditTab" data-bs-toggle="tab"
                                         data-bs-target="#pkaileHastaCocuklukDonemiEditTabPane" type="button" role="tab"
                                         aria-controls="pkaileHastaCocuklukDonemiEditTabPane"
@@ -69,6 +76,16 @@
                                 </p:panelGrid>
                             </div>
 
+                            <div class="tab-pane overflow-hidden" id="pkaileHastaListesiEditTabPane"
+                                 role="tabpanel" aria-labelledby="pkaileHastaListesiEditTab" tabindex="0">
+
+                                <p:panelGrid id="aileHastaListesiPanel" columns="2" styleClass="w-100"
+                                             rendered="#{pkAileController.selected!=null}" layout="tabular">
+
+                                    <ui:include src="/moduls/psikiyatriklinigi/pkAile/HastaListesiTab.xhtml"/>
+                                </p:panelGrid>
+                            </div>
+
                             <div class="tab-pane overflow-hidden" id="pkaileHastaCocuklukDonemiEditTabPane"
                                  role="tabpanel" aria-labelledby="pkaileHastaCocuklukDonemiEditTab" tabindex="0">
 
@@ -98,6 +115,8 @@
                                     <ui:include src="/moduls/psikiyatriklinigi/pkAile/HastaAdliSicil.xhtml"/>
                                 </p:panelGrid>
                             </div>
+
+
 
                         </div>
                     </div>

@@ -4,12 +4,15 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
+import org.hibernate.annotations.SQLRestriction;
 import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
 import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlYakinlikDerecesi;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
 
 import java.io.Serial;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
@@ -29,10 +32,6 @@ public class PkAile extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID", nullable = false)
     private Integer id;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PKHASTA_ID")
-    private PkHasta pkHasta;
 
     @Column(name = "BASVURU_TARIHI")
     private LocalDateTime basvuruTarihi;
@@ -62,6 +61,9 @@ public class PkAile extends BaseEntity {
     @JoinColumn(name = "PKHASTA_ADLI_SICIL_ID")
     private PkHastaAdliSicil pkHastaAdliSicil;
 
+    @OneToMany(mappedBy = "pkAile", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @SQLRestriction("AKTIF=true")
+    private List<PkHasta> pkHastaList = new ArrayList<>();
 
     @Override
     public int hashCode() {

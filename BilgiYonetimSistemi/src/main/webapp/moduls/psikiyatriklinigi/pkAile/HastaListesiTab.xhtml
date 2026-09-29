@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+>
+
+<ui:composition>
+
+    <p:dataTable id="aileHastaListesiTablo"
+                 value="#{pkAileController.hastaList}"
+                 var="hasta"
+                 scrollable="true"
+                 scrollHeight="300"
+                 scrollWidth="auto"
+                 style="max-width:900px !important"
+                 size="small"
+                 stripedRows="true">
+
+        <f:facet name="header">
+            <div class="row">
+                <div class="col-lg-3">
+                </div>
+                <div class="col-lg-6 text-center">
+                    <h:outputText value="#{messages.hastaListesi}"/>
+                </div>
+                <div class="col-lg-3">
+                    <div class="float-end">
+                        <p:commandButton id="hastaEkleButton"
+                                         styleClass="ui-button-primary"
+                                         icon="pi pi-plus"
+                                         value="#{messages.buttonEkle}"
+                                         title="#{messages.hastaSecmelisiniz}"
+                                         process="@this"
+                                         actionListener="#{bysController.openCommonDialog('pkHastaSec')}"
+                                         update="aileHastaListesiTablo,:growl"
+                                         onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()">
+                            <p:ajax event="dialogReturn"
+                                    process="@this"
+                                    listener="#{pkAileController.secilenHastaEkle}"
+                                    update=":growl,aileHastaListesiTablo"
+                                    onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                        </p:commandButton>
+                    </div>
+                </div>
+            </div>
+        </f:facet>
+
+        <p:column headerText="#{messages.tcKimlikNoText}" style="width:100px">
+            <h:outputText value="#{hasta.gnlKisi.tcKimlikNo}"/>
+        </p:column>
+
+        <p:column headerText="#{messages.adText}" style="width:150px">
+            <h:outputText value="#{hasta.gnlKisi.ad}"/>
+        </p:column>
+
+        <p:column headerText="#{messages.soyadText}" style="width:150px">
+            <h:outputText value="#{hasta.gnlKisi.soyad}"/>
+        </p:column>
+
+        <p:column headerText="#{messages.dogumTarihiText}" style="width:100px">
+            <h:outputText value="#{hasta.gnlKisi.dogumTarihi}">
+                <f:convertDateTime type="localDate" pattern="#{messages.tarihFormat}"/>
+            </h:outputText>
+        </p:column>
+
+        <p:column headerText="#{messages.telefonText}" style="width:100px">
+            <h:outputText value="#{hasta.gnlKisi.telefon}"/>
+        </p:column>
+
+        <p:column headerText="#{messages.basvuruTarihiText}" style="width:100px">
+            <h:outputText value="#{hasta.basvuruTarihi}">
+                <f:convertDateTime type="localDate" pattern="#{messages.tarihFormat}"/>
+            </h:outputText>
+        </p:column>
+
+        <p:column headerText="#{messages.buttonSec}" style="width:7rem;text-align: center">
+            <div class="d-flex justify-content-center gap-1">
+                <p:commandButton icon="pi pi-search" rounded="true" text="true"
+                                 styleClass="ui-button-info ui-button-sm"
+                                 process="@this"
+                                 action="#{pkAileController.hastaDetay(hasta)}"
+                                 update=":PkAileHastaDetayForm:PkAileHastaDetayForm"
+                                 oncomplete="PF('PkAileHastaDetayDialog').show();"
+                                 onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                <p:commandButton icon="pi pi-trash" rounded="true" text="true"
+                                 styleClass="ui-button-danger ui-button-sm"
+                                 process="@this"
+                                 action="#{pkAileController.hastaSil(hasta)}"
+                                 update="aileHastaListesiTablo,:growl"
+                                 onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()">
+                    <p:confirm header="#{messages.ConfirmationHeader}"
+                               message="#{messages.ConfirmDeleteMessage}"
+                               icon="pi pi-exclamation-circle"/>
+                </p:commandButton>
+            </div>
+        </p:column>
+
+    </p:dataTable>
+
+</ui:composition>
+</html>

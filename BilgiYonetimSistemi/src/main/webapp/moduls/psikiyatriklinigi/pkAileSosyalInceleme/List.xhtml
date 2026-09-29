@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:p="primefaces"
+                xmlns:pt="jakarta.faces.passthrough"
+                xmlns:coco="jakarta.faces.composite/ui">
+
+    <h:form id="PkAileSosyalIncelemeListForm" class="form-height">
+
+        <p:contextMenu id="PkAileSosyalIncelemeDataTableContextMenu" for="datalist:datalist">
+            <p:menuitem value="#{messages.buttonEkle}" onclick="document.getElementById('PkAileSosyalIncelemeListForm:datalist:datalist:createButton').click();"
+                        icon="pi pi-plus" rendered="#{syKullaniciController.hasPermission('pkailesosyalinceleme:ekle')}"/>
+            <p:menuitem value="#{messages.buttonGuncelle}" onclick="document.getElementById('PkAileSosyalIncelemeListForm:datalist:datalist:editButton').click();"
+                        icon="pi pi-pencil" rendered="#{syKullaniciController.hasPermission('pkailesosyalinceleme:guncelle')}"/>
+            <p:menuitem value="#{messages.buttonDetay}" onclick="document.getElementById('PkAileSosyalIncelemeListForm:datalist:datalist:viewButton').click();"
+                        icon="pi pi-search"/>
+            <p:menuitem value="#{messages.buttonSil}" onclick="document.getElementById('PkAileSosyalIncelemeListForm:datalist:datalist:deleteButton').click();"
+                        icon="pi pi-trash" rendered="#{syKullaniciController.hasPermission('pkailesosyalinceleme:sil')}"/>
+        </p:contextMenu>
+
+        <coco:datatable id="datalist"
+                        value="#{pkAileSosyalIncelemeController.lazyItems}"
+                        rowKey="#{item.id}"
+                        selection="#{pkAileSosyalIncelemeController.selected}"
+                        filtered="#{pkAileSosyalIncelemeController.filtered}"
+                        rowselect=":PkAileSosyalIncelemeListForm:datalist:datalist:createButton,:PkAileSosyalIncelemeListForm:datalist:datalist:viewButton,:PkAileSosyalIncelemeListForm:datalist:datalist:editButton,:PkAileSosyalIncelemeListForm:datalist:datalist:deleteButton"
+                        rowDblselect="document.getElementById('PkAileSosyalIncelemeListForm:datalist:datalist:editButton').click()"
+                        contextMenu=":PkAileSosyalIncelemeListForm:datalist:datalist:createButton :PkAileSosyalIncelemeListForm:datalist:datalist:viewButton :PkAileSosyalIncelemeListForm:datalist:datalist:editButton :PkAileSosyalIncelemeListForm:datalist:datalist:deleteButton"
+                        selectListener="#{pkAileSosyalIncelemeController.resetParents}"
+                        controller="#{pkAileSosyalIncelemeController}"
+                        header="#{messages.aileSosyalIncelemeListesi}">
+
+            <p:ajax event="colResize" listener="#{pkAileSosyalIncelemeController.onResize}"/>
+
+
+            <f:facet name="paginatorBottomLeft">
+                <p:commandButton id="createButton" styleClass="ui-button-primary" icon="pi pi-plus" pt:data-tooltip="#{messages.buttonEkle}"
+                                 actionListener="#{pkAileSosyalIncelemeController.prepareCreate}" update=":PkAileSosyalIncelemeCreateForm:PkAileSosyalIncelemeCreateForm"
+                                 oncomplete="PF('PkAileSosyalIncelemeCreateDialog').show()" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('pkailesosyalinceleme:ekle')}"/>
+                <p:commandButton id="editButton" styleClass="ui-button-success" icon="pi pi-pencil" pt:data-tooltip="#{messages.buttonGuncelle}"
+                                 update=":PkAileSosyalIncelemeEditForm:PkAileSosyalIncelemeEditForm"
+                                 oncomplete="PF('PkAileSosyalIncelemeEditDialog').show()" disabled="#{empty pkAileSosyalIncelemeController.selected}" onstart="PF('Loading').show()"
+                                 onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('pkailesosyalinceleme:guncelle')}"/>
+                <p:commandButton id="viewButton" styleClass="ui-button-info" icon="pi pi-search" pt:data-tooltip="#{messages.buttonDetay}"
+                                 update=":PkAileSosyalIncelemeViewForm:PkAileSosyalIncelemeViewForm"
+                                 oncomplete="PF('PkAileSosyalIncelemeViewDialog').show()" disabled="#{empty pkAileSosyalIncelemeController.selected}" onstart="PF('Loading').show()"
+                                 onsuccess="PF('Loading').hide()"/>
+                <p:commandButton id="deleteButton" styleClass="ui-button-danger" pt:data-tooltip="#{messages.buttonSil}" icon="pi pi-trash"
+                                 actionListener="#{pkAileSosyalIncelemeController.delete}"
+                                 update=":growl,datalist" disabled="#{empty pkAileSosyalIncelemeController.selected}"
+                                 rendered="#{syKullaniciController.hasPermission('pkailesosyalinceleme:sil')}">
+                    <p:confirm header="#{messages.ConfirmationHeader}" message="#{messages.ConfirmDeleteMessage}" icon="pi pi-warning"/>
+                </p:commandButton>
+            </f:facet>
+
+        </coco:datatable>
+
+
+        <ui:include src="/confirmation.xhtml"/>
+
+    </h:form>
+
+</ui:composition>

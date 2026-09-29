@@ -36,6 +36,13 @@
                                 </button>
                             </li>
                             <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="pkaileHastaListesiCreateTab" data-bs-toggle="tab"
+                                        data-bs-target="#pkaileHastaListesiCreateTabPane" type="button" role="tab"
+                                        aria-controls="pkaileHastaListesiCreateTabPane"
+                                        aria-selected="true">Hasta Listesi
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
                                 <button class="nav-link" id="pkaileHastaCocuklukDonemiCreateTab" data-bs-toggle="tab"
                                         data-bs-target="#pkaileHastaCocuklukDonemiCreateTabPane" type="button" role="tab"
                                         aria-controls="pkaileHastaCocuklukDonemiCreateTabPane"
@@ -68,6 +75,12 @@
                                     <ui:include src="/moduls/psikiyatriklinigi/pkAile/AileBilgileriTab.xhtml"/>
                                 </p:panelGrid>
                             </div>
+
+                            <div class="tab-pane overflow-hidden" id="pkaileHastaListesiCreateTabPane"
+                                 role="tabpanel" aria-labelledby="pkaileHastaListesiCreateTab" tabindex="0">
+                                <ui:include src="/moduls/psikiyatriklinigi/pkAile/HastaListesiTab.xhtml"/>
+                            </div>
+
 
                             <div class="tab-pane overflow-hidden" id="pkaileHastaCocuklukDonemiCreateTabPane"
                                  role="tabpanel" aria-labelledby="pkaileHastaCocuklukDonemiCreateTab" tabindex="0">
