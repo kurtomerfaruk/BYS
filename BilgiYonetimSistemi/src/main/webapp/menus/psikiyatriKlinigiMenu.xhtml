@@ -115,6 +115,17 @@
                                 </li>
                             </ui:fragment>
 
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('pkbireyselgorusme:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/psikiyatriklinigi/pkBireyselGorusme/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="Bireysel Görüşmeler"/>
+                                </li>
+                            </ui:fragment>
+
                         </ul>
                     </li>
                 </ui:fragment>
