@@ -62,7 +62,8 @@ public enum EnumSyFiltreAnahtari implements BaseEnum {
     GRAFIK_TURU("Grafik Türü"),
     IYTALEP_KONU("İleri Yaş Talep Konu"),
     PKTEDAVI_SEKLI("Psikiyatri Kliniği Tedavi Şekli"),
-    YAKINLIK_DERECESI("Yakınlık Derecesi");
+    YAKINLIK_DERECESI("Yakınlık Derecesi"),
+    PKEGITIM_TUR("Psikiyatri Kliniği Eğitim Tür");
 
     private final String label;
 
