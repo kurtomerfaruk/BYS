@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:createpage id="PkAileEgitimiCreateForm"
+                     renderedListener="#{pkAileEgitimiController.selected != null}"
+                     widgetVar="PkAileEgitimiCreateDialog"
+                     actionListener="#{pkAileEgitimiController.saveNew}"
+                     listForm="PkAileEgitimiListForm">
+
+        <p:outputLabel value="#{messages.tarihLabel}" for="@next"/>
+        <p:datePicker locale="tr" pattern="#{messages.tarihFormat}"
+                      value="#{pkAileEgitimiController.selected.tarih}"
+                      title="#{messages.tarihText}" mask="true"
+                      monthNavigator="true" yearNavigator="true" showButtonBar="true"
+                      showIcon="true" showOnFocus="false"/>
+
+        <p:outputLabel value="#{messages.tcKimlikNoLabel}" for="@next"/>
+        <coco:inputWithButton id="inputWithButtonPkAile" inputId="pkAileId"
+                              inputValue="#{pkAileEgitimiController.selected.pkAile.gnlKisi.tcKimlikNo}"
+                              inputTitle="#{messages.tcKimlikNoText}"
+                              actionListener="#{bysController.openCommonDialog('pkAileSec')}"
+                              ajaxListener="#{pkAileEgitimiController.secilenPkAile}"
+                              buttonTitle="#{messages.hastaSecmelisiniz}"
+                              size="50"
+                              dialogId="PkAileEgitimiCreateDialogId"/>
+
+
+        <p:outputLabel value="#{messages.adLabel}" for="@next"/>
+        <p:inputText id="ad" value="#{pkAileEgitimiController.selected.pkAile.gnlKisi.ad}"
+                     title="#{messages.adText}"
+                     size="50" maxlength="50" readonly="true" styleClass="inputUpdate"/>
+
+        <p:outputLabel value="#{messages.soyadLabel}" for="@next"/>
+        <p:inputText id="soyad" value="#{pkAileEgitimiController.selected.pkAile.gnlKisi.soyad}"
+                     title="#{messages.soyadText}" size="50" maxlength="50" readonly="true" styleClass="inputUpdate"/>
+
+        <p:outputLabel value="#{messages.telefonLabel}" for="@next"/>
+        <h:panelGroup>
+            <p:inputText value="#{pkAileEgitimiController.selected.pkAile.gnlKisi.telefon}"
+                         styleClass="inputUpdate" readonly="true"/>
+            <p:inputText value="#{pkAileEgitimiController.selected.pkAile.gnlKisi.telefon2}"
+                         styleClass="inputUpdate" readonly="true"/>
+        </h:panelGroup>
+
+        <p:outputLabel value="#{messages.konuLabel}" for="@next"/>
+        <p:selectOneMenu value="#{pkAileEgitimiController.selected.pkEgitimKonu}"
+                         converter="omnifaces.SelectItemsConverter" filter="true"
+                         required="true">
+            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{pkEgitimKonuController.getEgitimKonuList('EGITIM')}"
+                           var="konus"
+                           itemValue="#{konus}"
+                           itemLabel="#{konus.tanim}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.egitimiVerenPersonelLabel}" for="@next"/>
+        <p:selectOneMenu value="#{pkAileEgitimiController.selected.pkPersonel}"
+                         converter="omnifaces.SelectItemsConverter" filter="true"
+                         required="true">
+            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{pkPersonelController.items}"
+                           var="personels"
+                           itemValue="#{personels}"
+                           itemLabel="#{personels.gnlPersonel.gnlKisi.adSoyad}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.aciklamaLabel}" for="@next"/>
+        <p:inputTextarea value="#{pkAileEgitimiController.selected.aciklama}" rows="4" autoResize="false"
+                         styleClass="w-100"/>
+
+    </coco:createpage>
+
+</ui:composition>
+
+</html>

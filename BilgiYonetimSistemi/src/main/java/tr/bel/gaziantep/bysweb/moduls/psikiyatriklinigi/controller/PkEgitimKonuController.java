@@ -6,9 +6,11 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import lombok.extern.slf4j.Slf4j;
 import tr.bel.gaziantep.bysweb.core.controller.AbstractController;
+import tr.bel.gaziantep.bysweb.core.enums.psikiyatriklinigi.EnumPkEgitimTur;
 import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.EnumSyFiltreAnahtari;
 import tr.bel.gaziantep.bysweb.core.service.FilterOptionService;
 import tr.bel.gaziantep.bysweb.moduls.psikiyatriklinigi.entity.PkEgitimKonu;
+import tr.bel.gaziantep.bysweb.moduls.psikiyatriklinigi.service.PkEgitimKonuService;
 
 import java.io.Serial;
 import java.util.Collections;
@@ -28,6 +30,8 @@ public class PkEgitimKonuController extends AbstractController<PkEgitimKonu> {
     private static final long serialVersionUID = 7238273645272506920L;
 
     @Inject
+    private PkEgitimKonuService service;
+    @Inject
     private FilterOptionService filterOptionService;
 
     public PkEgitimKonuController() {
@@ -43,5 +47,12 @@ public class PkEgitimKonuController extends AbstractController<PkEgitimKonu> {
                 return Collections.emptyList();
             }
         }
+    }
+
+    public List<PkEgitimKonu> getEgitimKonuList(EnumPkEgitimTur tur){
+        if(tur!=null){
+            return service.findByTur(tur);
+        }
+        return Collections.emptyList();
     }
 }

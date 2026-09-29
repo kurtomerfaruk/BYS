@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:p="primefaces"
+                xmlns:pt="jakarta.faces.passthrough"
+                xmlns:coco="jakarta.faces.composite/ui">
+
+    <h:form id="PkAileTerapiListForm" class="form-height">
+
+        <p:contextMenu id="PkAileTerapiDataTableContextMenu" for="datalist:datalist">
+            <p:menuitem value="#{messages.buttonEkle}" onclick="document.getElementById('PkAileTerapiListForm:datalist:datalist:createButton').click();"
+                        icon="pi pi-plus" rendered="#{syKullaniciController.hasPermission('pkaileterapi:ekle')}"/>
+            <p:menuitem value="#{messages.buttonGuncelle}" onclick="document.getElementById('PkAileTerapiListForm:datalist:datalist:editButton').click();"
+                        icon="pi pi-pencil" rendered="#{syKullaniciController.hasPermission('pkaileterapi:guncelle')}"/>
+            <p:menuitem value="#{messages.buttonDetay}" onclick="document.getElementById('PkAileTerapiListForm:datalist:datalist:viewButton').click();"
+                        icon="pi pi-search"/>
+            <p:menuitem value="#{messages.buttonSil}" onclick="document.getElementById('PkAileTerapiListForm:datalist:datalist:deleteButton').click();"
+                        icon="pi pi-trash" rendered="#{syKullaniciController.hasPermission('pkaileterapi:sil')}"/>
+            <p:menuitem value="#{messages.buttonTaburcuEt}" onclick="document.getElementById('PkAileTerapiListForm:datalist:datalist:taburcuButton').click();"
+                        icon="pi pi-arrow-right" rendered="#{syKullaniciController.hasPermission('pkaileterapi:taburcuet')}"/>
+        </p:contextMenu>
+
+        <coco:datatable id="datalist"
+                        value="#{pkAileTerapiController.lazyItems}"
+                        rowKey="#{item.id}"
+                        selection="#{pkAileTerapiController.selected}"
+                        filtered="#{pkAileTerapiController.filtered}"
+                        rowselect=":PkAileTerapiListForm:datalist:datalist:createButton,:PkAileTerapiListForm:datalist:datalist:viewButton,:PkAileTerapiListForm:datalist:datalist:editButton,:PkAileTerapiListForm:datalist:datalist:deleteButton"
+                        rowDblselect="document.getElementById('PkAileTerapiListForm:datalist:datalist:editButton').click()"
+                        contextMenu=":PkAileTerapiListForm:datalist:datalist:createButton :PkAileTerapiListForm:datalist:datalist:viewButton :PkAileTerapiListForm:datalist:datalist:editButton :PkAileTerapiListForm:datalist:datalist:deleteButton"
+                        selectListener="#{pkAileTerapiController.resetParents}"
+                        controller="#{pkAileTerapiController}"
+                        header="#{messages.aileEgitimListesi}">
+
+            <p:ajax event="colResize" listener="#{pkAileTerapiController.onResize}"/>
+
+
+            <f:facet name="paginatorBottomLeft">
+                <p:commandButton id="createButton" styleClass="ui-button-primary" icon="pi pi-plus" pt:data-tooltip="#{messages.buttonEkle}"
+                                 actionListener="#{pkAileTerapiController.prepareCreate}" update=":PkAileTerapiCreateForm:PkAileTerapiCreateForm"
+                                 oncomplete="PF('PkAileTerapiCreateDialog').show()" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('pkaileterapi:ekle')}"/>
+                <p:commandButton id="editButton" styleClass="ui-button-success" icon="pi pi-pencil" pt:data-tooltip="#{messages.buttonGuncelle}"
+                                 update=":PkAileTerapiEditForm:PkAileTerapiEditForm"
+                                 oncomplete="PF('PkAileTerapiEditDialog').show()" disabled="#{empty pkAileTerapiController.selected}" onstart="PF('Loading').show()"
+                                 onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('pkaileterapi:guncelle')}"/>
+                <p:commandButton id="viewButton" styleClass="ui-button-info" icon="pi pi-search" pt:data-tooltip="#{messages.buttonDetay}"
+                                 update=":PkAileTerapiViewForm:PkAileTerapiViewForm"
+                                 oncomplete="PF('PkAileTerapiViewDialog').show()" disabled="#{empty pkAileTerapiController.selected}" onstart="PF('Loading').show()"
+                                 onsuccess="PF('Loading').hide()"/>
+                <p:commandButton id="deleteButton" styleClass="ui-button-danger" pt:data-tooltip="#{messages.buttonSil}" icon="pi pi-trash"
+                                 actionListener="#{pkAileTerapiController.delete}"
+                                 update=":growl,datalist" disabled="#{empty pkAileTerapiController.selected}"
+                                 rendered="#{syKullaniciController.hasPermission('pkaileterapi:sil')}">
+                    <p:confirm header="#{messages.ConfirmationHeader}" message="#{messages.ConfirmDeleteMessage}" icon="pi pi-warning"/>
+                </p:commandButton>
+
+            </f:facet>
+
+        </coco:datatable>
+
+        <ui:include src="/confirmation.xhtml"/>
+
+    </h:form>
+
+</ui:composition>

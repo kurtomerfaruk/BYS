@@ -21,6 +21,7 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "PKEGITIM_KONU")
+@NamedQuery(name = "PkEgitimKonu.findByTur",query = "SELECT k FROM PkEgitimKonu k WHERE k.aktif=true AND k.tur=:tur ORDER BY k.tanim ASC")
 public class PkEgitimKonu extends BaseEntity {
 
     @Serial

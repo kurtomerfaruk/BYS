@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:p="primefaces"
+                xmlns:pt="jakarta.faces.passthrough"
+                xmlns:coco="jakarta.faces.composite/ui">
+
+    <h:form id="PkAileEgitimiListForm" class="form-height">
+
+        <p:contextMenu id="PkAileEgitimiDataTableContextMenu" for="datalist:datalist">
+            <p:menuitem value="#{messages.buttonEkle}" onclick="document.getElementById('PkAileEgitimiListForm:datalist:datalist:createButton').click();"
+                        icon="pi pi-plus" rendered="#{syKullaniciController.hasPermission('pkaileegitimi:ekle')}"/>
+            <p:menuitem value="#{messages.buttonGuncelle}" onclick="document.getElementById('PkAileEgitimiListForm:datalist:datalist:editButton').click();"
+                        icon="pi pi-pencil" rendered="#{syKullaniciController.hasPermission('pkaileegitimi:guncelle')}"/>
+            <p:menuitem value="#{messages.buttonDetay}" onclick="document.getElementById('PkAileEgitimiListForm:datalist:datalist:viewButton').click();"
+                        icon="pi pi-search"/>
+            <p:menuitem value="#{messages.buttonSil}" onclick="document.getElementById('PkAileEgitimiListForm:datalist:datalist:deleteButton').click();"
+                        icon="pi pi-trash" rendered="#{syKullaniciController.hasPermission('pkaileegitimi:sil')}"/>
+            <p:menuitem value="#{messages.buttonTaburcuEt}" onclick="document.getElementById('PkAileEgitimiListForm:datalist:datalist:taburcuButton').click();"
+                        icon="pi pi-arrow-right" rendered="#{syKullaniciController.hasPermission('pkaileegitimi:taburcuet')}"/>
+        </p:contextMenu>
+
+        <coco:datatable id="datalist"
+                        value="#{pkAileEgitimiController.lazyItems}"
+                        rowKey="#{item.id}"
+                        selection="#{pkAileEgitimiController.selected}"
+                        filtered="#{pkAileEgitimiController.filtered}"
+                        rowselect=":PkAileEgitimiListForm:datalist:datalist:createButton,:PkAileEgitimiListForm:datalist:datalist:viewButton,:PkAileEgitimiListForm:datalist:datalist:editButton,:PkAileEgitimiListForm:datalist:datalist:deleteButton"
+                        rowDblselect="document.getElementById('PkAileEgitimiListForm:datalist:datalist:editButton').click()"
+                        contextMenu=":PkAileEgitimiListForm:datalist:datalist:createButton :PkAileEgitimiListForm:datalist:datalist:viewButton :PkAileEgitimiListForm:datalist:datalist:editButton :PkAileEgitimiListForm:datalist:datalist:deleteButton"
+                        selectListener="#{pkAileEgitimiController.resetParents}"
+                        controller="#{pkAileEgitimiController}"
+                        header="#{messages.aileEgitimListesi}">
+
+            <p:ajax event="colResize" listener="#{pkAileEgitimiController.onResize}"/>
+
+
+            <f:facet name="paginatorBottomLeft">
+                <p:commandButton id="createButton" styleClass="ui-button-primary" icon="pi pi-plus" pt:data-tooltip="#{messages.buttonEkle}"
+                                 actionListener="#{pkAileEgitimiController.prepareCreate}" update=":PkAileEgitimiCreateForm:PkAileEgitimiCreateForm"
+                                 oncomplete="PF('PkAileEgitimiCreateDialog').show()" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('pkaileegitimi:ekle')}"/>
+                <p:commandButton id="editButton" styleClass="ui-button-success" icon="pi pi-pencil" pt:data-tooltip="#{messages.buttonGuncelle}"
+                                 update=":PkAileEgitimiEditForm:PkAileEgitimiEditForm"
+                                 oncomplete="PF('PkAileEgitimiEditDialog').show()" disabled="#{empty pkAileEgitimiController.selected}" onstart="PF('Loading').show()"
+                                 onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('pkaileegitimi:guncelle')}"/>
+                <p:commandButton id="viewButton" styleClass="ui-button-info" icon="pi pi-search" pt:data-tooltip="#{messages.buttonDetay}"
+                                 update=":PkAileEgitimiViewForm:PkAileEgitimiViewForm"
+                                 oncomplete="PF('PkAileEgitimiViewDialog').show()" disabled="#{empty pkAileEgitimiController.selected}" onstart="PF('Loading').show()"
+                                 onsuccess="PF('Loading').hide()"/>
+                <p:commandButton id="deleteButton" styleClass="ui-button-danger" pt:data-tooltip="#{messages.buttonSil}" icon="pi pi-trash"
+                                 actionListener="#{pkAileEgitimiController.delete}"
+                                 update=":growl,datalist" disabled="#{empty pkAileEgitimiController.selected}"
+                                 rendered="#{syKullaniciController.hasPermission('pkaileegitimi:sil')}">
+                    <p:confirm header="#{messages.ConfirmationHeader}" message="#{messages.ConfirmDeleteMessage}" icon="pi pi-warning"/>
+                </p:commandButton>
+
+            </f:facet>
+
+        </coco:datatable>
+
+        <ui:include src="/confirmation.xhtml"/>
+
+    </h:form>
+
+</ui:composition>

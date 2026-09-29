@@ -82,6 +82,28 @@
                                 </li>
                             </ui:fragment>
 
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('pkaileegitimi:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/psikiyatriklinigi/pkAileEgitimi/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="Aile Eğitimleri"/>
+                                </li>
+                            </ui:fragment>
+
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('pkaileterapi:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/psikiyatriklinigi/pkAileTerapi/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="Aile Terapileri"/>
+                                </li>
+                            </ui:fragment>
+
                         </ul>
                     </li>
                 </ui:fragment>

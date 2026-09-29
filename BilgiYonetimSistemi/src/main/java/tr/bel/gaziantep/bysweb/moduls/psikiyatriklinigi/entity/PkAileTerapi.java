@@ -39,6 +39,10 @@ public class PkAileTerapi extends BaseEntity {
     @JoinColumn(name = "PKEGITIM_KONU_ID")
     private PkEgitimKonu pkEgitimKonu;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PKPERSONEL_ID")
+    private PkPersonel pkPersonel;
+
     @Nationalized
     @Lob
     @Column(name = "ACIKLAMA")
