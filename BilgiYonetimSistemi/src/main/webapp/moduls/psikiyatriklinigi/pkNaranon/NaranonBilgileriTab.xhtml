@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="primefaces">
+
+<ui:composition>
+
+    <p:panelGrid id="naranonBilgileriPanel" columns="1" rendered="#{pkNaranonController.selected != null}"
+                 layout="grid">
+
+        <p:panelGrid columns="2" layout="tabular" styleClass="w-100">
+
+            <p:outputLabel value="#{messages.tarihLabel}" for="@next"/>
+            <p:datePicker id="tarih" locale="tr"
+                          pattern="#{messages.tarihSaatKisaFormat}"
+                          value="#{pkNaranonController.selected.tarih}"
+                          title="#{messages.tarihText}" mask="true"
+                          showTime="true" timeOnlyWhenEmpty="false"
+                          monthNavigator="true" yearNavigator="true" showButtonBar="true"
+                          showIcon="true" showOnFocus="false"/>
+
+            <p:outputLabel value="#{messages.naranonIcerikLabel}" for="@next"/>
+            <p:inputTextarea id="toplantiIcerigi" rows="4" autoResize="true"
+                             value="#{pkNaranonController.selected.toplantiIcerigi}"
+                             title="#{messages.naranonIcerikText}"
+                             required="true" styleClass="w-100"/>
+
+        </p:panelGrid>
+
+        <ui:include src="/moduls/psikiyatriklinigi/pkNaranon/KatilanAilelerTab.xhtml"/>
+
+    </p:panelGrid>
+
+</ui:composition>
+</html>

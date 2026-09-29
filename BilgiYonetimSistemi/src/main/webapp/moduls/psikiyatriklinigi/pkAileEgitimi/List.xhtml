@@ -19,8 +19,6 @@
                         icon="pi pi-search"/>
             <p:menuitem value="#{messages.buttonSil}" onclick="document.getElementById('PkAileEgitimiListForm:datalist:datalist:deleteButton').click();"
                         icon="pi pi-trash" rendered="#{syKullaniciController.hasPermission('pkaileegitimi:sil')}"/>
-            <p:menuitem value="#{messages.buttonTaburcuEt}" onclick="document.getElementById('PkAileEgitimiListForm:datalist:datalist:taburcuButton').click();"
-                        icon="pi pi-arrow-right" rendered="#{syKullaniciController.hasPermission('pkaileegitimi:taburcuet')}"/>
         </p:contextMenu>
 
         <coco:datatable id="datalist"

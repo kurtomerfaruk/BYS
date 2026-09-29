@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces">
+
+<ui:composition>
+
+    <p:panelGrid id="katilanAilePanel" columns="1" rendered="#{pkNaranonController.selected != null}" layout="tabular"
+                 style="max-width:850px !important">
+
+        <p:commandButton value="Aile Ekle"
+                         icon="pi pi-plus"
+                         styleClass="ui-button-primary"
+                         action="#{bysController.openCommonDialog('pkAileMultiSec')}"
+                         process="@this"
+                         update=":growl"
+                         title="Aile seçmelisiniz...">
+            <p:ajax event="dialogReturn" process="@this"
+                    listener="#{pkNaranonController.secilenAileler}"
+                    update="@(.naranonKatilanAile),:growl"/>
+        </p:commandButton>
+
+        <p:dataTable id="katilanAileDataTable"
+                     styleClass="naranonKatilanAile"
+                     value="#{pkNaranonController.katilanAileListesi}"
+                     var="katilanAile"
+                     emptyMessage="#{messages.kayitBulunamadi}"
+                     paginator="true"
+                     rows="5"
+                     rowsPerPageTemplate="5,10,20"
+                     paginatorPosition="bottom"
+                     size="small"
+                     showGridlines="true"
+                     reflow="true"
+                     rowHover="true"
+                     currentPageReportTemplate="#{messages.currentPageTemplate}">
+
+            <p:column sortBy="#{katilanAile.pkAile.gnlKisi.tcKimlikNo}">
+                <f:facet name="header">
+                    <h:outputText value="#{messages.tcKimlikNoText}"/>
+                </f:facet>
+                <h:outputText value="#{katilanAile.pkAile.gnlKisi.tcKimlikNo}"/>
+            </p:column>
+
+            <p:column sortBy="#{katilanAile.pkAile.gnlKisi.ad}">
+                <f:facet name="header">
+                    <h:outputText value="#{messages.adText}"/>
+                </f:facet>
+                <h:outputText value="#{katilanAile.pkAile.gnlKisi.ad}"/>
+            </p:column>
+
+            <p:column sortBy="#{katilanAile.pkAile.gnlKisi.soyad}">
+                <f:facet name="header">
+                    <h:outputText value="#{messages.soyadText}"/>
+                </f:facet>
+                <h:outputText value="#{katilanAile.pkAile.gnlKisi.soyad}"/>
+            </p:column>
+
+            <p:column sortBy="#{katilanAile.pkAile.gnlKisi.telefon}">
+                <f:facet name="header">
+                    <h:outputText value="#{messages.telefonText}"/>
+                </f:facet>
+                <h:outputText value="#{katilanAile.pkAile.gnlKisi.telefon}"/>
+            </p:column>
+
+            <p:column sortBy="#{katilanAile.pkAile.gnlKisi.gnlIlce.tanim}">
+                <f:facet name="header">
+                    <h:outputText value="#{messages.ilceText}"/>
+                </f:facet>
+                <h:outputText value="#{katilanAile.pkAile.gnlKisi.gnlIlce.tanim}"/>
+            </p:column>
+
+            <p:column headerText="#{messages.buttonSec}" style="width:7rem;text-align:center">
+                <p:commandButton icon="pi pi-trash" rounded="true" text="true"
+                                 styleClass="ui-button-danger ui-button-sm"
+                                 process="@this"
+                                 title="#{messages.cikar}"
+                                 action="#{pkNaranonController.katilanAileCikar(katilanAile)}"
+                                 update="@(.naranonKatilanAile),:growl"
+                                 onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+            </p:column>
+
+        </p:dataTable>
+
+    </p:panelGrid>
+
+</ui:composition>
+</html>

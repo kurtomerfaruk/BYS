@@ -73,15 +73,11 @@
 
     <p:outputLabel value="#{messages.ilceLabel}" for="@next"/>
     <p:inputText value="#{pkAileController.selected.gnlKisi.gnlIlce.tanim}"
-                 title="#{messages.ilceText}" required="true"
-                 readonly="#{facesContext.renderResponse}"
-                 styleClass="tcUpdate"/>
+                 title="#{messages.ilceText}" readonly="true" styleClass="tcUpdate"/>
 
     <p:outputLabel value="#{messages.mahalleLabel}" for="@next"/>
     <p:inputText value="#{pkAileController.selected.gnlKisi.gnlMahalle.tanim}"
-                 title="#{messages.mahalleText}" required="true"
-                 readonly="#{facesContext.renderResponse}"
-                 styleClass="tcUpdate"/>
+                 title="#{messages.mahalleText}" readonly="true" styleClass="tcUpdate"/>
 
     <p:outputLabel value="#{messages.yakinlikDerecesiLabel}" for="@next"/>
     <h:panelGroup>

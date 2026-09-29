@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces">
+
+<ui:composition>
+
+    <p:panelGrid id="naranonDetayPanel" columns="1" styleClass="w-100"
+                 rendered="#{pkNaranonController.selected != null}" layout="tabular">
+
+        <p:panelGrid columns="2" styleClass="w-100" layout="tabular">
+
+            <p:outputLabel value="#{messages.tarihLabel}" for="@next"/>
+            <h:outputText id="tarih" value="#{pkNaranonController.selected.tarih}">
+                <f:convertDateTime pattern="#{messages.tarihSaatKisaFormat}" type="localDateTime"/>
+            </h:outputText>
+
+            <p:outputLabel value="#{messages.naranonIcerikLabel}" for="@next"/>
+            <h:outputText id="toplantiIcerigi"
+                          value="#{pkNaranonController.selected.toplantiIcerigi}"
+                          style="white-space: pre-wrap"/>
+
+        </p:panelGrid>
+
+        <p:panelGrid id="katilanAilePanel" columns="1" styleClass="w-100" layout="tabular">
+
+            <span class="fw-bold">#{messages.katilanAileListesi}</span>
+
+            <p:dataTable id="katilanAileDataTable"
+                         styleClass="w-100"
+                         value="#{pkNaranonController.katilanAileListesi}"
+                         var="katilanAile"
+                         emptyMessage="#{messages.kayitBulunamadi}"
+                         paginator="true"
+                         rows="5"
+                         rowsPerPageTemplate="5,10,20"
+                         paginatorPosition="bottom"
+                         size="small"
+                         showGridlines="true"
+                         reflow="true"
+                         rowHover="true"
+                         currentPageReportTemplate="#{messages.currentPageTemplate}">
+
+                <p:column sortBy="#{katilanAile.pkAile.gnlKisi.tcKimlikNo}">
+                    <f:facet name="header">
+                        <h:outputText value="#{messages.tcKimlikNoText}"/>
+                    </f:facet>
+                    <h:outputText value="#{katilanAile.pkAile.gnlKisi.tcKimlikNo}"/>
+                </p:column>
+
+                <p:column sortBy="#{katilanAile.pkAile.gnlKisi.ad}">
+                    <f:facet name="header">
+                        <h:outputText value="#{messages.adText}"/>
+                    </f:facet>
+                    <h:outputText value="#{katilanAile.pkAile.gnlKisi.ad}"/>
+                </p:column>
+
+                <p:column sortBy="#{katilanAile.pkAile.gnlKisi.soyad}">
+                    <f:facet name="header">
+                        <h:outputText value="#{messages.soyadText}"/>
+                    </f:facet>
+                    <h:outputText value="#{katilanAile.pkAile.gnlKisi.soyad}"/>
+                </p:column>
+
+                <p:column sortBy="#{katilanAile.pkAile.gnlKisi.telefon}">
+                    <f:facet name="header">
+                        <h:outputText value="#{messages.telefonText}"/>
+                    </f:facet>
+                    <h:outputText value="#{katilanAile.pkAile.gnlKisi.telefon}"/>
+                </p:column>
+
+                <p:column sortBy="#{katilanAile.pkAile.gnlKisi.gnlIlce.tanim}">
+                    <f:facet name="header">
+                        <h:outputText value="#{messages.ilceText}"/>
+                    </f:facet>
+                    <h:outputText value="#{katilanAile.pkAile.gnlKisi.gnlIlce.tanim}"/>
+                </p:column>
+
+            </p:dataTable>
+
+        </p:panelGrid>
+
+    </p:panelGrid>
+
+</ui:composition>
+</html>
