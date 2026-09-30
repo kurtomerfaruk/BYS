@@ -6,6 +6,7 @@ import jakarta.inject.Named;
 import lombok.extern.slf4j.Slf4j;
 import org.primefaces.event.SelectEvent;
 import tr.bel.gaziantep.bysweb.core.controller.AbstractController;
+import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
 import tr.bel.gaziantep.bysweb.moduls.psikiyatriklinigi.entity.PkAile;
 import tr.bel.gaziantep.bysweb.moduls.psikiyatriklinigi.entity.PkAileTerapi;
 
@@ -35,7 +36,7 @@ public class PkAileTerapiController extends AbstractController<PkAileTerapi> {
         PkAileTerapi newItem;
         try {
             newItem = PkAileTerapi.class.getDeclaredConstructor().newInstance();
-            newItem.setPkAile(new PkAile());
+            newItem.setPkAile(PkAile.builder().gnlKisi(new GnlKisi()).build());
             newItem.setTarih(LocalDateTime.now());
             this.setSelected(newItem);
             initializeEmbeddableKey();
