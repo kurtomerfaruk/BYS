@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:createpage id="PkIzinCreateForm"
+                     renderedListener="#{pkIzinController.selected != null}"
+                     widgetVar="PkIzinCreateDialog"
+                     actionListener="#{pkIzinController.saveNew}"
+                     listForm="PkIzinListForm">
+
+
+        <p:outputLabel value="#{messages.personelLabel}" for="@next"/>
+        <p:selectOneMenu value="#{pkIzinController.selected.pkPersonel}" converter="omnifaces.SelectItemsConverter" required="true"
+                         filter="true">
+            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{pkPersonelController.items}"
+                           var="personels"
+                           itemValue="#{personels}"
+                           itemLabel="#{personels.gnlPersonel.gnlKisi.adSoyad}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.izinTuruLabel}" for="@next"/>
+        <p:selectOneMenu value="#{pkIzinController.selected.izinTuru}" converter="omnifaces.SelectItemsConverter" required="true">
+            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{enumIzinTuru.ALL_VALUES}"
+                           var="izinTurus"
+                           itemValue="#{izinTurus}"
+                           itemLabel="#{izinTurus.displayValue}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.baslangicTarihiLabel}" for="@next"/>
+        <p:datePicker locale="tr" pattern="#{messages.tarihFormat}"
+                      value="#{pkIzinController.selected.izinBaslangic}"
+                      title="#{messages.baslangicTarihiText}" mask="true"
+                      monthNavigator="true" yearNavigator="true" showButtonBar="true"
+                      showIcon="true" showOnFocus="false" required="true">
+                <p:ajax event="change" update="gunSayi" listener="#{pkIzinController.getDayCount()}"/>
+        </p:datePicker>
+
+        <p:outputLabel value="#{messages.bitisTarihiLabel}" for="@next"/>
+        <p:datePicker locale="tr" pattern="#{messages.tarihFormat}"
+                      value="#{pkIzinController.selected.izinBitis}"
+                      title="#{messages.bitisTarihiText}" mask="true"
+                      monthNavigator="true" yearNavigator="true" showButtonBar="true"
+                      showIcon="true" showOnFocus="false" required="true">
+            <p:ajax event="change" update="gunSayi" listener="#{pkIzinController.getDayCount()}"/>
+        </p:datePicker>
+
+        <p:outputLabel value="#{messages.gunLabel}" for="@next"/>
+        <p:spinner id="gunSayi" value="#{pkIzinController.selected.gunSayi}" title="#{messages.gunText}" stepFactor="1" min="0" size="50"
+                   required="true"/>
+
+    </coco:createpage>
+
+</ui:composition>
+
+</html>

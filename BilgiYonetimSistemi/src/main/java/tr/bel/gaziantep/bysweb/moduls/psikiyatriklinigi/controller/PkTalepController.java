@@ -55,6 +55,7 @@ public class PkTalepController extends AbstractController<PkTalep> {
         }
     }
 
+    @Override
     public PkTalep prepareCreate(ActionEvent event) {
         PkTalep newItem;
         try {

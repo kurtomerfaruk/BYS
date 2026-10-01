@@ -30,6 +30,7 @@ public class PkAileSosyalIncelemeController extends AbstractController<PkAileSos
         super(PkAileSosyalInceleme.class);
     }
 
+    @Override
     public PkAileSosyalInceleme prepareCreate(ActionEvent event) {
         PkAileSosyalInceleme newItem;
         try {

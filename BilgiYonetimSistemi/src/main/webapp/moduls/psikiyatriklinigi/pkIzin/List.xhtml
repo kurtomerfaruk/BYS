@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:p="primefaces"
+                xmlns:pt="jakarta.faces.passthrough"
+                xmlns:coco="jakarta.faces.composite/ui">
+
+    <h:form id="PkIzinListForm" class="form-height">
+
+        <p:contextMenu id="PkIzinDataTableContextMenu" for="datalist:datalist">
+            <p:menuitem value="#{messages.buttonEkle}" onclick="document.getElementById('PkIzinListForm:datalist:datalist:createButton').click();"
+                        icon="pi pi-plus" rendered="#{syKullaniciController.hasPermission('pkizin:ekle')}"/>
+            <p:menuitem value="#{messages.buttonGuncelle}" onclick="document.getElementById('PkIzinListForm:datalist:datalist:editButton').click();"
+                        icon="pi pi-pencil" rendered="#{syKullaniciController.hasPermission('pkizin:guncelle')}"/>
+            <p:menuitem value="#{messages.buttonDetay}" onclick="document.getElementById('PkIzinListForm:datalist:datalist:viewButton').click();"
+                        icon="pi pi-search"/>
+            <p:menuitem value="#{messages.buttonSil}" onclick="document.getElementById('PkIzinListForm:datalist:datalist:deleteButton').click();"
+                        icon="pi pi-trash" rendered="#{syKullaniciController.hasPermission('pkizin:sil')}"/>
+        </p:contextMenu>
+
+        <coco:datatable id="datalist"
+                        value="#{pkIzinController.lazyItems}"
+                        rowKey="#{item.id}"
+                        selection="#{pkIzinController.selected}"
+                        filtered="#{pkIzinController.filtered}"
+                        rowselect=":PkIzinListForm:datalist:datalist:createButton,:PkIzinListForm:datalist:datalist:viewButton,:PkIzinListForm:datalist:datalist:editButton,:PkIzinListForm:datalist:datalist:deleteButton"
+                        rowDblselect="document.getElementById('PkIzinListForm:datalist:datalist:editButton').click()"
+                        contextMenu=":PkIzinListForm:datalist:datalist:createButton :PkIzinListForm:datalist:datalist:viewButton :PkIzinListForm:datalist:datalist:editButton :PkIzinListForm:datalist:datalist:deleteButton"
+                        selectListener="#{pkIzinController.resetParents}"
+                        controller="#{pkIzinController}"
+                        header="#{messages.maddeListesi}">
+
+            <p:ajax event="colResize" listener="#{pkIzinController.onResize}"/>
+
+
+            <f:facet name="paginatorBottomLeft">
+                <p:commandButton id="createButton" styleClass="ui-button-primary" icon="pi pi-plus" pt:data-tooltip="#{messages.buttonEkle}"
+                                 actionListener="#{pkIzinController.prepareCreate}" update=":PkIzinCreateForm:PkIzinCreateForm"
+                                 oncomplete="PF('PkIzinCreateDialog').show()" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('pkizin:ekle')}"/>
+                <p:commandButton id="editButton" styleClass="ui-button-success" icon="pi pi-pencil" pt:data-tooltip="#{messages.buttonGuncelle}"
+                                 update=":PkIzinEditForm:PkIzinEditForm"
+                                 oncomplete="PF('PkIzinEditDialog').show()" disabled="#{empty pkIzinController.selected}" onstart="PF('Loading').show()"
+                                 onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('pkizin:guncelle')}"/>
+                <p:commandButton id="viewButton" styleClass="ui-button-info" icon="pi pi-search" pt:data-tooltip="#{messages.buttonDetay}"
+                                 update=":PkIzinViewForm:PkIzinViewForm"
+                                 oncomplete="PF('PkIzinViewDialog').show()" disabled="#{empty pkIzinController.selected}" onstart="PF('Loading').show()"
+                                 onsuccess="PF('Loading').hide()"/>
+                <p:commandButton id="deleteButton" styleClass="ui-button-danger" pt:data-tooltip="#{messages.buttonSil}" icon="pi pi-trash"
+                                 actionListener="#{pkIzinController.delete}"
+                                 update=":growl,datalist" disabled="#{empty pkIzinController.selected}"
+                                 rendered="#{syKullaniciController.hasPermission('pkizin:sil')}">
+                    <p:confirm header="#{messages.ConfirmationHeader}" message="#{messages.ConfirmDeleteMessage}" icon="pi pi-warning"/>
+                </p:commandButton>
+            </f:facet>
+
+        </coco:datatable>
+
+
+        <ui:include src="/confirmation.xhtml"/>
+
+    </h:form>
+
+</ui:composition>

@@ -443,4 +443,10 @@ public class FilterOptionService implements java.io.Serializable{
                 .map(value -> new SelectItem(value,value.getDisplayValue()))
                 .collect(Collectors.toList());
     }
+
+    public List<SelectItem> getGnlIzinTurus() {
+        return Arrays.stream(EnumGnlIzinTuru.values())
+                .map(value -> new SelectItem(value,value.getDisplayValue()))
+                .collect(Collectors.toList());
+    }
 }
