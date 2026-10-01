@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:editpage id="PkHemsireGozlemFormuEditForm"
+                   widgetVar="PkHemsireGozlemFormuEditDialog"
+                   actionListener="#{pkHemsireGozlemFormuController.save}"
+                   listForm="PkHemsireGozlemFormuListForm"
+                   model="#{pkHemsireGozlemFormuController.selected}">
+
+        <p:outputLabel value="#{messages.tarihLabel}" for="@next"/>
+        <p:datePicker locale="tr" pattern="#{messages.tarihFormat}"
+                      value="#{pkHemsireGozlemFormuController.selected.tarih}"
+                      title="#{messages.tarihText}" mask="true"
+                      monthNavigator="true" yearNavigator="true" showButtonBar="true"
+                      showIcon="true" showOnFocus="false"/>
+
+        <p:outputLabel value="#{messages.tcKimlikNoLabel}" for="@next"/>
+        <coco:inputWithButton id="inputWithButtonPkHasta" inputId="pkHastaId"
+                              inputValue="#{pkHemsireGozlemFormuController.selected.pkHasta.gnlKisi.tcKimlikNo}"
+                              inputTitle="#{messages.tcKimlikNoText}"
+                              actionListener="#{bysController.openCommonDialog('pkHastaSec')}"
+                              ajaxListener="#{pkHemsireGozlemFormuController.secilenPkHasta}"
+                              buttonTitle="#{messages.hastaSecmelisiniz}"
+                              size="50"
+                              dialogId="PkHemsireGozlemFormuCreateDialogId"/>
+
+        <p:outputLabel value="#{messages.adLabel}" for="@next"/>
+        <p:inputText id="ad" value="#{pkHemsireGozlemFormuController.selected.pkHasta.gnlKisi.ad}"
+                     title="#{messages.adText}"
+                     size="50" maxlength="50" readonly="true" styleClass="inputUpdate"/>
+
+        <p:outputLabel value="#{messages.soyadLabel}" for="@next"/>
+        <p:inputText id="soyad" value="#{pkHemsireGozlemFormuController.selected.pkHasta.gnlKisi.soyad}"
+                     title="#{messages.soyadText}" size="50" maxlength="50" readonly="true" styleClass="inputUpdate"/>
+
+        <p:outputLabel value="#{messages.telefonLabel}" for="@next"/>
+        <h:panelGroup>
+            <p:inputText value="#{pkHemsireGozlemFormuController.selected.pkHasta.gnlKisi.telefon}"
+                         styleClass="inputUpdate" readonly="true"/>
+            <p:inputText value="#{pkHemsireGozlemFormuController.selected.pkHasta.gnlKisi.telefon2}"
+                         styleClass="inputUpdate" readonly="true"/>
+        </h:panelGroup>
+
+        <p:outputLabel value="#{messages.karantinaNoLabel}" for="@next"/>
+        <p:inputText value="#{pkHemsireGozlemFormuController.selected.karantinaNo}" required="true" title="#{messages.karantinaNoText}" size="50"/>
+
+        <p:outputLabel value="#{messages.servisLabel}" for="@next"/>
+        <p:inputTextarea value="#{pkHemsireGozlemFormuController.selected.servis}" rows="4" autoResize="false"
+                         styleClass="w-100"/>
+
+        <p:outputLabel value="#{messages.doktorLabel}" for="@next"/>
+        <p:selectOneMenu value="#{pkHemsireGozlemFormuController.selected.doktorPkPersonel}" converter="omnifaces.SelectItemsConverter"
+                         required="true" filter="true">
+            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{pkPersonelController.getPersonelsByUnvan('Doktor')}"
+                           var="doctors"
+                           itemValue="#{doctors}"
+                           itemLabel="#{doctors.gnlPersonel.gnlKisi.adSoyad}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.teshisLabel}" for="@next"/>
+        <p:inputTextarea value="#{pkHemsireGozlemFormuController.selected.teshis}" rows="4" autoResize="false"
+                         styleClass="w-100"/>
+
+        <p:outputLabel value="#{messages.orderLabel}" for="@next"/>
+        <p:inputTextarea value="#{pkHemsireGozlemFormuController.selected.teshisOrder}" rows="4" autoResize="false"
+                         styleClass="w-100"/>
+
+        <p:outputLabel value="#{messages.saatLabel}" for="@next"/>
+        <p:datePicker locale="tr" pattern="#{messages.saatFormatKisa}"
+                      value="#{pkHemsireGozlemFormuController.selected.saat}"
+                      title="#{messages.saatText}" mask="true"
+                      monthNavigator="true" yearNavigator="true" showButtonBar="true"
+                      showIcon="true" showOnFocus="false" timeOnly="true"/>
+
+        <p:outputLabel value="#{messages.atesLabel}" for="@next"/>
+        <p:inputText value="#{pkHemsireGozlemFormuController.selected.ates}" required="true" title="#{messages.atesText}" size="50"/>
+
+        <p:outputLabel value="#{messages.nabizLabel}" for="@next"/>
+        <p:inputText value="#{pkHemsireGozlemFormuController.selected.nabiz}" required="true" title="#{messages.nabizText}" size="50"/>
+
+        <p:outputLabel value="#{messages.kanBasinciLabel}" for="@next"/>
+        <p:inputText value="#{pkHemsireGozlemFormuController.selected.kanBasinci}" required="true" title="#{messages.kanBasinciText}" size="50"/>
+
+        <p:outputLabel value="#{messages.spo2Label}" for="@next"/>
+        <p:inputText value="#{pkHemsireGozlemFormuController.selected.spo2}" required="true" title="#{messages.spo2Text}" size="50"/>
+
+        <p:outputLabel value="#{messages.solunumLabel}" for="@next"/>
+        <p:inputText value="#{pkHemsireGozlemFormuController.selected.solunum}" required="true" title="#{messages.solunumText}" size="50"/>
+
+        <p:outputLabel value="#{messages.kanSekeriLabel}" for="@next"/>
+        <p:inputText value="#{pkHemsireGozlemFormuController.selected.kanSekeri}" required="true" title="#{messages.kanSekeriText}" size="50"/>
+
+        <p:outputLabel value="#{messages.hemsireLabel}" for="@next"/>
+        <p:selectOneMenu value="#{pkHemsireGozlemFormuController.selected.uygulayanHemsirePkPersonel}" converter="omnifaces.SelectItemsConverter"
+                         required="true" filter="true">
+            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{pkPersonelController.getPersonelsByUnvan('Hemşire')}"
+                           var="hemsires"
+                           itemValue="#{hemsires}"
+                           itemLabel="#{hemsires.gnlPersonel.gnlKisi.adSoyad}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.cvLabel}" for="@next"/>
+        <p:inputTextarea value="#{pkHemsireGozlemFormuController.selected.cv}" rows="4" autoResize="false"
+                         styleClass="w-100"/>
+
+    </coco:editpage>
+
+</ui:composition>
+
+</html>

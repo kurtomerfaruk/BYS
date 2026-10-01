@@ -19,6 +19,7 @@ import java.io.Serial;
 @NoArgsConstructor
 @Entity
 @Table(name = "PKPERSONEL")
+@NamedQuery(name = "PkPersonel.findByUnvan",query = "SELECT p FROM PkPersonel p WHERE p.aktif=true AND p.gnlPersonel.gnlUnvan.tanim=:unvan")
 public class PkPersonel extends BaseEntity {
     @Serial
     private static final long serialVersionUID = -3141401057523590462L;

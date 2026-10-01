@@ -16,14 +16,18 @@
                      listForm="PkPersonelListForm">
 
         <p:outputLabel value="#{messages.personelLabel}" for="@next"/>
-        <p:selectOneMenu id="uyruk" value="#{pkPersonelController.selected.gnlPersonel}"
+        <p:selectOneMenu value="#{pkPersonelController.selected.gnlPersonel}"
                          required="true" converter="omnifaces.SelectItemsConverter" filter="true">
             <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
             <f:selectItems value="#{gnlPersonelController.items}"
                            var="gnlPersonel"
                            itemLabel="#{gnlPersonel.gnlKisi.adSoyad}"
                            itemValue="#{gnlPersonel}"/>
+            <p:ajax event="change" update="unvan"/>
         </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.unvanLabel}" for="@next"/>
+        <p:inputText id="unvan" value="#{pkPersonelController.selected.gnlPersonel.gnlUnvan.tanim}" readonly="true" size="50"/>
 
     </coco:createpage>
 

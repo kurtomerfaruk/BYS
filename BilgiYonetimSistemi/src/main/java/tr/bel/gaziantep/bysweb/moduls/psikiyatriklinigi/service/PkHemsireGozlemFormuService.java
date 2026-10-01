@@ -5,24 +5,23 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import tr.bel.gaziantep.bysweb.core.service.AbstractService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
-import tr.bel.gaziantep.bysweb.moduls.psikiyatriklinigi.entity.PkPersonel;
+import tr.bel.gaziantep.bysweb.moduls.psikiyatriklinigi.entity.PkHemsireGozlemFormu;
 
 import java.io.Serial;
-import java.util.List;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
  * @version 1.21.0
- * @since 22.09.2026 14:19
+ * @since 1.10.2026 12:06
  */
 @Stateless
-public class PkPersonelService extends AbstractService<PkPersonel> {
+public class PkHemsireGozlemFormuService extends AbstractService<PkHemsireGozlemFormu> {
 
     @Serial
-    private static final long serialVersionUID = -361715590879247885L;
+    private static final long serialVersionUID = -4107467552154535427L;
 
-    public PkPersonelService() {
-        super(PkPersonel.class);
+    public PkHemsireGozlemFormuService() {
+        super(PkHemsireGozlemFormu.class);
     }
 
     @PersistenceContext(unitName = Constants.UNIT_NAME)
@@ -31,11 +30,5 @@ public class PkPersonelService extends AbstractService<PkPersonel> {
     @Override
     protected EntityManager getEntityManager() {
         return em;
-    }
-
-    public List<PkPersonel> getPersonelsByUnvan(String unvan) {
-        return  getEntityManager().createNamedQuery("PkPersonel.findByUnvan",PkPersonel.class)
-                .setParameter("unvan",unvan)
-                .getResultList();
     }
 }

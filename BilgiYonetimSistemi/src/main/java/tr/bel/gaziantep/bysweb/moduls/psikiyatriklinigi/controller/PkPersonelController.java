@@ -8,16 +8,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 import tr.bel.gaziantep.bysweb.core.controller.AbstractController;
-import tr.bel.gaziantep.bysweb.core.controller.KpsController;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlPersonel;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlUnvan;
-import tr.bel.gaziantep.bysweb.moduls.genel.service.GnlKisiService;
-import tr.bel.gaziantep.bysweb.moduls.genel.service.GnlPersonelService;
 import tr.bel.gaziantep.bysweb.moduls.psikiyatriklinigi.entity.PkPersonel;
+import tr.bel.gaziantep.bysweb.moduls.psikiyatriklinigi.service.PkPersonelService;
 
 import java.io.Serial;
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
@@ -33,11 +32,7 @@ public class PkPersonelController extends AbstractController<PkPersonel> {
     private static final long serialVersionUID = -8834885649649411798L;
 
     @Inject
-    private KpsController kpsController;
-    @Inject
-    private GnlKisiService gnlKisiService;
-    @Inject
-    private GnlPersonelService gnlPersonelService;
+    private PkPersonelService service;
 
     public PkPersonelController() {
         super(PkPersonel.class);
@@ -98,6 +93,10 @@ public class PkPersonelController extends AbstractController<PkPersonel> {
 //            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
 //        }
 //    }
+
+    public List<PkPersonel> getPersonelsByUnvan(String unvan){
+        return service.getPersonelsByUnvan(unvan);
+    }
 
 
 }

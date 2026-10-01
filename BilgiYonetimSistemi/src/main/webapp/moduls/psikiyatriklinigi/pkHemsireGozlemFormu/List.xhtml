@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:p="primefaces"
+                xmlns:pt="jakarta.faces.passthrough"
+                xmlns:coco="jakarta.faces.composite/ui">
+
+    <h:form id="PkHemsireGozlemFormuListForm" class="form-height">
+
+        <p:contextMenu id="PkHemsireGozlemFormuDataTableContextMenu" for="datalist:datalist">
+            <p:menuitem value="#{messages.buttonEkle}" onclick="document.getElementById('PkHemsireGozlemFormuListForm:datalist:datalist:createButton').click();"
+                        icon="pi pi-plus" rendered="#{syKullaniciController.hasPermission('pkhemsiregozlemformu:ekle')}"/>
+            <p:menuitem value="#{messages.buttonGuncelle}" onclick="document.getElementById('PkHemsireGozlemFormuListForm:datalist:datalist:editButton').click();"
+                        icon="pi pi-pencil" rendered="#{syKullaniciController.hasPermission('pkhemsiregozlemformu:guncelle')}"/>
+            <p:menuitem value="#{messages.buttonDetay}" onclick="document.getElementById('PkHemsireGozlemFormuListForm:datalist:datalist:viewButton').click();"
+                        icon="pi pi-search"/>
+            <p:menuitem value="#{messages.buttonSil}" onclick="document.getElementById('PkHemsireGozlemFormuListForm:datalist:datalist:deleteButton').click();"
+                        icon="pi pi-trash" rendered="#{syKullaniciController.hasPermission('pkhemsiregozlemformu:sil')}"/>
+        </p:contextMenu>
+
+        <coco:datatable id="datalist"
+                        value="#{pkHemsireGozlemFormuController.lazyItems}"
+                        rowKey="#{item.id}"
+                        selection="#{pkHemsireGozlemFormuController.selected}"
+                        filtered="#{pkHemsireGozlemFormuController.filtered}"
+                        rowselect=":PkHemsireGozlemFormuListForm:datalist:datalist:createButton,:PkHemsireGozlemFormuListForm:datalist:datalist:viewButton,:PkHemsireGozlemFormuListForm:datalist:datalist:editButton,:PkHemsireGozlemFormuListForm:datalist:datalist:deleteButton"
+                        rowDblselect="document.getElementById('PkHemsireGozlemFormuListForm:datalist:datalist:editButton').click()"
+                        contextMenu=":PkHemsireGozlemFormuListForm:datalist:datalist:createButton :PkHemsireGozlemFormuListForm:datalist:datalist:viewButton :PkHemsireGozlemFormuListForm:datalist:datalist:editButton :PkHemsireGozlemFormuListForm:datalist:datalist:deleteButton"
+                        selectListener="#{pkHemsireGozlemFormuController.resetParents}"
+                        controller="#{pkHemsireGozlemFormuController}"
+                        header="#{messages.aileEgitimListesi}">
+
+            <p:ajax event="colResize" listener="#{pkHemsireGozlemFormuController.onResize}"/>
+
+
+            <f:facet name="paginatorBottomLeft">
+                <p:commandButton id="createButton" styleClass="ui-button-primary" icon="pi pi-plus" pt:data-tooltip="#{messages.buttonEkle}"
+                                 actionListener="#{pkHemsireGozlemFormuController.prepareCreate}" update=":PkHemsireGozlemFormuCreateForm:PkHemsireGozlemFormuCreateForm"
+                                 oncomplete="PF('PkHemsireGozlemFormuCreateDialog').show()" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('pkhemsiregozlemformu:ekle')}"/>
+                <p:commandButton id="editButton" styleClass="ui-button-success" icon="pi pi-pencil" pt:data-tooltip="#{messages.buttonGuncelle}"
+                                 update=":PkHemsireGozlemFormuEditForm:PkHemsireGozlemFormuEditForm"
+                                 oncomplete="PF('PkHemsireGozlemFormuEditDialog').show()" disabled="#{empty pkHemsireGozlemFormuController.selected}" onstart="PF('Loading').show()"
+                                 onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('pkhemsiregozlemformu:guncelle')}"/>
+                <p:commandButton id="viewButton" styleClass="ui-button-info" icon="pi pi-search" pt:data-tooltip="#{messages.buttonDetay}"
+                                 update=":PkHemsireGozlemFormuViewForm:PkHemsireGozlemFormuViewForm"
+                                 oncomplete="PF('PkHemsireGozlemFormuViewDialog').show()" disabled="#{empty pkHemsireGozlemFormuController.selected}" onstart="PF('Loading').show()"
+                                 onsuccess="PF('Loading').hide()"/>
+                <p:commandButton id="deleteButton" styleClass="ui-button-danger" pt:data-tooltip="#{messages.buttonSil}" icon="pi pi-trash"
+                                 actionListener="#{pkHemsireGozlemFormuController.delete}"
+                                 update=":growl,datalist" disabled="#{empty pkHemsireGozlemFormuController.selected}"
+                                 rendered="#{syKullaniciController.hasPermission('pkhemsiregozlemformu:sil')}">
+                    <p:confirm header="#{messages.ConfirmationHeader}" message="#{messages.ConfirmDeleteMessage}" icon="pi pi-warning"/>
+                </p:commandButton>
+
+            </f:facet>
+
+        </coco:datatable>
+
+        <ui:include src="/confirmation.xhtml"/>
+
+    </h:form>
+
+</ui:composition>

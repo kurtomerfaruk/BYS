@@ -22,7 +22,11 @@
                            var="gnlPersonel"
                            itemLabel="#{gnlPersonel.gnlKisi.adSoyad}"
                            itemValue="#{gnlPersonel}"/>
+            <p:ajax event="change" update="unvan"/>
         </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.unvanLabel}" for="@next"/>
+        <p:inputText id="unvan" value="#{pkPersonelController.selected.gnlPersonel.gnlUnvan.tanim}" readonly="true" size="50"/>
 
     </coco:editpage>
 
