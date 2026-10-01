@@ -6,6 +6,7 @@ import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import lombok.extern.slf4j.Slf4j;
+import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 import tr.bel.gaziantep.bysweb.core.controller.AbstractController;
 import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.EnumSyFiltreAnahtari;
@@ -71,5 +72,13 @@ public class PkHastaTedaviSekliController extends AbstractController<PkHastaTeda
     public void secilenPkHasta(SelectEvent<PkHasta> event) {
         PkHasta pkHasta = event.getObject();
         this.getSelected().setPkHasta(pkHasta);
+    }
+
+    public void tedaviSekliSecKapat(PkHastaTedaviSekli pkHastaTedaviSekli) {
+        PrimeFaces.current().dialog().closeDynamic(pkHastaTedaviSekli);
+    }
+
+    public void onRowDblSelect(SelectEvent<PkHastaTedaviSekli> event) {
+        tedaviSekliSecKapat(event.getObject());
     }
 }

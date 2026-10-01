@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="primefaces">
+
+<ui:composition>
+
+    <h:panelGroup id="detayGruplariPanel" rendered="#{pkRevirAnemnezController.selected != null}"
+                  style="display: block;">
+
+        <ui:repeat value="#{pkRevirAnemnezController.detayGruplari}" var="grup">
+
+            <p:panel id="grupPanel" header="#{grup.turLabel}"
+                     styleClass="mb-2" toggleable="true">
+
+                <h:panelGroup layout="block">
+
+                    <ui:repeat value="#{grup.satirlar}" var="satir">
+                        <h:panelGroup rendered="#{satir.secili}" layout="block"
+                                      style="margin-bottom: 4px;">
+                            <h:outputText value="#{grup.tanimLabel(satir)}"/>
+                            <h:outputText value=" : " escape="false"/>
+                            <h:outputText value="#{satir.digerAciklama}"
+                                          rendered="#{not empty satir.digerAciklama}"
+                                          escape="false"/>
+                        </h:panelGroup>
+                    </ui:repeat>
+
+                    <h:outputText value="#{messages.revirSecimYokLabel}"
+                                  rendered="#{not grup.seciliVar}"
+                                  style="font-style: italic;"/>
+
+                </h:panelGroup>
+
+            </p:panel>
+
+        </ui:repeat>
+
+    </h:panelGroup>
+
+</ui:composition>
+</html>

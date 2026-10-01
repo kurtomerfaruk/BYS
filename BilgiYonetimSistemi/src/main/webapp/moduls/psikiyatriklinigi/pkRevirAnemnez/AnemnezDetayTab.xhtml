@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces">
+
+<ui:composition>
+
+    <h:panelGroup id="detayGruplariPanel" rendered="#{pkRevirAnemnezController.selected != null}"
+                  style="display: block;">
+
+        <ui:repeat value="#{pkRevirAnemnezController.detayGruplari}" var="grup">
+
+            <p:panel id="grupPanel" header="#{grup.turLabel}"
+                     styleClass="mb-2" toggleable="true">
+
+                <!-- ALERJISI gibi tek secimli gruplar -->
+                <p:selectOneRadio rendered="#{not grup.cokluSecim}"
+                                  id="secimRadio"
+                                  value="#{pkRevirAnemnezController.alerjiSecimi}"
+                                  columns="4" styleClass="revir-detay-radio" layout="responsive">
+                        <f:selectItems value="#{grup.satirlar}" var="satir" itemLabel="#{grup.getTanimLabel(satir)}" itemValue="#{satir.tanim}"/>
+                </p:selectOneRadio>
+
+                <!-- Coklu secimli gruplar: checkbox'lar dogrudan detay satiri secili alanina baglanir -->
+                <h:panelGroup rendered="#{grup.cokluSecim}" layout="block">
+                    <ui:repeat value="#{grup.satirlar}" var="satir">
+                        <h:panelGroup layout="block"
+                                      style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                            <p:selectBooleanCheckbox value="#{satir.secili}"
+                                                     itemLabel="#{grup.getTanimLabel(satir)}"/>
+                            <p:inputText value="#{satir.digerAciklama}"
+                                         rendered="#{grup.isAciklamaGerekli(satir)}"
+                                         placeholder="#{messages.revirDigerAciklamaText}"
+                                         title="#{messages.revirDigerAciklamaText}"
+                                         size="40" maxlength="250"/>
+                        </h:panelGroup>
+                    </ui:repeat>
+                </h:panelGroup>
+
+            </p:panel>
+
+        </ui:repeat>
+
+    </h:panelGroup>
+
+</ui:composition>
+</html>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:p="primefaces"
+      xmlns:f="jakarta.faces.core">
+
+<h:head>
+    <h:outputScript library="primefaces" name="jquery/jquery.js"/>
+    <h:outputScript library="primefaces" name="jquery/jquery-plugins.js"/>
+    <h:outputStylesheet library="css" name="pfcrud.css"/>
+</h:head>
+<h:body>
+
+    <h:form id="PkHastaTedaviSekliSec">
+        <p:dataTable id="datalist"
+                     value="#{pkHastaTedaviSekliController.lazyItems}"
+                     var="item"
+                     rowKey="#{item.id}"
+                     paginator="true"
+                     rows="10"
+                     selection="#{pkHastaTedaviSekliController.selected}"
+                     paginatorPosition="bottom"
+                     lazy="true"
+                     pageLinks="5"
+                     filteredValue="#{pkHastaTedaviSekliController.filtered}"
+                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                     currentPageReportTemplate="#{messages.currentPageTemplate}"
+                     emptyMessage="#{messages.kayitBulunamadi}"
+                     size="small"
+                     styleClass="w-100">
+
+            <f:facet name="header">
+                #{messages.tedaviSekliListesi}
+            </f:facet>
+
+            <p:ajax event="rowDblselect" listener="#{pkHastaTedaviSekliController.onRowDblSelect}"/>
+
+            <p:column sortBy="#{item.pkHasta.gnlKisi.tcKimlikNo}" filterBy="#{item.pkHasta.gnlKisi.tcKimlikNo}">
+                <f:facet name="header">
+                    <h:outputText value="#{messages.tcKimlikNoText}"/>
+                </f:facet>
+                <h:outputText value="#{item.pkHasta.gnlKisi.tcKimlikNo}"/>
+            </p:column>
+
+            <p:column sortBy="#{item.pkHasta.gnlKisi.ad}" filterBy="#{item.pkHasta.gnlKisi.ad}">
+                <f:facet name="header">
+                    <h:outputText value="#{messages.adText}"/>
+                </f:facet>
+                <h:outputText value="#{item.pkHasta.gnlKisi.ad}"/>
+            </p:column>
+
+            <p:column sortBy="#{item.pkHasta.gnlKisi.soyad}" filterBy="#{item.pkHasta.gnlKisi.soyad}">
+                <f:facet name="header">
+                    <h:outputText value="#{messages.soyadText}"/>
+                </f:facet>
+                <h:outputText value="#{item.pkHasta.gnlKisi.soyad}"/>
+            </p:column>
+
+            <p:column sortBy="#{item.tedaviSekli}" filterBy="#{item.tedaviSekli}">
+                <f:facet name="header">
+                    <h:outputText value="#{messages.tedaviSekliLabel}"/>
+                </f:facet>
+                <h:outputText value="#{item.tedaviSekli.displayValue}"/>
+            </p:column>
+
+            <p:column sortBy="#{item.tarih}" filterBy="#{item.tarih}">
+                <f:facet name="header">
+                    <h:outputText value="#{messages.tedaviTarihiLabel}"/>
+                </f:facet>
+                <h:outputText value="#{item.tarih}">
+                    <f:convertDateTime pattern="#{messages.tarihSaatKisaFormat}" type="localDateTime"/>
+                </h:outputText>
+            </p:column>
+
+            <p:column sortBy="#{item.taburcuTarihi}" filterBy="#{item.taburcuTarihi}">
+                <f:facet name="header">
+                    <h:outputText value="#{messages.taburcuTarihiLabel}"/>
+                </f:facet>
+                <h:outputText value="#{item.taburcuTarihi}">
+                    <f:convertDateTime pattern="#{messages.tarihSaatKisaFormat}" type="localDateTime"/>
+                </h:outputText>
+            </p:column>
+
+            <p:column headerText="#{messages.buttonSec}" style="width: 70px;text-align: center">
+                <p:commandButton icon="pi pi-check"
+                                 actionListener="#{pkHastaTedaviSekliController.tedaviSekliSecKapat(item)}"
+                                 style="width: 20px !important; height: 20px !important;"/>
+            </p:column>
+
+        </p:dataTable>
+    </h:form>
+
+
+</h:body>
+</html>

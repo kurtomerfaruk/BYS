@@ -5,6 +5,8 @@ import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import lombok.extern.slf4j.Slf4j;
+import org.primefaces.PrimeFaces;
+import org.primefaces.event.SelectEvent;
 import tr.bel.gaziantep.bysweb.core.controller.AbstractController;
 import tr.bel.gaziantep.bysweb.core.controller.KpsController;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
@@ -58,6 +60,14 @@ public class PkPersonelController extends AbstractController<PkPersonel> {
             log.error(null, ex);
         }
         return null;
+    }
+
+    public void personelSecKapat(PkPersonel pkPersonel) {
+        PrimeFaces.current().dialog().closeDynamic(pkPersonel);
+    }
+
+    public void onRowDblSelect(SelectEvent<PkPersonel> event) {
+        personelSecKapat(event.getObject());
     }
 
 //    public void getTcKimlik() {
