@@ -11,14 +11,14 @@ import java.io.Serial;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
- * @version 1.0.0
- * @since 1.10.2026 16:28
+ * @version 1.21.0
+ * @since 2.10.2026 11:40
  */
 @Stateless
 public class PkOpiyatYoksunlukService extends AbstractService<PkOpiyatYoksunluk> {
 
     @Serial
-    private static final long serialVersionUID = 4766861832512541924L;
+    private static final long serialVersionUID = -256729452159842498L;
 
     public PkOpiyatYoksunlukService() {
         super(PkOpiyatYoksunluk.class);

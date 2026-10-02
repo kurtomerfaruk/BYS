@@ -7,6 +7,8 @@ import tr.bel.gaziantep.bysweb.core.service.AbstractService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.moduls.psikiyatriklinigi.entity.PkRevirAnemnezDetay;
 
+import java.io.Serial;
+
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
  * @version 1.21.0
@@ -14,6 +16,9 @@ import tr.bel.gaziantep.bysweb.moduls.psikiyatriklinigi.entity.PkRevirAnemnezDet
  */
 @Stateless
 public class PkRevirAnemnezDetayService extends AbstractService<PkRevirAnemnezDetay> {
+
+    @Serial
+    private static final long serialVersionUID = -6337569181999781574L;
 
     public PkRevirAnemnezDetayService() {
         super(PkRevirAnemnezDetay.class);

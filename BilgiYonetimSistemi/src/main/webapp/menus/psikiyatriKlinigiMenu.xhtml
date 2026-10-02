@@ -159,6 +159,17 @@
                                 </li>
                             </ui:fragment>
 
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('pkopiyatyoksunluk:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/psikiyatriklinigi/pkOpiyatYoksunluk/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="Opiyat Yoksunluk Ölçeği"/>
+                                </li>
+                            </ui:fragment>
+
                             <ui:fragment rendered="#{syKullaniciController.hasPermission('pkhemsiregozlemformu:goster')}">
                                 <li class="slide">
                                     <p:commandLink styleClass="side-menu__item sublevel2"

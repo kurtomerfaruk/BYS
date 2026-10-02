@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <p:panelGrid id="anemnezBilgileriPanel" columns="2" styleClass="w-100"
+                 rendered="#{pkOpiyatYoksunlukController.selected != null}" layout="tabular">
+
+        <p:outputLabel value="#{messages.tarihLabel}" for="@next"/>
+        <p:datePicker id="yatisTarihi" locale="tr"
+                      pattern="#{messages.tarihSaatKisaFormat}"
+                      value="#{pkOpiyatYoksunlukController.selected.tarih}"
+                      title="#{messages.tarihText}" mask="true"
+                      showTime="true" timeOnlyWhenEmpty="false"
+                      monthNavigator="true" yearNavigator="true" showButtonBar="true"
+                      showIcon="true" showOnFocus="false"/>
+
+        <p:outputLabel value="#{messages.hastaLabel}" for="@next"/>
+        <coco:inputWithButton id="inputWithButtonPkHasta" inputId="pkHastaId"
+                              inputValue="#{pkOpiyatYoksunlukController.selected.pkHasta.gnlKisi.tcKimlikNo}"
+                              inputTitle="#{messages.tcKimlikNoText}"
+                              actionListener="#{bysController.openCommonDialog('pkHastaSec')}"
+                              ajaxListener="#{pkOpiyatYoksunlukController.secilenHasta}"
+                              buttonTitle="#{messages.hastaSecmelisiniz}"
+                              size="50"
+                              dialogId="PkOpiyatYoksunlukCreateDialogId"/>
+
+        <p:outputLabel value="#{messages.hastaAdSoyadLabel}" for="@next"/>
+        <p:inputText value="#{pkOpiyatYoksunlukController.selected.pkHasta.gnlKisi.adSoyad}"
+                     title="#{messages.hastaAdSoyadText}"
+                     size="50" maxlength="50" readonly="true" styleClass="inputUpdate"/>
+
+        <p:outputLabel value="#{messages.toplamPuanLabel}" for="@next"/>
+        <p:spinner value="#{pkOpiyatYoksunlukController.selected.toplamPuan}" title="#{messages.toplamPuanText}" stepFactor="1" min="0" max="100"
+                   size="50" required="true"/>
+    </p:panelGrid>
+
+</ui:composition>
+</html>

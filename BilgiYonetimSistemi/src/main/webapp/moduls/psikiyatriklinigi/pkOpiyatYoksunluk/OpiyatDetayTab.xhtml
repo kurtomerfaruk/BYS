@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces">
+<ui:composition>
+    <h:panelGroup id="detayGruplariPanel" rendered="#{pkOpiyatYoksunlukController.selected != null}"
+                  style="display: block;">
+        <ui:repeat id="turler" value="#{pkOpiyatYoksunlukController.detayGruplari}" var="grup">
+            <p:panel id="grup#{grup.turKod}" header="#{grup.turAdi}"
+                     styleClass="mb-2" toggleable="true">
+                <p:selectOneRadio id="r#{grup.turKod}"
+                                  rendered="#{not grup.cokluSecim}"
+                                  value="#{grup.seciliTanimId}"
+                                  layout="pageDirection" styleClass="revir-detay-radio">
+                    <f:selectItems value="#{grup.secenekler}" var="secenek" itemLabel="#{secenek.adi}" itemValue="#{secenek.tanimId}"/>
+                </p:selectOneRadio>
+                <!-- Coklu secimli gruplar. id'ler acikca verilir; aksi halde
+                     ui:repeat icinde uretilen otomatik id'ler postback ile
+                     eslesmez ve secimler kaydedilmez. -->
+                <h:panelGroup rendered="#{grup.cokluSecim}" layout="block">
+                    <ui:repeat id="secenekler" value="#{grup.secenekler}" var="secenek">
+                        <h:panelGroup layout="block"
+                                      style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                            <p:selectBooleanCheckbox id="c#{grup.turKod}#{secenek.kod}"
+                                                     value="#{secenek.secili}"
+                                                     itemLabel="#{secenek.adi}"/>
+                            <p:inputText id="a#{grup.turKod}#{secenek.kod}"
+                                         value="#{secenek.digerAciklama}"
+                                         rendered="#{secenek.aciklamaGerekli}"
+                                         placeholder="#{messages.revirDigerAciklamaText}"
+                                         title="#{messages.revirDigerAciklamaText}"
+                                         size="40" maxlength="250"/>
+                        </h:panelGroup>
+                    </ui:repeat>
+                </h:panelGroup>
+            </p:panel>
+        </ui:repeat>
+    </h:panelGroup>
+</ui:composition>
+</html>

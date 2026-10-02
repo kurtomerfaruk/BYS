@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces">
+
+<ui:composition>
+
+    <p:panelGrid id="anemnezBilgileriPanel" columns="2" styleClass="w-100"
+                 rendered="#{pkOpiyatYoksunlukController.selected != null}" layout="tabular">
+
+        <p:outputLabel value="#{messages.tarihLabel}"/>
+        <h:outputText value="#{pkOpiyatYoksunlukController.selected.yatisTarihi}">
+            <f:convertDateTime pattern="#{messages.tarihSaatKisaFormat}" type="localDateTime"/>
+        </h:outputText>
+
+        <p:outputLabel value="#{messages.revirGorusmeYapanLabel}"/>
+        <h:outputText value="#{pkOpiyatYoksunlukController.selected.gorusmeYapanPkPersonel.gnlPersonel.gnlKisi.adSoyad}"/>
+
+        <p:outputLabel value="#{messages.revirHastaLabel}"/>
+        <h:outputText value="#{pkOpiyatYoksunlukController.selected.pkHastaTedaviSekli.pkHasta.gnlKisi.adSoyad}"/>
+
+        <p:outputLabel value="#{messages.revirProtokolNoLabel}"/>
+        <h:outputText value="#{pkOpiyatYoksunlukController.selected.protokolNo}"/>
+
+        <p:outputLabel value="#{messages.boyLabel}"/>
+        <h:outputText value="#{pkOpiyatYoksunlukController.selected.boy}"/>
+
+        <p:outputLabel value="#{messages.kiloLabel}"/>
+        <h:outputText value="#{pkOpiyatYoksunlukController.selected.kilo}"/>
+
+        <p:outputLabel value="#{messages.revirAileselHastalikLabel}"/>
+        <h:outputText value="#{pkOpiyatYoksunlukController.selected.aileselHastalik}"/>
+
+        <p:outputLabel value="#{messages.revirAileselHastalikAciklamaLabel}"/>
+        <h:outputText value="#{pkOpiyatYoksunlukController.selected.aileselHastalikAciklama}"
+                      escape="false"/>
+
+        <p:outputLabel value="#{messages.revirOnTibbiTaniLabel}"/>
+        <h:outputText value="#{pkOpiyatYoksunlukController.selected.onTibbiTani}"
+                      escape="false"/>
+
+        <p:outputLabel value="#{messages.revirTeslimAlinanMalzemeLabel}"/>
+        <h:outputText value="#{pkOpiyatYoksunlukController.selected.teslimAlinanTibbiMalzemeler}"
+                      escape="false"/>
+
+        <p:outputLabel value="#{messages.revirCalismaVeEglenceLabel}"/>
+        <h:outputText value="#{pkOpiyatYoksunlukController.selected.calismaVeEglence}"
+                      escape="false"/>
+
+        <p:outputLabel value="#{messages.revirKiloKaybiLabel}"/>
+        <h:outputText value="#{pkOpiyatYoksunlukController.selected.sonAltiAydaKiloKaybiVarMi ? messages.revirVarLabel : messages.revirYokLabel}"/>
+
+        <p:outputLabel value="#{messages.revirKiloKaybiAciklamaLabel}"/>
+        <h:outputText value="#{pkOpiyatYoksunlukController.selected.sonAltiAydaKiloKaybiVarMiAciklama}"
+                      escape="false"/>
+
+
+    </p:panelGrid>
+
+</ui:composition>
+</html>

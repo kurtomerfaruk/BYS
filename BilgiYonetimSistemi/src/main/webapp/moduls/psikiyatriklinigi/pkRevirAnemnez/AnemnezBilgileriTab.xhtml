@@ -13,7 +13,7 @@
     <p:panelGrid id="anemnezBilgileriPanel" columns="2" styleClass="w-100"
                  rendered="#{pkRevirAnemnezController.selected != null}" layout="tabular">
 
-        <p:outputLabel value="#{messages.tarihLabel}" for="yatisTarihi"/>
+        <p:outputLabel value="#{messages.tarihLabel}" for="@next"/>
         <p:datePicker id="yatisTarihi" locale="tr"
                       pattern="#{messages.tarihSaatKisaFormat}"
                       value="#{pkRevirAnemnezController.selected.yatisTarihi}"

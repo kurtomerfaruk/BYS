@@ -1,14 +1,13 @@
 package tr.bel.gaziantep.bysweb.moduls.psikiyatriklinigi.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Nationalized;
 import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
 
 import java.io.Serial;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
@@ -18,11 +17,11 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "PKOPIYAT_YOKSUNLUK")
-public class PkOpiyatYoksunluk extends BaseEntity {
+@Table(name = "PKOPIYAT_YOKSUNLUK_DETAY")
+public class PkOpiyatYoksunlukDetay extends BaseEntity {
 
     @Serial
-    private static final long serialVersionUID = -5973096496047648974L;
+    private static final long serialVersionUID = 8234747046674316845L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,17 +29,17 @@ public class PkOpiyatYoksunluk extends BaseEntity {
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PKHASTA_ID")
-    private PkHasta pkHasta;
+    @JoinColumn(name = "PKOPIYAT_YOKSUNLUK_ID")
+    private PkOpiyatYoksunluk pkOpiyatYoksunluk;
 
-    @Column(name = "TARIH")
-    private LocalDateTime tarih;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PKSORU_TANIM_ID")
+    private PkSoruTanim pkSoruTanim;
 
-    @Column(name = "TOPLAM_PUAN")
-    private Integer toplamPuan;
-
-    @OneToMany(mappedBy = "pkOpiyatYoksunluk", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    private List<PkOpiyatYoksunlukDetay> pkOpiyatYoksunlukDetayList = new ArrayList<>();
+    @Size(max = 250)
+    @Nationalized
+    @Column(name = "DIGER_ACIKLAMA", length = 250)
+    private String digerAciklama;
 
     @Override
     public int hashCode() {
@@ -51,7 +50,7 @@ public class PkOpiyatYoksunluk extends BaseEntity {
 
     @Override
     public boolean equals(Object object) {
-        if (!(object instanceof PkOpiyatYoksunluk other)) {
+        if (!(object instanceof PkOpiyatYoksunlukDetay other)) {
             return false;
         }
         return (this.id != null || other.id == null) && (this.id == null || this.id.equals(other.id));
