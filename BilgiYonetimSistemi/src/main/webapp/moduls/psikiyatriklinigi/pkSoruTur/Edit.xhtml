@@ -2,6 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
       xmlns:p="primefaces"
       xmlns:coco="jakarta.faces.composite/ui">
 
@@ -12,6 +13,16 @@
                    actionListener="#{pkSoruTurController.save}"
                    listForm="PkSoruTurListForm"
                    model="#{pkSoruTurController.selected}">
+
+        <p:outputLabel value="#{messages.modulLabel}" for="@next"/>
+        <p:selectOneMenu value="#{pkSoruTurController.selected.modul}" converter="omnifaces.SelectItemsConverter" required="true"
+                         filter="true">
+            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{enumModul.ALL_VALUES}"
+                           var="moduls"
+                           itemValue="#{moduls}"
+                           itemLabel="#{moduls.displayValue}"/>
+        </p:selectOneMenu>
 
         <p:outputLabel value="#{messages.soruTurLabel}" for="@next" />
         <p:inputText id="tanim" value="#{pkSoruTurController.selected.tanim}" title="#{messages.soruTurText}" size="50" maxlength="150"

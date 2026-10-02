@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Nationalized;
 import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
+import tr.bel.gaziantep.bysweb.core.enums.psikiyatriklinigi.EnumPkModul;
 
 import java.io.Serial;
 import java.util.ArrayList;
@@ -30,6 +31,10 @@ public class PkSoruTur extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID", nullable = false)
     private Integer id;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "MODUL")
+    private EnumPkModul modul;
 
     @Size(max = 150)
     @NotNull

@@ -17,6 +17,7 @@ import tr.bel.gaziantep.bysweb.core.enums.hafriyat.EnumHfTahsilatTuru;
 import tr.bel.gaziantep.bysweb.core.enums.moralevi.EnumMeTalepDurumu;
 import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.*;
 import tr.bel.gaziantep.bysweb.core.enums.psikiyatriklinigi.EnumPkEgitimTur;
+import tr.bel.gaziantep.bysweb.core.enums.psikiyatriklinigi.EnumPkModul;
 import tr.bel.gaziantep.bysweb.core.enums.psikiyatriklinigi.EnumPkTalepTuru;
 import tr.bel.gaziantep.bysweb.core.enums.psikiyatriklinigi.EnumPkTedaviSekli;
 import tr.bel.gaziantep.bysweb.core.enums.saglikhizmetleri.EnumShDanismanlikHizmeti;
@@ -34,6 +35,8 @@ import tr.bel.gaziantep.bysweb.moduls.ileriyas.entity.IyTalepKonu;
 import tr.bel.gaziantep.bysweb.moduls.ileriyas.service.IyTalepKonuService;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtOlcuSablon;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.service.OrtOlcuSablonService;
+import tr.bel.gaziantep.bysweb.moduls.psikiyatriklinigi.entity.PkSoruTur;
+import tr.bel.gaziantep.bysweb.moduls.psikiyatriklinigi.service.PkSoruTurService;
 
 import java.io.Serial;
 import java.util.ArrayList;
@@ -63,6 +66,8 @@ public class FilterOptionService implements java.io.Serializable{
     private OrtOlcuSablonService ortOlcuSablonService;
     @Inject
     private IyTalepKonuService iyTalepKonuService;
+    @Inject
+    private PkSoruTurService pkSoruTurService;
 
     public List<SelectItem> getSyFilterTurs() {
         List<SelectItem> result = new ArrayList<>();
@@ -446,6 +451,21 @@ public class FilterOptionService implements java.io.Serializable{
 
     public List<SelectItem> getGnlIzinTurus() {
         return Arrays.stream(EnumGnlIzinTuru.values())
+                .map(value -> new SelectItem(value,value.getDisplayValue()))
+                .collect(Collectors.toList());
+    }
+
+    public List<SelectItem> getPkSoruTurs() {
+        List<SelectItem> result = new ArrayList<>();
+        List<PkSoruTur> list = pkSoruTurService.findAll();
+        for (PkSoruTur value : list) {
+            result.add(new SelectItem(value.getTanim(), value.getTanim()));
+        }
+        return result;
+    }
+
+    public List<SelectItem> getPkModuls() {
+        return Arrays.stream(EnumPkModul.values())
                 .map(value -> new SelectItem(value,value.getDisplayValue()))
                 .collect(Collectors.toList());
     }

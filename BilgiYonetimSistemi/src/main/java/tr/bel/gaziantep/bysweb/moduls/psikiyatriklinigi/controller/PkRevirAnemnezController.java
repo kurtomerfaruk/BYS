@@ -1,6 +1,5 @@
 package tr.bel.gaziantep.bysweb.moduls.psikiyatriklinigi.controller;
 
-import jakarta.annotation.PostConstruct;
 import jakarta.faces.event.ActionEvent;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
@@ -11,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.primefaces.event.SelectEvent;
 import tr.bel.gaziantep.bysweb.core.controller.AbstractController;
 import tr.bel.gaziantep.bysweb.core.enums.bys.EnumVarYok;
+import tr.bel.gaziantep.bysweb.core.enums.psikiyatriklinigi.EnumPkModul;
 import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
 import tr.bel.gaziantep.bysweb.core.utils.StringUtil;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
@@ -42,43 +42,13 @@ public class PkRevirAnemnezController  extends AbstractController<PkRevirAnemnez
     @Inject
     private PkSoruTanimService soruTanimService;
 
-    /**
-     * Formun baglandigi soru gruplari. Bunlar kalici entity DEGIL, sadece
-     * ekran durumu tutan gecici nesnelerdir; kaydetmede secimler
-     * PkRevirAnemnezDetay satirlarina cevrilir.
-     */
+
     private List<DetayGrup> detayGruplari = new ArrayList<>();
 
-    /**
-     * detayGruplari hangi kayit icin kuruldu? JSF formu gonderip ayni kaydi
-     * yeniden render ettiginde grup listesi yeniden kurulmaz; aksi halde
-     * kullanici secimleri render sirasinda ezilirdi.
-     */
     private PkRevirAnemnez detayGrubuKaynagi;
-
-    /**
-     * Secim diyaloglarinda gosterilen salt-okunur metinler.
-     * JSF bunlari form gonderiminde geri yazdigi icin yazilabilir olmalidir;
-     * deger kayit degistiginde ilk cagrida varliktan yeniden hesaplanir.
-     */
-    @Getter
-    @Setter
-    private String gorusmeYapanAdSoyad;
-
-    @Getter
-    @Setter
-    private String tedaviSekliHastaAdSoyad;
-
-    private PkRevirAnemnez adSoyadKaynagi;
 
     public PkRevirAnemnezController() {
         super(PkRevirAnemnez.class);
-    }
-
-    @PostConstruct
-    @Override
-    public void init() {
-        readColumns();
     }
 
     @Override
@@ -90,20 +60,12 @@ public class PkRevirAnemnezController  extends AbstractController<PkRevirAnemnez
             pkHastaTedaviSekli.setPkHasta(PkHasta.builder().gnlKisi(new GnlKisi()).build());
             yeniKayit.setPkHastaTedaviSekli(pkHastaTedaviSekli);
             yeniKayit.setSonAltiAydaKiloKaybiVarMi(EnumVarYok.YOK);
-            // Kayit yeni oldugu icin secili soru yoktur; detay satirlari
-            // yalnizca kullanici bir secenek isaretlediginde olusur.
             yeniKayit.setPkRevirAnemnezDetayList(new ArrayList<>());
             detayGrubuKaynagi = null;
         }
         return yeniKayit;
     }
 
-    /**
-     * Formdaki soru gruplari ve secenekleri.
-     *
-     * Katalog (soru turu/tanim) salt okunur veridir; yalnizca "secildi" ve
-     * "aciklama" bilgisi ekran durumudur.
-     */
     public List<DetayGrup> getDetayGruplari() {
         PkRevirAnemnez kayit = getSelected();
         if (kayit == null) {
@@ -117,21 +79,20 @@ public class PkRevirAnemnezController  extends AbstractController<PkRevirAnemnez
     }
 
     private List<DetayGrup> detayGruplariKur(PkRevirAnemnez kayit) {
-        List<PkSoruTur> turlar = soruTurService.findAktifler();
-        List<PkSoruTanim> tanimlar = soruTanimService.findAktifler();
+        List<PkSoruTur> turlar = soruTurService.findAktifler(EnumPkModul.REVIR);
+        List<PkSoruTanim> tanimlar = soruTanimService.findAktifler(EnumPkModul.REVIR);
 
         Map<Integer, List<PkSoruTanim>> turIdyeGore = tanimlar.stream()
                 .filter(tanim -> tanim.getPkSoruTur() != null
                         && tanim.getPkSoruTur().getId() != null)
                 .collect(Collectors.groupingBy(tanim -> tanim.getPkSoruTur().getId()));
 
-        // Kaydin daha once kaydedilmis secimleri: soru tanim id -> detay satiri
-        Map<Integer, PkRevirAnemnezDetay> secilmisler = new HashMap<>();
+        Map<Integer, PkRevirAnemnezDetay> kayitliCevaplar = new HashMap<>();
         if (kayit.getPkRevirAnemnezDetayList() != null) {
             for (PkRevirAnemnezDetay detay : kayit.getPkRevirAnemnezDetayList()) {
                 if (detay.getPkSoruTanim() != null
                         && detay.getPkSoruTanim().getId() != null) {
-                    secilmisler.put(detay.getPkSoruTanim().getId(), detay);
+                    kayitliCevaplar.put(detay.getPkSoruTanim().getId(), detay);
                 }
             }
         }
@@ -144,7 +105,7 @@ public class PkRevirAnemnezController  extends AbstractController<PkRevirAnemnez
             }
             List<DetaySecenek> secenekler = new ArrayList<>();
             for (PkSoruTanim tanim : turSecenekleri) {
-                secenekler.add(new DetaySecenek(tanim, secilmisler.get(tanim.getId())));
+                secenekler.add(new DetaySecenek(tanim, kayitliCevaplar.get(tanim.getId())));
             }
             gruplar.add(new DetayGrup(tur, secenekler));
         }
@@ -153,15 +114,6 @@ public class PkRevirAnemnezController  extends AbstractController<PkRevirAnemnez
         return gruplar;
     }
 
-    /**
-     * Kaydetmeden once ekrandaki secimleri detay satirlarina yansitir.
-     *
-     * - isaretlenmis secenek icin detay satiri yoksa olusturulur
-     * - isareti kaldirilan secenegin satiri koleksiyondan cikarilir
-     *   (orphanRemoval sayesinde veritabaninda silinir)
-     * - aciklama gerektirmeyen seceneklerde ve secim kaldirildiginda
-     *   aciklama metni temizlenir
-     */
     private void detaylariSenkronizeEt(PkRevirAnemnez kayit) {
         if (kayit.getPkRevirAnemnezDetayList() == null) {
             kayit.setPkRevirAnemnezDetayList(new ArrayList<>());
@@ -198,71 +150,9 @@ public class PkRevirAnemnezController  extends AbstractController<PkRevirAnemnez
         return true;
     }
 
-    public void secilenPersonel(SelectEvent<PkPersonel> event) {
-        if (event != null && event.getObject() != null && getSelected() != null) {
-            getSelected().setGorusmeYapanPkPersonel(event.getObject());
-            gorusmeYapanAdSoyad = personelinAdSoyadi(event.getObject());
-        }
-    }
-
     public void secilenTedaviSekli(SelectEvent<PkHastaTedaviSekli> event) {
-        if (event != null && event.getObject() != null && getSelected() != null) {
-            getSelected().setPkHastaTedaviSekli(event.getObject());
-            if (getSelected().getYatisTarihi() == null && event.getObject().getTarih() != null) {
-                getSelected().setYatisTarihi(event.getObject().getTarih());
-            }
-            tedaviSekliHastaAdSoyad = hastaninAdSoyadi(event.getObject().getPkHasta());
-        }
-    }
-
-    /**
-     * Edit dialogu her acildiginda secim kutularinin dogru metni gostermesi icin.
-     * JSF formu gonderip yeniden render ettiginde degerler korunur; sadece
-     * farkli bir kayit secildiginde yeniden hesaplanir.
-     */
-    public String getGorusmeYapanAdSoyad() {
-        PkRevirAnemnez naranon = getSelected();
-        if (naranon == null) {
-            return null;
-        }
-        if (naranon != adSoyadKaynagi) {
-            adSoyadKaynagi = naranon;
-            gorusmeYapanAdSoyad = personelinAdSoyadi(naranon.getGorusmeYapanPkPersonel());
-            tedaviSekliHastaAdSoyad = tedaviSekliHastaninAdSoyadi(naranon.getPkHastaTedaviSekli());
-        }
-        return gorusmeYapanAdSoyad;
-    }
-
-    public String getTedaviSekliHastaAdSoyad() {
-        PkRevirAnemnez naranon = getSelected();
-        if (naranon == null) {
-            return null;
-        }
-        if (naranon != adSoyadKaynagi) {
-            getGorusmeYapanAdSoyad();
-        }
-        return tedaviSekliHastaAdSoyad;
-    }
-
-    private String personelinAdSoyadi(PkPersonel personel) {
-        if (personel == null || personel.getGnlPersonel() == null || personel.getGnlPersonel().getGnlKisi() == null) {
-            return null;
-        }
-        return personel.getGnlPersonel().getGnlKisi().getAdSoyad();
-    }
-
-    private String tedaviSekliHastaninAdSoyadi(PkHastaTedaviSekli tedaviSekli) {
-        if (tedaviSekli == null) {
-            return null;
-        }
-        return hastaninAdSoyadi(tedaviSekli.getPkHasta());
-    }
-
-    private String hastaninAdSoyadi(PkHasta hasta) {
-        if (hasta == null || hasta.getGnlKisi() == null) {
-            return null;
-        }
-        return hasta.getGnlKisi().getAdSoyad();
+        PkHastaTedaviSekli pkHastaTedaviSekli = event.getObject();
+        this.getSelected().setPkHastaTedaviSekli(pkHastaTedaviSekli);
     }
 
     private boolean validateKayit() {
@@ -392,13 +282,19 @@ public class PkRevirAnemnezController  extends AbstractController<PkRevirAnemnez
 
         private String digerAciklama;
 
+        /**
+         * Detay satiri; null ise bu soru hic cevaplanmamis demektir.
+         * AKTIF=false bir satir varsa kullanici sonra isareti kaldirmistir.
+         */
         private PkRevirAnemnezDetay detay;
 
         DetaySecenek(PkSoruTanim tanim, PkRevirAnemnezDetay detay) {
             this.tanim = tanim;
             this.detay = detay;
-            this.secili = detay != null;
-            this.digerAciklama = detay != null ? detay.getDigerAciklama() : null;
+            this.secili = detay != null && detay.isAktif();
+            // Pasif satirin aciklamasi ekrana yuklenmez; kullanici soruyu
+            // yeniden secerse bos alacaktir (eski metin veritabaninda kalir).
+            this.digerAciklama = this.secili ? detay.getDigerAciklama() : null;
         }
 
         public Integer getTanimId() {
@@ -418,14 +314,22 @@ public class PkRevirAnemnezController  extends AbstractController<PkRevirAnemnez
         }
 
         /**
-         * Secenek isaretli: detay satiri yoksa olustur, varsa guncelle.
+         * Secenek isaretli.
+         *
+         * Once cevaplanmis ama pasifleştirilmis bir soru yeniden secildiyse
+         * yeni satir acmaz; mevcut satir yeniden aktiflestirilir. Aksi halde
+         * UNIQUE (PKREVIR_ANEMNEZ_ID, PKREVIR_ANEMNEZ_SORU_TANIM_ID) kisiti
+         * ihlal edilirdi.
          */
         void secimiKaydet(PkRevirAnemnez kayit) {
             if (detay == null) {
                 detay = new PkRevirAnemnezDetay();
                 detay.setPkRevirAnemnez(kayit);
                 detay.setPkSoruTanim(tanim);
+                detay.setAktif(true);
                 kayit.getPkRevirAnemnezDetayList().add(detay);
+            } else {
+                detay.setAktif(true);
             }
             if (!tanim.isAciklamaGerekli()) {
                 digerAciklama = null;
@@ -434,13 +338,16 @@ public class PkRevirAnemnezController  extends AbstractController<PkRevirAnemnez
         }
 
         /**
-         * Secenek isareti kaldirildi: detay satiri silinir, aciklama temizlenir.
-         * Boylece daha once yazilmis "diger" metni sonraki acilista geri gelmez.
+         * Secenegin isareti kaldirildi: satir SILINMEZ, AKTIF=false yapilir.
+         *
+         * Boylece gecmis cevap ve degistiren kullanici/tarih bilgisi korunur.
+         * Satir koleksiyonda kalir; soru yeniden secilirse ayni satir
+         * yeniden aktiflestirilir. Eski aciklama metni de veritabaninda
+         * durur, ama ekranda gosterilmez.
          */
         void secimiKaldir(PkRevirAnemnez kayit) {
             if (detay != null) {
-                kayit.getPkRevirAnemnezDetayList().remove(detay);
-                detay = null;
+                detay.setAktif(false);
             }
             digerAciklama = null;
         }

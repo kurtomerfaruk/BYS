@@ -12,6 +12,7 @@ import java.io.Serial;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
  * @version 1.21.0
@@ -82,7 +83,7 @@ public class PkRevirAnemnez extends BaseEntity {
     @Column(name = "CALISMA_VE_EGLENCE")
     private String calismaVeEglence;
 
-   @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING)
     @Column(name = "SON_ALTI_AYDA_KILO_KAYBI_VAR_MI")
     private EnumVarYok sonAltiAydaKiloKaybiVarMi;
 
@@ -91,7 +92,7 @@ public class PkRevirAnemnez extends BaseEntity {
     @Column(name = "SON_ALTI_AYDA_KILO_KAYBI_VAR_MI_ACIKLAMA")
     private String sonAltiAydaKiloKaybiVarMiAciklama;
 
-    @OneToMany(mappedBy = "pkRevirAnemnez",cascade = {CascadeType.MERGE,CascadeType.PERSIST},orphanRemoval = true)
+    @OneToMany(mappedBy = "pkRevirAnemnez", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private List<PkRevirAnemnezDetay> pkRevirAnemnezDetayList = new ArrayList<>();
 
     @Override

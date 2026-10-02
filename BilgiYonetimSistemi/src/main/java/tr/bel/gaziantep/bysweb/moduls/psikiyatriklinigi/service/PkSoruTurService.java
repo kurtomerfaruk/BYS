@@ -3,6 +3,7 @@ package tr.bel.gaziantep.bysweb.moduls.psikiyatriklinigi.service;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import tr.bel.gaziantep.bysweb.core.enums.psikiyatriklinigi.EnumPkModul;
 import tr.bel.gaziantep.bysweb.core.service.AbstractService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.moduls.psikiyatriklinigi.entity.PkSoruTur;
@@ -38,10 +39,11 @@ public class PkSoruTurService extends AbstractService<PkSoruTur> {
         return "tanim";
     }
 
-    public List<PkSoruTur> findAktifler() {
+    public List<PkSoruTur> findAktifler(EnumPkModul modul) {
         return em.createQuery("SELECT tur FROM PkSoruTur tur "
-                                + "WHERE tur.aktif = true ORDER BY tur.siraNo",
+                                + "WHERE tur.aktif = true AND tur.modul=:modul ORDER BY tur.siraNo",
                         PkSoruTur.class)
+                .setParameter("modul",modul)
                 .getResultList();
     }
 }
