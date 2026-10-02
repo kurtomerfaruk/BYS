@@ -1,44 +1,51 @@
 package tr.bel.gaziantep.bysweb.moduls.psikiyatriklinigi.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Nationalized;
 import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
 
 import java.io.Serial;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
  * @version 1.21.0
- * @since 1.10.2026 09:03
+ * @since 02.10.2026 09:08
  */
 @Getter
 @Setter
 @Entity
-@Table(name = "PKREVIR_ANEMNEZ_DETAY")
-public class PkRevirAnemnezDetay extends BaseEntity {
+@Table(name = "PKSORU_TUR")
+public class PkSoruTur extends BaseEntity {
 
     @Serial
-    private static final long serialVersionUID = -1087490571019630292L;
+    private static final long serialVersionUID = 6056235959919377991L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PKREVIR_ANEMNEZ_ID")
-    private PkRevirAnemnez pkRevirAnemnez;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PKSORU_TANIM_ID")
-    private PkSoruTanim pkSoruTanim;
-
-    @Size(max = 250)
+    @Size(max = 150)
+    @NotNull
     @Nationalized
-    @Column(name = "DIGER_ACIKLAMA", length = 250)
-    private String digerAciklama;
+    @Column(name = "TANIM", nullable = false, length = 150)
+    private String tanim;
+
+    @Column(name = "SIRA_NO")
+    private Integer siraNo;
+
+    @ColumnDefault("0")
+    @Column(name = "COKLU_SECIM", nullable = false)
+    private boolean cokluSecim;
+
+    @OneToMany(mappedBy = "pkSoruTur")
+    private List<PkSoruTanim> pkSoruTanimList = new ArrayList<>();
 
     @Override
     public int hashCode() {
@@ -49,7 +56,7 @@ public class PkRevirAnemnezDetay extends BaseEntity {
 
     @Override
     public boolean equals(Object object) {
-        if (!(object instanceof PkRevirAnemnezDetay other)) {
+        if (!(object instanceof PkSoruTur other)) {
             return false;
         }
         return (this.id != null || other.id == null) && (this.id == null || this.id.equals(other.id));

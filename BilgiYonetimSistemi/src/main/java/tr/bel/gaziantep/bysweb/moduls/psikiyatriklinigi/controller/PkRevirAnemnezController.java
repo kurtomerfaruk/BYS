@@ -1,7 +1,9 @@
 package tr.bel.gaziantep.bysweb.moduls.psikiyatriklinigi.controller;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.faces.event.ActionEvent;
 import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,21 +11,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.primefaces.event.SelectEvent;
 import tr.bel.gaziantep.bysweb.core.controller.AbstractController;
 import tr.bel.gaziantep.bysweb.core.enums.bys.EnumVarYok;
-import tr.bel.gaziantep.bysweb.core.enums.psikiyatriklinigi.EnumPkRevirAnemnezTanim;
-import tr.bel.gaziantep.bysweb.core.enums.psikiyatriklinigi.EnumPkRevirAnemnezTur;
 import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
 import tr.bel.gaziantep.bysweb.core.utils.StringUtil;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
-import tr.bel.gaziantep.bysweb.moduls.psikiyatriklinigi.entity.PkHasta;
-import tr.bel.gaziantep.bysweb.moduls.psikiyatriklinigi.entity.PkHastaTedaviSekli;
-import tr.bel.gaziantep.bysweb.moduls.psikiyatriklinigi.entity.PkRevirAnemnez;
-import tr.bel.gaziantep.bysweb.moduls.psikiyatriklinigi.entity.PkRevirAnemnezDetay;
+import tr.bel.gaziantep.bysweb.moduls.psikiyatriklinigi.entity.*;
+import tr.bel.gaziantep.bysweb.moduls.psikiyatriklinigi.service.PkSoruTanimService;
+import tr.bel.gaziantep.bysweb.moduls.psikiyatriklinigi.service.PkSoruTurService;
 
 import java.io.Serial;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
@@ -38,14 +36,49 @@ public class PkRevirAnemnezController  extends AbstractController<PkRevirAnemnez
     @Serial
     private static final long serialVersionUID = -4187758809562608138L;
 
+    @Inject
+    private PkSoruTurService soruTurService;
+
+    @Inject
+    private PkSoruTanimService soruTanimService;
+
+    /**
+     * Formun baglandigi soru gruplari. Bunlar kalici entity DEGIL, sadece
+     * ekran durumu tutan gecici nesnelerdir; kaydetmede secimler
+     * PkRevirAnemnezDetay satirlarina cevrilir.
+     */
+    private List<DetayGrup> detayGruplari = new ArrayList<>();
+
+    /**
+     * detayGruplari hangi kayit icin kuruldu? JSF formu gonderip ayni kaydi
+     * yeniden render ettiginde grup listesi yeniden kurulmaz; aksi halde
+     * kullanici secimleri render sirasinda ezilirdi.
+     */
+    private PkRevirAnemnez detayGrubuKaynagi;
+
+    /**
+     * Secim diyaloglarinda gosterilen salt-okunur metinler.
+     * JSF bunlari form gonderiminde geri yazdigi icin yazilabilir olmalidir;
+     * deger kayit degistiginde ilk cagrida varliktan yeniden hesaplanir.
+     */
     @Getter
     @Setter
-    private String alerjiSecimi;
+    private String gorusmeYapanAdSoyad;
 
-    private Integer alerjiSecimiKayitId;
+    @Getter
+    @Setter
+    private String tedaviSekliHastaAdSoyad;
+
+    private PkRevirAnemnez adSoyadKaynagi;
 
     public PkRevirAnemnezController() {
         super(PkRevirAnemnez.class);
+    }
+
+    @PostConstruct
+    @Override
+    public void init() {
+        readColumns();
     }
 
     @Override
@@ -57,106 +90,180 @@ public class PkRevirAnemnezController  extends AbstractController<PkRevirAnemnez
             pkHastaTedaviSekli.setPkHasta(PkHasta.builder().gnlKisi(new GnlKisi()).build());
             yeniKayit.setPkHastaTedaviSekli(pkHastaTedaviSekli);
             yeniKayit.setSonAltiAydaKiloKaybiVarMi(EnumVarYok.YOK);
-            if (yeniKayit.getPkRevirAnemnezDetayList() == null) {
-                yeniKayit.setPkRevirAnemnezDetayList(new ArrayList<>());
-            } else {
-                yeniKayit.getPkRevirAnemnezDetayList().clear();
-            }
-            detaySatirlariniTamamla(yeniKayit);
-            alerjiSecimiKayitId = yeniKayit.getId();
-            alerjiSecimi = null;
+            // Kayit yeni oldugu icin secili soru yoktur; detay satirlari
+            // yalnizca kullanici bir secenek isaretlediginde olusur.
+            yeniKayit.setPkRevirAnemnezDetayList(new ArrayList<>());
+            detayGrubuKaynagi = null;
         }
         return yeniKayit;
     }
 
     /**
-     * Formdaki secim gruplari. Her grup kendi detay satirlarini tasir.
+     * Formdaki soru gruplari ve secenekleri.
+     *
+     * Katalog (soru turu/tanim) salt okunur veridir; yalnizca "secildi" ve
+     * "aciklama" bilgisi ekran durumudur.
      */
     public List<DetayGrup> getDetayGruplari() {
-        PkRevirAnemnez naranon = getSelected();
-        if (naranon == null) {
+        PkRevirAnemnez kayit = getSelected();
+        if (kayit == null) {
             return new ArrayList<>();
         }
-        detaySatirlariniTamamla(naranon);
-        List<DetayGrup> gruplar = new ArrayList<>();
-        for (EnumPkRevirAnemnezTur tur : EnumPkRevirAnemnezTur.values()) {
-            gruplar.add(new DetayGrup(tur, naranon.getPkRevirAnemnezDetayList()));
+        if (detayGrubuKaynagi != kayit) {
+            detayGrubuKaynagi = kayit;
+            detayGruplari = detayGruplariKur(kayit);
         }
+        return detayGruplari;
+    }
+
+    private List<DetayGrup> detayGruplariKur(PkRevirAnemnez kayit) {
+        List<PkSoruTur> turlar = soruTurService.findAktifler();
+        List<PkSoruTanim> tanimlar = soruTanimService.findAktifler();
+
+        Map<Integer, List<PkSoruTanim>> turIdyeGore = tanimlar.stream()
+                .filter(tanim -> tanim.getPkSoruTur() != null
+                        && tanim.getPkSoruTur().getId() != null)
+                .collect(Collectors.groupingBy(tanim -> tanim.getPkSoruTur().getId()));
+
+        // Kaydin daha once kaydedilmis secimleri: soru tanim id -> detay satiri
+        Map<Integer, PkRevirAnemnezDetay> secilmisler = new HashMap<>();
+        if (kayit.getPkRevirAnemnezDetayList() != null) {
+            for (PkRevirAnemnezDetay detay : kayit.getPkRevirAnemnezDetayList()) {
+                if (detay.getPkSoruTanim() != null
+                        && detay.getPkSoruTanim().getId() != null) {
+                    secilmisler.put(detay.getPkSoruTanim().getId(), detay);
+                }
+            }
+        }
+
+        List<DetayGrup> gruplar = new ArrayList<>();
+        for (PkSoruTur tur : turlar) {
+            List<PkSoruTanim> turSecenekleri = turIdyeGore.get(tur.getId());
+            if (turSecenekleri == null || turSecenekleri.isEmpty()) {
+                continue;
+            }
+            List<DetaySecenek> secenekler = new ArrayList<>();
+            for (PkSoruTanim tanim : turSecenekleri) {
+                secenekler.add(new DetaySecenek(tanim, secilmisler.get(tanim.getId())));
+            }
+            gruplar.add(new DetayGrup(tur, secenekler));
+        }
+        log.debug("Revir anemnez formu icin {} soru grubu / {} secenek yuklendi",
+                gruplar.size(), tanimlar.size());
         return gruplar;
     }
 
     /**
-     * Enum'da tanimli her secenek icin detay satiri olusturur.
-     * Kayitli kayitlarda eksik satirlari tamamlar (yeni secenek eklendiginde
-     * eski kayitlarin da gosterilmemesi icin).
+     * Kaydetmeden once ekrandaki secimleri detay satirlarina yansitir.
+     *
+     * - isaretlenmis secenek icin detay satiri yoksa olusturulur
+     * - isareti kaldirilan secenegin satiri koleksiyondan cikarilir
+     *   (orphanRemoval sayesinde veritabaninda silinir)
+     * - aciklama gerektirmeyen seceneklerde ve secim kaldirildiginda
+     *   aciklama metni temizlenir
      */
-    private void detaySatirlariniTamamla(PkRevirAnemnez naranon) {
-        if (naranon == null) {
-            return;
+    private void detaylariSenkronizeEt(PkRevirAnemnez kayit) {
+        if (kayit.getPkRevirAnemnezDetayList() == null) {
+            kayit.setPkRevirAnemnezDetayList(new ArrayList<>());
         }
-        List<PkRevirAnemnezDetay> detaylar = naranon.getPkRevirAnemnezDetayList();
-        if (detaylar == null) {
-            detaylar = new ArrayList<>();
-            naranon.setPkRevirAnemnezDetayList(detaylar);
-        }
-        for (EnumPkRevirAnemnezTur tur : EnumPkRevirAnemnezTur.values()) {
-            for (EnumPkRevirAnemnezTanim tanim : tur.getSecenekler()) {
-                boolean var = detaylar.stream()
-                        .anyMatch(d -> tur.name().equals(d.getTur()) && tanim.name().equals(d.getTanim()));
-                if (!var) {
-                    PkRevirAnemnezDetay detay = new PkRevirAnemnezDetay();
-                    detay.setPkRevirAnemnez(naranon);
-                    detay.setTur(tur.name());
-                    detay.setTanim(tanim.name());
-                    detay.setSecili(false);
-                    detaylar.add(detay);
+        for (DetayGrup grup : getDetayGruplari()) {
+            for (DetaySecenek secenek : grup.getSecenekler()) {
+                boolean secili = grup.isCokluSecim()
+                        ? secenek.isSecili()
+                        : Objects.equals(grup.getSeciliTanimId(), secenek.getTanimId());
+                if (secili) {
+                    secenek.secimiKaydet(kayit);
+                } else {
+                    secenek.secimiKaldir(kayit);
                 }
             }
         }
     }
 
     /**
-     * Tek secimli ALERJISI grubunun secili secenegini dondurur.
-     * Ilk cagrida detay satirlarindan okunur, sonraki cagrilarda
-     * kullanicinin sectigi deger korunur.
+     * Aciklamasi zorunlu secenekler icin dogrulama.
      */
-    public String getAlerjiSecimi() {
-        PkRevirAnemnez naranon = getSelected();
-        if (naranon == null) {
-            return null;
+    private boolean validateAciklama() {
+        for (DetayGrup grup : getDetayGruplari()) {
+            for (DetaySecenek secenek : grup.getSecenekler()) {
+                boolean secili = grup.isCokluSecim()
+                        ? secenek.isSecili()
+                        : Objects.equals(grup.getSeciliTanimId(), secenek.getTanimId());
+                if (secili && secenek.isAciklamaGerekli() && StringUtil.isBlank(secenek.getDigerAciklama())) {
+                    FacesUtil.addErrorMessage(FacesUtil.message("revirSecilenSecenekAciklamaZorunlu"));
+                    return false;
+                }
+            }
         }
-        if (!Objects.equals(alerjiSecimiKayitId, naranon.getId())) {
-            alerjiSecimiKayitId = naranon.getId();
-            alerjiSecimi = naranon.getPkRevirAnemnezDetayList().stream()
-                    .filter(d -> EnumPkRevirAnemnezTur.ALERJISI.name().equals(d.getTur()) && d.isSecili())
-                    .map(PkRevirAnemnezDetay::getTanim)
-                    .findFirst()
-                    .orElse(null);
-        }
-        return alerjiSecimi;
+        return true;
     }
 
-    /**
-     * ALERJISI tek secim oldugu icin diger seceneklerin secili=false yapilir.
-     */
-    private void alerjiSeciminiUygula() {
-        PkRevirAnemnez naranon = getSelected();
-        if (naranon == null || naranon.getPkRevirAnemnezDetayList() == null) {
-            return;
-        }
-        for (PkRevirAnemnezDetay detay : naranon.getPkRevirAnemnezDetayList()) {
-            if (EnumPkRevirAnemnezTur.ALERJISI.name().equals(detay.getTur())) {
-                detay.setSecili(Objects.equals(detay.getTanim(), alerjiSecimi));
-            }
+    public void secilenPersonel(SelectEvent<PkPersonel> event) {
+        if (event != null && event.getObject() != null && getSelected() != null) {
+            getSelected().setGorusmeYapanPkPersonel(event.getObject());
+            gorusmeYapanAdSoyad = personelinAdSoyadi(event.getObject());
         }
     }
 
     public void secilenTedaviSekli(SelectEvent<PkHastaTedaviSekli> event) {
-        PkHastaTedaviSekli pkHastaTedaviSekli = event.getObject();
-        this.getSelected().setPkHastaTedaviSekli(pkHastaTedaviSekli);
+        if (event != null && event.getObject() != null && getSelected() != null) {
+            getSelected().setPkHastaTedaviSekli(event.getObject());
+            if (getSelected().getYatisTarihi() == null && event.getObject().getTarih() != null) {
+                getSelected().setYatisTarihi(event.getObject().getTarih());
+            }
+            tedaviSekliHastaAdSoyad = hastaninAdSoyadi(event.getObject().getPkHasta());
+        }
     }
 
+    /**
+     * Edit dialogu her acildiginda secim kutularinin dogru metni gostermesi icin.
+     * JSF formu gonderip yeniden render ettiginde degerler korunur; sadece
+     * farkli bir kayit secildiginde yeniden hesaplanir.
+     */
+    public String getGorusmeYapanAdSoyad() {
+        PkRevirAnemnez naranon = getSelected();
+        if (naranon == null) {
+            return null;
+        }
+        if (naranon != adSoyadKaynagi) {
+            adSoyadKaynagi = naranon;
+            gorusmeYapanAdSoyad = personelinAdSoyadi(naranon.getGorusmeYapanPkPersonel());
+            tedaviSekliHastaAdSoyad = tedaviSekliHastaninAdSoyadi(naranon.getPkHastaTedaviSekli());
+        }
+        return gorusmeYapanAdSoyad;
+    }
 
+    public String getTedaviSekliHastaAdSoyad() {
+        PkRevirAnemnez naranon = getSelected();
+        if (naranon == null) {
+            return null;
+        }
+        if (naranon != adSoyadKaynagi) {
+            getGorusmeYapanAdSoyad();
+        }
+        return tedaviSekliHastaAdSoyad;
+    }
+
+    private String personelinAdSoyadi(PkPersonel personel) {
+        if (personel == null || personel.getGnlPersonel() == null || personel.getGnlPersonel().getGnlKisi() == null) {
+            return null;
+        }
+        return personel.getGnlPersonel().getGnlKisi().getAdSoyad();
+    }
+
+    private String tedaviSekliHastaninAdSoyadi(PkHastaTedaviSekli tedaviSekli) {
+        if (tedaviSekli == null) {
+            return null;
+        }
+        return hastaninAdSoyadi(tedaviSekli.getPkHasta());
+    }
+
+    private String hastaninAdSoyadi(PkHasta hasta) {
+        if (hasta == null || hasta.getGnlKisi() == null) {
+            return null;
+        }
+        return hasta.getGnlKisi().getAdSoyad();
+    }
 
     private boolean validateKayit() {
         PkRevirAnemnez naranon = getSelected();
@@ -185,27 +292,26 @@ public class PkRevirAnemnezController  extends AbstractController<PkRevirAnemnez
 
     @Override
     public void save(ActionEvent event) {
-        if (!validateKayit()) {
+        PkRevirAnemnez naranon = getSelected();
+        if (naranon == null || !validateKayit() || !validateAciklama()) {
             return;
         }
-        alerjiSeciminiUygula();
+        detaylariSenkronizeEt(naranon);
         super.save(event);
     }
 
     @Override
     public void saveNew(ActionEvent event) {
-        if (!validateKayit()) {
+        PkRevirAnemnez naranon = getSelected();
+        if (naranon == null || !validateKayit() || !validateAciklama()) {
             return;
         }
-        alerjiSeciminiUygula();
+        detaylariSenkronizeEt(naranon);
         super.saveNew(event);
     }
 
     /**
-     * Bir secim grubu ve o grubun detay satirlari.
-     * Satirlar dogrudan PkRevirAnemnezDetay entity'leridir; checkbox'lar
-     * bu satirlarin secili alanina baglandigi icin kaydetmede senkronizasyon
-     * gerekmez.
+     * Bir soru grubu ve o grubun secenekleri.
      */
     @Getter
     public static class DetayGrup implements java.io.Serializable {
@@ -213,44 +319,42 @@ public class PkRevirAnemnezController  extends AbstractController<PkRevirAnemnez
         @Serial
         private static final long serialVersionUID = 8510041304742188221L;
 
-        private final EnumPkRevirAnemnezTur tur;
-        private final List<PkRevirAnemnezDetay> satirlar;
+        /** Katalog kaydi; salt okunur. */
+        private final PkSoruTur tur;
 
-        DetayGrup(EnumPkRevirAnemnezTur tur, List<PkRevirAnemnezDetay> detaylar) {
+        private final List<DetaySecenek> secenekler;
+
+        /**
+         * Tek secimli gruplarda secilen secenegin tanim id'si.
+         * ALERJISI gibi gruplarda checkbox yerine radio kullanilir ve
+         * deger buraya baglanir. Hicbiri secilmemis olabilir (null).
+         */
+        @Getter
+        @Setter
+        private Integer seciliTanimId;
+
+        DetayGrup(PkSoruTur tur, List<DetaySecenek> secenekler) {
             this.tur = tur;
-            this.satirlar = new ArrayList<>();
-            for (EnumPkRevirAnemnezTanim tanim : tur.getSecenekler()) {
-                for (PkRevirAnemnezDetay detay : detaylar) {
-                    if (tur.name().equals(detay.getTur()) && tanim.name().equals(detay.getTanim())) {
-                        this.satirlar.add(detay);
-                        break;
-                    }
-                }
+            this.secenekler = secenekler;
+            if (!tur.isCokluSecim()) {
+                this.seciliTanimId = secenekler.stream()
+                        .filter(DetaySecenek::isSecili)
+                        .map(DetaySecenek::getTanimId)
+                        .findFirst()
+                        .orElse(null);
             }
         }
 
-        public String getTurLabel() {
-            return tur.getDisplayValue();
+        public String getTurKod() {
+            return "tur-kod";
+        }
+
+        public String getTurAdi() {
+            return tur.getTanim();
         }
 
         public boolean isCokluSecim() {
             return tur.isCokluSecim();
-        }
-
-        public String getTanimLabel(PkRevirAnemnezDetay detay) {
-            try {
-                return EnumPkRevirAnemnezTanim.valueOf(detay.getTanim()).getDisplayValue();
-            } catch (IllegalArgumentException | NullPointerException ex) {
-                return detay.getTanim();
-            }
-        }
-
-        public boolean isAciklamaGerekli(PkRevirAnemnezDetay detay) {
-            try {
-                return EnumPkRevirAnemnezTanim.valueOf(detay.getTanim()).isAciklamaGerekli();
-            } catch (IllegalArgumentException | NullPointerException ex) {
-                return false;
-            }
         }
 
         /**
@@ -258,7 +362,87 @@ public class PkRevirAnemnezController  extends AbstractController<PkRevirAnemnez
          * "secim yok" yazisi gostermek icin).
          */
         public boolean isSeciliVar() {
-            return satirlar.stream().anyMatch(PkRevirAnemnezDetay::isSecili);
+            return secenekler.stream().anyMatch(DetaySecenek::isSecili);
+        }
+
+        /**
+         * Salt okunur ekranda yalnizca secilenler gosterilir.
+         */
+        public List<DetaySecenek> getSeciliSecenekler() {
+            return secenekler.stream().filter(DetaySecenek::isSecili).collect(Collectors.toList());
+        }
+    }
+
+    /**
+     * Bir soru secenegi. Katalog kaydi (tanim) salt okunur;
+     * secili/digerAciklama ekran durumudur; detay ise kayit varsa
+     * veritabanindaki satirdir (yoksa kayit aninda olusur).
+     */
+    @Getter
+    @Setter
+    public static class DetaySecenek implements java.io.Serializable {
+
+        @Serial
+        private static final long serialVersionUID = 3274108853102647218L;
+
+        /** Katalog kaydi; salt okunur. */
+        private final PkSoruTanim tanim;
+
+        private boolean secili;
+
+        private String digerAciklama;
+
+        private PkRevirAnemnezDetay detay;
+
+        DetaySecenek(PkSoruTanim tanim, PkRevirAnemnezDetay detay) {
+            this.tanim = tanim;
+            this.detay = detay;
+            this.secili = detay != null;
+            this.digerAciklama = detay != null ? detay.getDigerAciklama() : null;
+        }
+
+        public Integer getTanimId() {
+            return tanim.getId();
+        }
+
+        public String getKod() {
+            return "kod";
+        }
+
+        public String getAdi() {
+            return tanim.getTanim();
+        }
+
+        public boolean isAciklamaGerekli() {
+            return tanim.isAciklamaGerekli();
+        }
+
+        /**
+         * Secenek isaretli: detay satiri yoksa olustur, varsa guncelle.
+         */
+        void secimiKaydet(PkRevirAnemnez kayit) {
+            if (detay == null) {
+                detay = new PkRevirAnemnezDetay();
+                detay.setPkRevirAnemnez(kayit);
+                detay.setPkSoruTanim(tanim);
+                kayit.getPkRevirAnemnezDetayList().add(detay);
+            }
+            if (!tanim.isAciklamaGerekli()) {
+                digerAciklama = null;
+            }
+            detay.setDigerAciklama(StringUtil.isBlank(digerAciklama) ? null : digerAciklama);
+        }
+
+        /**
+         * Secenek isareti kaldirildi: detay satiri silinir, aciklama temizlenir.
+         * Boylece daha once yazilmis "diger" metni sonraki acilista geri gelmez.
+         */
+        void secimiKaldir(PkRevirAnemnez kayit) {
+            if (detay != null) {
+                kayit.getPkRevirAnemnezDetayList().remove(detay);
+                detay = null;
+            }
+            digerAciklama = null;
         }
     }
 }

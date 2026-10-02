@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:editpage id="PkSoruTanimEditForm"
+                   widgetVar="PkSoruTanimEditDialog"
+                   actionListener="#{pkSoruTanimController.save}"
+                   listForm="PkSoruTanimListForm"
+                   model="#{pkSoruTanimController.selected}">
+
+        <p:outputLabel value="#{messages.soruTurLabel}" for="@next"/>
+        <p:selectOneMenu value="#{pkSoruTanimController.selected.pkSoruTur}" converter="omnifaces.SelectItemsConverter" required="true"
+                         filter="true">
+            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{pkSoruTurController.items}"
+                           var="soruTurs"
+                           itemValue="#{soruTurs}"
+                           itemLabel="#{soruTurs.tanim}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.soruTanimLabel}" for="@next" />
+        <p:inputText value="#{pkSoruTanimController.selected.tanim}" title="#{messages.soruTanimText}" size="50" maxlength="150" required="true"/>
+
+        <p:outputLabel value="#{messages.siraLabel}" for="@next"/>
+        <p:spinner value="#{pkSoruTanimController.selected.siraNo}" title="#{messages.siraText}" stepFactor="1" min="0" size="50"
+                   required="true"/>
+
+        <p:outputLabel value="#{messages.aciklamaLabel}" for="@next"/>
+        <p:selectBooleanCheckbox value="#{pkSoruTanimController.selected.aciklamaGerekli}"/>
+    </coco:editpage>
+
+</ui:composition>
+
+</html>

@@ -91,7 +91,7 @@ public class PkRevirAnemnez extends BaseEntity {
     @Column(name = "SON_ALTI_AYDA_KILO_KAYBI_VAR_MI_ACIKLAMA")
     private String sonAltiAydaKiloKaybiVarMiAciklama;
 
-    @OneToMany(mappedBy = "pkRevirAnemnez",cascade = {CascadeType.MERGE,CascadeType.PERSIST})
+    @OneToMany(mappedBy = "pkRevirAnemnez",cascade = {CascadeType.MERGE,CascadeType.PERSIST},orphanRemoval = true)
     private List<PkRevirAnemnezDetay> pkRevirAnemnezDetayList = new ArrayList<>();
 
     @Override

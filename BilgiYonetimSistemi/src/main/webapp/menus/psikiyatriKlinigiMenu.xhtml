@@ -225,6 +225,28 @@
                                                    value="Eğitim Konuları"/>
                                 </li>
                             </ui:fragment>
+
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('pksorutur:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/psikiyatriklinigi/pkSoruTur/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="Soru Türleri"/>
+                                </li>
+                            </ui:fragment>
+
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('pksorutanim:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/psikiyatriklinigi/pkSoruTanim/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="Soru Tanımları"/>
+                                </li>
+                            </ui:fragment>
                         </ul>
                     </li>
                 </ui:fragment>

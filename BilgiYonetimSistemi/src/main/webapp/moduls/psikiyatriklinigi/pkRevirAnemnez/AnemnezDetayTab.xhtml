@@ -6,46 +6,39 @@
       xmlns:ui="jakarta.faces.facelets"
       xmlns:f="jakarta.faces.core"
       xmlns:p="primefaces">
-
 <ui:composition>
-
     <h:panelGroup id="detayGruplariPanel" rendered="#{pkRevirAnemnezController.selected != null}"
                   style="display: block;">
-
-        <ui:repeat value="#{pkRevirAnemnezController.detayGruplari}" var="grup">
-
-            <p:panel id="grupPanel" header="#{grup.turLabel}"
+        <ui:repeat id="turler" value="#{pkRevirAnemnezController.detayGruplari}" var="grup">
+            <p:panel id="grup#{grup.turKod}" header="#{grup.turAdi}"
                      styleClass="mb-2" toggleable="true">
-
-                <!-- ALERJISI gibi tek secimli gruplar -->
-                <p:selectOneRadio rendered="#{not grup.cokluSecim}"
-                                  id="secimRadio"
-                                  value="#{pkRevirAnemnezController.alerjiSecimi}"
-                                  columns="4" styleClass="revir-detay-radio" layout="responsive">
-                        <f:selectItems value="#{grup.satirlar}" var="satir" itemLabel="#{grup.getTanimLabel(satir)}" itemValue="#{satir.tanim}"/>
+                <p:selectOneRadio id="r#{grup.turKod}"
+                                  rendered="#{not grup.cokluSecim}"
+                                  value="#{grup.seciliTanimId}"
+                                  columns="4" styleClass="revir-detay-radio">
+                    <f:selectItems value="#{grup.secenekler}" var="secenek" itemLabel="#{secenek.adi}" itemValue="#{secenek.tanimId}"/>
                 </p:selectOneRadio>
-
-                <!-- Coklu secimli gruplar: checkbox'lar dogrudan detay satiri secili alanina baglanir -->
+                <!-- Coklu secimli gruplar. id'ler acikca verilir; aksi halde
+                     ui:repeat icinde uretilen otomatik id'ler postback ile
+                     eslesmez ve secimler kaydedilmez. -->
                 <h:panelGroup rendered="#{grup.cokluSecim}" layout="block">
-                    <ui:repeat value="#{grup.satirlar}" var="satir">
+                    <ui:repeat id="secenekler" value="#{grup.secenekler}" var="secenek">
                         <h:panelGroup layout="block"
                                       style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
-                            <p:selectBooleanCheckbox value="#{satir.secili}"
-                                                     itemLabel="#{grup.getTanimLabel(satir)}"/>
-                            <p:inputText value="#{satir.digerAciklama}"
-                                         rendered="#{grup.isAciklamaGerekli(satir)}"
+                            <p:selectBooleanCheckbox id="c#{grup.turKod}#{secenek.kod}"
+                                                     value="#{secenek.secili}"
+                                                     itemLabel="#{secenek.adi}"/>
+                            <p:inputText id="a#{grup.turKod}#{secenek.kod}"
+                                         value="#{secenek.digerAciklama}"
+                                         rendered="#{secenek.aciklamaGerekli}"
                                          placeholder="#{messages.revirDigerAciklamaText}"
                                          title="#{messages.revirDigerAciklamaText}"
                                          size="40" maxlength="250"/>
                         </h:panelGroup>
                     </ui:repeat>
                 </h:panelGroup>
-
             </p:panel>
-
         </ui:repeat>
-
     </h:panelGroup>
-
 </ui:composition>
 </html>
