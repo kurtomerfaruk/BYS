@@ -7,7 +7,7 @@
 
 <ui:composition>
 
-    <!-- Saglik Hizmetleri -->
+    <!-- Psikiyatri Klinigi -->
     <ui:fragment rendered="#{syKullaniciController.hasPermission('psikiyatri_klinigi:goster')}">
         <li class="slide has-sub">
             <a href="javascript:void(0);" class="side-menu__item main_menu">
@@ -181,6 +181,17 @@
                                 </li>
                             </ui:fragment>
 
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('pkverilenhizmet:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/psikiyatriklinigi/pkVerilenHizmet/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="Verilen Hizmetler"/>
+                                </li>
+                            </ui:fragment>
+
                         </ul>
                     </li>
                 </ui:fragment>
@@ -258,6 +269,17 @@
                                                    value="Soru Tanımları"/>
                                 </li>
                             </ui:fragment>
+
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('pkhizmettur:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/psikiyatriklinigi/pkHizmetTur/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="Hizmet Türleri"/>
+                                </li>
+                            </ui:fragment>
                         </ul>
                     </li>
                 </ui:fragment>
@@ -267,7 +289,7 @@
             </ul>
         </li>
     </ui:fragment>
-    <!-- Saglik Hizmetleri -->
+    <!-- Psikiyatri Klinigi -->
 
 </ui:composition>
 
