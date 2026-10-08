@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
- * @version 1.21.0
+ * @version 1.23.0
  * @since 29.09.2026 13:43
  */
 @Getter

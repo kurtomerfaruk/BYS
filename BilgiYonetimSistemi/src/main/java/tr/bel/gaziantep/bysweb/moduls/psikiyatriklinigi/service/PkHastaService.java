@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
- * @version 1.21.0
+ * @version 1.23.0
  * @since 22.09.2026 14:20
  */
 @Stateless

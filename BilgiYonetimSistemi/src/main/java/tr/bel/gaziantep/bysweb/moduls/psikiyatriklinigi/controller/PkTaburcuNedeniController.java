@@ -10,7 +10,7 @@ import java.io.Serial;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
- * @version 1.21.0
+ * @version 1.23.0
  * @since 25.09.2026 11:08
  */
 @Named
