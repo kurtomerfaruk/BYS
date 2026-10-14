@@ -9,6 +9,7 @@ import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlPersonel;
 
 import java.io.Serial;
+import java.util.List;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
@@ -41,5 +42,9 @@ public class GnlPersonelService extends AbstractService<GnlPersonel> {
                 .stream()
                 .findFirst()
                 .orElse(null);
+    }
+
+    public List<GnlPersonel> findAll() {
+        return getEntityManager().createNamedQuery("GnlPersonel.findAll",GnlPersonel.class).getResultList();
     }
 }

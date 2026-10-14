@@ -21,6 +21,8 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "GNLPERSONEL")
+@NamedQuery(name = "GnlPersonel.findAll",query = "SELECT p FROM GnlPersonel p WHERE p.aktif=true AND p.gnlKisi.aktif=true ORDER BY p.gnlKisi.ad," +
+        "p.gnlKisi.soyad")
 public class GnlPersonel extends BaseEntity {
     @Serial
     private static final long serialVersionUID = -5698037286482605462L;

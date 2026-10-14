@@ -3,6 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="jakarta.faces.facelets"
       xmlns:f="jakarta.faces.core"
+      xmlns:h="jakarta.faces.html"
       xmlns:p="primefaces"
       xmlns:coco="jakarta.faces.composite/ui">
 
@@ -15,13 +16,26 @@
                    listForm="PkPersonelListForm">
 
         <p:outputLabel value="#{messages.personelLabel}" for="@next"/>
-        <p:selectOneMenu id="uyruk" value="#{pkPersonelController.selected.gnlPersonel}"
-                         required="true" converter="omnifaces.SelectItemsConverter" filter="true">
+        <p:selectOneMenu value="#{pkPersonelController.selected.gnlPersonel}" required="true" converter="omnifaces.SelectItemsConverter"
+                         filter="true" filterNormalize="true" filterMatchMode="contains" var="personel" panelStyle="width:180px">
             <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
             <f:selectItems value="#{gnlPersonelController.items}"
                            var="gnlPersonel"
                            itemLabel="#{gnlPersonel.gnlKisi.adSoyad}"
                            itemValue="#{gnlPersonel}"/>
+
+            <p:column style="width:60%">
+                <f:facet name="header">
+                    <h:outputText value="Ad Soyad"/>
+                </f:facet>
+                <h:outputText value="#{personel.gnlKisi.adSoyad}"/>
+            </p:column>
+            <p:column style="width:40%">
+                <f:facet name="header">
+                    <h:outputText value="Unvan"/>
+                </f:facet>
+                <h:outputText value="#{personel.gnlUnvan.tanim}"/>
+            </p:column>
             <p:ajax event="change" update="unvan"/>
         </p:selectOneMenu>
 
