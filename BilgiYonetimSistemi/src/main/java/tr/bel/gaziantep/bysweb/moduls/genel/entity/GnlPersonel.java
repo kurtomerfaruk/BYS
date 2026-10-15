@@ -32,7 +32,7 @@ public class GnlPersonel extends BaseEntity {
     @Column(name = "ID", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER,cascade = {CascadeType.MERGE,CascadeType.PERSIST})
     @JoinColumn(name = "GNLKISI_ID")
     private GnlKisi gnlKisi;
 

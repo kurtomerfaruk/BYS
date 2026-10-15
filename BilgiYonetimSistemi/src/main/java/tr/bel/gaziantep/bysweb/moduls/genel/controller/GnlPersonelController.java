@@ -10,12 +10,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 import tr.bel.gaziantep.bysweb.core.controller.AbstractController;
+import tr.bel.gaziantep.bysweb.core.controller.KpsController;
+import tr.bel.gaziantep.bysweb.core.enums.bys.EnumModul;
+import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlUyruk;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlBirim;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlPersonel;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlPersonelBirim;
+import tr.bel.gaziantep.bysweb.moduls.genel.service.GnlKisiService;
 import tr.bel.gaziantep.bysweb.moduls.genel.service.GnlPersonelService;
 
 import java.io.Serial;
@@ -40,6 +44,10 @@ public class GnlPersonelController extends AbstractController<GnlPersonel> {
 
     @Inject
     private GnlPersonelService service;
+    @Inject
+    private GnlKisiService gnlKisiService;
+    @Inject
+    private KpsController kpsController;
 
     @Getter
     @Setter
@@ -54,7 +62,7 @@ public class GnlPersonelController extends AbstractController<GnlPersonel> {
         GnlPersonel newItem;
         try {
             newItem = GnlPersonel.class.getDeclaredConstructor().newInstance();
-            newItem.setGnlKisi(new GnlKisi());
+            newItem.setGnlKisi(GnlKisi.builder().uyruk(EnumGnlUyruk.TC).build());
             this.setSelected(newItem);
             initializeEmbeddableKey();
             return newItem;
@@ -73,10 +81,10 @@ public class GnlPersonelController extends AbstractController<GnlPersonel> {
         personelSecKapat(gnlPersonel);
     }
 
-    public void secilenGnlKisi(SelectEvent<GnlKisi> event) {
-        GnlKisi gnlKisi = event.getObject();
-        this.getSelected().setGnlKisi(gnlKisi);
-    }
+//    public void secilenGnlKisi(SelectEvent<GnlKisi> event) {
+//        GnlKisi gnlKisi = event.getObject();
+//        this.getSelected().setGnlKisi(gnlKisi);
+//    }
 
     public void create(ActionEvent event) {
         if (this.getSelected() != null) {
@@ -133,6 +141,24 @@ public class GnlPersonelController extends AbstractController<GnlPersonel> {
         if (this.getSelected() != null) {
             gnlBirims = new ArrayList<>();
             this.getSelected().getGnlPersonelBirimList().forEach(gnlPersonelBirim -> gnlBirims.add(gnlPersonelBirim.getGnlBirim()));
+        }
+    }
+
+    public void getTcKimlik() {
+        try {
+            if (this.getSelected() != null) {
+                String tcKimlikNo = this.getSelected().getGnlKisi().getTcKimlikNo();
+                GnlKisi kisi = gnlKisiService.findByTckimlikNo(tcKimlikNo);
+                if (kisi == null) kisi = this.getSelected().getGnlKisi();
+                kisi = kpsController.findByTcKimlikNo(kisi, EnumModul.GENEL);
+                if (kisi != null) {
+                    this.getSelected().setGnlKisi(kisi);
+                }
+
+            }
+        } catch (Exception ex) {
+            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+            log.error(null, ex);
         }
     }
 }
