@@ -44,11 +44,6 @@ body .ui-inputfield {
     }
 }
 
-/*.ui-selectonemenu {*/
-/*    width: 100% !important;*/
-/*    height: 32px !important;*/
-/*}*/
-
 body .ui-chkbox .ui-chkbox-box .ui-chkbox-icon {
     margin-top: -12px !important;
 }
@@ -63,43 +58,7 @@ body .ui-datatable.ui-datatable-sm .ui-datatable-data > tr > td {
 
 .ui-inputtext,  .ui-selectonemenu{
     width: 100% !important;
-    /*padding: 5px !important;*/
 }
-
-/*.ui-inputfield {*/
-/*    padding: 5px !important;*/
-/*    height: 32px !important;*/
-/*}*/
-
-/*.ui-inputmask {*/
-/*    padding: 5px !important;*/
-/*    height: 32px !important;*/
-/*}*/
-
-/*.ui-inputgroup-addon{*/
-/*    padding: 2px !important;*/
-/*}*/
-
-/*.ui-selectcheckboxmenu{*/
-/*    width: 100% !important;*/
-/*}*/
-/*.ui-selectcheckboxmenu-label {*/
-/*    width: 100% !important;*/
-/*}*/
-
-/*.ui-selectcheckboxmenu-panel .ui-selectcheckboxmenu-filter {*/
-/*    width: 100% !important;*/
-/*    padding-left: 30px !important;*/
-/*    top:43% !important;*/
-/*}*/
-
-/*.ui-selectcheckboxmenu .ui-selectcheckboxmenu-trigger {*/
-/*    width: 23px !important;*/
-/*}*/
-
-/*.mw-40{*/
-/*    max-width: 40vh !important;*/
-/*}*/
 
 body .ui-dialog .ui-dialog-content {
     padding: 3.2px 24px 20px 24px !important;
@@ -281,46 +240,6 @@ body .ui-button.ui-button-indigo,body .ui-splitbutton.ui-button-indigo>.ui-butto
     text-wrap: balance;
 }
 
-/*!* Arka plan ve hizalama *!*/
-/*.loader-container {*/
-/*    display: flex;*/
-/*    justify-content: center;*/
-/*    align-items: center;*/
-/*    height: 200px;*/
-/*}*/
-
-/*!* Ana Loader Halkasý *!*/
-/*.accessibility-loader {*/
-/*    position: relative;*/
-/*    width: 80px;*/
-/*    height: 80px;*/
-/*    border-radius: 50%;*/
-/*    border: 4px solid rgba(0, 123, 255, 0.1); !* Silik dýþ halka *!*/
-/*    border-top-color: #007bff; !* Hareketli mavi kýsým *!*/
-/*    animation: spin 1.5s linear infinite;*/
-/*    display: flex;*/
-/*    justify-content: center;*/
-/*    align-items: center;*/
-/*}*/
-
-/*!* Ýçindeki Ýkonun Sabit Kalmasý *!*/
-/*.icon {*/
-/*    width: 40px;*/
-/*    height: 40px;*/
-/*    fill: #007bff;*/
-/*    !* Halka dönerken ikonun ters yöne dönüp sabit durmasýný saðlar *!*/
-/*    animation: counter-spin 1.5s linear infinite;*/
-/*}*/
-
-/*!* Dönüþ Animasyonlarý *!*/
-/*@keyframes spin {*/
-/*    to { transform: rotate(360deg); }*/
-/*}*/
-
-/*@keyframes counter-spin {*/
-/*    to { transform: rotate(-360deg); }*/
-/*}*/
-
 .loader-wrapper {
     position: relative;
     width: 100px;
@@ -360,9 +279,6 @@ body .ui-button.ui-button-indigo,body .ui-splitbutton.ui-button-indigo>.ui-butto
     animation: sequenceAnim 10.5s infinite; /* 7 ikon x 1.5s = 10.5s */
 }
 
-/* SIRA ÝLE GÖSTERME AYARI */
-/* Her ikon 8 saniyelik toplam sürenin farklý zamanlarýnda görünür */
-
 .icon:nth-child(1) { animation-delay: 0s; }
 .icon:nth-child(2) { animation-delay: 1.5s; }
 .icon:nth-child(3) { animation-delay: 3s; }
@@ -388,99 +304,10 @@ body .ui-button.ui-button-indigo,body .ui-splitbutton.ui-button-indigo>.ui-butto
 body .ui-dialog {
     padding: 0 !important;
 }
-.kf-form-grid {
-    display: grid;
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    gap: 1rem;
-}
 
-.kf-form-field {
+.form-height {
+    height: calc(100vh - 90px) !important;
+    overflow: hidden !important;
     display: flex;
     flex-direction: column;
-    gap: .4rem;
-    min-width: 0;
-}
-
-/* Kolon geniþlikleri */
-
-.kf-col-1 {
-    grid-column: span 1;
-}
-
-.kf-col-2 {
-    grid-column: span 2;
-}
-
-.kf-col-3 {
-    grid-column: span 3;
-}
-
-.kf-col-4 {
-    grid-column: span 4;
-}
-
-.kf-col-5 {
-    grid-column: span 5;
-}
-
-.kf-col-6 {
-    grid-column: span 6;
-}
-
-.kf-col-7 {
-    grid-column: span 7;
-}
-
-.kf-col-8 {
-    grid-column: span 8;
-}
-
-.kf-col-9 {
-    grid-column: span 9;
-}
-
-.kf-col-10 {
-    grid-column: span 10;
-}
-
-.kf-col-11 {
-    grid-column: span 11;
-}
-
-.kf-col-12 {
-    grid-column: span 12;
-}
-
-
-/* Tablet */
-
-@media (max-width: 1024px) {
-
-    .kf-col-1,
-    .kf-col-2,
-    .kf-col-3,
-    .kf-col-4,
-    .kf-col-5,
-    .kf-col-6 {
-        grid-column: span 6;
-    }
-
-    .kf-col-7,
-    .kf-col-8,
-    .kf-col-9,
-    .kf-col-10,
-    .kf-col-11,
-    .kf-col-12 {
-        grid-column: span 12;
-    }
-}
-
-
-/* Mobil */
-
-@media (max-width: 768px) {
-
-    .kf-form-grid > .kf-form-field {
-        grid-column: span 12;
-    }
 }

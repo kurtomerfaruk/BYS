@@ -9,6 +9,7 @@
     <composite:attribute name="widgetVar"/>
     <composite:attribute name="columns" default="2"/>
     <composite:attribute name="model"/>
+    <composite:attribute name="position" default="top"/>
 </composite:interface>
 
 
@@ -20,6 +21,7 @@
               header="#{messages.dialogKayitBilgisi}"
               appendTo="@(body)"
               responsive="true"
+              position="top"
               style="overflow: auto;max-height: 500px;">
 
         <h:form id="#{cc.id}">

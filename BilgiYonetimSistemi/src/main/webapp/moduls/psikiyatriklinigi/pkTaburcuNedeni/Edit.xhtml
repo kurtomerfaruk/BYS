@@ -13,8 +13,9 @@
                    listForm="PkTaburcuNedeniListForm"
                    model="#{pkTaburcuNedeniController.selected}">
 
-        <p:outputLabel value="#{messages.maddeLabel}" for="@next" />
-        <p:inputText id="tanim" value="#{pkTaburcuNedeniController.selected.tanim}" title="#{messages.maddeText}" size="50" maxlength="100" required="true"/>
+        <p:outputLabel value="#{messages.tanimLabel}" for="@next" />
+        <p:inputText id="tanim" value="#{pkTaburcuNedeniController.selected.tanim}" title="#{messages.tanimText}" size="50" maxlength="100"
+                     required="true"/>
 
     </coco:editpage>
 

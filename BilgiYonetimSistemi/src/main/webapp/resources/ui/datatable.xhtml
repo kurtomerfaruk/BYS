@@ -37,22 +37,6 @@
 
 
 <composite:implementation>
-    <script type="text/javascript">
-        $(function () {
-            var windowH = $(window).height();
-            windowH -= 94;
-            $('.form-height').css({'height': windowH + 'px'});
-            $(window).trigger('resize');
-
-            $(window).resize(function () {
-                var windowH = $(window).height();
-                windowH -= 94;
-                $('.form-height').css({'height': windowH + 'px'});
-
-            });
-        });
-    </script>
-
 
     <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.EnumSyFiltreEslesmeModu" var="enumFilterMatch"/>
     <p:dataTable id="#{cc.attrs.id}"
@@ -92,7 +76,8 @@
                  frozenColumns="#{cc.attrs.frozenColumns}"
                  showGridlines="true"
                  draggableColumns="true"
-                 reorderableColumns="true">
+                 reorderableColumns="true"
+                 style="overflow:hidden">
 
         <p:ajax event="rowSelect" update="#{cc.attrs.rowselect}" listener="#{cc.attrs.selectListener}"/>
         <p:ajax event="contextMenu" update="#{cc.attrs.contextMenu}" listener="#{cc.attrs.selectListener}"/>
@@ -169,7 +154,8 @@
             <ui:fragment rendered="#{column.syKolon.filtreTuru eq 'RATING'}">
                 <p:rating value="#{cc.attrs.controller.getResolvedValue(item,column.syKolon.columnProperty)}"
                           rendered="#{fn:contains(column.syKolon.columnProperty,'.')}" readonly="true"/>
-                <p:rating value="#{item[column.syKolon.columnProperty]}" rendered="#{!fn:contains(column.syKolon.columnProperty,'.')}" readonly="true"/>
+                <p:rating value="#{item[column.syKolon.columnProperty]}" rendered="#{!fn:contains(column.syKolon.columnProperty,'.')}"
+                          readonly="true"/>
             </ui:fragment>
 
             <ui:fragment rendered="#{column.syKolon.tip eq 'DATE_TIME'}">
@@ -193,7 +179,8 @@
             </ui:fragment>
 
             <ui:fragment rendered="#{column.syKolon.tip eq 'BOOLEAN'}">
-                <h:outputText value="#{item[column.syKolon.columnProperty] ? 'Evet' : 'Hayır'}" styleClass="status-#{item[column.syKolon.columnProperty]}"
+                <h:outputText value="#{item[column.syKolon.columnProperty] ? 'Evet' : 'Hayır'}"
+                              styleClass="status-#{item[column.syKolon.columnProperty]}"
                               rendered="#{!fn:contains(column.syKolon.columnProperty,'.')}"/>
                 <h:outputText value="#{cc.attrs.controller.getResolvedValue(item,column.syKolon.columnProperty) ? 'Evet' : 'Hayır'}"
                               styleClass="status-#{cc.attrs.controller.getResolvedValue(item,column.syKolon.columnProperty)}"
@@ -209,7 +196,8 @@
             <ui:fragment rendered="#{column.syKolon.tip eq 'ENUM'}">
                 <h:outputText value="#{cc.attrs.controller.getResolvedValue(item,column.syKolon.columnProperty).displayValue}"
                               rendered="#{fn:contains(column.syKolon.columnProperty,'.')}"/>
-                <h:outputText value="#{item[column.syKolon.columnProperty].displayValue}" rendered="#{!fn:contains(column.syKolon.columnProperty,'.')}"/>
+                <h:outputText value="#{item[column.syKolon.columnProperty].displayValue}"
+                              rendered="#{!fn:contains(column.syKolon.columnProperty,'.')}"/>
             </ui:fragment>
 
             <ui:fragment rendered="#{column.syKolon.tip eq 'INTEGER' and column.syKolon.filtreTuru ne 'RATING'}">
@@ -226,7 +214,8 @@
 
             <f:facet name="filter">
                 <ui:fragment rendered="#{column.syKolon.tip eq 'DATE' or column.syKolon.tip eq 'DATE_TIME'}">
-                    <p:datePicker pattern="#{messages.tarihFormat}" locale="tr" mask="true" onkeyup="PF('#{cc.attrs.widgetVar}').filter()" monthNavigator="true"
+                    <p:datePicker pattern="#{messages.tarihFormat}" locale="tr" mask="true" onkeyup="PF('#{cc.attrs.widgetVar}').filter()"
+                                  monthNavigator="true"
                                   yearNavigator="true" showButtonBar="true" selectionMode="range" styleClass="w-100" inputstyleClass="w-100">
                         <p:ajax event="dateSelect" oncomplete="PF('#{cc.attrs.widgetVar}').filter()"/>
                     </p:datePicker>
@@ -265,19 +254,19 @@
 
         </p:columns>
 
-<!--        <ui:fragment rendered="#{syKullanici.kullaniciTuru eq 'SISTEM_YONETICISI'}">-->
-<!--            <p:column headerText="#{messages.aktifText}">-->
-<!--                <f:facet name="filter">-->
-<!--                    <p:selectOneMenu onchange="PF('#{cc.attrs.widgetVar}').filter()">-->
-<!--                        <f:selectItem itemLabel="#{messages.tumuText}" itemValue="#{null}" noSelectionOption="true"/>-->
-<!--                        <f:selectItem itemLabel="#{messages.aktifText}" itemValue="1" noSelectionOption="true"/>-->
-<!--                        <f:selectItem itemLabel="#{messages.pasifText}" itemValue="0" noSelectionOption="true"/>-->
-<!--                    </p:selectOneMenu>-->
-<!--                </f:facet>-->
-<!--                <h:outputText rendered="#{item.aktif}"/>-->
-<!--                <h:outputText rendered="#{!item.aktif}"/>-->
-<!--            </p:column>-->
-<!--        </ui:fragment>-->
+        <!--        <ui:fragment rendered="#{syKullanici.kullaniciTuru eq 'SISTEM_YONETICISI'}">-->
+        <!--            <p:column headerText="#{messages.aktifText}">-->
+        <!--                <f:facet name="filter">-->
+        <!--                    <p:selectOneMenu onchange="PF('#{cc.attrs.widgetVar}').filter()">-->
+        <!--                        <f:selectItem itemLabel="#{messages.tumuText}" itemValue="#{null}" noSelectionOption="true"/>-->
+        <!--                        <f:selectItem itemLabel="#{messages.aktifText}" itemValue="1" noSelectionOption="true"/>-->
+        <!--                        <f:selectItem itemLabel="#{messages.pasifText}" itemValue="0" noSelectionOption="true"/>-->
+        <!--                    </p:selectOneMenu>-->
+        <!--                </f:facet>-->
+        <!--                <h:outputText rendered="#{item.aktif}"/>-->
+        <!--                <h:outputText rendered="#{!item.aktif}"/>-->
+        <!--            </p:column>-->
+        <!--        </ui:fragment>-->
 
         <composite:insertFacet name="paginatorBottomLeft"/>
         <composite:insertFacet name="header"/>

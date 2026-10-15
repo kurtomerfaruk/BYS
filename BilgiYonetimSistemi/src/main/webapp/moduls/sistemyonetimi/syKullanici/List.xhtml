@@ -24,6 +24,12 @@
             <p:menuitem value="#{messages.buttonSil}"
                         onclick="document.getElementById('SyKullaniciListForm:datalist:datalist:deleteButton').click();"
                         icon="pi pi-trash" rendered="#{syKullaniciController.hasPermission('sykullanici:sil')}"/>
+            <p:menuitem value="#{messages.buttonParolaSifirla}"
+                        onclick="document.getElementById('SyKullaniciListForm:datalist:datalist:passwordButton').click();"
+                        icon="pi pi-key" rendered="#{syKullaniciController.hasPermission('sykullanici:parolaSifirla')}"/>
+            <p:menuitem value="#{messages.buttonTumSifrelerGuncellensin}"
+                        onclick="document.getElementById('SyKullaniciListForm:datalist:datalist:buttonAllPasswordChange').click();"
+                        icon="pi pi-users" rendered="#{syKullaniciController.hasPermission('sykullanici:parolalarGuncellensin')}"/>
         </p:contextMenu>
         <coco:datatable id="datalist"
                         value="#{syKullaniciController.lazyItems}"
