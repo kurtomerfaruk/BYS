@@ -47,9 +47,9 @@ public class KisiAdresModel implements java.io.Serializable {
     @JsonProperty("TcKimlikNo")
     private String tcKimlikNo;
     @JsonProperty("Adi")
-    private String adi;
+    private String ad;
     @JsonProperty("Soyadi")
-    private String soyadi;
+    private String soyad;
     @JsonProperty("Cinsiyet")
     private Integer cinsiyet;
     @JsonProperty("CinsiyetAciklama")
@@ -65,11 +65,15 @@ public class KisiAdresModel implements java.io.Serializable {
     @JsonProperty("DogumTarihi")
     private String dogumTarihi;
     @JsonProperty("BabaAdi")
-    private String babaAdi;
+    private String babaAd;
     @JsonProperty("AnneAdi")
-    private String anneAdi;
+    private String anneAd;
     @JsonProperty("DogumYeri")
     private String dogumYeri;
+    @JsonProperty("KimlikSeriNo")
+    private String kimlikSeriNo;
+    @JsonProperty("SonGecerlilikTarihi")
+    private String sonGecerlilikTarihi;
     @JsonProperty("Hata")
     private String hata;
 }

@@ -132,6 +132,26 @@ public class ModelConverter implements java.io.Serializable {
                 kisi.setLatLng(model.getX() + "," + model.getY());
             }
 
+//            kisi.setTcKimlikNo(model.getTcKimlikNo());
+//            kisi.setAd(model.getAd());
+//            kisi.setSoyad(model.getSoyad());
+//            kisi.setAnaAdi(model.getAnneAd());
+//            kisi.setBabaAdi(model.getBabaAd());
+//            kisi.setCinsiyet(EnumGnlCinsiyet.fromValue(model.getCinsiyetAciklama()));
+//            kisi.setDogumYeri(model.getDogumYeri());
+//            kisi.setDogumTarihi(DateUtil.stringToLocalDate(model.getDogumTarihi(),"yyyy-MM-dd'T'HH:mm:ss"));
+//            kisi.setDurum(EnumGnlDurum.fromValue(model.getDurumAciklama()));
+//            kisi.setMedeniDurum(EnumGnlMedeniDurum.fromValue(model.getMedeniHalAciklama()));
+//            //kisi.setOlumTarihi(model.getOlumTarihi());
+//            kisi.setKimlikSeriNo(model.getKimlikSeriNo());
+//            kisi.setSonGecerlilikTarihi(DateUtil.stringToLocalDate(model.getSonGecerlilikTarihi(),""));
+//            kisi.setAktif(true);
+//            if (kisi.getEklemeYeri() == null) {
+//                kisi.setEklemeYeri(modul);
+//            }
+//            if (kisi.getKayitTarihi() == null) {
+//                kisi.setKayitTarihi(LocalDate.now());
+//            }
         }
 
         kisi.setMernisGuncellemeTarihi(LocalDateTime.now());

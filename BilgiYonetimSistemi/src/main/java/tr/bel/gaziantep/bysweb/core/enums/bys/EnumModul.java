@@ -17,6 +17,7 @@ public enum EnumModul implements BaseEnum {
     ENGELSIZLER("Engelsizler"),
     GAZIKART("GaziKart"),
     GENEL("Genel"),
+    HAFRIYAT("Hafriyat"),
     ILERI_YAS("İleri Yaş"),
     MORAL_EVI("Moral Evi"),
     ORTEZ_PROTEZ("Ortez - Protez"),

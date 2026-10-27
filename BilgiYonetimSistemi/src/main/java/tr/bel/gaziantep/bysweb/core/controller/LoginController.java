@@ -17,12 +17,11 @@ import org.omnifaces.cdi.PushContext;
 import org.primefaces.PrimeFaces;
 import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.EnumSyKullaniciTuru;
 import tr.bel.gaziantep.bysweb.core.sessions.SessionManager;
-import tr.bel.gaziantep.bysweb.core.utils.Constants;
-import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
-import tr.bel.gaziantep.bysweb.core.utils.StringUtil;
-import tr.bel.gaziantep.bysweb.core.utils.Util;
+import tr.bel.gaziantep.bysweb.core.utils.*;
+import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.entity.SyGenelAyar;
 import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.entity.SyKullanici;
 import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.entity.SyKullaniciGiris;
+import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.service.SyGenelAyarService;
 import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.service.SyKullaniciGirisService;
 import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.service.SyKullaniciService;
 
@@ -62,6 +61,8 @@ public class LoginController implements java.io.Serializable {
     private SyKullaniciService syKullaniciService;
     @Inject
     private SyKullaniciGirisService girisService;
+    @Inject
+    private SyGenelAyarService syGenelAyarService;
 
 
     @Getter
@@ -182,7 +183,7 @@ public class LoginController implements java.io.Serializable {
                 if (StringUtil.isBlank(syKullanici.getTema())) {
                     syKullanici.setTema("saga-blue");
                 }
-                if(StringUtil.isBlank(syKullanici.getGrafikTema())){
+                if (StringUtil.isBlank(syKullanici.getGrafikTema())) {
                     syKullanici.setGrafikTema("material");
                 }
                 syKullanici.setSonGirilenIp(ipAddress);
@@ -214,12 +215,26 @@ public class LoginController implements java.io.Serializable {
                         .collect(Collectors.toList());
                 String message = syKullanici.getGnlPersonel().getGnlKisi().getAdSoyad() + " giriş yaptı.";
                 pushContext.send(new FacesMessage(message), kullaniciIds);
+
+                SyGenelAyar maxUserAyar = syGenelAyarService.findByTanim("MaxUser");
+                if (maxUserAyar != null) {
+                    int maxUser = Integer.parseInt(maxUserAyar.getDeger());
+                    int userSize = kullanicis.size();
+                    if (maxUser < userSize) {
+                        maxUserAyar.setDeger(userSize + "");
+                        syGenelAyarService.edit(maxUserAyar);
+                        SyGenelAyar maxUserDateAyar = syGenelAyarService.findByTanim("MaxUserDate");
+                        maxUserDateAyar.setDeger(DateUtil.localdateTimeToString(LocalDateTime.now(),"dd.MM.yyyy HH:mm:ss"));
+                    }
+                }
+
                 String param = Util.getParameter("surveyLogin");
                 ExternalContext externalContext = Util.getExternalContext();
                 if (syKullanici.isParolaDegistirilsin()) {
                     session.setAttribute(Constants.PAROLA_DEGISTIRILMESI_GEREKLI, Boolean.TRUE);
                     externalContext.redirect("sifreDegistir.xhtml");
                 } else if (StringUtil.isBlank(param)) {
+
                     externalContext.redirect("index.xhtml");
                 } else {
                     String viewId = FacesContext.getCurrentInstance().getViewRoot().getViewId();
