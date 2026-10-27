@@ -110,6 +110,10 @@ public class BilesikKutukSorgulaService extends KpsAbstractService<BilesikKutukS
             result.setHataBilgisi(sonucModel.getHata().getHataMesaji());
             return result;
         }
+        if(sonucModel.getSonuc().getSorguSonucu().isEmpty()){
+            result.setHataBilgisi("Sorgu sonucu bulunamadı");
+            return result;
+        }
         BilesikKutukSorguSonucu bilgi = sonucModel.getSonuc().getSorguSonucu().get(0);
 
         if (bilgi.getHataBilgisi() == null) {
@@ -142,7 +146,9 @@ public class BilesikKutukSorgulaService extends KpsAbstractService<BilesikKutukS
                     kisiBilgi = bilgi.getMaviKartliKisiKutukleri().getKisiBilgisi();
                     result.setKimlikSeriNo(bilgi.getMaviKartliKisiKutukleri().getYeniMaviKartBilgisi().getSeriNo());
                     result.setSonGecerlilikTarihi(convertToDate(bilgi.getMaviKartliKisiKutukleri().getYeniMaviKartBilgisi().getSonGecerlilikTarih()));
-                    result.setUyruk(bilgi.getMaviKartliKisiKutukleri().getYeniMaviKartBilgisi().getUyruk().getAciklama());
+                    if (bilgi.getMaviKartliKisiKutukleri().getYeniMaviKartBilgisi().getUyruk() != null) {
+                        result.setUyruk(bilgi.getMaviKartliKisiKutukleri().getYeniMaviKartBilgisi().getUyruk().getAciklama());
+                    }
                     result.setTcKimlikNo(kisiBilgi.getKimlikNo());
                 } else {
                     result.setUyruk("Türkiye Cumhuriyeti");

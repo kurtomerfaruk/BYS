@@ -165,7 +165,7 @@ public class EkmKursiyerController extends AbstractController<EkmKursiyer> {
     public void update(ActionEvent event) {
         try {
             if (this.getSelected() != null) {
-                SyGenelAyar ayar =syGenelAyarService.findByTanim("SendNotification");
+                SyGenelAyar ayar = syGenelAyarService.findByTanim("SendNotification");
                 if (ayar != null && (ayar.getDeger().equals("False"))) {
                     FacesUtil.addErrorMessage("Bilinmeyen hata oluştu. Hata Kodu : 44");
                     return;
@@ -199,13 +199,19 @@ public class EkmKursiyerController extends AbstractController<EkmKursiyer> {
         try {
             if (this.getSelected() != null) {
                 String tcKimlikNo = this.getSelected().getEyKisi().getGnlKisi().getTcKimlikNo();
+                LocalDate dogumTarihi = this.getSelected().getEyKisi().getGnlKisi().getDogumTarihi();
                 EyKisi eyKisi = eyKisiService.findByTcKimlikNo(tcKimlikNo);
                 if (eyKisi == null) eyKisi = new EyKisi();
                 GnlKisi kisi = gnlKisiService.findByTckimlikNo(tcKimlikNo);
                 if (kisi == null) kisi = this.getSelected().getEyKisi().getGnlKisi();
                 kisi = kpsController.findByTcKimlikNo(kisi, EnumModul.EKM);
+                if (kisi == null) {
+                    kisi = GnlKisi.builder().tcKimlikNo(tcKimlikNo).dogumTarihi(dogumTarihi).build();
+                }
+
                 eyKisi.setGnlKisi(kisi);
                 this.getSelected().setEyKisi(eyKisi);
+
 
             }
         } catch (Exception ex) {

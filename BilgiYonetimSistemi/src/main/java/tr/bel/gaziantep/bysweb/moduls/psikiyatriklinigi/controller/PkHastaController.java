@@ -27,6 +27,7 @@ import tr.bel.gaziantep.bysweb.moduls.psikiyatriklinigi.service.PkHastaService;
 
 import java.io.Serial;
 import java.lang.reflect.InvocationTargetException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -60,10 +61,10 @@ public class PkHastaController extends AbstractController<PkHasta> {
     private List<PkMadde> maddeList;
     @Getter
     @Setter
-    private List<String> maddeKullananBireyler ;
+    private List<String> maddeKullananBireyler;
     @Getter
     @Setter
-    private List<String> alkolKullananBireyler ;
+    private List<String> alkolKullananBireyler;
 
     public PkHastaController() {
         super(PkHasta.class);
@@ -87,7 +88,7 @@ public class PkHastaController extends AbstractController<PkHasta> {
             newItem = PkHasta.class.getDeclaredConstructor().newInstance();
             newItem.setGnlKisi(new GnlKisi());
             newItem.setBasvuruTarihi(LocalDateTime.now());
-            maddeList=new ArrayList<>();
+            maddeList = new ArrayList<>();
             maddeKullananBireyler = new ArrayList<>();
             alkolKullananBireyler = new ArrayList<>();
             this.setSelected(newItem);
@@ -104,10 +105,15 @@ public class PkHastaController extends AbstractController<PkHasta> {
         if (this.getSelected() != null) {
             try {
                 String tcKimlikNo = this.getSelected().getGnlKisi().getTcKimlikNo();
-
+                LocalDate dogumTarihi = this.getSelected().getGnlKisi().getDogumTarihi();
                 GnlKisi kisi = gnlKisiService.findByTckimlikNo(tcKimlikNo);
                 if (kisi == null) kisi = this.getSelected().getGnlKisi();
                 kisi = kpsController.findByTcKimlikNo(kisi, EnumModul.PSIKIYATRI_KLINIGI);
+
+                if (kisi != null) {
+                    kisi = GnlKisi.builder().tcKimlikNo(tcKimlikNo).dogumTarihi(dogumTarihi).build();
+                }
+
                 this.getSelected().setGnlKisi(kisi);
             } catch (Exception ex) {
                 log.error(null, ex);

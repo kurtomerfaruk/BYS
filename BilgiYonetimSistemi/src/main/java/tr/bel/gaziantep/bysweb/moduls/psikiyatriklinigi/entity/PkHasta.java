@@ -186,10 +186,9 @@ public class PkHasta extends BaseEntity {
     @Column(name = "AILEDE_ALKOL_KULLANIMI_OLAN_BIREY", length = 50)
     private String ailedeAlkolKullanimiOlanBirey;
 
-    @Size(max = 50)
-    @Nationalized
-    @Column(name = "AILEDE_INTIHAR_OYKUSU", length = 50)
-    private String ailedeIntiharOykusu;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "AILEDE_INTIHAR_OYKUSU")
+    private EnumVarYok ailedeIntiharOykusu;
 
     @Nationalized
     @Lob
@@ -214,15 +213,13 @@ public class PkHasta extends BaseEntity {
     @Column(name = "HERHANGI_BIR_SUC_ISLEDI_MI_ACIKLAMA", length = 50)
     private String herhangiBirSucIslediMiAciklama;
 
-    @Size(max = 50)
-    @Nationalized
-    @Column(name = "DEVAM_EDEN_MAHKEMESI_VAR_MI", length = 50)
-    private String devamEdenMahkemesiVarMi;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "DEVAM_EDEN_MAHKEMESI_VAR_MI")
+    private EnumVarYok devamEdenMahkemesiVarMi;
 
-    @Size(max = 50)
-    @Nationalized
-    @Column(name = "CEZAEVI_GECMISI_VAR_MI", length = 50)
-    private String cezaeviGecmisiVarMi;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "CEZAEVI_GECMISI_VAR_MI")
+    private EnumVarYok cezaeviGecmisiVarMi;
 
     @Size(max = 50)
     @Nationalized
@@ -267,7 +264,7 @@ public class PkHasta extends BaseEntity {
     @Column(name = "BEDENINDE_KESI_IZI_SIDDETI")
     private EnumPkKesiSiddeti bedenindeKesiIziSiddeti;
 
-   @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING)
     @Column(name = "BEDENINDE_DOVME_VAR_MI")
     private EnumVarYok bedenindeDovmeVarMi;
 
