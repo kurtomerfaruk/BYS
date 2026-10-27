@@ -110,7 +110,7 @@ public class PkHastaController extends AbstractController<PkHasta> {
                 if (kisi == null) kisi = this.getSelected().getGnlKisi();
                 kisi = kpsController.findByTcKimlikNo(kisi, EnumModul.PSIKIYATRI_KLINIGI);
 
-                if (kisi != null) {
+                if (kisi == null) {
                     kisi = GnlKisi.builder().tcKimlikNo(tcKimlikNo).dogumTarihi(dogumTarihi).build();
                 }
 
