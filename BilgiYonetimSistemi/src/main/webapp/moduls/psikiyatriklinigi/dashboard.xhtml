@@ -1,0 +1,495 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces">
+
+<ui:composition>
+    <h:form id="pkDashboardForm" prependId="false">
+        <ui:fragment rendered="#{not pkDashboardController.yetkili}">
+            <div class="alert alert-warning">
+                <h:outputText value="#{pkDashboardController.hataMesaji}"/>
+            </div>
+        </ui:fragment>
+
+        <ui:fragment rendered="#{pkDashboardController.yetkili}">
+            <!-- KPI Kartları -->
+            <div class="row g-3 mb-3">
+                <div class="col-xl-3 col-md-6">
+                    <div class="card custom-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="avatar avatar-lg bg-info-transparent">
+                                    <div class="avatar avatar-md bg-info"><i class="ti ti-users fs-25"></i></div>
+                                </div>
+                                <div class="flex-fill">
+                                    <h3 class="fw-semibold mb-1">
+                                        <h:outputText value="#{pkDashboardController.toplamDanisan}"><f:convertNumber type="number"/></h:outputText>
+                                    </h3>
+                                    <span>Toplam Danışan</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card custom-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="avatar avatar-lg bg-success-transparent">
+                                    <div class="avatar avatar-md bg-success"><i class="ti ti-user-check fs-25"></i></div>
+                                </div>
+                                <div class="flex-fill">
+                                    <h3 class="fw-semibold mb-1">
+                                        <h:outputText value="#{pkDashboardController.aktifDanisan}"><f:convertNumber type="number"/></h:outputText>
+                                    </h3>
+                                    <span>Aktif / Tedavide</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card custom-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="avatar avatar-lg bg-primary-transparent">
+                                    <div class="avatar avatar-md bg-primary"><i class="ti ti-user-plus fs-25"></i></div>
+                                </div>
+                                <div class="flex-fill">
+                                    <h3 class="fw-semibold mb-1">
+                                        <h:outputText value="#{pkDashboardController.bugunYeniBasvuru}"><f:convertNumber type="number"/></h:outputText>
+                                    </h3>
+                                    <span>Bugün Yeni Başvuru</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card custom-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="avatar avatar-lg bg-warning-transparent">
+                                    <div class="avatar avatar-md bg-warning"><i class="ti ti-calendar-stats fs-25"></i></div>
+                                </div>
+                                <div class="flex-fill">
+                                    <h3 class="fw-semibold mb-1">
+                                        <h:outputText value="#{pkDashboardController.buAyYeniBasvuru}"><f:convertNumber type="number"/></h:outputText>
+                                    </h3>
+                                    <span>Bu Ay Yeni Başvuru</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card custom-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="avatar avatar-lg bg-info-transparent">
+                                    <div class="avatar avatar-md bg-info"><i class="ti ti-message fs-25"></i></div>
+                                </div>
+                                <div class="flex-fill">
+                                    <h3 class="fw-semibold mb-1">
+                                        <h:outputText value="#{pkDashboardController.bugunGorusme}"><f:convertNumber type="number"/></h:outputText>
+                                    </h3>
+                                    <span>Bugünkü Görüşmeler</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card custom-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="avatar avatar-lg bg-success-transparent">
+                                    <div class="avatar avatar-md bg-success"><i class="ti ti-messages fs-25"></i></div>
+                                </div>
+                                <div class="flex-fill">
+                                    <h3 class="fw-semibold mb-1">
+                                        <h:outputText value="#{pkDashboardController.buAyGorusme}"><f:convertNumber type="number"/></h:outputText>
+                                    </h3>
+                                    <span>Bu Ay Görüşmeler</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card custom-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="avatar avatar-lg bg-danger-transparent">
+                                    <div class="avatar avatar-md bg-danger"><i class="ti ti-clock fs-25"></i></div>
+                                </div>
+                                <div class="flex-fill">
+                                    <h3 class="fw-semibold mb-1">
+                                        <h:outputText value="#{pkDashboardController.bekleyenTalep}"><f:convertNumber type="number"/></h:outputText>
+                                    </h3>
+                                    <span>Bekleyen Talepler</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card custom-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="avatar avatar-lg bg-purple-transparent">
+                                    <div class="avatar avatar-md bg-purple"><i class="ti ti-door-exit fs-25"></i></div>
+                                </div>
+                                <div class="flex-fill">
+                                    <h3 class="fw-semibold mb-1">
+                                        <h:outputText value="#{pkDashboardController.buAyTaburcu}"><f:convertNumber type="number"/></h:outputText>
+                                    </h3>
+                                    <span>Bu Ay Taburcu</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card custom-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="avatar avatar-lg bg-info-transparent">
+                                    <div class="avatar avatar-md bg-info"><i class="ti ti-bed fs-25"></i></div>
+                                </div>
+                                <div class="flex-fill">
+                                    <h3 class="fw-semibold mb-1">
+                                        <h:outputText value="#{pkDashboardController.yatiliDanisan}"><f:convertNumber type="number"/></h:outputText>
+                                    </h3>
+                                    <span>Yatılı Danışan</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card custom-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="avatar avatar-lg bg-success-transparent">
+                                    <div class="avatar avatar-md bg-success"><i class="ti ti-walk fs-25"></i></div>
+                                </div>
+                                <div class="flex-fill">
+                                    <h3 class="fw-semibold mb-1">
+                                        <h:outputText value="#{pkDashboardController.ayaktanDanisan}"><f:convertNumber type="number"/></h:outputText>
+                                    </h3>
+                                    <span>Ayaktan Danışan</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card custom-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="avatar avatar-lg bg-primary-transparent">
+                                    <div class="avatar avatar-md bg-primary"><i class="ti ti-heart-handshake fs-25"></i></div>
+                                </div>
+                                <div class="flex-fill">
+                                    <h3 class="fw-semibold mb-1">
+                                        <h:outputText value="#{pkDashboardController.verilenHizmet}"><f:convertNumber type="number"/></h:outputText>
+                                    </h3>
+                                    <span>Verilen Hizmet</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card custom-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="avatar avatar-lg bg-warning-transparent">
+                                    <div class="avatar avatar-md bg-warning"><i class="ti ti-notes fs-25"></i></div>
+                                </div>
+                                <div class="flex-fill">
+                                    <h3 class="fw-semibold mb-1">
+                                        <h:outputText value="#{pkDashboardController.hemsireGozlemFormu}"><f:convertNumber type="number"/></h:outputText>
+                                    </h3>
+                                    <span>Hemşire Gözlem Formu</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card custom-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="avatar avatar-lg bg-info-transparent">
+                                    <div class="avatar avatar-md bg-info"><i class="ti ti-clipboard fs-25"></i></div>
+                                </div>
+                                <div class="flex-fill">
+                                    <h3 class="fw-semibold mb-1">
+                                        <h:outputText value="#{pkDashboardController.revirAnemnez}"><f:convertNumber type="number"/></h:outputText>
+                                    </h3>
+                                    <span>Revir Anemnez</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card custom-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="avatar avatar-lg bg-success-transparent">
+                                    <div class="avatar avatar-md bg-success"><i class="ti ti-users-group fs-25"></i></div>
+                                </div>
+                                <div class="flex-fill">
+                                    <h3 class="fw-semibold mb-1">
+                                        <h:outputText value="#{pkDashboardController.naranon}"><f:convertNumber type="number"/></h:outputText>
+                                    </h3>
+                                    <span>Naranon Aile</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card custom-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="avatar avatar-lg bg-primary-transparent">
+                                    <div class="avatar avatar-md bg-primary"><i class="ti ti-stethoscope fs-25"></i></div>
+                                </div>
+                                <div class="flex-fill">
+                                    <h3 class="fw-semibold mb-1">
+                                        <h:outputText value="#{pkDashboardController.aktifPersonel}"><f:convertNumber type="number"/></h:outputText>
+                                    </h3>
+                                    <span>Aktif Personel</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card custom-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="avatar avatar-lg bg-warning-transparent">
+                                    <div class="avatar avatar-md bg-warning"><i class="ti ti-calendar-event fs-25"></i></div>
+                                </div>
+                                <div class="flex-fill">
+                                    <h3 class="fw-semibold mb-1">
+                                        <h:outputText value="#{pkDashboardController.izinliPersonel}"><f:convertNumber type="number"/></h:outputText>
+                                    </h3>
+                                    <span>İzinli Personel</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card custom-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="avatar avatar-lg bg-danger-transparent">
+                                    <div class="avatar avatar-md bg-danger"><i class="ti ti-alert-triangle fs-25"></i></div>
+                                </div>
+                                <div class="flex-fill">
+                                    <h3 class="fw-semibold mb-1">
+                                        <h:outputText value="#{pkDashboardController.kontrolZamaniYaklasanDanisan}"><f:convertNumber type="number"/></h:outputText>
+                                    </h3>
+                                    <span>Kontrolü Yaklaşan</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grafikler -->
+            <div class="row g-3 mb-3">
+                <div class="col-xl-8">
+                    <div class="card custom-card">
+                        <div class="card-header"><div class="card-title">Aylık Başvuru Trendi</div></div>
+                        <div class="card-body">
+                            <ui:fragment rendered="#{not empty pkDashboardController.aylikBasvuruTrendJson}">
+                                <p:chart value="#{pkDashboardController.aylikBasvuruTrendJson}" style="height:300px; width:100%"/>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{empty pkDashboardController.aylikBasvuruTrendJson}">
+                                <div class="text-muted text-center py-5">Veri bulunmuyor</div>
+                            </ui:fragment>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-4">
+                    <div class="card custom-card">
+                        <div class="card-header"><div class="card-title">Verilen Hizmet Türü</div></div>
+                        <div class="card-body">
+                            <ui:fragment rendered="#{not empty pkDashboardController.hizmetTuruDagilimJson}">
+                                <p:chart value="#{pkDashboardController.hizmetTuruDagilimJson}" style="height:300px; width:100%"/>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{empty pkDashboardController.hizmetTuruDagilimJson}">
+                                <div class="text-muted text-center py-5">Veri bulunmuyor</div>
+                            </ui:fragment>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row g-3 mb-3">
+                <div class="col-xl-6">
+                    <div class="card custom-card">
+                        <div class="card-header"><div class="card-title">Tedavi Şekli Dağılımı</div></div>
+                        <div class="card-body">
+                            <ui:fragment rendered="#{not empty pkDashboardController.tedaviSekliDagilimJson}">
+                                <p:chart value="#{pkDashboardController.tedaviSekliDagilimJson}" style="height:260px; width:100%"/>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{empty pkDashboardController.tedaviSekliDagilimJson}">
+                                <div class="text-muted text-center py-5">Veri bulunmuyor</div>
+                            </ui:fragment>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-6">
+                    <div class="card custom-card">
+                        <div class="card-header"><div class="card-title">Cinsiyet Dağılımı</div></div>
+                        <div class="card-body">
+                            <ui:fragment rendered="#{not empty pkDashboardController.cinsiyetDagilimJson}">
+                                <p:chart value="#{pkDashboardController.cinsiyetDagilimJson}" style="height:260px; width:100%"/>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{empty pkDashboardController.cinsiyetDagilimJson}">
+                                <div class="text-muted text-center py-5">Veri bulunmuyor</div>
+                            </ui:fragment>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cinsiyet ve Yaş Dağılımı -->
+            <div class="row g-3 mb-3">
+
+                <div class="col-xl-6">
+                    <div class="card custom-card">
+                        <div class="card-header"><div class="card-title">Yaş Dağılımı</div></div>
+                        <div class="card-body">
+                            <ui:fragment rendered="#{not empty pkDashboardController.yasDagilimiJson}">
+                                <p:chart value="#{pkDashboardController.yasDagilimiJson}" style="height:320px; width:100%"/>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{empty pkDashboardController.yasDagilimiJson}">
+                                <div class="text-muted text-center py-5">Veri bulunmuyor</div>
+                            </ui:fragment>
+                        </div>
+                    </div>
+                </div>
+                <!-- İlçe Dağılımı -->
+                <div class="col-6">
+                    <div class="card custom-card">
+                        <div class="card-header"><div class="card-title">İlçe Dağılımı</div></div>
+                        <div class="card-body">
+                            <ui:fragment rendered="#{not empty pkDashboardController.ilceDagilimJson}">
+                                <p:chart value="#{pkDashboardController.ilceDagilimJson}" style="height:320px; width:100%"/>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{empty pkDashboardController.ilceDagilimJson}">
+                                <div class="text-muted text-center py-5">Veri bulunmuyor</div>
+                            </ui:fragment>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Son Danışanlar ve Bekleyen Talepler -->
+            <div class="row g-3 mb-3">
+                <div class="col-xl-6">
+                    <div class="card custom-card">
+                        <div class="card-header"><div class="card-title">Son Eklenen Danışanlar</div></div>
+                        <div class="card-body">
+                            <p:dataTable value="#{pkDashboardController.sonDanisanlar}" var="d" rows="10" paginator="false" emptyMessage="Kayıt bulunamadı">
+                                <p:column headerText="Danışan">
+                                    <h:outputText value="#{d.gnlKisi.adSoyad}"/>
+                                </p:column>
+                                <p:column headerText="Başvuru Tarihi">
+                                    <h:outputText value="#{d.basvuruTarihi}">
+                                        <f:convertDateTime type="localDateTime" pattern="dd.MM.yyyy HH:mm"/>
+                                    </h:outputText>
+                                </p:column>
+                            </p:dataTable>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-6">
+                    <div class="card custom-card">
+                        <div class="card-header"><div class="card-title">Bekleyen Talepler</div></div>
+                        <div class="card-body">
+                            <p:dataTable value="#{pkDashboardController.bekleyenTalepler}" var="t" rows="10" paginator="false" emptyMessage="Bekleyen talep yok">
+                                <p:column headerText="Talep Türü">
+                                    <h:outputText value="#{t.talepTuru}"/>
+                                </p:column>
+                                <p:column headerText="Tarih">
+                                    <h:outputText value="#{t.tarih}">
+                                        <f:convertDateTime type="localDateTime" pattern="dd.MM.yyyy HH:mm"/>
+                                    </h:outputText>
+                                </p:column>
+                                <p:column headerText="Durum">
+                                    <span class="badge bg-warning-transparent text-warning">#{t.durum}</span>
+                                </p:column>
+                            </p:dataTable>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Son Görüşmeler ve Son Taburcu İşlemleri -->
+            <div class="row g-3 mb-3">
+                <div class="col-xl-6">
+                    <div class="card custom-card">
+                        <div class="card-header"><div class="card-title">Son Görüşmeler</div></div>
+                        <div class="card-body">
+                            <p:dataTable value="#{pkDashboardController.sonGorusmeler}" var="g" rows="10" paginator="false" emptyMessage="Kayıt bulunamadı">
+                                <p:column headerText="Aile / Danışan">
+                                    <h:outputText value="#{g.pkAile.gnlKisi.adSoyad}"/>
+                                </p:column>
+                                <p:column headerText="Görüşme Yapan">
+                                    <h:outputText value="#{g.gorusmeYapanPkPersonel.gnlPersonel.gnlKisi.adSoyad}"/>
+                                </p:column>
+                                <p:column headerText="Tarih">
+                                    <h:outputText value="#{g.tarih}">
+                                        <f:convertDateTime type="localDateTime" pattern="dd.MM.yyyy HH:mm"/>
+                                    </h:outputText>
+                                </p:column>
+                            </p:dataTable>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-6">
+                    <div class="card custom-card">
+                        <div class="card-header"><div class="card-title">Son Taburcu İşlemleri</div></div>
+                        <div class="card-body">
+                            <p:dataTable value="#{pkDashboardController.sonTaburcuIslemleri}" var="t" rows="10" paginator="false" emptyMessage="Kayıt bulunamadı">
+                                <p:column headerText="Tedavi Şekli">
+                                    <h:outputText value="#{t.tedaviSekli}"/>
+                                </p:column>
+                                <p:column headerText="Taburcu Tarihi">
+                                    <h:outputText value="#{t.taburcuTarihi}">
+                                        <f:convertDateTime type="localDateTime" pattern="dd.MM.yyyy HH:mm"/>
+                                    </h:outputText>
+                                </p:column>
+                                <p:column headerText="Hizmet Süresi (gün)">
+                                    <h:outputText value="#{t.hizmetSuresi}"/>
+                                </p:column>
+                            </p:dataTable>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end mb-3">
+                <p:commandButton value="Yenile" icon="pi pi-refresh" actionListener="#{pkDashboardController.yenile()}"
+                                 update="pkDashboardForm" process="@this" styleClass="ui-button-secondary"/>
+            </div>
+        </ui:fragment>
+    </h:form>
+</ui:composition>
+</html>

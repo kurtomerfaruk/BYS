@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces">
+
+<ui:composition>
+    <h:form id="eyDashboardForm" prependId="false">
+        <ui:fragment rendered="#{not eyDashboardController.yetkili}">
+            <div class="alert alert-warning">
+                <h:outputText value="#{eyDashboardController.hataMesaji}"/>
+            </div>
+        </ui:fragment>
+
+        <ui:fragment rendered="#{eyDashboardController.yetkili}">
+            <div class="row g-3 mb-3">
+                <div class="col-xl-3 col-md-6"><div class="card custom-card"><div class="card-body"><div class="d-flex align-items-center gap-3">
+                    <div class="avatar avatar-lg bg-info-transparent"><div class="avatar avatar-md bg-info"><i class="ti ti-users fs-25"></i></div></div>
+                    <div class="flex-fill"><h3 class="fw-semibold mb-1"><h:outputText value="#{eyDashboardController.toplamKisi}"><f:convertNumber type="number"/></h:outputText></h3><span>Toplam Hizmet Alan Kişi</span></div>
+                </div></div></div></div>
+                <div class="col-xl-3 col-md-6"><div class="card custom-card"><div class="card-body"><div class="d-flex align-items-center gap-3">
+                    <div class="avatar avatar-lg bg-primary-transparent"><div class="avatar avatar-md bg-primary"><i class="ti ti-user-plus fs-25"></i></div></div>
+                    <div class="flex-fill"><h3 class="fw-semibold mb-1"><h:outputText value="#{eyDashboardController.bugunYeniKayit}"><f:convertNumber type="number"/></h:outputText></h3><span>Bugün Yeni Kayıt</span></div>
+                </div></div></div></div>
+                <div class="col-xl-3 col-md-6"><div class="card custom-card"><div class="card-body"><div class="d-flex align-items-center gap-3">
+                    <div class="avatar avatar-lg bg-success-transparent"><div class="avatar avatar-md bg-success"><i class="ti ti-calendar-stats fs-25"></i></div></div>
+                    <div class="flex-fill"><h3 class="fw-semibold mb-1"><h:outputText value="#{eyDashboardController.buAyYeniKayit}"><f:convertNumber type="number"/></h:outputText></h3><span>Bu Ay Yeni Kayıt</span></div>
+                </div></div></div></div>
+                <div class="col-xl-3 col-md-6"><div class="card custom-card"><div class="card-body"><div class="d-flex align-items-center gap-3">
+                    <div class="avatar avatar-lg bg-warning-transparent"><div class="avatar avatar-md bg-warning"><i class="ti ti-clipboard fs-25"></i></div></div>
+                    <div class="flex-fill"><h3 class="fw-semibold mb-1"><h:outputText value="#{eyDashboardController.toplamTalep}"><f:convertNumber type="number"/></h:outputText></h3><span>Toplam Talep</span></div>
+                </div></div></div></div>
+                <div class="col-xl-3 col-md-6"><div class="card custom-card"><div class="card-body"><div class="d-flex align-items-center gap-3">
+                    <div class="avatar avatar-lg bg-danger-transparent"><div class="avatar avatar-md bg-danger"><i class="ti ti-clock fs-25"></i></div></div>
+                    <div class="flex-fill"><h3 class="fw-semibold mb-1"><h:outputText value="#{eyDashboardController.bekleyenTalep}"><f:convertNumber type="number"/></h:outputText></h3><span>Bekleyen Talepler</span></div>
+                </div></div></div></div>
+                <div class="col-xl-3 col-md-6"><div class="card custom-card"><div class="card-body"><div class="d-flex align-items-center gap-3">
+                    <div class="avatar avatar-lg bg-info-transparent"><div class="avatar avatar-md bg-info"><i class="ti ti-calendar fs-25"></i></div></div>
+                    <div class="flex-fill"><h3 class="fw-semibold mb-1"><h:outputText value="#{eyDashboardController.buAyTalep}"><f:convertNumber type="number"/></h:outputText></h3><span>Bu Ay Talepler</span></div>
+                </div></div></div></div>
+                <div class="col-xl-3 col-md-6"><div class="card custom-card"><div class="card-body"><div class="d-flex align-items-center gap-3">
+                    <div class="avatar avatar-lg bg-success-transparent"><div class="avatar avatar-md bg-success"><i class="ti ti-tool fs-25"></i></div></div>
+                    <div class="flex-fill"><h3 class="fw-semibold mb-1"><h:outputText value="#{eyDashboardController.toplamTamir}"><f:convertNumber type="number"/></h:outputText></h3><span>Toplam Tamir</span></div>
+                </div></div></div></div>
+                <div class="col-xl-3 col-md-6"><div class="card custom-card"><div class="card-body"><div class="d-flex align-items-center gap-3">
+                    <div class="avatar avatar-lg bg-warning-transparent"><div class="avatar avatar-md bg-warning"><i class="ti ti-calendar-event fs-25"></i></div></div>
+                    <div class="flex-fill"><h3 class="fw-semibold mb-1"><h:outputText value="#{eyDashboardController.buAyTamir}"><f:convertNumber type="number"/></h:outputText></h3><span>Bu Ay Tamir</span></div>
+                </div></div></div></div>
+                <div class="col-xl-3 col-md-6"><div class="card custom-card"><div class="card-body"><div class="d-flex align-items-center gap-3">
+                    <div class="avatar avatar-lg bg-primary-transparent"><div class="avatar avatar-md bg-primary"><i class="ti ti-wheelchair fs-25"></i></div></div>
+                    <div class="flex-fill"><h3 class="fw-semibold mb-1"><h:outputText value="#{eyDashboardController.toplamCihazTeslim}"><f:convertNumber type="number"/></h:outputText></h3><span>Toplam Cihaz Teslim</span></div>
+                </div></div></div></div>
+                <div class="col-xl-3 col-md-6"><div class="card custom-card"><div class="card-body"><div class="d-flex align-items-center gap-3">
+                    <div class="avatar avatar-lg bg-info-transparent"><div class="avatar avatar-md bg-info"><i class="ti ti-calendar-check fs-25"></i></div></div>
+                    <div class="flex-fill"><h3 class="fw-semibold mb-1"><h:outputText value="#{eyDashboardController.buAyCihazTeslim}"><f:convertNumber type="number"/></h:outputText></h3><span>Bu Ay Cihaz Teslim</span></div>
+                </div></div></div></div>
+                <div class="col-xl-3 col-md-6"><div class="card custom-card"><div class="card-body"><div class="d-flex align-items-center gap-3">
+                    <div class="avatar avatar-lg bg-success-transparent"><div class="avatar avatar-md bg-success"><i class="ti ti-file-text fs-25"></i></div></div>
+                    <div class="flex-fill"><h3 class="fw-semibold mb-1"><h:outputText value="#{eyDashboardController.sosyalIncelemeRaporu}"><f:convertNumber type="number"/></h:outputText></h3><span>Sosyal İnceleme Raporu</span></div>
+                </div></div></div></div>
+                <div class="col-xl-3 col-md-6"><div class="card custom-card"><div class="card-body"><div class="d-flex align-items-center gap-3">
+                    <div class="avatar avatar-lg bg-warning-transparent"><div class="avatar avatar-md bg-warning"><i class="ti ti-report fs-25"></i></div></div>
+                    <div class="flex-fill"><h3 class="fw-semibold mb-1"><h:outputText value="#{eyDashboardController.kullanilanCihaz}"><f:convertNumber type="number"/></h:outputText></h3><span>Kullanılan Cihaz</span></div>
+                </div></div></div></div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-xl-6">
+                    <div class="card custom-card">
+                        <div class="card-header"><div class="card-title">Talep Durumu Dağılımı</div></div>
+                        <div class="card-body">
+                            <ui:fragment rendered="#{not empty eyDashboardController.talepDurumuDagilimJson}">
+                                <p:chart value="#{eyDashboardController.talepDurumuDagilimJson}" style="height:300px; width:100%"/>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{empty eyDashboardController.talepDurumuDagilimJson}">
+                                <div class="text-muted text-center py-5">Veri bulunmuyor</div>
+                            </ui:fragment>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-6">
+                    <div class="card custom-card">
+                        <div class="card-header"><div class="card-title">Engel Grubu Dağılımı</div></div>
+                        <div class="card-body">
+                            <ui:fragment rendered="#{not empty eyDashboardController.engelGrubuDagilimJson}">
+                                <p:chart value="#{eyDashboardController.engelGrubuDagilimJson}" style="height:300px; width:100%"/>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{empty eyDashboardController.engelGrubuDagilimJson}">
+                                <div class="text-muted text-center py-5">Veri bulunmuyor</div>
+                            </ui:fragment>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-xl-6">
+                    <div class="card custom-card">
+                        <div class="card-header"><div class="card-title">Aylık Talep Trendi</div></div>
+                        <div class="card-body">
+                            <ui:fragment rendered="#{not empty eyDashboardController.aylikTalepTrendJson}">
+                                <p:chart value="#{eyDashboardController.aylikTalepTrendJson}" style="height:300px; width:100%"/>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{empty eyDashboardController.aylikTalepTrendJson}">
+                                <div class="text-muted text-center py-5">Veri bulunmuyor</div>
+                            </ui:fragment>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-6">
+                    <div class="card custom-card">
+                        <div class="card-header"><div class="card-title">Cinsiyet Dağılımı</div></div>
+                        <div class="card-body">
+                            <ui:fragment rendered="#{not empty eyDashboardController.cinsiyetDagilimJson}">
+                                <p:chart value="#{eyDashboardController.cinsiyetDagilimJson}" style="height:300px; width:100%"/>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{empty eyDashboardController.cinsiyetDagilimJson}">
+                                <div class="text-muted text-center py-5">Veri bulunmuyor</div>
+                            </ui:fragment>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-xl-6">
+                    <div class="card custom-card">
+                        <div class="card-header"><div class="card-title">Yaş Dağılımı</div></div>
+                        <div class="card-body">
+                            <ui:fragment rendered="#{not empty eyDashboardController.yasDagilimiJson}">
+                                <p:chart value="#{eyDashboardController.yasDagilimiJson}" style="height:320px; width:100%"/>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{empty eyDashboardController.yasDagilimiJson}">
+                                <div class="text-muted text-center py-5">Veri bulunmuyor</div>
+                            </ui:fragment>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-6">
+                    <div class="card custom-card">
+                        <div class="card-header"><div class="card-title">İlçe Dağılımı</div></div>
+                        <div class="card-body">
+                            <ui:fragment rendered="#{not empty eyDashboardController.ilceDagilimJson}">
+                                <p:chart value="#{eyDashboardController.ilceDagilimJson}" style="height:320px; width:100%"/>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{empty eyDashboardController.ilceDagilimJson}">
+                                <div class="text-muted text-center py-5">Veri bulunmuyor</div>
+                            </ui:fragment>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-xl-6">
+                    <div class="card custom-card">
+                        <div class="card-header"><div class="card-title">Son Eklenen Kişiler</div></div>
+                        <div class="card-body">
+                            <p:dataTable value="#{eyDashboardController.sonKisiler}" var="k" rows="10" paginator="false" emptyMessage="Kayıt bulunamadı">
+                                <p:column headerText="Kişi">
+                                    <h:outputText value="#{k.gnlKisi.adSoyad}"/>
+                                </p:column>
+                                <p:column headerText="Kayıt Tarihi">
+                                    <h:outputText value="#{k.eklemeTarihi}">
+                                        <f:convertDateTime type="localDateTime" pattern="dd.MM.yyyy HH:mm"/>
+                                    </h:outputText>
+                                </p:column>
+                            </p:dataTable>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-6">
+                    <div class="card custom-card">
+                        <div class="card-header"><div class="card-title">Bekleyen Talepler</div></div>
+                        <div class="card-body">
+                            <p:dataTable value="#{eyDashboardController.bekleyenTalepler}" var="t" rows="10" paginator="false" emptyMessage="Bekleyen talep yok">
+                                <p:column headerText="Talep Türü">
+                                    <h:outputText value="#{t.talepTuru.displayValue}"/>
+                                </p:column>
+                                <p:column headerText="Tarih">
+                                    <h:outputText value="#{t.tarih}">
+                                        <f:convertDateTime type="localDateTime" pattern="dd.MM.yyyy HH:mm"/>
+                                    </h:outputText>
+                                </p:column>
+                                <p:column headerText="Durum">
+                                    <span class="badge bg-warning-transparent text-warning">#{t.durum.displayValue}</span>
+                                </p:column>
+                            </p:dataTable>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-xl-6">
+                    <div class="card custom-card">
+                        <div class="card-header"><div class="card-title">Son Tamirler</div></div>
+                        <div class="card-body">
+                            <p:dataTable value="#{eyDashboardController.sonTamirler}" var="t" rows="10" paginator="false" emptyMessage="Kayıt bulunamadı">
+                                <p:column headerText="Kişi">
+                                    <h:outputText value="#{t.eyKisi.gnlKisi.adSoyad}"/>
+                                </p:column>
+                                <p:column headerText="Kayıt Tarihi">
+                                    <h:outputText value="#{t.kayitTarihi}">
+                                        <f:convertDateTime type="localDateTime" pattern="dd.MM.yyyy HH:mm"/>
+                                    </h:outputText>
+                                </p:column>
+                                <p:column headerText="Arıza Türü">
+                                    <h:outputText value="#{t.arizaTuru}"/>
+                                </p:column>
+                            </p:dataTable>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-6">
+                    <div class="card custom-card">
+                        <div class="card-header"><div class="card-title">Son Cihaz Teslimleri</div></div>
+                        <div class="card-body">
+                            <p:dataTable value="#{eyDashboardController.sonCihazTeslimleri}" var="c" rows="10" paginator="false" emptyMessage="Kayıt bulunamadı">
+                                <p:column headerText="Kişi">
+                                    <h:outputText value="#{c.eyKisi.gnlKisi.adSoyad}"/>
+                                </p:column>
+                                <p:column headerText="Veriliş Tarihi">
+                                    <h:outputText value="#{c.verilisTarihi}">
+                                        <f:convertDateTime type="localDateTime" pattern="dd.MM.yyyy HH:mm"/>
+                                    </h:outputText>
+                                </p:column>
+                                <p:column headerText="Cihaz Durumu">
+                                    <h:outputText value="#{c.cihazDurum.displayValue}"/>
+                                </p:column>
+                            </p:dataTable>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end mb-3">
+                <p:commandButton value="Yenile" icon="pi pi-refresh" actionListener="#{eyDashboardController.yenile()}"
+                                 update="eyDashboardForm" process="@this" styleClass="ui-button-secondary"/>
+            </div>
+        </ui:fragment>
+    </h:form>
+</ui:composition>
+</html>
