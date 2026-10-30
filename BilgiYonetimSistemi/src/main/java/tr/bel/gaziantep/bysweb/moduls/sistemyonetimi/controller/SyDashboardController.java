@@ -65,7 +65,7 @@ public class SyDashboardController implements java.io.Serializable{
         MODUL_MANIFEST.put(EnumModul.ILERI_YAS, new String[]{"ileriyas", "ti ti-old", "indigo"});
         MODUL_MANIFEST.put(EnumModul.EKM, new String[]{"engelsizkariyermerkezi", "ti ti-briefcase", "teal"});
         MODUL_MANIFEST.put(EnumModul.ORTEZ_PROTEZ, new String[]{"ortezprotez", "ti ti-crutches", "pink"});
-        MODUL_MANIFEST.put(EnumModul.PSIKIYATRI_KLINIGI, new String[]{"psikiyatriklinigi", "ti ti-brain", "cyan"});
+        MODUL_MANIFEST.put(EnumModul.PSIKIYATRI_KLINIGI, new String[]{"psikiyatriklinigi", "ti ti-brain", "teal"});
         MODUL_MANIFEST.put(EnumModul.HAFRIYAT, new String[]{"hafriyat", "ti ti-truck", "secondary"});
         MODUL_MANIFEST.put(EnumModul.SISTEM_YONETIMI, new String[]{"sistemyonetimi", "ti ti-settings-cog", "warning"});
     }
@@ -166,6 +166,10 @@ public class SyDashboardController implements java.io.Serializable{
 
     @Getter
     @Setter
+    private String sistemSaglikChartJson;
+
+    @Getter
+    @Setter
     private List<SyDashboardModulDTO> modulOzetleri;
     @Getter
     @Setter
@@ -179,6 +183,13 @@ public class SyDashboardController implements java.io.Serializable{
     @Getter
     @Setter
     private String maxUserDate;
+
+    private final java.util.Deque<Integer> sistemCpuGecmisi = new java.util.ArrayDeque<>();
+    private final java.util.Deque<Integer> sistemRamGecmisi = new java.util.ArrayDeque<>();
+    private final java.util.Deque<Integer> sistemHeapGecmisi = new java.util.ArrayDeque<>();
+    private final java.util.Deque<Integer> sistemDiskGecmisi = new java.util.ArrayDeque<>();
+    private final java.util.Deque<String> sistemZamanGecmisi = new java.util.ArrayDeque<>();
+    private static final int SISTEM_GECMIS_SAYISI = 30;
 
     @PostConstruct
     public void init() {
@@ -288,6 +299,21 @@ public class SyDashboardController implements java.io.Serializable{
 
             threadSayisi = ManagementFactory.getThreadMXBean().getThreadCount();
             calismaSuresi = calismaSuresiBicimlendir(ManagementFactory.getRuntimeMXBean().getUptime());
+
+            sistemCpuGecmisi.addLast(sistemCpuYuzdesi);
+            sistemRamGecmisi.addLast(ramYuzdesi);
+            sistemHeapGecmisi.addLast(heapYuzdesi);
+            sistemDiskGecmisi.addLast(diskYuzdesi);
+            sistemZamanGecmisi.addLast(java.time.LocalTime.now().format(java.time.format.DateTimeFormatter.ofPattern("HH:mm:ss")));
+
+            while (sistemCpuGecmisi.size() > SISTEM_GECMIS_SAYISI) {
+                sistemCpuGecmisi.pollFirst();
+                sistemRamGecmisi.pollFirst();
+                sistemHeapGecmisi.pollFirst();
+                sistemDiskGecmisi.pollFirst();
+                sistemZamanGecmisi.pollFirst();
+            }
+            sistemSaglikChartJson = sistemSaglikGrafikOlustur();
         } catch (Exception e) {
             log.error("Sistem sağlığı ölçümleri okunurken hata oluştu.", e);
         }
@@ -543,6 +569,66 @@ public class SyDashboardController implements java.io.Serializable{
         Map<String, Object> secenekler = temelSecenekler("y");
         ((Map<String, Object>) secenekler.get("plugins")).put("legend", Map.of("display", false));
         return grafikConfigOlustur("bar", etiketler, List.of(dataset), secenekler);
+    }
+
+    private String sistemSaglikGrafikOlustur() {
+        if (sistemZamanGecmisi.isEmpty()) {
+            return "";
+        }
+        List<String> etiketler = new ArrayList<>(sistemZamanGecmisi);
+        List<Number> cpu = new ArrayList<>(sistemCpuGecmisi);
+        List<Number> ram = new ArrayList<>(sistemRamGecmisi);
+        List<Number> heap = new ArrayList<>(sistemHeapGecmisi);
+        List<Number> disk = new ArrayList<>(sistemDiskGecmisi);
+
+        Map<String, Object> cpuDataset = new LinkedHashMap<>();
+        cpuDataset.put("label", "CPU (%)");
+        cpuDataset.put("data", cpu);
+        cpuDataset.put("borderColor", "rgba(228,77,99,1)");
+        cpuDataset.put("backgroundColor", "rgba(228,77,99,0.12)");
+        cpuDataset.put("fill", true);
+        cpuDataset.put("tension", 0.35);
+        cpuDataset.put("pointRadius", 0);
+        cpuDataset.put("borderWidth", 2);
+
+        Map<String, Object> ramDataset = new LinkedHashMap<>();
+        ramDataset.put("label", "RAM (%)");
+        ramDataset.put("data", ram);
+        ramDataset.put("borderColor", "rgba(58,122,224,1)");
+        ramDataset.put("backgroundColor", "rgba(58,122,224,0.10)");
+        ramDataset.put("fill", true);
+        ramDataset.put("tension", 0.35);
+        ramDataset.put("pointRadius", 0);
+        ramDataset.put("borderWidth", 2);
+
+        Map<String, Object> heapDataset = new LinkedHashMap<>();
+        heapDataset.put("label", "Heap (%)");
+        heapDataset.put("data", heap);
+        heapDataset.put("borderColor", "rgba(246,153,63,1)");
+        heapDataset.put("backgroundColor", "rgba(246,153,63,0.10)");
+        heapDataset.put("fill", true);
+        heapDataset.put("tension", 0.35);
+        heapDataset.put("pointRadius", 0);
+        heapDataset.put("borderWidth", 2);
+
+        Map<String, Object> diskDataset = new LinkedHashMap<>();
+        diskDataset.put("label", "Disk (%)");
+        diskDataset.put("data", disk);
+        diskDataset.put("borderColor", "rgba(89,194,148,1)");
+        diskDataset.put("backgroundColor", "rgba(89,194,148,0.10)");
+        diskDataset.put("fill", true);
+        diskDataset.put("tension", 0.35);
+        diskDataset.put("pointRadius", 0);
+        diskDataset.put("borderWidth", 2);
+
+        Map<String, Object> secenekler = temelSecenekler(null);
+        Map<String, Object> yEksen = new LinkedHashMap<>();
+        yEksen.put("min", 0);
+        yEksen.put("max", 100);
+        yEksen.put("ticks", Map.of("stepSize", 20));
+        Map<String, Object> scales = (Map<String, Object>) secenekler.get("scales");
+        scales.put("y", yEksen);
+        return grafikConfigOlustur("line", etiketler, List.of(cpuDataset, ramDataset, heapDataset, diskDataset), secenekler);
     }
 
     /**
