@@ -13,7 +13,7 @@ import org.omnifaces.cdi.Push;
 import org.omnifaces.cdi.PushContext;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
-import tr.bel.gaziantep.bysweb.core.controller.AbstractController;
+import tr.bel.gaziantep.bysweb.core.controller.AbstractKisiController;
 import tr.bel.gaziantep.bysweb.core.controller.InitApp;
 import tr.bel.gaziantep.bysweb.core.controller.KpsController;
 import tr.bel.gaziantep.bysweb.core.converter.ModelConverter;
@@ -58,7 +58,7 @@ import java.util.List;
 @Named
 @ViewScoped
 @Slf4j
-public class EyKisiController extends AbstractController<EyKisi> {
+public class EyKisiController extends AbstractKisiController<EyKisi> {
 
     @Serial
     private static final long serialVersionUID = 6858724710217059235L;
@@ -234,21 +234,26 @@ public class EyKisiController extends AbstractController<EyKisi> {
 
 
     public void getTcKimlik() {
-        try {
-            if (this.getSelected() != null) {
-                String tcKimlikNo = this.getSelected().getGnlKisi().getTcKimlikNo();
-                GnlKisi kisi = gnlKisiService.findByTckimlikNo(tcKimlikNo);
-                if (kisi == null) kisi = this.getSelected().getGnlKisi();
-                kisi = kpsController.findByTcKimlikNo(kisi, EnumModul.ENGELSIZLER);
-                if (kisi != null) {
-                    this.getSelected().setGnlKisi(kisi);
-                }
-
-            }
-        } catch (Exception ex) {
-            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
-            log.error(null, ex);
-        }
+//        try {
+//            if (this.getSelected() != null) {
+//                String tcKimlikNo = this.getSelected().getGnlKisi().getTcKimlikNo();
+//                GnlKisi kisi = gnlKisiService.findByTckimlikNo(tcKimlikNo);
+//                if (kisi == null) kisi = this.getSelected().getGnlKisi();
+//                kisi = kpsController.findByTcKimlikNo(kisi, EnumModul.ENGELSIZLER);
+//                if (kisi != null) {
+//                    this.getSelected().setGnlKisi(kisi);
+//                }
+//
+//            }
+//        } catch (Exception ex) {
+//            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+//            log.error(null, ex);
+//        }
+        fetchTcKimlik(
+                EyKisi::getGnlKisi,
+                EyKisi::setGnlKisi,
+                EnumModul.ENGELSIZLER
+        );
     }
 
     public void clearList() {

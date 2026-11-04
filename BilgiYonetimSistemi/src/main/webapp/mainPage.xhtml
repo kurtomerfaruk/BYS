@@ -42,15 +42,29 @@
 <!--    </ui:fragment>-->
 
     <!-- Engelsiz Kariyer Merkezi Dashboard -->
-    <ui:fragment rendered="#{syKullaniciController.hasPermission('engelsiz_kariyer_merkezi_dashboard:goster')}">
+<!--    <ui:fragment rendered="#{syKullaniciController.hasPermission('engelsiz_kariyer_merkezi_dashboard:goster')}">-->
+<!--        <div class="card border border-primary custom-card mb-4">-->
+<!--            <div class="card-header d-flex justify-content-between align-items-center">-->
+<!--                <div class="card-title">-->
+<!--                    <i class="ti ti-briefcase me-2"></i>Engelsiz Kariyer Merkezi Dashboard-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="card-body">-->
+<!--                <ui:include src="/moduls/engelsizkariyermerkezi/dashboard.xhtml"/>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </ui:fragment>-->
+
+    <!-- Evim Dünyalara Bedel Dashboard -->
+    <ui:fragment rendered="#{syKullaniciController.hasPermission('evim_dunyalara_bedel_dashboard:goster')}">
         <div class="card border border-primary custom-card mb-4">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <div class="card-title">
-                    <i class="ti ti-briefcase me-2"></i>Engelsiz Kariyer Merkezi Dashboard
+                    <i class="ti ti-home-heart me-2"></i>Evim Dünyalara Bedel Dashboard
                 </div>
             </div>
             <div class="card-body">
-                <ui:include src="/moduls/engelsizkariyermerkezi/dashboard.xhtml"/>
+                <ui:include src="/moduls/evimdunyalarabedel/dashboard.xhtml"/>
             </div>
         </div>
     </ui:fragment>

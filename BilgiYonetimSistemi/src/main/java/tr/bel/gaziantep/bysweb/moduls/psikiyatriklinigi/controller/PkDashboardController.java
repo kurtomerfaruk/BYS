@@ -9,6 +9,7 @@ import jakarta.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import tr.bel.gaziantep.bysweb.core.enums.BaseEnum;
 import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
 import tr.bel.gaziantep.bysweb.moduls.psikiyatriklinigi.entity.PkBireyselGorusme;
 import tr.bel.gaziantep.bysweb.moduls.psikiyatriklinigi.entity.PkHasta;
@@ -231,7 +232,12 @@ public class PkDashboardController implements java.io.Serializable {
             Object key = row[0];
             Long adet = ((Number) row[1]).longValue();
             if (key != null && adet != null) {
-                etiketler.add(key.toString());
+                if(key instanceof Enum<?>){
+                    String enumValue = ((BaseEnum)key).getDisplayValue();
+                    etiketler.add(enumValue);
+                }else{
+                    etiketler.add(key.toString());
+                }
                 sayilar.add(adet);
                 renkler.add(GRAFIK_RENKLERI.get(index % GRAFIK_RENKLERI.size()));
                 index++;
