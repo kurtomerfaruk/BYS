@@ -7,6 +7,8 @@ import tr.bel.gaziantep.bysweb.core.service.AbstractService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtProje;
 
+import java.io.Serial;
+
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
  * @version 1.0.0
@@ -14,6 +16,9 @@ import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtProje;
  */
 @Stateless
 public class OrtProjeService extends AbstractService<OrtProje> {
+
+    @Serial
+    private static final long serialVersionUID = -1355191118653151333L;
 
     public OrtProjeService() {
         super(OrtProje.class);

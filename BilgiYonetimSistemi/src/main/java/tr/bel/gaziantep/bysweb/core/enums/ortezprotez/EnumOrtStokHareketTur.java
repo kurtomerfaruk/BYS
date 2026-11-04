@@ -11,7 +11,13 @@ import tr.bel.gaziantep.bysweb.core.enums.BaseEnum;
 @Getter
 public enum EnumOrtStokHareketTur implements BaseEnum {
 
-    HASTA_ICIN_KULLANIM("Hasta için kullanım");
+    HASTA_ICIN_KULLANIM("Hasta için kullanım"),
+    GIRIS("Stok Giriş"),
+    CIKIS("Stok Çıkış"),
+    TRANSFER("Depo Transfer"),
+    SAYIM("Sayım Farkı"),
+    FIRE("Fire/Zayi"),
+    IADE("İade");
 
     private final String label;
 

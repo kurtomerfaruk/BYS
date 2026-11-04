@@ -31,6 +31,7 @@
                         :OrtStokListForm:datalist:datalist:deleteButton,
                         :OrtStokListForm:datalist:datalist:stokHistoryButton,
                         :OrtStokListForm:datalist:datalist:stokHistoryPriceButton,
+                        :OrtStokListForm:datalist:datalist:processButton,
                         :OrtStokListForm:datalist:datalist:priceButton"
                         rowDblselect="document.getElementById('OrtStokListForm:datalist:datalist:editButton').click()"
                         contextMenu=":OrtStokListForm:datalist:datalist:createButton
@@ -39,6 +40,7 @@
                         :OrtStokListForm:datalist:datalist:deleteButton
                         :OrtStokListForm:datalist:datalist:stokHistoryButton
                         :OrtStokListForm:datalist:datalist:stokHistoryPriceButton
+                        :OrtStokListForm:datalist:datalist:processButton
                         :OrtStokListForm:datalist:datalist:priceButton "
                         selectListener="#{ortStokController.resetParents}"
                         controller="#{ortStokController}"
@@ -64,6 +66,14 @@
                                  rendered="#{syKullaniciController.hasPermission('ortstok:sil')}">
                     <p:confirm header="#{messages.ConfirmationHeader}" message="#{messages.ConfirmDeleteMessage}" icon="pi pi-exclamation-circle"/>
                 </p:commandButton>
+
+                <p:commandButton id="processButton" styleClass="ui-button-amber" icon="pi pi-check"
+                                 pt:data-tooltip="#{messages.buttonStokIslem}"
+                                 update=":OrtStokIslemForm" oncomplete="PF('OrtStokIslemDialog').show()"
+                                 disabled="#{empty ortStokController.selected}"
+                                 actionListener="#{ortStokHareketController.prepare(ortStokController.selected)}"
+                                 onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('ortstok:islem')}"/>
 
                 <p:commandButton id="stokHistoryButton" styleClass="ui-button-orange" icon="pi pi-list-check" pt:data-tooltip="#{messages.buttonStokHareket}"
                                  update=":OrtStokHareketForm" oncomplete="PF('OrtStokHareketDialog').show()"

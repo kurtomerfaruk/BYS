@@ -140,6 +140,15 @@
                     <h:outputText value="#{item.durum.displayValue}"/>
                 </p:column>
 
+                <p:column id="duzenle" width="6%" headerText="#{messages.islemText}" styleClass="text-center"
+                          rendered="#{item.hareketTur ne 'HASTA_ICIN_KULLANIM'}">
+                    <p:commandButton icon="pi pi-pencil"
+                                     styleClass="rounded-button ui-button-info"
+                                     actionListener="#{ortStokHareketController.editInfo(item)}"
+                                     process="@this"
+                                     update=":OrtStokIslemForm" oncomplete="PF('OrtStokIslemDialog').show()"/>
+                </p:column>
+
             </p:dataTable>
         </h:form>
 

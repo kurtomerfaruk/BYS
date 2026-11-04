@@ -43,8 +43,12 @@ public class OrtStokService extends AbstractService<OrtStok> {
     }
 
     public void setStokMiktar(OrtStok ortStok) {
-        List<OrtStokHareket> harekets = ortStok.getOrtStokHareketList();
-        harekets.removeIf(x -> !x.isAktif());
+//        List<OrtStokHareket> harekets = ortStok.getOrtStokHareketList();
+        List<OrtStokHareket> harekets = getEntityManager()
+                .createQuery("SELECT s FROM OrtStokHareket s WHERE s.aktif=true AND s.ortStok=:stok", OrtStokHareket.class)
+                .setParameter("stok",ortStok)
+                .getResultList();
+//        harekets.removeIf(x -> !x.isAktif());
         Map<EnumGirisCikis, BigDecimal> totalMap = harekets
                 .stream()
                 .collect(Collectors.groupingBy(

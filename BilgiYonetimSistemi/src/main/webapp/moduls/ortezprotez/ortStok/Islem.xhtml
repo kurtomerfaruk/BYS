@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces">
+
+<ui:composition>
+
+    <p:dialog widgetVar="OrtStokIslemDialog"
+              id="OrtStokIslemDialogId"
+              modal="true"
+              resizable="false"
+              closeOnEscape="true"
+              header="#{messages.dialogYeniKayit}"
+              appendTo="@(body)"
+              responsive="true"
+              onShow="PF('OrtStokIslemDialog').initPosition();"
+              fitViewport="true"
+              position="top">
+
+        <h:form id="OrtStokIslemForm">
+            <h:panelGroup id="display">
+                <p:focus context="display"/>
+                <p:panelGrid columns="2" columnClasses="column" rendered="#{ortStokHareketController.selected!=null}" layout="tabular">
+
+                    <p:outputLabel value="#{messages.stokAdiLabel}" for="@next"/>
+                    <p:inputText value="#{ortStokHareketController.selected.ortStok.stokAdi}" readonly="true" size="50"/>
+
+                    <p:outputLabel value="#{messages.tarihLabel}" for="@next"/>
+                    <p:datePicker locale="tr" pattern="#{messages.tarihFormat}" value="#{ortStokHareketController.selected.tarih}"
+                                  title="#{messages.tarihText}" mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true"
+                                  showIcon="true" showOnFocus="false" required="true"/>
+
+                    <p:outputLabel value="#{messages.hareketTurLabel}" for="@next"/>
+                    <p:selectOneMenu value="#{ortStokHareketController.selected.hareketTur}" required="true" filter="true"
+                                     converter="omnifaces.SelectItemsConverter">
+                        <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+                        <f:selectItems value="#{enumOrtStokHareketTur.ALL_VALUES}"
+                                       var="hareketTurs"
+                                       itemValue="#{hareketTurs}"
+                                       itemLabel="#{hareketTurs.displayValue}"/>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel value="#{messages.durumLabel}" for="@next"/>
+                    <p:selectOneMenu value="#{ortStokHareketController.selected.durum}" required="true" filter="true"
+                                     converter="omnifaces.SelectItemsConverter">
+                        <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+                        <f:selectItems value="#{enumGirisCikis.ALL_VALUES}"
+                                       var="girisCikiss"
+                                       itemValue="#{girisCikiss}"
+                                       itemLabel="#{girisCikiss.displayValue}"/>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel value="#{messages.aciklamaLabel}" for="@next"/>
+                    <p:inputTextarea rows="4" value="#{ortStokHareketController.selected.aciklama}"
+                                     title="#{messages.aciklamaText}" styleClass="w-100" autoResize="false"/>
+
+                    <p:outputLabel value="#{messages.miktarLabel}" for="@next"/>
+                    <p:inputNumber  value="#{ortStokHareketController.selected.miktar}" decimalPlaces="2" decimalSeparator="," thousandSeparator="."
+                                   emptyValue="zero" inputStyleClass="text-end"/>
+
+                    <f:facet name="footer">
+                        <div class="float-end">
+                            <p:commandButton icon="pi pi-check" styleClass="ui-button-success"
+                                             actionListener="#{ortStokHareketController.save}"
+                                             value="#{messages.buttonKaydet}"
+                                             update="OrtStokListForm:datalist:datalist,:growl,display"
+                                             oncomplete="handleSubmit(xhr,status,args,PF('OrtStokIslemDialog'));"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                            <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                             value="#{messages.buttonIptal}"
+                                             onclick="PF('OrtStokIslemDialog').hide()" immediate="true"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()">
+                                <p:resetInput target="@form"/>
+                            </p:commandButton>
+                        </div>
+                    </f:facet>
+                </p:panelGrid>
+            </h:panelGroup>
+        </h:form>
+    </p:dialog>
+
+</ui:composition>
+
+</html>

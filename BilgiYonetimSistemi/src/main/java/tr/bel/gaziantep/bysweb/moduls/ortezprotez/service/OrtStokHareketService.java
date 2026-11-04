@@ -1,6 +1,7 @@
 package tr.bel.gaziantep.bysweb.moduls.ortezprotez.service;
 
 import jakarta.ejb.Stateless;
+import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import tr.bel.gaziantep.bysweb.core.enums.bys.EnumGirisCikis;
@@ -26,6 +27,9 @@ public class OrtStokHareketService extends AbstractService<OrtStokHareket> {
 
     @Serial
     private static final long serialVersionUID = -4203984261432299048L;
+
+    @Inject
+    private OrtStokService stokService;
 
     public OrtStokHareketService() {
         super(OrtStokHareket.class);
@@ -73,7 +77,7 @@ public class OrtStokHareketService extends AbstractService<OrtStokHareket> {
     }
 
     private OrtStokHareket findByIslemIdByHareketTur(Integer islemId, EnumOrtStokHareketTur hareketTur, OrtStok ortStok) {
-        return (OrtStokHareket) getEntityManager().createNamedQuery("OrtStokHareket.findByIslemIdByHareketTur")
+        return (OrtStokHareket) getEntityManager().createNamedQuery("OrtStokHareket.findByIslemIdByHareketTur", OrtStokHareket.class)
                 .setParameter("islemId", islemId)
                 .setParameter("hareketTur", hareketTur)
                 .setParameter("ortStok", ortStok)
@@ -81,5 +85,10 @@ public class OrtStokHareketService extends AbstractService<OrtStokHareket> {
                 .stream()
                 .findFirst()
                 .orElse(null);
+    }
+
+    public void update(OrtStokHareket stokHareket) {
+        edit(stokHareket);
+        stokService.setStokMiktar(stokHareket.getOrtStok());
     }
 }

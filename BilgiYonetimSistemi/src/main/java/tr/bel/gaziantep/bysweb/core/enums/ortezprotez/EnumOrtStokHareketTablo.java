@@ -12,7 +12,8 @@ import tr.bel.gaziantep.bysweb.core.enums.BaseEnum;
 public enum EnumOrtStokHareketTablo implements BaseEnum {
 
     ORTBASVURU_MALZEME_TESLIMI("Malzeme Teslimi"),
-    ORTMALZEME_TALEP("Malzeme Talep");
+    ORTMALZEME_TALEP("Malzeme Talep"),
+    ORTSTOK_HAREKET("Stok Hareket");
 
     private final String label;
 
