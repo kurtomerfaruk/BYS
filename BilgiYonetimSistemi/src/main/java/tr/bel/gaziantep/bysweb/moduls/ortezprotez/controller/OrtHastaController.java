@@ -88,9 +88,6 @@ public class OrtHastaController extends AbstractKisiController<OrtHasta> {
 
     public List<SelectItem> getFilterOptions(EnumSyFiltreAnahtari key) {
         switch (key) {
-            case ORTENGEL_OLUSUM -> {
-                return filterOptionService.getOrtEngelOlusums();
-            }
             case ILCE -> {
                 return filterOptionService.getGnlIlces();
             }

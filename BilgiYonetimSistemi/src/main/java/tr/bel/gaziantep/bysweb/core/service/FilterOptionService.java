@@ -330,12 +330,6 @@ public class FilterOptionService implements java.io.Serializable{
                 .collect(Collectors.toList());
     }
 
-    public List<SelectItem> getOrtEngelOlusums() {
-        return Arrays.stream(EnumOrtEngelOlusum.values())
-                .map(value -> new SelectItem(value, value.getDisplayValue()))
-                .collect(Collectors.toList());
-    }
-
     public List<SelectItem> getOrtOlcuSablons() {
         List<SelectItem> result = new ArrayList<>();
         List<OrtOlcuSablon> list = ortOlcuSablonService.findAll();
