@@ -13,6 +13,7 @@ import tr.bel.gaziantep.bysweb.moduls.genel.service.GnlKisiService;
 import java.io.Serial;
 import java.time.LocalDate;
 import java.util.function.BiConsumer;
+import java.util.function.BiPredicate;
 import java.util.function.Function;
 
 /**
@@ -41,7 +42,7 @@ public abstract class AbstractKisiController<T> extends AbstractController<T> {
     }
 
     public AbstractKisiController(Class<T> itemClass) {
-      super(itemClass);
+        super(itemClass);
     }
 
     protected void fetchTcKimlik(Function<T, GnlKisi> kisiExtractor,
@@ -49,6 +50,7 @@ public abstract class AbstractKisiController<T> extends AbstractController<T> {
                                  EnumModul modul) {
         if (this.getSelected() != null) {
             try {
+
                 GnlKisi gnlKisi = kisiExtractor.apply(this.getSelected());
 
                 String tcKimlikNo = gnlKisi.getTcKimlikNo();
@@ -62,8 +64,8 @@ public abstract class AbstractKisiController<T> extends AbstractController<T> {
                 kisi.setAktif(Boolean.TRUE);
                 kisi = kps.findByTcKimlikNo(kisi, modul);
 
-                if(kisi==null){
-                    kisi =GnlKisi.builder().tcKimlikNo(tcKimlikNo).dogumTarihi(dogumTarihi).build();
+                if (kisi == null) {
+                    kisi = GnlKisi.builder().tcKimlikNo(tcKimlikNo).dogumTarihi(dogumTarihi).build();
                 }
 
                 kisiSetter.accept(this.getSelected(), kisi);
@@ -72,6 +74,55 @@ public abstract class AbstractKisiController<T> extends AbstractController<T> {
                 log.error("TC Kimlik sorgulama hatası", ex);
                 FacesUtil.errorMessage(Constants.HATA_OLUSTU);
             }
+        }
+    }
+
+    protected void fetchTcKimlik(
+            Function<T, GnlKisi> kisiExtractor,
+            BiConsumer<T, GnlKisi> kisiSetter,
+            EnumModul modul,
+            BiPredicate<T, GnlKisi> duplicateChecker) {
+
+        if (this.getSelected() == null) {
+            return;
+        }
+
+        try {
+            T selected = this.getSelected();
+
+            GnlKisi gnlKisi = kisiExtractor.apply(selected);
+
+            String tcKimlikNo = gnlKisi.getTcKimlikNo();
+            LocalDate dogumTarihi = gnlKisi.getDogumTarihi();
+
+            if (duplicateChecker != null && duplicateChecker.test(selected, gnlKisi)) {
+                return;
+            }
+
+            GnlKisi kisi = kisiService.findByTckimlikNoByDogumTarihi(tcKimlikNo, dogumTarihi);
+
+            if (kisi == null) {
+                kisi = GnlKisi.builder()
+                        .tcKimlikNo(tcKimlikNo)
+                        .dogumTarihi(dogumTarihi)
+                        .build();
+            }
+
+            kisi.setAktif(Boolean.TRUE);
+            kisi = kps.findByTcKimlikNo(kisi, modul);
+
+            if (kisi == null) {
+                kisi = GnlKisi.builder()
+                        .tcKimlikNo(tcKimlikNo)
+                        .dogumTarihi(dogumTarihi)
+                        .build();
+            }
+
+            kisiSetter.accept(selected, kisi);
+
+        } catch (Exception ex) {
+            log.error("TC Kimlik sorgulama hatası", ex);
+            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
         }
     }
 }

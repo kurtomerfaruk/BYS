@@ -18,7 +18,8 @@ import java.io.Serial;
 @AllArgsConstructor
 @Entity
 @Table(name = "SYKULLANICI_KOLON")
-@NamedQuery(name = "SyKullaniciKolon.findByKullaniciByTablo", query = "SELECT s FROM SyKullaniciKolon s WHERE s.syKullanici =:syKullanici AND " +
+@NamedQuery(name = "SyKullaniciKolon.findByKullaniciByTablo", query = "SELECT s FROM SyKullaniciKolon s WHERE s.aktif=true AND " +
+        "s.syKolon.aktif=true AND s.syKullanici=:syKullanici AND " +
         "s.syKolon.syTablo.tabloAdi=:tablo ORDER BY s.siraNo ASC ")
 public class SyKullaniciKolon extends BaseEntityNoVersion {
     @Serial

@@ -20,12 +20,12 @@ public class GnlUnvanService extends AbstractService<GnlUnvan> {
     @Serial
     private static final long serialVersionUID = 4771434694148296030L;
 
-    @PersistenceContext(unitName = Constants.UNIT_NAME)
-    private EntityManager em;
-
     public GnlUnvanService() {
         super(GnlUnvan.class);
     }
+
+    @PersistenceContext(unitName = Constants.UNIT_NAME)
+    private EntityManager em;
 
     @Override
     protected EntityManager getEntityManager() {

@@ -240,6 +240,11 @@ public class EyKisi extends BaseEntity  {
     @SQLRestriction("AKTIF=true")
     private List<EyKisiHastalik> eyKisiHastalikList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "eyKisi", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @Builder.Default
+    @SQLRestriction("AKTIF=true")
+    private List<EyKisiEngelinOlusumu> eyKisiEngelinOlusumuList = new ArrayList<>();
+
 //    @OneToMany(mappedBy = "eyKisi", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
 //    @Builder.Default
 //    private List<EyKisiRapor> eyKisiRaporList = new ArrayList<>();

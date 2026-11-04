@@ -31,7 +31,8 @@ public class UserCheckTimerBean implements java.io.Serializable {
         try {
             List<SyKullanici> syKullanicis = syKullaniciService.findByKilitli();
             for (SyKullanici syKullanici : syKullanicis) {
-                LocalDateTime lastLoginTime = syKullanici.getSonGirisZamani() == null ? syKullanici.getEklemeTarihi() : syKullanici.getSonGirisZamani();
+                if(syKullanici.getSonGirisZamani()==null) continue;
+                LocalDateTime lastLoginTime = syKullanici.getSonGirisZamani();
                 long days = DateUtil.dateDifferenceDays(lastLoginTime.toLocalDate());
                 if (days > 14) {
                     syKullanici.setKilitli(true);

@@ -35,7 +35,7 @@ public class SyKullaniciKolonService extends AbstractService<SyKullaniciKolon> {
     }
 
     public List<SyKullaniciKolon> findByKullaniciByTablo(SyKullanici kullanici, String tableName) {
-        return getEntityManager().createNamedQuery("SyKullaniciKolon.findByKullaniciByTablo")
+        return getEntityManager().createNamedQuery("SyKullaniciKolon.findByKullaniciByTablo", SyKullaniciKolon.class)
                 .setParameter("syKullanici", kullanici)
                 .setParameter("tablo", tableName)
                 .getResultList();

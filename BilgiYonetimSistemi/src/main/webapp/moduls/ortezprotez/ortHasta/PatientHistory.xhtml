@@ -6,8 +6,12 @@
       xmlns:p="primefaces">
 <ui:composition>
 
-    <p:outputLabel value="#{messages.hastaninOykusuVeTalebiLabel}" for="@next"/>
-    <p:inputTextarea rows="4" id="hastaninOykusuTalebi" value="#{ortHastaController.selected.hastaninOykusuTalebi}"
-                     title="#{messages.hastaninOykusuVeTalebiText}" styleClass="w-100" autoResize="false"/>
+    <p:outputLabel value="#{messages.hastaninOykusuLabel}" for="@next"/>
+    <p:inputTextarea rows="4" value="#{ortHastaController.selected.hastaninOykusu}"
+                     title="#{messages.hastaninOykusuText}" styleClass="w-100" autoResize="false"/>
+
+    <p:outputLabel value="#{messages.hastaninTalebiLabel}" for="@next"/>
+    <p:inputTextarea rows="4" value="#{ortHastaController.selected.hastaninTalebi}"
+                     title="#{messages.hastaninTalebiText}" styleClass="w-100" autoResize="false"/>
 </ui:composition>
 </html>

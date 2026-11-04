@@ -225,6 +225,7 @@ public class LoginController implements java.io.Serializable {
                         syGenelAyarService.edit(maxUserAyar);
                         SyGenelAyar maxUserDateAyar = syGenelAyarService.findByTanim("MaxUserDate");
                         maxUserDateAyar.setDeger(DateUtil.localdateTimeToString(LocalDateTime.now(),"dd.MM.yyyy HH:mm:ss"));
+                        syGenelAyarService.edit(maxUserDateAyar);
                     }
                 }
 

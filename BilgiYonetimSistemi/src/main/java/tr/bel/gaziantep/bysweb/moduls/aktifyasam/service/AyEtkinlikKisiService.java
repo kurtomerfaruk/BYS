@@ -34,6 +34,6 @@ public class AyEtkinlikKisiService extends AbstractService<AyEtkinlikKisi> {
     }
 
     public List<AyEtkinlikKisi> findByGnlKisi(GnlKisi kisi) {
-        return getEntityManager().createNamedQuery("AyEtkinlikKisi.findByGnlKisi").setParameter("gnlKisi",kisi).getResultList();
+        return getEntityManager().createNamedQuery("AyEtkinlikKisi.findByGnlKisi",AyEtkinlikKisi.class).setParameter("gnlKisi",kisi).getResultList();
     }
 }

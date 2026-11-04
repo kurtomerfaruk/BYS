@@ -12,28 +12,31 @@ import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 import tr.bel.gaziantep.bysweb.core.controller.AbstractKisiController;
 import tr.bel.gaziantep.bysweb.core.enums.bys.EnumModul;
+import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlYakinlikDerecesi;
+import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtCihazTur;
 import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.EnumSyFiltreAnahtari;
 import tr.bel.gaziantep.bysweb.core.service.FilterOptionService;
-import tr.bel.gaziantep.bysweb.core.utils.Constants;
-import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
-import tr.bel.gaziantep.bysweb.core.utils.StringUtil;
+import tr.bel.gaziantep.bysweb.core.utils.*;
 import tr.bel.gaziantep.bysweb.moduls.engelsizler.entity.EyEngelGrubu;
+import tr.bel.gaziantep.bysweb.moduls.engelsizler.entity.EyEngelinOlusumu;
 import tr.bel.gaziantep.bysweb.moduls.engelsizler.entity.EyKisi;
+import tr.bel.gaziantep.bysweb.moduls.engelsizler.entity.EyKisiEngelinOlusumu;
 import tr.bel.gaziantep.bysweb.moduls.engelsizler.service.EyKisiEngelGrubuService;
 import tr.bel.gaziantep.bysweb.moduls.engelsizler.service.EyKisiService;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlIl;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlIlce;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlMahalle;
+import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtCihaz;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtHasta;
+import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtHastaKullandigiCihaz;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.service.OrtHastaService;
 
 import java.io.Serial;
 import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
@@ -65,12 +68,23 @@ public class OrtHastaController extends AbstractKisiController<OrtHasta> {
     private EyKisi eyKisi;
     @Getter
     @Setter
+    private List<OrtCihaz> ortezCihazList;
+    @Getter
+    @Setter
+    private List<OrtCihaz> protezCihazList;
+    @Getter
+    @Setter
+    private List<EyEngelinOlusumu> engelinOlusumuList;
+    @Getter
+    @Setter
     private boolean sehirDisi;
+    @Getter
+    @Setter
+    private List<EnumGnlYakinlikDerecesi> yakinlikDerecesiList;
 
     public OrtHastaController() {
         super(OrtHasta.class);
     }
-
 
     public List<SelectItem> getFilterOptions(EnumSyFiltreAnahtari key) {
         switch (key) {
@@ -105,6 +119,7 @@ public class OrtHastaController extends AbstractKisiController<OrtHasta> {
             eyEngelGrubus = new ArrayList<>();
             newItem.setGnlKisi(kisi);
             this.setSelected(newItem);
+            clearList();
             initializeEmbeddableKey();
             return newItem;
         } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException ex) {
@@ -150,14 +165,9 @@ public class OrtHastaController extends AbstractKisiController<OrtHasta> {
 
     public void getDisabledInfo() {
         if (this.getSelected() != null && this.getSelected().getGnlKisi() != null) {
-
+            clearList();
             try {
                 eyEngelGrubus = new ArrayList<>();
-
-//                if (!this.getSelected().isEngelli()) {
-//                    eyKisi = null;
-//                    return;
-//                }
 
                 if (!StringUtil.isBlank(this.getSelected().getGnlKisi().getTcKimlikNo())) {
                     eyKisi = eyKisiService.findByTcKimlikNo(this.getSelected().getGnlKisi().getTcKimlikNo());
@@ -166,6 +176,10 @@ public class OrtHastaController extends AbstractKisiController<OrtHasta> {
                         eyEngelGrubus = eyKisiEngelGrubuService.getEyEngelGrubuByEyKisi(eyKisi);
                         this.getSelected().setEngelli(!eyEngelGrubus.isEmpty());
                         this.getSelected().setEngelli(true);
+
+                        engelinOlusumuList = Function.filterAndCollect(eyKisi.getEyKisiEngelinOlusumuList(), EyKisiEngelinOlusumu::isSecili,
+                                EyKisiEngelinOlusumu::getEyEngelinOlusumu);
+
                     } else {
                         eyKisi = EyKisi.builder()
                                 .gnlKisi(this.getSelected().getGnlKisi())
@@ -173,6 +187,24 @@ public class OrtHastaController extends AbstractKisiController<OrtHasta> {
                                 .build();
 
                     }
+                }
+
+                List<OrtHastaKullandigiCihaz> ortezCihazs =
+                        this.getSelected().getOrtHastaKullandigiCihazList().stream().filter(x -> x.getOrtCihaz().getCihazTur().equals(EnumOrtCihazTur.ORTEZ)).toList();
+                ortezCihazList = Function.filterAndCollect(ortezCihazs, OrtHastaKullandigiCihaz::isSecili,
+                        OrtHastaKullandigiCihaz::getOrtCihaz);
+                List<OrtHastaKullandigiCihaz> protezCihazs =
+                        this.getSelected().getOrtHastaKullandigiCihazList().stream().filter(x -> x.getOrtCihaz().getCihazTur().equals(EnumOrtCihazTur.PROTEZ)).toList();
+                protezCihazList = Function.filterAndCollect(protezCihazs, OrtHastaKullandigiCihaz::isSecili,
+                        OrtHastaKullandigiCihaz::getOrtCihaz);
+
+                yakinlikDerecesiList = new ArrayList<>();
+                String birinciDereceVefatDurumu = StringUtil.removeBracket(this.getSelected().getBirinciDereceVefatDurumu());
+                if (StringUtil.isNotBlank(birinciDereceVefatDurumu)) {
+                    yakinlikDerecesiList = new ArrayList<>();
+                    yakinlikDerecesiList = Arrays.stream(birinciDereceVefatDurumu.split(","))
+                            .map(EnumGnlYakinlikDerecesi::fromName)
+                            .collect(Collectors.toList());
                 }
             } catch (Exception ex) {
                 log.error(null, ex);
@@ -182,17 +214,52 @@ public class OrtHastaController extends AbstractKisiController<OrtHasta> {
 
     }
 
+    public void clearList() {
+        ortezCihazList = new ArrayList<>();
+        protezCihazList = new ArrayList<>();
+        engelinOlusumuList = new ArrayList<>();
+        yakinlikDerecesiList = new ArrayList<>();
+    }
+
     @Override
     public void save(ActionEvent event) {
         if (this.getSelected() != null) {
             try {
-                service.save(this.getSelected(), eyKisi, eyEngelGrubus);
+                if (isDuplicatePatient()) {
+                    return;
+                }
+                generateYakinlikDerecesi();
+                service.save(this.getSelected(), eyKisi, eyEngelGrubus, ortezCihazList, protezCihazList, engelinOlusumuList);
                 FacesUtil.successMessage(Constants.KAYIT_GUNCELLENDI);
             } catch (Exception ex) {
                 log.error(null, ex);
                 FacesUtil.errorMessage(Constants.HATA_OLUSTU);
             }
         }
+    }
+
+    /**
+     * Aynı TC kimlik numarasına sahip başka bir aktif hasta kaydı olup olmadığını kontrol eder.
+     * Create ve Edit sayfaları ortak {@link #save} metodunu kullandığı için hem ekleme
+     * hem de güncelleme sırasında mükerrer kayıt engellenir.
+     */
+    private boolean isDuplicatePatient() {
+        if (this.getSelected() == null || this.getSelected().getGnlKisi() == null) {
+            return false;
+        }
+
+        String tcKimlikNo = this.getSelected().getGnlKisi().getTcKimlikNo();
+        if (StringUtil.isBlank(tcKimlikNo)) {
+            return false;
+        }
+
+        OrtHasta existing = service.findByTcKimlikNo(tcKimlikNo);
+        if (existing != null && !Objects.equals(existing.getId(), this.getSelected().getId())) {
+            FacesUtil.addErrorMessage(existing.getGnlKisi().getAdSoyad() + " T.C. kimlik numarasına ait zaten bir hasta kaydı bulunmaktadır.");
+            return true;
+        }
+
+        return false;
     }
 
     public void getViewInfo(OrtHasta ortHasta) {
@@ -202,4 +269,11 @@ public class OrtHastaController extends AbstractKisiController<OrtHasta> {
             PrimeFaces.current().executeScript("PF('OrtHastaViewDialog').show()");
         }
     }
+
+    private void generateYakinlikDerecesi() {
+        String yakinlikDereceleri = EnumUtil.enumListToString(yakinlikDerecesiList);
+        this.getSelected().setBirinciDereceVefatDurumu(yakinlikDereceleri);
+    }
+
+
 }

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:p="primefaces"
+                xmlns:pt="jakarta.faces.passthrough"
+                xmlns:coco="jakarta.faces.composite/ui">
+
+    <h:form id="OrtCihazListForm" styleClass="form-height">
+
+        <p:contextMenu id="OrtCihazDataTableContextMenu" for="datalist:datalist">
+            <p:menuitem value="#{messages.buttonEkle}" onclick="document.getElementById('OrtCihazListForm:datalist:datalist:createButton').click();"
+                        icon="pi pi-plus" rendered="#{syKullaniciController.hasPermission('ortcihaz:ekle')}"/>
+            <p:menuitem value="#{messages.buttonGuncelle}" onclick="document.getElementById('OrtCihazListForm:datalist:datalist:editButton').click();"
+                        icon="pi pi-pencil" rendered="#{syKullaniciController.hasPermission('ortcihaz:guncelle')}"/>
+            <p:menuitem value="#{messages.buttonDetay}" onclick="document.getElementById('OrtCihazListForm:datalist:datalist:viewButton').click();"
+                        icon="pi pi-search"/>
+            <p:menuitem value="#{messages.buttonSil}" onclick="document.getElementById('OrtCihazListForm:datalist:datalist:deleteButton').click();"
+                        icon="pi pi-trash" rendered="#{syKullaniciController.hasPermission('ortcihaz:sil')}"/>
+        </p:contextMenu>
+        <coco:datatable id="datalist"
+                        value="#{ortCihazController.lazyItems}"
+                        rowKey="#{item.id}"
+                        selection="#{ortCihazController.selected}"
+                        filtered="#{ortCihazController.filtered}"
+                        rowselect=":OrtCihazListForm:datalist:datalist:createButton,:OrtCihazListForm:datalist:datalist:viewButton,:OrtCihazListForm:datalist:datalist:editButton,:OrtCihazListForm:datalist:datalist:deleteButton"
+                        rowDblselect="document.getElementById('OrtCihazListForm:datalist:datalist:editButton').click()"
+                        contextMenu=":OrtCihazListForm:datalist:datalist:createButton :OrtCihazListForm:datalist:datalist:viewButton :OrtCihazListForm:datalist:datalist:editButton :OrtCihazListForm:datalist:datalist:deleteButton"
+                        selectListener="#{ortCihazController.resetParents}"
+                        controller="#{ortCihazController}"
+                        header="#{messages.cihazListesi}">
+
+            <p:ajax event="colResize" listener="#{ortCihazController.onResize}"/>
+
+            <f:facet name="paginatorBottomLeft">
+
+                <p:commandButton id="createButton" styleClass="ui-button-primary" icon="pi pi-plus" pt:data-tooltip="#{messages.buttonEkle}"
+                                 actionListener="#{ortCihazController.prepareCreate}" update=":OrtCihazCreateForm:OrtCihazCreateForm"
+                                 oncomplete="PF('OrtCihazCreateDialog').show()" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('ortcihaz:ekle')}"/>
+                <p:commandButton id="editButton" styleClass="ui-button-success" icon="pi pi-pencil" pt:data-tooltip="#{messages.buttonGuncelle}"
+                                 update=":OrtCihazEditForm:OrtCihazEditForm" oncomplete="PF('OrtCihazEditDialog').show()"
+                                 disabled="#{empty ortCihazController.selected}" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('ortcihaz:guncelle')}"/>
+                <p:commandButton id="viewButton" styleClass="ui-button-info" icon="pi pi-search" pt:data-tooltip="#{messages.buttonDetay}"
+                                 update=":OrtCihazViewForm:OrtCihazViewForm" oncomplete="PF('OrtCihazViewDialog').show()"
+                                 disabled="#{empty ortCihazController.selected}" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                <p:commandButton id="deleteButton" styleClass="ui-button-danger" icon="pi pi-trash" pt:data-tooltip="#{messages.buttonSil}"
+                                 actionListener="#{ortCihazController.delete}" update=":growl,datalist" disabled="#{empty ortCihazController.selected}"
+                                 rendered="#{syKullaniciController.hasPermission('ortcihaz:sil')}">
+                    <p:confirm header="#{messages.ConfirmationHeader}" message="#{messages.ConfirmDeleteMessage}" icon="pi pi-exclamation-circle"/>
+                </p:commandButton>
+
+            </f:facet>
+
+        </coco:datatable>
+
+
+        <ui:include src="/confirmation.xhtml"/>
+
+    </h:form>
+
+</ui:composition>

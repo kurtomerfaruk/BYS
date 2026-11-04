@@ -1,4 +1,8 @@
-package tr.bel.gaziantep.bysweb.core.utils;/**
+package tr.bel.gaziantep.bysweb.core.utils;
+
+import org.apache.commons.lang3.StringUtils;
+
+/**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
  * @version 1.0.0
  * @since 17.06.2025 13:46
@@ -43,6 +47,7 @@ public class StringUtil {
     }
 
     public static String removeBracket(String str){
+        if(StringUtils.isBlank(str))return null;
         return str.replace("[","").replace("]","");
     }
 

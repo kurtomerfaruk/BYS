@@ -10,7 +10,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
-import tr.bel.gaziantep.bysweb.core.controller.AbstractController;
+import tr.bel.gaziantep.bysweb.core.controller.AbstractKisiController;
 import tr.bel.gaziantep.bysweb.core.controller.KpsController;
 import tr.bel.gaziantep.bysweb.core.enums.bys.EnumModul;
 import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.EnumSyFiltreAnahtari;
@@ -18,6 +18,7 @@ import tr.bel.gaziantep.bysweb.core.service.FilterOptionService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
 import tr.bel.gaziantep.bysweb.core.utils.Function;
+import tr.bel.gaziantep.bysweb.core.utils.StringUtil;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
 import tr.bel.gaziantep.bysweb.moduls.genel.service.GnlKisiService;
 import tr.bel.gaziantep.bysweb.moduls.psikiyatriklinigi.entity.PkHasta;
@@ -27,12 +28,8 @@ import tr.bel.gaziantep.bysweb.moduls.psikiyatriklinigi.service.PkHastaService;
 
 import java.io.Serial;
 import java.lang.reflect.InvocationTargetException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
@@ -42,7 +39,7 @@ import java.util.List;
 @Named
 @ViewScoped
 @Slf4j
-public class PkHastaController extends AbstractController<PkHasta> {
+public class PkHastaController extends AbstractKisiController<PkHasta> {
 
     @Serial
     private static final long serialVersionUID = -5396860367374859970L;
@@ -102,34 +99,36 @@ public class PkHastaController extends AbstractController<PkHasta> {
     }
 
     public void getTcKimlik() {
-        if (this.getSelected() != null) {
-            try {
-                String tcKimlikNo = this.getSelected().getGnlKisi().getTcKimlikNo();
-                LocalDate dogumTarihi = this.getSelected().getGnlKisi().getDogumTarihi();
-                GnlKisi kisi = gnlKisiService.findByTckimlikNo(tcKimlikNo);
-                if (kisi == null) kisi = this.getSelected().getGnlKisi();
-                kisi = kpsController.findByTcKimlikNo(kisi, EnumModul.PSIKIYATRI_KLINIGI);
-
-                if (kisi == null) {
-                    kisi = GnlKisi.builder().tcKimlikNo(tcKimlikNo).dogumTarihi(dogumTarihi).build();
-                }
-
-                this.getSelected().setGnlKisi(kisi);
-            } catch (Exception ex) {
-                log.error(null, ex);
-                FacesUtil.errorMessage(Constants.HATA_OLUSTU);
-            }
-        }
+//        if (this.getSelected() != null) {
+//            try {
+//                String tcKimlikNo = this.getSelected().getGnlKisi().getTcKimlikNo();
+//                LocalDate dogumTarihi = this.getSelected().getGnlKisi().getDogumTarihi();
+//                GnlKisi kisi = gnlKisiService.findByTckimlikNo(tcKimlikNo);
+//                if (kisi == null) kisi = this.getSelected().getGnlKisi();
+//                kisi = kpsController.findByTcKimlikNo(kisi, EnumModul.PSIKIYATRI_KLINIGI);
+//
+//                if (kisi == null) {
+//                    kisi = GnlKisi.builder().tcKimlikNo(tcKimlikNo).dogumTarihi(dogumTarihi).build();
+//                }
+//
+//                this.getSelected().setGnlKisi(kisi);
+//            } catch (Exception ex) {
+//                log.error(null, ex);
+//                FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+//            }
+//        }
+        fetchTcKimlik(
+                PkHasta::getGnlKisi,
+                PkHasta::setGnlKisi,
+                EnumModul.PSIKIYATRI_KLINIGI
+        );
     }
 
     public void update(ActionEvent event) {
         try {
             if (this.getSelected() != null) {
 
-                PkHasta existing = service.findByTcKimlikNo(this.getSelected().getGnlKisi().getTcKimlikNo());
-
-                if (existing != null && !existing.getId().equals(this.getSelected().getId())) {
-                    FacesUtil.addErrorMessage("Bu kişiye ait zaten hasta kaydı var.");
+                if (isDuplicatePatient()) {
                     return;
                 }
 
@@ -140,6 +139,30 @@ public class PkHastaController extends AbstractController<PkHasta> {
             log.error(null, ex);
             FacesUtil.errorMessage(Constants.KAYIT_EKLENIRKEN_GUNCELLENIRKEN_HATA_OLUSTU);
         }
+    }
+
+    /**
+     * Aynı TC kimlik numarasına sahip başka bir aktif hasta kaydı olup olmadığını kontrol eder.
+     * Create ve Edit sayfaları ortak {@link #save} metodunu kullandığı için hem ekleme
+     * hem de güncelleme sırasında mükerrer kayıt engellenir.
+     */
+    private boolean isDuplicatePatient() {
+        if (this.getSelected() == null || this.getSelected().getGnlKisi() == null) {
+            return false;
+        }
+
+        String tcKimlikNo = this.getSelected().getGnlKisi().getTcKimlikNo();
+        if (StringUtil.isBlank(tcKimlikNo)) {
+            return false;
+        }
+
+        PkHasta existing = service.findByTcKimlikNo(tcKimlikNo);
+        if (existing != null && !Objects.equals(existing.getId(), this.getSelected().getId())) {
+            FacesUtil.addErrorMessage(existing.getGnlKisi().getAdSoyad() + " T.C. kimlik numarasına ait zaten bir hasta kaydı bulunmaktadır.");
+            return true;
+        }
+
+        return false;
     }
 
     public void readInfo() {

@@ -36,9 +36,9 @@
                         rowKey="#{item.id}"
                         selection="#{syKullaniciController.selected}"
                         filtered="#{syKullaniciController.filtered}"
-                        rowselect=":SyKullaniciListForm:datalist:datalist:createButton,:SyKullaniciListForm:datalist:datalist:viewButton,:SyKullaniciListForm:datalist:datalist:editButton,:SyKullaniciListForm:datalist:datalist:deleteButton,:SyKullaniciListForm:datalist:datalist:passwordButton,:SyKullaniciListForm:datalist:datalist:buttonAllPasswordChange,:SyKullaniciListForm:SyKullaniciDataTableContextMenu"
+                        rowselect=":SyKullaniciListForm:datalist:datalist:createButton,:SyKullaniciListForm:datalist:datalist:viewButton,:SyKullaniciListForm:datalist:datalist:editButton,:SyKullaniciListForm:datalist:datalist:deleteButton,:SyKullaniciListForm:datalist:datalist:passwordButton,:SyKullaniciListForm:datalist:datalist:buttonAllPasswordChange,:SyKullaniciListForm:datalist:datalist:unlockButton,:SyKullaniciListForm:SyKullaniciDataTableContextMenu"
                         rowDblselect="document.getElementById('SyKullaniciListForm:datalist:datalist:editButton').click()"
-                        contextMenu=":SyKullaniciListForm:datalist:datalist:createButton :SyKullaniciListForm:datalist:datalist:viewButton :SyKullaniciListForm:datalist:datalist:editButton :SyKullaniciListForm:datalist:datalist:deleteButton :SyKullaniciListForm:datalist:datalist:passwordButton :SyKullaniciListForm:datalist:datalist:buttonAllPasswordChange"
+                        contextMenu=":SyKullaniciListForm:datalist:datalist:createButton :SyKullaniciListForm:datalist:datalist:viewButton :SyKullaniciListForm:datalist:datalist:editButton :SyKullaniciListForm:datalist:datalist:deleteButton :SyKullaniciListForm:datalist:datalist:passwordButton :SyKullaniciListForm:datalist:datalist:buttonAllPasswordChange :SyKullaniciListForm:datalist:datalist:unlockButton"
                         selectListener="#{syKullaniciController.resetParents}"
                         controller="#{syKullaniciController}"
                         header="#{messages.kullaniciListesi}">
@@ -87,6 +87,22 @@
                                  update=":growl,datalist"
                                  rendered="#{syKullaniciController.hasPermission('sykullanici:parolalarGuncellensin')}">
                     <p:confirm header="Şifre Onay" message="Tüm kullanıcıların şifrelerini güncellemesini istediğinizden emin misiniz?"
+                               icon="pi pi-warning"/>
+                </p:commandButton>
+
+                <p:commandButton id="unlockButton" styleClass="ui-button-teal" icon="pi pi-unlock"
+                                 pt:data-tooltip="#{messages.buttonKilitKaldir}"
+                                 actionListener="#{syKullaniciController.unlock()}"
+                                 update=":growl,datalist" disabled="#{empty syKullaniciController.selected}">
+                    <p:confirm header="Kilit kaldırma onayı" message="Seçmiş olduğunuz kayıdın kilidini kaldırmak istediğinizden emin misiniz?"
+                               icon="pi pi-warning"/>
+                </p:commandButton>
+
+                <p:commandButton id="unlockAllButton" styleClass="ui-button-amber" icon="pi pi-unlock"
+                                 pt:data-tooltip="#{messages.buttonTumKilitleriKaldir}"
+                                 actionListener="#{syKullaniciController.unlockAll()}"
+                                 update=":growl,datalist">
+                    <p:confirm header="Kilit kaldırma onayı" message="Tüm kayıtların kilidini kaldırmak istediğinizden emin misiniz?"
                                icon="pi pi-warning"/>
                 </p:commandButton>
             </f:facet>

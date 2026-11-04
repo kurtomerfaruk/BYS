@@ -103,20 +103,28 @@
                        var="ilces"
                        itemLabel="#{ilces.tanim}"
                        itemValue="#{ilces}"/>
-        <p:ajax event="change" update="mahalle:mahalle"/>
+        <p:ajax event="change" update="mahalle"/>
     </p:selectOneMenu>
 
     <p:outputLabel value="#{messages.mahalleLabel}" for="@next"/>
-    <coco:selectOneMenuWithCreate id="mahalle" value="#{ortHastaController.selected.gnlKisi.gnlMahalle}"
-                                  styleClass="tcUpdate"
-                                  itemsValue="#{gnlMahalleController.getMahalleByIlce(ortHastaController.selected.gnlKisi.gnlIlce)}"
-                                  itemLabel="tanim"
-                                  update="#{not empty formId ? ':GnlMahalleCreateFormExt:GnlMahalleCreateFormExt'
-                                  :':GnlMahalleCreateForm:GnlMahalleCreateForm'}"
-                                  oncomplete="GnlMahalleCreateDialog"
-                                  actionListener="#{gnlMahalleController.prepareCreate}"
-                                  oneMenuDisabled="#{!ortHastaController.sehirDisi}"
-                                  buttonDisabled="#{!ortHastaController.sehirDisi}"/>
+    <p:selectOneMenu id="mahalle" value="#{ortHastaController.selected.gnlKisi.gnlMahalle}" filter="true" required="true"
+                     converter="omnifaces.SelectItemsConverter" styleClass="tcUpdate" disabled="#{!ortHastaController.sehirDisi}">
+        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+        <f:selectItems value="#{gnlMahalleController.getMahalleByIlce(ortHastaController.selected.gnlKisi.gnlIlce)}"
+                       var="mahalles"
+                       itemLabel="#{mahalles.tanim}"
+                       itemValue="#{mahalles}"/>
+    </p:selectOneMenu>
+<!--    <coco:selectOneMenuWithCreate id="mahalle" value="#{ortHastaController.selected.gnlKisi.gnlMahalle}"-->
+<!--                                  styleClass="tcUpdate"-->
+<!--                                  itemsValue="#{gnlMahalleController.getMahalleByIlce(ortHastaController.selected.gnlKisi.gnlIlce)}"-->
+<!--                                  itemLabel="tanim"-->
+<!--                                  update="#{not empty formId ? ':GnlMahalleCreateFormExt:GnlMahalleCreateFormExt'-->
+<!--                                  :':GnlMahalleCreateForm:GnlMahalleCreateForm'}"-->
+<!--                                  oncomplete="GnlMahalleCreateDialog"-->
+<!--                                  actionListener="#{gnlMahalleController.prepareCreate}"-->
+<!--                                  oneMenuDisabled="#{!ortHastaController.sehirDisi}"-->
+<!--                                  buttonDisabled="#{!ortHastaController.sehirDisi}"/>-->
 
     <p:outputLabel value="#{messages.adresLabel}" for="@next"/>
     <p:inputTextarea rows="4" id="adres" value="#{ortHastaController.selected.gnlKisi.adres}" title="#{messages.adresText}" styleClass="w-100 tcUpdate"

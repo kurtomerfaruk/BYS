@@ -67,7 +67,8 @@ public enum EnumSyFiltreAnahtari implements BaseEnum {
     PKTALEP_TURU("Psikiyatri Kliniği Talep Türü"),
     IZIN_TURU("İzin Türü"),
     PKSORU_TUR("Psikiyatri Kliniği Soru Tür"),
-    PKMODUL("Psikiyatri Kliniği Modül");
+    PKMODUL("Psikiyatri Kliniği Modül"),
+    ORTCIHAZ_TURU("Ortez/Protez Cihaz Türü");
 
     private final String label;
 

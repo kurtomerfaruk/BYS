@@ -5,6 +5,7 @@
       xmlns:h="jakarta.faces.html"
       xmlns:ui="jakarta.faces.facelets"
       xmlns:f="jakarta.faces.core"
+      xmlns:o="omnifaces"
       xmlns:p="primefaces">
 <ui:composition>
 
@@ -26,13 +27,15 @@
                        itemLabel="#{engelGrubus.tanim}"/>
     </p:selectManyCheckbox>
 
-    <p:outputLabel value="#{messages.engelDurumuLabel}" for="@next"/>
-    <p:selectOneRadio id="engelOlusmaDurumu" value="#{ortHastaController.selected.engelOlusmaDurumu}" layout="lineDirection">
-        <f:selectItems value="#{enumOrtEngelOlusum.ALL_VALUES}"
-                       var="engelOlusums"
-                       itemValue="#{engelOlusums}"
-                       itemLabel="#{engelOlusums.displayValue}"/>
-    </p:selectOneRadio>
+    <p:outputLabel value="#{messages.engelinOlusumuLabel}" for="@next"/>
+    <p:selectCheckboxMenu id="engelinOlusumu" value="#{ortHastaController.engelinOlusumuList}"
+                          label="Engelin Oluşumu" multiple="true" filter="true"
+                          filterMatchMode="startsWith" styleClass="checkboxMenu">
+        <f:selectItems value="#{eyEngelinOlusumuController.items}"
+                       var="olusum"
+                       itemValue="#{olusum}"
+                       itemLabel="#{olusum.tanim.toString()}"/>
+    </p:selectCheckboxMenu>
 
     <p:outputLabel value="#{messages.engelSeviyesiLabel}" for="@next"/>
     <p:panelGrid columns="2"
@@ -52,7 +55,7 @@
                             <span class="ui-float-label">
                                 <p:inputText id="protezSeviyesi" value="#{ortHastaController.selected.protezSeviyesi}" title="#{messages.amputeSeviyesiText}"
                                              disabled="#{!ortHastaController.selected.protez}"/>
-                                <p:outputLabel value="#{messages.amputeSeviyesiLabel}" for="@previous"/>
+                                <p:outputLabel value="#{messages.amputeSeviyesiText}" for="@previous"/>
                             </span>
                 </h:panelGroup>
             </p:column>
@@ -69,7 +72,7 @@
                            <span class="ui-float-label">
                                 <p:inputText id="ortezTipi" value="#{ortHastaController.selected.ortezTipi}" title="#{messages.ortezTipiText}"
                                              disabled="#{!ortHastaController.selected.ortez}"/>
-                                <p:outputLabel value="#{messages.ortezTipiLabel}" for="@previous"/>
+                                <p:outputLabel value="#{messages.ortezTipiText}" for="@previous"/>
                            </span>
                 </h:panelGroup>
             </p:column>
@@ -77,17 +80,32 @@
 
     </p:panelGrid>
 
-    <p:outputLabel value="#{messages.kullandigiCihazProtezLabel}" for="@next"/>
-    <p:inputText id="kullandigiCihazProtez" value="#{ortHastaController.selected.kullandigiCihazProtez}" title="#{messages.kullandigiCihazProtezText}"/>
+    <p:outputLabel value="#{messages.kullandigiCihazlarOrtezLabel}" for="@next"/>
+    <p:selectCheckboxMenu id="ortezCihaz"
+                          value="#{ortHastaController.ortezCihazList}"
+                          label="#{messages.kullandigiCihazlarText}" multiple="true"
+                          filter="true" filterMatchMode="startsWith" styleClass="checkboxMenu">
+        <f:selectItems value="#{ortCihazController.getCihazList('ORTEZ')}"
+                       var="kullandigiCihazlars"
+                       itemValue="#{kullandigiCihazlars}"
+                       itemLabel="#{kullandigiCihazlars.tanim}"/>
+    </p:selectCheckboxMenu>
 
-    <p:outputLabel value="#{messages.kullandigiCihazOrtezLabel}" for="@next"/>
-    <p:inputText id="kullandigiCihazOrtez" value="#{ortHastaController.selected.kullandigiCihazOrtez}" title="#{messages.kullandigiCihazOrtezText}"/>
+    <p:outputLabel value="#{messages.kullandigiCihazlarProtezLabel}" for="@next"/>
+    <p:selectCheckboxMenu id="protezCihaz"
+                          value="#{ortHastaController.protezCihazList}"
+                          label="#{messages.kullandigiCihazlarText}" multiple="true"
+                          filter="true" filterMatchMode="startsWith" styleClass="checkboxMenu">
+        <f:selectItems value="#{ortCihazController.getCihazList('PROTEZ')}"
+                       var="kullandigiCihazlars"
+                       itemValue="#{kullandigiCihazlars}"
+                       itemLabel="#{kullandigiCihazlars.tanim}"/>
+    </p:selectCheckboxMenu>
 
     <p:outputLabel value="#{messages.ailedekiEngelliSayisiLabel}" for="@next"/>
-    <p:inputText id="ailedekiEngelliSayisi" value="#{ortHastaController.eyKisi.ailedekiEngelliSayisi}" title="#{messages.ailedekiEngelliSayisiText}"
-                 styleClass="engelliUpdate" disabled="#{!ortHastaController.selected.engelli}">
-        <p:keyFilter mask="num"/>
-    </p:inputText>
+    <p:selectOneMenu value="#{ortHastaController.eyKisi.ailedekiEngelliSayisi}" converter="omnifaces.SelectItemsConverter">
+        <f:selectItems value="#{o:createIntegerArray(0, 20)}"/>
+    </p:selectOneMenu>
 
     <p:outputLabel value="#{messages.raporTarihiLabel}" for="@next"/>
     <p:datePicker id="raporTarihi" locale="tr" pattern="#{messages.tarihFormat}"
@@ -95,7 +113,6 @@
                   title="#{messages.raporTarihiText}" mask="true"
                   monthNavigator="true" yearNavigator="true" showButtonBar="true"
                   showIcon="true" disabled="#{!ortHastaController.selected.engelli}" styleClass="engelliUpdate"/>
-
 
     <p:outputLabel value="#{messages.surekliLabel}" for="@next"/>
     <h:panelGroup>
@@ -120,9 +137,14 @@
                   mask="true" monthNavigator="true" yearNavigator="true"
                   showButtonBar="true" showIcon="true"/>
 
-    <p:outputLabel value="#{messages.hastahaneLabel}" for="@next"/>
-    <p:inputText id="hastahane" value="#{ortHastaController.eyKisi.hastahane}"
-                 title="#{messages.hastahaneText}" size="50"/>
+    <p:outputLabel value="#{messages.hastaneLabel}" for="@next"/>
+    <p:selectOneMenu value="#{ortHastaController.eyKisi.hastahane}" filter="true" converter="omnifaces.SelectItemsConverter">
+        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+        <f:selectItems value="#{gnlHastaneController.items}"
+                       var="hastanes"
+                       itemLabel="#{hastanes.tanim}"
+                       itemValue="#{hastanes.tanim}"/>
+    </p:selectOneMenu>
 
     <p:outputLabel value="#{messages.toplamVucutKayipOraniLabel}" for="@next"/>
     <p:inputText id="toplamVucutKayipOrani"

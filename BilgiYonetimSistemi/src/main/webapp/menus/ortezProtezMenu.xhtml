@@ -108,6 +108,17 @@
                                 <i class="ri-arrow-right-s-line side-menu__angle"></i></a>
                             <ul class="slide-menu child2">
 
+                                <ui:fragment rendered="#{syKullaniciController.hasPermission('ortcihaz:goster')}">
+                                    <li class="slide">
+                                        <p:commandLink styleClass="side-menu__item sublevel2"
+                                                       actionListener="#{menuController.setPageLink('/moduls/ortezprotez/ortCihaz/index')}"
+                                                       update="myPanel,:growl"
+                                                       onstart="PF('Loading').show()"
+                                                       onsuccess="PF('Loading').hide()"
+                                                       value="Cihaz Listesi"/>
+                                    </li>
+                                </ui:fragment>
+
                                 <ui:fragment rendered="#{syKullaniciController.hasPermission('ortpersonel:goster')}">
                                     <li class="slide">
                                         <p:commandLink styleClass="side-menu__item sublevel2"

@@ -297,4 +297,32 @@ public class SyKullaniciController extends AbstractController<SyKullanici> {
             FacesUtil.errorMessage(Constants.HATA_OLUSTU);
         }
     }
+
+    public void unlock(){
+        if(this.getSelected()==null) return;
+        try {
+            this.getSelected().setKilitli(false);
+            service.edit(this.getSelected());
+            FacesUtil.addSuccessMessage("Kilit başarıyla kaldırıldı");
+        }catch (Exception ex){
+            log.error(null,ex);
+            FacesUtil.addErrorMessage("Kilit kaldırılırken hata oluştu");
+        }
+    }
+
+    public void unlockAll(){
+        try {
+            for (SyKullanici item : getItems()) {
+                if(item.isKilitli()){
+                    item.setKilitli(false);
+                    service.edit(item);
+                }
+            }
+
+            FacesUtil.addSuccessMessage("Tüm kullanıcı kilitleri başarıyla kaldırıldı");
+        } catch (Exception e) {
+            log.error(null,e);
+            throw new RuntimeException(e);
+        }
+    }
 }

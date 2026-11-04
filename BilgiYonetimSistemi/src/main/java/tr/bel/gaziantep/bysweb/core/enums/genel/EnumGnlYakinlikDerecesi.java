@@ -44,4 +44,14 @@ public enum EnumGnlYakinlikDerecesi implements BaseEnum {
 
         return null;
     }
+
+    public static EnumGnlYakinlikDerecesi fromName(String value){
+        for (EnumGnlYakinlikDerecesi yakinlikDerecesi : EnumGnlYakinlikDerecesi.values()) {
+            if(yakinlikDerecesi.name().equals(value.trim())){
+                return yakinlikDerecesi;
+            }
+        }
+
+        return null;
+    }
 }

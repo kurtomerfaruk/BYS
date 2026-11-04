@@ -175,6 +175,35 @@ public class EyKisiService extends AbstractService<EyKisi> {
         return eyKisi;
     }
 
+    public EyKisi checkEyKisiEngelinOlusumu(EyKisi eyKisi, List<EyEngelinOlusumu> engelinOlusumuList) {
+        if (engelinOlusumuList == null || engelinOlusumuList.isEmpty()) {
+            return eyKisi;
+        }
+
+        List<EyKisiEngelinOlusumu> kisiEngelinOlusumuList = eyKisi.getEyKisiEngelinOlusumuList();
+        Set<Integer> newGrubuIds = engelinOlusumuList.stream()
+                .map(EyEngelinOlusumu::getId)
+                .collect(Collectors.toSet());
+
+        Map<Integer, EyKisiEngelinOlusumu> existingMap = new HashMap<>();
+        for (EyKisiEngelinOlusumu keg : kisiEngelinOlusumuList) {
+            existingMap.put(keg.getEyEngelinOlusumu().getId(), keg);
+            keg.setSecili(newGrubuIds.contains(keg.getEyEngelinOlusumu().getId()));
+        }
+
+        for (EyEngelinOlusumu engelinOlusumu : engelinOlusumuList) {
+            if (!existingMap.containsKey(engelinOlusumu.getId())) {
+                EyKisiEngelinOlusumu newKeg = new EyKisiEngelinOlusumu();
+                newKeg.setEyKisi(eyKisi);
+                newKeg.setEyEngelinOlusumu(engelinOlusumu);
+                newKeg.setSecili(true);
+                kisiEngelinOlusumuList.add(newKeg);
+            }
+        }
+
+        return eyKisi;
+    }
+
 
     private EyKisi checkGnlKisiFaydalandigiHak(EyKisi eyKisi, List<EnumGnlFaydalandigiHak> faydalandigiHakList) {
         if (faydalandigiHakList == null || faydalandigiHakList.isEmpty()) {

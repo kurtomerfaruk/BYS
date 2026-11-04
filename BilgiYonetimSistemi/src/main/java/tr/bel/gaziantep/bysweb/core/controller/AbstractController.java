@@ -50,7 +50,7 @@ public abstract class AbstractController<T> implements Serializable {
     private static final long serialVersionUID = -991999085838138765L;
 
     @Inject
-    private AbstractService<T> ejbService;
+    protected AbstractService<T> ejbService;
     @Inject
     private SyKullaniciKolonService syKullaniciKolonService;
     @Inject

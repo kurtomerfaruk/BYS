@@ -3,11 +3,18 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
       xmlns:p="primefaces">
 <ui:composition>
 
     <p:outputLabel value="#{messages.ameliyatOlduguHastaneLabel}" for="@next"/>
-    <p:inputText id="ameliyatOlduguHastane" value="#{ortHastaController.selected.ameliyatOlduguHastane}" title="#{messages.ameliyatOlduguHastaneText}"/>
+    <p:selectOneMenu value="#{ortHastaController.selected.ameliyatOlduguHastane}" filter="true" converter="omnifaces.SelectItemsConverter">
+        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+        <f:selectItems value="#{gnlHastaneController.items}"
+                       var="hastanes"
+                       itemLabel="#{hastanes.tanim}"
+                       itemValue="#{hastanes}"/>
+    </p:selectOneMenu>
 
     <p:outputLabel value="#{messages.ameliyatTarihiLabel}" for="@next"/>
     <p:datePicker id="ameliyatTarihi" locale="tr" pattern="#{messages.tarihFormat}" value="#{ortHastaController.selected.ameliyatTarihi}"
@@ -15,13 +22,31 @@
                   showOnFocus="false"/>
 
     <p:outputLabel value="#{messages.depremeNeredeYakalandiLabel}" for="@next"/>
-    <p:inputText id="depremeNeredeYakalandi" value="#{ortHastaController.selected.depremeNeredeYakalandi}" title="#{messages.depremeNeredeYakalandiText}"/>
+    <p:selectOneMenu value="#{ortHastaController.selected.depremeNeredeYakalandi}" filter="true"
+                     converter="omnifaces.SelectItemsConverter">
+        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+        <f:selectItems value="#{gnlIlController.items}"
+                       var="sehirs"
+                       itemLabel="#{sehirs.tanim}"
+                       itemValue="#{sehirs.tanim}"/>
+    </p:selectOneMenu>
 
     <p:outputLabel value="#{messages.birinciDereceVefatDurumuLabel}" for="@next"/>
-    <p:inputText id="birinciDereceVefatDurumu" value="#{ortHastaController.selected.birinciDereceVefatDurumu}"
-                 title="#{messages.birinciDereceVefatDurumuText}"/>
+    <p:selectManyCheckbox  value="#{ortHastaController.yakinlikDerecesiList}"
+                          converter="omnifaces.SelectItemsConverter" layout="responsive" columns="2">
+        <f:selectItems value="#{enumYakinlikDerecesi.ALL_VALUES}"
+                       var="yakinlikDerecesis"
+                       itemValue="#{yakinlikDerecesis}"
+                       itemLabel="#{yakinlikDerecesis.displayValue}"/>
+    </p:selectManyCheckbox>
 
     <p:outputLabel value="#{messages.meslekLabel}" for="@next"/>
-    <p:inputText id="meslek" value="#{ortHastaController.selected.gnlKisi.meslek}" title="#{messages.meslekText}" styleClass="tcUpdate"/>
+    <p:selectOneMenu value="#{ortHastaController.selected.gnlKisi.meslek}" filter="true" converter="omnifaces.SelectItemsConverter">
+        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+        <f:selectItems value="#{gnlMeslekController.items}"
+                       var="mesleks"
+                       itemLabel="#{mesleks.tanim}"
+                       itemValue="#{mesleks.tanim}"/>
+    </p:selectOneMenu>
 </ui:composition>
 </html>

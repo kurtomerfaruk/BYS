@@ -9,6 +9,7 @@ import tr.bel.gaziantep.bysweb.core.enums.BaseEnum;
  * @since 24.09.2025 09:07
  */
 @Getter
+@Deprecated
 public enum EnumOrtEngelOlusum implements BaseEnum {
 
     DEPREM_ONCESI("Deprem Öncesi"),

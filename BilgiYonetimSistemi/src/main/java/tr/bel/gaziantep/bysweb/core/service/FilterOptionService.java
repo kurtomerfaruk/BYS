@@ -469,4 +469,10 @@ public class FilterOptionService implements java.io.Serializable{
                 .map(value -> new SelectItem(value,value.getDisplayValue()))
                 .collect(Collectors.toList());
     }
+
+    public List<SelectItem> getOrtCihazTurs() {
+        return Arrays.stream(EnumOrtCihazTur.values())
+                .map(value -> new SelectItem(value,value.getDisplayValue()))
+                .collect(Collectors.toList());
+    }
 }

@@ -37,7 +37,7 @@ public class AyAramaService extends AbstractService<AyArama> {
     }
 
     public List<AyArama> findByGunByTarihByGrup(EnumGnlGun day, LocalDate date, EnumAyGrup grup) {
-        return getEntityManager().createNamedQuery("AyArama.findByGunByTarihByGrup")
+        return getEntityManager().createNamedQuery("AyArama.findByGunByTarihByGrup",AyArama.class)
                 .setParameter("gun", day)
                 .setParameter("tarih", date)
                 .setParameter("grup", grup)

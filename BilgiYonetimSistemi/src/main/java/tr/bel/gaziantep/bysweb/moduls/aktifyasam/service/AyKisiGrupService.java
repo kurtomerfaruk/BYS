@@ -36,6 +36,6 @@ public class AyKisiGrupService extends AbstractService<AyKisiGrup> {
     }
 
     public List<AyKisi> findByGroup(EnumAyGrup group) {
-        return getEntityManager().createNamedQuery("AyKisiGrup.findByGroup").setParameter("grup", group).getResultList();
+        return getEntityManager().createNamedQuery("AyKisiGrup.findByGroup",AyKisi.class).setParameter("grup", group).getResultList();
     }
 }
