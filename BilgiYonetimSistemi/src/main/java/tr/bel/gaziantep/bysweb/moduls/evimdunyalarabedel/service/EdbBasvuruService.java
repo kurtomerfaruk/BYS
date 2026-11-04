@@ -61,7 +61,7 @@ public class EdbBasvuruService extends AbstractService<EdbBasvuru> {
     }
 
     public List<EdbBasvuru> findByGnlKisi(GnlKisi kisi) {
-        return getEntityManager().createNamedQuery("EdbBasvuru.findByGnlKisi").setParameter("gnlKisi", kisi).getResultList();
+        return getEntityManager().createNamedQuery("EdbBasvuru.findByGnlKisi", EdbBasvuru.class).setParameter("gnlKisi", kisi).getResultList();
     }
 
     public PageResponse<EdbBasvuruDTO> findAll(int page, int size) {

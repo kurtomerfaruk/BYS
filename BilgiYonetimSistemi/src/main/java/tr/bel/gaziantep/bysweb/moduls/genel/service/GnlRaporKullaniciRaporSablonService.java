@@ -213,7 +213,8 @@ public class GnlRaporKullaniciRaporSablonService extends AbstractService<GnlRapo
 
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public List<GnlRaporKullaniciRaporSablon> findBySyKullaniciOrPublic(SyKullanici syKullanici) {
-        return getEntityManager().createNamedQuery("GnlRaporKullaniciRaporSablon.findBySyKullaniciOrPublic").setParameter("syKullanici",syKullanici).getResultList();
+        return getEntityManager().createNamedQuery("GnlRaporKullaniciRaporSablon.findBySyKullaniciOrPublic", GnlRaporKullaniciRaporSablon.class).setParameter("syKullanici",
+                syKullanici).getResultList();
     }
 
 

@@ -35,6 +35,6 @@ public class EyAracCihazTeslimiService extends AbstractService<EyAracCihazTeslim
     }
 
     public List<EyAracCihazTeslimi> findByGnlKisi(GnlKisi kisi) {
-        return getEntityManager().createNamedQuery("EyAracCihazTeslimi.findByGnlKisi").setParameter("gnlKisi",kisi).getResultList();
+        return getEntityManager().createNamedQuery("EyAracCihazTeslimi.findByGnlKisi", EyAracCihazTeslimi.class).setParameter("gnlKisi", kisi).getResultList();
     }
 }

@@ -40,6 +40,6 @@ public class EyAracTamirService extends AbstractService<EyAracTamir> {
     }
 
     public List<EyAracTamir> findByGnlKisi(GnlKisi kisi) {
-        return getEntityManager().createNamedQuery("EyAracTamir.findByGnlKisi").setParameter("gnlKisi",kisi).getResultList();
+        return getEntityManager().createNamedQuery("EyAracTamir.findByGnlKisi", EyAracTamir.class).setParameter("gnlKisi", kisi).getResultList();
     }
 }

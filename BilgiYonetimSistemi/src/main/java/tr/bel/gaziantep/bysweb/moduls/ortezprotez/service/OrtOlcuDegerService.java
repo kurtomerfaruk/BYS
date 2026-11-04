@@ -37,14 +37,14 @@ public class OrtOlcuDegerService extends AbstractService<OrtOlcuDeger> {
     }
 
     public List<OrtOlcuDeger> findByOrtOlcu(OrtOlcu ortOlcu) {
-        return getEntityManager().createNamedQuery("OrtOlcuDeger.findByOrtOlcu").setParameter("ortOlcu", ortOlcu).getResultList();
+        return getEntityManager().createNamedQuery("OrtOlcuDeger.findByOrtOlcu", OrtOlcuDeger.class).setParameter("ortOlcu", ortOlcu).getResultList();
     }
 
     public List<OrtOlcuDeger> findByOrtOlcuByOrtOlcuSablon(OrtOlcu ortOlcu, OrtOlcuSablon ortOlcuSablon) {
         if(ortOlcu.getId()==null){
             return new ArrayList<>();
         }
-        return getEntityManager().createNamedQuery("OrtOlcuDeger.findByOrtOlcuByOrtOlcuSablon")
+        return getEntityManager().createNamedQuery("OrtOlcuDeger.findByOrtOlcuByOrtOlcuSablon", OrtOlcuDeger.class)
                 .setParameter("ortOlcu", ortOlcu)
                 .setParameter("ortOlcuSablon", ortOlcuSablon)
                 .getResultList();

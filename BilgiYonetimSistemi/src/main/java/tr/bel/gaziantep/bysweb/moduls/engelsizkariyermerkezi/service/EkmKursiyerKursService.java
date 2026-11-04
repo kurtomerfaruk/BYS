@@ -35,7 +35,7 @@ public class EkmKursiyerKursService extends AbstractService<EkmKursiyerKurs> {
     }
 
     public List<EkmKursiyer> findByKurs(GnlKurs gnlKurs) {
-        return getEntityManager().createNamedQuery("EkmKursiyerKurs.findByKurs")
+        return getEntityManager().createNamedQuery("EkmKursiyerKurs.findByKurs", EkmKursiyer.class)
                 .setParameter("gnlKurs", gnlKurs)
                 .getResultList();
     }

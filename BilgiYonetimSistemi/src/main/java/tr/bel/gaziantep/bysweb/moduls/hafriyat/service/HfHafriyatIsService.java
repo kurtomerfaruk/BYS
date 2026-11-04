@@ -45,6 +45,6 @@ public class HfHafriyatIsService extends AbstractService<HfHafriyatIs> {
     }
 
     public List<HfHafriyatIs> findByFirma(HfFirma hfFirma) {
-        return getEntityManager().createNamedQuery("HfHafriyatIs.findByFirma").setParameter("firma",hfFirma).getResultList();
+        return getEntityManager().createNamedQuery("HfHafriyatIs.findByFirma", HfHafriyatIs.class).setParameter("firma", hfFirma).getResultList();
     }
 }

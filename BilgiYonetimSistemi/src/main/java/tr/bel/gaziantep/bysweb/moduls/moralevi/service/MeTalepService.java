@@ -35,6 +35,6 @@ public class MeTalepService extends AbstractService<MeTalep> {
     }
 
     public List<MeTalep> findByGnlKisi(GnlKisi kisi) {
-        return getEntityManager().createNamedQuery("MeTalep.findByGnlKisi").setParameter("gnlKisi",kisi).getResultList();
+        return getEntityManager().createNamedQuery("MeTalep.findByGnlKisi", MeTalep.class).setParameter("gnlKisi", kisi).getResultList();
     }
 }

@@ -142,7 +142,7 @@ public class OrtMalzemeTalepService extends AbstractService<OrtMalzemeTalep> {
     }
 
     public List<OrtMalzemeTalep> findByOrtBasvuruByOnayDurum(OrtBasvuru ortBasvuru, EnumOrtMalzemeOnayDurumu onayDurumu) {
-        return getEntityManager().createNamedQuery("OrtMalzemeTalep.findByOrtBasvuruByOnayDurum")
+        return getEntityManager().createNamedQuery("OrtMalzemeTalep.findByOrtBasvuruByOnayDurum", OrtMalzemeTalep.class)
                 .setParameter("ortBasvuru",ortBasvuru)
                 .setParameter("onayDurumu",onayDurumu)
                 .getResultList();

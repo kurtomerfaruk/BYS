@@ -33,6 +33,6 @@ public class SyKolonService extends AbstractService<SyKolon> {
     }
 
     public List<SyKolon> findByTabloAdi(String tabloAdi) {
-        return getEntityManager().createNamedQuery("SyKolon.findByTabloAdi").setParameter("tabloAdi", tabloAdi).getResultList();
+        return getEntityManager().createNamedQuery("SyKolon.findByTabloAdi", SyKolon.class).setParameter("tabloAdi", tabloAdi).getResultList();
     }
 }

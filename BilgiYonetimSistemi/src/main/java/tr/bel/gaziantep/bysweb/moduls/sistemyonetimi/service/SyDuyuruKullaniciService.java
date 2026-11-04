@@ -34,6 +34,6 @@ public class SyDuyuruKullaniciService extends AbstractService<SyDuyuruKullanici>
     }
 
     public List<SyDuyuruKullanici> findByKullanici(SyKullanici syKullanici) {
-        return getEntityManager().createNamedQuery("SyDuyuruKullanici.findByKullanici").setParameter("kullanici", syKullanici).getResultList();
+        return getEntityManager().createNamedQuery("SyDuyuruKullanici.findByKullanici", SyDuyuruKullanici.class).setParameter("kullanici", syKullanici).getResultList();
     }
 }

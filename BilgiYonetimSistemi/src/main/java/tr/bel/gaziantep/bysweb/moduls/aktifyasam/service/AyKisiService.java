@@ -42,7 +42,7 @@ public class AyKisiService extends AbstractService<AyKisi> {
     }
 
     public List<AyKisi> findByLatLngIsNull(int recordCount) {
-        return getEntityManager().createNamedQuery("AyKisi.findByLatLngIsNull").setMaxResults(recordCount).getResultList();
+        return getEntityManager().createNamedQuery("AyKisi.findByLatLngIsNull", AyKisi.class).setMaxResults(recordCount).getResultList();
     }
 
 //    @TransactionAttribute(TransactionAttributeType.REQUIRED)
@@ -63,7 +63,6 @@ public class AyKisiService extends AbstractService<AyKisi> {
 
     public List<AyKisi> findByGun(EnumGnlGun day) {
         return Collections.emptyList();
-//        return getEntityManager().createNamedQuery("AyKisi.findByGun").setParameter("gun", day).getResultList();
     }
 
     @TransactionAttribute(TransactionAttributeType.REQUIRED)

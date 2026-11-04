@@ -37,7 +37,7 @@ public class GnlIlService extends AbstractService<GnlIl> {
     }
 
     public GnlIl findByKod(Integer kod) {
-        return (GnlIl) getEntityManager().createNamedQuery("GnlIl.findByKod")
+        return getEntityManager().createNamedQuery("GnlIl.findByKod", GnlIl.class)
                 .setParameter("kod",kod)
                 .getResultList()
                 .stream()

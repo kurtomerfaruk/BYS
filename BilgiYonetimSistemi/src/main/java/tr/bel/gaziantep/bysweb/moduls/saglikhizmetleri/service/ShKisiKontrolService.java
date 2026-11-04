@@ -35,6 +35,6 @@ public class ShKisiKontrolService extends AbstractService<ShKisiKontrol> {
     }
 
     public List<ShKisiKontrol> findByGnlKisi(GnlKisi kisi) {
-        return  getEntityManager().createNamedQuery("ShKisiKontrol.findByGnlKisi").setParameter("gnlKisi",kisi).getResultList();
+        return getEntityManager().createNamedQuery("ShKisiKontrol.findByGnlKisi", ShKisiKontrol.class).setParameter("gnlKisi", kisi).getResultList();
     }
 }

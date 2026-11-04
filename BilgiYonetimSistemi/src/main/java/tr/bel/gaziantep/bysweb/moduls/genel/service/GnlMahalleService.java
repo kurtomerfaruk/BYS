@@ -40,7 +40,7 @@ public class GnlMahalleService extends AbstractService<GnlMahalle> {
     }
 
     public GnlMahalle findByKod(Integer kod) {
-        return (GnlMahalle) getEntityManager().createNamedQuery("GnlMahalle.findByKod").setParameter("kod", kod)
+        return getEntityManager().createNamedQuery("GnlMahalle.findByKod", GnlMahalle.class).setParameter("kod", kod)
                 .getResultList()
                 .stream()
                 .findFirst()
@@ -48,7 +48,7 @@ public class GnlMahalleService extends AbstractService<GnlMahalle> {
     }
 
     public List<GnlMahalle> findByIlce(GnlIlce gnlIlce) {
-        return getEntityManager().createNamedQuery("GnlMahalle.findByIlce").setParameter("gnlIlce", gnlIlce).getResultList();
+        return getEntityManager().createNamedQuery("GnlMahalle.findByIlce", GnlMahalle.class).setParameter("gnlIlce", gnlIlce).getResultList();
     }
 
     public void merge(GnlMahalle mahalle) {

@@ -36,6 +36,6 @@ public class AyKisiGunService extends AbstractService<AyKisiGun> {
     }
 
     public List<AyKisi> findByGun(EnumGnlGun day) {
-        return getEntityManager().createNamedQuery("AyKisiGun.findByGun").setParameter("gun", day).getResultList();
+        return getEntityManager().createNamedQuery("AyKisiGun.findByGun", AyKisi.class).setParameter("gun", day).getResultList();
     }
 }

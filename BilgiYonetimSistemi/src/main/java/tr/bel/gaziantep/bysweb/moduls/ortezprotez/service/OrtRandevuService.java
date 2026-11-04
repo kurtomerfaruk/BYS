@@ -42,7 +42,7 @@ public class OrtRandevuService extends AbstractService<OrtRandevu> {
     private OrtBasvuruHareketService ortBasvuruHareketService;
 
     public List<OrtRandevu> findByStartDateByEndDate(LocalDateTime start, LocalDateTime end) {
-        return getEntityManager().createNamedQuery("OrtRandevu.findByStartDateByEndDate")
+        return getEntityManager().createNamedQuery("OrtRandevu.findByStartDateByEndDate", OrtRandevu.class)
                 .setParameter("start", start)
                 .setParameter("end", end)
                 .getResultList();

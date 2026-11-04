@@ -35,6 +35,6 @@ public class ShKisiKanTahlilSonucService extends AbstractService<ShKisiKanTahlil
     }
 
     public List<ShKisiKanTahlilSonuc> findByGnlKisi(GnlKisi kisi) {
-        return getEntityManager().createNamedQuery("ShKisiKanTahlilSonuc.findByGnlKisi").setParameter("gnlKisi",kisi).getResultList();
+        return getEntityManager().createNamedQuery("ShKisiKanTahlilSonuc.findByGnlKisi", ShKisiKanTahlilSonuc.class).setParameter("gnlKisi", kisi).getResultList();
     }
 }

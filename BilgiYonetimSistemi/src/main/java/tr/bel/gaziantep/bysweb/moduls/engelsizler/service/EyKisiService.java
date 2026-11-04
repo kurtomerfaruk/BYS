@@ -60,7 +60,7 @@ public class EyKisiService extends AbstractService<EyKisi> {
     }
 
     public List<GnlKisi> getTcList(int recordCount) {
-        return getEntityManager().createNamedQuery("EyKisi.getTcList").setMaxResults(recordCount).getResultList();
+        return getEntityManager().createNamedQuery("EyKisi.getTcList", GnlKisi.class).setMaxResults(recordCount).getResultList();
     }
 
 //    @TransactionAttribute(TransactionAttributeType.REQUIRED)
@@ -454,7 +454,7 @@ public class EyKisiService extends AbstractService<EyKisi> {
     }
 
     public List<String> getAllCoordinates() {
-        return getEntityManager().createNamedQuery("EyKisi.getAllCoordinates").getResultList();
+        return getEntityManager().createNamedQuery("EyKisi.getAllCoordinates", String.class).getResultList();
     }
 
     public List<String> getAllCoordinates(EnumGnlCinsiyet cinsiyet, int yasBaslangic, int yasBitis, GnlIlce gnlIlce, GnlMahalle gnlMahalle,
@@ -715,7 +715,9 @@ public class EyKisiService extends AbstractService<EyKisi> {
             }
             dto.setMaddeKullanimi(maddeKullanimis);
 
-            List<EyAracCihazTeslimi> eyAracCihazTeslimiList = getEntityManager().createNamedQuery("EyAracCihazTeslimi.findByEyKisi").setParameter("eyKisi",
+            List<EyAracCihazTeslimi> eyAracCihazTeslimiList = getEntityManager().createNamedQuery("EyAracCihazTeslimi.findByEyKisi",
+                    EyAracCihazTeslimi.class).setParameter(
+                    "eyKisi",
                     eyKisi).getResultList();
             List<EyCihazTeslimiDTO> cihazTeslimiList = new ArrayList<>();
             for (EyAracCihazTeslimi cihazTeslimi : eyAracCihazTeslimiList) {

@@ -62,10 +62,10 @@ public class MeKisiService extends AbstractService<MeKisi> {
     }
 
     public List<MeKisi> findByGnlKisi(GnlKisi kisi) {
-        return getEntityManager().createNamedQuery("MeKisi.findByGnlKisi").setParameter("gnlKisi",kisi).getResultList();
+        return getEntityManager().createNamedQuery("MeKisi.findByGnlKisi", MeKisi.class).setParameter("gnlKisi", kisi).getResultList();
     }
 
     public List<MeKisi> findByGirisYapmayanlar() {
-        return getEntityManager().createNamedQuery("MeKisi.findByGirisYapmayanlar").getResultList();
+        return getEntityManager().createNamedQuery("MeKisi.findByGirisYapmayanlar", MeKisi.class).getResultList();
     }
 }

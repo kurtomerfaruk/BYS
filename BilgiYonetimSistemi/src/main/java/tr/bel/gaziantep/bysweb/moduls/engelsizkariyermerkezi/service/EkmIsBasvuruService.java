@@ -36,10 +36,10 @@ public class EkmIsBasvuruService extends AbstractService<EkmIsBasvuru> {
     }
 
     public List<EkmIsBasvuru> findByGnlKisi(GnlKisi kisi) {
-        return getEntityManager().createNamedQuery("EkmIsBasvuru.findByGnlKisi").setParameter("gnlKisi", kisi).getResultList();
+        return getEntityManager().createNamedQuery("EkmIsBasvuru.findByGnlKisi", EkmIsBasvuru.class).setParameter("gnlKisi", kisi).getResultList();
     }
 
     public List<EyKisi> getEyKisiList() {
-        return getEntityManager().createNamedQuery("EkmIsBasvuru.getEyKisiList").getResultList();
+        return getEntityManager().createNamedQuery("EkmIsBasvuru.getEyKisiList", EyKisi.class).getResultList();
     }
 }

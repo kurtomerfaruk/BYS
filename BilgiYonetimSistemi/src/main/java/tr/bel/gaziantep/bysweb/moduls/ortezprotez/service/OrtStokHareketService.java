@@ -77,7 +77,7 @@ public class OrtStokHareketService extends AbstractService<OrtStokHareket> {
     }
 
     private OrtStokHareket findByIslemIdByHareketTur(Integer islemId, EnumOrtStokHareketTur hareketTur, OrtStok ortStok) {
-        return  getEntityManager().createNamedQuery("OrtStokHareket.findByIslemIdByHareketTur", OrtStokHareket.class)
+        return getEntityManager().createNamedQuery("OrtStokHareket.findByIslemIdByHareketTur", OrtStokHareket.class)
                 .setParameter("islemId", islemId)
                 .setParameter("hareketTur", hareketTur)
                 .setParameter("ortStok", ortStok)

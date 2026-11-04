@@ -34,6 +34,6 @@ public class SyDuyuruService extends AbstractService<SyDuyuru> {
     }
 
     public List<SyDuyuru> getTopFive() {
-        return getEntityManager().createNamedQuery("SyDuyuru.findAllPublic").setMaxResults(5).getResultList();
+        return getEntityManager().createNamedQuery("SyDuyuru.findAllPublic", SyDuyuru.class).setMaxResults(5).getResultList();
     }
 }

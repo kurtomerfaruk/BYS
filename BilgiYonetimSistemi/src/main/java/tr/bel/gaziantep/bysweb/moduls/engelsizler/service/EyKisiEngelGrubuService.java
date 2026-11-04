@@ -36,7 +36,7 @@ public class EyKisiEngelGrubuService extends AbstractService<EyKisiEngelGrubu> {
     }
 
     public List<EyEngelGrubu> getEyEngelGrubuByEyKisi(EyKisi eyKisi) {
-        return getEntityManager().createNamedQuery("EyKisiEngelGrubu.getEyEngelGrubuByEyKisi")
+        return getEntityManager().createNamedQuery("EyKisiEngelGrubu.getEyEngelGrubuByEyKisi", EyEngelGrubu.class)
                 .setParameter("eyKisi",eyKisi)
                 .getResultList();
     }

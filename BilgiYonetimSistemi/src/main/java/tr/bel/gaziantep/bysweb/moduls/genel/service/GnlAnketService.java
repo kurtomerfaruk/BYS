@@ -37,8 +37,8 @@ public class GnlAnketService extends AbstractService<GnlAnket> {
     private GnlAnketCevapService gnlAnketCevapService;
 
     public GnlAnket findByToken(String token) {
-        return (GnlAnket) getEntityManager()
-                .createNamedQuery("GnlAnket.findByToken")
+        return getEntityManager()
+                .createNamedQuery("GnlAnket.findByToken", GnlAnket.class)
                 .setParameter("token",token)
                 .getResultList()
                 .stream().

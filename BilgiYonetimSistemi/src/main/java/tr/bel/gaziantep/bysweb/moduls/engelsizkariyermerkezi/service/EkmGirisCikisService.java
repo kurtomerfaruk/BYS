@@ -45,7 +45,7 @@ public class EkmGirisCikisService extends AbstractService<EkmGirisCikis>     {
     }
 
     public List<EkmGirisCikis> findByGnlKisi(GnlKisi kisi) {
-        return getEntityManager().createNamedQuery("EkmGirisCikis.findByGnlKisi").setParameter("gnlKisi",kisi).getResultList();
+        return getEntityManager().createNamedQuery("EkmGirisCikis.findByGnlKisi", EkmGirisCikis.class).setParameter("gnlKisi", kisi).getResultList();
     }
 
 //    public List<EkmGirisCikis> getEntrants(GnlKurs gnlkurs) {
@@ -53,6 +53,6 @@ public class EkmGirisCikisService extends AbstractService<EkmGirisCikis>     {
 //    }
 
     public List<EkmGirisCikis> findByKurs(GnlKurs gnlKurs) {
-        return  getEntityManager().createNamedQuery("EkmGirisCikis.findByKurs").setParameter("gnlKurs",gnlKurs).getResultList();
+        return getEntityManager().createNamedQuery("EkmGirisCikis.findByKurs", EkmGirisCikis.class).setParameter("gnlKurs", gnlKurs).getResultList();
     }
 }

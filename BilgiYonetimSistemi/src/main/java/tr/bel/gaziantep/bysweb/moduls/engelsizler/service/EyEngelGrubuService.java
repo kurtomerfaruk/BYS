@@ -32,7 +32,7 @@ public class EyEngelGrubuService extends AbstractService<EyEngelGrubu> {
     }
 
     public EyEngelGrubu findByName(String engelGrup) {
-        return (EyEngelGrubu) getEntityManager().createNamedQuery("EyEngelGrubu.findByTanim")
+        return getEntityManager().createNamedQuery("EyEngelGrubu.findByTanim", EyEngelGrubu.class)
                 .setParameter("engelGrup",engelGrup)
                 .getResultList()
                 .stream()

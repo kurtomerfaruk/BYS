@@ -35,6 +35,6 @@ public class EdbHizmetService extends AbstractService<EdbHizmet> {
     }
 
     public List<EdbHizmet> findByHizmetTuru(EnumEdbHizmetTuru hizmetTuru) {
-        return getEntityManager().createNamedQuery("EdbHizmet.findByHizmetTuru").setParameter("hizmetTuru",hizmetTuru).getResultList();
+        return getEntityManager().createNamedQuery("EdbHizmet.findByHizmetTuru", EdbHizmet.class).setParameter("hizmetTuru", hizmetTuru).getResultList();
     }
 }

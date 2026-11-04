@@ -35,6 +35,6 @@ public class EySosyalIncelemeRaporuService extends AbstractService<EySosyalIncel
     }
 
     public List<EySosyalIncelemeRaporu> findByGnlKisi(GnlKisi kisi) {
-        return getEntityManager().createNamedQuery("EySosyalIncelemeRaporu.findByGnlKisi").setParameter("gnlKisi",kisi).getResultList();
+        return getEntityManager().createNamedQuery("EySosyalIncelemeRaporu.findByGnlKisi", EySosyalIncelemeRaporu.class).setParameter("gnlKisi", kisi).getResultList();
     }
 }

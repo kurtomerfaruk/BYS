@@ -39,7 +39,7 @@ public class GnlIlceService extends AbstractService<GnlIlce> {
     }
 
     public GnlIlce findByKod(Integer kod) {
-        return (GnlIlce) getEntityManager().createNamedQuery("GnlIlce.findByKod")
+        return getEntityManager().createNamedQuery("GnlIlce.findByKod", GnlIlce.class)
                 .setParameter("kod",kod)
                 .getResultList()
                 .stream()
@@ -48,7 +48,7 @@ public class GnlIlceService extends AbstractService<GnlIlce> {
     }
 
     public List<GnlIlce> findByIlId(int ilId) {
-        return getEntityManager().createNamedQuery("GnlIlce.findByIlId").setParameter("ilId",ilId).getResultList();
+        return getEntityManager().createNamedQuery("GnlIlce.findByIlId", GnlIlce.class).setParameter("ilId", ilId).getResultList();
     }
 
     public void merge(GnlIlce ilce) {

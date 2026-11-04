@@ -50,11 +50,11 @@ public class EdbVerilecekHizmetService extends AbstractService<EdbVerilecekHizme
     }
 
     public List<EdbVerilecekHizmet> findByDurumMaxDate(EnumEdbDurum durum) {
-        return getEntityManager().createNamedQuery("EdbVerilecekHizmet.findByDurumMaxDate").setParameter("durum", durum).getResultList();
+        return getEntityManager().createNamedQuery("EdbVerilecekHizmet.findByDurumMaxDate", EdbVerilecekHizmet.class).setParameter("durum", durum).getResultList();
     }
 
     public List<EdbVerilecekHizmet> findByDurum(EnumEdbDurum durum) {
-        return getEntityManager().createNamedQuery("EdbVerilecekHizmet.findByDurum").setParameter("durum", durum).getResultList();
+        return getEntityManager().createNamedQuery("EdbVerilecekHizmet.findByDurum", EdbVerilecekHizmet.class).setParameter("durum", durum).getResultList();
     }
 
 

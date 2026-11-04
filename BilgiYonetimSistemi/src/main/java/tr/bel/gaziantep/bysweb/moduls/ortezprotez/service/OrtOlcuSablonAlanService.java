@@ -40,7 +40,7 @@ public class OrtOlcuSablonAlanService extends AbstractService<OrtOlcuSablonAlan>
 //    }
 
     public OrtOlcuSablonAlan findByXByY(int x, int y) {
-        return (OrtOlcuSablonAlan) getEntityManager().createNamedQuery("OrtOlcuSablonAlan.findByXByY")
+        return getEntityManager().createNamedQuery("OrtOlcuSablonAlan.findByXByY", OrtOlcuSablonAlan.class)
                 .setParameter("x",x)
                 .setParameter("y",y)
                 .getResultList()
@@ -50,7 +50,7 @@ public class OrtOlcuSablonAlanService extends AbstractService<OrtOlcuSablonAlan>
     }
 
     public List<OrtOlcuSablonAlan> findByOrtOlcuSablon(OrtOlcuSablon ortOlcuSablon) {
-        return getEntityManager().createNamedQuery("OrtOlcuSablonAlan.findByOrtOlcuSablon")
+        return getEntityManager().createNamedQuery("OrtOlcuSablonAlan.findByOrtOlcuSablon", OrtOlcuSablonAlan.class)
                 .setParameter("ortOlcuSablon",ortOlcuSablon)
                 .getResultList();
     }

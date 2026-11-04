@@ -34,6 +34,6 @@ public class MeGirisCikisService extends AbstractService<MeGirisCikis> {
     }
 
     public List<MeGirisCikis> findByEntrance() {
-        return getEntityManager().createNamedQuery("MeGirisCikis.findByEntrance").getResultList();
+        return getEntityManager().createNamedQuery("MeGirisCikis.findByEntrance", MeGirisCikis.class).getResultList();
     }
 }
