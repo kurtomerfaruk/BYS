@@ -266,7 +266,7 @@
                         </div>
                         <div class="card-body">
                             <p:dataTable value="#{edbDashboardController.sonBasvurular}" var="b" rows="10" paginator="false"
-                                         emptyMessage="Kayıt bulunamadı">
+                                         emptyMessage="Kayıt bulunamadı" size="small">
                                 <p:column headerText="Kişi">
                                     <h:outputText value="#{b.gnlKisi.adSoyad}"/>
                                 </p:column>

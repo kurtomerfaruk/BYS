@@ -14,25 +14,25 @@
     </h:form>
 
     <!-- Psikiyatri Kliniği Dashboard -->
-    <ui:fragment rendered="#{syKullaniciController.hasPermission('psikiyatri_klinigi_dashboard:goster')}">
-        <div class="card border border-primary custom-card mb-4 mt-3">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <div class="card-title">
-                    <i class="ti ti-brain me-2"></i>Psikiyatri Kliniği Dashboard
-                </div>
-            </div>
-            <div class="card-body">
-                <ui:include src="/moduls/psikiyatriklinigi/dashboard.xhtml"/>
-            </div>
-        </div>
-    </ui:fragment>
+    <!--    <ui:fragment rendered="#{syKullaniciController.hasPermission('psikiyatri_klinigi_dashboard:goster')}">-->
+    <!--        <div class="card border border-primary custom-card mb-4 mt-3">-->
+    <!--            <div class="card-header d-flex justify-content-between align-items-center">-->
+    <!--                <div class="card-title">-->
+    <!--                    <i class="ti ti-brain me-2"></i>Psikiyatri Kliniği-->
+    <!--                </div>-->
+    <!--            </div>-->
+    <!--            <div class="card-body">-->
+    <!--                <ui:include src="/moduls/psikiyatriklinigi/dashboard.xhtml"/>-->
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--    </ui:fragment>-->
 
     <!-- Engelsizler Dashboard -->
 <!--    <ui:fragment rendered="#{syKullaniciController.hasPermission('engelsizler_dashboard:goster')}">-->
 <!--        <div class="card border border-primary custom-card mb-4">-->
 <!--            <div class="card-header d-flex justify-content-between align-items-center">-->
 <!--                <div class="card-title">-->
-<!--                    <i class="ti ti-accessible me-2"></i>Engelsizler Dashboard-->
+    <!--                    <i class="ti ti-accessible me-2"></i>Engelsizler-->
 <!--                </div>-->
 <!--            </div>-->
 <!--            <div class="card-body">-->
@@ -46,7 +46,7 @@
 <!--        <div class="card border border-primary custom-card mb-4">-->
 <!--            <div class="card-header d-flex justify-content-between align-items-center">-->
 <!--                <div class="card-title">-->
-<!--                    <i class="ti ti-briefcase me-2"></i>Engelsiz Kariyer Merkezi Dashboard-->
+    <!--                    <i class="ti ti-briefcase me-2"></i>Engelsiz Kariyer Merkezi-->
 <!--                </div>-->
 <!--            </div>-->
 <!--            <div class="card-body">-->
@@ -56,15 +56,29 @@
 <!--    </ui:fragment>-->
 
     <!-- Evim Dünyalara Bedel Dashboard -->
-    <ui:fragment rendered="#{syKullaniciController.hasPermission('evim_dunyalara_bedel_dashboard:goster')}">
+    <!--    <ui:fragment rendered="#{syKullaniciController.hasPermission('evim_dunyalara_bedel_dashboard:goster')}">-->
+    <!--        <div class="card border border-primary custom-card mb-4">-->
+    <!--            <div class="card-header d-flex justify-content-between align-items-center">-->
+    <!--                <div class="card-title">-->
+    <!--                    <i class="ti ti-home-heart me-2"></i>Evim Dünyalara Bedel-->
+    <!--                </div>-->
+    <!--            </div>-->
+    <!--            <div class="card-body">-->
+    <!--                <ui:include src="/moduls/evimdunyalarabedel/dashboard.xhtml"/>-->
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--    </ui:fragment>-->
+
+    <!-- Ortez-Protez Dashboard -->
+    <ui:fragment rendered="#{syKullaniciController.hasPermission('ortez_protez_dashboard:goster')}">
         <div class="card border border-primary custom-card mb-4">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <div class="card-title">
-                    <i class="ti ti-home-heart me-2"></i>Evim Dünyalara Bedel Dashboard
+                    <i class="ti ti-crutches me-2"></i>Ortez-Protez
                 </div>
             </div>
             <div class="card-body">
-                <ui:include src="/moduls/evimdunyalarabedel/dashboard.xhtml"/>
+                <ui:include src="/moduls/ortezprotez/dashboard.xhtml"/>
             </div>
         </div>
     </ui:fragment>
