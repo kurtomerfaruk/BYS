@@ -298,11 +298,11 @@
                                     <h:outputText value="#{b.ortHasta.gnlKisi.adSoyad}"/>
                                 </p:column>
                                 <p:column headerText="Başvuru Durumu">
-                                    <h:outputText value="#{b.basvuruDurumu}"/>
+                                    <span class="badge bg-warning-transparent text-warning">#{b.basvuruDurumu.displayValue}</span>
                                 </p:column>
                                 <p:column headerText="Başvuru Tarihi">
                                     <h:outputText value="#{b.basvuruTarihi}">
-                                        <f:convertDateTime type="localDateTime" pattern="dd.MM.yyyy HH:mm"/>
+                                        <f:convertDateTime type="localDateTime" pattern="#{messages.tarihSaatKisaFormat}"/>
                                     </h:outputText>
                                 </p:column>
                             </p:dataTable>
@@ -322,11 +322,11 @@
                                 </p:column>
                                 <p:column headerText="Başvuru Tarihi">
                                     <h:outputText value="#{b.basvuruTarihi}">
-                                        <f:convertDateTime type="localDateTime" pattern="dd.MM.yyyy HH:mm"/>
+                                        <f:convertDateTime type="localDateTime" pattern="#{messages.tarihSaatKisaFormat}"/>
                                     </h:outputText>
                                 </p:column>
                                 <p:column headerText="Durum">
-                                    <span class="badge bg-warning-transparent text-warning">#{b.basvuruDurumu}</span>
+                                    <span class="badge bg-warning-transparent text-warning">#{b.basvuruDurumu.displayValue}</span>
                                 </p:column>
                             </p:dataTable>
                         </div>
@@ -351,7 +351,7 @@
                                 </p:column>
                                 <p:column headerText="Randevu Tarihi">
                                     <h:outputText value="#{r.randevuTarihi}">
-                                        <f:convertDateTime type="localDateTime" pattern="dd.MM.yyyy HH:mm"/>
+                                        <f:convertDateTime type="localDateTime" pattern="#{messages.tarihSaatKisaFormat}"/>
                                     </h:outputText>
                                 </p:column>
                             </p:dataTable>
@@ -371,11 +371,11 @@
                                 </p:column>
                                 <p:column headerText="Tarih">
                                     <h:outputText value="#{f.tarih}">
-                                        <f:convertDateTime type="localDateTime" pattern="dd.MM.yyyy HH:mm"/>
+                                        <f:convertDateTime type="localDateTime" pattern="#{messages.tarihSaatKisaFormat}"/>
                                     </h:outputText>
                                 </p:column>
                                 <p:column headerText="Durum">
-                                    <h:outputText value="#{f.durum}"/>
+                                    <span class="badge bg-warning-transparent text-warning">#{f.durum.displayValue}</span>
                                 </p:column>
                             </p:dataTable>
                         </div>
@@ -397,7 +397,7 @@
                                 </p:column>
                                 <p:column headerText="Teslim Tarihi">
                                     <h:outputText value="#{t.teslimTarihi}">
-                                        <f:convertDateTime type="localDateTime" pattern="dd.MM.yyyy HH:mm"/>
+                                        <f:convertDateTime type="localDateTime" pattern="#{messages.tarihSaatKisaFormat}"/>
                                     </h:outputText>
                                 </p:column>
                                 <p:column headerText="Miktar">

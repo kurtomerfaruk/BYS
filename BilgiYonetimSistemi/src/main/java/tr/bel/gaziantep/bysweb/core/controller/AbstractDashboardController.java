@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import tr.bel.gaziantep.bysweb.core.enums.BaseEnum;
-import tr.bel.gaziantep.bysweb.core.enums.bys.EnumModul;
 
 import java.io.Serial;
 import java.util.ArrayList;
@@ -33,7 +32,7 @@ public abstract class AbstractDashboardController implements java.io.Serializabl
         init();
     }
 
-    protected String createDistribution(List<Object[]> veri, String label, String tip, EnumModul modul) {
+    protected String createDistribution(List<Object[]> veri, String label, String tip) {
         List<String> etiketler = new ArrayList<>();
         List<Number> sayilar = new ArrayList<>();
         List<String> renkler = new ArrayList<>();
@@ -60,10 +59,10 @@ public abstract class AbstractDashboardController implements java.io.Serializabl
         dataset.put("label", label);
         dataset.put("data", sayilar);
         dataset.put("backgroundColor", renkler);
-        return createChartConfig(tip, etiketler, List.of(dataset), new LinkedHashMap<>(), modul);
+        return createChartConfig(tip, etiketler, List.of(dataset), new LinkedHashMap<>());
     }
 
-    protected String createMonthlyTrend(List<Object[]> veri, String label, EnumModul modul) {
+    protected String createMonthlyTrend(List<Object[]> veri, String label) {
         List<String> etiketler = new ArrayList<>();
         List<Number> sayilar = new ArrayList<>();
         for (Object[] row : veri) {
@@ -82,11 +81,11 @@ public abstract class AbstractDashboardController implements java.io.Serializabl
         dataset.put("borderColor", "rgba(58,122,224,1)");
         dataset.put("backgroundColor", "rgba(58,122,224,0.6)");
         dataset.put("borderWidth", 1);
-        return createChartConfig("bar", etiketler, List.of(dataset), new LinkedHashMap<>(), modul);
+        return createChartConfig("bar", etiketler, List.of(dataset), new LinkedHashMap<>());
     }
 
     private String createChartConfig(String tip, List<String> etiketler,
-                                     List<Map<String, Object>> datasetler, Map<String, Object> secenekler, EnumModul modul) {
+                                     List<Map<String, Object>> datasetler, Map<String, Object> secenekler) {
         Map<String, Object> data = new LinkedHashMap<>();
         data.put("labels", etiketler);
         data.put("datasets", datasetler);
@@ -99,7 +98,7 @@ public abstract class AbstractDashboardController implements java.io.Serializabl
         try {
             return JSON_MAPPER.writeValueAsString(config);
         } catch (JsonProcessingException e) {
-            log.error(modul.getDisplayValue() + " dashboard grafik JSON'u üretilirken hata oluştu.", e);
+            log.error("Dashboard grafik JSON'u üretilirken hata oluştu.", e);
             return "";
         }
     }

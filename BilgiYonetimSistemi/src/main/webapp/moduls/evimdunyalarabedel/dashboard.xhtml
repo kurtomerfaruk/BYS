@@ -275,7 +275,7 @@
                                 </p:column>
                                 <p:column headerText="Başvuru Tarihi">
                                     <h:outputText value="#{b.basvuruTarihi}">
-                                        <f:convertDateTime type="localDateTime" pattern="dd.MM.yyyy HH:mm"/>
+                                        <f:convertDateTime type="localDateTime" pattern="#{messages.tarihSaatKisaFormat}"/>
                                     </h:outputText>
                                 </p:column>
                             </p:dataTable>
@@ -295,7 +295,7 @@
                                 </p:column>
                                 <p:column headerText="Tarih">
                                     <h:outputText value="#{t.tarih}">
-                                        <f:convertDateTime type="localDateTime" pattern="dd.MM.yyyy HH:mm"/>
+                                        <f:convertDateTime type="localDateTime" pattern="#{messages.tarihSaatKisaFormat}"/>
                                     </h:outputText>
                                 </p:column>
                                 <p:column headerText="Durum">
@@ -324,7 +324,7 @@
                                 </p:column>
                                 <p:column headerText="Tarih">
                                     <h:outputText value="#{t.tarih}">
-                                        <f:convertDateTime type="localDateTime" pattern="dd.MM.yyyy HH:mm"/>
+                                        <f:convertDateTime type="localDateTime" pattern="#{messages.tarihSaatKisaFormat}"/>
                                     </h:outputText>
                                 </p:column>
                             </p:dataTable>
@@ -344,7 +344,7 @@
                                 </p:column>
                                 <p:column headerText="Hizmet Tarihi">
                                     <h:outputText value="#{v.hizmetTarihi}">
-                                        <f:convertDateTime type="localDate" pattern="dd.MM.yyyy"/>
+                                        <f:convertDateTime type="localDate" pattern="#{messages.tarihFormat}"/>
                                     </h:outputText>
                                 </p:column>
                                 <p:column headerText="Durum">

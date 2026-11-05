@@ -248,7 +248,7 @@
                                 </p:column>
                                 <p:column headerText="Başvuru Tarihi">
                                     <h:outputText value="#{b.basvuruTarihi}">
-                                        <f:convertDateTime type="localDateTime" pattern="dd.MM.yyyy HH:mm"/>
+                                        <f:convertDateTime type="localDateTime" pattern="#{messages.tarihSaatKisaFormat}"/>
                                     </h:outputText>
                                 </p:column>
                             </p:dataTable>
@@ -268,7 +268,7 @@
                                 </p:column>
                                 <p:column headerText="Kayıt Tarihi">
                                     <h:outputText value="#{k.kayitTarihi}">
-                                        <f:convertDateTime type="localDateTime" pattern="dd.MM.yyyy HH:mm"/>
+                                        <f:convertDateTime type="localDateTime" pattern="#{messages.tarihSaatKisaFormat}"/>
                                     </h:outputText>
                                 </p:column>
                                 <p:column headerText="Devam Durumu">
@@ -294,12 +294,12 @@
                                 </p:column>
                                 <p:column headerText="Giriş Tarihi">
                                     <h:outputText value="#{g.girisTarihi}">
-                                        <f:convertDateTime type="localDateTime" pattern="dd.MM.yyyy HH:mm"/>
+                                        <f:convertDateTime type="localDateTime" pattern="#{messages.tarihSaatKisaFormat}"/>
                                     </h:outputText>
                                 </p:column>
                                 <p:column headerText="Çıkış Tarihi">
                                     <h:outputText value="#{g.cikisTarihi}">
-                                        <f:convertDateTime type="localDateTime" pattern="dd.MM.yyyy HH:mm"/>
+                                        <f:convertDateTime type="localDateTime" pattern="#{messages.tarihSaatKisaFormat}"/>
                                     </h:outputText>
                                 </p:column>
                             </p:dataTable>
