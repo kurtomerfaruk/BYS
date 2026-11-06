@@ -45,7 +45,7 @@
                                  onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()" actionListener="#{shKisiController.readInfo()}"
                                  rendered="#{syKullaniciController.hasPermission('shkisi:guncelle')}"/>
                 <p:commandButton id="viewButton" styleClass="ui-button-info" icon="pi pi-search" pt:data-tooltip="#{messages.buttonDetay}"
-                                 update=":ShKisiViewForm" oncomplete="PF('ShKisiViewDialog').show()"
+                                 update=":ShKisiViewForm:ShKisiViewForm" oncomplete="PF('ShKisiViewDialog').show()"
                                  disabled="#{empty shKisiController.selected}" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
                 <p:commandButton id="deleteButton" styleClass="ui-button-danger" icon="pi pi-trash" pt:data-tooltip="#{messages.buttonSil}"
                                  actionListener="#{shKisiController.delete}" update=":growl,datalist" disabled="#{empty shKisiController.selected}"
