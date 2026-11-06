@@ -11,6 +11,7 @@ import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlDurum;
 import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlMedeniDurum;
 import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlUyruk;
 import tr.bel.gaziantep.bysweb.core.utils.DateUtil;
+import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
 import tr.bel.gaziantep.bysweb.core.utils.StringUtil;
 import tr.bel.gaziantep.bysweb.moduls.engelsizler.entity.EyKisi;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlIl;
@@ -200,7 +201,7 @@ public class ModelConverter implements java.io.Serializable {
 
                 if (identityNo != null && identityNo.matches("\\d{11}") && result.stream().noneMatch(x -> x.getTcKimlikNo() == Long.parseLong(identityNo))
                         && !model.getDisabledDegree().equals("-")) {
-                    LocalDate date = DateUtil.stringToLocalDate(model.getBirthDate(), "dd.MM.yyyy");
+                    LocalDate date = DateUtil.stringToLocalDate(model.getBirthDate(), FacesUtil.message("tarihFormat"));
                     KisiParameter parameter = KpsUtil.setDate(date);
                     parameter.setTcKimlikNo(Long.parseLong(model.getIdentityNo()));
                     result.add(parameter);
@@ -221,7 +222,7 @@ public class ModelConverter implements java.io.Serializable {
 
                 if (identityNo != null && identityNo.matches("\\d{11}") &&
                         result.stream().noneMatch(x -> x.getTcKimlikNo() == Long.parseLong(identityNo))) {
-                    LocalDate date = DateUtil.stringToLocalDate(model.getBirthDate(), "dd.MM.yyyy");
+                    LocalDate date = DateUtil.stringToLocalDate(model.getBirthDate(), FacesUtil.message("tarihFormat"));
                     if (DateUtil.calculateAge(date) < 60) {
                         continue;
                     }

@@ -15,6 +15,7 @@ import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlDurum;
 import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlEgitimDurumu;
 import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlTalepDurumu;
 import tr.bel.gaziantep.bysweb.core.utils.DateUtil;
+import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
 import tr.bel.gaziantep.bysweb.core.utils.Util;
 import tr.bel.gaziantep.bysweb.moduls.engelsizler.entity.EyEngelGrubu;
 import tr.bel.gaziantep.bysweb.moduls.engelsizler.entity.EyTalepKonu;
@@ -42,7 +43,6 @@ public class EyTalepRaporuPrint extends AbstractReportController {
     @Serial
     private static final long serialVersionUID = 8108989016737227335L;
     private static final String PATH = "engelsizler";
-    private static final String DATE_FORMAT = "dd.MM.yyyy";
 
     private EnumRaporTuru raporTuru;
     private GnlIlce gnlIlce;
@@ -70,8 +70,8 @@ public class EyTalepRaporuPrint extends AbstractReportController {
             setCompileFileName(PATH + File.separator + "eytalep_rapor");
             Map<String, Object> parameterMap = new HashMap<>();
             setExportOption(raporTuru);
-            parameterMap.put("baslangicTarihi", DateUtil.localdateToString(baslangicTarihi, DATE_FORMAT));
-            parameterMap.put("bitisTarihi", DateUtil.localdateToString(bitisTarihi, DATE_FORMAT));
+            parameterMap.put("baslangicTarihi", DateUtil.localdateToString(baslangicTarihi, FacesUtil.message("tarihFormat")));
+            parameterMap.put("bitisTarihi", DateUtil.localdateToString(bitisTarihi, FacesUtil.message("tarihFormat")));
             parameterMap.put("mahalleId", gnlMahalle == null ? -1 : gnlMahalle.getId());
             parameterMap.put("ilceId", gnlIlce == null ? -1 : gnlIlce.getId());
             parameterMap.put("konuId", eyTalepKonu == null ? -1 : eyTalepKonu.getId());

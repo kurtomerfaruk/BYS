@@ -19,6 +19,7 @@ import tr.bel.gaziantep.bysweb.core.enums.bys.EnumModul;
 import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlCinsiyet;
 import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlTalepDurumu;
 import tr.bel.gaziantep.bysweb.core.utils.DateUtil;
+import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
 import tr.bel.gaziantep.bysweb.moduls.engelsizler.entity.EyEngelGrubu;
 import tr.bel.gaziantep.bysweb.moduls.engelsizler.entity.EyTalep;
 import tr.bel.gaziantep.bysweb.moduls.engelsizler.entity.EyTalepKonu;
@@ -134,7 +135,7 @@ public class EngelsizDashboardController implements java.io.Serializable {
         List<EyTalep> taleps = eyTalepService.findByDurum(EnumGnlTalepDurumu.BEKLIYOR);
         if (!taleps.isEmpty()) {
             StringBuilder messageStr = new StringBuilder("Sistemde bekleyen toplam talep sayısı : " + taleps.size() + "\n\n");
-            messageStr.append(DateUtil.localdateTimeToString(taleps.get(0).getTarih(), "dd.MM.yyyy")).append(" tarihinden beri bekleyen talebiniz bulunmaktadır.\n\n");
+            messageStr.append(DateUtil.localdateTimeToString(taleps.get(0).getTarih(), FacesUtil.message("tarihFormat"))).append(" tarihinden beri bekleyen talebiniz bulunmaktadır.\n\n");
             List<Map.Entry<EyTalepKonu, Long>> ilk10 = taleps.stream()
                     .filter(t -> t.getEyTalepKonu() != null)
                     .collect(Collectors.groupingBy(

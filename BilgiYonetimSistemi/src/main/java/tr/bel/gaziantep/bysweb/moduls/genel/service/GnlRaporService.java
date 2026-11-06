@@ -10,6 +10,7 @@ import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.EnumSyVeriTipi;
 import tr.bel.gaziantep.bysweb.core.service.AbstractService;
 import tr.bel.gaziantep.bysweb.core.service.EnumService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
+import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
 import tr.bel.gaziantep.bysweb.core.utils.StringUtil;
 import tr.bel.gaziantep.bysweb.moduls.genel.dtos.GnlRaporDto;
 import tr.bel.gaziantep.bysweb.moduls.genel.dtos.GnlRaporKolonDto;
@@ -404,10 +405,10 @@ public class GnlRaporService extends AbstractService<GnlRapor> {
                 case BOOLEAN:
                     return Boolean.parseBoolean(value);
                 case DATE:
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+                    SimpleDateFormat sdf = new SimpleDateFormat(FacesUtil.message("tarihFormat"));
                     return sdf.parse(value);
                 case DATE_TIME:
-                    SimpleDateFormat sdf2 = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+                    SimpleDateFormat sdf2 = new SimpleDateFormat(FacesUtil.message("tarihSaatFormat"));
                     return sdf2.parse(value);
                 default:
                     return value;

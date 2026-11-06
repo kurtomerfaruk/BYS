@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import tr.bel.gaziantep.bysweb.core.controller.InitApp;
 import tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlDurum;
 import tr.bel.gaziantep.bysweb.core.utils.DateUtil;
+import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.VefatEdenKisi;
 import tr.bel.gaziantep.bysweb.moduls.genel.service.GnlKisiService;
@@ -50,8 +51,8 @@ public class GnlKisiOlenSchedule implements java.io.Serializable {
         MezarlikSorgulaService mezarlikSorgulaService = new MezarlikSorgulaService();
         VefatEdenRoot vefatEdenRoot = mezarlikSorgulaService.vefatEdenSorgula(initApp.getProperty("webServisLink"),
                 initApp.getProperty("webServisToken"),
-                DateUtil.localdateToString(startDate, "dd.MM.yyyy"),
-                DateUtil.localdateToString(endDate, "dd.MM.yyyy")
+                DateUtil.localdateToString(startDate, FacesUtil.message("tarihFormat")),
+                DateUtil.localdateToString(endDate, FacesUtil.message("tarihFormat"))
         );
 
         List<VefatEdenKisi> vefatEdenKisiList = new ArrayList<>();

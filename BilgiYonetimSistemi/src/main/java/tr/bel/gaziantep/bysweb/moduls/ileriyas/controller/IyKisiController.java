@@ -289,8 +289,8 @@ public class IyKisiController extends AbstractController<IyKisi> {
                 MezarlikSorgulaService mezarlikSorgulaService = new MezarlikSorgulaService();
                 VefatEdenRoot vefatEdenRoot = mezarlikSorgulaService.vefatEdenSorgula(initApp.getProperty("webServisLink"),
                         initApp.getProperty("webServisToken"),
-                        DateUtil.localdateToString(startDate, "dd.MM.yyyy"),
-                        DateUtil.localdateToString(endDate, "dd.MM.yyyy")
+                        DateUtil.localdateToString(startDate, FacesUtil.message("tarihFormat")),
+                        DateUtil.localdateToString(endDate, FacesUtil.message("tarihFormat"))
                 );
 
                 List<VefatEdenKisi> vefatEdenKisiList = new ArrayList<>();

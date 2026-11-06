@@ -12,6 +12,7 @@ import org.primefaces.PrimeFaces;
 import tr.bel.gaziantep.bysweb.core.controller.AbstractReportController;
 import tr.bel.gaziantep.bysweb.core.enums.bys.EnumRaporTuru;
 import tr.bel.gaziantep.bysweb.core.utils.DateUtil;
+import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
 import tr.bel.gaziantep.bysweb.core.utils.Util;
 
 import java.io.File;
@@ -53,8 +54,8 @@ public class EyAnketGuncellemePrint extends AbstractReportController {
             setCompileFileName(PATH + File.separator + "eyanket_guncelleme_raporu");
             Map<String, Object> parameterMap = new HashMap<>();
             setExportOption(raporTuru);
-            parameterMap.put("baslangicTarihi", DateUtil.localdateToString(tarih.get(0), "dd.MM.yyyy"));
-            parameterMap.put("bitisTarihi", DateUtil.localdateToString(tarih.get(1), "dd.MM.yyyy"));
+            parameterMap.put("baslangicTarihi", DateUtil.localdateToString(tarih.get(0), FacesUtil.message("tarihFormat")));
+            parameterMap.put("bitisTarihi", DateUtil.localdateToString(tarih.get(1), FacesUtil.message("tarihFormat")));
 
             if (raporTuru == EnumRaporTuru.PDF) {
                 ServletContext sc = Util.getServletContext();

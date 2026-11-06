@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import tr.bel.gaziantep.bysweb.core.controller.AbstractDashboardController;
-import tr.bel.gaziantep.bysweb.core.enums.bys.EnumModul;
 import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtBasvuru;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtBasvuruMalzemeTeslimi;
@@ -152,12 +151,12 @@ public class OrtDashboardController extends AbstractDashboardController {
             sonFizikTedaviler = ortDashboardService.sonFizikTedaviler();
             sonMalzemeTeslimleri = ortDashboardService.sonMalzemeTeslimleri();
 
-            aylikBasvuruTrendJson = createMonthlyTrend(ortDashboardService.aylikBasvuruTrendi(), "Başvuru", EnumModul.ORTEZ_PROTEZ);
-            basvuruDurumuDagilimJson = createDistribution(ortDashboardService.basvuruDurumuDagilimi(), "Başvuru Durumu", "pie", EnumModul.ORTEZ_PROTEZ);
-            fizikTedaviDurumuDagilimJson = createDistribution(ortDashboardService.fizikTedaviDurumuDagilimi(), "Fizik Tedavi Durumu", "doughnut", EnumModul.ORTEZ_PROTEZ);
-            cinsiyetDagilimJson = createDistribution(ortDashboardService.cinsiyetDagilimi(), "Cinsiyet", "pie", EnumModul.ORTEZ_PROTEZ);
-            yasDagilimiJson = createDistribution(ortDashboardService.yasDagilimi(), "Yaş Grubu", "bar", EnumModul.ORTEZ_PROTEZ);
-            ilceDagilimJson = createDistribution(ortDashboardService.ilceDagilimi(), "İlçe", "bar", EnumModul.ORTEZ_PROTEZ);
+            aylikBasvuruTrendJson = createMonthlyTrend(ortDashboardService.aylikBasvuruTrendi(), "Başvuru");
+            basvuruDurumuDagilimJson = createDistribution(ortDashboardService.basvuruDurumuDagilimi(), "Başvuru Durumu", "pie");
+            fizikTedaviDurumuDagilimJson = createDistribution(ortDashboardService.fizikTedaviDurumuDagilimi(), "Fizik Tedavi Durumu", "doughnut");
+            cinsiyetDagilimJson = createDistribution(ortDashboardService.cinsiyetDagilimi(), "Cinsiyet", "pie");
+            yasDagilimiJson = createDistribution(ortDashboardService.yasDagilimi(), "Yaş Grubu", "bar");
+            ilceDagilimJson = createDistribution(ortDashboardService.ilceDagilimi(), "İlçe", "bar");
 
         } catch (SecurityException e) {
             yetkili = false;
