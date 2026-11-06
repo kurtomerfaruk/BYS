@@ -8,7 +8,7 @@
       xmlns:p="primefaces">
 
 <ui:composition>
-    <h:form id="ekmDashboardForm" prependId="false">
+    <h:panelGroup id="ekmDashboardPanel" layout="block">
         <ui:fragment rendered="#{not ekmDashboardController.yetkili}">
             <div class="alert alert-warning">
                 <h:outputText value="#{ekmDashboardController.hataMesaji}"/>
@@ -239,7 +239,7 @@
                         </div>
                         <div class="card-body">
                             <p:dataTable value="#{ekmDashboardController.sonBasvurular}" var="b" rows="10" paginator="false"
-                                         emptyMessage="Kayıt bulunamadı" size="small">
+                                         emptyMessage="#{messages.kayitBulunamadi}" size="small">
                                 <p:column headerText="Kişi">
                                     <h:outputText value="#{b.eyKisi.gnlKisi.adSoyad}"/>
                                 </p:column>
@@ -262,7 +262,7 @@
                         </div>
                         <div class="card-body">
                             <p:dataTable value="#{ekmDashboardController.sonKursiyerler}" var="k" rows="10" paginator="false"
-                                         emptyMessage="Kayıt bulunamadı" size="small">
+                                         emptyMessage="#{messages.kayitBulunamadi}" size="small">
                                 <p:column headerText="Kişi">
                                     <h:outputText value="#{k.eyKisi.gnlKisi.adSoyad}"/>
                                 </p:column>
@@ -288,7 +288,7 @@
                         </div>
                         <div class="card-body">
                             <p:dataTable value="#{ekmDashboardController.sonGirisCikislar}" var="g" rows="10" paginator="false"
-                                         emptyMessage="Kayıt bulunamadı" size="small">
+                                         emptyMessage="#{messages.kayitBulunamadi}" size="small">
                                 <p:column headerText="Kursiyer">
                                     <h:outputText value="#{g.ekmKursiyer.eyKisi.gnlKisi.adSoyad}"/>
                                 </p:column>
@@ -309,10 +309,10 @@
             </div>
 
             <div class="d-flex justify-content-end mb-3">
-                <p:commandButton value="Yenile" icon="pi pi-refresh" actionListener="#{ekmDashboardController.yenile()}"
-                                 update="ekmDashboardForm" process="@this" styleClass="ui-button-secondary"/>
+                <p:commandButton value="#{messages.buttonYenile}" icon="pi pi-refresh" actionListener="#{ekmDashboardController.yenile()}"
+                                 update="ekmDashboardPanel" process="@this" styleClass="ui-button-secondary"/>
             </div>
         </ui:fragment>
-    </h:form>
+    </h:panelGroup>
 </ui:composition>
 </html>

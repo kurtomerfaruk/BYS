@@ -8,7 +8,7 @@
       xmlns:p="primefaces">
 
 <ui:composition>
-    <h:form id="ortDashboardForm" prependId="false">
+    <h:panelGroup id="ortDashboardPanel" layout="block">
         <ui:fragment rendered="#{not ortDashboardController.yetkili}">
             <div class="alert alert-warning">
                 <h:outputText value="#{ortDashboardController.hataMesaji}"/>
@@ -410,10 +410,10 @@
             </div>
 
             <div class="d-flex justify-content-end mb-3">
-                <p:commandButton value="Yenile" icon="pi pi-refresh" actionListener="#{ortDashboardController.yenile()}"
-                                 update="ortDashboardForm" process="@this" styleClass="ui-button-secondary"/>
+                <p:commandButton value="#{messages.buttonYenile}" icon="pi pi-refresh" actionListener="#{ortDashboardController.yenile()}"
+                                 update="ortDashboardPanel" process="@this" styleClass="ui-button-secondary"/>
             </div>
         </ui:fragment>
-    </h:form>
+    </h:panelGroup>
 </ui:composition>
 </html>

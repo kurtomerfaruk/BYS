@@ -4,6 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="jakarta.faces.facelets"
       xmlns:h="jakarta.faces.html"
+      xmlns:p="primefaces"
       xmlns:k="http://kurtomerfaruk.com/ui">
 
 <ui:composition>
@@ -11,6 +12,47 @@
         <k:map widgetVar="mapVar" center="37.069387, 37.374620" zoom="12" style="display:none">
 
         </k:map>
+    </h:form>
+
+    <h:form id="dashboardForm">
+        <p:tabView id="dashboardTabView" dynamic="true" cache="true" styleClass="mt-3">
+            <p:ajax event="tabChange" onstart="PF('Loading').show()" oncomplete="PF('Loading').hide()"/>
+
+            <p:tab title="Engelsizler"
+                   rendered="#{syKullaniciController.hasPermission('engelsizler_dashboard:goster')}">
+                <ui:include src="/moduls/engelsizler/dashboardNew.xhtml"/>
+            </p:tab>
+
+            <p:tab title="Engelsiz Kariyer Merkezi"
+                   rendered="#{syKullaniciController.hasPermission('engelsiz_kariyer_merkezi_dashboard:goster')}">
+                <ui:include src="/moduls/engelsizkariyermerkezi/dashboard.xhtml"/>
+            </p:tab>
+
+            <p:tab title="Evim Dünyalara Bedel"
+                   rendered="#{syKullaniciController.hasPermission('evim_dunyalara_bedel_dashboard:goster')}">
+                <ui:include src="/moduls/evimdunyalarabedel/dashboard.xhtml"/>
+            </p:tab>
+
+            <p:tab title="Psikiyatri Kliniği"
+                   rendered="#{syKullaniciController.hasPermission('psikiyatri_klinigi_dashboard:goster')}">
+                <ui:include src="/moduls/psikiyatriklinigi/dashboard.xhtml"/>
+            </p:tab>
+
+            <p:tab title="Ortez-Protez"
+                   rendered="#{syKullaniciController.hasPermission('ortez_protez_dashboard:goster')}">
+                <ui:include src="/moduls/ortezprotez/dashboard.xhtml"/>
+            </p:tab>
+        </p:tabView>
+
+        <ui:fragment
+                rendered="#{not (syKullaniciController.hasPermission('psikiyatri_klinigi_dashboard:goster') or syKullaniciController.hasPermission('engelsizler_dashboard:goster') or syKullaniciController.hasPermission('engelsiz_kariyer_merkezi_dashboard:goster') or syKullaniciController.hasPermission('evim_dunyalara_bedel_dashboard:goster') or syKullaniciController.hasPermission('ortez_protez_dashboard:goster'))}">
+            <div class="card border border-primary custom-card mb-4 mt-3">
+                <div class="card-body text-center text-muted py-5">
+                    <i class="ti ti-layout-dashboard fs-40 d-block mb-2"></i>
+                    <span>Görüntüleme yetkiniz olan bir dashboard bulunmamaktadır.</span>
+                </div>
+            </div>
+        </ui:fragment>
     </h:form>
 
     <!-- Psikiyatri Kliniği Dashboard -->
@@ -70,18 +112,18 @@
     <!--    </ui:fragment>-->
 
     <!-- Ortez-Protez Dashboard -->
-    <ui:fragment rendered="#{syKullaniciController.hasPermission('ortez_protez_dashboard:goster')}">
-        <div class="card border border-primary custom-card mb-4">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <div class="card-title">
-                    <i class="ti ti-crutches me-2"></i>Ortez-Protez
-                </div>
-            </div>
-            <div class="card-body">
-                <ui:include src="/moduls/ortezprotez/dashboard.xhtml"/>
-            </div>
-        </div>
-    </ui:fragment>
+    <!--    <ui:fragment rendered="#{syKullaniciController.hasPermission('ortez_protez_dashboard:goster')}">-->
+    <!--        <div class="card border border-primary custom-card mb-4">-->
+    <!--            <div class="card-header d-flex justify-content-between align-items-center">-->
+    <!--                <div class="card-title">-->
+    <!--                    <i class="ti ti-crutches me-2"></i>Ortez-Protez-->
+    <!--                </div>-->
+    <!--            </div>-->
+    <!--            <div class="card-body">-->
+    <!--                <ui:include src="/moduls/ortezprotez/dashboard.xhtml"/>-->
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--    </ui:fragment>-->
 
 
     <!--    <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.genel.EnumGnlCinsiyet" var="enumCinsiyet"/>-->

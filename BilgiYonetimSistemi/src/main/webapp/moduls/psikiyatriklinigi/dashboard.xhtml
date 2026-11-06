@@ -8,7 +8,7 @@
       xmlns:p="primefaces">
 
 <ui:composition>
-    <h:form id="pkDashboardForm" prependId="false">
+    <h:panelGroup id="pkDashboardPanel" layout="block">
         <ui:fragment rendered="#{not pkDashboardController.yetkili}">
             <div class="alert alert-warning">
                 <h:outputText value="#{pkDashboardController.hataMesaji}"/>
@@ -513,10 +513,10 @@
             </div>
 
             <div class="d-flex justify-content-end mb-3">
-                <p:commandButton value="Yenile" icon="pi pi-refresh" actionListener="#{pkDashboardController.yenile()}"
-                                 update="pkDashboardForm" process="@this" styleClass="ui-button-secondary"/>
+                <p:commandButton value="#{messages.buttonYenile}" icon="pi pi-refresh" actionListener="#{pkDashboardController.yenile()}"
+                                 update="pkDashboardPanel" process="@this" styleClass="ui-button-secondary"/>
             </div>
         </ui:fragment>
-    </h:form>
+    </h:panelGroup>
 </ui:composition>
 </html>

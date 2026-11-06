@@ -8,7 +8,7 @@
       xmlns:p="primefaces">
 
 <ui:composition>
-    <h:form id="edbDashboardForm" prependId="false">
+    <h:panelGroup id="edbDashboardPanel" layout="block">
         <ui:fragment rendered="#{not edbDashboardController.yetkili}">
             <div class="alert alert-warning">
                 <h:outputText value="#{edbDashboardController.hataMesaji}"/>
@@ -266,7 +266,7 @@
                         </div>
                         <div class="card-body">
                             <p:dataTable value="#{edbDashboardController.sonBasvurular}" var="b" rows="10" paginator="false"
-                                         emptyMessage="Kayıt bulunamadı" size="small">
+                                         emptyMessage="#{messages.kayitBulunamadi}" size="small">
                                 <p:column headerText="Kişi">
                                     <h:outputText value="#{b.gnlKisi.adSoyad}"/>
                                 </p:column>
@@ -315,7 +315,7 @@
                         </div>
                         <div class="card-body">
                             <p:dataTable value="#{edbDashboardController.sonTalepler}" var="t" rows="10" paginator="false"
-                                         emptyMessage="Kayıt bulunamadı" size="small">
+                                         emptyMessage="#{messages.kayitBulunamadi}" size="small">
                                 <p:column headerText="Kişi">
                                     <h:outputText value="#{t.edbBasvuru.gnlKisi.adSoyad}"/>
                                 </p:column>
@@ -338,7 +338,7 @@
                         </div>
                         <div class="card-body">
                             <p:dataTable value="#{edbDashboardController.sonVerilecekHizmetler}" var="v" rows="10" paginator="false"
-                                         emptyMessage="Kayıt bulunamadı" size="small">
+                                         emptyMessage="#{messages.kayitBulunamadi}" size="small">
                                 <p:column headerText="Kişi">
                                     <h:outputText value="#{v.edbHizmetPlanlama.edbTalep.edbBasvuru.gnlKisi.adSoyad}"/>
                                 </p:column>
@@ -357,10 +357,10 @@
             </div>
 
             <div class="d-flex justify-content-end mb-3">
-                <p:commandButton value="Yenile" icon="pi pi-refresh" actionListener="#{edbDashboardController.yenile()}"
-                                 update="edbDashboardForm" process="@this" styleClass="ui-button-secondary"/>
+                <p:commandButton value="#{messages.buttonYenile}" icon="pi pi-refresh" actionListener="#{edbDashboardController.yenile()}"
+                                 update="edbDashboardPanel" process="@this" styleClass="ui-button-secondary"/>
             </div>
         </ui:fragment>
-    </h:form>
+    </h:panelGroup>
 </ui:composition>
 </html>
