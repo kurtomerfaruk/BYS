@@ -142,11 +142,11 @@ public class EyKisiService extends AbstractService<EyKisi> {
         eyKisi = checkGnlKisiYardimAlinanYerler(eyKisi, yardimAlinanYerlers);
         eyKisi = checkGnlKisiYardimTuru(eyKisi, yardimTurus);
         eyKisi = checkEyKisiKullandigiCihaz(eyKisi, kullandigiCihazs);
-        eyKisi = chekcEyKisiHastalik(eyKisi,hastalikList);
+        eyKisi = checkEyKisiHastalik(eyKisi, hastalikList);
         return eyKisi;
     }
 
-    private EyKisi chekcEyKisiHastalik(EyKisi eyKisi, List<GnlHastalik> hastalikList) {
+    private EyKisi checkEyKisiHastalik(EyKisi eyKisi, List<GnlHastalik> hastalikList) {
         if (hastalikList == null || hastalikList.isEmpty()) {
             return eyKisi;
         }
