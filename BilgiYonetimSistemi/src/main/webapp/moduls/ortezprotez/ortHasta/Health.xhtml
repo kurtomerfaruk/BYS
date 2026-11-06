@@ -49,15 +49,26 @@
                 <p:selectBooleanCheckbox value="#{ortHastaController.selected.protez}" itemLabel="#{messages.protezText}">
                     <p:ajax event="change" update="protezSeviyesi"/>
                 </p:selectBooleanCheckbox>
+                <p:selectCheckboxMenu id="protezSeviyesi"
+                                      value="#{ortHastaController.amputeSeviyeList}"
+                                      label="#{messages.protezAmputeSeviyeText}" multiple="true"
+                                      filter="true" filterMatchMode="startsWith" styleClass="checkboxMenu"
+                                      disabled="#{!ortHastaController.selected.protez}">
+                    <f:selectItems value="#{ortProtezAmputeSeviyeController.items}"
+                                   var="amputeSeviyes"
+                                   itemValue="#{amputeSeviyes}"
+                                   itemLabel="#{amputeSeviyes.tanim}"/>
+                </p:selectCheckboxMenu>
             </p:column>
             <p:column>
-                <h:panelGroup>
-                            <span class="ui-float-label">
-                                <p:inputText id="protezSeviyesi" value="#{ortHastaController.selected.protezSeviyesi}" title="#{messages.amputeSeviyesiText}"
-                                             disabled="#{!ortHastaController.selected.protez}"/>
-                                <p:outputLabel value="#{messages.amputeSeviyesiText}" for="@previous"/>
-                            </span>
-                </h:panelGroup>
+                <!--                <h:panelGroup>-->
+                <!--                            <span class="ui-float-label">-->
+                <!--                                <p:inputText id="protezSeviyesi" value="#{ortHastaController.selected.protezSeviyesi}" title="#{messages.amputeSeviyesiText}"-->
+                <!--                                             disabled="#{!ortHastaController.selected.protez}"/>-->
+                <!--                                <p:outputLabel value="#{messages.amputeSeviyesiText}" for="@previous"/>-->
+                <!--                            </span>-->
+                <!--                </h:panelGroup>-->
+
             </p:column>
         </p:row>
 
