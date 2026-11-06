@@ -27,9 +27,7 @@ import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlIl;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlIlce;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlMahalle;
-import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtCihaz;
-import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtHasta;
-import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtHastaKullandigiCihaz;
+import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.*;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.service.OrtHastaService;
 
 import java.io.Serial;
@@ -81,6 +79,9 @@ public class OrtHastaController extends AbstractKisiController<OrtHasta> {
     @Getter
     @Setter
     private List<EnumGnlYakinlikDerecesi> yakinlikDerecesiList;
+    @Getter
+    @Setter
+    private List<OrtProtezAmputeSeviye> amputeSeviyeList;
 
     public OrtHastaController() {
         super(OrtHasta.class);
@@ -195,6 +196,9 @@ public class OrtHastaController extends AbstractKisiController<OrtHasta> {
                 protezCihazList = Function.filterAndCollect(protezCihazs, OrtHastaKullandigiCihaz::isSecili,
                         OrtHastaKullandigiCihaz::getOrtCihaz);
 
+                amputeSeviyeList = Function.filterAndCollect(this.getSelected().getOrtHastaProtezAmputeSeviyeList(),
+                        OrtHastaProtezAmputeSeviye::isSecili, OrtHastaProtezAmputeSeviye::getOrtProtezAmputeSeviye);
+
                 yakinlikDerecesiList = new ArrayList<>();
                 String birinciDereceVefatDurumu = StringUtil.removeBracket(this.getSelected().getBirinciDereceVefatDurumu());
                 if (StringUtil.isNotBlank(birinciDereceVefatDurumu)) {
@@ -216,6 +220,7 @@ public class OrtHastaController extends AbstractKisiController<OrtHasta> {
         protezCihazList = new ArrayList<>();
         engelinOlusumuList = new ArrayList<>();
         yakinlikDerecesiList = new ArrayList<>();
+        amputeSeviyeList = new ArrayList<>();
     }
 
     @Override
@@ -226,7 +231,7 @@ public class OrtHastaController extends AbstractKisiController<OrtHasta> {
                     return;
                 }
                 generateYakinlikDerecesi();
-                service.save(this.getSelected(), eyKisi, eyEngelGrubus, ortezCihazList, protezCihazList, engelinOlusumuList);
+                service.save(this.getSelected(), eyKisi, eyEngelGrubus, ortezCihazList, protezCihazList, engelinOlusumuList, amputeSeviyeList);
                 FacesUtil.successMessage(Constants.KAYIT_GUNCELLENDI);
             } catch (Exception ex) {
                 log.error(null, ex);

@@ -12,11 +12,10 @@ import tr.bel.gaziantep.bysweb.moduls.engelsizler.entity.EyEngelinOlusumu;
 import tr.bel.gaziantep.bysweb.moduls.engelsizler.entity.EyKisi;
 import tr.bel.gaziantep.bysweb.moduls.engelsizler.entity.EyKisiEngelGrubu;
 import tr.bel.gaziantep.bysweb.moduls.engelsizler.service.EyKisiService;
-import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtCihaz;
-import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtHasta;
-import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtHastaKullandigiCihaz;
+import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.*;
 
 import java.io.Serial;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -65,10 +64,12 @@ public class OrtHastaService extends AbstractService<OrtHasta> {
                      List<EyEngelGrubu> eyEngelGrubus,
                      List<OrtCihaz> ortezCihazList,
                      List<OrtCihaz> protezCihazList,
-                     List<EyEngelinOlusumu> engelinOlusumuList) {
+                     List<EyEngelinOlusumu> engelinOlusumuList,
+                     List<OrtProtezAmputeSeviye> amputeSeviyeList) {
 
         ortHasta = checkOrtHastaKullandigiCihaz(ortHasta, ortezCihazList, EnumOrtCihazTur.ORTEZ);
         ortHasta = checkOrtHastaKullandigiCihaz(ortHasta, protezCihazList, EnumOrtCihazTur.PROTEZ);
+        ortHasta = checkOrtHastaProtezAmputeSeviye(ortHasta, amputeSeviyeList);
         edit(ortHasta);
 
         if (!ortHasta.isEngelli()) {
@@ -131,6 +132,35 @@ public class OrtHastaService extends AbstractService<OrtHasta> {
                 newKeg.setSecili(true);
 
                 hastaCihazList.add(newKeg);
+            }
+        }
+
+        return ortHasta;
+    }
+
+    private OrtHasta checkOrtHastaProtezAmputeSeviye(OrtHasta ortHasta, List<OrtProtezAmputeSeviye> amputeSeviyeList) {
+        if (amputeSeviyeList == null || amputeSeviyeList.isEmpty()) {
+            return ortHasta;
+        }
+
+        List<OrtHastaProtezAmputeSeviye> hastaProtezAmputeSeviye = ortHasta.getOrtHastaProtezAmputeSeviyeList();
+        Set<Integer> newGrubuIds = amputeSeviyeList.stream()
+                .map(OrtProtezAmputeSeviye::getId)
+                .collect(Collectors.toSet());
+
+        Map<Integer, OrtHastaProtezAmputeSeviye> existingMap = new HashMap<>();
+        for (OrtHastaProtezAmputeSeviye keg : hastaProtezAmputeSeviye) {
+            existingMap.put(keg.getOrtProtezAmputeSeviye().getId(), keg);
+            keg.setSecili(newGrubuIds.contains(keg.getOrtProtezAmputeSeviye().getId()));
+        }
+
+        for (OrtProtezAmputeSeviye ampute : amputeSeviyeList) {
+            if (!existingMap.containsKey(ampute.getId())) {
+                OrtHastaProtezAmputeSeviye newKeg = new OrtHastaProtezAmputeSeviye();
+                newKeg.setOrtHasta(ortHasta);
+                newKeg.setOrtProtezAmputeSeviye(ampute);
+                newKeg.setSecili(true);
+                hastaProtezAmputeSeviye.add(newKeg);
             }
         }
 

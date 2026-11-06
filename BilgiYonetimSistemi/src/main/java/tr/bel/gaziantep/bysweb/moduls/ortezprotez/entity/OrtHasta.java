@@ -54,10 +54,10 @@ public class OrtHasta extends BaseEntity {
     @Column(name = "PROTEZ", nullable = false)
     private boolean protez;
 
-    @Size(max = 150)
-    @Nationalized
-    @Column(name = "PROTEZ_SEVIYESI", length = 150)
-    private String protezSeviyesi;
+//    @Size(max = 150)
+//    @Nationalized
+//    @Column(name = "PROTEZ_SEVIYESI", length = 150)
+//    private String protezSeviyesi;
 
     @ColumnDefault("0")
     @Column(name = "ORTEZ", nullable = false)
@@ -108,6 +108,11 @@ public class OrtHasta extends BaseEntity {
     @SQLRestriction("AKTIF=true")
     @Builder.Default
     private List<OrtHastaKullandigiCihaz> ortHastaKullandigiCihazList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "ortHasta", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @SQLRestriction("AKTIF=true")
+    @Builder.Default
+    private List<OrtHastaProtezAmputeSeviye> ortHastaProtezAmputeSeviyeList = new ArrayList<>();
 
     @Override
     public int hashCode() {
