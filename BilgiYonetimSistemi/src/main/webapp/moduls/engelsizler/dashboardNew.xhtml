@@ -314,7 +314,7 @@
                         </div>
                         <div class="card-body">
                             <p:dataTable value="#{eyDashboardController.bekleyenTalepler}" var="t" rows="10" paginator="false"
-                                         emptyMessage="Bekleyen talep yok">
+                                         emptyMessage="Bekleyen talep yok" size="small">
                                 <p:column headerText="Talep Türü">
                                     <h:outputText value="#{t.talepTuru.displayValue}"/>
                                 </p:column>
