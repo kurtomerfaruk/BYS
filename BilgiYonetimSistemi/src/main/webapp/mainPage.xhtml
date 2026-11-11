@@ -18,6 +18,11 @@
         <p:tabView id="dashboardTabView" dynamic="true" cache="true" styleClass="mt-3">
             <p:ajax event="tabChange" onstart="PF('Loading').show()" oncomplete="PF('Loading').hide()"/>
 
+            <p:tab title="Aktif Yaşam"
+                   rendered="#{syKullaniciController.hasPermission('aktif_yasam_dashboard:goster')}">
+                <ui:include src="/moduls/aktifyasam/dashboard.xhtml"/>
+            </p:tab>
+
             <p:tab title="Engelsizler"
                    rendered="#{syKullaniciController.hasPermission('engelsizler_dashboard:goster')}">
                 <ui:include src="/moduls/engelsizler/dashboardNew.xhtml"/>
@@ -44,8 +49,12 @@
             </p:tab>
         </p:tabView>
 
-        <ui:fragment
-                rendered="#{not (syKullaniciController.hasPermission('psikiyatri_klinigi_dashboard:goster') or syKullaniciController.hasPermission('engelsizler_dashboard:goster') or syKullaniciController.hasPermission('engelsiz_kariyer_merkezi_dashboard:goster') or syKullaniciController.hasPermission('evim_dunyalara_bedel_dashboard:goster') or syKullaniciController.hasPermission('ortez_protez_dashboard:goster'))}">
+        <ui:fragment rendered="#{not (syKullaniciController.hasPermission('psikiyatri_klinigi_dashboard:goster')
+        or syKullaniciController.hasPermission('aktif_yasam_dashboard:goster')
+        or syKullaniciController.hasPermission('engelsizler_dashboard:goster')
+        or syKullaniciController.hasPermission('engelsiz_kariyer_merkezi_dashboard:goster')
+        or syKullaniciController.hasPermission('evim_dunyalara_bedel_dashboard:goster')
+        or syKullaniciController.hasPermission('ortez_protez_dashboard:goster'))}">
             <div class="card border border-primary custom-card mb-4 mt-3">
                 <div class="card-body text-center text-muted py-5">
                     <i class="ti ti-layout-dashboard fs-40 d-block mb-2"></i>

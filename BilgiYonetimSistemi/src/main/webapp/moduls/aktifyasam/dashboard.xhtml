@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces">
+
+<ui:composition>
+    <h:panelGroup id="ayDashboardPanel" layout="block">
+        <ui:fragment rendered="#{not ayDashboardController.yetkili}">
+            <div class="alert alert-warning">
+                <h:outputText value="#{ayDashboardController.hataMesaji}"/>
+            </div>
+        </ui:fragment>
+
+        <ui:fragment rendered="#{ayDashboardController.yetkili}">
+            <div class="row g-3 mb-3">
+                <div class="col-xl-3 col-md-6">
+                    <div class="card custom-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="avatar avatar-lg bg-info-transparent">
+                                    <div class="avatar avatar-md bg-info"><i class="ti ti-users fs-25"></i></div>
+                                </div>
+                                <div class="flex-fill"><h3 class="fw-semibold mb-1"><h:outputText
+                                        value="#{ayDashboardController.toplamUye}"><f:convertNumber type="number"/></h:outputText></h3>
+                                    <span>Toplam Üye</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card custom-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="avatar avatar-lg bg-success-transparent">
+                                    <div class="avatar avatar-md bg-success"><i class="ti ti-user-check fs-25"></i></div>
+                                </div>
+                                <div class="flex-fill"><h3 class="fw-semibold mb-1"><h:outputText
+                                        value="#{ayDashboardController.aktifUye}"><f:convertNumber type="number"/></h:outputText></h3>
+                                    <span>Aktif Üye</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card custom-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="avatar avatar-lg bg-primary-transparent">
+                                    <div class="avatar avatar-md bg-primary"><i class="ti ti-user-plus fs-25"></i></div>
+                                </div>
+                                <div class="flex-fill"><h3 class="fw-semibold mb-1"><h:outputText
+                                        value="#{ayDashboardController.bugunYeniKayit}"><f:convertNumber type="number"/></h:outputText></h3>
+                                    <span>Bugün Yeni Kayıt</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card custom-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="avatar avatar-lg bg-warning-transparent">
+                                    <div class="avatar avatar-md bg-warning"><i class="ti ti-calendar-stats fs-25"></i></div>
+                                </div>
+                                <div class="flex-fill"><h3 class="fw-semibold mb-1"><h:outputText
+                                        value="#{ayDashboardController.buAyYeniKayit}"><f:convertNumber type="number"/></h:outputText></h3>
+                                    <span>Bu Ay Yeni Kayıt</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card custom-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="avatar avatar-lg bg-info-transparent">
+                                    <div class="avatar avatar-md bg-info"><i class="ti ti-calendar fs-25"></i></div>
+                                </div>
+                                <div class="flex-fill"><h3 class="fw-semibold mb-1"><h:outputText
+                                        value="#{ayDashboardController.toplamEtkinlik}"><f:convertNumber type="number"/></h:outputText></h3>
+                                    <span>Toplam Etkinlik</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card custom-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="avatar avatar-lg bg-success-transparent">
+                                    <div class="avatar avatar-md bg-success"><i class="ti ti-calendar-event fs-25"></i></div>
+                                </div>
+                                <div class="flex-fill"><h3 class="fw-semibold mb-1"><h:outputText
+                                        value="#{ayDashboardController.yaklasanEtkinlik}"><f:convertNumber type="number"/></h:outputText></h3>
+                                    <span>Yaklaşan Etkinlik</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card custom-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="avatar avatar-lg bg-primary-transparent">
+                                    <div class="avatar avatar-md bg-primary"><i class="ti ti-door-enter fs-25"></i></div>
+                                </div>
+                                <div class="flex-fill"><h3 class="fw-semibold mb-1"><h:outputText
+                                        value="#{ayDashboardController.toplamGirisCikis}"><f:convertNumber type="number"/></h:outputText></h3>
+                                    <span>Giriş-Çıkış</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card custom-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="avatar avatar-lg bg-warning-transparent">
+                                    <div class="avatar avatar-md bg-warning"><i class="ti ti-book fs-25"></i></div>
+                                </div>
+                                <div class="flex-fill"><h3 class="fw-semibold mb-1"><h:outputText
+                                        value="#{ayDashboardController.toplamKursKaydi}"><f:convertNumber type="number"/></h:outputText></h3>
+                                    <span>Kurs Kaydı</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-xl-8">
+                    <div class="card custom-card">
+                        <div class="card-header">
+                            <div class="card-title">Aylık Üye Trendi</div>
+                        </div>
+                        <div class="card-body">
+                            <ui:fragment rendered="#{not empty ayDashboardController.aylikUyeTrendJson}">
+                                <p:chart value="#{ayDashboardController.aylikUyeTrendJson}" style="height:300px; width:100%"/>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{empty ayDashboardController.aylikUyeTrendJson}">
+                                <div class="text-muted text-center py-5">Veri bulunmuyor</div>
+                            </ui:fragment>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-4">
+                    <div class="card custom-card">
+                        <div class="card-header">
+                            <div class="card-title">Birim Dağılımı</div>
+                        </div>
+                        <div class="card-body">
+                            <ui:fragment rendered="#{not empty ayDashboardController.birimDagilimJson}">
+                                <p:chart value="#{ayDashboardController.birimDagilimJson}" style="height:300px; width:100%"/>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{empty ayDashboardController.birimDagilimJson}">
+                                <div class="text-muted text-center py-5">Veri bulunmuyor</div>
+                            </ui:fragment>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-xl-6">
+                    <div class="card custom-card">
+                        <div class="card-header">
+                            <div class="card-title">Aylık Etkinlik Trendi</div>
+                        </div>
+                        <div class="card-body">
+                            <ui:fragment rendered="#{not empty ayDashboardController.aylikEtkinlikTrendJson}">
+                                <p:chart value="#{ayDashboardController.aylikEtkinlikTrendJson}" style="height:260px; width:100%"/>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{empty ayDashboardController.aylikEtkinlikTrendJson}">
+                                <div class="text-muted text-center py-5">Veri bulunmuyor</div>
+                            </ui:fragment>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-6">
+                    <div class="card custom-card">
+                        <div class="card-header">
+                            <div class="card-title">Cinsiyet Dağılımı</div>
+                        </div>
+                        <div class="card-body">
+                            <ui:fragment rendered="#{not empty ayDashboardController.cinsiyetDagilimJson}">
+                                <p:chart value="#{ayDashboardController.cinsiyetDagilimJson}" style="height:260px; width:100%"/>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{empty ayDashboardController.cinsiyetDagilimJson}">
+                                <div class="text-muted text-center py-5">Veri bulunmuyor</div>
+                            </ui:fragment>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-xl-6">
+                    <div class="card custom-card">
+                        <div class="card-header">
+                            <div class="card-title">İlçe Dağılımı</div>
+                        </div>
+                        <div class="card-body">
+                            <ui:fragment rendered="#{not empty ayDashboardController.ilceDagilimJson}">
+                                <p:chart value="#{ayDashboardController.ilceDagilimJson}" style="height:320px; width:100%"/>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{empty ayDashboardController.ilceDagilimJson}">
+                                <div class="text-muted text-center py-5">Veri bulunmuyor</div>
+                            </ui:fragment>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-6">
+                    <div class="card custom-card">
+                        <div class="card-header">
+                            <div class="card-title">Yaş Dağılımı</div>
+                        </div>
+                        <div class="card-body">
+                            <ui:fragment rendered="#{not empty ayDashboardController.yasDagilimiJson}">
+                                <p:chart value="#{ayDashboardController.yasDagilimiJson}" style="height:320px; width:100%"/>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{empty ayDashboardController.yasDagilimiJson}">
+                                <div class="text-muted text-center py-5">Veri bulunmuyor</div>
+                            </ui:fragment>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+
+                <div class="col-xl-12">
+                    <div class="card custom-card">
+                        <div class="card-header">
+                            <div class="card-title">Son Etkinlikler</div>
+                        </div>
+                        <div class="card-body">
+                            <p:dataTable value="#{ayDashboardController.sonEtkinlikler}" var="e" rows="10" paginator="false"
+                                         emptyMessage="#{messages.kayitBulunamadi}" size="small">
+                                <p:column headerText="Etkinlik">
+                                    <h:outputText value="#{e.ad}"/>
+                                </p:column>
+                                <p:column headerText="Tarih" width="100">
+                                    <h:outputText value="#{e.tarih}">
+                                        <f:convertDateTime type="localDate" pattern="#{messages.tarihFormat}"/>
+                                    </h:outputText>
+                                </p:column>
+                                <p:column headerText="Yer">
+                                    <h:outputText value="#{e.etkinlikYeri}"/>
+                                </p:column>
+                                <p:column headerText="Katılımcı Sayısı" width="120">
+                                    <h:outputText value="#{e.ayEtkinlikKisiList.size()}"/>
+                                </p:column>
+                            </p:dataTable>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-xl-6">
+                    <div class="card custom-card">
+                        <div class="card-header">
+                            <div class="card-title">Son Üyeler</div>
+                        </div>
+                        <div class="card-body">
+                            <p:dataTable value="#{ayDashboardController.sonUyeler}" var="u" rows="10" paginator="false"
+                                         emptyMessage="#{messages.kayitBulunamadi}" size="small">
+                                <p:column headerText="Üye">
+                                    <h:outputText value="#{u.gnlKisi.adSoyad}"/>
+                                </p:column>
+                                <p:column headerText="Kayıt Tarihi">
+                                    <h:outputText value="#{u.kayitTarihi}">
+                                        <f:convertDateTime type="localDateTime" pattern="dd.MM.yyyy HH:mm"/>
+                                    </h:outputText>
+                                </p:column>
+                                <p:column headerText="Devam Durumu">
+                                    <h:outputText value="#{u.devamDurumu.displayValue}"/>
+                                </p:column>
+                            </p:dataTable>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-6">
+                    <div class="card custom-card">
+                        <div class="card-header">
+                            <div class="card-title">Son Giriş-Çıkışlar</div>
+                        </div>
+                        <div class="card-body">
+                            <p:dataTable value="#{ayDashboardController.sonGirisCikislar}" var="g" rows="10" paginator="false"
+                                         emptyMessage="#{messages.kayitBulunamadi}" size="small">
+                                <p:column headerText="Üye">
+                                    <h:outputText value="#{g.ayKisi.gnlKisi.adSoyad}"/>
+                                </p:column>
+                                <p:column headerText="Giriş Tarihi">
+                                    <h:outputText value="#{g.girisTarihi}">
+                                        <f:convertDateTime type="localDateTime" pattern="dd.MM.yyyy HH:mm"/>
+                                    </h:outputText>
+                                </p:column>
+                                <p:column headerText="Çıkış Tarihi">
+                                    <h:outputText value="#{g.cikisTarihi}">
+                                        <f:convertDateTime type="localDateTime" pattern="dd.MM.yyyy HH:mm"/>
+                                    </h:outputText>
+                                </p:column>
+                            </p:dataTable>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end mb-3">
+                <p:commandButton value="Yenile" icon="pi pi-refresh" actionListener="#{ayDashboardController.yenile()}"
+                                 update="ayDashboardPanel" process="@this" styleClass="ui-button-secondary"/>
+            </div>
+        </ui:fragment>
+    </h:panelGroup>
+</ui:composition>
+</html>
