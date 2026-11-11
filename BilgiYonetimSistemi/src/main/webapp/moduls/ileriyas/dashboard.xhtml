@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces">
+
+<ui:composition>
+    <h:panelGroup id="iyDashboardPanel" layout="block">
+        <ui:fragment rendered="#{not iyDashboardController.yetkili}">
+            <div class="alert alert-warning">
+                <h:outputText value="#{iyDashboardController.hataMesaji}"/>
+            </div>
+        </ui:fragment>
+
+        <ui:fragment rendered="#{iyDashboardController.yetkili}">
+            <div class="row g-3 mb-3">
+                <div class="col-xl-3 col-md-6">
+                    <div class="card custom-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="avatar avatar-lg bg-info-transparent">
+                                    <div class="avatar avatar-md bg-info"><i class="ti ti-users fs-25"></i></div>
+                                </div>
+                                <div class="flex-fill"><h3 class="fw-semibold mb-1"><h:outputText
+                                        value="#{iyDashboardController.toplamKisi}"><f:convertNumber type="number"/></h:outputText></h3>
+                                    <span>Toplam Kişi</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card custom-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="avatar avatar-lg bg-primary-transparent">
+                                    <div class="avatar avatar-md bg-primary"><i class="ti ti-clipboard fs-25"></i></div>
+                                </div>
+                                <div class="flex-fill"><h3 class="fw-semibold mb-1"><h:outputText
+                                        value="#{iyDashboardController.toplamTalep}"><f:convertNumber type="number"/></h:outputText></h3>
+                                    <span>Toplam Talep</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card custom-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="avatar avatar-lg bg-danger-transparent">
+                                    <div class="avatar avatar-md bg-danger"><i class="ti ti-clock fs-25"></i></div>
+                                </div>
+                                <div class="flex-fill"><h3 class="fw-semibold mb-1"><h:outputText
+                                        value="#{iyDashboardController.bekleyenTalep}"><f:convertNumber type="number"/></h:outputText></h3>
+                                    <span>Bekleyen Talep</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card custom-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="avatar avatar-lg bg-success-transparent">
+                                    <div class="avatar avatar-md bg-success"><i class="ti ti-user-plus fs-25"></i></div>
+                                </div>
+                                <div class="flex-fill"><h3 class="fw-semibold mb-1"><h:outputText
+                                        value="#{iyDashboardController.bugunTalep}"><f:convertNumber type="number"/></h:outputText></h3>
+                                    <span>Bugün Talep</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card custom-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="avatar avatar-lg bg-info-transparent">
+                                    <div class="avatar avatar-md bg-info"><i class="ti ti-calendar-stats fs-25"></i></div>
+                                </div>
+                                <div class="flex-fill"><h3 class="fw-semibold mb-1"><h:outputText
+                                        value="#{iyDashboardController.buAyTalep}"><f:convertNumber type="number"/></h:outputText></h3>
+                                    <span>Bu Ay Talep</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card custom-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="avatar avatar-lg bg-warning-transparent">
+                                    <div class="avatar avatar-md bg-warning"><i class="ti ti-list fs-25"></i></div>
+                                </div>
+                                <div class="flex-fill"><h3 class="fw-semibold mb-1"><h:outputText
+                                        value="#{iyDashboardController.toplamTalepKonu}"><f:convertNumber type="number"/></h:outputText></h3>
+                                    <span>Talep Konusu</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-xl-8">
+                    <div class="card custom-card">
+                        <div class="card-header">
+                            <div class="card-title">Aylık Talep Trendi</div>
+                        </div>
+                        <div class="card-body">
+                            <ui:fragment rendered="#{not empty iyDashboardController.aylikTalepTrendJson}">
+                                <p:chart value="#{iyDashboardController.aylikTalepTrendJson}" style="height:300px; width:100%"/>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{empty iyDashboardController.aylikTalepTrendJson}">
+                                <div class="text-muted text-center py-5">Veri bulunmuyor</div>
+                            </ui:fragment>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-4">
+                    <div class="card custom-card">
+                        <div class="card-header">
+                            <div class="card-title">Talep Konusu Dağılımı</div>
+                        </div>
+                        <div class="card-body">
+                            <ui:fragment rendered="#{not empty iyDashboardController.talepKonuDagilimJson}">
+                                <p:chart value="#{iyDashboardController.talepKonuDagilimJson}" style="height:300px; width:100%"/>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{empty iyDashboardController.talepKonuDagilimJson}">
+                                <div class="text-muted text-center py-5">Veri bulunmuyor</div>
+                            </ui:fragment>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-xl-4">
+                    <div class="card custom-card">
+                        <div class="card-header">
+                            <div class="card-title">Talep Durumu Dağılımı</div>
+                        </div>
+                        <div class="card-body">
+                            <ui:fragment rendered="#{not empty iyDashboardController.talepDurumuDagilimJson}">
+                                <p:chart value="#{iyDashboardController.talepDurumuDagilimJson}" style="height:260px; width:100%"/>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{empty iyDashboardController.talepDurumuDagilimJson}">
+                                <div class="text-muted text-center py-5">Veri bulunmuyor</div>
+                            </ui:fragment>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-4">
+                    <div class="card custom-card">
+                        <div class="card-header">
+                            <div class="card-title">Cinsiyet Dağılımı</div>
+                        </div>
+                        <div class="card-body">
+                            <ui:fragment rendered="#{not empty iyDashboardController.cinsiyetDagilimJson}">
+                                <p:chart value="#{iyDashboardController.cinsiyetDagilimJson}" style="height:260px; width:100%"/>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{empty iyDashboardController.cinsiyetDagilimJson}">
+                                <div class="text-muted text-center py-5">Veri bulunmuyor</div>
+                            </ui:fragment>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-4">
+                    <div class="card custom-card">
+                        <div class="card-header">
+                            <div class="card-title">Yaş Dağılımı</div>
+                        </div>
+                        <div class="card-body">
+                            <ui:fragment rendered="#{not empty iyDashboardController.yasDagilimiJson}">
+                                <p:chart value="#{iyDashboardController.yasDagilimiJson}" style="height:260px; width:100%"/>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{empty iyDashboardController.yasDagilimiJson}">
+                                <div class="text-muted text-center py-5">Veri bulunmuyor</div>
+                            </ui:fragment>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-12">
+                    <div class="card custom-card">
+                        <div class="card-header">
+                            <div class="card-title">İlçe Dağılımı</div>
+                        </div>
+                        <div class="card-body">
+                            <ui:fragment rendered="#{not empty iyDashboardController.ilceDagilimJson}">
+                                <p:chart value="#{iyDashboardController.ilceDagilimJson}" style="height:320px; width:100%"/>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{empty iyDashboardController.ilceDagilimJson}">
+                                <div class="text-muted text-center py-5">Veri bulunmuyor</div>
+                            </ui:fragment>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-xl-6">
+                    <div class="card custom-card">
+                        <div class="card-header">
+                            <div class="card-title">Son Kişiler</div>
+                        </div>
+                        <div class="card-body">
+                            <p:dataTable value="#{iyDashboardController.sonKisiler}" var="k" rows="10" paginator="false"
+                                         emptyMessage="#{messages.kayitBulunamadi}" size="small">
+                                <p:column headerText="Kişi">
+                                    <h:outputText value="#{k.gnlKisi.adSoyad}"/>
+                                </p:column>
+                                <p:column headerText="Kayıt Tarihi">
+                                    <h:outputText value="#{k.eklemeTarihi}">
+                                        <f:convertDateTime type="localDateTime" pattern="#{messages.tarihSaatKisaFormat}"/>
+                                    </h:outputText>
+                                </p:column>
+                            </p:dataTable>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-6">
+                    <div class="card custom-card">
+                        <div class="card-header">
+                            <div class="card-title">Bekleyen Talepler</div>
+                        </div>
+                        <div class="card-body">
+                            <p:dataTable value="#{iyDashboardController.bekleyenTalepler}" var="t" rows="10" paginator="false"
+                                         emptyMessage="Bekleyen talep yok">
+                                <p:column headerText="Talep Türü">
+                                    <h:outputText value="#{t.talepTuru}"/>
+                                </p:column>
+                                <p:column headerText="Tarih">
+                                    <h:outputText value="#{t.tarih}">
+                                        <f:convertDateTime type="localDateTime" pattern="#{messages.tarihSaatKisaFormat}"/>
+                                    </h:outputText>
+                                </p:column>
+                                <p:column headerText="Durum">
+                                    <span class="badge bg-warning-transparent text-warning">#{t.durum}</span>
+                                </p:column>
+                            </p:dataTable>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-xl-12">
+                    <div class="card custom-card">
+                        <div class="card-header">
+                            <div class="card-title">Son Talepler</div>
+                        </div>
+                        <div class="card-body">
+                            <p:dataTable value="#{iyDashboardController.sonTalepler}" var="t" rows="10" paginator="false"
+                                         emptyMessage="#{messages.kayitBulunamadi}" size="small">
+                                <p:column headerText="Kişi">
+                                    <h:outputText value="#{t.iyKisi.gnlKisi.adSoyad}"/>
+                                </p:column>
+                                <p:column headerText="Talep Konusu">
+                                    <h:outputText value="#{t.iyTalepKonu.tanim}"/>
+                                </p:column>
+                                <p:column headerText="Tarih">
+                                    <h:outputText value="#{t.tarih}">
+                                        <f:convertDateTime type="localDateTime" pattern="#{messages.tarihSaatKisaFormat}"/>
+                                    </h:outputText>
+                                </p:column>
+                                <p:column headerText="Durum">
+                                    <h:outputText value="#{t.durum}"/>
+                                </p:column>
+                            </p:dataTable>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end mb-3">
+                <p:commandButton value="Yenile" icon="pi pi-refresh" actionListener="#{iyDashboardController.yenile()}"
+                                 update="iyDashboardPanel" process="@this" styleClass="ui-button-secondary"/>
+            </div>
+        </ui:fragment>
+    </h:panelGroup>
+</ui:composition>
+</html>
