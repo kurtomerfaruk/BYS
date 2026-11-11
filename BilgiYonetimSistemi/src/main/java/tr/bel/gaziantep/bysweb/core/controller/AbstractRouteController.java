@@ -58,11 +58,11 @@ public abstract class AbstractRouteController<T> implements java.io.Serializable
     protected MapModel<Long> mapModel;
 
     @PostConstruct
-    public void init(){
+    public void init() {
         mapModel = new DefaultMapModel<>();
         LatLng centerCord = new LatLng(37.06591759577603, 37.37354309665679);
-        startPointStr = centerCord.getLat()+","+centerCord.getLng();
-        startPoint = new Point(centerCord.getLat(),centerCord.getLng());
+        startPointStr = centerCord.getLat() + "," + centerCord.getLng();
+        startPoint = new Point(centerCord.getLat(), centerCord.getLng());
         mapModel.addOverlay(new Marker<>(centerCord, "Merkez", 1L));
         mapModel.getMarkers().get(0).setDraggable(true);
     }
@@ -82,7 +82,7 @@ public abstract class AbstractRouteController<T> implements java.io.Serializable
 
     public void createRoute() {
         try {
-            if(startPoint == null){
+            if (startPoint == null) {
                 FacesUtil.addExclamationMessage("Başlangıç noktasını seçmeden rota hesaplaması yapılamaz");
                 return;
             }
@@ -153,9 +153,14 @@ public abstract class AbstractRouteController<T> implements java.io.Serializable
 
     // --- Abstract metodlar (alt sınıflar override edecek) ---
     protected abstract String getLatLng(T kisi);
+
     protected abstract String getTcKimlikNo(T kisi);
+
     protected abstract GnlKisi getGnlKisi(T kisi);
+
     protected abstract void setGnlKisi(T kisi, GnlKisi gnlKisi);
+
     protected abstract EnumModul getModul();
+
     protected abstract void saveEntity(T kisi);
 }

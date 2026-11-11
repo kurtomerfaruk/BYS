@@ -5,27 +5,29 @@
       xmlns:ui="jakarta.faces.facelets"
       xmlns:h="jakarta.faces.html"
       xmlns:p="primefaces"
-      xmlns:k="http://kurtomerfaruk.com/ui">
+>
 
 <ui:composition>
-    <h:form>
-        <k:map widgetVar="mapVar" center="37.069387, 37.374620" zoom="12" style="display:none">
+    <!--    <h:form>-->
+    <!--        <div style="position: relative; height: calc(100vh - 235px);">-->
+    <!--        <k:map widgetVar="mapVar1" center="37.069387, 37.374620" zoom="12">-->
 
-        </k:map>
-    </h:form>
+    <!--        </k:map>-->
+    <!--        </div>-->
+    <!--    </h:form>-->
 
     <h:form id="dashboardForm">
         <p:tabView id="dashboardTabView" dynamic="true" cache="true" styleClass="mt-3">
             <p:ajax event="tabChange" onstart="PF('Loading').show()" oncomplete="PF('Loading').hide()"/>
 
-            <p:tab title="Aktif Yaşam"
-                   rendered="#{syKullaniciController.hasPermission('aktif_yasam_dashboard:goster')}">
-                <ui:include src="/moduls/aktifyasam/dashboard.xhtml"/>
-            </p:tab>
-
             <p:tab title="Engelsizler"
                    rendered="#{syKullaniciController.hasPermission('engelsizler_dashboard:goster')}">
                 <ui:include src="/moduls/engelsizler/dashboardNew.xhtml"/>
+            </p:tab>
+
+            <p:tab title="Aktif Yaşam"
+                   rendered="#{syKullaniciController.hasPermission('aktif_yasam_dashboard:goster')}">
+                <ui:include src="/moduls/aktifyasam/dashboard.xhtml"/>
             </p:tab>
 
             <p:tab title="Engelsiz Kariyer Merkezi"

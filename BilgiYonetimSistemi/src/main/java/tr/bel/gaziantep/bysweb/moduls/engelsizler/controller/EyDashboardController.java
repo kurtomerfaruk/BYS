@@ -9,6 +9,7 @@ import jakarta.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.primefaces.model.map.LatLng;
 import tr.bel.gaziantep.bysweb.core.enums.BaseEnum;
 import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
 import tr.bel.gaziantep.bysweb.moduls.engelsizler.entity.EyAracCihazTeslimi;
@@ -16,6 +17,7 @@ import tr.bel.gaziantep.bysweb.moduls.engelsizler.entity.EyAracTamir;
 import tr.bel.gaziantep.bysweb.moduls.engelsizler.entity.EyKisi;
 import tr.bel.gaziantep.bysweb.moduls.engelsizler.entity.EyTalep;
 import tr.bel.gaziantep.bysweb.moduls.engelsizler.service.EyDashboardService;
+import tr.bel.gaziantep.bysweb.moduls.engelsizler.service.EyKisiService;
 
 import java.io.Serial;
 import java.util.ArrayList;
@@ -31,7 +33,7 @@ import java.util.Map;
 @Named
 @ViewScoped
 @Slf4j
-public class EyDashboardController implements java.io.Serializable{
+public class EyDashboardController implements java.io.Serializable {
     @Serial
     private static final long serialVersionUID = 4490819164960959952L;
 
@@ -43,39 +45,97 @@ public class EyDashboardController implements java.io.Serializable{
 
     @Inject
     private EyDashboardService eyDashboardService;
+    @Inject
+    private EyKisiService eyKisiService;
 
     @Getter
     @Setter
     private long toplamKisi;
-    @Getter @Setter private long bugunYeniKayit;
-    @Getter @Setter private long buAyYeniKayit;
-    @Getter @Setter private long toplamTalep;
-    @Getter @Setter private long bekleyenTalep;
-    @Getter @Setter private long buAyTalep;
-    @Getter @Setter private long toplamTamir;
-    @Getter @Setter private long buAyTamir;
-    @Getter @Setter private long toplamCihazTeslim;
-    @Getter @Setter private long buAyCihazTeslim;
-    @Getter @Setter private long sosyalIncelemeRaporu;
-    @Getter @Setter private long buAySosyalInceleme;
-    @Getter @Setter private long kullanilanCihaz;
-    @Getter @Setter private long engelGrubuSayisi;
+    @Getter
+    @Setter
+    private long bugunYeniKayit;
+    @Getter
+    @Setter
+    private long buAyYeniKayit;
+    @Getter
+    @Setter
+    private long toplamTalep;
+    @Getter
+    @Setter
+    private long bekleyenTalep;
+    @Getter
+    @Setter
+    private long buAyTalep;
+    @Getter
+    @Setter
+    private long toplamTamir;
+    @Getter
+    @Setter
+    private long buAyTamir;
+    @Getter
+    @Setter
+    private long toplamCihazTeslim;
+    @Getter
+    @Setter
+    private long buAyCihazTeslim;
+    @Getter
+    @Setter
+    private long sosyalIncelemeRaporu;
+    @Getter
+    @Setter
+    private long buAySosyalInceleme;
+    @Getter
+    @Setter
+    private long kullanilanCihaz;
+    @Getter
+    @Setter
+    private long engelGrubuSayisi;
 
-    @Getter @Setter private List<EyKisi> sonKisiler = new ArrayList<>();
-    @Getter @Setter private List<EyTalep> sonTalepler = new ArrayList<>();
-    @Getter @Setter private List<EyTalep> bekleyenTalepler = new ArrayList<>();
-    @Getter @Setter private List<EyAracTamir> sonTamirler = new ArrayList<>();
-    @Getter @Setter private List<EyAracCihazTeslimi> sonCihazTeslimleri = new ArrayList<>();
+    @Getter
+    @Setter
+    private List<EyKisi> sonKisiler = new ArrayList<>();
+    @Getter
+    @Setter
+    private List<EyTalep> sonTalepler = new ArrayList<>();
+    @Getter
+    @Setter
+    private List<EyTalep> bekleyenTalepler = new ArrayList<>();
+    @Getter
+    @Setter
+    private List<EyAracTamir> sonTamirler = new ArrayList<>();
+    @Getter
+    @Setter
+    private List<EyAracCihazTeslimi> sonCihazTeslimleri = new ArrayList<>();
 
-    @Getter @Setter private String aylikTalepTrendJson = "";
-    @Getter @Setter private String engelGrubuDagilimJson = "";
-    @Getter @Setter private String talepDurumuDagilimJson = "";
-    @Getter @Setter private String cinsiyetDagilimJson = "";
-    @Getter @Setter private String yasDagilimiJson = "";
-    @Getter @Setter private String ilceDagilimJson = "";
+    @Getter
+    @Setter
+    private String aylikTalepTrendJson = "";
+    @Getter
+    @Setter
+    private String engelGrubuDagilimJson = "";
+    @Getter
+    @Setter
+    private String talepDurumuDagilimJson = "";
+    @Getter
+    @Setter
+    private String cinsiyetDagilimJson = "";
+    @Getter
+    @Setter
+    private String yasDagilimiJson = "";
+    @Getter
+    @Setter
+    private String ilceDagilimJson = "";
 
-    @Getter @Setter private boolean yetkili = true;
-    @Getter @Setter private String hataMesaji;
+    @Getter
+    @Setter
+    private boolean yetkili = true;
+    @Getter
+    @Setter
+    private String hataMesaji;
+
+    @Getter
+    @Setter
+    private List<LatLng> heatmapModels;
 
     @PostConstruct
     public void init() {
@@ -109,6 +169,8 @@ public class EyDashboardController implements java.io.Serializable{
             cinsiyetDagilimJson = dagilimOlustur(eyDashboardService.cinsiyetDagilimi(), "Cinsiyet", "pie");
             yasDagilimiJson = dagilimOlustur(eyDashboardService.yasDagilimi(), "Yaş Grubu", "bar");
             ilceDagilimJson = dagilimOlustur(eyDashboardService.ilceDagilimi(), "İlçe", "bar");
+
+            getAddress();
 
         } catch (SecurityException e) {
             yetkili = false;
@@ -157,10 +219,10 @@ public class EyDashboardController implements java.io.Serializable{
             Object key = row[0];
             Long adet = ((Number) row[1]).longValue();
             if (key != null && adet != null) {
-                if(key instanceof Enum<?>){
-                    String enumValue = ((BaseEnum)key).getDisplayValue();
+                if (key instanceof Enum<?>) {
+                    String enumValue = ((BaseEnum) key).getDisplayValue();
                     etiketler.add(enumValue);
-                }else{
+                } else {
                     etiketler.add(key.toString());
                 }
                 sayilar.add(adet);
@@ -194,6 +256,17 @@ public class EyDashboardController implements java.io.Serializable{
         } catch (JsonProcessingException e) {
             log.error("Engelsizler dashboard grafik JSON'u üretilirken hata oluştu.", e);
             return "";
+        }
+    }
+
+    private void getAddress() {
+        heatmapModels = new ArrayList<>();
+        List<String> coordinates = eyKisiService.getAllCoordinates();
+        for (String coordinate : coordinates) {
+            if (coordinate.equals("null,null")) continue;
+            String[] parts = coordinate.split("\\s*,\\s*");
+            LatLng heatmapModel = new LatLng(Double.parseDouble(parts[1]), Double.parseDouble(parts[0]));
+            heatmapModels.add(heatmapModel);
         }
     }
 }

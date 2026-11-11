@@ -5,7 +5,8 @@
       xmlns:ui="jakarta.faces.facelets"
       xmlns:h="jakarta.faces.html"
       xmlns:f="jakarta.faces.core"
-      xmlns:p="primefaces">
+      xmlns:p="primefaces"
+      xmlns:k="http://kurtomerfaruk.com/ui">
 
 <ui:composition>
     <h:panelGroup id="eyDashboardPanel" layout="block">
@@ -16,6 +17,31 @@
         </ui:fragment>
 
         <ui:fragment rendered="#{eyDashboardController.yetkili}">
+            <div class="row g-3 mb-3">
+                <div class="col-xl-12">
+                    <div class="card custom-card">
+                        <div class="card-header">
+                            <div class="card-title">Sıcaklık Haritası</div>
+                        </div>
+                        <div class="card-body">
+                            <ui:fragment rendered="#{not empty eyDashboardController.heatmapModels}">
+                                <div style="position: relative; height: calc(70vh);">
+                                    <k:map id="generalMap" center="37.069387, 37.374620" zoom="12"
+                                           widgetVar="mapVar">
+                                        <k:heatmap
+                                                points="#{eyDashboardController.heatmapModels}"
+                                                radius="25" blur="10"/>
+                                    </k:map>
+                                </div>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{empty eyDashboardController.heatmapModels}">
+                                <div class="text-muted text-center py-5">Veri bulunmuyor</div>
+                            </ui:fragment>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="row g-3 mb-3">
                 <div class="col-xl-3 col-md-6">
                     <div class="card custom-card">
