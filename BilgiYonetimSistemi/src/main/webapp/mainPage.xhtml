@@ -57,6 +57,11 @@
                    rendered="#{syKullaniciController.hasPermission('psikiyatri_klinigi_dashboard:goster')}">
                 <ui:include src="/moduls/psikiyatriklinigi/dashboard.xhtml"/>
             </p:tab>
+
+            <p:tab title="Sağlık Hizmetleri"
+                   rendered="#{syKullaniciController.hasPermission('saglik_hizmetleri_dashboard:goster')}">
+                <ui:include src="/moduls/saglikhizmetleri/dashboard.xhtml"/>
+            </p:tab>
         </p:tabView>
 
         <ui:fragment rendered="#{not (syKullaniciController.hasPermission('psikiyatri_klinigi_dashboard:goster')

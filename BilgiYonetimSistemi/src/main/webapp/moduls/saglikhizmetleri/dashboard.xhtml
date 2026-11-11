@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces">
+
+<ui:composition>
+    <h:panelGroup id="shDashboardPanel" layout="block">
+        <ui:fragment rendered="#{not shDashboardController.yetkili}">
+            <div class="alert alert-warning">
+                <h:outputText value="#{shDashboardController.hataMesaji}"/>
+            </div>
+        </ui:fragment>
+
+        <ui:fragment rendered="#{shDashboardController.yetkili}">
+            <div class="row g-3 mb-3">
+                <div class="col-xl-3 col-md-6">
+                    <div class="card custom-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="avatar avatar-lg bg-info-transparent">
+                                    <div class="avatar avatar-md bg-info"><i class="ti ti-users fs-25"></i></div>
+                                </div>
+                                <div class="flex-fill"><h3 class="fw-semibold mb-1"><h:outputText
+                                        value="#{shDashboardController.toplamDanisan}"><f:convertNumber type="number"/></h:outputText></h3>
+                                    <span>Toplam Danışan</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card custom-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="avatar avatar-lg bg-primary-transparent">
+                                    <div class="avatar avatar-md bg-primary"><i class="ti ti-user-plus fs-25"></i></div>
+                                </div>
+                                <div class="flex-fill"><h3 class="fw-semibold mb-1"><h:outputText
+                                        value="#{shDashboardController.bugunYeniKayit}"><f:convertNumber type="number"/></h:outputText></h3>
+                                    <span>Bugün Yeni Kayıt</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card custom-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="avatar avatar-lg bg-success-transparent">
+                                    <div class="avatar avatar-md bg-success"><i class="ti ti-calendar-stats fs-25"></i></div>
+                                </div>
+                                <div class="flex-fill"><h3 class="fw-semibold mb-1"><h:outputText
+                                        value="#{shDashboardController.buAyYeniKayit}"><f:convertNumber type="number"/></h:outputText></h3>
+                                    <span>Bu Ay Yeni Kayıt</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card custom-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="avatar avatar-lg bg-warning-transparent">
+                                    <div class="avatar avatar-md bg-warning"><i class="ti ti-stethoscope fs-25"></i></div>
+                                </div>
+                                <div class="flex-fill"><h3 class="fw-semibold mb-1"><h:outputText
+                                        value="#{shDashboardController.toplamKontrol}"><f:convertNumber type="number"/></h:outputText></h3>
+                                    <span>Toplam Kontrol</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card custom-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="avatar avatar-lg bg-info-transparent">
+                                    <div class="avatar avatar-md bg-info"><i class="ti ti-calendar fs-25"></i></div>
+                                </div>
+                                <div class="flex-fill"><h3 class="fw-semibold mb-1"><h:outputText
+                                        value="#{shDashboardController.bugunKontrol}"><f:convertNumber type="number"/></h:outputText></h3>
+                                    <span>Bugün Kontrol</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card custom-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="avatar avatar-lg bg-success-transparent">
+                                    <div class="avatar avatar-md bg-success"><i class="ti ti-list-search fs-25"></i></div>
+                                </div>
+                                <div class="flex-fill"><h3 class="fw-semibold mb-1"><h:outputText
+                                        value="#{shDashboardController.toplamTahlil}"><f:convertNumber type="number"/></h:outputText></h3>
+                                    <span>Kan Tahlil Sonucu</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card custom-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="avatar avatar-lg bg-warning-transparent">
+                                    <div class="avatar avatar-md bg-warning"><i class="ti ti-augmented-reality fs-25"></i></div>
+                                </div>
+                                <div class="flex-fill"><h3 class="fw-semibold mb-1"><h:outputText value="#{shDashboardController.toplamObeziteAnket}"><f:convertNumber
+                                        type="number"/></h:outputText></h3><span>Obezite Anketi</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card custom-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="avatar avatar-lg bg-primary-transparent">
+                                    <div class="avatar avatar-md bg-primary"><i class="ti ti-calendar-event fs-25"></i></div>
+                                </div>
+                                <div class="flex-fill"><h3 class="fw-semibold mb-1"><h:outputText
+                                        value="#{shDashboardController.toplamRandevu}"><f:convertNumber type="number"/></h:outputText></h3>
+                                    <span>Toplam Randevu</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-xl-8">
+                    <div class="card custom-card">
+                        <div class="card-header">
+                            <div class="card-title">Aylık Danışan Trendi</div>
+                        </div>
+                        <div class="card-body">
+                            <ui:fragment rendered="#{not empty shDashboardController.aylikDanisanTrendJson}">
+                                <p:chart value="#{shDashboardController.aylikDanisanTrendJson}" style="height:300px; width:100%"/>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{empty shDashboardController.aylikDanisanTrendJson}">
+                                <div class="text-muted text-center py-5">Veri bulunmuyor</div>
+                            </ui:fragment>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-4">
+                    <div class="card custom-card">
+                        <div class="card-header">
+                            <div class="card-title">Danışmanlık Hizmeti Dağılımı</div>
+                        </div>
+                        <div class="card-body">
+                            <ui:fragment rendered="#{not empty shDashboardController.danismanlikHizmetiDagilimJson}">
+                                <p:chart value="#{shDashboardController.danismanlikHizmetiDagilimJson}" style="height:300px; width:100%"/>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{empty shDashboardController.danismanlikHizmetiDagilimJson}">
+                                <div class="text-muted text-center py-5">Veri bulunmuyor</div>
+                            </ui:fragment>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-xl-6">
+                    <div class="card custom-card">
+                        <div class="card-header">
+                            <div class="card-title">Verilen Hizmet Dağılımı</div>
+                        </div>
+                        <div class="card-body">
+                            <ui:fragment rendered="#{not empty shDashboardController.verilenHizmetDagilimJson}">
+                                <p:chart value="#{shDashboardController.verilenHizmetDagilimJson}" style="height:260px; width:100%"/>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{empty shDashboardController.verilenHizmetDagilimJson}">
+                                <div class="text-muted text-center py-5">Veri bulunmuyor</div>
+                            </ui:fragment>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-6">
+                    <div class="card custom-card">
+                        <div class="card-header">
+                            <div class="card-title">Cinsiyet Dağılımı</div>
+                        </div>
+                        <div class="card-body">
+                            <ui:fragment rendered="#{not empty shDashboardController.cinsiyetDagilimJson}">
+                                <p:chart value="#{shDashboardController.cinsiyetDagilimJson}" style="height:260px; width:100%"/>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{empty shDashboardController.cinsiyetDagilimJson}">
+                                <div class="text-muted text-center py-5">Veri bulunmuyor</div>
+                            </ui:fragment>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-xl-6">
+                    <div class="card custom-card">
+                        <div class="card-header">
+                            <div class="card-title">İlçe Dağılımı</div>
+                        </div>
+                        <div class="card-body">
+                            <ui:fragment rendered="#{not empty shDashboardController.ilceDagilimJson}">
+                                <p:chart value="#{shDashboardController.ilceDagilimJson}" style="height:320px; width:100%"/>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{empty shDashboardController.ilceDagilimJson}">
+                                <div class="text-muted text-center py-5">Veri bulunmuyor</div>
+                            </ui:fragment>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-6">
+                    <div class="card custom-card">
+                        <div class="card-header">
+                            <div class="card-title">Yaş Dağılımı</div>
+                        </div>
+                        <div class="card-body">
+                            <ui:fragment rendered="#{not empty shDashboardController.yasDagilimiJson}">
+                                <p:chart value="#{shDashboardController.yasDagilimiJson}" style="height:260px; width:100%"/>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{empty shDashboardController.yasDagilimiJson}">
+                                <div class="text-muted text-center py-5">Veri bulunmuyor</div>
+                            </ui:fragment>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-xl-6">
+                    <div class="card custom-card">
+                        <div class="card-header">
+                            <div class="card-title">Son Danışanlar</div>
+                        </div>
+                        <div class="card-body">
+                            <p:dataTable value="#{shDashboardController.sonDanisanlar}" var="d" rows="10" paginator="false"
+                                         emptyMessage="#{messages.kayitBulunamadi}" size="small">
+                                <p:column headerText="Danışan">
+                                    <h:outputText value="#{d.gnlKisi.adSoyad}"/>
+                                </p:column>
+                                <p:column headerText="Geliş Tarihi">
+                                    <h:outputText value="#{d.gelisTarihi}">
+                                        <f:convertDateTime type="localDateTime" pattern="#{messages.tarihSaatKisaFormat}"/>
+                                    </h:outputText>
+                                </p:column>
+                                <p:column headerText="Danışmanlık Hizmeti">
+                                    <h:outputText value="#{d.danismanlikHizmeti.displayValue}"/>
+                                </p:column>
+                            </p:dataTable>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-6">
+                    <div class="card custom-card">
+                        <div class="card-header">
+                            <div class="card-title">Son Kontroller</div>
+                        </div>
+                        <div class="card-body">
+                            <p:dataTable value="#{shDashboardController.sonKontroller}" var="k" rows="10" paginator="false"
+                                         emptyMessage="#{messages.kayitBulunamadi}" size="small">
+                                <p:column headerText="Danışan">
+                                    <h:outputText value="#{k.shKisi.gnlKisi.adSoyad}"/>
+                                </p:column>
+                                <p:column headerText="Tarih">
+                                    <h:outputText value="#{k.tarih}">
+                                        <f:convertDateTime type="localDate" pattern="#{messages.tarihFormat}"/>
+                                    </h:outputText>
+                                </p:column>
+                                <p:column headerText="BKİ">
+                                    <h:outputText value="#{k.bki}"/>
+                                </p:column>
+                            </p:dataTable>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-xl-6">
+                    <div class="card custom-card">
+                        <div class="card-header">
+                            <div class="card-title">Son Tahliller</div>
+                        </div>
+                        <div class="card-body">
+                            <p:dataTable value="#{shDashboardController.sonTahliller}" var="t" rows="10" paginator="false"
+                                         emptyMessage="#{messages.kayitBulunamadi}" size="small">
+                                <p:column headerText="Danışan">
+                                    <h:outputText value="#{t.shKisi.gnlKisi.adSoyad}"/>
+                                </p:column>
+                                <p:column headerText="Tarih">
+                                    <h:outputText value="#{t.tarih eq null ? t.eklemeTarihi : t.tarih}">
+                                        <f:convertDateTime type="localDateTime" pattern="#{messages.tarihSaatKisaFormat}"/>
+                                    </h:outputText>
+                                </p:column>
+                            </p:dataTable>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-6">
+                    <div class="card custom-card">
+                        <div class="card-header">
+                            <div class="card-title">Son Randevular</div>
+                        </div>
+                        <div class="card-body">
+                            <p:dataTable value="#{shDashboardController.sonRandevular}" var="r" rows="10" paginator="false"
+                                         emptyMessage="#{messages.kayitBulunamadi}" size="small">
+                                <p:column headerText="Danışan">
+                                    <h:outputText value="#{r.shKisi.gnlKisi.adSoyad}"/>
+                                </p:column>
+                                <p:column headerText="Konu">
+                                    <h:outputText value="#{r.konu}"/>
+                                </p:column>
+                                <p:column headerText="Randevu Tarihi">
+                                    <h:outputText value="#{r.randevuTarihi}">
+                                        <f:convertDateTime type="localDateTime" pattern="#{messages.tarihSaatKisaFormat}"/>
+                                    </h:outputText>
+                                </p:column>
+                            </p:dataTable>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-xl-12">
+                    <div class="card custom-card">
+                        <div class="card-header">
+                            <div class="card-title">Son Obezite Anketleri</div>
+                        </div>
+                        <div class="card-body">
+                            <p:dataTable value="#{shDashboardController.sonObeziteAnketleri}" var="a" rows="10" paginator="false"
+                                         emptyMessage="#{messages.kayitBulunamadi}" size="small">
+                                <p:column headerText="Danışan">
+                                    <h:outputText value="#{a.shKisi.gnlKisi.adSoyad}"/>
+                                </p:column>
+                                <p:column headerText="Anket Tarihi">
+                                    <h:outputText value="#{a.anketTarihi}">
+                                        <f:convertDateTime type="localDateTime" pattern="#{messages.tarihSaatKisaFormat}"/>
+                                    </h:outputText>
+                                </p:column>
+                                <p:column headerText="BKİ">
+                                    <h:outputText value="#{a.bki}"/>
+                                </p:column>
+                            </p:dataTable>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end mb-3">
+                <p:commandButton value="Yenile" icon="pi pi-refresh" actionListener="#{shDashboardController.yenile()}"
+                                 update="shDashboardPanel" process="@this" styleClass="ui-button-secondary"/>
+            </div>
+        </ui:fragment>
+    </h:panelGroup>
+</ui:composition>
+</html>

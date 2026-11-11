@@ -31,4 +31,9 @@ public class SyYetkiService extends AbstractService<SyYetki> {
     protected EntityManager getEntityManager() {
         return em;
     }
+
+    @Override
+    public String getSortCol() {
+        return "aciklama";
+    }
 }
