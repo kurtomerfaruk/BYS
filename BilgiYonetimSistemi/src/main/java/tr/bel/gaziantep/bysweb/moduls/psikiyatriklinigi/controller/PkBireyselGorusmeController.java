@@ -7,8 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.primefaces.event.SelectEvent;
 import tr.bel.gaziantep.bysweb.core.controller.AbstractController;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
-import tr.bel.gaziantep.bysweb.moduls.psikiyatriklinigi.entity.PkAile;
 import tr.bel.gaziantep.bysweb.moduls.psikiyatriklinigi.entity.PkBireyselGorusme;
+import tr.bel.gaziantep.bysweb.moduls.psikiyatriklinigi.entity.PkHasta;
 
 import java.io.Serial;
 import java.lang.reflect.InvocationTargetException;
@@ -36,7 +36,7 @@ public class PkBireyselGorusmeController extends AbstractController<PkBireyselGo
         PkBireyselGorusme newItem;
         try {
             newItem = PkBireyselGorusme.class.getDeclaredConstructor().newInstance();
-            newItem.setPkAile(PkAile.builder().gnlKisi(new GnlKisi()).build());
+            newItem.setPkHasta(PkHasta.builder().gnlKisi(new GnlKisi()).build());
             newItem.setTarih(LocalDateTime.now());
             this.setSelected(newItem);
             initializeEmbeddableKey();
@@ -47,8 +47,8 @@ public class PkBireyselGorusmeController extends AbstractController<PkBireyselGo
         return null;
     }
 
-    public void secilenPkAile(SelectEvent<PkAile> event) {
-        PkAile pkAile = event.getObject();
-        this.getSelected().setPkAile(pkAile);
+    public void secilenPkHasta(SelectEvent<PkHasta> event) {
+        PkHasta pkHasta = event.getObject();
+        this.getSelected().setPkHasta(pkHasta);
     }
 }

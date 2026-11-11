@@ -31,8 +31,8 @@ public class PkBireyselGorusme extends BaseEntity {
     private LocalDateTime tarih;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PKAILE_ID")
-    private PkAile pkAile;
+    @JoinColumn(name = "PKHASTA_ID")
+    private PkHasta pkHasta;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "GORUSME_YAPAN_PKPERSONEL_ID")

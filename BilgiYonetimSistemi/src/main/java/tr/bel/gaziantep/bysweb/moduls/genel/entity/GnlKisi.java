@@ -103,6 +103,10 @@ public class GnlKisi extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private EnumGnlEgitimDurumu egitimDurumu;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "GNLEGITIM_DURUMU_ID")
+    private GnlEgitimDurumu gnlEgitimDurumu;
+
     @Size(max = 50)
     @Nationalized
     @Column(name = "ANA_ADI", length = 50)

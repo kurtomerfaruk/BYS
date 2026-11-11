@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:editpage id="GnlEgitimDurumuEditForm"
+                   widgetVar="GnlEgitimDurumuEditDialog"
+                   actionListener="#{gnlEgitimDurumuController.save}"
+                   listForm="GnlEgitimDurumuListForm"
+                   model="#{gnlEgitimDurumuController.selected}">
+
+        <p:outputLabel value="#{messages.egitimDurumuLabel}" for="@next"/>
+        <p:inputText id="tanim" value="#{gnlEgitimDurumuController.selected.tanim}" title="#{messages.egitimDurumuText}" size="50" maxlength="100"/>
+
+
+    </coco:editpage>
+
+</ui:composition>
+
+</html>

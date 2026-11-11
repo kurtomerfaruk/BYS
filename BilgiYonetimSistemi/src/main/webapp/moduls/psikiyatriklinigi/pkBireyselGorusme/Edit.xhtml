@@ -2,7 +2,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="jakarta.faces.facelets"
-      xmlns:h="jakarta.faces.html"
       xmlns:f="jakarta.faces.core"
       xmlns:p="primefaces"
       xmlns:coco="jakarta.faces.composite/ui">
@@ -23,31 +22,23 @@
                       showIcon="true" showOnFocus="false"/>
 
         <p:outputLabel value="#{messages.tcKimlikNoLabel}" for="@next"/>
-        <coco:inputWithButton id="inputWithButtonPkAile" inputId="pkAileId"
-                              inputValue="#{pkBireyselGorusmeController.selected.pkAile.gnlKisi.tcKimlikNo}"
+        <coco:inputWithButton id="inputWithButtonPkHasta" inputId="pkHastaId"
+                              inputValue="#{pkBireyselGorusmeController.selected.pkHasta.gnlKisi.tcKimlikNo}"
                               inputTitle="#{messages.tcKimlikNoText}"
-                              actionListener="#{bysController.openCommonDialog('pkAileSec')}"
-                              ajaxListener="#{pkBireyselGorusmeController.secilenPkAile}"
+                              actionListener="#{bysController.openCommonDialog('pkHastaSec')}"
+                              ajaxListener="#{pkBireyselGorusmeController.secilenPkHasta}"
                               buttonTitle="#{messages.hastaSecmelisiniz}"
                               size="50"
                               dialogId="PkBireyselGorusmeEditDialogId"/>
 
         <p:outputLabel value="#{messages.adLabel}" for="@next"/>
-        <p:inputText id="ad" value="#{pkBireyselGorusmeController.selected.pkAile.gnlKisi.ad}"
+        <p:inputText id="ad" value="#{pkBireyselGorusmeController.selected.pkHasta.gnlKisi.ad}"
                      title="#{messages.adText}"
                      size="50" maxlength="50" readonly="true" styleClass="inputUpdate"/>
 
         <p:outputLabel value="#{messages.soyadLabel}" for="@next"/>
-        <p:inputText id="soyad" value="#{pkBireyselGorusmeController.selected.pkAile.gnlKisi.soyad}"
+        <p:inputText id="soyad" value="#{pkBireyselGorusmeController.selected.pkHasta.gnlKisi.soyad}"
                      title="#{messages.soyadText}" size="50" maxlength="50" readonly="true" styleClass="inputUpdate"/>
-
-        <p:outputLabel value="#{messages.telefonLabel}" for="@next"/>
-        <h:panelGroup>
-            <p:inputText value="#{pkBireyselGorusmeController.selected.pkAile.gnlKisi.telefon}"
-                         styleClass="inputUpdate" readonly="true"/>
-            <p:inputText value="#{pkBireyselGorusmeController.selected.pkAile.gnlKisi.telefon2}"
-                         styleClass="inputUpdate" readonly="true"/>
-        </h:panelGroup>
 
         <p:outputLabel value="#{messages.gorusmeyiYapanPersonelLabel}" for="@next"/>
         <p:selectOneMenu value="#{pkBireyselGorusmeController.selected.gorusmeYapanPkPersonel}"

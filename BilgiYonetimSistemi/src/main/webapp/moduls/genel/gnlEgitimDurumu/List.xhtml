@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:p="primefaces"
+                xmlns:pt="jakarta.faces.passthrough"
+                xmlns:coco="jakarta.faces.composite/ui">
+
+    <h:form id="GnlEgitimDurumuListForm" styleClass="form-height">
+
+        <p:contextMenu id="GnlEgitimDurumuDataTableContextMenu" for="datalist:datalist">
+            <p:menuitem value="#{messages.buttonEkle}"
+                        onclick="document.getElementById('GnlEgitimDurumuListForm:datalist:datalist:createButton').click();"
+                        icon="pi pi-plus" rendered="#{syKullaniciController.hasPermission('gnlegitimdurumu:ekle')}"/>
+            <p:menuitem value="#{messages.buttonGuncelle}"
+                        onclick="document.getElementById('GnlEgitimDurumuListForm:datalist:datalist:editButton').click();"
+                        icon="pi pi-pencil" rendered="#{syKullaniciController.hasPermission('gnlegitimdurumu:guncelle')}"/>
+            <p:menuitem value="#{messages.buttonDetay}"
+                        onclick="document.getElementById('GnlEgitimDurumuListForm:datalist:datalist:viewButton').click();"
+                        icon="pi pi-search"/>
+            <p:menuitem value="#{messages.buttonSil}"
+                        onclick="document.getElementById('GnlEgitimDurumuListForm:datalist:datalist:deleteButton').click();"
+                        icon="pi pi-trash" rendered="#{syKullaniciController.hasPermission('gnlegitimdurumu:sil')}"/>
+        </p:contextMenu>
+        <coco:datatable id="datalist"
+                        value="#{gnlEgitimDurumuController.lazyItems}"
+                        rowKey="#{item.id}"
+                        selection="#{gnlEgitimDurumuController.selected}"
+                        filtered="#{gnlEgitimDurumuController.filtered}"
+                        rowselect=":GnlEgitimDurumuListForm:datalist:datalist:createButton,:GnlEgitimDurumuListForm:datalist:datalist:viewButton,:GnlEgitimDurumuListForm:datalist:datalist:editButton,:GnlEgitimDurumuListForm:datalist:datalist:deleteButton"
+                        rowDblselect="document.getElementById('GnlEgitimDurumuListForm:datalist:datalist:editButton').click()"
+                        contextMenu=":GnlEgitimDurumuListForm:datalist:datalist:createButton :GnlEgitimDurumuListForm:datalist:datalist:viewButton :GnlEgitimDurumuListForm:datalist:datalist:editButton :GnlEgitimDurumuListForm:datalist:datalist:deleteButton"
+                        selectListener="#{gnlEgitimDurumuController.resetParents}"
+                        controller="#{gnlEgitimDurumuController}"
+                        header="#{messages.egitimDurumuListesi}">
+
+            <p:ajax event="colResize" listener="#{gnlEgitimDurumuController.onResize}"/>
+
+            <f:facet name="paginatorBottomLeft">
+
+                <p:commandButton id="createButton" styleClass="ui-button-primary" icon="pi pi-plus" pt:data-tooltip="#{messages.buttonEkle}"
+                                 actionListener="#{gnlEgitimDurumuController.prepareCreate}"
+                                 update=":GnlEgitimDurumuCreateForm:GnlEgitimDurumuCreateForm"
+                                 oncomplete="PF('GnlEgitimDurumuCreateDialog').show()" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('gnlegitimdurumu:ekle')}"/>
+                <p:commandButton id="editButton" styleClass="ui-button-success" icon="pi pi-pencil" pt:data-tooltip="#{messages.buttonGuncelle}"
+                                 update=":GnlEgitimDurumuEditForm:GnlEgitimDurumuEditForm" oncomplete="PF('GnlEgitimDurumuEditDialog').show()"
+                                 disabled="#{empty gnlEgitimDurumuController.selected}" onstart="PF('Loading').show()"
+                                 onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('gnlegitimdurumu:guncelle')}"/>
+                <p:commandButton id="viewButton" styleClass="ui-button-info" icon="pi pi-search" pt:data-tooltip="#{messages.buttonDetay}"
+                                 update=":GnlEgitimDurumuViewForm:GnlEgitimDurumuViewForm" oncomplete="PF('GnlEgitimDurumuViewDialog').show()"
+                                 disabled="#{empty gnlEgitimDurumuController.selected}" onstart="PF('Loading').show()"
+                                 onsuccess="PF('Loading').hide()"/>
+                <p:commandButton id="deleteButton" styleClass="ui-button-danger" icon="pi pi-trash" pt:data-tooltip="#{messages.buttonSil}"
+                                 actionListener="#{gnlEgitimDurumuController.delete}" update=":growl,datalist"
+                                 disabled="#{empty gnlEgitimDurumuController.selected}"
+                                 rendered="#{syKullaniciController.hasPermission('gnlegitimdurumu:sil')}">
+                    <p:confirm header="#{messages.ConfirmationHeader}" message="#{messages.ConfirmDeleteMessage}" icon="pi pi-exclamation-circle"/>
+                </p:commandButton>
+
+            </f:facet>
+
+        </coco:datatable>
+
+
+        <ui:include src="/confirmation.xhtml"/>
+
+    </h:form>
+
+</ui:composition>
