@@ -4,6 +4,7 @@ import jakarta.ejb.Schedule;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
+import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.EnumSyKullaniciTuru;
 import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.entity.SyKullanici;
 import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.service.SyKullaniciService;
 
@@ -31,12 +32,14 @@ public class PasswordCheckTimerBean implements java.io.Serializable {
         try {
             List<SyKullanici> syKullanicis = syKullaniciService.findByParolaDegistirilsin();
             for (SyKullanici syKullanici : syKullanicis) {
-                LocalDateTime lastLoginTime = syKullanici.getSonGirisZamani();
-                if (lastLoginTime != null) {
-                    long days = Duration.between(lastLoginTime, LocalDateTime.now()).toDays();
-                    if (days >= 1) {
-                        syKullanici.setKilitli(true);
-                        syKullaniciService.edit(syKullanici);
+                if (syKullanici.getKullaniciTuru().equals(EnumSyKullaniciTuru.KULLANICI)) {
+                    LocalDateTime lastLoginTime = syKullanici.getSonGirisZamani();
+                    if (lastLoginTime != null) {
+                        long days = Duration.between(lastLoginTime, LocalDateTime.now()).toDays();
+                        if (days >= 0) {
+                            syKullanici.setKilitli(true);
+                            syKullaniciService.edit(syKullanici);
+                        }
                     }
                 }
             }
