@@ -12,6 +12,7 @@ import tr.bel.gaziantep.bysweb.core.enums.BaseEnum;
 public enum EnumSyKullaniciTuru implements BaseEnum {
 
     SISTEM_YONETICISI("Sistem Yöneticisi"),
+    DAIRE_YONETICISI("Daire  Yöneticisi"),
     KULLANICI("Kullanıcı");
 
     private final String label;

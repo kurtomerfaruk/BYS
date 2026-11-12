@@ -129,6 +129,7 @@ public class SyKullaniciController extends AbstractController<SyKullanici> {
                     .gnlUnvan(new GnlUnvan())
                     .build());
             newItem.setKullaniciTuru(EnumSyKullaniciTuru.KULLANICI);
+            newItem.setParolaDegistirilsin(true);
             selectedYetkis = new ArrayList<>();
             this.setSelected(newItem);
             initializeEmbeddableKey();

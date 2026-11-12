@@ -261,13 +261,14 @@ public class PkHasta extends BaseEntity {
     @Column(name = "BEDENINDE_ANOMALI_VAR_MI_ACIKLAMA")
     private String bedenindeAnomaliVarMiAciklama;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "BEDENINDE_KESI_IZI_VAR_MI")
-    private EnumVarYok bedenindeKesiIziVarMi;
+//    @Enumerated(EnumType.STRING)
+//    @Column(name = "BEDENINDE_KESI_IZI_VAR_MI")
+//    private EnumVarYok bedenindeKesiIziVarMi;
 
-    @Enumerated(EnumType.STRING)
+    @Nationalized
+    @Lob
     @Column(name = "BEDENINDE_KESI_IZI_VAR_MI_ACIKLAMA")
-    private EnumPkBeden bedenindeKesiIziVarMiAciklama;
+    private String bedenindeKesiIziVarMiAciklama;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "BEDENINDE_KESI_IZI_SIDDETI")

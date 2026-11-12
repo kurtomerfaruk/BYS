@@ -237,7 +237,7 @@ public class PkDashboardService implements java.io.Serializable {
         // Varsayım: son görüşmesi 30 günden eski olan aktif danışanlar.
         LocalDateTime esik = LocalDateTime.now().minusDays(30);
         return em.createQuery(
-                        "SELECT COUNT(DISTINCT g.pkAile) FROM PkBireyselGorusme g " +
+                        "SELECT COUNT(DISTINCT g.pkHasta) FROM PkBireyselGorusme g " +
                                 "WHERE g.aktif = true AND g.tarih IS NOT NULL AND g.tarih < :esik",
                         Long.class)
                 .setParameter("esik", esik)

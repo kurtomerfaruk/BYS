@@ -326,7 +326,7 @@
     <h:panelGroup>
         <p:selectCheckboxMenu value="#{pkHastaController.aileDurumList}"
                               converter="omnifaces.SelectItemsConverter"
-                              label="Madde Türleri" multiple="true" filter="true"
+                              label="Aile Durumları" multiple="true" filter="true"
                               filterMatchMode="startsWith" styleClass="checkboxMenu">
             <f:selectItems value="#{pkAileDurumController.items}"
                            var="aileDurums"
@@ -511,33 +511,23 @@
 
     <p:outputLabel value="#{messages.bedenindeKesiIziVarMiLabel}" for="@next"/>
     <h:panelGroup>
-        <p:selectOneMenu value="#{pkHastaController.selected.bedenindeKesiIziVarMi}"
-                         converter="omnifaces.SelectItemsConverter">
-            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
-            <f:selectItems value="#{enumVarYok.ALL_VALUES}"
-                           var="varYok"
-                           itemLabel="#{varYok.displayValue}"
-                           itemValue="#{varYok}"/>
-            <p:ajax event="change" update="bedenindeKesiIziVarMiAciklama,bedenindeKesiIziSiddeti"/>
-        </p:selectOneMenu>
-        <p:selectOneMenu id="bedenindeKesiIziVarMiAciklama"
-                         value="#{pkHastaController.selected.bedenindeKesiIziVarMiAciklama}"
-                         converter="omnifaces.SelectItemsConverter"
-                         required="#{pkHastaController.selected.bedenindeKesiIziVarMi eq 'VAR'}"
-                         disabled="#{pkHastaController.selected.bedenindeKesiIziVarMi ne 'VAR'}">
-            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
-            <f:selectItems value="#{enumBeden.ALL_VALUES}"
-                           var="beden"
-                           itemLabel="#{beden.displayValue}"
-                           itemValue="#{beden}"/>
-        </p:selectOneMenu>
+        <p:selectCheckboxMenu value="#{pkHastaController.kesiIziList}"
+                              converter="omnifaces.SelectItemsConverter"
+                              label="Kesi İzleri" multiple="true" filter="true"
+                              filterMatchMode="startsWith" styleClass="checkboxMenu">
+            <f:selectItems value="#{pkKesiIziController.items}"
+                           var="kesiIzleri"
+                           itemValue="#{kesiIzleri}"
+                           itemLabel="#{kesiIzleri.tanim}"/>
+        </p:selectCheckboxMenu>
+        <p:inputText id="bedenindeKesiIziVarMiAciklama" value="#{pkHastaController.selected.bedenindeKesiIziVarMiAciklama}"
+                     title="#{messages.aciklamaText}"/>
     </h:panelGroup>
 
     <p:outputLabel value="#{messages.kesiIziSiddetiLabel}" for="@next"/>
     <p:selectOneMenu id="bedenindeKesiIziSiddeti"
                      value="#{pkHastaController.selected.bedenindeKesiIziSiddeti}"
-                     converter="omnifaces.SelectItemsConverter"
-                     disabled="#{pkHastaController.selected.bedenindeKesiIziVarMi ne 'VAR'}">
+                     converter="omnifaces.SelectItemsConverter" filter="true">
         <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
         <f:selectItems value="#{enumKesiSiddeti.ALL_VALUES}"
                        var="kesiSiddeti"

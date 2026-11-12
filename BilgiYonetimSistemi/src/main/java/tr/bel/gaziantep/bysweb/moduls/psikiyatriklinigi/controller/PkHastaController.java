@@ -63,6 +63,9 @@ public class PkHastaController extends AbstractKisiController<PkHasta> {
     @Getter
     @Setter
     private List<PkAileDurum> aileDurumList;
+    @Getter
+    @Setter
+    private List<PkKesiIzi> kesiIziList;
 
     public PkHastaController() {
         super(PkHasta.class);
@@ -102,6 +105,7 @@ public class PkHastaController extends AbstractKisiController<PkHasta> {
         maddeKullananBireyler = new ArrayList<>();
         alkolKullananBireyler = new ArrayList<>();
         aileDurumList = new ArrayList<>();
+        kesiIziList = new ArrayList<>();
     }
 
     public void getTcKimlik() {
@@ -138,7 +142,7 @@ public class PkHastaController extends AbstractKisiController<PkHasta> {
                     return;
                 }
 
-                service.update(this.getSelected(), maddeList, maddeKullananBireyler, alkolKullananBireyler, aileDurumList);
+                service.update(this.getSelected(), maddeList, maddeKullananBireyler, alkolKullananBireyler, aileDurumList, kesiIziList);
                 FacesUtil.successMessage(Constants.KAYIT_GUNCELLENDI);
             }
         } catch (Exception ex) {
@@ -177,6 +181,7 @@ public class PkHastaController extends AbstractKisiController<PkHasta> {
             maddeList = Function.filterAndCollect(this.getSelected().getPkHastaMaddeKullanimiList(), PkHastaMaddeKullanimi::isSecili, PkHastaMaddeKullanimi::getPkMadde);
             aileDurumList = Function.filterAndCollect(this.getSelected().getPkHastaAileDurumList(), PkHastaAileDurum::isSecili,
                     PkHastaAileDurum::getPkAileDurum);
+            kesiIziList = Function.filterAndCollect(this.getSelected().getPkHastaKesiIziList(), PkHastaKesiIzi::isSecili, PkHastaKesiIzi::getPkKesiIzi);
             maddeKullananBireyler = Arrays.asList(this.getSelected().getAiledeMaddeKullanimiOlanBireyler().split("\\|"));
             alkolKullananBireyler = Arrays.asList(this.getSelected().getAiledeAlkolKullanimiOlanBirey().split("\\|"));
         }

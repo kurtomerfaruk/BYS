@@ -52,9 +52,10 @@ public class PkHastaService extends AbstractService<PkHasta> {
     public void update(PkHasta pkHasta, List<PkMadde> maddeList,
                        List<String> maddeKullananBireyler,
                        List<String> alkolKullananBireyler,
-                       List<PkAileDurum> aileDurumList) {
+                       List<PkAileDurum> aileDurumList,
+                       List<PkKesiIzi> kesiIziList) {
 
-        pkHasta = processAllUpdates(pkHasta, maddeList, maddeKullananBireyler, alkolKullananBireyler, aileDurumList);
+        pkHasta = processAllUpdates(pkHasta, maddeList, maddeKullananBireyler, alkolKullananBireyler, aileDurumList, kesiIziList);
         edit(pkHasta);
     }
 
@@ -62,10 +63,12 @@ public class PkHastaService extends AbstractService<PkHasta> {
                                      List<PkMadde> maddeList,
                                      List<String> maddeKullananBireyler,
                                      List<String> alkolKullananBireyler,
-                                     List<PkAileDurum> aileDurumList) {
+                                     List<PkAileDurum> aileDurumList,
+                                     List<PkKesiIzi> kesiIziList) {
 
         pkHasta = checkPkMadde(pkHasta, maddeList);
         pkHasta = checkPkAileDurum(pkHasta, aileDurumList);
+        pkHasta = checkPkKesiIzi(pkHasta, kesiIziList);
         pkHasta.setAiledeMaddeKullanimiOlanBireyler(StringUtils.join(maddeKullananBireyler, "|"));
         pkHasta.setAiledeAlkolKullanimiOlanBirey(StringUtils.join(alkolKullananBireyler, "|"));
         return pkHasta;
@@ -123,6 +126,35 @@ public class PkHastaService extends AbstractService<PkHasta> {
                 newKeg.setPkAileDurum(newGrubu);
                 newKeg.setSecili(true);
                 hastaAileDurumList.add(newKeg);
+            }
+        }
+
+        return pkHasta;
+    }
+
+    private PkHasta checkPkKesiIzi(PkHasta pkHasta, List<PkKesiIzi> kesiIziList) {
+        if (kesiIziList == null || kesiIziList.isEmpty()) {
+            return pkHasta;
+        }
+
+        List<PkHastaKesiIzi> hastaKesiIziList = pkHasta.getPkHastaKesiIziList();
+        Set<Integer> newGrubuIds = kesiIziList.stream()
+                .map(PkKesiIzi::getId)
+                .collect(Collectors.toSet());
+
+        Map<Integer, PkHastaKesiIzi> existingMap = new HashMap<>();
+        for (PkHastaKesiIzi keg : hastaKesiIziList) {
+            existingMap.put(keg.getPkKesiIzi().getId(), keg);
+            keg.setSecili(newGrubuIds.contains(keg.getPkKesiIzi().getId()));
+        }
+
+        for (PkKesiIzi newGrubu : kesiIziList) {
+            if (!existingMap.containsKey(newGrubu.getId())) {
+                PkHastaKesiIzi newKeg = new PkHastaKesiIzi();
+                newKeg.setPkHasta(pkHasta);
+                newKeg.setPkKesiIzi(newGrubu);
+                newKeg.setSecili(true);
+                hastaKesiIziList.add(newKeg);
             }
         }
 

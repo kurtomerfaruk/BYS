@@ -473,7 +473,7 @@
                             <p:dataTable value="#{pkDashboardController.sonGorusmeler}" var="g" rows="10" paginator="false"
                                          emptyMessage="#{messages.kayitBulunamadi}" size="small">
                                 <p:column headerText="Aile / Danışan">
-                                    <h:outputText value="#{g.pkAile.gnlKisi.adSoyad}"/>
+                                    <h:outputText value="#{g.pkHasta.gnlKisi.adSoyad}"/>
                                 </p:column>
                                 <p:column headerText="Görüşme Yapan">
                                     <h:outputText value="#{g.gorusmeYapanPkPersonel.gnlPersonel.gnlKisi.adSoyad}"/>
