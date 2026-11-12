@@ -7,9 +7,7 @@ import jakarta.validation.constraints.Size;
 import org.apache.commons.lang3.StringUtils;
 import tr.bel.gaziantep.bysweb.core.service.AbstractService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
-import tr.bel.gaziantep.bysweb.moduls.psikiyatriklinigi.entity.PkHasta;
-import tr.bel.gaziantep.bysweb.moduls.psikiyatriklinigi.entity.PkHastaMaddeKullanimi;
-import tr.bel.gaziantep.bysweb.moduls.psikiyatriklinigi.entity.PkMadde;
+import tr.bel.gaziantep.bysweb.moduls.psikiyatriklinigi.entity.*;
 
 import java.io.Serial;
 import java.util.HashMap;
@@ -24,7 +22,7 @@ import java.util.stream.Collectors;
  * @since 22.09.2026 14:20
  */
 @Stateless
-public class PkHastaService  extends AbstractService<PkHasta> {
+public class PkHastaService extends AbstractService<PkHasta> {
 
     @Serial
     private static final long serialVersionUID = -8365947549596330975L;
@@ -42,8 +40,8 @@ public class PkHastaService  extends AbstractService<PkHasta> {
     }
 
     public PkHasta findByTcKimlikNo(@Size(max = 11) String tcKimlikNo) {
-        return  getEntityManager()
-                .createNamedQuery("PkHasta.findByKisiTcKimlikNo",PkHasta.class)
+        return getEntityManager()
+                .createNamedQuery("PkHasta.findByKisiTcKimlikNo", PkHasta.class)
                 .setParameter("tcKimlikNo", tcKimlikNo)
                 .getResultList()
                 .stream()
@@ -51,21 +49,29 @@ public class PkHastaService  extends AbstractService<PkHasta> {
                 .orElse(null);
     }
 
-    public void update(PkHasta pkHasta, List<PkMadde> maddeList, List<String> maddeKullananBireyler, List<String> alkolKullananBireyler) {
+    public void update(PkHasta pkHasta, List<PkMadde> maddeList,
+                       List<String> maddeKullananBireyler,
+                       List<String> alkolKullananBireyler,
+                       List<PkAileDurum> aileDurumList) {
 
-        pkHasta = processAllUpdates(pkHasta, maddeList, maddeKullananBireyler, alkolKullananBireyler);
+        pkHasta = processAllUpdates(pkHasta, maddeList, maddeKullananBireyler, alkolKullananBireyler, aileDurumList);
         edit(pkHasta);
     }
 
-    public PkHasta processAllUpdates(PkHasta pkHasta, List<PkMadde> maddeList, List<String> maddeKullananBireyler, List<String> alkolKullananBireyler) {
+    public PkHasta processAllUpdates(PkHasta pkHasta,
+                                     List<PkMadde> maddeList,
+                                     List<String> maddeKullananBireyler,
+                                     List<String> alkolKullananBireyler,
+                                     List<PkAileDurum> aileDurumList) {
 
         pkHasta = checkPkMadde(pkHasta, maddeList);
+        pkHasta = checkPkAileDurum(pkHasta, aileDurumList);
         pkHasta.setAiledeMaddeKullanimiOlanBireyler(StringUtils.join(maddeKullananBireyler, "|"));
         pkHasta.setAiledeAlkolKullanimiOlanBirey(StringUtils.join(alkolKullananBireyler, "|"));
         return pkHasta;
     }
 
-    public PkHasta checkPkMadde(PkHasta pkHasta, List<PkMadde> maddeList) {
+    private PkHasta checkPkMadde(PkHasta pkHasta, List<PkMadde> maddeList) {
         if (maddeList == null || maddeList.isEmpty()) {
             return pkHasta;
         }
@@ -88,6 +94,35 @@ public class PkHastaService  extends AbstractService<PkHasta> {
                 newKeg.setPkMadde(newGrubu);
                 newKeg.setSecili(true);
                 maddeKullanimiList.add(newKeg);
+            }
+        }
+
+        return pkHasta;
+    }
+
+    private PkHasta checkPkAileDurum(PkHasta pkHasta, List<PkAileDurum> aileDurumList) {
+        if (aileDurumList == null || aileDurumList.isEmpty()) {
+            return pkHasta;
+        }
+
+        List<PkHastaAileDurum> hastaAileDurumList = pkHasta.getPkHastaAileDurumList();
+        Set<Integer> newGrubuIds = aileDurumList.stream()
+                .map(PkAileDurum::getId)
+                .collect(Collectors.toSet());
+
+        Map<Integer, PkHastaAileDurum> existingMap = new HashMap<>();
+        for (PkHastaAileDurum keg : hastaAileDurumList) {
+            existingMap.put(keg.getPkAileDurum().getId(), keg);
+            keg.setSecili(newGrubuIds.contains(keg.getPkAileDurum().getId()));
+        }
+
+        for (PkAileDurum newGrubu : aileDurumList) {
+            if (!existingMap.containsKey(newGrubu.getId())) {
+                PkHastaAileDurum newKeg = new PkHastaAileDurum();
+                newKeg.setPkHasta(pkHasta);
+                newKeg.setPkAileDurum(newGrubu);
+                newKeg.setSecili(true);
+                hastaAileDurumList.add(newKeg);
             }
         }
 

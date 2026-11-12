@@ -171,10 +171,6 @@ public class PkHasta extends BaseEntity {
 //    @Column(name = "AILE_DURUM_BILGISI")
 //    private EnumPkAileDurum aileDurumBilgisi;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PKAILE_DURUM_ID")
-    private PkAileDurum pkAileDurum;
-
     @Nationalized
     @Lob
     @Column(name = "AILE_DURUM_BILGISI_ACIKLAMA")
@@ -198,6 +194,15 @@ public class PkHasta extends BaseEntity {
     @Lob
     @Column(name = "AILEDE_INTIHAR_OYKUSU_ACIKLAMA")
     private String ailedeIntiharOykusuAciklama;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "AILEDE_PSIKIYATRIK_RAHATSIZLIK")
+    private EnumVarYok ailedePsikiyatrikRahatsizlik;
+
+    @Nationalized
+    @Lob
+    @Column(name = "AILEDE_PSIKIYATRIK_RAHATSIZLIK_ACIKLAMA")
+    private String ailedePsikiyatrikRahatsizlikAciklama;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "INTIHAR_GIRISIMI")
@@ -288,6 +293,10 @@ public class PkHasta extends BaseEntity {
     @OneToMany(mappedBy = "pkHasta", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @SQLRestriction("AKTIF=true")
     private List<PkBireyselTedaviPlani> pkBireyselTedaviPlaniList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "pkHasta", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @SQLRestriction("AKTIF=true")
+    private List<PkHastaAileDurum> pkHastaAileDurumList = new ArrayList<>();
 
     @Override
     public int hashCode() {

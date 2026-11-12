@@ -21,9 +21,7 @@ import tr.bel.gaziantep.bysweb.core.utils.Function;
 import tr.bel.gaziantep.bysweb.core.utils.StringUtil;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlKisi;
 import tr.bel.gaziantep.bysweb.moduls.genel.service.GnlKisiService;
-import tr.bel.gaziantep.bysweb.moduls.psikiyatriklinigi.entity.PkHasta;
-import tr.bel.gaziantep.bysweb.moduls.psikiyatriklinigi.entity.PkHastaMaddeKullanimi;
-import tr.bel.gaziantep.bysweb.moduls.psikiyatriklinigi.entity.PkMadde;
+import tr.bel.gaziantep.bysweb.moduls.psikiyatriklinigi.entity.*;
 import tr.bel.gaziantep.bysweb.moduls.psikiyatriklinigi.service.PkHastaService;
 
 import java.io.Serial;
@@ -62,6 +60,9 @@ public class PkHastaController extends AbstractKisiController<PkHasta> {
     @Getter
     @Setter
     private List<String> alkolKullananBireyler;
+    @Getter
+    @Setter
+    private List<PkAileDurum> aileDurumList;
 
     public PkHastaController() {
         super(PkHasta.class);
@@ -85,9 +86,7 @@ public class PkHastaController extends AbstractKisiController<PkHasta> {
             newItem = PkHasta.class.getDeclaredConstructor().newInstance();
             newItem.setGnlKisi(new GnlKisi());
             newItem.setBasvuruTarihi(LocalDateTime.now());
-            maddeList = new ArrayList<>();
-            maddeKullananBireyler = new ArrayList<>();
-            alkolKullananBireyler = new ArrayList<>();
+            clearList();
             this.setSelected(newItem);
             initializeEmbeddableKey();
             return newItem;
@@ -96,6 +95,13 @@ public class PkHastaController extends AbstractKisiController<PkHasta> {
             log.error(null, ex);
         }
         return null;
+    }
+
+    private void clearList() {
+        maddeList = new ArrayList<>();
+        maddeKullananBireyler = new ArrayList<>();
+        alkolKullananBireyler = new ArrayList<>();
+        aileDurumList = new ArrayList<>();
     }
 
     public void getTcKimlik() {
@@ -132,7 +138,7 @@ public class PkHastaController extends AbstractKisiController<PkHasta> {
                     return;
                 }
 
-                service.update(this.getSelected(), maddeList, maddeKullananBireyler, alkolKullananBireyler);
+                service.update(this.getSelected(), maddeList, maddeKullananBireyler, alkolKullananBireyler, aileDurumList);
                 FacesUtil.successMessage(Constants.KAYIT_GUNCELLENDI);
             }
         } catch (Exception ex) {
@@ -167,7 +173,10 @@ public class PkHastaController extends AbstractKisiController<PkHasta> {
 
     public void readInfo() {
         if (this.getSelected() != null) {
+            clearList();
             maddeList = Function.filterAndCollect(this.getSelected().getPkHastaMaddeKullanimiList(), PkHastaMaddeKullanimi::isSecili, PkHastaMaddeKullanimi::getPkMadde);
+            aileDurumList = Function.filterAndCollect(this.getSelected().getPkHastaAileDurumList(), PkHastaAileDurum::isSecili,
+                    PkHastaAileDurum::getPkAileDurum);
             maddeKullananBireyler = Arrays.asList(this.getSelected().getAiledeMaddeKullanimiOlanBireyler().split("\\|"));
             alkolKullananBireyler = Arrays.asList(this.getSelected().getAiledeAlkolKullanimiOlanBirey().split("\\|"));
         }
