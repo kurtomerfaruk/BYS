@@ -167,9 +167,13 @@ public class PkHasta extends BaseEntity {
     @Column(name = "YOKSUNLUK_ENTOKSIKASYON_REMISYON")
     private String yoksunlukEntoksikasyonRemisyon;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "AILE_DURUM_BILGISI")
-    private EnumPkAileDurum aileDurumBilgisi;
+//    @Enumerated(EnumType.STRING)
+//    @Column(name = "AILE_DURUM_BILGISI")
+//    private EnumPkAileDurum aileDurumBilgisi;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PKAILE_DURUM_ID")
+    private PkAileDurum pkAileDurum;
 
     @Nationalized
     @Lob

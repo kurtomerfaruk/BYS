@@ -204,14 +204,36 @@
                             <i class="ri-arrow-right-s-line side-menu__angle"></i></a>
                         <ul class="slide-menu child2">
 
-                            <ui:fragment rendered="#{syKullaniciController.hasPermission('pkpersonel:goster')}">
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('pkailedurum:goster')}">
                                 <li class="slide">
                                     <p:commandLink styleClass="side-menu__item sublevel2"
-                                                   actionListener="#{menuController.setPageLink('/moduls/psikiyatriklinigi/pkPersonel/index')}"
+                                                   actionListener="#{menuController.setPageLink('/moduls/psikiyatriklinigi/pkAileDurum/index')}"
                                                    update="myPanel,:growl"
                                                    onstart="PF('Loading').show()"
                                                    onsuccess="PF('Loading').hide()"
-                                                   value="Personel Listesi"/>
+                                                   value="Aile Durumları"/>
+                                </li>
+                            </ui:fragment>
+
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('pkegitimkonu:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/psikiyatriklinigi/pkEgitimKonu/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="Eğitim Konuları"/>
+                                </li>
+                            </ui:fragment>
+
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('pkhizmettur:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/psikiyatriklinigi/pkHizmetTur/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="Hizmet Türleri"/>
                                 </li>
                             </ui:fragment>
 
@@ -226,27 +248,17 @@
                                 </li>
                             </ui:fragment>
 
-                            <ui:fragment rendered="#{syKullaniciController.hasPermission('pktaburcunedeni:goster')}">
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('pkpersonel:goster')}">
                                 <li class="slide">
                                     <p:commandLink styleClass="side-menu__item sublevel2"
-                                                   actionListener="#{menuController.setPageLink('/moduls/psikiyatriklinigi/pkTaburcuNedeni/index')}"
+                                                   actionListener="#{menuController.setPageLink('/moduls/psikiyatriklinigi/pkPersonel/index')}"
                                                    update="myPanel,:growl"
                                                    onstart="PF('Loading').show()"
                                                    onsuccess="PF('Loading').hide()"
-                                                   value="Taburcu Nedenleri"/>
+                                                   value="Personel Listesi"/>
                                 </li>
                             </ui:fragment>
 
-                            <ui:fragment rendered="#{syKullaniciController.hasPermission('pkegitimkonu:goster')}">
-                                <li class="slide">
-                                    <p:commandLink styleClass="side-menu__item sublevel2"
-                                                   actionListener="#{menuController.setPageLink('/moduls/psikiyatriklinigi/pkEgitimKonu/index')}"
-                                                   update="myPanel,:growl"
-                                                   onstart="PF('Loading').show()"
-                                                   onsuccess="PF('Loading').hide()"
-                                                   value="Eğitim Konuları"/>
-                                </li>
-                            </ui:fragment>
 
                             <ui:fragment rendered="#{syKullaniciController.hasPermission('pksorutur:goster')}">
                                 <li class="slide">
@@ -270,16 +282,18 @@
                                 </li>
                             </ui:fragment>
 
-                            <ui:fragment rendered="#{syKullaniciController.hasPermission('pkhizmettur:goster')}">
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('pktaburcunedeni:goster')}">
                                 <li class="slide">
                                     <p:commandLink styleClass="side-menu__item sublevel2"
-                                                   actionListener="#{menuController.setPageLink('/moduls/psikiyatriklinigi/pkHizmetTur/index')}"
+                                                   actionListener="#{menuController.setPageLink('/moduls/psikiyatriklinigi/pkTaburcuNedeni/index')}"
                                                    update="myPanel,:growl"
                                                    onstart="PF('Loading').show()"
                                                    onsuccess="PF('Loading').hide()"
-                                                   value="Hizmet Türleri"/>
+                                                   value="Taburcu Nedenleri"/>
                                 </li>
                             </ui:fragment>
+
+
                         </ul>
                     </li>
                 </ui:fragment>

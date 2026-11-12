@@ -68,13 +68,13 @@
                  required="true"/>
 
     <p:outputLabel value="#{messages.egitimDurumuLabel}" for="@next"/>
-    <p:selectOneMenu id="egitimDurumu" value="#{pkHastaController.selected.gnlKisi.egitimDurumu}"
-                     converter="omnifaces.SelectItemsConverter" styleClass="tcUpdate">
+    <p:selectOneMenu id="egitimDurumu" value="#{pkHastaController.selected.gnlKisi.gnlEgitimDurumu}"
+                     converter="omnifaces.SelectItemsConverter" styleClass="tcUpdate" filter="true">
         <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
-        <f:selectItems value="#{enumEgitimDurumu.ALL_VALUES}"
-                       var="enumEgitimDurumus"
-                       itemLabel="#{enumEgitimDurumus.displayValue}"
-                       itemValue="#{enumEgitimDurumus}"/>
+        <f:selectItems value="#{gnlEgitimDurumuController.items}"
+                       var="egitimDurums"
+                       itemLabel="#{egitimDurums.tanim}"
+                       itemValue="#{egitimDurums}"/>
     </p:selectOneMenu>
 
     <p:outputLabel value="#{messages.telefonLabel}" for="@next"/>
@@ -290,7 +290,7 @@
     </p:selectOneMenu>
 
 
-    <p:outputLabel value="#{messages.maddeyeBaslamaYasiLabel}" for="@next"/>
+    <p:outputLabel value="Sigara Hariç #{messages.maddeyeBaslamaYasiLabel}" for="@next"/>
     <p:selectOneMenu value="#{pkHastaController.selected.maddeyeBaslamaYasi}"
                      converter="omnifaces.SelectItemsConverter">
         <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
@@ -324,19 +324,15 @@
 
     <p:outputLabel value="#{messages.aileDurumBilgisiLabel}" for="@next"/>
     <h:panelGroup>
-        <p:selectOneMenu value="#{pkHastaController.selected.aileDurumBilgisi}"
-                         converter="omnifaces.SelectItemsConverter">
+        <p:selectOneMenu value="#{pkHastaController.selected.pkAileDurum}" converter="omnifaces.SelectItemsConverter" filter="true">
             <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
-            <f:selectItems value="#{enumAileDurum.ALL_VALUES}"
+            <f:selectItems value="#{pkAileDurumController.items}"
                            var="aileDurum"
-                           itemLabel="#{aileDurum.displayValue}"
+                           itemLabel="#{aileDurum.tanim}"
                            itemValue="#{aileDurum}"/>
-            <p:ajax event="change" update="aileDurumBilgisiAciklama"/>
         </p:selectOneMenu>
-        <p:inputText id="aileDurumBilgisiAciklama"
-                     value="#{pkHastaController.selected.aileDurumBilgisiAciklama}"
-                     required="#{pkHastaController.selected.aileDurumBilgisi eq 'ANNE_BABA_VEFAT'}"
-                     disabled="#{pkHastaController.selected.aileDurumBilgisi ne 'ANNE_BABA_VEFAT'}"/>
+        <p:inputText id="aileDurumBilgisiAciklama" value="#{pkHastaController.selected.aileDurumBilgisiAciklama}"
+                     title="#{messages.aileDurumBilgisiAciklamaText}"/>
     </h:panelGroup>
 
     <p:outputLabel value="#{messages.ailedeMaddeKullanimiOlanBireyLabel}" for="@next"/>

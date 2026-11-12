@@ -9,6 +9,7 @@ import tr.bel.gaziantep.bysweb.core.enums.BaseEnum;
  * @since 13.06.2025 14:06
  */
 @Getter
+@Deprecated(since = "1.29.0")
 public enum EnumGnlEgitimDurumu implements BaseEnum {
     ILKOGRETIM("İlköğretim"),
     ONLISANS("2 Yıllık Önlisans"),
