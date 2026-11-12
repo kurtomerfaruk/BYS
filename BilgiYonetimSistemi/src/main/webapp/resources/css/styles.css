@@ -26197,3 +26197,7 @@ a.link-underline-dark {
   --bs-focus-ring-color: rgba(var(--dark-rgb), var(--bs-focus-ring-opacity));
 }
 /* End:: Focus Ring */
+/* Menu search visibility */
+html[data-toggled*="close"]:not([data-icon-overlay="open"]) #menu-search-container {
+  display: none !important;
+}
