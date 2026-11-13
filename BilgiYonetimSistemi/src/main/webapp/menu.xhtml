@@ -80,6 +80,10 @@
                     <ui:include src="menus/saglikHizmetleriMenu.xhtml"/>
                     <!-- Saglik Hizmetleri -->
 
+                    <!-- Stok Yonetimi -->
+                    <ui:include src="menus/stokYonetimiMenu.xhtml"/>
+                    <!-- Stok Yonetimi -->
+
                     <!-- Sistem Yonetimi -->
                     <ui:include src="menus/sistemYonetimiMenu.xhtml"/>
                     <!-- Sistem Yonetimi -->
@@ -91,7 +95,8 @@
             <!-- Version label (fixed at bottom of sidebar) -->
             <div id="menu-version-label" class="text-center small text-muted"
                  style="bottom:0; left:0; right:0; background:var(--menu-bg); border-top:1px solid rgba(0,0,0,.1); z-index:2;">
-                <span class="badge bg-success">Ver#{initApp.version}</span><br/><span class="badge bg-outline-info">#{initApp.buildTime}</span>
+                <span class="badge bg-success">Ver#{initApp.version}</span>
+                <!--                <br/><span class="badge bg-outline-info">#{initApp.buildTime}</span>-->
             </div>
 
         </div>

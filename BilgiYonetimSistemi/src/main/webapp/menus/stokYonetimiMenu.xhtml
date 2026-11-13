@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="primefaces">
+
+<ui:composition>
+
+    <!-- Stok Yonetimi -->
+    <ui:fragment rendered="#{syKullaniciController.hasPermission('stokyonetimi:goster')}">
+        <li class="slide has-sub">
+            <a href="javascript:void(0);" class="side-menu__item main_menu">
+                <i class="ri-stock-fill side-menu__icon"></i>
+                <span class="side-menu__label">Stok Yönetimi</span>
+                <i class="ri-arrow-right-s-line side-menu__angle"></i>
+            </a>
+            <ul class="slide-menu child1">
+                <li class="slide side-menu__label1">
+                    <a href="javascript:void(0)">Stok Yönetimi</a>
+                </li>
+
+                <!--    Islemler    -->
+                <ui:fragment rendered="#{syKullaniciController.hasPermission('stokyonetimi_islemler:goster')}">
+                    <li class="slide has-sub">
+                        <a href="javascript:void(0);" class="side-menu__item sublevel1">İşlemler
+                            <i class="ri-arrow-right-s-line side-menu__angle"></i></a>
+                        <ul class="slide-menu child2">
+
+                            <ui:fragment
+                                    rendered="#{syKullaniciController.hasPermission('ststok:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/stokyonetimi/stStok/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="Stok Listesi"/>
+                                </li>
+                            </ui:fragment>
+
+                        </ul>
+                    </li>
+                </ui:fragment>
+                <!--    Islemler    -->
+
+                <!--    Tanimlamalar    -->
+                <ui:fragment rendered="#{syKullaniciController.hasPermission('stokyonetimi_tanimlamalar:goster')}">
+                    <li class="slide has-sub">
+                        <a href="javascript:void(0);" class="side-menu__item sublevel1">Tanımlamalar
+                            <i class="ri-arrow-right-s-line side-menu__angle"></i></a>
+                        <ul class="slide-menu child2">
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('stbirim:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/stokyonetimi/stBirim/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="Birimler"/>
+                                </li>
+                            </ui:fragment>
+
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('stdepo:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/stokyonetimi/stDepo/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="Depolar"/>
+                                </li>
+                            </ui:fragment>
+
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('stdepolokasyon:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/stokyonetimi/stDepoLokasyon/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="Depo Lokasyonları"/>
+                                </li>
+                            </ui:fragment>
+
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('ststokkategori:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/stokyonetimi/stStokKategori/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="Stok Kategorileri"/>
+                                </li>
+                            </ui:fragment>
+                        </ul>
+                    </li>
+                </ui:fragment>
+                <!--    Tanimlamalar    -->
+
+            </ul>
+        </li>
+    </ui:fragment>
+    <!-- Stok Yonetimi -->
+
+</ui:composition>
+
+</html>
+

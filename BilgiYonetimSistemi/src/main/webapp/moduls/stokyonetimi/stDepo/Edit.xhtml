@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:editpage id="StDepoEditForm"
+                   widgetVar="StDepoEditDialog"
+                   actionListener="#{stDepoController.save}"
+                   listForm="StDepoListForm"
+                   model="#{stDepoController.selected}">
+
+        <p:outputLabel value="#{messages.depoKoduLabel}" for="@next"/>
+        <p:inputText id="depoKodu" value="#{stDepoController.selected.depoKodu}" title="#{messages.depoKoduText}" size="30" maxlength="30"/>
+
+        <p:outputLabel value="#{messages.depoAdiLabel}" for="@next"/>
+        <p:inputText id="depoAdi" value="#{stDepoController.selected.depoAdi}" title="#{messages.depoAdiText}" size="50" maxlength="150"/>
+
+        <p:outputLabel value="#{messages.depoTipiLabel}" for="@next"/>
+        <p:selectOneMenu value="#{stDepoController.selected.depoTipi}" required="true" converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{enumDepoTipi.ALL_VALUES}"
+                           var="depoTipis"
+                           itemLabel="#{depoTipis.displayValue}"
+                           itemValue="#{depoTipis}"/>
+        </p:selectOneMenu>
+
+    </coco:editpage>
+
+</ui:composition>
+
+</html>

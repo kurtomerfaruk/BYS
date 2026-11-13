@@ -14,7 +14,8 @@
                    model="#{gnlMeslekController.selected}">
 
         <p:outputLabel value="#{messages.meslekLabel}" for="@next"/>
-        <p:inputText id="tanim" value="#{gnlMeslekController.selected.tanim}" title="#{messages.meslekText}" size="50" maxlength="100"/>
+        <p:inputText id="tanim" value="#{gnlMeslekController.selected.tanim}" title="#{messages.meslekText}" size="50" maxlength="100"
+                     required="true"/>
 
 
     </coco:editpage>
