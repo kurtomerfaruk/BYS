@@ -4,6 +4,7 @@ import jakarta.ejb.Stateless;
 import jakarta.faces.model.SelectItem;
 import jakarta.inject.Inject;
 import tr.bel.gaziantep.bysweb.core.enums.aktifyasam.EnumAyGrup;
+import tr.bel.gaziantep.bysweb.core.enums.bys.EnumGirisCikis;
 import tr.bel.gaziantep.bysweb.core.enums.bys.EnumGrafikTuru;
 import tr.bel.gaziantep.bysweb.core.enums.bys.EnumModul;
 import tr.bel.gaziantep.bysweb.core.enums.bys.EnumSoruTuru;
@@ -24,6 +25,7 @@ import tr.bel.gaziantep.bysweb.core.enums.saglikhizmetleri.EnumShDanismanlikHizm
 import tr.bel.gaziantep.bysweb.core.enums.saglikhizmetleri.EnumShObeziteHizmet;
 import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.*;
 import tr.bel.gaziantep.bysweb.core.enums.stokyonetimi.EnumStDepoTipi;
+import tr.bel.gaziantep.bysweb.core.enums.stokyonetimi.EnumStHareketTuru;
 import tr.bel.gaziantep.bysweb.core.enums.stokyonetimi.EnumStLokasyonTipi;
 import tr.bel.gaziantep.bysweb.moduls.aktifyasam.entity.AyBirim;
 import tr.bel.gaziantep.bysweb.moduls.aktifyasam.service.AyBirimService;
@@ -480,6 +482,18 @@ public class FilterOptionService implements java.io.Serializable{
 
     public List<SelectItem> getStDepLokasyonTipis() {
         return Arrays.stream(EnumStLokasyonTipi.values())
+                .map(value -> new SelectItem(value, value.getDisplayValue()))
+                .collect(Collectors.toList());
+    }
+
+    public List<SelectItem> getStHareketTurus() {
+        return Arrays.stream(EnumStHareketTuru.values())
+                .map(value -> new SelectItem(value, value.getDisplayValue()))
+                .collect(Collectors.toList());
+    }
+
+    public List<SelectItem> getGirisCikis() {
+        return Arrays.stream(EnumGirisCikis.values())
                 .map(value -> new SelectItem(value, value.getDisplayValue()))
                 .collect(Collectors.toList());
     }

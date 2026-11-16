@@ -69,7 +69,9 @@ public enum EnumSyFiltreAnahtari implements BaseEnum {
     PKMODUL("Psikiyatri Kliniği Modül"),
     ORTCIHAZ_TURU("Ortez/Protez Cihaz Türü"),
     STDEPO_TIPI("Stok Takip Depo Tipi"),
-    STDEPO_LOKASYON_TIPI("Stok Takip Depo Lokasyon Tipi");
+    STDEPO_LOKASYON_TIPI("Stok Takip Depo Lokasyon Tipi"),
+    STHAREKET_TURU("Stok Takip Hareket Türü"),
+    GIRIS_CIKIS("Giriş / Çıkış");
 
     private final String label;
 
