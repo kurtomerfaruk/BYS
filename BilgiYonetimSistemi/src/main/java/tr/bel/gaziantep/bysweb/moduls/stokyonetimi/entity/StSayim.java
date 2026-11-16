@@ -51,10 +51,8 @@ public class StSayim extends BaseEntity {
     @Column(name = "BITIS_TARIHI")
     private LocalDateTime bitisTarihi;
 
-    @Size(max = 50)
-    @Nationalized
     @Enumerated(EnumType.STRING)
-    @Column(name = "DURUM", length = 50)
+    @Column(name = "DURUM")
     private EnumStSayimDurum durum;
 
     @ManyToOne(fetch = FetchType.LAZY)

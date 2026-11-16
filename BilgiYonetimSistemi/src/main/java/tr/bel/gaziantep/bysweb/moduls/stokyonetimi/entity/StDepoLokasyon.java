@@ -59,10 +59,8 @@ public class StDepoLokasyon extends BaseEntity {
     @Column(name = "GOZ_NO", length = 50)
     private String gozNo;
 
-    @Size(max = 30)
-    @Nationalized
     @Enumerated(EnumType.STRING)
-    @Column(name = "LOKASYON_TIPI", length = 30)
+    @Column(name = "LOKASYON_TIPI")
     private EnumStLokasyonTipi lokasyonTipi;
 
     @Override

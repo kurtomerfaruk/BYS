@@ -12,6 +12,8 @@ import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.entity.SyKullanici;
 
 import java.io.Serial;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
@@ -53,10 +55,8 @@ public class StTransfer extends BaseEntity {
     @Column(name = "TESLIM_TARIHI")
     private LocalDateTime teslimTarihi;
 
-    @Size(max = 50)
-    @Nationalized
     @Enumerated(EnumType.STRING)
-    @Column(name = "DURUM", length = 50)
+    @Column(name = "DURUM")
     private EnumStTransferDurum durum;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -79,6 +79,9 @@ public class StTransfer extends BaseEntity {
     @Lob
     @Column(name = "ACIKLAMA")
     private String aciklama;
+
+    @OneToMany(mappedBy = "stTransfer", cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
+    private List<StTransferKalem> stTransferKalemList = new ArrayList<>();
 
     @Override
     public int hashCode() {

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:editpage id="StTransferEditForm"
+                   widgetVar="StTransferEditDialog"
+                   actionListener="#{stTransferController.save}"
+                   listForm="StTransferListForm"
+                   model="#{stTransferController.selected}">
+
+        <p:outputLabel value="#{messages.transferNoLabel}" for="@next"/>
+        <p:inputText value="#{stTransferController.selected.transferNo}" title="#{messages.transferNoText}" readonly="true" size="30" maxlength="50"/>
+
+        <p:outputLabel value="#{messages.kaynakDepoLabel}" for="@next"/>
+        <p:selectOneMenu value="#{stTransferController.selected.kaynakDepo}" required="true" filter="true" converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{stDepoController.items}" var="d" itemLabel="#{d.depoAdi}" itemValue="#{d}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.hedefDepoLabel}" for="@next"/>
+        <p:selectOneMenu value="#{stTransferController.selected.hedefDepo}" required="true" filter="true" converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{stDepoController.items}" var="d" itemLabel="#{d.depoAdi}" itemValue="#{d}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.durumLabel}" for="@next"/>
+        <p:selectOneMenu value="#{stTransferController.selected.durum}" required="true" converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{enumTransferDurum.ALL_VALUES}" var="t" itemLabel="#{t.displayValue}" itemValue="#{t}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.aciklamaLabel}" for="@next"/>
+        <p:inputTextarea value="#{stTransferController.selected.aciklama}" rows="3" styleClass="w-100" autoResize="false"/>
+
+    </coco:editpage>
+
+</ui:composition>
+
+</html>

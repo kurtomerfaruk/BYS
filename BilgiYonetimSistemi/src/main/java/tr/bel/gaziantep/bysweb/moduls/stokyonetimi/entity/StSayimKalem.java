@@ -51,7 +51,7 @@ public class StSayimKalem extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "STBIRIM_ID")
-    private StBirim stBirim;
+    private StStokHareket stBirim;
 
     @Nationalized
     @Lob

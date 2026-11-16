@@ -59,16 +59,12 @@ public class StStokHareket extends BaseEntity {
     @JoinColumn(name = "HEDEF_LOKASYON_ID")
     private StDepoLokasyon hedefLokasyon;
 
-    @Size(max = 50)
-    @Nationalized
     @Enumerated(EnumType.STRING)
-    @Column(name = "HAREKET_TURU", length = 50)
+    @Column(name = "HAREKET_TURU")
     private EnumStHareketTuru hareketTuru;
 
-    @Size(max = 50)
-    @Nationalized
     @Enumerated(EnumType.STRING)
-    @Column(name = "DURUM", length = 50)
+    @Column(name = "DURUM")
     private EnumGirisCikis durum;
 
     @Column(name = "MIKTAR", precision = 18, scale = 4)
@@ -76,7 +72,7 @@ public class StStokHareket extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "STBIRIM_ID")
-    private StBirim stBirim;
+    private StStokHareket stBirim;
 
     @Column(name = "BIRIM_MALIYET", precision = 18, scale = 4)
     private BigDecimal birimMaliyet;
@@ -113,6 +109,14 @@ public class StStokHareket extends BaseEntity {
     @Nationalized
     @Column(name = "KAYNAK_ISLEM_REFERANSI", length = 100)
     private String kaynakIslemReferansi;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "STTRANSFER_ID")
+    private StTransfer stTransfer;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "STSAYIM_ID")
+    private StSayim stSayim;
 
     @ColumnDefault("0")
     @Column(name = "IPTAL_EDILDI", nullable = false)

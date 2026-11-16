@@ -7,6 +7,8 @@ import tr.bel.gaziantep.bysweb.core.service.AbstractService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.entity.SyGenelAyar;
 
+import java.io.Serial;
+
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
  * @version 1.0.0
@@ -14,6 +16,9 @@ import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.entity.SyGenelAyar;
  */
 @Stateless
 public class SyGenelAyarService extends AbstractService<SyGenelAyar> {
+
+    @Serial
+    private static final long serialVersionUID = 6721662596429970765L;
 
     public SyGenelAyarService() {
         super(SyGenelAyar.class);
@@ -29,7 +34,7 @@ public class SyGenelAyarService extends AbstractService<SyGenelAyar> {
 
     public SyGenelAyar findByTanim(String tanim) {
             return (SyGenelAyar) getEntityManager()
-                    .createNamedQuery("SyGenelAyar.findByTanim")
+                    .createNamedQuery("SyGenelAyar.findByTanim", SyGenelAyar.class)
                     .setParameter("tanim",tanim)
                     .getResultList()
                     .stream()

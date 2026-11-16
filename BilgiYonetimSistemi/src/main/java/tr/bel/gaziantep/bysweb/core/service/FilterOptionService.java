@@ -27,6 +27,7 @@ import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.*;
 import tr.bel.gaziantep.bysweb.core.enums.stokyonetimi.EnumStDepoTipi;
 import tr.bel.gaziantep.bysweb.core.enums.stokyonetimi.EnumStHareketTuru;
 import tr.bel.gaziantep.bysweb.core.enums.stokyonetimi.EnumStLokasyonTipi;
+import tr.bel.gaziantep.bysweb.core.enums.stokyonetimi.EnumStTransferDurum;
 import tr.bel.gaziantep.bysweb.moduls.aktifyasam.entity.AyBirim;
 import tr.bel.gaziantep.bysweb.moduls.aktifyasam.service.AyBirimService;
 import tr.bel.gaziantep.bysweb.moduls.engelsizler.entity.EyTalepKonu;
@@ -494,6 +495,12 @@ public class FilterOptionService implements java.io.Serializable{
 
     public List<SelectItem> getGirisCikis() {
         return Arrays.stream(EnumGirisCikis.values())
+                .map(value -> new SelectItem(value, value.getDisplayValue()))
+                .collect(Collectors.toList());
+    }
+
+    public List<SelectItem> getStTranferDurums() {
+        return Arrays.stream(EnumStTransferDurum.values())
                 .map(value -> new SelectItem(value, value.getDisplayValue()))
                 .collect(Collectors.toList());
     }

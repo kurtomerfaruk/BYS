@@ -9,7 +9,10 @@ import lombok.extern.slf4j.Slf4j;
 import tr.bel.gaziantep.bysweb.core.controller.AbstractController;
 import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.EnumSyFiltreAnahtari;
 import tr.bel.gaziantep.bysweb.core.service.FilterOptionService;
+import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
 import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity.StStokHareket;
+import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.service.StStokHareketService;
+import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.service.StStokIslemService;
 
 import java.io.Serial;
 import java.time.LocalDateTime;
@@ -30,7 +33,11 @@ public class StStokHareketController extends AbstractController<StStokHareket> {
     private static final long serialVersionUID = -6610720030443546883L;
 
     @Inject
+    private StStokHareketService service;
+    @Inject
     private FilterOptionService filterOptionService;
+    @Inject
+    private StStokIslemService islemService;
 
     public StStokHareketController() {
         super(StStokHareket.class);
@@ -57,7 +64,23 @@ public class StStokHareketController extends AbstractController<StStokHareket> {
             hareket.setIslemTarihi(LocalDateTime.now());
             hareket.setIptalEdildi(false);
             hareket.setSyKullanici(this.getSyKullanici());
+            hareket.setHareketNo(service.generateHareketNo());
         }
         return hareket;
     }
+
+    public void postMovement(ActionEvent event) {
+        try {
+            if (this.getSelected() != null) {
+                islemService.postMovement(this.getSelected());
+                FacesUtil.addSuccessMessage("Stok hareketi kaydedildi");
+                this.setSelected(null);
+                this.setLazyItems(null);
+            }
+        } catch (Exception ex) {
+            log.error(null, ex);
+            FacesUtil.errorMessage("Hata oluþtu");
+        }
+    }
+
 }

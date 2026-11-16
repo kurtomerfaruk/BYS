@@ -68,7 +68,7 @@ public class StStok extends BaseEntity {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "STBIRIM_ID", nullable = false)
-    private StBirim stBirim;
+    private StStokHareket stBirim;
 
     @Column(name = "KDV_ORANI")
     private int kdvOrani;

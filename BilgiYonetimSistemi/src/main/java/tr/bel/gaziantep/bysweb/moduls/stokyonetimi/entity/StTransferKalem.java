@@ -1,10 +1,8 @@
 package tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Nationalized;
 import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
 import tr.bel.gaziantep.bysweb.core.enums.stokyonetimi.EnumStTransferDurum;
 
@@ -48,7 +46,7 @@ public class StTransferKalem extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "STBIRIM_ID")
-    private StBirim stBirim;
+    private StStokHareket stBirim;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "KAYNAK_STDEPO_LOKASYON_ID")
@@ -58,10 +56,8 @@ public class StTransferKalem extends BaseEntity {
     @JoinColumn(name = "HEDEF_STDEPO_LOKASYON_ID")
     private StDepoLokasyon hedefStDepoLokasyon;
 
-    @Size(max = 50)
-    @Nationalized
     @Enumerated(EnumType.STRING)
-    @Column(name = "DURUM", length = 50)
+    @Column(name = "DURUM")
     private EnumStTransferDurum durum;
 
     @Override

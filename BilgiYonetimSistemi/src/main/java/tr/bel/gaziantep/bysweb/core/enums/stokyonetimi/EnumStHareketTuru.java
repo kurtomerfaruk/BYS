@@ -20,8 +20,6 @@ public enum EnumStHareketTuru implements BaseEnum {
     FIRE("Fire"),
     ZAYI("Zayi"),
     SARF("Sarf"),
-    URETIM_GIRISI("Üretim Girişi"),
-    URETIM_CIKISI("Üretim Çıkışı"),
     ACILIS_STOGU("Açılış Stoğu"),
     MANUEL_DUZELTME("Manuel Düzeltme");
 

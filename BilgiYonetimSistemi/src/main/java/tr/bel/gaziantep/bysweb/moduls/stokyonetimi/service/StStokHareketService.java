@@ -8,6 +8,7 @@ import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity.StStokHareket;
 
 import java.io.Serial;
+import java.time.Year;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
@@ -35,5 +36,23 @@ public class StStokHareketService extends AbstractService<StStokHareket> {
     @Override
     public String getSortCol() {
         return "islemTarihi";
+    }
+
+    public String generateHareketNo() {
+        int year = Year.now().getValue();
+        String prefix = year + "/";
+        jakarta.persistence.TypedQuery<String> q = em.createQuery(
+                "SELECT h.hareketNo FROM StStokHareket h WHERE h.hareketNo LIKE :prefix", String.class);
+        q.setParameter("prefix", prefix + "%");
+        int max = 0;
+        for (String no : q.getResultList()) {
+            String seqPart = no.substring(prefix.length());
+            try {
+                int val = Integer.parseInt(seqPart);
+                if (val > max) max = val;
+            } catch (NumberFormatException ignored) {
+            }
+        }
+        return prefix + String.format("%06d", max + 1);
     }
 }

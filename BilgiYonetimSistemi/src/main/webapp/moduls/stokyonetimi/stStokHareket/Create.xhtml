@@ -14,74 +14,75 @@
                      actionListener="#{stStokHareketController.saveNew}"
                      listForm="StStokHareketListForm">
 
-        <p:outputLabel value="${messages.hareketNoLabel}" for="@next"/>
-        <p:inputText value="#{stStokHareketController.selected.hareketNo}" title="#{messages.hareketNoText}" size="30" maxlength="50"/>
+        <p:outputLabel value="#{messages.hareketNoLabel}" for="@next"/>
+        <p:inputText value="#{stStokHareketController.selected.hareketNo}" title="#{messages.hareketNoText}" required="true" size="30"
+                     maxlength="50"/>
 
         <p:outputLabel value="#{messages.stokLabel}" for="@next"/>
-        <p:selectOneMenu value="#{stStokHareketController.selected.stStok}" required="true" filter="true" converter="omnifaces.SelectItemsConverter">
+        <p:selectOneMenu value="#{stStokHareketController.selected.stStok}" required="true" converter="omnifaces.SelectItemsConverter" filter="true">
             <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
             <f:selectItems value="#{stStokController.items}" var="s" itemLabel="#{s.stokKodu} - #{s.stokAdi}" itemValue="#{s}"/>
         </p:selectOneMenu>
 
-        <!--        <p:outputLabel value="Depo" for="@next"/>-->
-        <!--        <p:selectOneMenu value="#{stStokHareketController.selected.depo}" required="true" converter="omnifaces.SelectItemsConverter">-->
-        <!--            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>-->
-        <!--            <f:selectItems value="#{stStokHareketController.depolar}" var="d" itemLabel="#{d.depoAdi}" itemValue="#{d}"/>-->
-        <!--        </p:selectOneMenu>-->
+        <p:outputLabel value="#{messages.depoLabel}" for="@next"/>
+        <p:selectOneMenu value="#{stStokHareketController.selected.stDepo}" required="true" converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{stDepoController.items}" var="d" itemLabel="#{d.depoAdi}" itemValue="#{d}"/>
+        </p:selectOneMenu>
 
-        <!--        <p:outputLabel value="Lokasyon" for="@next"/>-->
-        <!--        <p:selectOneMenu value="#{stStokHareketController.selected.lokasyon}" converter="omnifaces.SelectItemsConverter">-->
-        <!--            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>-->
-        <!--            <f:selectItems value="#{stStokHareketController.lokasyonlar}" var="l" itemLabel="#{l.lokasyonKodu}" itemValue="#{l}"/>-->
-        <!--        </p:selectOneMenu>-->
+        <p:outputLabel value="#{messages.lokasyonLabel}" for="@next"/>
+        <p:selectOneMenu value="#{stStokHareketController.selected.stDepoLokasyon}" converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{stDepoLokasyonController.items}" var="l" itemLabel="#{l.lokasyonKodu}" itemValue="#{l}"/>
+        </p:selectOneMenu>
 
-        <!--        <p:outputLabel value="Hedef Depo" for="@next"/>-->
-        <!--        <p:selectOneMenu value="#{stStokHareketController.selected.hedefDepo}" converter="omnifaces.SelectItemsConverter">-->
-        <!--            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>-->
-        <!--            <f:selectItems value="#{stStokHareketController.depolar}" var="d" itemLabel="#{d.depoAdi}" itemValue="#{d}"/>-->
-        <!--        </p:selectOneMenu>-->
+        <p:outputLabel value="#{messages.hedefDepoLabel}" for="@next"/>
+        <p:selectOneMenu value="#{stStokHareketController.selected.hedefDepo}" converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{stDepoController.items}" var="d" itemLabel="#{d.depoAdi}" itemValue="#{d}"/>
+        </p:selectOneMenu>
 
-        <!--        <p:outputLabel value="Hedef Lokasyon" for="@next"/>-->
-        <!--        <p:selectOneMenu value="#{stStokHareketController.selected.hedefLokasyon}" converter="omnifaces.SelectItemsConverter">-->
-        <!--            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>-->
-        <!--            <f:selectItems value="#{stStokHareketController.lokasyonlar}" var="l" itemLabel="#{l.lokasyonKodu}" itemValue="#{l}"/>-->
-        <!--        </p:selectOneMenu>-->
+        <p:outputLabel value="#{messages.hedefLokasyonLabel}" for="@next"/>
+        <p:selectOneMenu value="#{stStokHareketController.selected.hedefLokasyon}" converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{stDepoLokasyonController.items}" var="l" itemLabel="#{l.lokasyonKodu}" itemValue="#{l}"/>
+        </p:selectOneMenu>
 
-        <!--        <p:outputLabel value="Hareket Türü" for="@next"/>-->
-        <!--        <p:selectOneMenu value="#{stStokHareketController.selected.hareketTuru}" required="true" converter="omnifaces.SelectItemsConverter">-->
-        <!--            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>-->
-        <!--            <f:selectItems value="#{enumHareketTuru.ALL_VALUES}" var="h" itemLabel="#{h.displayValue}" itemValue="#{h}"/>-->
-        <!--        </p:selectOneMenu>-->
+        <p:outputLabel value="#{messages.hareketTurLabel}" for="@next"/>
+        <p:selectOneMenu value="#{stStokHareketController.selected.hareketTuru}" required="true" converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{enumHareketTuru.ALL_VALUES}" var="h" itemLabel="#{h.displayValue}" itemValue="#{h}"/>
+        </p:selectOneMenu>
 
-        <!--        <p:outputLabel value="Durum" for="@next"/>-->
-        <!--        <p:selectOneMenu value="#{stStokHareketController.selected.durum}" required="true" converter="omnifaces.SelectItemsConverter">-->
-        <!--            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>-->
-        <!--            <f:selectItems value="#{enumGirisCikis.ALL_VALUES}" var="g" itemLabel="#{g.displayValue}" itemValue="#{g}"/>-->
-        <!--        </p:selectOneMenu>-->
+        <p:outputLabel value="#{messages.durumLabel}" for="@next"/>
+        <p:selectOneMenu value="#{stStokHareketController.selected.durum}" required="true" converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{enumGirisCikis.ALL_VALUES}" var="g" itemLabel="#{g.displayValue}" itemValue="#{g}"/>
+        </p:selectOneMenu>
 
-        <!--        <p:outputLabel value="Miktar" for="@next"/>-->
-        <!--        <p:inputNumber value="#{stStokHareketController.selected.miktar}" required="true" decimalPlaces="4"/>-->
+        <p:outputLabel value="#{messages.miktarLabel}" for="@next"/>
+        <p:inputNumber value="#{stStokHareketController.selected.miktar}" required="true" decimalPlaces="4"/>
 
-        <!--        <p:outputLabel value="Birim" for="@next"/>-->
-        <!--        <p:selectOneMenu value="#{stStokHareketController.selected.birim}" required="true" converter="omnifaces.SelectItemsConverter">-->
-        <!--            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>-->
-        <!--            <f:selectItems value="#{stStokHareketController.birimler}" var="b" itemLabel="#{b.birimAdi}" itemValue="#{b}"/>-->
-        <!--        </p:selectOneMenu>-->
+        <p:outputLabel value="#{messages.birimLabel}" for="@next"/>
+        <p:selectOneMenu value="#{stStokHareketController.selected.stBirim}" required="true" converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{stBirimController.items}" var="b" itemLabel="#{b.tanim}" itemValue="#{b}"/>
+        </p:selectOneMenu>
 
-        <!--        <p:outputLabel value="Birim Maliyet" for="@next"/>-->
-        <!--        <p:inputNumber value="#{stStokHareketController.selected.birimMaliyet}" decimalPlaces="4"/>-->
+        <p:outputLabel value="#{messages.birimMaliyetLabel}" for="@next"/>
+        <p:inputNumber value="#{stStokHareketController.selected.birimMaliyet}" decimalPlaces="4"/>
 
-        <!--        <p:outputLabel value="Toplam Maliyet" for="@next"/>-->
-        <!--        <p:inputNumber value="#{stStokHareketController.selected.toplamMaliyet}" decimalPlaces="4"/>-->
+        <p:outputLabel value="#{messages.toplamMaliyetLabel}" for="@next"/>
+        <p:inputNumber value="#{stStokHareketController.selected.toplamMaliyet}" decimalPlaces="4"/>
 
-        <p:outputLabel value="Belge Türü" for="@next"/>
-        <p:inputText value="#{stStokHareketController.selected.belgeTuru}" size="20" maxlength="50"/>
+        <!--        <p:outputLabel value="Belge Türü" for="@next"/>-->
+        <!--        <p:inputText value="#{stStokHareketController.selected.belgeTuru}" size="20" maxlength="50"/>-->
 
-        <p:outputLabel value="Belge No" for="@next"/>
-        <p:inputText value="#{stStokHareketController.selected.belgeNo}" size="20" maxlength="50"/>
+        <!--        <p:outputLabel value="Belge No" for="@next"/>-->
+        <!--        <p:inputText value="#{stStokHareketController.selected.belgeNo}" size="20" maxlength="50"/>-->
 
-        <p:outputLabel value="#{messages.aciklamaLabel}" for="@next"/>
-        <p:inputTextarea value="#{stStokHareketController.selected.aciklama}" rows="3" autoResize="false" styleClass="w-100"/>
+        <p:outputLabel value="Açıklama" for="@next"/>
+        <p:inputTextarea value="#{stStokHareketController.selected.aciklama}" rows="3" cols="50"/>
 
     </coco:createpage>
 
