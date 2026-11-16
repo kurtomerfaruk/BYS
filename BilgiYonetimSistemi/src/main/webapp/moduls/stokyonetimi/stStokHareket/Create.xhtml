@@ -11,11 +11,11 @@
     <coco:createpage id="StStokHareketCreateForm"
                      renderedListener="#{stStokHareketController.selected != null}"
                      widgetVar="StStokHareketCreateDialog"
-                     actionListener="#{stStokHareketController.saveNew}"
+                     actionListener="#{stStokHareketController.createMovement}"
                      listForm="StStokHareketListForm">
 
         <p:outputLabel value="#{messages.hareketNoLabel}" for="@next"/>
-        <p:inputText value="#{stStokHareketController.selected.hareketNo}" title="#{messages.hareketNoText}" required="true" size="30"
+        <p:inputText value="#{stStokHareketController.selected.hareketNo}" title="#{messages.hareketNoText}" readonly="true" size="30"
                      maxlength="50"/>
 
         <p:outputLabel value="#{messages.stokLabel}" for="@next"/>
@@ -60,20 +60,25 @@
             <f:selectItems value="#{enumGirisCikis.ALL_VALUES}" var="g" itemLabel="#{g.displayValue}" itemValue="#{g}"/>
         </p:selectOneMenu>
 
-        <p:outputLabel value="#{messages.miktarLabel}" for="@next"/>
-        <p:inputNumber value="#{stStokHareketController.selected.miktar}" required="true" decimalPlaces="4"/>
-
         <p:outputLabel value="#{messages.birimLabel}" for="@next"/>
         <p:selectOneMenu value="#{stStokHareketController.selected.stBirim}" required="true" converter="omnifaces.SelectItemsConverter">
             <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
             <f:selectItems value="#{stBirimController.items}" var="b" itemLabel="#{b.tanim}" itemValue="#{b}"/>
         </p:selectOneMenu>
 
+        <p:outputLabel value="#{messages.miktarLabel}" for="@next"/>
+        <p:inputNumber value="#{stStokHareketController.selected.miktar}" required="true" decimalPlaces="4" styleClass="text-end">
+            <p:ajax event="keyup" update="toplamMaliyet" listener="#{stStokHareketController.calculate()}"/>
+        </p:inputNumber>
+
         <p:outputLabel value="#{messages.birimMaliyetLabel}" for="@next"/>
-        <p:inputNumber value="#{stStokHareketController.selected.birimMaliyet}" decimalPlaces="4"/>
+        <p:inputNumber value="#{stStokHareketController.selected.birimMaliyet}" decimalPlaces="4" styleClass="text-end">
+            <p:ajax event="keyup" update="toplamMaliyet" listener="#{stStokHareketController.calculate()}"/>
+        </p:inputNumber>
 
         <p:outputLabel value="#{messages.toplamMaliyetLabel}" for="@next"/>
-        <p:inputNumber value="#{stStokHareketController.selected.toplamMaliyet}" decimalPlaces="4"/>
+        <p:inputNumber id="toplamMaliyet" value="#{stStokHareketController.selected.toplamMaliyet}" decimalPlaces="4" styleClass="text-end"
+                       readonly="true"/>
 
         <!--        <p:outputLabel value="Belge Türü" for="@next"/>-->
         <!--        <p:inputText value="#{stStokHareketController.selected.belgeTuru}" size="20" maxlength="50"/>-->

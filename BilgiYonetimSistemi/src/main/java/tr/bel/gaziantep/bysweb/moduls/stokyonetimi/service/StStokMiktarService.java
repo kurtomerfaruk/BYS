@@ -58,6 +58,7 @@ public class StStokMiktarService {
             bakiye.setTransferdekiMiktar(BigDecimal.ZERO);
             em.persist(bakiye);
             if (lockMode != null) em.lock(bakiye, lockMode);
+            updateStokMiktar(stokKarti);
         }
         return bakiye;
     }
@@ -67,6 +68,14 @@ public class StStokMiktarService {
                 "SELECT COALESCE(SUM(b.miktar),0) FROM StStokBakiye b WHERE b.stStok = :stok AND b.stDepo = :depo", BigDecimal.class);
         q.setParameter("stok", stokKarti);
         q.setParameter("depo", depo);
+        BigDecimal result = q.getSingleResult();
+        return result == null ? BigDecimal.ZERO : result;
+    }
+
+    public BigDecimal getToplamMiktar(StStok stokKarti) {
+        jakarta.persistence.TypedQuery<BigDecimal> q = em.createQuery(
+                "SELECT COALESCE(SUM(b.miktar),0) FROM StStokBakiye b WHERE b.stStok = :stok AND b.aktif = true", BigDecimal.class);
+        q.setParameter("stok", stokKarti);
         BigDecimal result = q.getSingleResult();
         return result == null ? BigDecimal.ZERO : result;
     }
@@ -81,5 +90,18 @@ public class StStokMiktarService {
         BigDecimal onHand = row[0] == null ? BigDecimal.ZERO : (BigDecimal) row[0];
         BigDecimal reserved = row[1] == null ? BigDecimal.ZERO : (BigDecimal) row[1];
         return onHand.subtract(reserved);
+    }
+
+    public void save(StStokBakiye bakiye) {
+        em.merge(bakiye);
+        updateStokMiktar(bakiye.getStStok());
+    }
+
+    private void updateStokMiktar(StStok stokKarti) {
+        if (stokKarti == null || stokKarti.getId() == null) return;
+        StStok managed = em.find(StStok.class, stokKarti.getId());
+        if (managed != null) {
+            managed.setMiktar(getToplamMiktar(managed));
+        }
     }
 }

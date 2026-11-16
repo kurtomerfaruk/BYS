@@ -51,6 +51,9 @@ public class StStok extends BaseEntity {
     @Column(name = "STOK_ADI", nullable = false, length = 200)
     private String stokAdi;
 
+    @Column(name = "MIKTAR", precision = 18, scale = 4)
+    private BigDecimal miktar = BigDecimal.ZERO;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "STSTOK_KATEGORI_ID")
     private StStokKategori stStokKategori;
@@ -68,7 +71,7 @@ public class StStok extends BaseEntity {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "STBIRIM_ID", nullable = false)
-    private StStokHareket stBirim;
+    private StBirim stBirim;
 
     @Column(name = "KDV_ORANI")
     private int kdvOrani;
@@ -108,6 +111,7 @@ public class StStok extends BaseEntity {
     @OneToMany(mappedBy = "stStok", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @SQLRestriction("AKTIF=true")
     private List<StStokBarkod> stokBarkodList = new ArrayList<>();
+
 
     @Override
     public int hashCode() {

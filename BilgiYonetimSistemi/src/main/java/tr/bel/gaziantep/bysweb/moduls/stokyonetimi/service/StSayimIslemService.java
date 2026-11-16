@@ -42,7 +42,7 @@ public class StSayimIslemService {
     @Inject
     private StStokIslemService islemService;
     @Inject
-    private StStokService stokKartiService;
+    private StStokService stokService;
 
     public StSayim baslatSayim(StSayim sayim, List<StStok> stokKartlari) {
         if (sayim == null) throw new IllegalArgumentException("Sayým zorunludur");
@@ -54,7 +54,7 @@ public class StSayimIslemService {
             for (StStok sk : stokKartlari) {
                 StSayimKalem kalem = new StSayimKalem();
                 kalem.setStSayim(sayim);
-                kalem.setStStok(stokKartiService.find(sk.getId()));
+                kalem.setStStok(stokService.find(sk.getId()));
                 kalem.setStDepoLokasyon(sayim.getStDepoLokasyon());
                 kalem.setStBirim(sk.getStBirim());
                 BigDecimal sistem = miktarService.getOnHand(sk, sayim.getStDepo());
@@ -109,7 +109,7 @@ public class StSayimIslemService {
             hareket.setBelgeTuru("STSAYIM");
             hareket.setBelgeId(s.getId());
             hareket.setBelgeNo(s.getSayimNo());
-            islemService.postMovement(hareket);
+            islemService.createMovement(hareket);
 
             k.setOnaylandi(true);
             sayimKalemService.edit(k);

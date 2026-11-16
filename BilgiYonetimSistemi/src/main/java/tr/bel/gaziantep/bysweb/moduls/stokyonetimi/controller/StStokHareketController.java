@@ -15,6 +15,8 @@ import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.service.StStokHareketService;
 import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.service.StStokIslemService;
 
 import java.io.Serial;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -69,10 +71,10 @@ public class StStokHareketController extends AbstractController<StStokHareket> {
         return hareket;
     }
 
-    public void postMovement(ActionEvent event) {
+    public void createMovement(ActionEvent event) {
         try {
             if (this.getSelected() != null) {
-                islemService.postMovement(this.getSelected());
+                islemService.createMovement(this.getSelected());
                 FacesUtil.addSuccessMessage("Stok hareketi kaydedildi");
                 this.setSelected(null);
                 this.setLazyItems(null);
@@ -81,6 +83,27 @@ public class StStokHareketController extends AbstractController<StStokHareket> {
             log.error(null, ex);
             FacesUtil.errorMessage("Hata oluþtu");
         }
+    }
+
+    public void updateMovement(ActionEvent event) {
+        try {
+            if (this.getSelected() != null) {
+                islemService.updateMovement(this.getSelected());
+                FacesUtil.addSuccessMessage("Stok hareketi güncellendi");
+                this.setSelected(null);
+                this.setLazyItems(null);
+            }
+        } catch (Exception ex) {
+            log.error(null, ex);
+            FacesUtil.errorMessage("Hata oluþtu");
+        }
+    }
+
+    public void calculate() {
+        if (this.getSelected() == null) return;
+        BigDecimal amount = this.getSelected().getMiktar() != null ? this.getSelected().getMiktar() : BigDecimal.ZERO;
+        BigDecimal unitPrice = this.getSelected().getBirimMaliyet() != null ? this.getSelected().getBirimMaliyet() : BigDecimal.ZERO;
+        this.getSelected().setToplamMaliyet(amount.multiply(unitPrice).setScale(4, RoundingMode.HALF_UP));
     }
 
 }

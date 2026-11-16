@@ -46,7 +46,7 @@ public class StTransferKalem extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "STBIRIM_ID")
-    private StStokHareket stBirim;
+    private StBirim stBirim;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "KAYNAK_STDEPO_LOKASYON_ID")

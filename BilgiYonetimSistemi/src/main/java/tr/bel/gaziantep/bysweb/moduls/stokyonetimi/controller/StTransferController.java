@@ -58,7 +58,7 @@ public class StTransferController extends AbstractController<StTransfer> {
     private BigDecimal amount;
     @Getter
     @Setter
-    private StStokHareket unit;
+    private StBirim unit;
     @Getter
     @Setter
     private StDepoLokasyon sourceLocation;

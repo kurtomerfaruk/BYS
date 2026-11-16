@@ -40,8 +40,6 @@ public class StTransferIslemService {
     private StStokMiktarService miktarService;
     @Inject
     private StStokService stokService;
-    @Inject
-    private StStokBakiyeService stokBakiyeService;
 //    @Inject
 //    private StKullaniciDepoYetkiService yetkiService;
 
@@ -98,12 +96,12 @@ public class StTransferIslemService {
             hareket.setBelgeTuru("STTRANSFER");
             hareket.setBelgeId(t.getId());
             hareket.setBelgeNo(t.getTransferNo());
-            islemService.postMovement(hareket);
+            islemService.createMovement(hareket);
 
             StStokBakiye hedefBakiye = miktarService.getOrCreateBakiye(hareket.getStStok(), hedefDepo, kalem.getHedefStDepoLokasyon(), null,
                     LockModeType.PESSIMISTIC_WRITE);
             hedefBakiye.setTransferdekiMiktar(hedefBakiye.getTransferdekiMiktar().add(kalan));
-            stokBakiyeService.edit(hedefBakiye);
+            miktarService.save(hedefBakiye);
 
             kalem.setSevkMiktar(kalem.getMiktar());
             kalemService.edit(kalem);
@@ -148,7 +146,7 @@ public class StTransferIslemService {
             hareket.setBelgeTuru("STTRANSFER");
             hareket.setBelgeId(t.getId());
             hareket.setBelgeNo(t.getTransferNo());
-            islemService.postMovement(hareket);
+            islemService.createMovement(hareket);
 
             StStokBakiye hedefBakiye = miktarService.findBakiye(hareket.getStStok(), hedefDepo, kalem.getHedefStDepoLokasyon(), null,
                     LockModeType.PESSIMISTIC_WRITE);
@@ -157,7 +155,7 @@ public class StTransferIslemService {
                 if (hedefBakiye.getTransferdekiMiktar().compareTo(BigDecimal.ZERO) < 0) {
                     hedefBakiye.setTransferdekiMiktar(BigDecimal.ZERO);
                 }
-                stokBakiyeService.edit(hedefBakiye);
+                miktarService.save(hedefBakiye);
             }
 
             kalem.setTeslimMiktar(kalem.getSevkMiktar());

@@ -33,13 +33,11 @@ public class StStokIslemService {
     @Inject
     private StStokMiktarService miktarService;
     @Inject
-    private StStokBakiyeService stokBakiyeService;
-    @Inject
     private StMaliyetService maliyetService;
 //    @Inject
 //    private StKullaniciDepoYetkiService yetkiService;
 
-    public StStokHareket postMovement(StStokHareket hareket) {
+    public StStokHareket createMovement(StStokHareket hareket) {
         if (hareket == null || hareket.getStStok() == null || hareket.getStDepo() == null) {
             throw new IllegalArgumentException("Stok kartý ve depo zorunludur");
         }
@@ -110,7 +108,29 @@ public class StStokIslemService {
         if (hareket.getId() == null) hareketService.create(hareket);
         else hareketService.edit(hareket);
 
-        stokBakiyeService.edit(bakiye);
+        miktarService.save(bakiye);
+        return hareket;
+    }
+
+    public StStokHareket updateMovement(StStokHareket hareket) {
+        if (hareket == null || hareket.getId() == null) throw new IllegalArgumentException("Geçersiz hareket");
+        StStokHareket old = hareketService.find(hareket.getId());
+        if (old == null) throw new IllegalArgumentException("Hareket bulunamadý");
+
+        if (!old.getStStok().getId().equals(hareket.getStStok().getId())
+                || !old.getStDepo().getId().equals(hareket.getStDepo().getId())) {
+            throw new IllegalStateException("Stok kartý veya depo deðiþikliði desteklenmiyor");
+        }
+
+        java.math.BigDecimal oldContrib = (old.getDurum() == EnumGirisCikis.GIRIS) ? old.getMiktar() : old.getMiktar().negate();
+        java.math.BigDecimal newContrib = (hareket.getDurum() == EnumGirisCikis.GIRIS) ? hareket.getMiktar() : hareket.getMiktar().negate();
+        java.math.BigDecimal delta = newContrib.subtract(oldContrib);
+
+        StStokBakiye bakiye = miktarService.getOrCreateBakiye(old.getStStok(), old.getStDepo(), old.getStDepoLokasyon(), null, LockModeType.PESSIMISTIC_WRITE);
+        bakiye.setMiktar(bakiye.getMiktar().add(delta));
+        miktarService.save(bakiye);
+
+        hareketService.edit(hareket);
         return hareket;
     }
 
@@ -133,7 +153,7 @@ public class StStokIslemService {
         ters.setKaynakIslemReferansi(original.getHareketNo());
         ters.setIptalEdildi(false);
 
-        StStokHareket saved = postMovement(ters);
+        StStokHareket saved = createMovement(ters);
         original.setIptalEdildi(true);
         hareketService.edit(original);
         return saved;

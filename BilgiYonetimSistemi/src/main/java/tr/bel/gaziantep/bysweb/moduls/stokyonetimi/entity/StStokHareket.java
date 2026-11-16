@@ -72,7 +72,7 @@ public class StStokHareket extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "STBIRIM_ID")
-    private StStokHareket stBirim;
+    private StBirim stBirim;
 
     @Column(name = "BIRIM_MALIYET", precision = 18, scale = 4)
     private BigDecimal birimMaliyet;
