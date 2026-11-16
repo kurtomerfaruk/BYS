@@ -34,11 +34,18 @@ public class StStokIslemService {
     private StStokMiktarService miktarService;
     @Inject
     private StMaliyetService maliyetService;
-//    @Inject
-//    private StKullaniciDepoYetkiService yetkiService;
 
+    /**
+     * Yeni stok hareketi oluþturur. Mevcut bir hareket bu metoda verilemez.
+     */
     public StStokHareket createMovement(StStokHareket hareket) {
-        if (hareket == null || hareket.getStStok() == null || hareket.getStDepo() == null) {
+        if (hareket == null) {
+            throw new IllegalArgumentException("Hareket zorunludur");
+        }
+        if (hareket.getId() != null) {
+            throw new IllegalArgumentException("Mevcut hareket yeniden post edilemez. Düzeltme için hareketi iptal edip yeni kayýt girin");
+        }
+        if (hareket.getStStok() == null || hareket.getStDepo() == null) {
             throw new IllegalArgumentException("Stok kartý ve depo zorunludur");
         }
 
@@ -55,6 +62,9 @@ public class StStokIslemService {
 //        }
 
         BigDecimal miktarTemel = hareket.getMiktar();
+        if (miktarTemel == null || miktarTemel.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("Miktar sýfýrdan büyük olmalýdýr");
+        }
         if (hareket.getStBirim() == null || !hareket.getStBirim().getId().equals(stokKarti.getStBirim().getId())) {
             throw new IllegalArgumentException("Birim dönüþümü desteklenmiyor (þimdilik temel birim kullanýn)");
         }
@@ -67,27 +77,32 @@ public class StStokIslemService {
         }
 
         StDepoLokasyon lokasyon = hareket.getStDepoLokasyon();
-        java.time.LocalDate skt = null;
-        StStokBakiye bakiye = miktarService.getOrCreateBakiye(stokKarti, depo, lokasyon, skt, LockModeType.PESSIMISTIC_WRITE);
+        EnumStMaliyetYontemi method = maliyetService.getCostMethod(stokKarti);
+        StStokBakiye bakiye = miktarService.getOrCreateBakiye(stokKarti, depo, lokasyon, null, LockModeType.PESSIMISTIC_WRITE);
 
-        if (hareket.getDurum() == EnumGirisCikis.GIRIS) {
-            bakiye.setMiktar(bakiye.getMiktar().add(miktarTemel));
-        } else {
-            bakiye.setMiktar(bakiye.getMiktar().subtract(miktarTemel));
+        // Aðýrlýklý ortalama için hareket eklenmeden önceki miktar gerekir.
+        BigDecimal oncekiMiktar = null;
+        if (hareket.getDurum() == EnumGirisCikis.GIRIS && method == EnumStMaliyetYontemi.WEIGHTED_AVERAGE) {
+            oncekiMiktar = miktarService.calculateNet(stokKarti, depo, lokasyon);
+            if (oncekiMiktar.compareTo(BigDecimal.ZERO) < 0) oncekiMiktar = BigDecimal.ZERO;
         }
 
-        EnumStMaliyetYontemi method = maliyetService.getCostMethod(stokKarti);
+        if (hareket.getIslemTarihi() == null) hareket.setIslemTarihi(LocalDateTime.now());
+
+        hareketService.create(hareket);
+        hareketService.flush();
+
         if (hareket.getDurum() == EnumGirisCikis.GIRIS) {
             BigDecimal birimMaliyet = hareket.getBirimMaliyet() == null ? BigDecimal.ZERO : hareket.getBirimMaliyet();
             maliyetService.createCostLayer(hareket, miktarTemel, birimMaliyet);
             hareket.setToplamMaliyet(birimMaliyet.multiply(miktarTemel));
             if (method == EnumStMaliyetYontemi.WEIGHTED_AVERAGE) {
-                BigDecimal oldQty = bakiye.getMiktar().subtract(miktarTemel);
-                if (oldQty.compareTo(BigDecimal.ZERO) < 0) oldQty = BigDecimal.ZERO;
                 BigDecimal oldAvg = bakiye.getOrtalamaMaliyet() == null ? BigDecimal.ZERO : bakiye.getOrtalamaMaliyet();
-                BigDecimal totalQty = oldQty.add(miktarTemel);
-                if (totalQty.compareTo(BigDecimal.ZERO) > 0) {
-                    bakiye.setOrtalamaMaliyet(oldAvg.multiply(oldQty).add(birimMaliyet.multiply(miktarTemel)).divide(totalQty, 4, RoundingMode.HALF_UP));
+                BigDecimal toplamMiktar = oncekiMiktar.add(miktarTemel);
+                if (toplamMiktar.compareTo(BigDecimal.ZERO) > 0) {
+                    bakiye.setOrtalamaMaliyet(oldAvg.multiply(oncekiMiktar)
+                            .add(birimMaliyet.multiply(miktarTemel))
+                            .divide(toplamMiktar, 4, RoundingMode.HALF_UP));
                 } else {
                     bakiye.setOrtalamaMaliyet(birimMaliyet);
                 }
@@ -103,59 +118,56 @@ public class StStokIslemService {
             }
         }
 
-        if (hareket.getIslemTarihi() == null) hareket.setIslemTarihi(LocalDateTime.now());
-
-        if (hareket.getId() == null) hareketService.create(hareket);
-        else hareketService.edit(hareket);
-
-        miktarService.save(bakiye);
+        miktarService.recalculateBakiye(stokKarti, depo, lokasyon);
+        miktarService.recalculateStokKartiMiktar(stokKarti);
         return hareket;
     }
 
+    /**
+     * Hareketin yalnýzca miktarý etkilemeyen alanlarýný günceller.
+     *
+     * <p>Miktar, durum, depo, lokasyon, birim ve maliyet alanlarý deðiþtirilemez.
+     * Bunlar için hareket iptal edilip yeni kayýt girilmelidir.</p>
+     */
     public StStokHareket updateMovement(StStokHareket hareket) {
         if (hareket == null || hareket.getId() == null) throw new IllegalArgumentException("Geçersiz hareket");
-        StStokHareket old = hareketService.find(hareket.getId());
-        if (old == null) throw new IllegalArgumentException("Hareket bulunamadý");
+        StStokHareket managed = hareketService.find(hareket.getId());
+        if (managed == null) throw new IllegalArgumentException("Hareket bulunamadý");
+        if (managed.isIptalEdildi()) throw new IllegalStateException("Ýptal edilmiþ hareket güncellenemez");
 
-        if (!old.getStStok().getId().equals(hareket.getStStok().getId())
-                || !old.getStDepo().getId().equals(hareket.getStDepo().getId())) {
-            throw new IllegalStateException("Stok kartý veya depo deðiþikliði desteklenmiyor");
-        }
+        managed.setHareketTuru(hareket.getHareketTuru());
+        managed.setBelgeTuru(hareket.getBelgeTuru());
+        managed.setBelgeNo(hareket.getBelgeNo());
+        managed.setStTedarikci(hareket.getStTedarikci());
+        managed.setAciklama(hareket.getAciklama());
+        managed.setKaynakIslemReferansi(hareket.getKaynakIslemReferansi());
 
-        java.math.BigDecimal oldContrib = (old.getDurum() == EnumGirisCikis.GIRIS) ? old.getMiktar() : old.getMiktar().negate();
-        java.math.BigDecimal newContrib = (hareket.getDurum() == EnumGirisCikis.GIRIS) ? hareket.getMiktar() : hareket.getMiktar().negate();
-        java.math.BigDecimal delta = newContrib.subtract(oldContrib);
+        hareketService.edit(managed);
+        hareketService.flush();
 
-        StStokBakiye bakiye = miktarService.getOrCreateBakiye(old.getStStok(), old.getStDepo(), old.getStDepoLokasyon(), null, LockModeType.PESSIMISTIC_WRITE);
-        bakiye.setMiktar(bakiye.getMiktar().add(delta));
-        miktarService.save(bakiye);
-
-        hareketService.edit(hareket);
-        return hareket;
+        // Miktar deðiþmediði için sonuç aynýdýr; yine de özet alanlarý tazeliyoruz.
+        miktarService.recalculateBakiye(managed.getStStok(), managed.getStDepo(), managed.getStDepoLokasyon());
+        miktarService.recalculateStokKartiMiktar(managed.getStStok());
+        return managed;
     }
 
-    public StStokHareket reverseMovement(StStokHareket original, String aciklama) {
-        if (original == null || original.getId() == null) throw new IllegalArgumentException("Geçersiz hareket");
-        StStokHareket ters = new StStokHareket();
-        ters.setStStok(original.getStStok());
-        ters.setStDepo(original.getStDepo());
-        ters.setStDepoLokasyon(original.getStDepoLokasyon());
-        ters.setHedefDepo(original.getHedefDepo());
-        ters.setHedefLokasyon(original.getHedefLokasyon());
-        ters.setHareketTuru(original.getHareketTuru());
-        ters.setDurum(original.getDurum() == EnumGirisCikis.GIRIS ? EnumGirisCikis.CIKIS : EnumGirisCikis.GIRIS);
-        ters.setMiktar(original.getMiktar());
-        ters.setStBirim(original.getStBirim());
-        ters.setBirimMaliyet(original.getBirimMaliyet());
-        ters.setIslemTarihi(LocalDateTime.now());
-        ters.setSyKullanici(original.getSyKullanici());
-        ters.setAciklama(aciklama != null ? aciklama : "Ters kayýt: " + original.getHareketNo());
-        ters.setKaynakIslemReferansi(original.getHareketNo());
-        ters.setIptalEdildi(false);
+    /**
+     * Hareketi iptal eder (silmez) ve bakiyeyi hareketlerden yeniden hesaplar.
+     *
+     * <p>Ters kayýt oluþturulmaz; iptal edilen hareket toplam hesabýna girmez.</p>
+     */
+    public StStokHareket cancel(StStokHareket hareket) {
+        if (hareket == null || hareket.getId() == null) throw new IllegalArgumentException("Geçersiz hareket");
+        StStokHareket managed = hareketService.find(hareket.getId());
+        if (managed == null) throw new IllegalArgumentException("Hareket bulunamadý");
+        if (managed.isIptalEdildi()) return managed;
 
-        StStokHareket saved = createMovement(ters);
-        original.setIptalEdildi(true);
-        hareketService.edit(original);
-        return saved;
+        managed.setIptalEdildi(true);
+        hareketService.edit(managed);
+        hareketService.flush();
+
+        miktarService.recalculateBakiye(managed.getStStok(), managed.getStDepo(), managed.getStDepoLokasyon());
+        miktarService.recalculateStokKartiMiktar(managed.getStStok());
+        return managed;
     }
 }

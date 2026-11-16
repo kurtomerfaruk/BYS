@@ -122,6 +122,10 @@ public class StStokHareket extends BaseEntity {
     @Column(name = "IPTAL_EDILDI", nullable = false)
     private boolean iptalEdildi;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "STTEDARIKCI_ID")
+    private StTedarikci stTedarikci;
+
     @Override
     public int hashCode() {
         int hash = 0;

@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import tr.bel.gaziantep.bysweb.core.controller.AbstractController;
 import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.EnumSyFiltreAnahtari;
 import tr.bel.gaziantep.bysweb.core.service.FilterOptionService;
+import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
 import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity.StStokHareket;
 import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.service.StStokHareketService;
@@ -81,7 +82,7 @@ public class StStokHareketController extends AbstractController<StStokHareket> {
             }
         } catch (Exception ex) {
             log.error(null, ex);
-            FacesUtil.errorMessage("Hata oluþtu");
+            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
         }
     }
 
@@ -95,7 +96,7 @@ public class StStokHareketController extends AbstractController<StStokHareket> {
             }
         } catch (Exception ex) {
             log.error(null, ex);
-            FacesUtil.errorMessage("Hata oluþtu");
+            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
         }
     }
 
@@ -105,5 +106,20 @@ public class StStokHareketController extends AbstractController<StStokHareket> {
         BigDecimal unitPrice = this.getSelected().getBirimMaliyet() != null ? this.getSelected().getBirimMaliyet() : BigDecimal.ZERO;
         this.getSelected().setToplamMaliyet(amount.multiply(unitPrice).setScale(4, RoundingMode.HALF_UP));
     }
+
+    public void cancel(ActionEvent event) {
+        try {
+            if (this.getSelected() != null) {
+                islemService.cancel(this.getSelected());
+                FacesUtil.addSuccessMessage("Stok hareketi iptal edildi");
+                this.setSelected(null);
+                this.setLazyItems(null);
+            }
+        } catch (Exception ex) {
+            log.error(null, ex);
+            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+        }
+    }
+
 
 }
