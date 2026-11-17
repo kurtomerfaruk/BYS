@@ -9,6 +9,11 @@ import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
 
 import java.io.Serial;
 
+/**
+ * @author Omer Faruk KURT kurtomerfaruk@gmail.com
+ * @version 1.30.0
+ * @since 17.11.2026 10:46
+ */
 @Getter
 @Setter
 @Entity

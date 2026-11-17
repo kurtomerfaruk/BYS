@@ -21,7 +21,7 @@
         <p:inputText id="ad" value="#{stStokKategoriController.selected.ad}" title="#{messages.adText}" size="50" maxlength="150" required="true"/>
 
         <p:outputLabel value="#{messages.ustKategoriLabel}" for="@next"/>
-        <p:selectOneMenu id="ustStokKategori" value="#{stStokKategoriController.selected.ustStokKategori}" filter="true"
+        <p:selectOneMenu id="ustStokKategori" value="#{stStokKategoriController.selected.ustKategori}" filter="true"
                          converter="omnifaces.SelectItemsConverter">
             <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
             <f:selectItems value="#{stStokKategoriController.items}" var="kategoriItem"
