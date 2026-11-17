@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces">
+<ui:composition>
+
+    <p:outputLabel value="#{messages.malzemeKoduLabel}" for="@next"/>
+    <p:inputText id="malzemeKodu" value="#{stStokController.selected.malzemeKodu}" title="#{messages.malzemeKoduText}"
+                 size="50" maxlength="50" required="true"/>
+
+    <p:outputLabel value="#{messages.stokKoduLabel}" for="@next"/>
+    <p:inputText id="stokKodu" value="#{stStokController.selected.stokKodu}" title="#{messages.stokKoduText}"
+                 size="50" maxlength="50"/>
+
+    <p:outputLabel value="#{messages.stokAdiLabel}" for="@next"/>
+    <p:inputText id="stokAdi" value="#{stStokController.selected.stokAdi}" title="#{messages.stokAdiText}"
+                 size="50" maxlength="200" required="true"/>
+
+    <p:outputLabel value="#{messages.markaLabel}" for="@next"/>
+    <p:inputText id="marka" value="#{stStokController.selected.marka}" title="#{messages.markaText}" size="40" maxlength="100"/>
+
+    <p:outputLabel value="#{messages.modelLabel}" for="@next"/>
+    <p:inputText id="model" value="#{stStokController.selected.model}" title="#{messages.modelText}" size="40" maxlength="100"/>
+
+    <p:outputLabel value="#{messages.ustKategoriLabel}" for="@next"/>
+    <p:selectOneMenu id="stStokKategori" value="#{stStokController.selected.stStokKategori}" filter="true"
+                     converter="omnifaces.SelectItemsConverter">
+        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+        <f:selectItems value="#{stStokKategoriController.items}" var="kategoriItem"
+                       itemValue="#{kategoriItem}" itemLabel="#{kategoriItem.ad}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.birimLabel}" for="@next"/>
+    <p:selectOneMenu id="stBirim" value="#{stStokController.selected.stBirim}" filter="true" required="true"
+                     converter="omnifaces.SelectItemsConverter">
+        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+        <f:selectItems value="#{stBirimController.items}" var="birimItem"
+                       itemValue="#{birimItem}" itemLabel="#{birimItem.ad}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.kdvOraniLabel}" for="@next"/>
+    <p:inputNumber id="kdvOrani" value="#{stStokController.selected.kdvOrani}" decimalPlaces="0"
+                   emptyValue="empty" minValue="0" maxValue="100"/>
+
+    <p:outputLabel value="#{messages.minStokLabel}" for="@next"/>
+    <p:inputNumber id="minStok" value="#{stStokController.selected.minStok}" decimalPlaces="4"
+                   emptyValue="empty" minValue="0"/>
+
+    <p:outputLabel value="#{messages.maksStokLabel}" for="@next"/>
+    <p:inputNumber id="maksStok" value="#{stStokController.selected.maxStok}" decimalPlaces="4"
+                   emptyValue="empty" minValue="0"/>
+
+    <p:outputLabel value="#{messages.kritikStokLabel}" for="@next"/>
+    <p:inputNumber id="kritikStok" value="#{stStokController.selected.kritikStok}" decimalPlaces="4"
+                   emptyValue="empty" minValue="0"/>
+
+    <p:outputLabel value="#{messages.varsayilanDepoLabel}" for="@next"/>
+    <p:selectOneMenu id="varsayilanStDepo" value="#{stStokController.selected.stDepo}" filter="true"
+                     converter="omnifaces.SelectItemsConverter">
+        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+        <f:selectItems value="#{stDepoController.items}" var="depoItem"
+                       itemValue="#{depoItem}" itemLabel="#{depoItem.ad}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.lotTakibiLabel}" for="@next"/>
+    <p:selectBooleanCheckbox id="lotTakibi" value="#{stStokController.selected.lotTakibi}"/>
+
+    <p:outputLabel value="#{messages.seriNoTakibiLabel}" for="@next"/>
+    <p:selectBooleanCheckbox id="seriNoTakibi" value="#{stStokController.selected.seriNoTakibi}"/>
+
+    <p:outputLabel value="#{messages.sktTakibiLabel}" for="@next"/>
+    <p:selectBooleanCheckbox id="sktTakibi" value="#{stStokController.selected.sktTakibi}"/>
+
+    <p:outputLabel value="#{messages.maliyetYonetimiLabel}" for="@next"/>
+    <p:selectOneMenu id="maliyetYontemi" value="#{stStokController.selected.maliyetYontemi}"
+                     converter="omnifaces.SelectItemsConverter">
+        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+        <f:selectItems value="#{enumMaliyetYontemi.ALL_VALUES}" var="yontem"
+                       itemValue="#{yontem}" itemLabel="#{yontem.displayValue}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.aciklamaLabel}" for="@next"/>
+    <p:inputTextarea id="aciklama" value="#{stStokController.selected.aciklama}" title="#{messages.aciklamaText}"
+                     rows="4" styleClass="w-100" autoResize="false"/>
+
+</ui:composition>
+
+</html>

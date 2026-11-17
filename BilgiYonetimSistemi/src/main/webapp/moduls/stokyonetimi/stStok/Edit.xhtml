@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:p="primefaces">
+
+<ui:composition>
+
+    <p:dialog widgetVar="StStokEditDialog"
+              id="StStokEditDialogId"
+              modal="true"
+              resizable="false"
+              closeOnEscape="true"
+              header="#{messages.dialogKayitGuncelle}"
+              appendTo="@(body)"
+              responsive="true"
+              fitViewport="true"
+              position="top"
+              style="min-width:900px;">
+
+        <h:form id="StStokEditForm">
+            <h:panelGroup id="display">
+                <p:focus context="display"/>
+                <div class="card">
+                    <div class="card-body">
+
+                        <ul class="nav nav-tabs mb-3 tab-style-8 scaleX">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="stKartEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#stKartEditTabPane" type="button" role="tab"
+                                        aria-controls="stKartEditTabPane" aria-selected="true">Kart Bilgileri
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="stBarkodEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#stBarkodEditTabPane" type="button" role="tab"
+                                        aria-controls="stBarkodEditTabPane" aria-selected="false">Barkodlar
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="stBirimDonusumEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#stBirimDonusumEditTabPane" type="button" role="tab"
+                                        aria-controls="stBirimDonusumEditTabPane" aria-selected="false">Birim Dönüşümleri
+                                </button>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content">
+                            <div class="tab-pane show active overflow-hidden" id="stKartEditTabPane"
+                                 role="tabpanel" aria-labelledby="stKartEditTab" tabindex="0">
+                                <p:panelGrid columns="2" styleClass="w-100" layout="tabular"
+                                             rendered="#{stStokController.selected != null}">
+                                    <ui:include src="/moduls/stokyonetimi/stStok/KartTab.xhtml"/>
+                                </p:panelGrid>
+                            </div>
+
+                            <div class="tab-pane overflow-hidden" id="stBarkodEditTabPane"
+                                 role="tabpanel" aria-labelledby="stBarkodEditTab" tabindex="0">
+                                <ui:include src="/moduls/stokyonetimi/stStok/BarkodTab.xhtml"/>
+                            </div>
+
+                            <div class="tab-pane overflow-hidden" id="stBirimDonusumEditTabPane"
+                                 role="tabpanel" aria-labelledby="stBirimDonusumEditTab" tabindex="0">
+                                <ui:include src="/moduls/stokyonetimi/stStok/BirimDonusumTab.xhtml"/>
+                            </div>
+                        </div>
+                    </div><!-- end card-body -->
+                    <div class="card-footer">
+                        <div class="float-end">
+                            <p:commandButton icon="pi pi-check" styleClass="ui-button-success"
+                                             actionListener="#{stStokController.save}"
+                                             value="#{messages.buttonKaydet}"
+                                             update="display,:StStokListForm:datalist:datalist,:growl"
+                                             oncomplete="handleSubmit(xhr,status,args,PF('StStokEditDialog'));"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                            <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                             value="#{messages.buttonIptal}" onclick="PF('StStokEditDialog').hide()"
+                                             immediate="true" onstart="PF('Loading').show()"
+                                             onsuccess="PF('Loading').hide()"/>
+                        </div>
+                    </div>
+                </div>
+                <ui:include src="/confirmation.xhtml"/>
+            </h:panelGroup>
+        </h:form>
+
+    </p:dialog>
+</ui:composition>
+
+</html>

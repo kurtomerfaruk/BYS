@@ -10,6 +10,11 @@ import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
 
 import java.io.Serial;
 
+/**
+ * @author Omer Faruk KURT kurtomerfaruk@gmail.com
+ * @version 1.30.0
+ * @since 17.11.2026 10:58
+ */
 @Getter
 @Setter
 @Entity
@@ -31,7 +36,7 @@ public class StStokBarkod extends BaseEntity {
 
     @ColumnDefault("0")
     @Column(name = "ANA_BARKOD")
-    private Boolean anaBarkod;
+    private boolean anaBarkod;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "STBIRIM_ID")

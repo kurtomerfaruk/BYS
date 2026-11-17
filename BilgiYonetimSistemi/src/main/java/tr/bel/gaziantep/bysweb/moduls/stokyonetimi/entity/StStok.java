@@ -7,17 +7,29 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Nationalized;
+import org.hibernate.annotations.SQLRestriction;
 import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
+import tr.bel.gaziantep.bysweb.core.enums.stokyonetimi.EnumStMaliyetYontemi;
 
+import java.io.Serial;
 import java.math.BigDecimal;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
+/**
+ * @author Omer Faruk KURT kurtomerfaruk@gmail.com
+ * @version 1.30.0
+ * @since 17.11.2026 10:56
+ */
 @Getter
 @Setter
 @Entity
 @Table(name = "STSTOK")
 public class StStok extends BaseEntity {
+
+    @Serial
+    private static final long serialVersionUID = -1621611929348806812L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID", nullable = false)
@@ -85,21 +97,35 @@ public class StStok extends BaseEntity {
     @Column(name = "SKT_TAKIBI", nullable = false)
     private boolean sktTakibi;
 
-    @Size(max = 50)
-    @Nationalized
-    @Column(name = "MALIYET_YONTEMI", length = 50)
-    private String maliyetYontemi;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "MALIYET_YONTEMI")
+    private EnumStMaliyetYontemi maliyetYontemi;
 
     @Nationalized
     @Lob
     @Column(name = "ACIKLAMA")
     private String aciklama;
 
-    @OneToMany(mappedBy = "stStok")
-    private Set<StStokBarkod> ststokBarkods = new LinkedHashSet<>();
+    @OneToMany(mappedBy = "stStok", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @SQLRestriction("AKTIF = true")
+    private List<StStokBarkod> stokBarkodList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "stStok")
-    private Set<StStokBirimDonusum> ststokBirimDonusums = new LinkedHashSet<>();
+    @OneToMany(mappedBy = "stStok", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @SQLRestriction("AKTIF = true")
+    private List<StStokBirimDonusum> stokBirimDonusumList = new ArrayList<>();
 
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
 
+    @Override
+    public boolean equals(Object object) {
+        if (!(object instanceof StStok other)) {
+            return false;
+        }
+        return (this.id != null || other.id == null) && (this.id == null || this.id.equals(other.id));
+    }
 }
