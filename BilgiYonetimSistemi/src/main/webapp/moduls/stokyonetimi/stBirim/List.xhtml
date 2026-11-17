@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:p="primefaces"
+                xmlns:pt="jakarta.faces.passthrough"
+                xmlns:coco="jakarta.faces.composite/ui">
+
+    <h:form id="StBirimListForm" class="form-height">
+
+        <p:contextMenu id="StBirimDataTableContextMenu" for="datalist:datalist">
+            <p:menuitem value="#{messages.buttonEkle}" onclick="document.getElementById('StBirimListForm:datalist:datalist:createButton').click();"
+                        icon="pi pi-plus" rendered="#{syKullaniciController.hasPermission('stbirim:ekle')}"/>
+            <p:menuitem value="#{messages.buttonGuncelle}" onclick="document.getElementById('StBirimListForm:datalist:datalist:editButton').click();"
+                        icon="pi pi-pencil" rendered="#{syKullaniciController.hasPermission('stbirim:guncelle')}"/>
+            <p:menuitem value="#{messages.buttonDetay}" onclick="document.getElementById('StBirimListForm:datalist:datalist:viewButton').click();"
+                        icon="pi pi-search"/>
+            <p:menuitem value="#{messages.buttonSil}" onclick="document.getElementById('StBirimListForm:datalist:datalist:deleteButton').click();"
+                        icon="pi pi-trash" rendered="#{syKullaniciController.hasPermission('stbirim:sil')}"/>
+        </p:contextMenu>
+
+        <coco:datatable id="datalist"
+                        value="#{stBirimController.lazyItems}"
+                        rowKey="#{item.id}"
+                        selection="#{stBirimController.selected}"
+                        filtered="#{stBirimController.filtered}"
+                        rowselect=":StBirimListForm:datalist:datalist:createButton,:StBirimListForm:datalist:datalist:viewButton,:StBirimListForm:datalist:datalist:editButton,:StBirimListForm:datalist:datalist:deleteButton"
+                        rowDblselect="document.getElementById('StBirimListForm:datalist:datalist:editButton').click()"
+                        contextMenu=":StBirimListForm:datalist:datalist:createButton :StBirimListForm:datalist:datalist:viewButton :StBirimListForm:datalist:datalist:editButton :StBirimListForm:datalist:datalist:deleteButton"
+                        selectListener="#{stBirimController.resetParents}"
+                        controller="#{stBirimController}"
+                        header="#{messages.birimListesi}">
+
+            <p:ajax event="colResize" listener="#{stBirimController.onResize}"/>
+
+
+            <f:facet name="paginatorBottomLeft">
+                <p:commandButton id="createButton" styleClass="ui-button-primary" icon="pi pi-plus" pt:data-tooltip="#{messages.buttonEkle}"
+                                 actionListener="#{stBirimController.prepareCreate}" update=":StBirimCreateForm:StBirimCreateForm"
+                                 oncomplete="PF('StBirimCreateDialog').show()" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('stbirim:ekle')}"/>
+                <p:commandButton id="editButton" styleClass="ui-button-success" icon="pi pi-pencil" pt:data-tooltip="#{messages.buttonGuncelle}"
+                                 update=":StBirimEditForm:StBirimEditForm"
+                                 oncomplete="PF('StBirimEditDialog').show()" disabled="#{empty stBirimController.selected}"
+                                 onstart="PF('Loading').show()"
+                                 onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('stbirim:guncelle')}"/>
+                <p:commandButton id="viewButton" styleClass="ui-button-info" icon="pi pi-search" pt:data-tooltip="#{messages.buttonDetay}"
+                                 update=":StBirimViewForm:StBirimViewForm"
+                                 oncomplete="PF('StBirimViewDialog').show()" disabled="#{empty stBirimController.selected}"
+                                 onstart="PF('Loading').show()"
+                                 onsuccess="PF('Loading').hide()"/>
+                <p:commandButton id="deleteButton" styleClass="ui-button-danger" pt:data-tooltip="#{messages.buttonSil}" icon="pi pi-trash"
+                                 actionListener="#{stBirimController.delete}"
+                                 update=":growl,datalist" disabled="#{empty stBirimController.selected}"
+                                 rendered="#{syKullaniciController.hasPermission('stbirim:sil')}">
+                    <p:confirm header="#{messages.ConfirmationHeader}" message="#{messages.ConfirmDeleteMessage}" icon="pi pi-warning"/>
+                </p:commandButton>
+            </f:facet>
+
+        </coco:datatable>
+
+
+        <ui:include src="/confirmation.xhtml"/>
+
+    </h:form>
+
+</ui:composition>

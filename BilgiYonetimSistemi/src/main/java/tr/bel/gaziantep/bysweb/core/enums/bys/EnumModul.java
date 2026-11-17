@@ -23,6 +23,7 @@ public enum EnumModul implements BaseEnum {
     ORTEZ_PROTEZ("Ortez - Protez"),
     PSIKIYATRI_KLINIGI("Psikiyatri Kliniği"),
     SAGLIK_HIZMETLERI("Sağlık Hizmetleri"),
+    STOK_YONETIMI("Stok Yönetimi"),
     SISTEM_YONETIMI("Sistem Yönetimi");
 
     private final String modul;
