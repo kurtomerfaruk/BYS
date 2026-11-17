@@ -24,6 +24,7 @@ import tr.bel.gaziantep.bysweb.core.enums.psikiyatriklinigi.EnumPkTedaviSekli;
 import tr.bel.gaziantep.bysweb.core.enums.saglikhizmetleri.EnumShDanismanlikHizmeti;
 import tr.bel.gaziantep.bysweb.core.enums.saglikhizmetleri.EnumShObeziteHizmet;
 import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.*;
+import tr.bel.gaziantep.bysweb.core.enums.stokyonetimi.EnumStDepoLokasyonTipi;
 import tr.bel.gaziantep.bysweb.moduls.aktifyasam.entity.AyBirim;
 import tr.bel.gaziantep.bysweb.moduls.aktifyasam.service.AyBirimService;
 import tr.bel.gaziantep.bysweb.moduls.engelsizler.entity.EyTalepKonu;
@@ -477,4 +478,9 @@ public class FilterOptionService implements java.io.Serializable{
                 .collect(Collectors.toList());
     }
 
+    public List<SelectItem> getStDepoLokasyonTipis() {
+        return Arrays.stream(EnumStDepoLokasyonTipi.values())
+                .map(value -> new SelectItem(value, value.getDisplayValue()))
+                .collect(Collectors.toList());
+    }
 }

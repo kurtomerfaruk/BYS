@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:createpage id="StDepoLokasyonCreateForm"
+                     renderedListener="#{stDepoLokasyonController.selected != null}"
+                     widgetVar="StDepoLokasyonCreateDialog"
+                     actionListener="#{stDepoLokasyonController.saveNew}"
+                     listForm="StDepoLokasyonListForm">
+
+        <p:outputLabel value="#{messages.kodLabel}" for="@next"/>
+        <p:inputText id="kod" value="#{stDepoLokasyonController.selected.kod}" title="#{messages.kodText}"
+                     size="30" maxlength="50"/>
+
+        <p:outputLabel value="#{messages.adLabel}" for="@next"/>
+        <p:inputText id="ad" value="#{stDepoLokasyonController.selected.ad}" title="#{messages.adText}"
+                     size="50" maxlength="150" required="true"/>
+
+        <p:outputLabel value="#{messages.lokasyonTipiLabel}" for="@next"/>
+        <p:selectOneMenu id="lokasyonTipi" value="#{stDepoLokasyonController.selected.lokasyonTipi}"
+                         converter="omnifaces.SelectItemsConverter" required="true">
+            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{enumDepoLokasyonTipi.ALL_VALUES}" var="tip"
+                           itemValue="#{tip}" itemLabel="#{tip.displayValue}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.depoLabel}" for="@next"/>
+        <p:selectOneMenu id="stDepo" value="#{stDepoLokasyonController.selected.stDepo}" filter="true"
+                         converter="omnifaces.SelectItemsConverter" required="true">
+            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{stDepoController.items}" var="depoItem"
+                           itemValue="#{depoItem}" itemLabel="#{depoItem.ad}"/>
+            <p:ajax process="@this" update="ustDepoLokasyon" listener="#{stDepoLokasyonController.onDepoChange}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.ustLokasyonLabel}" for="@next"/>
+        <p:selectOneMenu id="ustDepoLokasyon" value="#{stDepoLokasyonController.selected.ustDepoLokasyon}"
+                         filter="true" converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{stDepoLokasyonController.ustLokasyonItems}" var="ustItem"
+                           itemValue="#{ustItem}" itemLabel="#{ustItem.ad}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.siraNoLabel}" for="@next"/>
+        <p:inputNumber id="siraNo" value="#{stDepoLokasyonController.selected.siraNo}"
+                       decimalPlaces="0" emptyValue="empty" minValue="0"/>
+
+        <p:outputLabel value="#{messages.aciklamaLabel}" for="@next"/>
+        <p:inputTextarea id="aciklama" value="#{stDepoLokasyonController.selected.aciklama}"
+                         title="#{messages.aciklamaText}" rows="3" styleClass="w-100"
+                         autoResize="false" maxlength="300"/>
+
+    </coco:createpage>
+
+</ui:composition>
+
+</html>
