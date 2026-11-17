@@ -114,6 +114,14 @@ public class StStok extends BaseEntity {
     @SQLRestriction("AKTIF = true")
     private List<StStokBirimDonusum> stokBirimDonusumList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "stStok", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @SQLRestriction("AKTIF = true")
+    private List<StStokBakiye> stokBakiyeList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "stStok", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @SQLRestriction("AKTIF = true")
+    private List<StStokHareket> stokHareketList = new ArrayList<>();
+
     @Override
     public int hashCode() {
         int hash = 0;

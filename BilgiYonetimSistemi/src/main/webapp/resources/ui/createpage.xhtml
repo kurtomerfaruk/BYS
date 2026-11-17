@@ -11,6 +11,7 @@
     <composite:attribute name="actionListener" method-signature="void actionListener(jakarta.faces.event.ActionEvent)"
                          required="true"/>
     <composite:attribute name="listForm"/>
+    <composite:attribute name="extraUpdate" default=""/>
     <composite:attribute name="columns" default="2"/>
     <composite:attribute name="focus"/>
     <composite:attribute name="onShow"/>
@@ -44,7 +45,7 @@
                             <p:commandButton icon="pi pi-check" styleClass="ui-button-success"
                                              actionListener="#{cc.attrs.actionListener}"
                                              value="#{messages.buttonKaydet}"
-                                             update=":#{cc.attrs.listForm}:datalist:datalist,:growl,display"
+                                             update="#{empty cc.attrs.listForm ? '' : ':'.concat(cc.attrs.listForm).concat(':datalist:datalist,')}:growl,display#{empty cc.attrs.extraUpdate ? '' : ','.concat(cc.attrs.extraUpdate)}"
                                              oncomplete="handleSubmit(xhr,status,args,PF('#{cc.attrs.widgetVar}'));"
                                              onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
                             <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"

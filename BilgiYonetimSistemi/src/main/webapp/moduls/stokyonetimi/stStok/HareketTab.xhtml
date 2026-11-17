@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:pt="jakarta.faces.passthrough">
+<ui:composition>
+
+    <div class="d-flex justify-content-end mb-2">
+        <p:commandButton value="#{messages.buttonEkle}" icon="pi pi-plus" styleClass="ui-button-primary"
+                         actionListener="#{stStokController.prepareHareket}"
+                         update=":StStokHareketCreateForm:StStokHareketCreateForm"
+                         oncomplete="PF('StStokHareketCreateDialog').show()"
+                         disabled="#{stStokController.selected == null || stStokController.selected.id == null}"
+                         onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+    </div>
+
+    <p:dataTable id="stokHareketTable" value="#{stStokController.selected.stokHareketList}" var="hareket"
+                 emptyMessage="#{messages.kayitBulunamadi}" rows="10" paginator="true"
+                 paginatorPosition="bottom" rowHover="true" size="small" stripedRows="true"
+                 styleClass="w-100" lazy="false">
+
+        <p:column headerText="#{messages.hareketNoLabel}" sortBy="#{hareket.hareketNo}">
+            <h:outputText value="#{hareket.hareketNo}"/>
+        </p:column>
+
+        <p:column headerText="#{messages.islemTarihiText}" sortBy="#{hareket.islemTarihi}">
+            <h:outputText value="#{hareket.islemTarihi}">
+                <f:convertDateTime pattern="#{messages.tarihSaatKisaFormat}" type="localDateTime"/>
+            </h:outputText>
+        </p:column>
+
+        <p:column headerText="#{messages.hareketTuruText}" sortBy="#{hareket.hareketTuru.displayValue}">
+            <h:outputText value="#{hareket.hareketTuru.displayValue}"/>
+        </p:column>
+
+        <p:column headerText="#{messages.yonText}" sortBy="#{hareket.yon.displayValue}">
+            <h:outputText value="#{hareket.yon.displayValue}"/>
+        </p:column>
+
+        <p:column headerText="#{messages.miktarText}" styleClass="text-end" sortBy="#{hareket.miktar}">
+            <h:outputText value="#{hareket.miktar}">
+                <f:convertNumber minFractionDigits="0" maxFractionDigits="4"/>
+            </h:outputText>
+        </p:column>
+
+        <p:column headerText="#{messages.belgeNoText}">
+            <h:outputText value="#{hareket.belgeNo}"/>
+        </p:column>
+
+        <p:column headerText="#{messages.buttonStokIslem}" style="width:110px;text-align:center;">
+            <p:commandButton icon="pi pi-undo" styleClass="ui-button-warning rounded-button"
+                             pt:data-tooltip="#{messages.buttonTersHareket}"
+                             actionListener="#{stStokController.tersHareket(hareket)}"
+                             update=":StStokEditForm:display,:growl"
+                             disabled="#{hareket.tersHareket != null}"
+                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()">
+                <p:confirm header="#{messages.ConfirmationHeader}" message="Bu hareketin tersi oluşturulacak. Devam edilsin mi?"
+                           icon="pi pi-exclamation-circle"/>
+            </p:commandButton>
+        </p:column>
+
+    </p:dataTable>
+
+    <ui:include src="/confirmation.xhtml"/>
+
+</ui:composition>
+
+</html>

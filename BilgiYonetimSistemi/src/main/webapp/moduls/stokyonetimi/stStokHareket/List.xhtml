@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:p="primefaces"
+                xmlns:pt="jakarta.faces.passthrough"
+                xmlns:coco="jakarta.faces.composite/ui">
+
+    <h:form id="StStokHareketListForm" styleClass="form-height">
+
+        <p:contextMenu id="StStokHareketDataTableContextMenu" for="datalist:datalist">
+            <p:menuitem value="#{messages.buttonEkle}"
+                        onclick="document.getElementById('StStokHareketListForm:datalist:datalist:createButton').click();"
+                        icon="pi pi-plus" rendered="#{syKullaniciController.hasPermission('ststokhareket:ekle')}"/>
+            <p:menuitem value="#{messages.buttonDetay}"
+                        onclick="document.getElementById('StStokHareketListForm:datalist:datalist:viewButton').click();"
+                        icon="pi pi-search"/>
+            <p:menuitem value="#{messages.buttonTersHareket}"
+                        onclick="document.getElementById('StStokHareketListForm:datalist:datalist:reverseButton').click();"
+                        icon="pi pi-undo" rendered="#{syKullaniciController.hasPermission('ststokhareket:tershareket')}"/>
+        </p:contextMenu>
+
+        <coco:datatable id="datalist"
+                        value="#{stStokHareketController.lazyItems}"
+                        rowKey="#{item.id}"
+                        selection="#{stStokHareketController.selected}"
+                        filtered="#{stStokHareketController.filtered}"
+                        rowselect=":StStokHareketListForm:datalist:datalist:viewButton,
+                        :StStokHareketListForm:datalist:datalist:reverseButton"
+                        rowDblselect="document.getElementById('StStokHareketListForm:datalist:datalist:viewButton').click()"
+                        contextMenu=":StStokHareketListForm:datalist:datalist:viewButton
+                        :StStokHareketListForm:datalist:datalist:reverseButton"
+                        selectListener="#{stStokHareketController.resetParents}"
+                        controller="#{stStokHareketController}"
+                        header="#{messages.stokHareketListesi}">
+
+            <p:ajax event="colResize" listener="#{stStokHareketController.onResize}"/>
+
+            <f:facet name="paginatorBottomLeft">
+
+                <p:commandButton id="createButton" styleClass="ui-button-primary" icon="pi pi-plus" pt:data-tooltip="#{messages.buttonEkle}"
+                                 actionListener="#{stStokHareketController.prepareCreate}" update=":StStokHareketCreateForm:StStokHareketCreateForm"
+                                 oncomplete="PF('StStokHareketCreateDialog').show()" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('ststokhareket:ekle')}"/>
+
+                <p:commandButton id="viewButton" styleClass="ui-button-info" icon="pi pi-search" pt:data-tooltip="#{messages.buttonDetay}"
+                                 update=":StStokHareketViewForm:StStokHareketViewForm" oncomplete="PF('StStokHareketViewDialog').show()"
+                                 disabled="#{empty stStokHareketController.selected}" onstart="PF('Loading').show()"
+                                 onsuccess="PF('Loading').hide()"/>
+
+                <p:commandButton id="reverseButton" styleClass="ui-button-warning" icon="pi pi-undo" pt:data-tooltip="#{messages.buttonTersHareket}"
+                                 actionListener="#{stStokHareketController.tersHareket}" update=":growl,datalist"
+                                 disabled="#{empty stStokHareketController.selected || stStokHareketController.selected.tersHareket != null}"
+                                 rendered="#{syKullaniciController.hasPermission('ststokhareket:tershareket')}">
+                    <p:confirm header="#{messages.ConfirmationHeader}" message="Bu hareketin tersi oluşturulacak. Devam edilsin mi?"
+                               icon="pi pi-exclamation-circle"/>
+                </p:commandButton>
+
+            </f:facet>
+
+        </coco:datatable>
+
+        <ui:include src="/confirmation.xhtml"/>
+
+    </h:form>
+
+</ui:composition>

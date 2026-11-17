@@ -47,7 +47,8 @@
                                  oncomplete="PF('StStokCreateDialog').show()" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
                                  rendered="#{syKullaniciController.hasPermission('ststok:ekle')}"/>
                 <p:commandButton id="editButton" styleClass="ui-button-success" icon="pi pi-pencil" pt:data-tooltip="#{messages.buttonGuncelle}"
-                                 update=":StStokEditForm"
+                                 update=":StStokEditForm,StStokEditForm:stokBakiyeTable"
+                                 actionListener="#{stStokController.editInfo()}"
                                  oncomplete="PF('StStokEditDialog').show()" disabled="#{empty stStokController.selected}"
                                  onstart="PF('Loading').show()"
                                  onsuccess="PF('Loading').hide()"

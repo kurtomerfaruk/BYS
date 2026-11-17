@@ -12,8 +12,8 @@
                      renderedListener="#{stStokController.selected != null}"
                      widgetVar="StStokCreateDialog"
                      actionListener="#{stStokController.saveNew}"
-                     listForm="StStokListForm"
-                     columns="2">
+                     listForm="#{empty hareketListForm ? 'StStokHareketListForm' : hareketListForm}"
+                     extraUpdate="#{empty hareketExtraUpdate ? '' : hareketExtraUpdate}">
 
         <p:outputLabel value="#{messages.malzemeKoduLabel}" for="@next"/>
         <p:inputText id="malzemeKodu" value="#{stStokController.selected.malzemeKodu}" title="#{messages.malzemeKoduText}"

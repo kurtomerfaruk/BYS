@@ -5,10 +5,18 @@
 
     <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.stokyonetimi.EnumStMaliyetYontemi"
                   var="enumMaliyetYontemi"/>
+    <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.stokyonetimi.EnumStHareketTuru"
+                  var="enumStHareketTuru"/>
+    <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.bys.EnumGirisCikis"
+                  var="enumGirisCikis"/>
 
     <ui:include src="/moduls/stokyonetimi/stStok/List.xhtml"/>
     <ui:include src="/moduls/stokyonetimi/stStok/View.xhtml"/>
     <ui:include src="/moduls/stokyonetimi/stStok/Edit.xhtml"/>
     <ui:include src="/moduls/stokyonetimi/stStok/Create.xhtml"/>
+    <ui:include src="/moduls/stokyonetimi/stStokHareket/Create.xhtml">
+        <ui:param name="hareketListForm" value=""/>
+        <ui:param name="hareketExtraUpdate" value=":StStokEditForm:display"/>
+    </ui:include>
 
 </ui:composition>

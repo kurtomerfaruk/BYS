@@ -44,6 +44,18 @@
                                         aria-controls="stBirimDonusumEditTabPane" aria-selected="false">Birim Dönüşümleri
                                 </button>
                             </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="stHareketEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#stHareketEditTabPane" type="button" role="tab"
+                                        aria-controls="stHareketEditTabPane" aria-selected="false">#{messages.stokHareketListesi}
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="stBakiyeEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#stBakiyeEditTabPane" type="button" role="tab"
+                                        aria-controls="stBakiyeEditTabPane" aria-selected="false">#{messages.bakiyeListesi}
+                                </button>
+                            </li>
                         </ul>
 
                         <div class="tab-content">
@@ -63,6 +75,15 @@
                             <div class="tab-pane overflow-hidden" id="stBirimDonusumEditTabPane"
                                  role="tabpanel" aria-labelledby="stBirimDonusumEditTab" tabindex="0">
                                 <ui:include src="/moduls/stokyonetimi/stStok/BirimDonusumTab.xhtml"/>
+                            </div>
+                            <div class="tab-pane overflow-hidden" id="stHareketEditTabPane"
+                                 role="tabpanel" aria-labelledby="stHareketEditTab" tabindex="0">
+                                <ui:include src="/moduls/stokyonetimi/stStok/HareketTab.xhtml"/>
+                            </div>
+
+                            <div class="tab-pane overflow-hidden" id="stBakiyeEditTabPane"
+                                 role="tabpanel" aria-labelledby="stBakiyeEditTab" tabindex="0">
+                                <ui:include src="/moduls/stokyonetimi/stStok/BakiyeTab.xhtml"/>
                             </div>
                         </div>
                     </div><!-- end card-body -->

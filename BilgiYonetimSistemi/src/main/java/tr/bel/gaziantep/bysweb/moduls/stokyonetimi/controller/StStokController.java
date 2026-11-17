@@ -8,11 +8,10 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import tr.bel.gaziantep.bysweb.core.controller.AbstractController;
+import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
-import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity.StStok;
-import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity.StStokBarkod;
-import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity.StStokBirimDonusum;
+import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity.*;
 import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.service.*;
 
 import java.io.Serial;
@@ -43,6 +42,12 @@ public class StStokController extends AbstractController<StStok> {
     private StStokBarkodService stStokBarkodService;
     @Inject
     private StStokBirimDonusumService stStokBirimDonusumService;
+    @Inject
+    private StStokHareketService stStokHareketService;
+    @Inject
+    private StStokBakiyeService stStokBakiyeService;
+    @Inject
+    private StStokHareketController stStokHareketController;
 
     @Getter
     @Setter
@@ -50,11 +55,34 @@ public class StStokController extends AbstractController<StStok> {
     @Getter
     @Setter
     private StStokBirimDonusum birimDonusum = new StStokBirimDonusum();
+    @Getter
+    @Setter
+    private BigDecimal toplamMiktar;
+    @Getter
+    @Setter
+    private BigDecimal rezerveMiktar;
+    @Getter
+    @Setter
+    private BigDecimal transferMiktar;
+
+//    public List<StStokHareket> getHareketItems() {
+//        if (getSelected() == null || getSelected().getId() == null) {
+//            return new java.util.ArrayList<>();
+//
+//        }
+//        return stStokHareketService.findByStok(getSelected());
+//    }
+//
+//    public List<StStokBakiye> getBakiyeItems() {
+//        if (getSelected() == null || getSelected().getId() == null) {
+//            return new java.util.ArrayList<>();
+//        }
+//        return stStokBakiyeService.findByStok(getSelected());
+//    }
 
     public StStokController() {
         super(StStok.class);
     }
-
 
     @Override
     public StStok prepareCreate(ActionEvent event) {
@@ -142,6 +170,54 @@ public class StStokController extends AbstractController<StStok> {
             }
         }
         FacesUtil.successMessage(Constants.KAYIT_SILINDI);
+    }
+
+    /**
+     * Stok karti icinden yeni hareket acar: hareket formunu secili stokla
+     * on-doldurur ve mevcut Create dialog'unu gosterir.
+     */
+    public void prepareHareket() {
+        if (getSelected() == null || getSelected().getId() == null) {
+            FacesUtil.warningMessage("stHareketStokZorunlu");
+            return;
+        }
+        try {
+            StStokHareket yeni = StStokHareket.class.getDeclaredConstructor().newInstance();
+            yeni.setStStok(getSelected());
+            yeni.setIslemTarihi(java.time.LocalDateTime.now());
+            yeni.setYon(tr.bel.gaziantep.bysweb.core.enums.bys.EnumGirisCikis.GIRIS);
+            stStokHareketController.setSelected(yeni);
+        } catch (Exception ex) {
+            log.error(null, ex);
+            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+        }
+    }
+
+    /**
+     * Stok karti icinden secilen hareketin tersini olusturur.
+     */
+    public void tersHareket(StStokHareket hareket) {
+        if (hareket == null) {
+            return;
+        }
+        stStokHareketController.setSelected(hareket);
+        stStokHareketController.tersHareket();
+    }
+
+    public void editInfo() {
+        if (this.getSelected() == null) return;
+        toplamMiktar = this.getSelected().getStokBakiyeList().stream()
+                .filter(BaseEntity::isAktif)
+                .map(StStokBakiye::getMiktar)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        rezerveMiktar = this.getSelected().getStokBakiyeList().stream()
+                .filter(BaseEntity::isAktif)
+                .map(StStokBakiye::getRezerveMiktar)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        transferMiktar = this.getSelected().getStokBakiyeList().stream()
+                .filter(BaseEntity::isAktif)
+                .map(StStokBakiye::getTransferdekiMiktar)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }
 

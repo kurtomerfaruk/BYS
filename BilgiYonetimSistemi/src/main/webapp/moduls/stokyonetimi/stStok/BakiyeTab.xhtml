@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces">
+<ui:composition>
+
+    <p:dataTable id="stokBakiyeTable" value="#{stStokController.selected.stokBakiyeList}" var="bakiye"
+                 emptyMessage="#{messages.kayitBulunamadi}" size="small" stripedRows="true"
+                 styleClass="w-100" lazy="false">
+
+        <p:column headerText="#{messages.depoText}-#{stStokController.toplamMiktar}" sortBy="#{bakiye.stDepo.ad}">
+            <h:outputText value="#{bakiye.stDepo.ad}"/>
+        </p:column>
+
+        <p:column headerText="#{messages.lokasyonText}" sortBy="#{bakiye.stDepoLokasyon.ad}">
+            <h:outputText value="#{bakiye.stDepoLokasyon.ad}"/>
+        </p:column>
+
+        <p:column headerText="#{messages.lotText}">
+            <h:outputText value="#{bakiye.lot}"/>
+        </p:column>
+
+        <p:column headerText="#{messages.sktText}" sortBy="#{bakiye.skt}">
+            <h:outputText value="#{bakiye.skt}">
+                <f:convertDateTime pattern="#{messages.tarihFormat}" type="localDate"/>
+            </h:outputText>
+        </p:column>
+
+        <p:column headerText="#{messages.miktarText}" styleClass="text-end" sortBy="#{bakiye.miktar}">
+            <h:outputText value="#{bakiye.miktar}">
+                <f:convertNumber minFractionDigits="0" maxFractionDigits="4"/>
+            </h:outputText>
+        </p:column>
+
+        <p:column headerText="#{messages.rezerveMiktarText}" styleClass="text-end" sortBy="#{bakiye.rezerveMiktar}">
+            <h:outputText value="#{bakiye.rezerveMiktar}">
+                <f:convertNumber minFractionDigits="0" maxFractionDigits="4"/>
+            </h:outputText>
+        </p:column>
+
+        <p:column headerText="#{messages.transferdekiMiktarText}" styleClass="text-end" sortBy="#{bakiye.transferdekiMiktar}">
+            <h:outputText value="#{bakiye.transferdekiMiktar}">
+                <f:convertNumber minFractionDigits="0" maxFractionDigits="4"/>
+            </h:outputText>
+        </p:column>
+
+        <p:columnGroup type="footer">
+            <p:row>
+                <p:column colspan="4" styleClass="text-end" footerText="#{messages.toplamLabel}"/>
+                <p:column styleClass="text-end">
+                    <f:facet name="footer">
+                        <h:outputText value="#{stStokController.toplamMiktar}">
+                            <f:convertNumber minFractionDigits="0" maxFractionDigits="4"/>
+                        </h:outputText>
+                    </f:facet>
+                </p:column>
+                <p:column styleClass="text-end">
+                    <f:facet name="footer">
+                        <h:outputText value="#{stStokController.rezerveMiktar}">
+                            <f:convertNumber minFractionDigits="0" maxFractionDigits="4"/>
+                        </h:outputText>
+                    </f:facet>
+                </p:column>
+                <p:column styleClass="text-end">
+                    <f:facet name="footer">
+                        <h:outputText value="#{stStokController.transferMiktar}">
+                            <f:convertNumber minFractionDigits="0" maxFractionDigits="4"/>
+                        </h:outputText>
+                    </f:facet>
+                </p:column>
+            </p:row>
+        </p:columnGroup>
+
+    </p:dataTable>
+
+</ui:composition>
+
+</html>
