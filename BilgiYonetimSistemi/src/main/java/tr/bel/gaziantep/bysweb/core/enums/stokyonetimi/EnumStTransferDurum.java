@@ -12,10 +12,10 @@ import tr.bel.gaziantep.bysweb.core.enums.BaseEnum;
 public enum EnumStTransferDurum implements BaseEnum {
 
     TASLAK("Taslak"),
-    ONAYLANDI("Onaylandý"),
+    ONAYLANDI("OnaylandÄ±"),
     SEVK_EDILDI("Sevk Edildi"),
-    TAMAMLANDI("Tamamlandý"),
-    IPTAL("Ýptal"),
+    TAMAMLANDI("TamamlandÄ±"),
+    IPTAL("Ä°ptal"),
     REDDEDILDI("Reddedildi");
 
     private final String label;

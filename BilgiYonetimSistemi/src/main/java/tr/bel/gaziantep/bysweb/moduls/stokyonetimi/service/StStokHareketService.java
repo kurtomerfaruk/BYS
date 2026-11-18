@@ -83,7 +83,7 @@ public class StStokHareketService extends AbstractService<StStokHareket> {
      * saklanir; orijinal silinmez/degistirilmez.
      */
     public StStokHareket tersHareketOlustur(StStokHareket orijinal) {
-        String mesaj = "Bu hareket için ters kayýt zaten oluþturulmuþtur.";
+        String mesaj = "Bu hareket iÃ§in ters kayÄ±t zaten oluÅŸturulmuÅŸtur.";
         orijinal = find(orijinal.getId());
         if (orijinal == null || orijinal.getId() == null) {
             throw new IllegalArgumentException(mesaj);
@@ -115,33 +115,33 @@ public class StStokHareketService extends AbstractService<StStokHareket> {
         ters.setBelgeNo(orijinal.getBelgeNo());
         ters.setIslemTarihi(LocalDateTime.now());
         ters.setTersHareket(orijinal);
-        ters.setAciklama("Ters kayýt: " + orijinal.getHareketNo());
+        ters.setAciklama("Ters kayÄ±t: " + orijinal.getHareketNo());
 
         return hareketEkle(ters);
     }
 
     private void validate(StStokHareket hareket) {
         if (hareket == null || hareket.getStStok() == null) {
-            throw new IllegalArgumentException("Stok hareketi için stok seçin");
+            throw new IllegalArgumentException("Stok hareketi iÃ§in stok seÃ§in");
         }
         if (hareket.getStDepo() == null) {
-            throw new IllegalArgumentException("Stok hareketi için depo seçin");
+            throw new IllegalArgumentException("Stok hareketi iÃ§in depo seÃ§in");
         }
         if (hareket.getHareketTuru() == null) {
-            throw new IllegalArgumentException("Stok hareketi için hareket türü seçin");
+            throw new IllegalArgumentException("Stok hareketi iÃ§in hareket tÃ¼rÃ¼ seÃ§in");
         }
         if (hareket.getYon() == null) {
-            throw new IllegalArgumentException("Stok hareketi için yönü seçin");
+            throw new IllegalArgumentException("Stok hareketi iÃ§in yÃ¶nÃ¼ seÃ§in");
         }
         if (hareket.getMiktar() == null) {
-            throw new IllegalArgumentException("Stok hareketi için miktar girin");
+            throw new IllegalArgumentException("Stok hareketi iÃ§in miktar girin");
         }
         if (hareket.getMiktar().compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException("Miktar sýfýrdan büyük olmalýdýr.");
+            throw new IllegalArgumentException("Miktar sÄ±fÄ±rdan bÃ¼yÃ¼k olmalÄ±dÄ±r.");
         }
         if (hareket.getStDepoLokasyon() != null && (hareket.getStDepoLokasyon().getStDepo() == null
                 || !Objects.equals(hareket.getStDepo().getId(), hareket.getStDepoLokasyon().getStDepo().getId()))) {
-            throw new IllegalArgumentException("Seçilen lokasyon hareket deposuna ait deðil");
+            throw new IllegalArgumentException("SeÃ§ilen lokasyon hareket deposuna ait deÄŸil");
         }
     }
 

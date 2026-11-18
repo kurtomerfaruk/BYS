@@ -62,7 +62,7 @@ public class StTransferService extends AbstractService<StTransfer> {
 
     public void onayla(StTransfer transfer, SyKullanici onaylayan) {
         if (transfer == null || transfer.getId() == null) {
-            throw new IllegalArgumentException("Ýþlem için bir transfer seçin");
+            throw new IllegalArgumentException("Ä°ÅŸlem iÃ§in bir transfer seÃ§in");
         }
         StTransfer managed = em.find(StTransfer.class, transfer.getId());
         if (managed.getDurum() != EnumStTransferDurum.TASLAK) {
@@ -75,7 +75,7 @@ public class StTransferService extends AbstractService<StTransfer> {
 
     public void reddet(StTransfer transfer, SyKullanici onaylayan) {
         if (transfer == null || transfer.getId() == null) {
-            throw new IllegalArgumentException("Ýþlem için bir transfer seçin");
+            throw new IllegalArgumentException("Ä°ÅŸlem iÃ§in bir transfer seÃ§in");
         }
         StTransfer managed = em.find(StTransfer.class, transfer.getId());
         if (managed.getDurum() != EnumStTransferDurum.TASLAK) {
@@ -88,7 +88,7 @@ public class StTransferService extends AbstractService<StTransfer> {
 
     public void sevkEt(StTransfer transfer) {
         if (transfer == null || transfer.getId() == null) {
-            throw new IllegalArgumentException("Ýþlem için bir transfer seçin");
+            throw new IllegalArgumentException("Ä°ÅŸlem iÃ§in bir transfer seÃ§in");
         }
         StTransfer managed = em.find(StTransfer.class, transfer.getId());
         if (managed.getDurum() != EnumStTransferDurum.ONAYLANDI) {
@@ -119,7 +119,7 @@ public class StTransferService extends AbstractService<StTransfer> {
 
     public void teslimEt(StTransfer transfer, SyKullanici teslimAlan) {
         if (transfer == null || transfer.getId() == null) {
-            throw new IllegalArgumentException("Ýþlem için bir transfer seçin");
+            throw new IllegalArgumentException("ï¿½ï¿½lem iï¿½in bir transfer seï¿½in");
         }
         StTransfer managed = em.find(StTransfer.class, transfer.getId());
         if (managed.getDurum() != EnumStTransferDurum.SEVK_EDILDI) {
@@ -148,7 +148,7 @@ public class StTransferService extends AbstractService<StTransfer> {
 
     public void iptalEt(StTransfer transfer) {
         if (transfer == null || transfer.getId() == null) {
-            throw new IllegalArgumentException("Ýþlem için bir transfer seçin");
+            throw new IllegalArgumentException("ï¿½ï¿½lem iï¿½in bir transfer seï¿½in");
         }
         StTransfer managed = em.find(StTransfer.class, transfer.getId());
         EnumStTransferDurum durum = managed.getDurum();
@@ -181,26 +181,26 @@ public class StTransferService extends AbstractService<StTransfer> {
 
     private void validate(StTransfer transfer) {
         if (transfer == null) {
-            throw new IllegalArgumentException("Transfer bilgisi boþ");
+            throw new IllegalArgumentException("Transfer bilgisi boï¿½");
         }
         if (transfer.getKaynakDepo() == null) {
-            throw new IllegalArgumentException("Kaynak depo seçin");
+            throw new IllegalArgumentException("Kaynak depo seï¿½in");
         }
         if (transfer.getHedefDepo() == null) {
-            throw new IllegalArgumentException("Hedef depo seçin");
+            throw new IllegalArgumentException("Hedef depo seï¿½in");
         }
         if (Objects.equals(transfer.getKaynakDepo().getId(), transfer.getHedefDepo().getId())) {
-            throw new IllegalArgumentException("Kaynak ve hedef depo ayný olamaz.");
+            throw new IllegalArgumentException("Kaynak ve hedef depo aynï¿½ olamaz.");
         }
         if (transfer.getKalemler() == null || transfer.getKalemler().isEmpty()) {
             throw new IllegalArgumentException("En az bir transfer kalemi eklenmelidir.");
         }
         for (StTransferKalem kalem : transfer.getKalemler()) {
             if (kalem.getStStok() == null) {
-                throw new IllegalArgumentException("Transfer kalemi için stok seçin");
+                throw new IllegalArgumentException("Transfer kalemi iï¿½in stok seï¿½in");
             }
             if (kalem.getMiktar() == null || kalem.getMiktar().compareTo(BigDecimal.ZERO) <= 0) {
-                throw new IllegalArgumentException("Miktar sýfýrdan büyük olmalýdýr.");
+                throw new IllegalArgumentException("Miktar sï¿½fï¿½rdan bï¿½yï¿½k olmalï¿½dï¿½r.");
             }
         }
     }

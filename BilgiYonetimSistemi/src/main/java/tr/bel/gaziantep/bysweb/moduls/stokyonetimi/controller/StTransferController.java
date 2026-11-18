@@ -79,11 +79,11 @@ public class StTransferController extends AbstractController<StTransfer> {
             return;
         }
         if (kalem.getStStok() == null || kalem.getStStok().getId() == null) {
-            FacesUtil.addExclamationMessage("Transfer kalemi için stok seçin");
+            FacesUtil.addExclamationMessage("Transfer kalemi iÃ§in stok seÃ§in");
             return;
         }
         if (kalem.getMiktar() == null || kalem.getMiktar().compareTo(java.math.BigDecimal.ZERO) <= 0) {
-            FacesUtil.addExclamationMessage("Miktar sýfýrdan büyük olmalýdýr");
+            FacesUtil.addExclamationMessage("Miktar sÄ±fÄ±rdan bÃ¼yÃ¼k olmalÄ±dÄ±r");
             return;
         }
         if (getSelected().getKalemler() == null) {
@@ -131,7 +131,7 @@ public class StTransferController extends AbstractController<StTransfer> {
     public void onayla() {
         try {
             service.onayla(getSelected(), currentUser());
-            FacesUtil.addSuccessMessage("Transfer onaylandý");
+            FacesUtil.addSuccessMessage("Transfer onaylandÄ±");
             setItems(null);
             setLazyItems(null);
         } catch (IllegalArgumentException ex) {

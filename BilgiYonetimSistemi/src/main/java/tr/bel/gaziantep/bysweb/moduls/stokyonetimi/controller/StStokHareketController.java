@@ -129,12 +129,12 @@ public class StStokHareketController extends AbstractController<StStokHareket> {
     public void tersHareket() {
         try {
             if (getSelected() == null) {
-                FacesUtil.warningMessage("Ýþlem için bir hareket seçin");
+                FacesUtil.warningMessage("Ä°ÅŸlem iÃ§in bir hareket seÃ§in");
                 return;
             }
             StStokHareket ters = hareketService.tersHareketOlustur(getSelected());
             setSelected(ters);
-            FacesUtil.addSuccessMessage("Ters hareket oluþturuldu");
+            FacesUtil.addSuccessMessage("Ters hareket oluÅŸturuldu");
             setItems(null);
             setLazyItems(null);
         } catch (IllegalArgumentException ex) {

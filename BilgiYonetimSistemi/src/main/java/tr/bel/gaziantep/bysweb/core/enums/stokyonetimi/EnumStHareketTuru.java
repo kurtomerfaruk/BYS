@@ -12,20 +12,18 @@ import tr.bel.gaziantep.bysweb.core.enums.bys.EnumGirisCikis;
 @Getter
 public enum EnumStHareketTuru implements BaseEnum {
 
-    SATIN_ALMA("Satýn Alma", EnumGirisCikis.GIRIS),
-    SATIS("Satýþ", EnumGirisCikis.CIKIS),
-    TRANSFER_GIRIS("Transfer Giriþi", EnumGirisCikis.GIRIS),
-    TRANSFER_CIKIS("Transfer Çýkýþý", EnumGirisCikis.CIKIS),
-    SAYIM_FARKI("Sayým Farký", null),
-    IADE_GIRIS("Ýade Giriþi", EnumGirisCikis.GIRIS),
-    IADE_CIKIS("Ýade Çýkýþý", EnumGirisCikis.CIKIS),
+    SATIN_ALMA("SatÄ±n Alma", EnumGirisCikis.GIRIS),
+    SATIS("SatÄ±ÅŸ", EnumGirisCikis.CIKIS),
+    TRANSFER_GIRIS("Transfer GiriÅŸi", EnumGirisCikis.GIRIS),
+    TRANSFER_CIKIS("Transfer Ã‡Ä±kÄ±ÅŸÄ±", EnumGirisCikis.CIKIS),
+    SAYIM_FARKI("SayÄ±m FarkÄ±", null),
+    IADE_GIRIS("Ä°ade GiriÅŸi", EnumGirisCikis.GIRIS),
+    IADE_CIKIS("Ä°ade Ã‡Ä±kÄ±ÅŸÄ±", EnumGirisCikis.CIKIS),
     FIRE("Fire", EnumGirisCikis.CIKIS),
     ZAYI("Zayi", EnumGirisCikis.CIKIS),
     SARF("Sarf", EnumGirisCikis.CIKIS),
-    URETIM_GIRIS("Üretim Giriþi", EnumGirisCikis.GIRIS),
-    URETIM_CIKIS("Üretim Çýkýþý", EnumGirisCikis.CIKIS),
-    ACILIS("Açýlýþ", EnumGirisCikis.GIRIS),
-    MANUEL_DUZELTME("Manuel Düzeltme", null);
+    ACILIS("AÃ§Ä±lÄ±ÅŸ", EnumGirisCikis.GIRIS),
+    MANUEL_DUZELTME("Manuel DÃ¼zeltme", null);
 
     private final String label;
     private final EnumGirisCikis varsayilanYon;

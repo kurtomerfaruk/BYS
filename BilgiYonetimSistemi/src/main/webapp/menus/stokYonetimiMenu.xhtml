@@ -94,6 +94,17 @@
                                 </li>
                             </ui:fragment>
 
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('stdepoyetki:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/stokyonetimi/stDepoYetki/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="Depo Yetkileri"/>
+                                </li>
+                            </ui:fragment>
+
                             <ui:fragment rendered="#{syKullaniciController.hasPermission('ststokkategori:goster')}">
                                 <li class="slide">
                                     <p:commandLink styleClass="side-menu__item sublevel2"

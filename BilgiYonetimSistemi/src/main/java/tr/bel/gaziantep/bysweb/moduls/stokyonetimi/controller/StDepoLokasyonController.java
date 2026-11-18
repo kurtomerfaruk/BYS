@@ -108,7 +108,7 @@ public class StDepoLokasyonController extends AbstractController<StDepoLokasyon>
         StDepoLokasyon ust = getSelected().getUstDepoLokasyon();
         if (getSelected().getStDepo() == null || ust.getStDepo() == null
                 || !Objects.equals(getSelected().getStDepo().getId(), ust.getStDepo().getId())) {
-            FacesUtil.addExclamationMessage("Üst lokasyon, seçilen depo ile ayný depoya ait olmalýdýr.");
+            FacesUtil.addExclamationMessage("Ãœst lokasyon, seÃ§ilen depo ile aynÄ± depoya ait olmalÄ±dÄ±r.");
             return false;
         }
         return true;
