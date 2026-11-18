@@ -5,9 +5,11 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import tr.bel.gaziantep.bysweb.core.service.AbstractService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
+import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity.StDepo;
 import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity.StDepoLokasyon;
 
 import java.io.Serial;
+import java.util.List;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
@@ -36,5 +38,11 @@ public class StDepoLokasyonService extends AbstractService<StDepoLokasyon> {
     @Override
     public String getSortCol() {
         return "ad";
+    }
+
+    public List<StDepoLokasyon> findByDepo(StDepo depo) {
+        return getEntityManager().createNamedQuery("StDepoLokasyon.findByDepo", StDepoLokasyon.class)
+                .setParameter("stDepo", depo)
+                .getResultList();
     }
 }

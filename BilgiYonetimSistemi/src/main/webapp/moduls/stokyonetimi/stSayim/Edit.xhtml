@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:h="jakarta.faces.html"
+      xmlns:p="primefaces">
+
+<ui:composition>
+
+    <p:dialog widgetVar="StSayimEditDialog"
+              id="StSayimEditDialogId"
+              modal="true"
+              resizable="false"
+              closeOnEscape="true"
+              header="#{messages.dialogKayitGuncelle}"
+              appendTo="@(body)"
+              responsive="true"
+              fitViewport="true"
+              position="top"
+              style="min-width:900px;">
+
+        <h:form id="StSayimEditForm">
+            <h:panelGroup id="display">
+                <p:focus context="display"/>
+                <div class="card">
+                    <div class="card-body">
+
+                        <p:panelGrid columns="2" styleClass="w-100" layout="tabular"
+                                     rendered="#{stSayimController.selected != null}">
+                            <p:outputLabel value="#{messages.depoLabel}" for="@next"/>
+                            <p:selectOneMenu id="stDepo" value="#{stSayimController.selected.stDepo}" filter="true"
+                                             converter="omnifaces.SelectItemsConverter" required="true"
+                                             disabled="#{stSayimController.selected.durum ne 'TASLAK'}">
+                                <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+                                <f:selectItems value="#{stDepoController.items}" var="depoItem"
+                                               itemValue="#{depoItem}" itemLabel="#{depoItem.ad}"/>
+                                <p:ajax process="@this" update="stDepoLokasyon" listener="#{stSayimController.onDepoChange}"/>
+                            </p:selectOneMenu>
+
+                            <p:outputLabel value="#{messages.lokasyonLabel}" for="@next"/>
+                            <p:selectOneMenu id="stDepoLokasyon" value="#{stSayimController.selected.stDepoLokasyon}" filter="true"
+                                             converter="omnifaces.SelectItemsConverter"
+                                             disabled="#{stSayimController.selected.durum ne 'TASLAK'}">
+                                <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+                                <f:selectItems value="#{stDepoLokasyonController.getLokasyonByDepo(stSayimController.selected.stDepo)}"
+                                               var="lokasyonItem"
+                                               itemValue="#{lokasyonItem}" itemLabel="#{lokasyonItem.ad}"/>
+                            </p:selectOneMenu>
+
+                            <p:outputLabel value="#{messages.aciklamaLabel}" for="@next"/>
+                            <p:inputTextarea id="aciklama" value="#{stSayimController.selected.aciklama}"
+                                             title="#{messages.aciklamaText}" rows="2" styleClass="w-100"
+                                             autoResize="false" maxlength="300"/>
+
+                            <p:outputLabel value="#{messages.durumLabel}" for="@next"/>
+                            <h:outputText value="#{stSayimController.selected.durum.displayValue}"/>
+                        </p:panelGrid>
+
+                        <p:outputLabel value="#{messages.sayimKalemLabel}" for="@next" styleClass="mt-2"/>
+                        <ui:fragment rendered="#{stSayimController.selected.durum eq 'TASLAK'}">
+                            <div class="d-flex gap-2 mb-2 flex-wrap">
+                                <p:selectOneMenu id="kalemStok" value="#{stSayimController.kalem.stStok}" filter="true"
+                                                 converter="omnifaces.SelectItemsConverter" style="min-width:260px;">
+                                    <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+                                    <f:selectItems value="#{stStokController.items}" var="stokItem"
+                                                   itemValue="#{stokItem}" itemLabel="#{stokItem.stokKodu} - #{stokItem.stokAdi}"/>
+                                </p:selectOneMenu>
+                                <p:inputNumber id="kalemSistem" value="#{stSayimController.kalem.sistemMiktari}" decimalPlaces="4"
+                                               emptyValue="empty" minValue="0" style="width:140px;"/>
+                                <p:commandButton value="#{messages.buttonKalemEkle}" icon="pi pi-plus" styleClass="ui-button-primary"
+                                                 actionListener="#{stSayimController.addKalem}"
+                                                 update="kalemTable,kalemStok,kalemSistem" process="@this,kalemStok,kalemSistem"
+                                                 onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                            </div>
+                        </ui:fragment>
+                        <p:dataTable id="kalemTable" value="#{stSayimController.selected.kalemler}" var="kalemItem"
+                                     emptyMessage="#{messages.kayitBulunamadi}" size="small" stripedRows="true"
+                                     styleClass="w-100" lazy="false">
+                            <p:column headerText="#{messages.stokLabel}">
+                                <h:outputText value="#{kalemItem.stStok.stokKodu} - #{kalemItem.stStok.stokAdi}"/>
+                            </p:column>
+                            <p:column headerText="#{messages.sistemMiktariText}" styleClass="text-end">
+                                <h:outputText value="#{kalemItem.sistemMiktari}">
+                                    <f:convertNumber minFractionDigits="0" maxFractionDigits="4"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="#{messages.sayilanMiktarText}" styleClass="text-end">
+                                <p:inputNumber value="#{kalemItem.sayilanMiktar}" decimalPlaces="4" emptyValue="empty" minValue="0"
+                                               disabled="#{stSayimController.selected.durum ne 'SAYIMDA'}"/>
+                            </p:column>
+                            <p:column headerText="#{messages.farkText}" styleClass="text-end">
+                                <h:outputText value="#{kalemItem.fark}">
+                                    <f:convertNumber minFractionDigits="0" maxFractionDigits="4"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column style="width:60px;text-align:center;"
+                                      rendered="#{stSayimController.selected.durum eq 'TASLAK'}">
+                                <p:commandButton icon="pi pi-trash" styleClass="ui-button-danger rounded-button"
+                                                 actionListener="#{stSayimController.removeKalem(kalemItem)}"
+                                                 update="kalemTable" process="@this"
+                                                 onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                            </p:column>
+                        </p:dataTable>
+
+                    </div>
+                    <div class="card-footer">
+                        <div class="float-end d-flex gap-2 flex-wrap">
+                            <p:commandButton icon="pi pi-check" styleClass="ui-button-success"
+                                             value="#{messages.buttonKaydet}"
+                                             actionListener="#{stSayimController.save}"
+                                             update="display,:StSayimListForm:datalist:datalist,:growl"
+                                             oncomplete="handleSubmit(xhr,status,args,PF('StSayimEditDialog'));"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                             rendered="#{stSayimController.selected.durum eq 'TASLAK'}"/>
+
+                            <p:commandButton value="#{messages.buttonSayimBaslat}" icon="pi pi-play" styleClass="ui-button-primary"
+                                             actionListener="#{stSayimController.baslat}"
+                                             update="display,:StSayimListForm:datalist:datalist,:growl"
+                                             rendered="#{stSayimController.selected.durum eq 'TASLAK'}"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+
+                            <p:commandButton value="#{messages.buttonSayimTamamla}" icon="pi pi-check" styleClass="ui-button-success"
+                                             actionListener="#{stSayimController.tamamla}"
+                                             update="display,:StSayimListForm:datalist:datalist,:growl"
+                                             rendered="#{stSayimController.selected.durum eq 'SAYIMDA'}"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+
+                            <p:commandButton value="#{messages.buttonSayimOnayla}" icon="pi pi-verified" styleClass="ui-button-success"
+                                             actionListener="#{stSayimController.onayla}"
+                                             update="display,:StSayimListForm:datalist:datalist,:growl"
+                                             rendered="#{stSayimController.selected.durum eq 'ONAY_BEKLIYOR'}"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+
+                            <p:commandButton value="#{messages.buttonIptalEt}" icon="pi pi-ban" styleClass="ui-button-warning"
+                                             actionListener="#{stSayimController.iptalEt}"
+                                             update="display,:StSayimListForm:datalist:datalist,:growl"
+                                             rendered="#{stSayimController.selected.durum ne 'TAMAMLANDI' and stSayimController.selected.durum ne 'IPTAL'}"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+
+                            <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                             value="#{messages.buttonIptal}" onclick="PF('StSayimEditDialog').hide()"
+                                             immediate="true" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                        </div>
+                    </div>
+                </div>
+                <ui:include src="/confirmation.xhtml"/>
+            </h:panelGroup>
+        </h:form>
+
+    </p:dialog>
+
+</ui:composition>
+
+</html>

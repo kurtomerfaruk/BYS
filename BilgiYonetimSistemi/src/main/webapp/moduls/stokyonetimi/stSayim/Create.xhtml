@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:createpage id="StSayimCreateForm"
+                     renderedListener="#{stSayimController.selected != null}"
+                     widgetVar="StSayimCreateDialog"
+                     actionListener="#{stSayimController.saveNew}"
+                     listForm="StSayimListForm">
+
+        <p:outputLabel value="#{messages.depoLabel}" for="@next"/>
+        <p:selectOneMenu id="stDepo" value="#{stSayimController.selected.stDepo}" filter="true"
+                         converter="omnifaces.SelectItemsConverter" required="true" style="width:400px !important">
+            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{stDepoController.items}" var="depoItem"
+                           itemValue="#{depoItem}" itemLabel="#{depoItem.ad}"/>
+            <p:ajax process="@this" update="stDepoLokasyon" listener="#{stSayimController.onDepoChange}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.lokasyonLabel}" for="@next"/>
+        <p:selectOneMenu id="stDepoLokasyon" value="#{stSayimController.selected.stDepoLokasyon}" filter="true"
+                         converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{stDepoLokasyonController.getLokasyonByDepo(stSayimController.selected.stDepo)}" var="lokasyonItem"
+                           itemValue="#{lokasyonItem}" itemLabel="#{lokasyonItem.ad}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.aciklamaLabel}" for="@next"/>
+        <p:inputTextarea id="aciklama" value="#{stSayimController.selected.aciklama}"
+                         title="#{messages.aciklamaText}" rows="2" styleClass="w-100"
+                         autoResize="false" maxlength="300"/>
+
+    </coco:createpage>
+
+</ui:composition>
+
+</html>

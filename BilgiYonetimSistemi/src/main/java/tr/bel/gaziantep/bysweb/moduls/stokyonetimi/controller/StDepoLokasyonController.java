@@ -10,6 +10,7 @@ import tr.bel.gaziantep.bysweb.core.controller.AbstractController;
 import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.EnumSyFiltreAnahtari;
 import tr.bel.gaziantep.bysweb.core.service.FilterOptionService;
 import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
+import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity.StDepo;
 import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity.StDepoLokasyon;
 import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.service.StDepoLokasyonService;
 
@@ -112,5 +113,10 @@ public class StDepoLokasyonController extends AbstractController<StDepoLokasyon>
             return false;
         }
         return true;
+    }
+
+    public List<StDepoLokasyon> getLokasyonByDepo(StDepo depo) {
+        if (depo == null || depo.getId() == null) return Collections.emptyList();
+        return service.findByDepo(depo);
     }
 }

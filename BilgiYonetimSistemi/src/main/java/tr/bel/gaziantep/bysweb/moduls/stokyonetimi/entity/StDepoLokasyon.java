@@ -14,6 +14,7 @@ import java.io.Serial;
 @Setter
 @Entity
 @Table(name = "STDEPO_LOKASYON")
+@NamedQuery(name = "StDepoLokasyon.findByDepo", query = "SELECT l FROM StDepoLokasyon l WHERE l.aktif=true AND l.stDepo=:stDepo ORDER BY l.ad")
 public class StDepoLokasyon extends BaseEntity {
 
     @Serial

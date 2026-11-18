@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces">
+<ui:composition>
+
+    <p:dialog widgetVar="StSayimViewDialog"
+              id="StSayimViewDialogId"
+              modal="true"
+              resizable="false"
+              closeOnEscape="true"
+              header="#{messages.dialogKayitBilgisi} - #{stSayimController.selected.sayimNo}"
+              appendTo="@(body)"
+              responsive="true"
+              position="top"
+              style="max-width:900px;">
+
+        <h:form id="StSayimViewForm">
+            <h:panelGroup id="display">
+                <p:panelGrid columns="2" styleClass="w-100" layout="tabular" rendered="#{stSayimController.selected != null}">
+                    <h:outputText value="#{messages.sayimNoLabel}"/>
+                    <h:outputText value="#{stSayimController.selected.sayimNo}"/>
+
+                    <h:outputText value="#{messages.depoLabel}"/>
+                    <h:outputText value="#{stSayimController.selected.stDepo.ad}"/>
+
+                    <h:outputText value="#{messages.lokasyonLabel}"/>
+                    <h:outputText value="#{stSayimController.selected.stDepoLokasyon.ad}"/>
+
+                    <h:outputText value="#{messages.durumLabel}"/>
+                    <h:outputText value="#{stSayimController.selected.durum.displayValue}"/>
+
+                    <h:outputText value="#{messages.baslangicTarihiLabel}"/>
+                    <h:outputText value="#{stSayimController.selected.baslangicTarihi}">
+                        <f:convertDateTime pattern="#{messages.tarihSaatKisaFormat}" type="localDateTime"/>
+                    </h:outputText>
+
+                    <h:outputText value="#{messages.bitisTarihiLabel}"/>
+                    <h:outputText value="#{stSayimController.selected.bitisTarihi}">
+                        <f:convertDateTime pattern="#{messages.tarihSaatKisaFormat}" type="localDateTime"/>
+                    </h:outputText>
+
+                    <h:outputText value="#{messages.aciklamaLabel}"/>
+                    <h:outputText value="#{stSayimController.selected.aciklama}"/>
+                </p:panelGrid>
+
+                <p:dataTable value="#{stSayimController.selected.kalemler}" var="kalemItem"
+                             emptyMessage="#{messages.kayitBulunamadi}" size="small" stripedRows="true"
+                             styleClass="w-100 mt-2" lazy="false">
+                    <p:column headerText="#{messages.stokLabel}">
+                        <h:outputText value="#{kalemItem.stStok.stokKodu} - #{kalemItem.stStok.stokAdi}"/>
+                    </p:column>
+                    <p:column headerText="#{messages.sistemMiktariText}" styleClass="text-end">
+                        <h:outputText value="#{kalemItem.sistemMiktari}">
+                            <f:convertNumber minFractionDigits="0" maxFractionDigits="4"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="#{messages.sayilanMiktarText}" styleClass="text-end">
+                        <h:outputText value="#{kalemItem.sayilanMiktar}">
+                            <f:convertNumber minFractionDigits="0" maxFractionDigits="4"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="#{messages.farkText}" styleClass="text-end">
+                        <h:outputText value="#{kalemItem.fark}">
+                            <f:convertNumber minFractionDigits="0" maxFractionDigits="4"/>
+                        </h:outputText>
+                    </p:column>
+                </p:dataTable>
+
+                <div class="float-end mt-2">
+                    <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                     value="#{messages.buttonKapat}"
+                                     onclick="PF('StSayimViewDialog').hide()"
+                                     onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                </div>
+            </h:panelGroup>
+        </h:form>
+
+    </p:dialog>
+
+</ui:composition>
+
+</html>
