@@ -6,6 +6,7 @@ import jakarta.ejb.TransactionManagementType;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import tr.bel.gaziantep.bysweb.core.enums.stokyonetimi.EnumStIslemLogTuru;
 import tr.bel.gaziantep.bysweb.core.enums.stokyonetimi.EnumStTransferDurum;
 import tr.bel.gaziantep.bysweb.core.service.AbstractService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
@@ -34,6 +35,8 @@ public class StTransferService extends AbstractService<StTransfer> {
 
     @Inject
     private StStokBakiyeService bakiyeService;
+    @Inject
+    private StIslemLogService stIslemLogService;
 
     public StTransferService() {
         super(StTransfer.class);
@@ -71,6 +74,8 @@ public class StTransferService extends AbstractService<StTransfer> {
         managed.setDurum(EnumStTransferDurum.ONAYLANDI);
         managed.setOnayTarihi(LocalDateTime.now());
         managed.setOnaylayanSyKullanici(onaylayan);
+        stIslemLogService.log(EnumStIslemLogTuru.TRANSFER, onaylayan, managed.getKaynakDepo(),
+                "StTransfer", managed.getTransferNo(), "Onaylandı");
     }
 
     public void reddet(StTransfer transfer, SyKullanici onaylayan) {
@@ -84,6 +89,8 @@ public class StTransferService extends AbstractService<StTransfer> {
         managed.setDurum(EnumStTransferDurum.REDDEDILDI);
         managed.setOnayTarihi(LocalDateTime.now());
         managed.setOnaylayanSyKullanici(onaylayan);
+        stIslemLogService.log(EnumStIslemLogTuru.TRANSFER, onaylayan, managed.getKaynakDepo(),
+                "StTransfer", managed.getTransferNo(), "Reddedildi");
     }
 
     public void sevkEt(StTransfer transfer) {
@@ -115,11 +122,13 @@ public class StTransferService extends AbstractService<StTransfer> {
         }
         managed.setDurum(EnumStTransferDurum.SEVK_EDILDI);
         managed.setSevkTarihi(LocalDateTime.now());
+        stIslemLogService.log(EnumStIslemLogTuru.TRANSFER, null, managed.getKaynakDepo(),
+                "StTransfer", managed.getTransferNo(), "Sevk edildi");
     }
 
     public void teslimEt(StTransfer transfer, SyKullanici teslimAlan) {
         if (transfer == null || transfer.getId() == null) {
-            throw new IllegalArgumentException("��lem i�in bir transfer se�in");
+            throw new IllegalArgumentException("İşlem için bir transfer seçin");
         }
         StTransfer managed = em.find(StTransfer.class, transfer.getId());
         if (managed.getDurum() != EnumStTransferDurum.SEVK_EDILDI) {
@@ -144,11 +153,13 @@ public class StTransferService extends AbstractService<StTransfer> {
         managed.setDurum(EnumStTransferDurum.TAMAMLANDI);
         managed.setTeslimTarihi(LocalDateTime.now());
         managed.setTeslimAlanSyKullanici(teslimAlan);
+        stIslemLogService.log(EnumStIslemLogTuru.TRANSFER, teslimAlan, managed.getHedefDepo(),
+                "StTransfer", managed.getTransferNo(), "Teslim edildi");
     }
 
     public void iptalEt(StTransfer transfer) {
         if (transfer == null || transfer.getId() == null) {
-            throw new IllegalArgumentException("��lem i�in bir transfer se�in");
+            throw new IllegalArgumentException("İşlem için bir transfer seçin");
         }
         StTransfer managed = em.find(StTransfer.class, transfer.getId());
         EnumStTransferDurum durum = managed.getDurum();
@@ -177,30 +188,32 @@ public class StTransferService extends AbstractService<StTransfer> {
             }
         }
         managed.setDurum(EnumStTransferDurum.IPTAL);
+        stIslemLogService.log(EnumStIslemLogTuru.TRANSFER, null, managed.getKaynakDepo(),
+                "StTransfer", managed.getTransferNo(), "İptal edildi");
     }
 
     private void validate(StTransfer transfer) {
         if (transfer == null) {
-            throw new IllegalArgumentException("Transfer bilgisi bo�");
+            throw new IllegalArgumentException("Transfer bilgisi boş");
         }
         if (transfer.getKaynakDepo() == null) {
-            throw new IllegalArgumentException("Kaynak depo se�in");
+            throw new IllegalArgumentException("Kaynak depo seçin");
         }
         if (transfer.getHedefDepo() == null) {
-            throw new IllegalArgumentException("Hedef depo se�in");
+            throw new IllegalArgumentException("Hedef depo seçin");
         }
         if (Objects.equals(transfer.getKaynakDepo().getId(), transfer.getHedefDepo().getId())) {
-            throw new IllegalArgumentException("Kaynak ve hedef depo ayn� olamaz.");
+            throw new IllegalArgumentException("Kaynak ve hedef depo aynı olamaz.");
         }
         if (transfer.getKalemler() == null || transfer.getKalemler().isEmpty()) {
             throw new IllegalArgumentException("En az bir transfer kalemi eklenmelidir.");
         }
         for (StTransferKalem kalem : transfer.getKalemler()) {
             if (kalem.getStStok() == null) {
-                throw new IllegalArgumentException("Transfer kalemi i�in stok se�in");
+                throw new IllegalArgumentException("Transfer kalemi için stok seçin");
             }
             if (kalem.getMiktar() == null || kalem.getMiktar().compareTo(BigDecimal.ZERO) <= 0) {
-                throw new IllegalArgumentException("Miktar s�f�rdan b�y�k olmal�d�r.");
+                throw new IllegalArgumentException("Miktar sıfırdan büyük olmalıdır.");
             }
         }
     }

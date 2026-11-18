@@ -1,6 +1,7 @@
 package tr.bel.gaziantep.bysweb.moduls.stokyonetimi.controller;
 
 import jakarta.faces.event.ActionEvent;
+import jakarta.faces.model.SelectItem;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -8,18 +9,19 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import tr.bel.gaziantep.bysweb.core.controller.AbstractController;
+import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.EnumSyFiltreAnahtari;
 import tr.bel.gaziantep.bysweb.core.enums.stokyonetimi.EnumStSayimDurum;
+import tr.bel.gaziantep.bysweb.core.service.FilterOptionService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
 import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity.StSayim;
 import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity.StSayimKalem;
-import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.service.StDepoLokasyonService;
-import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.service.StDepoService;
 import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.service.StSayimService;
-import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.service.StStokService;
 
 import java.io.Serial;
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
@@ -37,11 +39,7 @@ public class StSayimController extends AbstractController<StSayim> {
     @Inject
     private StSayimService sayimService;
     @Inject
-    private StDepoService stDepoService;
-    @Inject
-    private StDepoLokasyonService stDepoLokasyonService;
-    @Inject
-    private StStokService stStokService;
+    private FilterOptionService filterOptionService;
 
     @Getter
     @Setter
@@ -51,17 +49,16 @@ public class StSayimController extends AbstractController<StSayim> {
         super(StSayim.class);
     }
 
-//    public List<StDepoLokasyon> getLokasyonItems() {
-//        if (getSelected() == null || getSelected().getStDepo() == null
-//                || getSelected().getStDepo().getId() == null) {
-//            return Collections.emptyList();
-//        }
-//        Integer depoId = getSelected().getStDepo().getId();
-//        return stDepoLokasyonService.findAll().stream()
-//                .filter(x -> x.getStDepo() != null && depoId.equals(x.getStDepo().getId()))
-//                .collect(Collectors.toList());
-//    }
-
+    public List<SelectItem> getFilterOptions(EnumSyFiltreAnahtari key) {
+        switch (key) {
+            case STSAYIM_DURUMU -> {
+                return filterOptionService.getStSayimDurumus();
+            }
+            default -> {
+                return Collections.emptyList();
+            }
+        }
+    }
 
     @Override
     public StSayim prepareCreate(ActionEvent event) {

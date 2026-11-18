@@ -13,8 +13,10 @@ import tr.bel.gaziantep.bysweb.core.enums.stokyonetimi.EnumStHareketTuru;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
 import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity.StDepoLokasyon;
+import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity.StStokBakiye;
 import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity.StStokHareket;
 import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.service.StDepoLokasyonService;
+import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.service.StStokBakiyeService;
 import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.service.StStokHareketService;
 
 import java.io.Serial;
@@ -41,6 +43,8 @@ public class StStokHareketController extends AbstractController<StStokHareket> {
     private StStokHareketService hareketService;
     @Inject
     private StDepoLokasyonService stDepoLokasyonService;
+    @Inject
+    private StStokBakiyeService stStokBakiyeService;
 
     public StStokHareketController() {
         super(StStokHareket.class);
@@ -113,6 +117,17 @@ public class StStokHareketController extends AbstractController<StStokHareket> {
             StStokHareket kayit = hareketService.hareketEkle(getSelected());
             setSelected(kayit);
             FacesUtil.successMessage(Constants.KAYIT_EKLENDI);
+            // kritik stok uyarisi
+            try {
+                StStokBakiye bakiye = stStokBakiyeService.find(
+                        kayit.getStStok(), kayit.getStDepo(), kayit.getStDepoLokasyon(),
+                        kayit.getLot(), kayit.getSkt(), false);
+                if (bakiye != null && kayit.getStStok().getKritikStok() != null
+                        && bakiye.getMiktar().compareTo(kayit.getStStok().getKritikStok()) <= 0) {
+                    FacesUtil.addExclamationMessage("Kritik stok seviyesine ulaştığından / altına düşülemez");
+                }
+            } catch (Exception ignored) {
+            }
             setItems(null);
             setLazyItems(null);
         } catch (IllegalArgumentException ex) {

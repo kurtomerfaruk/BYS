@@ -12,7 +12,8 @@ import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
 import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity.*;
-import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.service.*;
+import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.service.StStokBarkodService;
+import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.service.StStokBirimDonusumService;
 
 import java.io.Serial;
 import java.math.BigDecimal;
@@ -31,21 +32,9 @@ public class StStokController extends AbstractController<StStok> {
     private static final long serialVersionUID = -2934417348583578519L;
 
     @Inject
-    private StStokService service;
-    @Inject
-    private StBirimService stBirimService;
-    @Inject
-    private StStokKategoriService stStokKategoriService;
-    @Inject
-    private StDepoService stDepoService;
-    @Inject
     private StStokBarkodService stStokBarkodService;
     @Inject
     private StStokBirimDonusumService stStokBirimDonusumService;
-    @Inject
-    private StStokHareketService stStokHareketService;
-    @Inject
-    private StStokBakiyeService stStokBakiyeService;
     @Inject
     private StStokHareketController stStokHareketController;
 
@@ -64,21 +53,6 @@ public class StStokController extends AbstractController<StStok> {
     @Getter
     @Setter
     private BigDecimal transferMiktar;
-
-//    public List<StStokHareket> getHareketItems() {
-//        if (getSelected() == null || getSelected().getId() == null) {
-//            return new java.util.ArrayList<>();
-//
-//        }
-//        return stStokHareketService.findByStok(getSelected());
-//    }
-//
-//    public List<StStokBakiye> getBakiyeItems() {
-//        if (getSelected() == null || getSelected().getId() == null) {
-//            return new java.util.ArrayList<>();
-//        }
-//        return stStokBakiyeService.findByStok(getSelected());
-//    }
 
     public StStokController() {
         super(StStok.class);

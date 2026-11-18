@@ -14,7 +14,6 @@ import tr.bel.gaziantep.bysweb.core.enums.stokyonetimi.EnumStTransferDurum;
 import tr.bel.gaziantep.bysweb.core.service.FilterOptionService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
-import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.entity.SyKullanici;
 import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity.StTransfer;
 import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity.StTransferKalem;
 import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.service.StTransferService;
@@ -124,13 +123,10 @@ public class StTransferController extends AbstractController<StTransfer> {
         }
     }
 
-    private SyKullanici currentUser() {
-        return tr.bel.gaziantep.bysweb.core.utils.Util.getSyKullanici();
-    }
 
     public void onayla() {
         try {
-            service.onayla(getSelected(), currentUser());
+            service.onayla(getSelected(), this.getSyKullanici());
             FacesUtil.addSuccessMessage("Transfer onaylandı");
             setItems(null);
             setLazyItems(null);
@@ -144,7 +140,7 @@ public class StTransferController extends AbstractController<StTransfer> {
 
     public void reddet() {
         try {
-            service.reddet(getSelected(), currentUser());
+            service.reddet(getSelected(), this.getSyKullanici());
             FacesUtil.addSuccessMessage("Transfer reddedildi");
             setItems(null);
             setLazyItems(null);
@@ -178,7 +174,7 @@ public class StTransferController extends AbstractController<StTransfer> {
 
     public void teslimEt() {
         try {
-            service.teslimEt(getSelected(), currentUser());
+            service.teslimEt(getSelected(), this.getSyKullanici());
             FacesUtil.addSuccessMessage("Transfer teslim edildi.");
             setItems(null);
             setLazyItems(null);

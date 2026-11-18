@@ -8,6 +8,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import tr.bel.gaziantep.bysweb.core.enums.bys.EnumGirisCikis;
 import tr.bel.gaziantep.bysweb.core.enums.stokyonetimi.EnumStHareketTuru;
+import tr.bel.gaziantep.bysweb.core.enums.stokyonetimi.EnumStIslemLogTuru;
 import tr.bel.gaziantep.bysweb.core.enums.stokyonetimi.EnumStSayimDurum;
 import tr.bel.gaziantep.bysweb.core.service.AbstractService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
@@ -38,6 +39,8 @@ public class StSayimService extends AbstractService<StSayim> {
     private StStokHareketService hareketService;
     @Inject
     private StStokBakiyeService bakiyeService;
+    @Inject
+    private StIslemLogService stIslemLogService;
 
     public StSayimService() {
         super(StSayim.class);
@@ -171,6 +174,8 @@ public class StSayimService extends AbstractService<StSayim> {
         managed.setDurum(EnumStSayimDurum.TAMAMLANDI);
         managed.setBitisTarihi(LocalDateTime.now());
         managed.setOnaylayanSyKullanici(onaylayan);
+        stIslemLogService.log(EnumStIslemLogTuru.SAYIM, onaylayan, managed.getStDepo(),
+                "StSayim", managed.getSayimNo(), "Sayım onaylandı");
     }
 
     public void iptalEt(StSayim sayim) {

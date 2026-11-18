@@ -10,6 +10,8 @@ import tr.bel.gaziantep.bysweb.core.enums.bys.EnumGirisCikis;
 import tr.bel.gaziantep.bysweb.core.enums.stokyonetimi.EnumStHareketTuru;
 import tr.bel.gaziantep.bysweb.core.service.AbstractService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
+import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.entity.SyGenelAyar;
+import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.service.SyGenelAyarService;
 import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity.StStok;
 import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity.StStokBakiye;
 import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity.StStokHareket;
@@ -33,6 +35,10 @@ public class StStokHareketService extends AbstractService<StStokHareket> {
 
     @Inject
     private StStokBakiyeService bakiyeService;
+    @Inject
+    private SyGenelAyarService syGenelAyarService;
+    @Inject
+    private StIslemLogService stIslemLogService;
 
     public StStokHareketService() {
         super(StStokHareket.class);
@@ -73,7 +79,29 @@ public class StStokHareketService extends AbstractService<StStokHareket> {
         BigDecimal delta = hareket.getYon() == EnumGirisCikis.GIRIS
                 ? hareket.getMiktar()
                 : hareket.getMiktar().negate();
+        // negatif stok kontrolu (ayar ile)
+        if (hareket.getYon() == EnumGirisCikis.CIKIS) {
+            BigDecimal yeniMiktar = bakiye.getMiktar().add(delta);
+            if (yeniMiktar.compareTo(BigDecimal.ZERO) < 0) {
+                SyGenelAyar ayar = syGenelAyarService.findByTanim("StokNegatifStokIzinVer");
+                boolean izinVer = ayar != null && "true".equalsIgnoreCase(ayar.getDeger());
+                if (!izinVer) {
+                    throw new IllegalArgumentException("Negatif stok oluşturulamaz (Sistem Yöneticiniz ile görüşünüz).");
+                }
+            }
+        }
         bakiye.setMiktar(bakiye.getMiktar().add(delta));
+
+        // islem logu
+        stIslemLogService.log(
+                tr.bel.gaziantep.bysweb.core.enums.stokyonetimi.EnumStIslemLogTuru.HAREKET,
+                hareket.getEkleyen(),
+                hareket.getStDepo(),
+                "StStokHareket",
+                hareket.getHareketNo(),
+                "Hareket: " + hareket.getHareketTuru().getDisplayValue()
+                        + " / " + hareket.getYon().getDisplayValue()
+                        + " / " + hareket.getMiktar());
 
         return hareket;
     }

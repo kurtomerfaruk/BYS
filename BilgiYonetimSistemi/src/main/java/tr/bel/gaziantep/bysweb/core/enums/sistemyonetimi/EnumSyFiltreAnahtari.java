@@ -72,7 +72,9 @@ public enum EnumSyFiltreAnahtari implements BaseEnum {
     STDEPO_LOKASYON_TIPI("Stok Takip Depo Lokasyon Tipi"),
     STHAREKET_TURU("Stok Takip Hareket Türü"),
     GIRIS_CIKIS("Giriş / Çıkış"),
-    STTRANSFER_DURUM("Stok Takip Tranfer Durum");
+    STTRANSFER_DURUM("Stok Takip Tranfer Durum"),
+    STSAYIM_DURUMU("Stok Takip Sayım Durumu"),
+    STTEDARIKCI_TUR("Stok Takip Tedarikçi Tür");
 
     private final String label;
 

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:editpage id="StTedarikciEditForm"
+                   widgetVar="StTedarikciEditDialog"
+                   actionListener="#{stTedarikciController.save}"
+                   listForm="StTedarikciListForm"
+                   model="#{stTedarikciController.selected}">
+
+        <p:outputLabel value="#{messages.turLabel}" for="@next"/>
+        <p:selectOneMenu value="#{stTedarikciController.selected.tur}" required="true" converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{enumTedarikciTuru.ALL_VALUES}"
+                           var="turs"
+                           itemValue="#{turs}"
+                           itemLabel="#{turs.displayValue}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.kodLabel}" for="@next"/>
+        <p:inputText value="#{stTedarikciController.selected.kod}" title="#{messages.kodText}" size="50" maxlength="50"/>
+
+        <p:outputLabel value="#{messages.adLabel}" for="@next"/>
+        <p:inputText value="#{stTedarikciController.selected.ad}" title="#{messages.adText}" size="50" maxlength="200" required="true"/>
+
+        <p:outputLabel value="#{messages.vergiNoLabel}" for="@next"/>
+        <p:inputText value="#{stTedarikciController.selected.vergiNo}" title="#{messages.vergiNoText}" size="50" maxlength="50"/>
+
+        <p:outputLabel value="#{messages.ilgiliLabel}" for="@next"/>
+        <p:inputText value="#{stTedarikciController.selected.ilgiliKisi}" title="#{messages.ilgiliText}" size="50" maxlength="150"/>
+
+        <p:outputLabel value="#{messages.telefonLabel}" for="@next"/>
+        <p:inputMask id="telefon" value="#{stTedarikciController.selected.telefon}"
+                     mask="#{messages.telefonFormat}"
+                     required="true"
+                     title="#{messages.telefonText}" size="14"/>
+
+        <p:outputLabel value="#{messages.epostaAdresiLabel}" for="@next"/>
+        <p:inputText value="#{stTedarikciController.selected.eposta}" title="#{messages.epostaAdresiText}" size="50" maxlength="150"/>
+
+        <p:outputLabel value="#{messages.sehirLabel}" for="@next"/>
+        <p:selectOneMenu value="#{stTedarikciController.selected.gnlIl}" filter="true" converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{gnlIlController.items}"
+                           var="sehirs"
+                           itemValue="#{sehirs}"
+                           itemLabel="#{sehirs.tanim}"/>
+            <p:ajax event="change" update="gnlIlce"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.ilceLabel}" for="@next"/>
+        <p:selectOneMenu id="gnlIlce" value="#{stTedarikciController.selected.gnlIlce}" filter="true" converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{gnlIlceController.getIlceByIlId(stTedarikciController.selected.gnlIl)}"
+                           var="ilces"
+                           itemValue="#{ilces}"
+                           itemLabel="#{ilces.tanim}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.adresLabel}" for="@next"/>
+        <p:inputTextarea rows="4" value="#{stTedarikciController.selected.adres}"
+                         title="#{messages.adresText}"
+                         styleClass="w-100" autoResize="false"/>
+
+        <p:outputLabel value="#{messages.aciklamaLabel}" for="@next"/>
+        <p:inputTextarea rows="4" value="#{stTedarikciController.selected.aciklama}"
+                         title="#{messages.aciklamaText}"
+                         styleClass="w-100" autoResize="false"/>
+
+    </coco:editpage>
+
+</ui:composition>
+
+</html>
