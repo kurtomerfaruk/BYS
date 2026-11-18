@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces">
+<ui:composition>
+
+    <p:dialog widgetVar="StAlisViewDialog"
+              id="StAlisViewDialogId"
+              modal="true"
+              resizable="false"
+              closeOnEscape="true"
+              header="#{messages.dialogKayitBilgisi} - #{stAlisController.selected.belgeNo}"
+              appendTo="@(body)"
+              responsive="true"
+              position="top"
+              style="min-width:900px;">
+
+        <h:form id="StAlisViewForm">
+            <h:panelGroup id="display">
+                <p:panelGrid columns="2" styleClass="w-100" layout="tabular"
+                             rendered="#{stAlisController.selected != null}">
+                    <h:outputText value="#{messages.belgeTuruLabel}"/>
+                    <h:outputText value="#{stAlisController.selected.belgeTuru.displayValue}"/>
+
+                    <h:outputText value="#{messages.belgeNoLabel}"/>
+                    <h:outputText value="#{stAlisController.selected.belgeNo}"/>
+
+                    <h:outputText value="#{messages.tedarikciLabel}"/>
+                    <h:outputText value="#{stAlisController.selected.stTedarikci.ad}"/>
+
+                    <h:outputText value="#{messages.tarihLabel}"/>
+                    <h:outputText value="#{stAlisController.selected.tarih}">
+                        <f:convertDateTime pattern="#{messages.tarihSaatKisaFormat}" type="localDateTime"/>
+                    </h:outputText>
+
+                    <h:outputText value="#{messages.depoLabel}"/>
+                    <h:outputText value="#{stAlisController.selected.stDepo.ad}"/>
+
+                    <h:outputText value="#{messages.lokasyonLabel}"/>
+                    <h:outputText value="#{stAlisController.selected.stDepoLokasyon.ad}"/>
+
+                    <h:outputText value="#{messages.aciklamaLabel}"/>
+                    <h:outputText value="#{stAlisController.selected.aciklama}"/>
+                </p:panelGrid>
+
+                <p:dataTable value="#{stAlisController.selected.kalemler}" var="kalemItem"
+                             emptyMessage="#{messages.kayitBulunamadi}" size="small" stripedRows="true"
+                             styleClass="w-100 mt-2">
+                    <p:column headerText="#{messages.stokLabel}">
+                        <h:outputText value="#{kalemItem.stStok.stokKodu} - #{kalemItem.stStok.stokAdi}"/>
+                    </p:column>
+                    <p:column headerText="#{messages.miktarLabel}" styleClass="text-end">
+                        <h:outputText value="#{kalemItem.miktar}">
+                            <f:convertNumber minFractionDigits="0" maxFractionDigits="4"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="#{messages.birimMaliyetLabel}" styleClass="text-end">
+                        <h:outputText value="#{kalemItem.birimMaliyet}">
+                            <f:convertNumber minFractionDigits="0" maxFractionDigits="4"/>
+                        </h:outputText>
+                    </p:column>
+                </p:dataTable>
+
+                <div class="float-end mt-2">
+                    <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                     value="#{messages.buttonKapat}"
+                                     onclick="PF('StAlisViewDialog').hide()"
+                                     onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                </div>
+            </h:panelGroup>
+        </h:form>
+
+    </p:dialog>
+
+</ui:composition>
+
+</html>

@@ -31,4 +31,9 @@ public class StTedarikciService extends AbstractService<StTedarikci> {
     protected EntityManager getEntityManager() {
         return em;
     }
+
+    @Override
+    public String getSortCol() {
+        return "ad";
+    }
 }

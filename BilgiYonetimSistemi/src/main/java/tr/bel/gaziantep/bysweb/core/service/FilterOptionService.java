@@ -24,10 +24,7 @@ import tr.bel.gaziantep.bysweb.core.enums.psikiyatriklinigi.EnumPkTedaviSekli;
 import tr.bel.gaziantep.bysweb.core.enums.saglikhizmetleri.EnumShDanismanlikHizmeti;
 import tr.bel.gaziantep.bysweb.core.enums.saglikhizmetleri.EnumShObeziteHizmet;
 import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.*;
-import tr.bel.gaziantep.bysweb.core.enums.stokyonetimi.EnumStDepoLokasyonTipi;
-import tr.bel.gaziantep.bysweb.core.enums.stokyonetimi.EnumStSayimDurum;
-import tr.bel.gaziantep.bysweb.core.enums.stokyonetimi.EnumStTedarikciTuru;
-import tr.bel.gaziantep.bysweb.core.enums.stokyonetimi.EnumStTransferDurum;
+import tr.bel.gaziantep.bysweb.core.enums.stokyonetimi.*;
 import tr.bel.gaziantep.bysweb.moduls.aktifyasam.entity.AyBirim;
 import tr.bel.gaziantep.bysweb.moduls.aktifyasam.service.AyBirimService;
 import tr.bel.gaziantep.bysweb.moduls.engelsizler.entity.EyTalepKonu;
@@ -501,6 +498,12 @@ public class FilterOptionService implements java.io.Serializable{
 
     public List<SelectItem> getStTedarikciTurs() {
         return Arrays.stream(EnumStTedarikciTuru.values())
+                .map(value -> new SelectItem(value, value.getDisplayValue()))
+                .collect(Collectors.toList());
+    }
+
+    public List<SelectItem> getStAlisBelgeTurus() {
+        return Arrays.stream(EnumStAlisBelgeTuru.values())
                 .map(value -> new SelectItem(value, value.getDisplayValue()))
                 .collect(Collectors.toList());
     }

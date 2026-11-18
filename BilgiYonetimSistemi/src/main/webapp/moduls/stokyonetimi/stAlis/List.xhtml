@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:p="primefaces"
+                xmlns:pt="jakarta.faces.passthrough"
+                xmlns:coco="jakarta.faces.composite/ui">
+
+    <h:form id="StAlisListForm" styleClass="form-height">
+
+        <p:contextMenu id="StAlisDataTableContextMenu" for="datalist:datalist">
+            <p:menuitem value="#{messages.buttonEkle}" onclick="document.getElementById('StAlisListForm:datalist:datalist:createButton').click();"
+                        icon="pi pi-plus" rendered="#{syKullaniciController.hasPermission('stalis:ekle')}"/>
+            <p:menuitem value="#{messages.buttonDetay}" onclick="document.getElementById('StAlisListForm:datalist:datalist:viewButton').click();"
+                        icon="pi pi-search"/>
+        </p:contextMenu>
+
+        <coco:datatable id="datalist"
+                        value="#{stAlisController.lazyItems}"
+                        rowKey="#{item.id}"
+                        selection="#{stAlisController.selected}"
+                        filtered="#{stAlisController.filtered}"
+                        rowselect=":StAlisListForm:datalist:datalist:viewButton"
+                        rowDblselect="document.getElementById('StAlisListForm:datalist:datalist:viewButton').click()"
+                        contextMenu=":StAlisListForm:datalist:datalist:viewButton"
+                        selectListener="#{stAlisController.resetParents}"
+                        controller="#{stAlisController}"
+                        header="#{messages.alisListesi}">
+
+            <p:ajax event="colResize" listener="#{stAlisController.onResize}"/>
+
+            <f:facet name="paginatorBottomLeft">
+
+                <p:commandButton id="createButton" styleClass="ui-button-primary" icon="pi pi-plus" pt:data-tooltip="#{messages.buttonEkle}"
+                                 actionListener="#{stAlisController.prepareCreate}" update=":StAlisCreateForm:StAlisCreateForm"
+                                 oncomplete="PF('StAlisCreateDialog').show()" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
+                                 rendered="#{syKullaniciController.hasPermission('stalis:ekle')}"/>
+
+                <p:commandButton id="viewButton" styleClass="ui-button-info" icon="pi pi-search" pt:data-tooltip="#{messages.buttonDetay}"
+                                 update=":StAlisViewForm:StAlisViewForm" oncomplete="PF('StAlisViewDialog').show()"
+                                 disabled="#{empty stAlisController.selected}" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+
+            </f:facet>
+
+        </coco:datatable>
+
+    </h:form>
+
+</ui:composition>

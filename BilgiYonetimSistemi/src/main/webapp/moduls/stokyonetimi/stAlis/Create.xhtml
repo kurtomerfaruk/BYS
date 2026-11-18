@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:h="jakarta.faces.html"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:createpage id="StAlisCreateForm"
+                     renderedListener="#{stAlisController.selected != null}"
+                     widgetVar="StAlisCreateDialog"
+                     actionListener="#{stAlisController.saveNew}"
+                     listForm="StAlisListForm">
+
+        <p:outputLabel value="#{messages.tedarikciLabel}" for="@next"/>
+        <p:selectOneMenu id="tedarikci" value="#{stAlisController.selected.stTedarikci}" filter="true"
+                         converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{stTedarikciController.items}" var="tedarikciItem"
+                           itemValue="#{tedarikciItem}" itemLabel="#{tedarikciItem.ad}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.belgeTuruLabel}" for="@next"/>
+        <p:selectOneMenu id="belgeTuru" value="#{stAlisController.selected.belgeTuru}"
+                         converter="omnifaces.SelectItemsConverter" required="true">
+            <f:selectItems value="#{enumAlisBelgeTuru.ALL_VALUES}" var="tur"
+                           itemValue="#{tur}" itemLabel="#{tur.displayValue}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.belgeNoLabel}" for="@next"/>
+        <p:inputText id="belgeNo" value="#{stAlisController.selected.belgeNo}"
+                     size="30" maxlength="50" required="true"/>
+
+        <p:outputLabel value="#{messages.tarihLabel}" for="@next"/>
+        <p:datePicker id="tarih" value="#{stAlisController.selected.tarih}"
+                      pattern="#{messages.tarihSaatKisaFormat}" showTime="true" showOnFocus="false" required="true"/>
+
+        <p:outputLabel value="#{messages.depoLabel}" for="@next"/>
+        <p:selectOneMenu id="stDepo" value="#{stAlisController.selected.stDepo}" filter="true"
+                         converter="omnifaces.SelectItemsConverter" required="true">
+            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{stDepoController.items}" var="depoItem"
+                           itemValue="#{depoItem}" itemLabel="#{depoItem.ad}"/>
+            <p:ajax process="@this" update="stDepoLokasyon" listener="#{stAlisController.onDepoChange}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.stLokasyonLabel}" for="@next"/>
+        <p:selectOneMenu id="stDepoLokasyon" value="#{stAlisController.selected.stDepoLokasyon}" filter="true"
+                         converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{stDepoLokasyonController.getLokasyonByDepo(stAlisController.selected.stDepo)}" var="lokasyonItem"
+                           itemValue="#{lokasyonItem}" itemLabel="#{lokasyonItem.ad}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.aciklamaLabel}" for="@next"/>
+        <p:inputTextarea id="aciklama" value="#{stAlisController.selected.aciklama}"
+                         title="#{messages.aciklamaText}" rows="2" styleClass="w-100"
+                         autoResize="false" maxlength="300"/>
+
+        <p:outputLabel value="#{messages.alisKalemLabel}" for="@next"/>
+        <h:panelGroup>
+            <div class="d-flex gap-2 mb-2 flex-wrap">
+                <p:selectOneMenu id="kalemStok" value="#{stAlisController.kalem.stStok}" filter="true"
+                                 converter="omnifaces.SelectItemsConverter" style="min-width:260px;">
+                    <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+                    <f:selectItems value="#{stStokController.items}" var="stokItem"
+                                   itemValue="#{stokItem}" itemLabel="#{stokItem.stokKodu} - #{stokItem.stokAdi}"/>
+                </p:selectOneMenu>
+                <p:inputNumber id="kalemMiktar" value="#{stAlisController.kalem.miktar}" decimalPlaces="4"
+                               emptyValue="empty" minValue="0.0001" style="width:120px;"/>
+                <p:inputNumber id="kalemBirimMaliyet" value="#{stAlisController.kalem.birimMaliyet}" decimalPlaces="4"
+                               emptyValue="empty" minValue="0" style="width:120px;"/>
+                <p:commandButton value="#{messages.buttonKalemEkle}" icon="pi pi-plus" styleClass="ui-button-primary"
+                                 actionListener="#{stAlisController.addKalem}"
+                                 update="kalemTable,kalemStok,kalemMiktar,kalemBirimMaliyet" process="@this,kalemStok,kalemMiktar,kalemBirimMaliyet"
+                                 onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+            </div>
+            <p:dataTable id="kalemTable" value="#{stAlisController.selected.kalemler}" var="kalemItem"
+                         emptyMessage="#{messages.kayitBulunamadi}" size="small" stripedRows="true"
+                         styleClass="w-100">
+                <p:column headerText="#{messages.stokText}">
+                    <h:outputText value="#{kalemItem.stStok.stokKodu} - #{kalemItem.stStok.stokAdi}"/>
+                </p:column>
+                <p:column headerText="#{messages.miktarText}" styleClass="text-end">
+                    <h:outputText value="#{kalemItem.miktar}">
+                        <f:convertNumber minFractionDigits="0" maxFractionDigits="4"/>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="#{messages.birimMaliyetText}" styleClass="text-end">
+                    <h:outputText value="#{kalemItem.birimMaliyet}">
+                        <f:convertNumber minFractionDigits="0" maxFractionDigits="4"/>
+                    </h:outputText>
+                </p:column>
+                <p:column style="width:60px;text-align:center;">
+                    <p:commandButton icon="pi pi-trash" styleClass="ui-button-danger rounded-button"
+                                     actionListener="#{stAlisController.removeKalem(kalemItem)}"
+                                     update="kalemTable" process="@this"
+                                     onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                </p:column>
+            </p:dataTable>
+        </h:panelGroup>
+
+    </coco:createpage>
+
+</ui:composition>
+
+</html>
