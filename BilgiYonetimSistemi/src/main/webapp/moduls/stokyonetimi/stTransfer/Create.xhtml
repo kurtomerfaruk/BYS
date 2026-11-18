@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:h="jakarta.faces.html"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:createpage id="StTransferCreateForm"
+                     renderedListener="#{stTransferController.selected != null}"
+                     widgetVar="StTransferCreateDialog"
+                     actionListener="#{stTransferController.saveNew}"
+                     listForm="StTransferListForm">
+
+        <p:outputLabel value="#{messages.kaynakDepoLabel}" for="@next"/>
+        <p:selectOneMenu id="kaynakDepo" value="#{stTransferController.selected.kaynakDepo}" filter="true"
+                         converter="omnifaces.SelectItemsConverter" required="true">
+            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{stDepoController.items}" var="depoItem"
+                           itemValue="#{depoItem}" itemLabel="#{depoItem.ad}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.hedefDepoLabel}" for="@next"/>
+        <p:selectOneMenu id="hedefDepo" value="#{stTransferController.selected.hedefDepo}" filter="true"
+                         converter="omnifaces.SelectItemsConverter" required="true">
+            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+            <f:selectItems value="#{stDepoController.items}" var="depoItem"
+                           itemValue="#{depoItem}" itemLabel="#{depoItem.ad}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.aciklamaLabel}" for="@next"/>
+        <p:inputTextarea id="aciklama" value="#{stTransferController.selected.aciklama}"
+                         title="#{messages.aciklamaText}" rows="2" styleClass="w-100"
+                         autoResize="false" maxlength="300"/>
+
+        <p:outputLabel value="#{messages.transferKalemLabel}" for="@next"/>
+        <h:panelGroup>
+            <div class="d-flex gap-2 mb-2 flex-wrap">
+                <p:selectOneMenu id="kalemStok" value="#{stTransferController.kalem.stStok}" filter="true"
+                                 converter="omnifaces.SelectItemsConverter" style="min-width:260px;">
+                    <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+                    <f:selectItems value="#{stStokController.items}" var="stokItem"
+                                   itemValue="#{stokItem}" itemLabel="#{stokItem.stokKodu} - #{stokItem.stokAdi}"/>
+                </p:selectOneMenu>
+                <p:inputNumber id="kalemMiktar" value="#{stTransferController.kalem.miktar}" decimalPlaces="4"
+                               emptyValue="empty" minValue="0.0001" style="width:140px;"/>
+                <p:commandButton value="#{messages.buttonKalemEkle}" icon="pi pi-plus" styleClass="ui-button-primary"
+                                 actionListener="#{stTransferController.addKalem}"
+                                 update="kalemTable,kalemStok,kalemMiktar" process="@this,kalemStok,kalemMiktar"
+                                 onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+            </div>
+            <p:dataTable id="kalemTable" value="#{stTransferController.selected.kalemler}" var="kalemItem"
+                         emptyMessage="#{messages.kayitBulunamadi}" size="small" stripedRows="true"
+                         styleClass="w-100" lazy="false">
+                <p:column headerText="#{messages.stokText}">
+                    <h:outputText value="#{kalemItem.stStok.stokKodu} - #{kalemItem.stStok.stokAdi}"/>
+                </p:column>
+                <p:column headerText="#{messages.miktarText}" styleClass="text-end">
+                    <h:outputText value="#{kalemItem.miktar}">
+                        <f:convertNumber minFractionDigits="0" maxFractionDigits="4"/>
+                    </h:outputText>
+                </p:column>
+                <p:column style="width:60px;text-align:center;">
+                    <p:commandButton icon="pi pi-trash" styleClass="ui-button-danger rounded-button"
+                                     actionListener="#{stTransferController.removeKalem(kalemItem)}"
+                                     update="kalemTable" process="@this"
+                                     onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                </p:column>
+            </p:dataTable>
+        </h:panelGroup>
+
+    </coco:createpage>
+
+</ui:composition>
+
+</html>

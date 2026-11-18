@@ -38,6 +38,17 @@
                                 </li>
                             </ui:fragment>
 
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('sttransfer:goster')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/stokyonetimi/stTransfer/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="Transferler"/>
+                                </li>
+                            </ui:fragment>
+
                         </ul>
                     </li>
                 </ui:fragment>

@@ -31,7 +31,7 @@
             <p:ajax process="@this" update="stDepoLokasyon" listener="#{stStokHareketController.onDepoChange}"/>
         </p:selectOneMenu>
 
-        <p:outputLabel value="#{messages.stLokasyonLabel}" for="@next"/>
+        <p:outputLabel value="#{messages.lokasyonLabel}" for="@next"/>
         <p:selectOneMenu id="stDepoLokasyon" value="#{stStokHareketController.selected.stDepoLokasyon}" filter="true"
                          converter="omnifaces.SelectItemsConverter">
             <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
@@ -39,7 +39,7 @@
                            itemValue="#{lokasyonItem}" itemLabel="#{lokasyonItem.ad}"/>
         </p:selectOneMenu>
 
-        <p:outputLabel value="#{messages.stHareketTuruLabel}" for="@next"/>
+        <p:outputLabel value="#{messages.hareketTuruLabel}" for="@next"/>
         <p:selectOneMenu id="hareketTuru" value="#{stStokHareketController.selected.hareketTuru}"
                          converter="omnifaces.SelectItemsConverter" required="true">
             <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
@@ -48,7 +48,7 @@
             <p:ajax process="@this" update="yon" listener="#{stStokHareketController.onHareketTuruChange}"/>
         </p:selectOneMenu>
 
-        <p:outputLabel value="#{messages.stYonLabel}" for="@next"/>
+        <p:outputLabel value="#{messages.yonLabel}" for="@next"/>
         <p:selectOneMenu id="yon" value="#{stStokHareketController.selected.yon}"
                          converter="omnifaces.SelectItemsConverter" required="true">
             <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
@@ -64,7 +64,7 @@
         <p:inputNumber id="birimMaliyet" value="#{stStokHareketController.selected.birimMaliyet}" decimalPlaces="4"
                        emptyValue="empty" minValue="0"/>
 
-        <p:outputLabel value="#{messages.stIslemTarihiLabel}" for="@next"/>
+        <p:outputLabel value="#{messages.islemTarihiLabel}" for="@next"/>
         <p:datePicker id="islemTarihi" value="#{stStokHareketController.selected.islemTarihi}"
                       pattern="#{messages.tarihSaatKisaFormat}" showTime="true" showOnFocus="false"/>
 
@@ -75,14 +75,6 @@
         <p:outputLabel value="#{messages.belgeNoLabel}" for="@next"/>
         <p:inputText id="belgeNo" value="#{stStokHareketController.selected.belgeNo}"
                      size="30" maxlength="50"/>
-
-        <p:outputLabel value="#{messages.stLotLabel}" for="@next"/>
-        <p:inputText id="lot" value="#{stStokHareketController.selected.lot}"
-                     size="30" maxlength="50"/>
-
-        <p:outputLabel value="#{messages.stSktLabel}" for="@next"/>
-        <p:datePicker id="skt" value="#{stStokHareketController.selected.skt}"
-                      pattern="#{messages.tarihFormat}" showOnFocus="false"/>
 
         <p:outputLabel value="#{messages.aciklamaLabel}" for="@next"/>
         <p:inputTextarea id="aciklama" value="#{stStokHareketController.selected.aciklama}"

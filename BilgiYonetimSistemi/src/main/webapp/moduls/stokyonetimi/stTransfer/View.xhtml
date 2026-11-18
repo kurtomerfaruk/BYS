@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces">
+<ui:composition>
+
+    <p:dialog widgetVar="StTransferViewDialog"
+              id="StTransferViewDialogId"
+              modal="true"
+              resizable="false"
+              closeOnEscape="true"
+              header="#{messages.dialogKayitBilgisi} - #{stTransferController.selected.transferNo}"
+              appendTo="@(body)"
+              responsive="true"
+              position="top"
+              styleClass="w-50">
+
+        <h:form id="StTransferViewForm">
+            <h:panelGroup id="display">
+                <p:panelGrid columns="2" styleClass="w-100" layout="tabular"
+                             rendered="#{stTransferController.selected != null}">
+                    <h:outputText value="#{messages.transferNoLabel}"/>
+                    <h:outputText value="#{stTransferController.selected.transferNo}"/>
+
+                    <h:outputText value="#{messages.kaynakDepoLabel}"/>
+                    <h:outputText value="#{stTransferController.selected.kaynakDepo.ad}"/>
+
+                    <h:outputText value="#{messages.hedefDepoLabel}"/>
+                    <h:outputText value="#{stTransferController.selected.hedefDepo.ad}"/>
+
+                    <h:outputText value="#{messages.transferDurumLabel}"/>
+                    <h:outputText value="#{stTransferController.selected.durum.displayValue}"/>
+
+                    <h:outputText value="#{messages.talepTarihiLabel}"/>
+                    <h:outputText value="#{stTransferController.selected.talepTarihi}">
+                        <f:convertDateTime pattern="#{messages.tarihSaatKisaFormat}" type="localDateTime"/>
+                    </h:outputText>
+
+                    <h:outputText value="#{messages.onayTarihiLabel}"/>
+                    <h:outputText value="#{stTransferController.selected.onayTarihi}">
+                        <f:convertDateTime pattern="#{messages.tarihSaatKisaFormat}" type="localDateTime"/>
+                    </h:outputText>
+
+                    <h:outputText value="#{messages.sevkTarihiLabel}"/>
+                    <h:outputText value="#{stTransferController.selected.sevkTarihi}">
+                        <f:convertDateTime pattern="#{messages.tarihSaatKisaFormat}" type="localDateTime"/>
+                    </h:outputText>
+
+                    <h:outputText value="#{messages.teslimTarihiLabel}"/>
+                    <h:outputText value="#{stTransferController.selected.teslimTarihi}">
+                        <f:convertDateTime pattern="#{messages.tarihSaatKisaFormat}" type="localDateTime"/>
+                    </h:outputText>
+
+                    <h:outputText value="#{messages.aciklamaLabel}"/>
+                    <h:outputText value="#{stTransferController.selected.aciklama}"/>
+                </p:panelGrid>
+
+                <p:dataTable value="#{stTransferController.selected.kalemler}" var="kalemItem"
+                             emptyMessage="#{messages.kayitBulunamadi}" size="small" stripedRows="true"
+                             styleClass="w-100 mt-2" lazy="false">
+                    <p:column headerText="#{messages.stokText}">
+                        <h:outputText value="#{kalemItem.stStok.stokKodu} - #{kalemItem.stStok.stokAdi}"/>
+                    </p:column>
+                    <p:column headerText="#{messages.miktarText}" styleClass="text-end">
+                        <h:outputText value="#{kalemItem.miktar}">
+                            <f:convertNumber minFractionDigits="0" maxFractionDigits="4"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="#{messages.sevkMiktariText}" styleClass="text-end">
+                        <h:outputText value="#{kalemItem.sevkMiktari}">
+                            <f:convertNumber minFractionDigits="0" maxFractionDigits="4"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="#{messages.teslimMiktariText}" styleClass="text-end">
+                        <h:outputText value="#{kalemItem.teslimMiktari}">
+                            <f:convertNumber minFractionDigits="0" maxFractionDigits="4"/>
+                        </h:outputText>
+                    </p:column>
+                </p:dataTable>
+
+                <div class="d-flex gap-2 mt-3 flex-wrap float-end">
+                    <p:commandButton value="#{messages.buttonOnayla}" icon="pi pi-check" styleClass="ui-button-success"
+                                     actionListener="#{stTransferController.onayla}"
+                                     update="display,:StTransferListForm:datalist:datalist,:growl"
+                                     rendered="#{stTransferController.selected.durum eq 'TASLAK'}"
+                                     onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+
+                    <p:commandButton value="#{messages.buttonReddet}" icon="pi pi-times" styleClass="ui-button-danger"
+                                     actionListener="#{stTransferController.reddet}"
+                                     update="display,:StTransferListForm:datalist:datalist,:growl"
+                                     rendered="#{stTransferController.selected.durum eq 'TASLAK'}"
+                                     onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+
+                    <p:commandButton value="#{messages.buttonSevket}" icon="pi pi-send" styleClass="ui-button-primary"
+                                     actionListener="#{stTransferController.sevkEt}"
+                                     update="display,:StTransferListForm:datalist:datalist,:growl"
+                                     rendered="#{stTransferController.selected.durum eq 'ONAYLANDI'}"
+                                     onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+
+                    <p:commandButton value="#{messages.buttonTeslimEt}" icon="pi pi-check-circle" styleClass="ui-button-success"
+                                     actionListener="#{stTransferController.teslimEt}"
+                                     update="display,:StTransferListForm:datalist:datalist,:growl"
+                                     rendered="#{stTransferController.selected.durum eq 'SEVK_EDILDI'}"
+                                     onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+
+                    <p:commandButton value="#{messages.buttonIptal}" icon="pi pi-ban" styleClass="ui-button-warning"
+                                     actionListener="#{stTransferController.iptalEt}"
+                                     update="display,:StTransferListForm:datalist:datalist,:growl"
+                                     rendered="#{stTransferController.selected.durum ne 'TAMAMLANDI'
+                                                 and stTransferController.selected.durum ne 'IPTAL'
+                                                 and stTransferController.selected.durum ne 'REDDEDILDI'}"
+                                     onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+
+                    <p:commandButton icon="pi pi-times" styleClass="ui-button-secondary"
+                                     value="#{messages.buttonKapat}" onclick="PF('StTransferViewDialog').hide()"
+                                     onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                </div>
+
+            </h:panelGroup>
+        </h:form>
+
+    </p:dialog>
+
+</ui:composition>
+
+</html>
