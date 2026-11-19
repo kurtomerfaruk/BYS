@@ -17,6 +17,7 @@
     <composite:attribute name="focus"/>
     <composite:attribute name="onShow"/>
     <composite:attribute name="position" default="top"/>
+    <composite:attribute name="extraUpdate" default=""/>
 </composite:interface>
 
 
@@ -48,7 +49,7 @@
                             <p:commandButton icon="pi pi-check" styleClass="ui-button-success"
                                              actionListener="#{cc.attrs.actionListener}"
                                              value="#{messages.buttonKaydetKapat}"
-                                             update="display,:#{cc.attrs.listForm}:datalist:datalist,:growl"
+                                             update="display,:#{cc.attrs.listForm}:datalist:datalist,:growl#{empty cc.attrs.extraUpdate ? '' : ','.concat(cc.attrs.extraUpdate)}"
                                              oncomplete="handleSubmit(xhr,status,args,PF('#{cc.attrs.widgetVar}'));"
                                              onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
                             <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"

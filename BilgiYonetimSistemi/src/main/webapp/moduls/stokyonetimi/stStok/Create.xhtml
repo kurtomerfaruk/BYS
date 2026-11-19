@@ -8,12 +8,13 @@
 
 <ui:composition>
 
-    <coco:createpage id="StStokCreateForm"
-                     renderedListener="#{stStokController.selected != null}"
-                     widgetVar="StStokCreateDialog"
-                     actionListener="#{stStokController.saveNew}"
-                     listForm="#{empty hareketListForm ? 'StStokHareketListForm' : hareketListForm}"
-                     extraUpdate="#{empty hareketExtraUpdate ? '' : hareketExtraUpdate}">
+    <coco:createpageproceed id="StStokCreateForm"
+                            renderedListener="#{stStokController.selected != null}"
+                            widgetVar="StStokCreateDialog"
+                            actionListener="#{stStokController.saveNew}"
+                            listForm="#{empty hareketListForm ? 'StStokHareketListForm' : hareketListForm}"
+                            extraUpdate="#{empty hareketExtraUpdate ? '' : hareketExtraUpdate}"
+                            proceedActionListener="#{stStokController.saveProceed}">
 
         <p:outputLabel value="#{messages.malzemeKoduLabel}" for="@next"/>
         <p:inputText id="malzemeKodu" value="#{stStokController.selected.malzemeKodu}" title="#{messages.malzemeKoduText}"
@@ -67,7 +68,7 @@
         <p:inputTextarea id="aciklama" value="#{stStokController.selected.aciklama}" title="#{messages.aciklamaText}"
                          rows="4" styleClass="w-100" autoResize="false"/>
 
-    </coco:createpage>
+    </coco:createpageproceed>
 
 </ui:composition>
 

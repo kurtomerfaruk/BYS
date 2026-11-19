@@ -74,4 +74,30 @@ public class StringUtil {
 
         return simpleName.substring(0, 1).toLowerCase() + simpleName.substring(1);
     }
+
+    public static String incrementAccountCode(String accountCode) {
+
+        String[] parts = accountCode.split("\\.");
+
+        int lastIndex = parts.length - 1;
+
+        int lastValue = Integer.parseInt(parts[lastIndex]);
+
+        if (lastValue < 99) {
+            parts[lastIndex] = String.format("%02d", lastValue + 1);
+        } else {
+            int previousIndex = lastIndex - 1;
+
+            int previousValue = Integer.parseInt(parts[previousIndex]);
+
+            if (previousValue >= 99) {
+                throw new IllegalArgumentException("Hesap kodu üst limiti aşıldı.");
+            }
+
+            parts[previousIndex] = String.format("%02d", previousValue + 1);
+            parts[lastIndex] = "01";
+        }
+
+        return String.join(".", parts);
+    }
 }

@@ -11,6 +11,7 @@ import tr.bel.gaziantep.bysweb.core.controller.AbstractController;
 import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
+import tr.bel.gaziantep.bysweb.core.utils.StringUtil;
 import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity.*;
 import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.service.StStokBarkodService;
 import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.service.StStokBirimDonusumService;
@@ -192,6 +193,26 @@ public class StStokController extends AbstractController<StStok> {
                 .filter(BaseEntity::isAktif)
                 .map(StStokBakiye::getTransferdekiMiktar)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    public void saveProceed(ActionEvent event) {
+//        StStok oldYetki = this.getSelected();
+//        saveNew(event);
+//        SyYetki yetki = prepareCreate(event);
+//        String yetkiTanim = oldYetki.getYetki().split(":")[0];
+//        yetki.setYetki(yetkiTanim+":");
+//        yetki.setAciklama(StringUtil.removeLastPart(oldYetki.getAciklama()));
+//        this.setSelected(yetki);
+        StStok oldStok = this.getSelected();
+        saveNew(event);
+        StStok stok = prepareCreate(event);
+        stok.setStStokKategori(oldStok.getStStokKategori());
+        stok.setStBirim(oldStok.getStBirim());
+        stok.setKdvOrani(oldStok.getKdvOrani());
+        String malzemeKodu = StringUtil.incrementAccountCode(oldStok.getMalzemeKodu());
+        stok.setMalzemeKodu(malzemeKodu);
+        stok.setMarka(oldStok.getMarka());
+        this.setSelected(stok);
     }
 }
 

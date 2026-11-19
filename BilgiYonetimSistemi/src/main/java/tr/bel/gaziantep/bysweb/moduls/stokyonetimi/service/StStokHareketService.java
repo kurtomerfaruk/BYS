@@ -38,6 +38,8 @@ public class StStokHareketService extends AbstractService<StStokHareket> {
     private SyGenelAyarService syGenelAyarService;
     @Inject
     private StIslemLogService stIslemLogService;
+    @Inject
+    private StMaliyetKatmaniService stMaliyetKatmaniService;
 
     public StStokHareketService() {
         super(StStokHareket.class);
@@ -88,6 +90,14 @@ public class StStokHareketService extends AbstractService<StStokHareket> {
             }
         }
         bakiye.setMiktar(bakiye.getMiktar().add(delta));
+
+        // maliyet motoru (FIFO/LIFO/Ağırlıklı Ortalama)
+        if (hareket.getYon() == EnumGirisCikis.GIRIS) {
+            stMaliyetKatmaniService.katmanOlustur(hareket);
+        } else {
+            stMaliyetKatmaniService.katmanTuket(hareket);
+        }
+
 
         // islem logu
         stIslemLogService.log(
