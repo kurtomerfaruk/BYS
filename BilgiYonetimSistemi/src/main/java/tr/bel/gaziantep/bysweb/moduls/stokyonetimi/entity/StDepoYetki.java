@@ -1,8 +1,7 @@
 package tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
 import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.entity.SyKullanici;
 
@@ -13,6 +12,9 @@ import java.io.Serial;
  * @version 1.30.0
  * @since 18.11.2026 09:21
  */
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 @Entity

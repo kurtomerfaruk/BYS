@@ -1,6 +1,6 @@
 package tr.bel.gaziantep.bysweb.moduls.stokyonetimi.service;
 
-import jakarta.ejb.Stateless;
+import jakarta.ejb.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.EnumSyKullaniciTuru;
@@ -20,6 +20,7 @@ import java.util.List;
  * @since 18.11.2026 09:21
  */
 @Stateless
+@TransactionManagement(TransactionManagementType.CONTAINER)
 public class StDepoYetkiService extends AbstractService<StDepoYetki> {
 
     @Serial
@@ -51,43 +52,43 @@ public class StDepoYetkiService extends AbstractService<StDepoYetki> {
                 .getResultList();
     }
 
-    public boolean hasYetki(SyKullanici kullanici, StDepo depo) {
-        if (kullanici == null || depo == null) {
-            return false;
-        }
-        if (isSistemYoneticisi(kullanici)) {
-            return true;
-        }
-        List<StDepoYetki> yetkiler = findByKullanici(kullanici);
-        if (yetkiler.isEmpty()) {
-            // geriye uyum: yetki kaydi yoksa tum depolara yetkili
-            return true;
-        }
-        return yetkiler.stream().anyMatch(y ->
-                y.getStDepo() != null
-                        && y.getStDepo().getId().equals(depo.getId()));
-    }
-
-    public List<StDepo> getYetkiliDepolar(SyKullanici kullanici) {
-        if (kullanici == null) {
-            return new ArrayList<>();
-        }
-        if (isSistemYoneticisi(kullanici)) {
-            // tum aktif depolar
-            return em.createQuery("SELECT d FROM StDepo d WHERE d.aktif = true", StDepo.class).getResultList();
-        }
-        List<StDepoYetki> yetkiler = findByKullanici(kullanici);
-        if (yetkiler.isEmpty()) {
-            return em.createQuery("SELECT d FROM StDepo d WHERE d.aktif = true", StDepo.class).getResultList();
-        }
-        List<StDepo> result = new ArrayList<>();
-        for (StDepoYetki y : yetkiler) {
-            if (y.getStDepo() != null && !result.contains(y.getStDepo())) {
-                result.add(y.getStDepo());
-            }
-        }
-        return result;
-    }
+//    public boolean hasYetki(SyKullanici kullanici, StDepo depo) {
+//        if (kullanici == null || depo == null) {
+//            return false;
+//        }
+//        if (isSistemYoneticisi(kullanici)) {
+//            return true;
+//        }
+//        List<StDepoYetki> yetkiler = findByKullanici(kullanici);
+//        if (yetkiler.isEmpty()) {
+//            // geriye uyum: yetki kaydi yoksa tum depolara yetkili
+//            return true;
+//        }
+//        return yetkiler.stream().anyMatch(y ->
+//                y.getStDepo() != null
+//                        && y.getStDepo().getId().equals(depo.getId()));
+//    }
+//
+//    public List<StDepo> getYetkiliDepolar(SyKullanici kullanici) {
+//        if (kullanici == null) {
+//            return new ArrayList<>();
+//        }
+//        if (isSistemYoneticisi(kullanici)) {
+//            // tum aktif depolar
+//            return em.createQuery("SELECT d FROM StDepo d WHERE d.aktif = true", StDepo.class).getResultList();
+//        }
+//        List<StDepoYetki> yetkiler = findByKullanici(kullanici);
+//        if (yetkiler.isEmpty()) {
+//            return em.createQuery("SELECT d FROM StDepo d WHERE d.aktif = true", StDepo.class).getResultList();
+//        }
+//        List<StDepo> result = new ArrayList<>();
+//        for (StDepoYetki y : yetkiler) {
+//            if (y.getStDepo() != null && !result.contains(y.getStDepo())) {
+//                result.add(y.getStDepo());
+//            }
+//        }
+//        return result;
+//    }
 
     public StDepoYetki findByKullaniciByDepo(SyKullanici syKullanici, StDepo stDepo) {
         return getEntityManager().createNamedQuery("StDepoYetki.findByKullaniciByDepo", StDepoYetki.class)
@@ -96,5 +97,16 @@ public class StDepoYetkiService extends AbstractService<StDepoYetki> {
                 .getResultStream()
                 .findFirst()
                 .orElse(null);
+    }
+
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void saveNew(StDepoYetki depoYetki, List<StDepo> depoList) {
+        for (StDepo stDepo : depoList) {
+            StDepoYetki exist = findByKullaniciByDepo(depoYetki.getSyKullanici(), stDepo);
+            if (exist == null) {
+                StDepoYetki yetki = StDepoYetki.builder().syKullanici(depoYetki.getSyKullanici()).stDepo(stDepo).build();
+                create(yetki);
+            }
+        }
     }
 }

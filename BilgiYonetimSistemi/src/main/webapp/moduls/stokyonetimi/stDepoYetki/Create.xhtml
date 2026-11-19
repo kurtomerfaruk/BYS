@@ -2,6 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
       xmlns:f="jakarta.faces.core"
       xmlns:p="primefaces"
       xmlns:coco="jakarta.faces.composite/ui">
@@ -12,7 +13,8 @@
                      renderedListener="#{stDepoYetkiController.selected != null}"
                      widgetVar="StDepoYetkiCreateDialog"
                      actionListener="#{stDepoYetkiController.saveNew}"
-                     listForm="StDepoYetkiListForm">
+                     listForm="StDepoYetkiListForm"
+                     onShow="adjustMenuWidth('StDepoYetkiCreateDialog','ui-autocomplete-multiple-container',30)">
 
         <p:outputLabel value="#{messages.kullaniciLabel}" for="@next"/>
         <p:selectOneMenu value="#{stDepoYetkiController.selected.syKullanici}" required="true" filter="true"
@@ -24,15 +26,35 @@
                            itemLabel="#{kullanicilar.gnlPersonel.gnlKisi.adSoyad}"/>
         </p:selectOneMenu>
 
+        <!--        <p:outputLabel value="#{messages.depoLabel}" for="@next"/>-->
+        <!--        <p:selectOneMenu value="#{stDepoYetkiController.selected.stDepo}" required="true" filter="true"-->
+        <!--                         converter="omnifaces.SelectItemsConverter">-->
+        <!--            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>-->
+        <!--            <f:selectItems value="#{stDepoController.items}"-->
+        <!--                           var="depolar"-->
+        <!--                           itemValue="#{depolar}"-->
+        <!--                           itemLabel="#{depolar.ad}"/>-->
+        <!--        </p:selectOneMenu>-->
+
         <p:outputLabel value="#{messages.depoLabel}" for="@next"/>
-        <p:selectOneMenu value="#{stDepoYetkiController.selected.stDepo}" required="true" filter="true"
-                         converter="omnifaces.SelectItemsConverter">
-            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
-            <f:selectItems value="#{stDepoController.items}"
-                           var="depolar"
-                           itemValue="#{depolar}"
-                           itemLabel="#{depolar.ad}"/>
-        </p:selectOneMenu>
+        <p:autoComplete id="depos" multiple="true" value="#{stDepoYetkiController.selectedDepos}"
+                        completeMethod="#{stDepoYetkiController.completeDepos}" showEmptyMessage="false"
+                        var="item" itemLabel="#{item.ad}" itemValue="#{item}"
+                        converter="#{stDepoConverter}" forceSelection="true" scrollHeight="250"
+                        styleClass="custom-autocomplete w-100">
+            <p:ajax event="itemSelect" listener="#{stDepoYetkiController.onItemSelect}" update=":growl"/>
+            <p:ajax event="itemUnselect" listener="#{stDepoYetkiController.onItemUnSelect}" update=":growl"/>
+
+            <p:column>
+                <h:outputText value="#{item.daireBaskanligi.tanim}"/>
+            </p:column>
+            <p:column>
+                <h:outputText value="#{item.subeMudurlugu.tanim}"/>
+            </p:column>
+            <p:column>
+                <h:outputText value="#{item.ad}"/>
+            </p:column>
+        </p:autoComplete>
 
     </coco:createpage>
 
