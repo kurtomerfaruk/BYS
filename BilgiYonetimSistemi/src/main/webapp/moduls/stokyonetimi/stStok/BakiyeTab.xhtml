@@ -16,14 +16,6 @@
             <h:outputText value="#{bakiye.stDepo.ad}"/>
         </p:column>
 
-        <p:column headerText="#{messages.lokasyonText}" sortBy="#{bakiye.stDepoLokasyon.ad}">
-            <h:outputText value="#{bakiye.stDepoLokasyon.ad}"/>
-        </p:column>
-
-        <p:column headerText="#{messages.lotText}">
-            <h:outputText value="#{bakiye.lot}"/>
-        </p:column>
-
         <p:column headerText="#{messages.sktText}" sortBy="#{bakiye.skt}">
             <h:outputText value="#{bakiye.skt}">
                 <f:convertDateTime pattern="#{messages.tarihFormat}" type="localDate"/>

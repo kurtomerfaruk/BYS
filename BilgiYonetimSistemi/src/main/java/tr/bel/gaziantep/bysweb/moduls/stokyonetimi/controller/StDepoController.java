@@ -42,7 +42,7 @@ public class StDepoController extends AbstractController<StDepo> {
     @Override
     public Collection<StDepo> getItems() {
         EnumSyKullaniciTuru kullaniciTuru = this.getSyKullanici().getKullaniciTuru();
-        if (kullaniciTuru.equals(EnumSyKullaniciTuru.SISTEM_YONETICISI) || kullaniciTuru.equals(EnumSyKullaniciTuru.DAIRE_YONETICISI)) {
+        if (kullaniciTuru.equals(EnumSyKullaniciTuru.SISTEM_YONETICISI)) {
             return service.findAll();
         }
         List<StDepoYetki> yetkis = depoYetkiService.findByKullanici(this.getSyKullanici());

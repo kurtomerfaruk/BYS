@@ -19,7 +19,6 @@ import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity.StStokHareket;
 import java.io.Serial;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
@@ -72,8 +71,6 @@ public class StStokHareketService extends AbstractService<StStokHareket> {
         StStokBakiye bakiye = bakiyeService.getOrCreate(
                 hareket.getStStok(),
                 hareket.getStDepo(),
-                hareket.getStDepoLokasyon(),
-                hareket.getLot(),
                 hareket.getSkt());
 
         BigDecimal delta = hareket.getYon() == EnumGirisCikis.GIRIS
@@ -131,13 +128,11 @@ public class StStokHareketService extends AbstractService<StStokHareket> {
         StStokHareket ters = new StStokHareket();
         ters.setStStok(orijinal.getStStok());
         ters.setStDepo(orijinal.getStDepo());
-        ters.setStDepoLokasyon(orijinal.getStDepoLokasyon());
         ters.setHareketTuru(orijinal.getHareketTuru());
         ters.setYon(orijinal.getYon() == EnumGirisCikis.GIRIS ? EnumGirisCikis.CIKIS : EnumGirisCikis.GIRIS);
         ters.setMiktar(orijinal.getMiktar());
         ters.setBirimMaliyet(orijinal.getBirimMaliyet());
         ters.setToplamMaliyet(orijinal.getToplamMaliyet());
-        ters.setLot(orijinal.getLot());
         ters.setSkt(orijinal.getSkt());
         ters.setBelgeTuru(orijinal.getBelgeTuru());
         ters.setBelgeNo(orijinal.getBelgeNo());
@@ -166,10 +161,6 @@ public class StStokHareketService extends AbstractService<StStokHareket> {
         }
         if (hareket.getMiktar().compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Miktar sıfırdan büyük olmalıdır.");
-        }
-        if (hareket.getStDepoLokasyon() != null && (hareket.getStDepoLokasyon().getStDepo() == null
-                || !Objects.equals(hareket.getStDepo().getId(), hareket.getStDepoLokasyon().getStDepo().getId()))) {
-            throw new IllegalArgumentException("Seçilen lokasyon hareket deposuna ait değil");
         }
     }
 

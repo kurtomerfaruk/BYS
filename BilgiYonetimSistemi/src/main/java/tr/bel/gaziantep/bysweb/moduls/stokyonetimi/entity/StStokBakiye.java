@@ -1,10 +1,8 @@
 package tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Nationalized;
 import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
 
 import java.io.Serial;
@@ -37,15 +35,6 @@ public class StStokBakiye extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "STDEPO_ID")
     private StDepo stDepo;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "STDEPO_LOKASYON_ID")
-    private StDepoLokasyon stDepoLokasyon;
-
-    @Size(max = 50)
-    @Nationalized
-    @Column(name = "LOT", length = 50)
-    private String lot;
 
     @Column(name = "SKT")
     private LocalDate skt;

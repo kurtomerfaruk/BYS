@@ -46,10 +46,6 @@ public class StStokHareket extends BaseEntity {
     @JoinColumn(name = "STDEPO_ID")
     private StDepo stDepo;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "STDEPO_LOKASYON_ID")
-    private StDepoLokasyon stDepoLokasyon;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "HAREKET_TURU")
     private EnumStHareketTuru hareketTuru;
@@ -66,11 +62,6 @@ public class StStokHareket extends BaseEntity {
 
     @Column(name = "TOPLAM_MALIYET", precision = 18, scale = 4)
     private BigDecimal toplamMaliyet;
-
-    @Size(max = 50)
-    @Nationalized
-    @Column(name = "LOT", length = 50)
-    private String lot;
 
     @Column(name = "SKT")
     private LocalDate skt;

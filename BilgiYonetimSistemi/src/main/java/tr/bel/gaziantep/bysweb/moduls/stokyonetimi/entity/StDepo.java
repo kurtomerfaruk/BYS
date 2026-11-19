@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
+import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlBirim;
 
 import java.io.Serial;
 
@@ -26,6 +27,10 @@ public class StDepo extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID", nullable = false)
     private Integer id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "GNLBIRIM_ID")
+    private GnlBirim gnlBirim;
 
     @Size(max = 50)
     @Nationalized

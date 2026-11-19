@@ -107,15 +107,13 @@ public class StTransferService extends AbstractService<StTransfer> {
             if (kalan.compareTo(BigDecimal.ZERO) <= 0) {
                 continue;
             }
-            StStokBakiye kaynakBakiye = bakiyeService.getOrCreate(
-                    kalem.getStStok(), managed.getKaynakDepo(), null, null, null);
+            StStokBakiye kaynakBakiye = bakiyeService.getOrCreate(kalem.getStStok(), managed.getKaynakDepo(), null);
             if (kaynakBakiye.getMiktar().compareTo(kalan) < 0) {
                 throw new IllegalArgumentException("Kaynak depoda yetersiz bakiye");
             }
             kaynakBakiye.setMiktar(kaynakBakiye.getMiktar().subtract(kalan));
 
-            StStokBakiye hedefBakiye = bakiyeService.getOrCreate(
-                    kalem.getStStok(), managed.getHedefDepo(), null, null, null);
+            StStokBakiye hedefBakiye = bakiyeService.getOrCreate(kalem.getStStok(), managed.getHedefDepo(), null);
             hedefBakiye.setTransferdekiMiktar(hedefBakiye.getTransferdekiMiktar().add(kalan));
 
             kalem.setSevkMiktari(kalem.getMiktar());
@@ -139,8 +137,7 @@ public class StTransferService extends AbstractService<StTransfer> {
             if (kalan.compareTo(BigDecimal.ZERO) <= 0) {
                 continue;
             }
-            StStokBakiye hedefBakiye = bakiyeService.getOrCreate(
-                    kalem.getStStok(), managed.getHedefDepo(), null, null, null);
+            StStokBakiye hedefBakiye = bakiyeService.getOrCreate(kalem.getStStok(), managed.getHedefDepo(), null);
             BigDecimal yeniTransferdeki = hedefBakiye.getTransferdekiMiktar().subtract(kalan);
             if (yeniTransferdeki.compareTo(BigDecimal.ZERO) < 0) {
                 yeniTransferdeki = BigDecimal.ZERO;
@@ -174,12 +171,10 @@ public class StTransferService extends AbstractService<StTransfer> {
                 if (kalan.compareTo(BigDecimal.ZERO) <= 0) {
                     continue;
                 }
-                StStokBakiye kaynakBakiye = bakiyeService.getOrCreate(
-                        kalem.getStStok(), managed.getKaynakDepo(), null, null, null);
+                StStokBakiye kaynakBakiye = bakiyeService.getOrCreate(kalem.getStStok(), managed.getKaynakDepo(), null);
                 kaynakBakiye.setMiktar(kaynakBakiye.getMiktar().add(kalan));
 
-                StStokBakiye hedefBakiye = bakiyeService.getOrCreate(
-                        kalem.getStStok(), managed.getHedefDepo(), null, null, null);
+                StStokBakiye hedefBakiye = bakiyeService.getOrCreate(kalem.getStStok(), managed.getHedefDepo(), null);
                 BigDecimal yeniTransferdeki = hedefBakiye.getTransferdekiMiktar().subtract(kalan);
                 if (yeniTransferdeki.compareTo(BigDecimal.ZERO) < 0) {
                     yeniTransferdeki = BigDecimal.ZERO;

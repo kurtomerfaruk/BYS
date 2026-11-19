@@ -9,7 +9,6 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Nationalized;
 import org.hibernate.annotations.SQLRestriction;
 import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
-import tr.bel.gaziantep.bysweb.core.enums.stokyonetimi.EnumStMaliyetYontemi;
 
 import java.io.Serial;
 import java.math.BigDecimal;
@@ -72,22 +71,8 @@ public class StStok extends BaseEntity {
     @Column(name = "KDV_ORANI")
     private Integer kdvOrani;
 
-    @Column(name = "MIN_STOK", precision = 18, scale = 4)
-    private BigDecimal minStok;
-
-    @Column(name = "MAX_STOK", precision = 18, scale = 4)
-    private BigDecimal maxStok;
-
     @Column(name = "KRITIK_STOK", precision = 18, scale = 4)
     private BigDecimal kritikStok;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "STDEPO_ID")
-    private StDepo stDepo;
-
-    @ColumnDefault("0")
-    @Column(name = "LOT_TAKIBI", nullable = false)
-    private boolean lotTakibi;
 
     @ColumnDefault("0")
     @Column(name = "SERI_NO_TAKIBI", nullable = false)
@@ -96,10 +81,6 @@ public class StStok extends BaseEntity {
     @ColumnDefault("0")
     @Column(name = "SKT_TAKIBI", nullable = false)
     private boolean sktTakibi;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "MALIYET_YONTEMI")
-    private EnumStMaliyetYontemi maliyetYontemi;
 
     @Nationalized
     @Lob

@@ -73,22 +73,11 @@ public class StSayimService extends AbstractService<StSayim> {
 
     private void snapshotKalemler(StSayim sayim) {
         StDepo depo = sayim.getStDepo();
-        StDepoLokasyon lokasyon = sayim.getStDepoLokasyon();
-        List<StStokBakiye> bakiyeler;
-        if (lokasyon == null) {
-            bakiyeler = em.createQuery(
-                            "SELECT b FROM StStokBakiye b WHERE b.stDepo = :depo AND b.aktif = true",
-                            StStokBakiye.class)
-                    .setParameter("depo", depo)
-                    .getResultList();
-        } else {
-            bakiyeler = em.createQuery(
-                            "SELECT b FROM StStokBakiye b WHERE b.stDepo = :depo AND b.stDepoLokasyon = :lok AND b.aktif = true",
-                            StStokBakiye.class)
-                    .setParameter("depo", depo)
-                    .setParameter("lok", lokasyon)
-                    .getResultList();
-        }
+        List<StStokBakiye> bakiyeler = em.createQuery(
+                        "SELECT b FROM StStokBakiye b WHERE b.stDepo = :depo AND b.aktif = true",
+                        StStokBakiye.class)
+                .setParameter("depo", depo)
+                .getResultList();
 
         // stok bazinda topla
         Map<Integer, BigDecimal> sistemMap = new HashMap<>();
@@ -163,7 +152,6 @@ public class StSayimService extends AbstractService<StSayim> {
             StStokHareket hareket = new StStokHareket();
             hareket.setStStok(k.getStStok());
             hareket.setStDepo(managed.getStDepo());
-            hareket.setStDepoLokasyon(managed.getStDepoLokasyon());
             hareket.setHareketTuru(EnumStHareketTuru.SAYIM_FARKI);
             hareket.setYon(fark.compareTo(BigDecimal.ZERO) > 0 ? EnumGirisCikis.GIRIS : EnumGirisCikis.CIKIS);
             hareket.setMiktar(fark.abs());
@@ -192,9 +180,6 @@ public class StSayimService extends AbstractService<StSayim> {
     private void resolveRefs(StSayim sayim) {
         if (sayim.getStDepo() != null && sayim.getStDepo().getId() != null) {
             sayim.setStDepo(em.find(StDepo.class, sayim.getStDepo().getId()));
-        }
-        if (sayim.getStDepoLokasyon() != null && sayim.getStDepoLokasyon().getId() != null) {
-            sayim.setStDepoLokasyon(em.find(StDepoLokasyon.class, sayim.getStDepoLokasyon().getId()));
         }
     }
 }

@@ -33,7 +33,7 @@
         <p:outputLabel value="#{messages.modelLabel}" for="@next"/>
         <p:inputText id="model" value="#{stStokController.selected.model}" title="#{messages.modelText}" size="40" maxlength="100"/>
 
-        <p:outputLabel value="#{messages.ustKategoriLabel}" for="@next"/>
+        <p:outputLabel value="#{messages.kategoriLabel}" for="@next"/>
         <p:selectOneMenu id="stStokKategori" value="#{stStokController.selected.stStokKategori}" filter="true"
                          converter="omnifaces.SelectItemsConverter">
             <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
@@ -53,42 +53,15 @@
         <p:inputNumber id="kdvOrani" value="#{stStokController.selected.kdvOrani}" decimalPlaces="0"
                        emptyValue="empty" minValue="0" maxValue="100"/>
 
-        <p:outputLabel value="#{messages.minStokLabel}" for="@next"/>
-        <p:inputNumber id="minStok" value="#{stStokController.selected.minStok}" decimalPlaces="4"
-                       emptyValue="empty" minValue="0"/>
-
-        <p:outputLabel value="#{messages.maksStokLabel}" for="@next"/>
-        <p:inputNumber id="maksStok" value="#{stStokController.selected.maxStok}" decimalPlaces="4"
-                       emptyValue="empty" minValue="0"/>
-
         <p:outputLabel value="#{messages.kritikStokLabel}" for="@next"/>
         <p:inputNumber id="kritikStok" value="#{stStokController.selected.kritikStok}" decimalPlaces="4"
                        emptyValue="empty" minValue="0"/>
-
-        <p:outputLabel value="#{messages.varsayilanDepoLabel}" for="@next"/>
-        <p:selectOneMenu id="varsayilanStDepo" value="#{stStokController.selected.stDepo}" filter="true"
-                         converter="omnifaces.SelectItemsConverter">
-            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
-            <f:selectItems value="#{stDepoController.items}" var="depoItem"
-                           itemValue="#{depoItem}" itemLabel="#{depoItem.ad}"/>
-        </p:selectOneMenu>
-
-        <p:outputLabel value="#{messages.lotTakibiLabel}" for="@next"/>
-        <p:selectBooleanCheckbox id="lotTakibi" value="#{stStokController.selected.lotTakibi}"/>
 
         <p:outputLabel value="#{messages.seriNoTakibiLabel}" for="@next"/>
         <p:selectBooleanCheckbox id="seriNoTakibi" value="#{stStokController.selected.seriNoTakibi}"/>
 
         <p:outputLabel value="#{messages.sktTakibiLabel}" for="@next"/>
         <p:selectBooleanCheckbox id="sktTakibi" value="#{stStokController.selected.sktTakibi}"/>
-
-        <p:outputLabel value="#{messages.maliyetYonetimiLabel}" for="@next"/>
-        <p:selectOneMenu id="maliyetYontemi" value="#{stStokController.selected.maliyetYontemi}"
-                         converter="omnifaces.SelectItemsConverter">
-            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
-            <f:selectItems value="#{enumMaliyetYontemi.ALL_VALUES}" var="yontem"
-                           itemValue="#{yontem}" itemLabel="#{yontem.displayValue}"/>
-        </p:selectOneMenu>
 
         <p:outputLabel value="#{messages.aciklamaLabel}" for="@next"/>
         <p:inputTextarea id="aciklama" value="#{stStokController.selected.aciklama}" title="#{messages.aciklamaText}"

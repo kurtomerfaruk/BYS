@@ -72,12 +72,6 @@ public class StSayimController extends AbstractController<StSayim> {
         return yeni;
     }
 
-    public void onDepoChange() {
-        if (getSelected() != null) {
-            getSelected().setStDepoLokasyon(null);
-        }
-    }
-
     public void addKalem() {
         if (getSelected() == null) {
             return;

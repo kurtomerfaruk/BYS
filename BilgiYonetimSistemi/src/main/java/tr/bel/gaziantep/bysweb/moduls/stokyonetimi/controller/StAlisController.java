@@ -68,12 +68,6 @@ public class StAlisController extends AbstractController<StAlis> {
         return yeni;
     }
 
-    public void onDepoChange() {
-        if (getSelected() != null) {
-            getSelected().setStDepoLokasyon(null);
-        }
-    }
-
     public void addKalem() {
         if (getSelected() == null) {
             return;
@@ -83,7 +77,7 @@ public class StAlisController extends AbstractController<StAlis> {
             return;
         }
         if (kalem.getMiktar() == null || kalem.getMiktar().compareTo(java.math.BigDecimal.ZERO) <= 0) {
-            FacesUtil.addExclamationMessage("stAlisKalemMiktarPozitif");
+            FacesUtil.addExclamationMessage("Alış kalemi sıfırdan büyük olmalı");
             return;
         }
         if (getSelected().getKalemler() == null) {

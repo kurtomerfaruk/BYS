@@ -14,7 +14,6 @@ import jakarta.persistence.criteria.Root;
 import tr.bel.gaziantep.bysweb.core.service.AbstractService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity.StDepo;
-import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity.StDepoLokasyon;
 import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity.StStok;
 import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity.StStokBakiye;
 
@@ -52,8 +51,7 @@ public class StStokBakiyeService extends AbstractService<StStokBakiye> {
      * Bakiye satirini bulur. kilitle=true ise PESSIMISTIC_WRITE ile kilitler;
      * boylece ayni bakiye uzerinde eczamanli hareketler birbirini bekler.
      */
-    public StStokBakiye find(StStok stStok, StDepo stDepo, StDepoLokasyon stDepoLokasyon,
-                             String lot, LocalDate skt, boolean kilitle) {
+    public StStokBakiye find(StStok stStok, StDepo stDepo, LocalDate skt, boolean kilitle) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<StStokBakiye> cq = cb.createQuery(StStokBakiye.class);
         Root<StStokBakiye> root = cq.from(StStokBakiye.class);
@@ -61,12 +59,6 @@ public class StStokBakiyeService extends AbstractService<StStokBakiye> {
         List<Predicate> predicates = new ArrayList<>();
         predicates.add(cb.equal(root.get("stStok"), stStok));
         predicates.add(cb.equal(root.get("stDepo"), stDepo));
-        predicates.add(stDepoLokasyon == null
-                ? cb.isNull(root.get("stDepoLokasyon"))
-                : cb.equal(root.get("stDepoLokasyon"), stDepoLokasyon));
-        predicates.add(lot == null || lot.isBlank()
-                ? cb.isNull(root.get("lot"))
-                : cb.equal(root.get("lot"), lot.trim()));
         predicates.add(skt == null
                 ? cb.isNull(root.get("skt"))
                 : cb.equal(root.get("skt"), skt));
@@ -83,9 +75,8 @@ public class StStokBakiyeService extends AbstractService<StStokBakiye> {
     /**
      * Bakiye satiri yoksa sifir degerlerle olusturur ve kilitli dondurur.
      */
-    public StStokBakiye getOrCreate(StStok stStok, StDepo stDepo, StDepoLokasyon stDepoLokasyon,
-                                    String lot, LocalDate skt) {
-        StStokBakiye bakiye = find(stStok, stDepo, stDepoLokasyon, lot, skt, true);
+    public StStokBakiye getOrCreate(StStok stStok, StDepo stDepo, LocalDate skt) {
+        StStokBakiye bakiye = find(stStok, stDepo, skt, true);
         if (bakiye != null) {
             return bakiye;
         }
@@ -93,8 +84,6 @@ public class StStokBakiyeService extends AbstractService<StStokBakiye> {
         StStokBakiye yeni = new StStokBakiye();
         yeni.setStStok(stStok);
         yeni.setStDepo(stDepo);
-        yeni.setStDepoLokasyon(stDepoLokasyon);
-        yeni.setLot(lot == null || lot.isBlank() ? null : lot.trim());
         yeni.setSkt(skt);
         yeni.setMiktar(BigDecimal.ZERO);
         yeni.setRezerveMiktar(BigDecimal.ZERO);
@@ -102,7 +91,7 @@ public class StStokBakiyeService extends AbstractService<StStokBakiye> {
         create(yeni);
         flush();
 
-        return find(stStok, stDepo, stDepoLokasyon, lot, skt, true);
+        return find(stStok, stDepo, skt, true);
     }
 
     public List<StStokBakiye> findByStok(StStok stStok) {

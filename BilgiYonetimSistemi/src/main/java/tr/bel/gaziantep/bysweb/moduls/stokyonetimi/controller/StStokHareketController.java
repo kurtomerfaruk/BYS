@@ -12,10 +12,8 @@ import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.EnumSyFiltreAnahtari;
 import tr.bel.gaziantep.bysweb.core.enums.stokyonetimi.EnumStHareketTuru;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
-import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity.StDepoLokasyon;
 import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity.StStokBakiye;
 import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity.StStokHareket;
-import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.service.StDepoLokasyonService;
 import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.service.StStokBakiyeService;
 import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.service.StStokHareketService;
 
@@ -42,28 +40,12 @@ public class StStokHareketController extends AbstractController<StStokHareket> {
     @Inject
     private StStokHareketService hareketService;
     @Inject
-    private StDepoLokasyonService stDepoLokasyonService;
-    @Inject
     private StStokBakiyeService stStokBakiyeService;
 
     public StStokHareketController() {
         super(StStokHareket.class);
     }
 
-
-    /**
-     * Sekilen depoya ait lokasyonlar; depo secilmediyse bos liste.
-     */
-    public List<StDepoLokasyon> getLokasyonItems() {
-        if (getSelected() == null || getSelected().getStDepo() == null
-                || getSelected().getStDepo().getId() == null) {
-            return Collections.emptyList();
-        }
-        Integer depoId = getSelected().getStDepo().getId();
-        return stDepoLokasyonService.findAll().stream()
-                .filter(x -> x.getStDepo() != null && depoId.equals(x.getStDepo().getId()))
-                .collect(Collectors.toList());
-    }
 
     public List<SelectItem> getFilterOptions(EnumSyFiltreAnahtari key) {
         if (key == EnumSyFiltreAnahtari.STHAREKET_TURU) {
@@ -90,15 +72,6 @@ public class StStokHareketController extends AbstractController<StStokHareket> {
     }
 
     /**
-     * Depo degistiginde onceki depoya ait lokasyon secimini temizler.
-     */
-    public void onDepoChange() {
-        if (getSelected() != null) {
-            getSelected().setStDepoLokasyon(null);
-        }
-    }
-
-    /**
      * Hareket turu secildiginde yonu turun varsayilan degerine ceker.
      */
     public void onHareketTuruChange() {
@@ -120,8 +93,7 @@ public class StStokHareketController extends AbstractController<StStokHareket> {
             // kritik stok uyarisi
             try {
                 StStokBakiye bakiye = stStokBakiyeService.find(
-                        kayit.getStStok(), kayit.getStDepo(), kayit.getStDepoLokasyon(),
-                        kayit.getLot(), kayit.getSkt(), false);
+                        kayit.getStStok(), kayit.getStDepo(), kayit.getSkt(), false);
                 if (bakiye != null && kayit.getStStok().getKritikStok() != null
                         && bakiye.getMiktar().compareTo(kayit.getStStok().getKritikStok()) <= 0) {
                     FacesUtil.addExclamationMessage("Kritik stok seviyesine ulaştığından / altına düşülemez");

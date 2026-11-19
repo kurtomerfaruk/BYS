@@ -54,10 +54,6 @@ public class StAlis extends BaseEntity {
     @JoinColumn(name = "STDEPO_ID")
     private StDepo stDepo;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "STDEPO_LOKASYON_ID")
-    private StDepoLokasyon stDepoLokasyon;
-
     @Nationalized
     @Lob
     @Column(name = "ACIKLAMA")

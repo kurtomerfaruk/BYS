@@ -66,7 +66,6 @@ public class StAlisService extends AbstractService<StAlis> {
             StStokHareket hareket = new StStokHareket();
             hareket.setStStok(k.getStStok());
             hareket.setStDepo(alis.getStDepo());
-            hareket.setStDepoLokasyon(alis.getStDepoLokasyon());
             hareket.setHareketTuru(EnumStHareketTuru.SATIN_ALMA);
             hareket.setYon(EnumGirisCikis.GIRIS);
             hareket.setMiktar(k.getMiktar());
@@ -109,9 +108,6 @@ public class StAlisService extends AbstractService<StAlis> {
     private void resolveRefs(StAlis alis) {
         if (alis.getStDepo() != null && alis.getStDepo().getId() != null) {
             alis.setStDepo(em.find(StDepo.class, alis.getStDepo().getId()));
-        }
-        if (alis.getStDepoLokasyon() != null && alis.getStDepoLokasyon().getId() != null) {
-            alis.setStDepoLokasyon(em.find(StDepoLokasyon.class, alis.getStDepoLokasyon().getId()));
         }
         if (alis.getStTedarikci() != null && alis.getStTedarikci().getId() != null) {
             alis.setStTedarikci(em.find(StTedarikci.class, alis.getStTedarikci().getId()));
