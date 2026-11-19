@@ -15,7 +15,8 @@
                         icon="pi pi-plus" rendered="#{syKullaniciController.hasPermission('sykolon:ekle')}"/>
             <p:menuitem value="#{messages.buttonGuncelle}" onclick="document.getElementById('SyKolonListForm:datalist:datalist:editButton').click();"
                         icon="pi pi-pencil" rendered="#{syKullaniciController.hasPermission('sykolon:guncelle')}"/>
-            <p:menuitem value="#{messages.buttonKayitBilgisi}" onclick="document.getElementById('SyKolonListForm:datalist:datalist:viewButton').click();"
+            <p:menuitem value="#{messages.buttonKayitBilgisi}"
+                        onclick="document.getElementById('SyKolonListForm:datalist:datalist:viewButton').click();"
                         icon="pi pi-search"/>
             <p:menuitem value="#{messages.buttonSil}" onclick="document.getElementById('SyKolonListForm:datalist:datalist:deleteButton').click();"
                         icon="pi pi-trash" rendered="#{syKullaniciController.hasPermission('sykolon:sil')}"/>
