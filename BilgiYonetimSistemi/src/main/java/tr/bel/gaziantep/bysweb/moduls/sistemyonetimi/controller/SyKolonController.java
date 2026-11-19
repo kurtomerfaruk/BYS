@@ -17,7 +17,6 @@ import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
 import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.entity.SyKolon;
 
 import java.io.Serial;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
 import java.util.List;
 
@@ -64,18 +63,24 @@ public class SyKolonController extends AbstractController<SyKolon> {
 
     @Override
     public SyKolon prepareCreate(ActionEvent event) {
-        SyKolon newItem;
-        try {
-            newItem = SyKolon.class.getDeclaredConstructor().newInstance();
+        SyKolon newItem = super.prepareCreate(event);
+        if (newItem != null) {
             newItem.setFiltreEslesmeModu(EnumSyFiltreEslesmeModu.STARTS_WITH);
             newItem.setFiltreTuru(EnumSyFiltreTuru.INPUT);
-            this.setSelected(newItem);
-            initializeEmbeddableKey();
-            return newItem;
-        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException ex) {
-            log.error(null,ex);
         }
-        return null;
+        return newItem;
+//        SyKolon newItem;
+//        try {
+//            newItem = SyKolon.class.getDeclaredConstructor().newInstance();
+//            newItem.setFiltreEslesmeModu(EnumSyFiltreEslesmeModu.STARTS_WITH);
+//            newItem.setFiltreTuru(EnumSyFiltreTuru.INPUT);
+//            this.setSelected(newItem);
+//            initializeEmbeddableKey();
+//            return newItem;
+//        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException ex) {
+//            log.error(null,ex);
+//        }
+//        return null;
     }
 
     public void saveProceed(ActionEvent event) {
@@ -86,35 +91,35 @@ public class SyKolonController extends AbstractController<SyKolon> {
         this.setSelected(kolon);
     }
 
-    public void updateColumn(){
+    public void updateColumn() {
         try {
-            if(this.getSelected()==null) return;
+            if (this.getSelected() == null) return;
             this.getSelected().setSortProperty(this.getSelected().getColumnProperty());
             this.getSelected().setFilterProperty(this.getSelected().getColumnProperty());
-        }catch (Exception ex){
-            log.error(null,ex);
+        } catch (Exception ex) {
+            log.error(null, ex);
             FacesUtil.errorMessage(Constants.HATA_OLUSTU);
         }
     }
 
-    public void updateFilterMatchMode(){
-        if(this.getSelected()==null) return;
+    public void updateFilterMatchMode() {
+        if (this.getSelected() == null) return;
         try {
-            EnumSyFiltreTuru filtreTuru= this.getSelected().getFiltreTuru();
-            if(filtreTuru  == EnumSyFiltreTuru.DATE_PICKER){
+            EnumSyFiltreTuru filtreTuru = this.getSelected().getFiltreTuru();
+            if (filtreTuru == EnumSyFiltreTuru.DATE_PICKER) {
                 this.getSelected().setTip(EnumSyVeriTipi.DATE_TIME);
                 this.getSelected().setFiltreEslesmeModu(EnumSyFiltreEslesmeModu.BETWEEN);
             }
-            EnumSyVeriTipi veriTipi=this.getSelected().getTip();
+            EnumSyVeriTipi veriTipi = this.getSelected().getTip();
             this.getSelected().setFiltreEslesmeModu(setFilterMatchMode(veriTipi));
-        }catch (Exception ex){
-            log.error(null,ex);
+        } catch (Exception ex) {
+            log.error(null, ex);
             FacesUtil.errorMessage(Constants.HATA_OLUSTU);
         }
     }
 
     private EnumSyFiltreEslesmeModu setFilterMatchMode(EnumSyVeriTipi veriTipi) {
-        if(veriTipi==null) return EnumSyFiltreEslesmeModu.STARTS_WITH;
+        if (veriTipi == null) return EnumSyFiltreEslesmeModu.STARTS_WITH;
         switch (veriTipi) {
             case STRING -> {
                 return EnumSyFiltreEslesmeModu.CONTAINS;
