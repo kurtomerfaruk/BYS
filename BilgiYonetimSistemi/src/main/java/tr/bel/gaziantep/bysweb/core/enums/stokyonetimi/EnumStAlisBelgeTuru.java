@@ -11,9 +11,9 @@ import tr.bel.gaziantep.bysweb.core.enums.BaseEnum;
 @Getter
 public enum EnumStAlisBelgeTuru implements BaseEnum {
 
-    FATURA("Fatura"),
-    IRSALIYE("İrsaliye"),
-    HIBE("Hibe");
+    BAGIS("Bağış"),
+    IHALE("İhale"),
+    DOGRUDAN_TEMIN("Doğrudan Temin");
 
     private final String label;
 

@@ -8,7 +8,6 @@ import jakarta.inject.Named;
 import lombok.extern.slf4j.Slf4j;
 import tr.bel.gaziantep.bysweb.core.controller.AbstractController;
 import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.EnumSyFiltreAnahtari;
-import tr.bel.gaziantep.bysweb.core.enums.stokyonetimi.EnumStAlisBelgeTuru;
 import tr.bel.gaziantep.bysweb.core.service.FilterOptionService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
@@ -63,7 +62,6 @@ public class StAlisController extends AbstractController<StAlis> {
         StAlis yeni = super.prepareCreate(event);
         if (yeni != null) {
             yeni.setTarih(LocalDateTime.now());
-            yeni.setBelgeTuru(EnumStAlisBelgeTuru.FATURA);
             yeni.setKalemler(new java.util.ArrayList<>());
         }
         kalem = new StAlisKalem();
