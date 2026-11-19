@@ -2,6 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
       xmlns:p="primefaces"
       xmlns:coco="jakarta.faces.composite/ui">
 
@@ -12,6 +13,27 @@
                    actionListener="#{stDepoController.save}"
                    listForm="StDepoListForm"
                    model="#{stDepoController.selected}">
+
+        <p:outputLabel value="#{messages.daireBaskanligiLabel}" for="@next"/>
+        <p:selectOneMenu value="#{stDepoController.selected.daireBaskanligi}" filter="true" required="true"
+                         converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{gnlBirimController.items}"
+                           var="birimItems"
+                           itemValue="#{birimItems}"
+                           itemLabel="#{birimItems.tanim}"/>
+            <p:ajax event="change" update="subeMudurlugu"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.subeMudurluguLabel}" for="@next"/>
+        <p:selectOneMenu id="subeMudurlugu" value="#{stDepoController.selected.subeMudurlugu}" filter="true" required="true"
+                         converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{gnlBirimController.findByUstBirim(stDepoController.selected.daireBaskanligi)}"
+                           var="birimItems"
+                           itemValue="#{birimItems}"
+                           itemLabel="#{birimItems.tanim}"/>
+        </p:selectOneMenu>
 
         <p:outputLabel value="#{messages.kodLabel}" for="@next"/>
         <p:inputText value="#{stDepoController.selected.kod}" title="#{messages.kodText}" size="50" maxlength="50"/>

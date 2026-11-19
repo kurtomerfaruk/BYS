@@ -15,12 +15,12 @@
                    model="#{gnlBirimController.selected}">
 
         <p:outputLabel value="#{messages.ustBirimLabel}" for="@next"/>
-        <p:selectOneMenu id="ustBirimId" value="#{gnlBirimController.selected.ustBirimId}" filter="true">
+        <p:selectOneMenu id="ustBirimId" value="#{gnlBirimController.selected.ustBirim}" filter="true" converter="omnifaces.SelectItemsConverter">
             <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
             <f:selectItems value="#{gnlBirimController.items}"
                            var="gnlBirims"
                            itemLabel="#{gnlBirims.tanim}"
-                           itemValue="#{gnlBirims.id}"/>
+                           itemValue="#{gnlBirims}"/>
         </p:selectOneMenu>
 
         <p:outputLabel value="#{messages.birimLabel}" for="@next"/>

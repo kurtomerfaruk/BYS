@@ -8,6 +8,7 @@ import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.moduls.genel.entity.GnlBirim;
 
 import java.io.Serial;
+import java.util.List;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
@@ -30,5 +31,17 @@ public class GnlBirimService extends AbstractService<GnlBirim> {
     @Override
     protected EntityManager getEntityManager() {
         return em;
+    }
+
+    @Override
+    public String getSortCol() {
+        return "tanim";
+    }
+
+
+    public List<GnlBirim> findByUstBirim(GnlBirim ustBirim) {
+        return getEntityManager().createNamedQuery("GnlBirim.findByUstBirim", GnlBirim.class)
+                .setParameter("ustBirim", ustBirim)
+                .getResultList();
     }
 }

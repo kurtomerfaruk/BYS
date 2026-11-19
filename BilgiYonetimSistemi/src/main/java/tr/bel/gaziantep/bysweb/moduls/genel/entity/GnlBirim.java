@@ -19,6 +19,7 @@ import java.io.Serial;
 @AllArgsConstructor
 @Entity
 @Table(name = "GNLBIRIM")
+@NamedQuery(name = "GnlBirim.findByUstBirim", query = "SELECT b FROM GnlBirim b WHERE b.aktif=true AND b.ustBirim=:ustBirim")
 public class GnlBirim extends BaseEntity {
     @Serial
     private static final long serialVersionUID = 3125571172286603777L;
@@ -33,8 +34,9 @@ public class GnlBirim extends BaseEntity {
     @Column(name = "TANIM", length = 100)
     private String tanim;
 
-    @Column(name = "UST_BIRIM_ID")
-    private Integer ustBirimId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "UST_BIRIM_ID")
+    private GnlBirim ustBirim;
 
     @Override
     public int hashCode() {

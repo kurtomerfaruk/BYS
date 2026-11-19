@@ -29,8 +29,12 @@ public class StDepo extends BaseEntity {
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "GNLBIRIM_ID")
-    private GnlBirim gnlBirim;
+    @JoinColumn(name = "DAIRE_BASKANLIGI_GNLBIRIM_ID")
+    private GnlBirim daireBaskanligi;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "SUBE_MUDURLUGU_GNLBIRIM_ID")
+    private GnlBirim subeMudurlugu;
 
     @Size(max = 50)
     @Nationalized
