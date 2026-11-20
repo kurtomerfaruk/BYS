@@ -43,7 +43,7 @@
             <f:facet name="paginatorBottomLeft">
                 <p:commandButton id="createButton" styleClass="ui-button-primary" icon="pi pi-plus" pt:data-tooltip="#{messages.buttonEkle}"
                                  actionListener="#{stStokController.prepareCreate}"
-                                 update=":StStokCreateForm:StStokCreateForm"
+                                 update=":StStokCreateForm"
                                  oncomplete="PF('StStokCreateDialog').show()" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
                                  rendered="#{syKullaniciController.hasPermission('ststok:ekle')}"/>
                 <p:commandButton id="editButton" styleClass="ui-button-success" icon="pi pi-pencil" pt:data-tooltip="#{messages.buttonGuncelle}"

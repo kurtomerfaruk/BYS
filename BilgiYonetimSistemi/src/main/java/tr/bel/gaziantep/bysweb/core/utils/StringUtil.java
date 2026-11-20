@@ -17,7 +17,7 @@ public class StringUtil {
         if (strLen == 0) {
             return true;
         } else {
-            for(int i = 0; i < strLen; ++i) {
+            for (int i = 0; i < strLen; ++i) {
                 if (!Character.isWhitespace(cs.charAt(i))) {
                     return false;
                 }
@@ -34,6 +34,7 @@ public class StringUtil {
     public static boolean isEmpty(CharSequence cs) {
         return cs == null || cs.length() == 0;
     }
+
     public static boolean isNotEmpty(CharSequence cs) {
         return !isEmpty(cs);
     }
@@ -46,9 +47,9 @@ public class StringUtil {
         return str;
     }
 
-    public static String removeBracket(String str){
-        if(StringUtils.isBlank(str))return null;
-        return str.replace("[","").replace("]","");
+    public static String removeBracket(String str) {
+        if (StringUtils.isBlank(str)) return null;
+        return str.replace("[", "").replace("]", "");
     }
 
     public static String incrementName(String name) {
@@ -78,18 +79,13 @@ public class StringUtil {
     public static String incrementAccountCode(String accountCode) {
 
         String[] parts = accountCode.split("\\.");
-
         int lastIndex = parts.length - 1;
-
         int lastValue = Integer.parseInt(parts[lastIndex]);
-
         if (lastValue < 99) {
             parts[lastIndex] = String.format("%02d", lastValue + 1);
         } else {
             int previousIndex = lastIndex - 1;
-
             int previousValue = Integer.parseInt(parts[previousIndex]);
-
             if (previousValue >= 99) {
                 throw new IllegalArgumentException("Hesap kodu üst limiti aşıldı.");
             }

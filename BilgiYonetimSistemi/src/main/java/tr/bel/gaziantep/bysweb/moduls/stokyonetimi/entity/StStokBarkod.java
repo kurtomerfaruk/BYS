@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Nationalized;
 import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
 
@@ -33,14 +32,6 @@ public class StStokBarkod extends BaseEntity {
     @Nationalized
     @Column(name = "BARKOD", length = 50)
     private String barkod;
-
-    @ColumnDefault("0")
-    @Column(name = "ANA_BARKOD")
-    private boolean anaBarkod;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "STBIRIM_ID")
-    private StBirim stBirim;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "STSTOK_ID")

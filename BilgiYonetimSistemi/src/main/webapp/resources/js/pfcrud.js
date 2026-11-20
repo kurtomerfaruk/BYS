@@ -291,6 +291,17 @@ let createpassword = (type, ele) => {
     }
 }
 
+function stBarkodOdak(id) {
+    if (!id) {
+        return;
+    }
+    var el = document.getElementById(id);
+    if (el) {
+        el.focus();
+        el.select();
+    }
+}
+
 function fitTabWidth(div) {
     var width = $("#" + div).width();
     $(".tab-pane").width(width);

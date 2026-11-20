@@ -12,9 +12,11 @@ import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
 import tr.bel.gaziantep.bysweb.core.utils.StringUtil;
-import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity.*;
+import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity.StStok;
+import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity.StStokBakiye;
+import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity.StStokBarkod;
+import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity.StStokHareket;
 import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.service.StStokBarkodService;
-import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.service.StStokBirimDonusumService;
 
 import java.io.Serial;
 import java.math.BigDecimal;
@@ -35,16 +37,11 @@ public class StStokController extends AbstractController<StStok> {
     @Inject
     private StStokBarkodService stStokBarkodService;
     @Inject
-    private StStokBirimDonusumService stStokBirimDonusumService;
-    @Inject
     private StStokHareketController stStokHareketController;
 
     @Getter
     @Setter
     private StStokBarkod barkod = new StStokBarkod();
-    @Getter
-    @Setter
-    private StStokBirimDonusum birimDonusum = new StStokBirimDonusum();
     @Getter
     @Setter
     private BigDecimal toplamMiktar;
@@ -63,7 +60,6 @@ public class StStokController extends AbstractController<StStok> {
     public StStok prepareCreate(ActionEvent event) {
         StStok newItem = super.prepareCreate(event);
         barkod = new StStokBarkod();
-        birimDonusum = new StStokBirimDonusum();
         return newItem;
     }
 
@@ -73,14 +69,11 @@ public class StStokController extends AbstractController<StStok> {
         }
         String barkodText = barkod.getBarkod();
         if (barkodText == null || barkodText.isBlank()) {
-            FacesUtil.warningMessage("stBarkodZorunlu");
+            FacesUtil.addExclamationMessage("Barkod zorunlu");
             return;
         }
         barkod.setBarkod(barkodText.trim());
         barkod.setStStok(getSelected());
-        if (getSelected().getStokBarkodList().isEmpty()) {
-            barkod.setAnaBarkod(true);
-        }
         getSelected().getStokBarkodList().add(barkod);
         barkod = new StStokBarkod();
         FacesUtil.successMessage(Constants.KAYIT_EKLENDI);
@@ -100,50 +93,6 @@ public class StStokController extends AbstractController<StStok> {
                 FacesUtil.errorMessage(Constants.HATA_OLUSTU);
             }
         }
-        if (item.isAnaBarkod() && !getSelected().getStokBarkodList().isEmpty()) {
-            getSelected().getStokBarkodList().get(0).setAnaBarkod(true);
-        }
-        FacesUtil.successMessage(Constants.KAYIT_SILINDI);
-    }
-
-    public void addBirimDonusum() {
-        if (getSelected() == null) {
-            return;
-        }
-        if (birimDonusum.getStBirim() == null || birimDonusum.getStBirim().getId() == null) {
-            FacesUtil.warningMessage("stBirimZorunlu");
-            return;
-        }
-        BigDecimal carpan = birimDonusum.getDonusumCarpani();
-        if (carpan == null || carpan.compareTo(BigDecimal.ZERO) <= 0) {
-            FacesUtil.warningMessage("stDonusumCarpaniGecersiz");
-            return;
-        }
-        if (getSelected().getStBirim() != null
-                && birimDonusum.getStBirim().getId().equals(getSelected().getStBirim().getId())) {
-            FacesUtil.warningMessage("stBirimTemelOlamaz");
-            return;
-        }
-        birimDonusum.setStStok(getSelected());
-        getSelected().getStokBirimDonusumList().add(birimDonusum);
-        birimDonusum = new StStokBirimDonusum();
-        FacesUtil.successMessage(Constants.KAYIT_EKLENDI);
-    }
-
-    public void removeBirimDonusum(StStokBirimDonusum item) {
-        if (getSelected() == null || item == null) {
-            return;
-        }
-        getSelected().getStokBirimDonusumList().remove(item);
-        if (item.getId() != null) {
-            try {
-                item.setAktif(false);
-                stStokBirimDonusumService.edit(item);
-            } catch (Exception ex) {
-                log.error(null, ex);
-                FacesUtil.errorMessage(Constants.HATA_OLUSTU);
-            }
-        }
         FacesUtil.successMessage(Constants.KAYIT_SILINDI);
     }
 
@@ -153,7 +102,7 @@ public class StStokController extends AbstractController<StStok> {
      */
     public void prepareHareket() {
         if (getSelected() == null || getSelected().getId() == null) {
-            FacesUtil.warningMessage("stHareketStokZorunlu");
+            FacesUtil.addExclamationMessage("stHareketStokZorunlu");
             return;
         }
         try {
@@ -196,13 +145,6 @@ public class StStokController extends AbstractController<StStok> {
     }
 
     public void saveProceed(ActionEvent event) {
-//        StStok oldYetki = this.getSelected();
-//        saveNew(event);
-//        SyYetki yetki = prepareCreate(event);
-//        String yetkiTanim = oldYetki.getYetki().split(":")[0];
-//        yetki.setYetki(yetkiTanim+":");
-//        yetki.setAciklama(StringUtil.removeLastPart(oldYetki.getAciklama()));
-//        this.setSelected(yetki);
         StStok oldStok = this.getSelected();
         saveNew(event);
         StStok stok = prepareCreate(event);

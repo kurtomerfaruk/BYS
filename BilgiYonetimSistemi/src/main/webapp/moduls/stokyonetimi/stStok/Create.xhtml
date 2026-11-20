@@ -2,73 +2,89 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="jakarta.faces.facelets"
-      xmlns:f="jakarta.faces.core"
-      xmlns:p="primefaces"
-      xmlns:coco="jakarta.faces.composite/ui">
+      xmlns:h="jakarta.faces.html"
+      xmlns:p="primefaces">
 
 <ui:composition>
 
-    <coco:createpageproceed id="StStokCreateForm"
-                            renderedListener="#{stStokController.selected != null}"
-                            widgetVar="StStokCreateDialog"
-                            actionListener="#{stStokController.saveNew}"
-                            listForm="#{empty hareketListForm ? 'StStokHareketListForm' : hareketListForm}"
-                            extraUpdate="#{empty hareketExtraUpdate ? '' : hareketExtraUpdate}"
-                            proceedActionListener="#{stStokController.saveProceed}">
+    <p:dialog widgetVar="StStokCreateDialog"
+              id="StStokCreateDialogId"
+              modal="true"
+              resizable="false"
+              closeOnEscape="true"
+              header="#{messages.dialogYeniKayit}"
+              appendTo="@(body)"
+              responsive="true"
+              fitViewport="true"
+              position="top"
+              style="min-width:960px;">
 
-        <p:outputLabel value="#{messages.malzemeKoduLabel}" for="@next"/>
-        <p:inputText id="malzemeKodu" value="#{stStokController.selected.malzemeKodu}" title="#{messages.malzemeKoduText}"
-                     size="50" maxlength="50" required="true"/>
+        <h:form id="StStokCreateForm">
+            <h:panelGroup id="display">
+                <p:focus context="display"/>
+                <div class="card">
+                    <div class="card-body">
 
-        <p:outputLabel value="#{messages.stokKoduLabel}" for="@next"/>
-        <p:inputText id="stokKodu" value="#{stStokController.selected.stokKodu}" title="#{messages.stokKoduText}"
-                     size="50" maxlength="50"/>
+                        <ul class="nav nav-tabs mb-3 tab-style-8 scaleX">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="stKartCreateTab" data-bs-toggle="tab"
+                                        data-bs-target="#stKartCreateTabPane" type="button" role="tab"
+                                        aria-controls="stKartCreateTabPane" aria-selected="true">Kart Bilgileri
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="stBarkodCreateTab" data-bs-toggle="tab"
+                                        data-bs-target="#stBarkodCreateTabPane" type="button" role="tab"
+                                        aria-controls="stBarkodCreateTabPane" aria-selected="false">Barkodlar
+                                </button>
+                            </li>
+                        </ul>
 
-        <p:outputLabel value="#{messages.stokAdiLabel}" for="@next"/>
-        <p:inputText id="stokAdi" value="#{stStokController.selected.stokAdi}" title="#{messages.stokAdiText}"
-                     size="50" maxlength="200" required="true"/>
+                        <div class="tab-content">
+                            <div class="tab-pane show active overflow-hidden" id="stKartCreateTabPane"
+                                 role="tabpanel" aria-labelledby="stKartCreateTab" tabindex="0">
+                                <p:panelGrid columns="2" styleClass="w-100" layout="tabular"
+                                             rendered="#{stStokController.selected != null}">
+                                    <ui:include src="/moduls/stokyonetimi/stStok/KartTab.xhtml"/>
+                                </p:panelGrid>
+                            </div>
 
-        <p:outputLabel value="#{messages.markaLabel}" for="@next"/>
-        <p:inputText id="marka" value="#{stStokController.selected.marka}" title="#{messages.markaText}" size="40" maxlength="100"/>
+                            <div class="tab-pane overflow-hidden" id="stBarkodCreateTabPane"
+                                 role="tabpanel" aria-labelledby="stBarkodCreateTab" tabindex="0">
+                                <ui:include src="/moduls/stokyonetimi/stStok/BarkodTab.xhtml">
+                                    <ui:param name="barkodInputId" value="StStokCreateForm:yeniBarkod"/>
+                                </ui:include>
+                            </div>
 
-        <p:outputLabel value="#{messages.modelLabel}" for="@next"/>
-        <p:inputText id="model" value="#{stStokController.selected.model}" title="#{messages.modelText}" size="40" maxlength="100"/>
+                        </div>
+                    </div><!-- end card-body -->
+                    <div class="card-footer">
+                        <div class="float-end">
+                            <p:commandButton id="btnKaydetDevam" icon="pi pi-check-circle" styleClass="ui-button-help"
+                                             actionListener="#{stStokController.saveProceed}"
+                                             value="#{messages.buttonKaydet}"
+                                             update="display,:StStokListForm:datalist:datalist,:growl"
+                                             onstart="PF('Loading').show()" oncomplete="PF('Loading').hide();"/>
+                            <p:commandButton id="btnKaydetKapat" icon="pi pi-check" styleClass="ui-button-success"
+                                             actionListener="#{stStokController.saveNew}"
+                                             value="#{messages.buttonKaydetKapat}"
+                                             update="display,:StStokListForm:datalist:datalist,:growl"
+                                             oncomplete="handleSubmit(xhr,status,args,PF('StStokCreateDialog'));"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                            <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                             value="#{messages.buttonKapat}"
+                                             onclick="PF('StStokCreateDialog').hide()" immediate="true"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()">
+                                <p:resetInput target="@form"/>
+                            </p:commandButton>
+                        </div>
+                    </div>
+                </div>
+                <p:defaultCommand target="btnKaydetDevam"/>
+            </h:panelGroup>
+        </h:form>
 
-        <p:outputLabel value="#{messages.kategoriLabel}" for="@next"/>
-        <p:selectOneMenu id="stStokKategori" value="#{stStokController.selected.stStokKategori}" filter="true"
-                         converter="omnifaces.SelectItemsConverter">
-            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
-            <f:selectItems value="#{stStokKategoriController.items}" var="kategoriItem"
-                           itemValue="#{kategoriItem}" itemLabel="#{kategoriItem.ad}"/>
-        </p:selectOneMenu>
-
-        <p:outputLabel value="#{messages.birimLabel}" for="@next"/>
-        <p:selectOneMenu id="stBirim" value="#{stStokController.selected.stBirim}" filter="true" required="true"
-                         converter="omnifaces.SelectItemsConverter">
-            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
-            <f:selectItems value="#{stBirimController.items}" var="birimItem"
-                           itemValue="#{birimItem}" itemLabel="#{birimItem.ad}"/>
-        </p:selectOneMenu>
-
-        <p:outputLabel value="#{messages.kdvOraniLabel}" for="@next"/>
-        <p:inputNumber id="kdvOrani" value="#{stStokController.selected.kdvOrani}" decimalPlaces="0"
-                       emptyValue="empty" minValue="0" maxValue="100"/>
-
-        <p:outputLabel value="#{messages.kritikStokLabel}" for="@next"/>
-        <p:inputNumber id="kritikStok" value="#{stStokController.selected.kritikStok}" decimalPlaces="4"
-                       emptyValue="empty" minValue="0"/>
-
-        <p:outputLabel value="#{messages.seriNoTakibiLabel}" for="@next"/>
-        <p:selectBooleanCheckbox id="seriNoTakibi" value="#{stStokController.selected.seriNoTakibi}"/>
-
-        <p:outputLabel value="#{messages.sktTakibiLabel}" for="@next"/>
-        <p:selectBooleanCheckbox id="sktTakibi" value="#{stStokController.selected.sktTakibi}"/>
-
-        <p:outputLabel value="#{messages.aciklamaLabel}" for="@next"/>
-        <p:inputTextarea id="aciklama" value="#{stStokController.selected.aciklama}" title="#{messages.aciklamaText}"
-                         rows="4" styleClass="w-100" autoResize="false"/>
-
-    </coco:createpageproceed>
+    </p:dialog>
 
 </ui:composition>
 

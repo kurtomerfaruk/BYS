@@ -39,12 +39,6 @@
                                 </button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="stBirimDonusumEditTab" data-bs-toggle="tab"
-                                        data-bs-target="#stBirimDonusumEditTabPane" type="button" role="tab"
-                                        aria-controls="stBirimDonusumEditTabPane" aria-selected="false">Birim Dönüşümleri
-                                </button>
-                            </li>
-                            <li class="nav-item" role="presentation">
                                 <button class="nav-link" id="stHareketEditTab" data-bs-toggle="tab"
                                         data-bs-target="#stHareketEditTabPane" type="button" role="tab"
                                         aria-controls="stHareketEditTabPane" aria-selected="false">#{messages.stokHareketListesi}
@@ -72,10 +66,6 @@
                                 <ui:include src="/moduls/stokyonetimi/stStok/BarkodTab.xhtml"/>
                             </div>
 
-                            <div class="tab-pane overflow-hidden" id="stBirimDonusumEditTabPane"
-                                 role="tabpanel" aria-labelledby="stBirimDonusumEditTab" tabindex="0">
-                                <ui:include src="/moduls/stokyonetimi/stStok/BirimDonusumTab.xhtml"/>
-                            </div>
                             <div class="tab-pane overflow-hidden" id="stHareketEditTabPane"
                                  role="tabpanel" aria-labelledby="stHareketEditTab" tabindex="0">
                                 <ui:include src="/moduls/stokyonetimi/stStok/HareketTab.xhtml"/>
