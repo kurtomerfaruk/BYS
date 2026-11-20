@@ -1,6 +1,7 @@
 package tr.bel.gaziantep.bysweb.moduls.stokyonetimi.service;
 
 import jakarta.ejb.Stateless;
+import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.*;
@@ -8,18 +9,20 @@ import org.primefaces.model.FilterMeta;
 import org.primefaces.model.MatchMode;
 import org.primefaces.model.SortMeta;
 import org.primefaces.model.SortOrder;
+import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.EnumSyKullaniciTuru;
 import tr.bel.gaziantep.bysweb.core.service.AbstractService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.core.utils.StringUtil;
+import tr.bel.gaziantep.bysweb.core.utils.Util;
+import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.entity.SyKullanici;
+import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity.StDepo;
+import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity.StDepoYetki;
 import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity.StStok;
 import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity.StStokBakiye;
 
 import java.io.Serial;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
@@ -35,6 +38,11 @@ public class StStokService extends AbstractService<StStok> {
     private static final String DEPO_MIKTAR_FIELD = "depoMiktar_";
     private static final String TOPLAM_FIELD = "depoMiktar_TOPLAM";
 
+    @Inject
+    private StDepoYetkiService stDepoYetkiService;
+    @Inject
+    private StDepoService stDepoService;
+
     public StStokService() {
         super(StStok.class);
     }
@@ -45,6 +53,30 @@ public class StStokService extends AbstractService<StStok> {
     @Override
     protected EntityManager getEntityManager() {
         return em;
+    }
+
+    /**
+     * Toplam miktar kolonunun kapsamini belirleyen yetkili depo ID'leri.
+     * Liste ile ayni kural: sistem yoneticisi tum aktif depolar, diger kullanici yetki kayitlari.
+     */
+    private List<Integer> getYetkiliDepoIds() {
+        SyKullanici kullanici = Util.getSyKullanici();
+        if (kullanici == null) {
+            return List.of();
+        }
+        if (kullanici.getKullaniciTuru() == EnumSyKullaniciTuru.SISTEM_YONETICISI) {
+            return stDepoService.findAll().stream()
+                    .map(StDepo::getId)
+                    .filter(Objects::nonNull)
+                    .toList();
+        }
+        return stDepoYetkiService.findByKullanici(kullanici).stream()
+                .map(StDepoYetki::getStDepo)
+                .filter(Objects::nonNull)
+                .map(StDepo::getId)
+                .filter(Objects::nonNull)
+                .distinct()
+                .toList();
     }
 
     public static String depoMiktarField(Integer depoId) {
@@ -77,20 +109,22 @@ public class StStokService extends AbstractService<StStok> {
     /**
      * Depo miktari (veya toplam) icin stok satirina bagli alt sorgu.
      */
-    private Subquery<BigDecimal> miktarSubquery(CriteriaBuilder cb, CriteriaQuery<?> cq,
-                                                Root<StStok> root, Integer depoId) {
+    private Subquery<BigDecimal> miktarSubquery(CriteriaBuilder cb, CriteriaQuery<?> cq, Root<StStok> root, String field) {
         Subquery<BigDecimal> sq = cq.subquery(BigDecimal.class);
         Root<StStokBakiye> bakiye = sq.from(StStokBakiye.class);
         sq.select(cb.coalesce(cb.sum(bakiye.get("miktar")), BigDecimal.ZERO));
-        if (depoId == null) {
+        if (TOPLAM_FIELD.equals(field)) {
+            List<Integer> depoIds = getYetkiliDepoIds();
             sq.where(cb.and(
                     cb.equal(bakiye.get("stStok"), root),
-                    cb.isTrue(bakiye.get("aktif"))));
+                    cb.isTrue(bakiye.get("aktif")),
+                    depoIds.isEmpty() ? cb.disjunction() : bakiye.get("stDepo").get("id").in(depoIds)));
         } else {
+            Integer depoId = depoIdFromField(field);
             sq.where(cb.and(
                     cb.equal(bakiye.get("stStok"), root),
-                    cb.equal(bakiye.get("stDepo").get("id"), depoId),
-                    cb.isTrue(bakiye.get("aktif"))));
+                    cb.isTrue(bakiye.get("aktif")),
+                    cb.equal(bakiye.get("stDepo").get("id"), depoId)));
         }
         return sq;
     }
@@ -107,7 +141,7 @@ public class StStokService extends AbstractService<StStok> {
         } catch (NumberFormatException e) {
             return cb.conjunction();
         }
-        Subquery<BigDecimal> sq = miktarSubquery(cb, cq, root, depoIdFromField(filter.getField()));
+        Subquery<BigDecimal> sq = miktarSubquery(cb, cq, root, filter.getField());
         MatchMode mode = filter.getMatchMode() == null ? MatchMode.EQUALS : filter.getMatchMode();
         return switch (mode) {
             case EQUALS -> cb.equal(sq, value);
@@ -182,7 +216,7 @@ public class StStokService extends AbstractService<StStok> {
                 String field = sortMeta.getField();
                 boolean desc = sortMeta.getOrder() == SortOrder.DESCENDING;
                 if (isDepoMiktarField(field)) {
-                    Subquery<BigDecimal> sq = miktarSubquery(cb, cq, root, depoIdFromField(field));
+                    Subquery<BigDecimal> sq = miktarSubquery(cb, cq, root, field);
                     orders.add(desc ? cb.desc(sq) : cb.asc(sq));
                 } else if (field != null && field.contains(".")) {
                     Path<?> path = stokPath(root, field, joins);

@@ -162,10 +162,15 @@ public class StStokController extends AbstractController<StStok> {
     }
 
     /**
-     * Siralama/filtre ICIN kullanilan alan adi. Toplam kolonu hesaplanan deger oldugu icin
-     * siralanamaz/filtrelenemez; bos donulur.
+     * Siralama/filtre icin kullanilan alan adi. Depo ve toplam kolonlari icin
+     * StStokService tarafindan yorumlanan sanal alan adlari uretilir.
      */
     public String getExtraColumnField(Object column) {
+        if (TOPLAM_KOLON.equals(column)) {
+            String field = StStokService.toplamMiktarField();
+            getFilter(field);
+            return field;
+        }
         if (column instanceof StDepo depo && depo.getId() != null) {
             String field = StStokService.depoMiktarField(depo.getId());
             getFilter(field);
