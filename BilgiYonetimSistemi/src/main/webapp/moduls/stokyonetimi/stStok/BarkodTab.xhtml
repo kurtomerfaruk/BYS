@@ -4,6 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="jakarta.faces.facelets"
       xmlns:h="jakarta.faces.html"
+      xmlns:pt="jakarta.faces.passthrough"
       xmlns:p="primefaces">
 <ui:composition>
 
@@ -13,21 +14,30 @@
 
         <div class="ui-grid ui-grid-responsive mb-3">
             <div class="ui-grid-row">
-                <div class="ui-grid-col-4">
-                    <p:outputLabel value="#{messages.barkodLabel}" for="@next"/>
-                    <p:inputText id="yeniBarkod" value="#{stStokController.barkod.barkod}"
-                                 title="#{messages.barkodText}" maxlength="50" styleClass="w-100"
-                                 autocomplete="off"/>
-                </div>
                 <div class="ui-grid-col-3">
-                    <p:commandButton id="btnBarkodEkle" value="#{messages.buttonEkle}" icon="pi pi-plus"
-                                     styleClass="ui-button-primary mt-4"
-                                     actionListener="#{stStokController.addBarkod}"
-                                     process="barkodInputPanel"
-                                     update="barkodInputPanel barkodTable :growl"
-                                     onstart="PF('Loading').show()"
-                                     oncomplete="PF('Loading').hide(); stBarkodOdak('#{barkodInputId}');"/>
+                    <div class="mt-2 fst-italic">
+                        <i class="bx bx-info-circle"></i> Ürünün barkodunu okutunuz
+                    </div>
                 </div>
+                <div class="ui-grid-col-9">
+                    <div class="ui-inputgroup">
+                        <span class="ui-inputgroup-addon"><i class="pi pi-qrcode"></i></span>
+                        <p:inputText id="yeniBarkod" value="#{stStokController.barkod.barkod}"
+                                     title="#{messages.barkodText}" maxlength="50" styleClass="w-100"
+                                     autocomplete="off" placeholder="Barkod Okut / Gir" pt:autofocus="true"/>
+                        <p:commandButton id="btnBarkodEkle" pt:data-tooltip="#{messages.buttonEkle}" icon="pi pi-plus"
+                                         styleClass="ui-button-primary"
+                                         actionListener="#{stStokController.addBarkod}"
+                                         process="barkodInputPanel"
+                                         update="barkodInputPanel barkodTable :growl"
+                                         onstart="PF('Loading').show()"
+                                         oncomplete="PF('Loading').hide(); stBarkodOdak('#{barkodInputId}');"/>
+                        <p:commandButton type="button" pt:data-tooltip="#{messages.buttonKameraAc}" icon="pi pi-camera"
+                                         styleClass="ui-button-secondary"
+                                         onclick="stBarkodScanner.ac('#{barkodInputId}')"/>
+                    </div>
+                </div>
+
             </div>
         </div>
     </h:panelGroup>

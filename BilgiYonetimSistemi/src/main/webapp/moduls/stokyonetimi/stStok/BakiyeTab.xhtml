@@ -8,7 +8,18 @@
       xmlns:p="primefaces">
 <ui:composition>
 
-    <p:dataTable id="stokBakiyeTable" value="#{stStokController.selected.stokBakiyeList}" var="bakiye"
+    <div class="d-flex justify-content-end mb-2">
+
+        <p:outputLabel value="#{messages.depoLabel}" for="bakiyeDepoFiltre" styleClass="mt-2 me-2"/>
+        <p:selectOneMenu id="bakiyeDepoFiltre" value="#{stStokController.seciliDepo}" filter="true"
+                         converter="omnifaces.SelectItemsConverter" style="width:220px">
+            <f:selectItem itemValue="#{null}" itemLabel="#{messages.tumuText}" noSelectionOption="true"/>
+            <f:selectItems value="#{stStokController.yetkiliDepoOptions}"/>
+            <p:ajax update="stokBakiyeTable"/>
+        </p:selectOneMenu>
+    </div>
+
+    <p:dataTable id="stokBakiyeTable" value="#{stStokController.yetkiliBakiyeList}" var="bakiye"
                  emptyMessage="#{messages.kayitBulunamadi}" size="small" stripedRows="true"
                  styleClass="w-100" lazy="false">
 

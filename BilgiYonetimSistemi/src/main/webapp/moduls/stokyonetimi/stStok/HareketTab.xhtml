@@ -5,20 +5,21 @@
       xmlns:ui="jakarta.faces.facelets"
       xmlns:h="jakarta.faces.html"
       xmlns:f="jakarta.faces.core"
-      xmlns:p="primefaces"
-      xmlns:pt="jakarta.faces.passthrough">
+      xmlns:p="primefaces">
 <ui:composition>
 
     <div class="d-flex justify-content-end mb-2">
-        <p:commandButton value="#{messages.buttonEkle}" icon="pi pi-plus" styleClass="ui-button-primary"
-                         actionListener="#{stStokController.prepareHareket}"
-                         update=":StStokHareketCreateForm:StStokHareketCreateForm"
-                         oncomplete="PF('StStokHareketCreateDialog').show()"
-                         disabled="#{stStokController.selected == null || stStokController.selected.id == null}"
-                         onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+        <p:outputLabel value="#{messages.depoLabel}" for="hareketDepoFiltre" styleClass="mt-2 me-2"/>
+        <p:selectOneMenu id="hareketDepoFiltre" value="#{stStokController.seciliDepo}" filter="true"
+                         converter="omnifaces.SelectItemsConverter" style="width:220px"
+                         onchange="PF('Loading').show()">
+            <f:selectItem itemValue="#{null}" itemLabel="#{messages.tumuText}" noSelectionOption="true"/>
+            <f:selectItems value="#{stStokController.yetkiliDepoOptions}"/>
+            <p:ajax update="stokHareketTable" oncomplete="PF('Loading').hide()"/>
+        </p:selectOneMenu>
     </div>
 
-    <p:dataTable id="stokHareketTable" value="#{stStokController.selected.stokHareketList}" var="hareket"
+    <p:dataTable id="stokHareketTable" value="#{stStokController.yetkiliHareketList}" var="hareket"
                  emptyMessage="#{messages.kayitBulunamadi}" rows="10" paginator="true"
                  paginatorPosition="bottom" rowHover="true" size="small" stripedRows="true"
                  styleClass="w-100" lazy="false">
@@ -41,6 +42,10 @@
             <h:outputText value="#{hareket.yon.displayValue}"/>
         </p:column>
 
+        <p:column headerText="#{messages.depoText}" sortBy="#{hareket.stDepo.ad}">
+            <h:outputText value="#{hareket.stDepo.ad}"/>
+        </p:column>
+
         <p:column headerText="#{messages.miktarText}" styleClass="text-end" sortBy="#{hareket.miktar}">
             <h:outputText value="#{hareket.miktar}">
                 <f:convertNumber minFractionDigits="0" maxFractionDigits="4"/>
@@ -51,21 +56,7 @@
             <h:outputText value="#{hareket.belgeNo}"/>
         </p:column>
 
-        <p:column headerText="#{messages.buttonStokIslem}" style="width:110px;text-align:center;">
-            <p:commandButton icon="pi pi-undo" styleClass="ui-button-warning rounded-button"
-                             pt:data-tooltip="#{messages.buttonTersHareket}"
-                             actionListener="#{stStokController.tersHareket(hareket)}"
-                             update=":StStokEditForm:display,:growl"
-                             disabled="#{hareket.tersHareket != null}"
-                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()">
-                <p:confirm header="#{messages.ConfirmationHeader}" message="Bu hareketin tersi oluşturulacak. Devam edilsin mi?"
-                           icon="pi pi-exclamation-circle"/>
-            </p:commandButton>
-        </p:column>
-
     </p:dataTable>
-
-    <ui:include src="/confirmation.xhtml"/>
 
 </ui:composition>
 

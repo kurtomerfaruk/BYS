@@ -17,7 +17,7 @@
               responsive="true"
               fitViewport="true"
               position="top"
-              style="min-width:960px;">
+              style="max-width:1024px;">
 
         <h:form id="StStokCreateForm">
             <h:panelGroup id="display">
@@ -35,7 +35,8 @@
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link" id="stBarkodCreateTab" data-bs-toggle="tab"
                                         data-bs-target="#stBarkodCreateTabPane" type="button" role="tab"
-                                        aria-controls="stBarkodCreateTabPane" aria-selected="false">Barkodlar
+                                        aria-controls="stBarkodCreateTabPane" aria-selected="false"
+                                        onclick="stBarkodOdak('StStokCreateForm:yeniBarkod')">Barkodlar
                                 </button>
                             </li>
                         </ul>

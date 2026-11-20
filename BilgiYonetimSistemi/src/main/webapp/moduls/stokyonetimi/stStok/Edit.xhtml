@@ -17,7 +17,7 @@
               responsive="true"
               fitViewport="true"
               position="top"
-              style="min-width:900px;">
+              style="max-width:1024px;">
 
         <h:form id="StStokEditForm">
             <h:panelGroup id="display">
@@ -35,7 +35,8 @@
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link" id="stBarkodEditTab" data-bs-toggle="tab"
                                         data-bs-target="#stBarkodEditTabPane" type="button" role="tab"
-                                        aria-controls="stBarkodEditTabPane" aria-selected="false">Barkodlar
+                                        aria-controls="stBarkodEditTabPane" aria-selected="false"
+                                        onclick="stBarkodOdak('StStokEditForm:yeniBarkod')">Barkodlar
                                 </button>
                             </li>
                             <li class="nav-item" role="presentation">
@@ -63,7 +64,9 @@
 
                             <div class="tab-pane overflow-hidden" id="stBarkodEditTabPane"
                                  role="tabpanel" aria-labelledby="stBarkodEditTab" tabindex="0">
-                                <ui:include src="/moduls/stokyonetimi/stStok/BarkodTab.xhtml"/>
+                                <ui:include src="/moduls/stokyonetimi/stStok/BarkodTab.xhtml">
+                                    <ui:param name="barkodInputId" value="StStokEditForm:yeniBarkod"/>
+                                </ui:include>
                             </div>
 
                             <div class="tab-pane overflow-hidden" id="stHareketEditTabPane"

@@ -1,6 +1,7 @@
 package tr.bel.gaziantep.bysweb.moduls.stokyonetimi.controller;
 
 import jakarta.faces.event.ActionEvent;
+import jakarta.faces.model.SelectItem;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -38,8 +39,6 @@ public class StStokController extends AbstractController<StStok> {
     @Inject
     private StStokBarkodService stStokBarkodService;
     @Inject
-    private StStokHareketController stStokHareketController;
-    @Inject
     private StDepoYetkiService stDepoYetkiService;
     @Inject
     private StDepoService stDepoService;
@@ -58,6 +57,12 @@ public class StStokController extends AbstractController<StStok> {
     @Getter
     @Setter
     private BigDecimal transferMiktar;
+    /**
+     * Hareketler/Bakiyeler sekmelerinde kullanilan depo filtresi (null = tum yetkili depolar).
+     */
+    @Getter
+    @Setter
+    private StDepo seciliDepo;
 
     private List<StDepo> yetkiliDepolar;
     private Map<Integer, Map<Integer, BigDecimal>> depoMiktarMap = new HashMap<>();
@@ -86,6 +91,61 @@ public class StStokController extends AbstractController<StStok> {
             }
         }
         return yetkiliDepolar;
+    }
+
+    public List<SelectItem> getYetkiliDepoOptions() {
+        List<SelectItem> options = new ArrayList<>();
+        for (StDepo depo : getYetkiliDepolar()) {
+            options.add(new SelectItem(depo, depo.getAd()));
+        }
+        return options;
+    }
+
+    private Set<Integer> yetkiliDepoIds() {
+        return getYetkiliDepolar().stream()
+                .map(StDepo::getId)
+                .filter(Objects::nonNull)
+                .collect(java.util.stream.Collectors.toSet());
+    }
+
+    private boolean depoGorunur(StDepo depo) {
+        if (depo == null || depo.getId() == null) {
+            return false;
+        }
+        if (!yetkiliDepoIds().contains(depo.getId())) {
+            return false;
+        }
+        return seciliDepo == null || seciliDepo.getId() == null || seciliDepo.getId().equals(depo.getId());
+    }
+
+    /**
+     * Stok kartinda goruntulenecek hareketler: yalnizca yetkili depolar.
+     */
+    public List<StStokHareket> getYetkiliHareketList() {
+        if (getSelected() == null || getSelected().getId() == null) {
+            return List.of();
+        }
+        return getSelected().getStokHareketList().stream()
+                .filter(BaseEntity::isAktif)
+                .filter(hareket -> depoGorunur(hareket.getStDepo()))
+                .sorted(Comparator.comparing(StStokHareket::getIslemTarihi,
+                        Comparator.nullsLast(Comparator.reverseOrder())))
+                .toList();
+    }
+
+    /**
+     * Stok kartinda goruntulenecek bakiyeler: yalnizca yetkili depolar.
+     */
+    public List<StStokBakiye> getYetkiliBakiyeList() {
+        if (getSelected() == null || getSelected().getId() == null) {
+            return List.of();
+        }
+        return getSelected().getStokBakiyeList().stream()
+                .filter(BaseEntity::isAktif)
+                .filter(bakiye -> depoGorunur(bakiye.getStDepo()))
+                .sorted(Comparator.comparing(bakiye -> bakiye.getStDepo().getAd(),
+                        Comparator.nullsLast(Comparator.naturalOrder())))
+                .toList();
     }
 
     /**
@@ -234,51 +294,21 @@ public class StStokController extends AbstractController<StStok> {
         FacesUtil.successMessage(Constants.KAYIT_SILINDI);
     }
 
-    /**
-     * Stok karti icinden yeni hareket acar: hareket formunu secili stokla
-     * on-doldurur ve mevcut Create dialog'unu gosterir.
-     */
-    public void prepareHareket() {
-        if (getSelected() == null || getSelected().getId() == null) {
-            FacesUtil.addExclamationMessage("stHareketStokZorunlu");
-            return;
-        }
-        try {
-            StStokHareket yeni = StStokHareket.class.getDeclaredConstructor().newInstance();
-            yeni.setStStok(getSelected());
-            yeni.setIslemTarihi(java.time.LocalDateTime.now());
-            yeni.setYon(tr.bel.gaziantep.bysweb.core.enums.bys.EnumGirisCikis.GIRIS);
-            stStokHareketController.setSelected(yeni);
-        } catch (Exception ex) {
-            log.error(null, ex);
-            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
-        }
-    }
-
-    /**
-     * Stok karti icinden secilen hareketin tersini olusturur.
-     */
-    public void tersHareket(StStokHareket hareket) {
-        if (hareket == null) {
-            return;
-        }
-        stStokHareketController.setSelected(hareket);
-        stStokHareketController.tersHareket();
-    }
-
     public void editInfo() {
         if (this.getSelected() == null) return;
-        toplamMiktar = this.getSelected().getStokBakiyeList().stream()
-                .filter(BaseEntity::isAktif)
+        seciliDepo = null;
+        List<StStokBakiye> gorunurBakiyeler = getYetkiliBakiyeList();
+        toplamMiktar = gorunurBakiyeler.stream()
                 .map(StStokBakiye::getMiktar)
+                .filter(Objects::nonNull)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
-        rezerveMiktar = this.getSelected().getStokBakiyeList().stream()
-                .filter(BaseEntity::isAktif)
+        rezerveMiktar = gorunurBakiyeler.stream()
                 .map(StStokBakiye::getRezerveMiktar)
+                .filter(Objects::nonNull)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
-        transferMiktar = this.getSelected().getStokBakiyeList().stream()
-                .filter(BaseEntity::isAktif)
+        transferMiktar = gorunurBakiyeler.stream()
                 .map(StStokBakiye::getTransferdekiMiktar)
+                .filter(Objects::nonNull)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
