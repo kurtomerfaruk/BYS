@@ -48,6 +48,10 @@ import java.util.*;
 public abstract class AbstractController<T> implements Serializable {
     @Serial
     private static final long serialVersionUID = -991999085838138765L;
+    /**
+     * extraColumns facet'indeki dinamik kolonlari kullanici kolonlarindan ayirmak icin.
+     */
+    protected static final String EXTRA_COLUMNS_ID = "extraColumns";
 
     @Inject
     protected AbstractService<T> ejbService;
@@ -158,6 +162,7 @@ public abstract class AbstractController<T> implements Serializable {
                         int count = ejbService.count(newMaps);
                         setRowCount(count);
                     }
+                    afterLoad(result);
                     return result;
                 }
 
@@ -206,6 +211,34 @@ public abstract class AbstractController<T> implements Serializable {
     public FilterMeta getFilter(String field) {
         return filterMap.computeIfAbsent(field, k -> FilterMeta.builder().field(field).build());
     }
+
+    /**
+     * Lazy liste yuklendikten sonra alt siniflarin satir bazli ek veri (ornegin depo bakiyeleri)
+     * hazirlamasi icin kullanabilecegi genisletme noktasi. Varsayilan olarak hicbir sey yapmaz.
+     */
+    protected void afterLoad(List<T> result) {
+    }
+
+    /**
+     * Listeye ekstra kolon eklenmesi icin genisletme noktasi. Varsayilan olarak kolon yoktur.
+     */
+    public List<?> getExtraColumns() {
+        return List.of();
+    }
+
+    public String getExtraColumnHeader(Object column) {
+        return column == null ? "" : String.valueOf(column);
+    }
+
+    public String getExtraColumnField(Object column) {
+        return "";
+    }
+
+
+    public Object getExtraColumnValue(Object item, Object column) {
+        return null;
+    }
+
 
     public void save(ActionEvent event) {
         String msg = FacesUtil.message(Constants.KAYIT_GUNCELLENDI);
@@ -351,6 +384,15 @@ public abstract class AbstractController<T> implements Serializable {
 
     public void onResize(ColumnResizeEvent event) {
         try {
+            UIColumn column = event.getColumn();
+            // Sadece kullanici tarafindan yapilandirilabilir dinamik kolonlarin genisligi kaydedilir
+            if (!(column instanceof DynamicColumn)) {
+                return;
+            }
+            // Kullanici kolonu disindaki ekstra kolonlar (depo miktarlari, toplam) kaydedilmez
+            if (dynamicColumnExtra(column)) {
+                return;
+            }
             String[] str = event.getColumn().getColumnKey().split(":");
             int length = str.length;
             boolean isParsable = NumberUtil.isParsable(str[length - 1]);
@@ -373,18 +415,38 @@ public abstract class AbstractController<T> implements Serializable {
 
     }
 
+    private boolean dynamicColumnExtra(UIColumn column) {
+        return column instanceof DynamicColumn dynamicColumn
+                && dynamicColumn.getColumns() != null
+                && EXTRA_COLUMNS_ID.equals(dynamicColumn.getColumns().getId());
+    }
+
     public void onReorder(AjaxBehaviorEvent event) {
         try {
             DataTable dt = (DataTable) event.getSource();
             List<UIColumn> columnList = dt.getColumns();
             int count = 0;
             for (UIColumn uiColumn : columnList) {
-                DynamicColumn dynamicColumn = (DynamicColumn) uiColumn;
-                SyKullaniciKolon kullaniciKolon = kullaniciKolons.get(dynamicColumn.getIndex());
-                if (kullaniciKolon != null) {
-                    kullaniciKolon.setSiraNo(count);
-                    syKullaniciKolonService.edit(kullaniciKolon);
+//                DynamicColumn dynamicColumn = (DynamicColumn) uiColumn;
+//                SyKullaniciKolon kullaniciKolon = kullaniciKolons.get(dynamicColumn.getIndex());
+//                if (kullaniciKolon != null) {
+//                    kullaniciKolon.setSiraNo(count);
+//                    syKullaniciKolonService.edit(kullaniciKolon);
+                if (!(uiColumn instanceof DynamicColumn dynamicColumn)) {
+                    // statik ekstra kolonlar (toplam vb.) kullanici kolonu degil
+                    continue;
                 }
+                if (dynamicColumnExtra(uiColumn)) {
+                    // kullanici kolonu degil (depo miktarlari)
+                    continue;
+                }
+                int index = dynamicColumn.getIndex();
+                if (index < 0 || index >= kullaniciKolons.size()) {
+                    continue;
+                }
+                SyKullaniciKolon kullaniciKolon = kullaniciKolons.get(index);
+                kullaniciKolon.setSiraNo(count);
+                syKullaniciKolonService.edit(kullaniciKolon);
                 count++;
             }
         } catch (Exception ex) {

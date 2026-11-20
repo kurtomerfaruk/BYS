@@ -101,4 +101,21 @@ public class StStokBakiyeService extends AbstractService<StStokBakiye> {
         cq.where(cb.and(cb.equal(root.get("stStok"), stStok), cb.isTrue(root.get("aktif"))));
         return em.createQuery(cq).getResultList();
     }
+
+    /**
+     * Bir sayfadaki stoklar icin, verilen depolardaki bakiyeleri tek sorguda dondurur.
+     */
+    public List<StStokBakiye> findByStokAndDepos(List<Integer> stokIds, List<Integer> depoIds) {
+        if (stokIds == null || stokIds.isEmpty() || depoIds == null || depoIds.isEmpty()) {
+            return List.of();
+        }
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<StStokBakiye> cq = cb.createQuery(StStokBakiye.class);
+        Root<StStokBakiye> root = cq.from(StStokBakiye.class);
+        cq.where(cb.and(
+                root.get("stStok").get("id").in(stokIds),
+                root.get("stDepo").get("id").in(depoIds),
+                cb.isTrue(root.get("aktif"))));
+        return em.createQuery(cq).getResultList();
+    }
 }

@@ -254,6 +254,42 @@
 
         </p:columns>
 
+        <!-- Ek kolonlar (ornegin depo bazli miktarlar). Diger listelerde bos liste oldugu icin hicbir kolon uretilmez. -->
+        <p:columns id="extraColumns"
+                   value="#{cc.attrs.controller.extraColumns}"
+                   var="extraColumn"
+                   field="#{cc.attrs.controller.getExtraColumnField(extraColumn)}"
+                   headerText="#{cc.attrs.controller.getExtraColumnHeader(extraColumn)}"
+                   sortable="#{not empty cc.attrs.controller.getExtraColumnField(extraColumn)}"
+                   filterable="#{not empty cc.attrs.controller.getExtraColumnField(extraColumn)}"
+                   filterMatchMode="equals"
+                   toggleable="false">
+            <h:outputText value="#{cc.attrs.controller.getExtraColumnValue(item, extraColumn)}" styleClass="text-end">
+                <f:convertNumber minFractionDigits="0" maxFractionDigits="4"/>
+            </h:outputText>
+            <f:facet name="filter">
+                <ui:fragment rendered="#{not empty cc.attrs.controller.getExtraColumnField(extraColumn)}">
+                    <div class="filter-container">
+                        <p:selectOneMenu value="#{cc.attrs.controller.filterMap[cc.attrs.controller.getExtraColumnField(extraColumn)].matchMode}"
+                                         styleClass="filter-operator"
+                                         onchange="PF('#{cc.attrs.widgetVar}').filter()">
+                            <f:selectItem itemLabel="=" itemValue="EQUALS"/>
+                            <f:selectItem itemLabel="&#8800;" itemValue="NOT_EQUALS"/>
+                            <f:selectItem itemLabel="&gt;" itemValue="GREATER_THAN"/>
+                            <f:selectItem itemLabel="≥" itemValue="GREATER_THAN_EQUALS"/>
+                            <f:selectItem itemLabel="&lt;" itemValue="LESS_THAN"/>
+                            <f:selectItem itemLabel="≤" itemValue="LESS_THAN_EQUALS"/>
+                        </p:selectOneMenu>
+                        <p:inputText value="#{cc.attrs.controller.filterMap[cc.attrs.controller.getExtraColumnField(extraColumn)].filterValue}"
+                                     styleClass="filter-value"
+                                     onkeyup="PF('#{cc.attrs.widgetVar}').filter()">
+                            <p:keyFilter mask="int"/>
+                        </p:inputText>
+                    </div>
+                </ui:fragment>
+            </f:facet>
+        </p:columns>
+
         <!--        <ui:fragment rendered="#{syKullanici.kullaniciTuru eq 'SISTEM_YONETICISI'}">-->
         <!--            <p:column headerText="#{messages.aktifText}">-->
         <!--                <f:facet name="filter">-->
