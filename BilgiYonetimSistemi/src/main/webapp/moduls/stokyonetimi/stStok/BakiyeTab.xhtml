@@ -12,7 +12,7 @@
                  emptyMessage="#{messages.kayitBulunamadi}" size="small" stripedRows="true"
                  styleClass="w-100" lazy="false">
 
-        <p:column headerText="#{messages.depoText}-#{stStokController.toplamMiktar}" sortBy="#{bakiye.stDepo.ad}">
+        <p:column headerText="#{messages.depoText}" sortBy="#{bakiye.stDepo.ad}">
             <h:outputText value="#{bakiye.stDepo.ad}"/>
         </p:column>
 
@@ -42,7 +42,7 @@
 
         <p:columnGroup type="footer">
             <p:row>
-                <p:column colspan="4" styleClass="text-end" footerText="#{messages.toplamLabel}"/>
+                <p:column colspan="2" styleClass="text-end" footerText="#{messages.toplamLabel}"/>
                 <p:column styleClass="text-end">
                     <f:facet name="footer">
                         <h:outputText value="#{stStokController.toplamMiktar}">

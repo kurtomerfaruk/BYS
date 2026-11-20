@@ -263,8 +263,9 @@
                    sortable="#{not empty cc.attrs.controller.getExtraColumnField(extraColumn)}"
                    filterable="#{not empty cc.attrs.controller.getExtraColumnField(extraColumn)}"
                    filterMatchMode="equals"
-                   toggleable="false">
-            <h:outputText value="#{cc.attrs.controller.getExtraColumnValue(item, extraColumn)}" styleClass="text-end">
+                   toggleable="false"
+                   styleClass="text-end">
+            <h:outputText value="#{cc.attrs.controller.getExtraColumnValue(item, extraColumn)}">
                 <f:convertNumber minFractionDigits="0" maxFractionDigits="4"/>
             </h:outputText>
             <f:facet name="filter">
