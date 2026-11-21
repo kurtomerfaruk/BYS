@@ -46,17 +46,17 @@
                 <p:dataTable value="#{stAlisController.selected.kalemler}" var="kalemItem"
                              emptyMessage="#{messages.kayitBulunamadi}" size="small" stripedRows="true"
                              styleClass="w-100 mt-2" lazy="false">
-                    <p:column headerText="#{messages.stokLabel}">
+                    <p:column headerText="#{messages.stokText}">
                         <h:outputText value="#{kalemItem.stStok.stokKodu} - #{kalemItem.stStok.stokAdi}"/>
                     </p:column>
-                    <p:column headerText="#{messages.miktarLabel}" styleClass="text-end">
+                    <p:column headerText="#{messages.miktarText}" styleClass="text-end">
                         <h:outputText value="#{kalemItem.miktar}">
-                            <f:convertNumber minFractionDigits="0" maxFractionDigits="4"/>
+                            <f:convertNumber minFractionDigits="2" maxFractionDigits="4"/>
                         </h:outputText>
                     </p:column>
-                    <p:column headerText="#{messages.birimMaliyetLabel}" styleClass="text-end">
+                    <p:column headerText="#{messages.birimMaliyetText}" styleClass="text-end">
                         <h:outputText value="#{kalemItem.birimMaliyet}">
-                            <f:convertNumber minFractionDigits="0" maxFractionDigits="4"/>
+                            <f:convertNumber minFractionDigits="2" maxFractionDigits="4"/>
                         </h:outputText>
                     </p:column>
                 </p:dataTable>

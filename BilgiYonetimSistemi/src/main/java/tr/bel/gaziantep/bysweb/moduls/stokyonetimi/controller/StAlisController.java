@@ -1,5 +1,6 @@
 package tr.bel.gaziantep.bysweb.moduls.stokyonetimi.controller;
 
+import jakarta.ejb.EJBException;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.event.ActionEvent;
 import jakarta.faces.model.SelectItem;
@@ -316,8 +317,8 @@ public class StAlisController extends AbstractController<StAlis> {
             FacesUtil.successMessage(Constants.KAYIT_EKLENDI);
             setItems(null);
             setLazyItems(null);
-        } catch (IllegalArgumentException ex) {
-            FacesUtil.addExclamationMessage(ex.getMessage());
+        } catch (EJBException ex) {
+            FacesUtil.addExclamationMessage(ex.getCause().getMessage());
         } catch (Exception ex) {
             log.error("Alis olusturulamadi", ex);
             FacesUtil.errorMessage(Constants.HATA_OLUSTU);
@@ -369,8 +370,8 @@ public class StAlisController extends AbstractController<StAlis> {
             FacesUtil.successMessage(Constants.KAYIT_GUNCELLENDI);
             setItems(null);
             setLazyItems(null);
-        } catch (IllegalArgumentException ex) {
-            FacesUtil.addExclamationMessage(ex.getMessage());
+        } catch (EJBException ex) {
+            FacesUtil.addExclamationMessage(ex.getCause().getMessage());
         } catch (Exception ex) {
             log.error("Alis guncellenemedi", ex);
             FacesUtil.errorMessage(Constants.HATA_OLUSTU);

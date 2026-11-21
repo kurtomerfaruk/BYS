@@ -20,6 +20,7 @@
                     <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}" noSelectionOption="true"/>
                     <f:selectItems value="#{enumAlisBelgeTuru.ALL_VALUES}" var="tur"
                                    itemValue="#{tur}" itemLabel="#{tur.displayValue}"/>
+                    <p:ajax event="change" update="@(.ihaleNo)"/>
                 </p:selectOneMenu>
             </div>
             <div class="ui-grid-col-2">
@@ -27,8 +28,9 @@
                 <p:inputText value="#{stAlisController.selected.belgeNo}" size="30" maxlength="50"/>
             </div>
             <div class="ui-grid-col-2">
-                <p:outputLabel value="#{messages.ihaleNoLabel}" for="@next"/>
-                <p:inputText value="#{stAlisController.selected.ihaleNo}" size="30" maxlength="50"/>
+                <p:outputLabel value="#{messages.ihaleNoLabel}" for="@next" styleClass="ihaleNo"/>
+                <p:inputText value="#{stAlisController.selected.ihaleNo}" size="30" maxlength="50" styleClass="ihaleNo"
+                             required="#{stAlisController.selected.belgeTuru eq 'IHALE'}"/>
             </div>
             <div class="ui-grid-col-4">
                 <p:outputLabel value="#{messages.depoLabel}" for="stDepo"/>
