@@ -13,6 +13,8 @@
         <p:contextMenu id="StAlisDataTableContextMenu" for="datalist:datalist">
             <p:menuitem value="#{messages.buttonEkle}" onclick="document.getElementById('StAlisListForm:datalist:datalist:createButton').click();"
                         icon="pi pi-plus" rendered="#{syKullaniciController.hasPermission('stalis:ekle')}"/>
+            <p:menuitem value="#{messages.buttonGuncelle}" onclick="document.getElementById('StAlisListForm:datalist:datalist:editButton').click();"
+                        icon="pi pi-pencil" rendered="#{syKullaniciController.hasPermission('stalis:guncelle')}"/>
             <p:menuitem value="#{messages.buttonDetay}" onclick="document.getElementById('StAlisListForm:datalist:datalist:viewButton').click();"
                         icon="pi pi-search"/>
         </p:contextMenu>
@@ -22,9 +24,9 @@
                         rowKey="#{item.id}"
                         selection="#{stAlisController.selected}"
                         filtered="#{stAlisController.filtered}"
-                        rowselect=":StAlisListForm:datalist:datalist:viewButton"
-                        rowDblselect="document.getElementById('StAlisListForm:datalist:datalist:viewButton').click()"
-                        contextMenu=":StAlisListForm:datalist:datalist:viewButton"
+                        rowselect=":StAlisListForm:datalist:datalist:editButton :StAlisListForm:datalist:datalist:viewButton"
+                        rowDblselect="document.getElementById('StAlisListForm:datalist:datalist:editButton').click()"
+                        contextMenu=":StAlisListForm:datalist:datalist:editButton :StAlisListForm:datalist:datalist:viewButton"
                         selectListener="#{stAlisController.resetParents}"
                         controller="#{stAlisController}"
                         header="#{messages.alisListesi}">
@@ -34,12 +36,18 @@
             <f:facet name="paginatorBottomLeft">
 
                 <p:commandButton id="createButton" styleClass="ui-button-primary" icon="pi pi-plus" pt:data-tooltip="#{messages.buttonEkle}"
-                                 actionListener="#{stAlisController.prepareCreate}" update=":StAlisCreateForm:StAlisCreateForm"
+                                 actionListener="#{stAlisController.prepareCreate}" update=":StAlisCreateForm"
                                  oncomplete="PF('StAlisCreateDialog').show()" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
                                  rendered="#{syKullaniciController.hasPermission('stalis:ekle')}"/>
-
+                <p:commandButton id="editButton" styleClass="ui-button-success" icon="pi pi-pencil"
+                                 pt:data-tooltip="#{messages.buttonGuncelle}"
+                                 actionListener="#{stAlisController.prepareEdit}" update=":StAlisEditForm"
+                                 oncomplete="PF('StAlisEditDialog').show()"
+                                 disabled="#{empty stAlisController.selected}"
+                                 rendered="#{syKullaniciController.hasPermission('stalis:guncelle')}"
+                                 onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
                 <p:commandButton id="viewButton" styleClass="ui-button-info" icon="pi pi-search" pt:data-tooltip="#{messages.buttonDetay}"
-                                 update=":StAlisViewForm:StAlisViewForm" oncomplete="PF('StAlisViewDialog').show()"
+                                 update=":StAlisViewForm" oncomplete="PF('StAlisViewDialog').show()"
                                  disabled="#{empty stAlisController.selected}" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
 
             </f:facet>

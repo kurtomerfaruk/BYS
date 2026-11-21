@@ -32,4 +32,16 @@ public class StStokBarkodService extends AbstractService<StStokBarkod> {
         return em;
     }
 
+    public StStokBarkod findByBarkod(String barkod) {
+        if (barkod == null || barkod.isBlank()) {
+            return null;
+        }
+        return em.createQuery("SELECT b FROM StStokBarkod b WHERE b.barkod = :barkod AND b.aktif = true",
+                        StStokBarkod.class)
+                .setParameter("barkod", barkod.trim())
+                .getResultStream()
+                .findFirst()
+                .orElse(null);
+    }
+
 }

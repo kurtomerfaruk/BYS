@@ -234,5 +234,20 @@ public class StStokService extends AbstractService<StStok> {
 
         return em.createQuery(cq).setFirstResult(first).setMaxResults(pageSize).getResultList();
     }
+
+    /**
+     * Barkod okutulamadiysa stok kodu / malzeme kodu ile de arama yapilir.
+     */
+    public StStok findByKod(String kod) {
+        if (kod == null || kod.isBlank()) {
+            return null;
+        }
+        return em.createQuery("SELECT s FROM StStok s WHERE (s.stokKodu = :kod OR s.malzemeKodu = :kod) AND s.aktif = true",
+                        StStok.class)
+                .setParameter("kod", kod.trim())
+                .getResultStream()
+                .findFirst()
+                .orElse(null);
+    }
 }
 

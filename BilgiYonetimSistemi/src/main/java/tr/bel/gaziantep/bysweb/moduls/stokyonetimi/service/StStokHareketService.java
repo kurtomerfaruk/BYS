@@ -19,6 +19,7 @@ import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity.StStokHareket;
 import java.io.Serial;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
@@ -112,6 +113,24 @@ public class StStokHareketService extends AbstractService<StStokHareket> {
 
         return hareket;
     }
+
+    /**
+     * Belgeye ait, henuz terslenmemis aktif hareketleri dondurur.
+     */
+    public List<StStokHareket> findActiveByPurchaseDocument(String belgeTuru, String belgeNo) {
+        if (belgeTuru == null || belgeNo == null) {
+            return List.of();
+        }
+        return em.createQuery(
+                        "SELECT h FROM StStokHareket h WHERE h.belgeTuru = :belgeTuru AND h.belgeNo = :belgeNo "
+                                + "AND h.aktif = true AND h.tersHareket IS NULL "
+                                + "AND NOT EXISTS (SELECT r FROM StStokHareket r WHERE r.tersHareket = h AND r.aktif = true)",
+                        StStokHareket.class)
+                .setParameter("belgeTuru", belgeTuru)
+                .setParameter("belgeNo", belgeNo)
+                .getResultList();
+    }
+
 
     /**
      * Orijinal hareketin tersini olusturur. Ters kayit yeni bir hareket olarak

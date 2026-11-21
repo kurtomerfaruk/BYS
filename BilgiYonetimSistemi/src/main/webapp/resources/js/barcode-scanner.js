@@ -80,7 +80,7 @@ var stBarkodScanner = (function () {
 
     function ac(scannerInputId) {
         inputId = scannerInputId;
-        buttonId = scannerInputId ? scannerInputId.replace(/yeniBarkod$/, "btnBarkodEkle") : null;
+        buttonId = scannerInputId ? scannerInputId.replace(/(yeniBarkod|barkodOku)$/, "btnBarkodEkle") : null;
         if (!inputId) {
             window.alert("Barkod alani bulunamadi.");
             return;

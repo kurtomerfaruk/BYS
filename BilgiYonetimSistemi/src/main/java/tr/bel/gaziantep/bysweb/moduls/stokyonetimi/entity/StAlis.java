@@ -32,16 +32,19 @@ public class StAlis extends BaseEntity {
     @Column(name = "ID", nullable = false)
     private Integer id;
 
-    @Size(max = 20)
-    @Nationalized
     @Enumerated(EnumType.STRING)
-    @Column(name = "BELGE_TURU", length = 20)
+    @Column(name = "BELGE_TURU")
     private EnumStAlisBelgeTuru belgeTuru;
 
     @Size(max = 50)
     @Nationalized
     @Column(name = "BELGE_NO", length = 50)
     private String belgeNo;
+
+    @Size(max = 50)
+    @Nationalized
+    @Column(name = "IHALE_NO", length = 50)
+    private String ihaleNo;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "STTEDARIKCI_ID")
