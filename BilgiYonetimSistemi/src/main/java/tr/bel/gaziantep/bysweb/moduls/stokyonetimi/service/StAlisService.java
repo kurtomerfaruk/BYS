@@ -136,6 +136,10 @@ public class StAlisService extends AbstractService<StAlis> {
         }
         managed.setAciklama(form.getAciklama());
 
+        // Eski kalemleri sil; formdaki kalemler yeni kayit olarak eklenir.
+        managed.getKalemler().clear();
+        em.flush();
+
         int index = 0;
         for (StAlisKalem k : form.getKalemler()) {
             StAlisKalem kalem = new StAlisKalem();
@@ -143,6 +147,7 @@ public class StAlisService extends AbstractService<StAlis> {
             kalem.setMiktar(k.getMiktar());
             kalem.setBirimMaliyet(k.getBirimMaliyet());
             kalem.setAciklama(k.getAciklama());
+            kalem.setStAlis(managed);
             managed.getKalemler().add(kalem);
 
             StStokHareket template = buildStockMovement(managed, kalem, kullanici);

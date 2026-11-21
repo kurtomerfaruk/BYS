@@ -14,14 +14,17 @@ import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.entity.SyGenelAyar;
 import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.entity.SyKullanici;
 import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.service.SyGenelAyarService;
+import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity.StDepo;
 import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity.StStok;
 import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity.StStokBakiye;
 import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity.StStokHareket;
 
 import java.io.Serial;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
@@ -81,30 +84,17 @@ public class StStokHareketService extends AbstractService<StStokHareket> {
         BigDecimal delta = hareket.getYon() == EnumGirisCikis.GIRIS
                 ? hareket.getMiktar()
                 : hareket.getMiktar().negate();
-        // negatif stok kontrolu (ayar ile)
-        if (hareket.getYon() == EnumGirisCikis.CIKIS) {
-            BigDecimal yeniMiktar = bakiye.getMiktar().add(delta);
-            if (yeniMiktar.compareTo(BigDecimal.ZERO) < 0) {
-                SyGenelAyar ayar = syGenelAyarService.findByTanim("StokNegatifStokIzinVer");
-                boolean izinVer = ayar != null && "true".equalsIgnoreCase(ayar.getDeger());
-                if (!izinVer) {
-                    throw new IllegalArgumentException("Negatif stok oluşturulamaz (Sistem Yöneticiniz ile görüşünüz).");
-                }
-            }
-        }
+        checkNegativeStock(hareket.getYon(), bakiye.getMiktar().add(delta));
         bakiye.setMiktar(bakiye.getMiktar().add(delta));
 
-        // maliyet motoru (FIFO/LIFO/Ağırlıklı Ortalama)
         if (hareket.getYon() == EnumGirisCikis.GIRIS) {
             stMaliyetKatmaniService.katmanOlustur(hareket);
         } else {
             stMaliyetKatmaniService.katmanTuket(hareket);
         }
 
-
-        // islem logu
         stIslemLogService.log(
-                tr.bel.gaziantep.bysweb.core.enums.stokyonetimi.EnumStIslemLogTuru.HAREKET,
+                EnumStIslemLogTuru.HAREKET,
                 hareket.getEkleyen(),
                 hareket.getStDepo(),
                 "StStokHareket",
@@ -117,8 +107,9 @@ public class StStokHareketService extends AbstractService<StStokHareket> {
     }
 
     /**
-     * Mevcut stok hareketini yerinde gunceller; bakiye ve maliyet katmanini
-     * eski/new miktar farki kadar duzeltir. Yeni hareket kaydi olusturmaz.
+     * Mevcut stok hareketini yerinde gunceller. Bakiye, eski miktarin cikarilip
+     * yeni miktarin eklenmesiyle net fark kadar duzeltilir; ayni depo icin tek
+     * bakiye satiri uzerinde islem yapilir. Yeni hareket kaydi olusturulmaz.
      */
     public StStokHareket updateStockMovement(StStokHareket mevcut, StStokHareket yeni, SyKullanici kullanici) {
         if (mevcut == null || mevcut.getId() == null) {
@@ -126,56 +117,90 @@ public class StStokHareketService extends AbstractService<StStokHareket> {
         }
         validate(yeni);
 
-        BigDecimal oldQty = mevcut.getMiktar() == null ? BigDecimal.ZERO : mevcut.getMiktar();
+        StStokHareket managed = em.find(StStokHareket.class, mevcut.getId());
+        if (managed == null) {
+            throw new IllegalArgumentException("Guncellenecek stok hareketi bulunamadi.");
+        }
+
+        BigDecimal oldQty = managed.getMiktar() == null ? BigDecimal.ZERO : managed.getMiktar();
         BigDecimal newQty = yeni.getMiktar() == null ? BigDecimal.ZERO : yeni.getMiktar();
-        BigDecimal oldCost = mevcut.getBirimMaliyet();
-        EnumGirisCikis yon = mevcut.getYon() == null ? yeni.getYon() : mevcut.getYon();
+        BigDecimal oldCost = managed.getBirimMaliyet();
+        EnumGirisCikis yon = managed.getYon() == null ? yeni.getYon() : managed.getYon();
         int sign = yon == EnumGirisCikis.GIRIS ? 1 : -1;
         BigDecimal oldDelta = oldQty.multiply(BigDecimal.valueOf(sign));
         BigDecimal newDelta = newQty.multiply(BigDecimal.valueOf(sign));
 
-        StStokBakiye oldBalance = bakiyeService.getOrCreate(
-                mevcut.getStStok(), mevcut.getStDepo(), mevcut.getSkt());
-        oldBalance.setMiktar(oldBalance.getMiktar().subtract(oldDelta));
+        StStok oldStok = managed.getStStok();
+        StDepo oldDepo = managed.getStDepo();
+        LocalDate oldSkt = managed.getSkt();
 
-        StStokBakiye newBalance = bakiyeService.getOrCreate(
-                yeni.getStStok(), yeni.getStDepo(), yeni.getSkt());
-        BigDecimal updatedBalance = newBalance.getMiktar().add(newDelta);
-        if (yon == EnumGirisCikis.CIKIS && updatedBalance.compareTo(BigDecimal.ZERO) < 0) {
-            SyGenelAyar ayar = syGenelAyarService.findByTanim("StokNegatifStokIzinVer");
-            boolean izinVer = ayar != null && "true".equalsIgnoreCase(ayar.getDeger());
-            if (!izinVer) {
-                oldBalance.setMiktar(oldBalance.getMiktar().add(oldDelta));
-                throw new IllegalArgumentException("Negatif stok oluşturulamaz (Sistem Yöneticiniz ile görüşünüz).");
-            }
+        StStok newStok = yeni.getStStok() == null || yeni.getStStok().getId() == null
+                ? oldStok
+                : em.find(StStok.class, yeni.getStStok().getId());
+        StDepo newDepo = yeni.getStDepo() == null || yeni.getStDepo().getId() == null
+                ? oldDepo
+                : em.find(StDepo.class, yeni.getStDepo().getId());
+        LocalDate newSkt = yeni.getSkt();
+
+        boolean sameBalance = Objects.equals(
+                oldStok == null ? null : oldStok.getId(),
+                newStok == null ? null : newStok.getId())
+                && Objects.equals(
+                oldDepo == null ? null : oldDepo.getId(),
+                newDepo == null ? null : newDepo.getId())
+                && Objects.equals(oldSkt, newSkt);
+
+        if (sameBalance) {
+            StStokBakiye bakiye = bakiyeService.getOrCreate(oldStok, oldDepo, oldSkt);
+            BigDecimal finalQty = bakiye.getMiktar().subtract(oldDelta).add(newDelta);
+            checkNegativeStock(yon, finalQty);
+            bakiye.setMiktar(finalQty);
+        } else {
+            StStokBakiye oldBalance = bakiyeService.getOrCreate(oldStok, oldDepo, oldSkt);
+            oldBalance.setMiktar(oldBalance.getMiktar().subtract(oldDelta));
+
+            StStokBakiye newBalance = bakiyeService.getOrCreate(newStok, newDepo, newSkt);
+            BigDecimal finalQty = newBalance.getMiktar().add(newDelta);
+            checkNegativeStock(yon, finalQty);
+            newBalance.setMiktar(finalQty);
         }
-        newBalance.setMiktar(updatedBalance);
 
-        mevcut.setStStok(yeni.getStStok());
-        mevcut.setStDepo(yeni.getStDepo());
-        mevcut.setSkt(yeni.getSkt());
-        mevcut.setMiktar(newQty);
-        mevcut.setBirimMaliyet(yeni.getBirimMaliyet());
-        mevcut.setToplamMaliyet(yeni.getBirimMaliyet() == null ? null : newQty.multiply(yeni.getBirimMaliyet()));
-        mevcut.setBelgeTuru(yeni.getBelgeTuru());
-        mevcut.setBelgeNo(yeni.getBelgeNo());
-        mevcut.setIslemTarihi(yeni.getIslemTarihi() == null ? LocalDateTime.now() : yeni.getIslemTarihi());
-        mevcut.setAciklama(yeni.getAciklama());
+        managed.setStStok(newStok);
+        managed.setStDepo(newDepo);
+        managed.setSkt(newSkt);
+        managed.setMiktar(newQty);
+        managed.setBirimMaliyet(yeni.getBirimMaliyet());
+        managed.setToplamMaliyet(yeni.getBirimMaliyet() == null ? null : newQty.multiply(yeni.getBirimMaliyet()));
+        managed.setBelgeTuru(yeni.getBelgeTuru());
+        managed.setBelgeNo(yeni.getBelgeNo());
+        managed.setIslemTarihi(yeni.getIslemTarihi() == null ? LocalDateTime.now() : yeni.getIslemTarihi());
+        managed.setAciklama(yeni.getAciklama());
         if (kullanici != null) {
-            mevcut.setGuncelleyen(kullanici);
+            managed.setGuncelleyen(kullanici);
         }
 
-        stMaliyetKatmaniService.updateCostLayer(mevcut, oldQty, oldCost);
-        em.merge(mevcut);
+        stMaliyetKatmaniService.updateCostLayer(managed, oldQty, oldCost);
+        em.flush();
         stIslemLogService.log(
                 EnumStIslemLogTuru.HAREKET,
                 kullanici,
-                mevcut.getStDepo(),
+                managed.getStDepo(),
                 "StStokHareket",
-                mevcut.getHareketNo(),
-                "Hareket güncelleme: " + mevcut.getHareketTuru().getDisplayValue()
+                managed.getHareketNo(),
+                "Hareket güncelleme: " + managed.getHareketTuru().getDisplayValue()
                         + " / " + oldQty + " -> " + newQty);
-        return mevcut;
+        return managed;
+    }
+
+    private void checkNegativeStock(EnumGirisCikis yon, BigDecimal finalQty) {
+        if (yon != EnumGirisCikis.CIKIS || finalQty.compareTo(BigDecimal.ZERO) >= 0) {
+            return;
+        }
+        SyGenelAyar ayar = syGenelAyarService.findByTanim("StokNegatifStokIzinVer");
+        boolean izinVer = ayar != null && "true".equalsIgnoreCase(ayar.getDeger());
+        if (!izinVer) {
+            throw new IllegalArgumentException("Negatif stok oluşturulamaz (Sistem Yöneticiniz ile görüşünüz).");
+        }
     }
 
     /**
@@ -203,7 +228,7 @@ public class StStokHareketService extends AbstractService<StStokHareket> {
     }
 
     /**
-     * Belgeye ait, henuz terslenmemis aktif hareketleri dondurur.
+     * Belgeye ait aktif hareketleri dondurur.
      */
     public List<StStokHareket> findActiveByPurchaseDocument(String belgeTuru, String belgeNo) {
         if (belgeNo == null || belgeNo.isBlank()) {
@@ -217,7 +242,6 @@ public class StStokHareketService extends AbstractService<StStokHareket> {
                 .setParameter("belgeNo", belgeNo.trim())
                 .getResultList();
     }
-
 
     /**
      * Orijinal hareketin tersini olusturur. Ters kayit yeni bir hareket olarak
@@ -287,7 +311,7 @@ public class StStokHareketService extends AbstractService<StStokHareket> {
         return hareketTuru == null ? null : hareketTuru.getVarsayilanYon();
     }
 
-    public java.util.List<StStokHareket> findByStok(StStok stStok) {
+    public List<StStokHareket> findByStok(StStok stStok) {
         if (stStok == null || stStok.getId() == null) {
             return new java.util.ArrayList<>();
         }
