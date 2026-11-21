@@ -157,7 +157,7 @@
                 </f:facet>
                 <f:facet name="input">
                     <p:inputNumber value="#{kalemItem.miktar}" decimalPlaces="2" minValue="0.0001" emptyValue="empty">
-                        <p:ajax event="change" update="kalemTable"/>
+                        <p:ajax event="change" update="@(.total)"/>
                     </p:inputNumber>
                 </f:facet>
             </p:cellEditor>
@@ -171,14 +171,15 @@
                 </f:facet>
                 <f:facet name="input">
                     <p:inputNumber value="#{kalemItem.birimMaliyet}" decimalPlaces="2" minValue="0" emptyValue="empty">
-                        <p:ajax event="change" update="kalemTable"/></p:inputNumber>
+                        <p:ajax event="change" update="@(.total)"/>
+                    </p:inputNumber>
                 </f:facet>
             </p:cellEditor>
         </p:column>
-        <p:column headerText="#{messages.toplamText}" styleClass="text-end total">
-            <h:outputText value="#{stAlisController.getKalemTutar(kalemItem)}" styleClass="total">
+        <p:column headerText="#{messages.toplamText}" styleClass="text-end">
+            <p:outputLabel value="#{stAlisController.getKalemTutar(kalemItem)}" styleClass="total">
                 <f:convertNumber minFractionDigits="2" maxFractionDigits="2"/>
-            </h:outputText>
+            </p:outputLabel>
         </p:column>
         <p:column style="width:60px;text-align:center;">
             <p:commandButton icon="pi pi-trash" styleClass="ui-button-danger rounded-button"
@@ -190,13 +191,13 @@
             <div style="text-align:right;font-size:12px">
                 #{messages.kalemSayisiLabel}: #{stAlisController.selected.kalemler.size()} |
                 #{messages.toplamMiktarLabel}:
-                <h:outputText value="#{stAlisController.toplamMiktar}" styleClass="total">
+                <p:outputLabel value="#{stAlisController.toplamMiktar}" styleClass="total">
                     <f:convertNumber minFractionDigits="2" maxFractionDigits="2"/>
-                </h:outputText> |
+                </p:outputLabel> |
                 #{messages.toplamTutarLabel}:
-                <h:outputText value="#{stAlisController.toplamTutar}" styleClass="total">
+                <p:outputLabel value="#{stAlisController.toplamTutar}" styleClass="total">
                     <f:convertNumber minFractionDigits="2" maxFractionDigits="2"/>
-                </h:outputText>
+                </p:outputLabel>
             </div>
         </f:facet>
     </p:dataTable>

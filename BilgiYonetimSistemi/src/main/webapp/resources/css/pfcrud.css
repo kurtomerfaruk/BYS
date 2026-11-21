@@ -267,7 +267,7 @@ body .ui-button.ui-button-indigo,body .ui-splitbutton.ui-button-indigo>.ui-butto
     height: 40px;
 }
 
-/* Tüm ikonlar üst üste biniyor ve baþlangýçta görünmezler */
+/* Tï¿½m ikonlar ï¿½st ï¿½ste biniyor ve baï¿½langï¿½ï¿½ta gï¿½rï¿½nmezler */
 .icon {
     position: absolute;
     top: 50%;
@@ -287,12 +287,12 @@ body .ui-button.ui-button-indigo,body .ui-splitbutton.ui-button-indigo>.ui-butto
 .icon:nth-child(6) { animation-delay: 7.5s; }
 .icon:nth-child(7) { animation-delay: 9s; }
 
-/* Dýþ halka animasyonu */
+/* Dï¿½ï¿½ halka animasyonu */
 @keyframes spin {
     to { transform: rotate(360deg); }
 }
 
-/* Görünme-Kaybolma Animasyonu */
+/* Gï¿½rï¿½nme-Kaybolma Animasyonu */
 @keyframes sequenceAnim {
     0% { opacity: 0; transform: translate(-50%, -50%) scale(0.6); }
     2% { opacity: 1; transform: translate(-50%, -50%) scale(1); }    /* Belirme */
@@ -310,4 +310,9 @@ body .ui-dialog {
     overflow: hidden !important;
     display: flex;
     flex-direction: column;
+}
+
+.ui-grid-row > [class*="ui-grid-col-"] {
+    padding-right: .25rem !important;
+    padding-left: .25rem !important;
 }
