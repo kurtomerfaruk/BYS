@@ -3,209 +3,46 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="jakarta.faces.facelets"
       xmlns:h="jakarta.faces.html"
-      xmlns:f="jakarta.faces.core"
       xmlns:p="primefaces">
 
 <ui:composition>
-    <ui:param name="alisFormId" value="StAlisEditForm"/>
-    <ui:param name="alisWidgetVar" value="StAlisEditDialog"/>
-    <ui:param name="alisDialogHeader" value="#{messages.dialogKayitGuncelle} - #{messages.alisKayitLabel}"/>
-    <ui:param name="alisSaveAction" value="#{stAlisController.saveEdit}"/>
-    <ui:param name="alisShowProceed" value="false"/>
 
-
-    <p:dialog widgetVar="#{alisWidgetVar}"
-              id="#{alisWidgetVar}Id"
+    <p:dialog widgetVar="StAlisEditDialog"
+              id="StAlisEditDialogId"
               modal="true"
               resizable="false"
               closeOnEscape="true"
-              header="#{alisDialogHeader}"
+              header="#{messages.dialogKayitGuncelle} - #{messages.alisBelgesiText}"
               appendTo="@(body)"
               responsive="true"
               fitViewport="true"
               position="top"
-              onShow="PF('#{alisWidgetVar}').initPosition(); stBarkodOdak('#{alisFormId}:barkodOku');"
+              onShow="PF('StAlisEditDialog').initPosition(); stBarkodOdak('StAlisEditForm:barkodOku');"
               style="min-width:1000px;">
 
-        <h:form id="#{alisFormId}">
+        <h:form id="StAlisEditForm">
             <h:panelGroup id="display">
                 <div class="card">
                     <div class="card-body">
 
-                        <div class="card-title fw-bold mb-2">#{messages.alisBelgeBilgileri}</div>
-                        <div class="ui-grid ui-grid-responsive mb-3">
-                            <div class="ui-grid-row">
-                                <div class="ui-grid-col-3">
-                                    <p:outputLabel value="#{messages.belgeTuruLabel}" for="belgeTuru"/>
-                                    <p:selectOneMenu id="belgeTuru" value="#{stAlisController.selected.belgeTuru}"
-                                                     converter="omnifaces.SelectItemsConverter" required="true"
-                                                     styleClass="w-100">
-                                        <f:selectItems value="#{enumAlisBelgeTuru.ALL_VALUES}" var="tur"
-                                                       itemValue="#{tur}" itemLabel="#{tur.displayValue}"/>
-                                    </p:selectOneMenu>
-                                </div>
-                                <div class="ui-grid-col-3">
-                                    <p:outputLabel value="#{messages.belgeNoLabel}" for="belgeNo"/>
-                                    <p:inputText id="belgeNo" value="#{stAlisController.selected.belgeNo}"
-                                                 size="30" maxlength="50" required="true" styleClass="w-100"/>
-                                </div>
-                                <div class="ui-grid-col-3">
-                                    <p:outputLabel value="#{messages.tarihLabel}" for="tarih"/>
-                                    <p:datePicker id="tarih" value="#{stAlisController.selected.tarih}"
-                                                  pattern="#{messages.tarihSaatKisaFormat}" showTime="true"
-                                                  showOnFocus="false" required="true" styleClass="w-100"/>
-                                </div>
-                                <div class="ui-grid-col-3">
-                                    <p:outputLabel value="#{messages.depoLabel}" for="stDepo"/>
-                                    <p:selectOneMenu id="stDepo" value="#{stAlisController.selected.stDepo}"
-                                                     filter="true" converter="omnifaces.SelectItemsConverter"
-                                                     required="true" styleClass="w-100">
-                                        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
-                                        <f:selectItems value="#{stAlisController.yetkiliDepoOptions}"/>
-                                    </p:selectOneMenu>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="ui-grid ui-grid-responsive mb-3">
-                            <div class="ui-grid-row">
-                                <div class="ui-grid-col-6">
-                                    <p:outputLabel value="#{messages.tedarikciLabel}" for="tedarikci"/>
-                                    <p:selectOneMenu id="tedarikci" value="#{stAlisController.selected.stTedarikci}"
-                                                     filter="true" converter="omnifaces.SelectItemsConverter"
-                                                     styleClass="w-100">
-                                        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
-                                        <f:selectItems value="#{stTedarikciController.items}" var="tedarikciItem"
-                                                       itemValue="#{tedarikciItem}" itemLabel="#{tedarikciItem.ad}"/>
-                                    </p:selectOneMenu>
-                                </div>
-                                <div class="ui-grid-col-6">
-                                    <p:outputLabel value="#{messages.aciklamaLabel}" for="aciklama"/>
-                                    <p:inputTextarea id="aciklama" value="#{stAlisController.selected.aciklama}"
-                                                     title="#{messages.aciklamaText}" rows="2" styleClass="w-100"
-                                                     autoResize="false" maxlength="300"/>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="card-title fw-bold mb-2">#{messages.alisHizliKalemGirisi}</div>
-                        <h:panelGroup id="alisBarkodPanel" layout="block" styleClass="ui-fieldset ui-widget mb-2"
-                                      style="padding:10px;border:1px solid #d5dce3;border-radius:6px;background:#f8fbff;">
-                            <p:defaultCommand target="btnBarkodEkle" scope="alisBarkodPanel"/>
-                            <div class="ui-grid ui-grid-responsive">
-                                <div class="ui-grid-row">
-                                    <div class="ui-grid-col-4">
-                                        <p:outputLabel value="#{messages.barkodLabel} / #{messages.stokKoduLabel}"
-                                                       for="barkodOku"/>
-                                        <p:inputText id="barkodOku" value="#{stAlisController.barkodOku}"
-                                                     styleClass="w-100" style="font-size:16px;font-weight:600"
-                                                     maxlength="50" autocomplete="off"/>
-                                    </div>
-                                    <div class="ui-grid-col-2">
-                                        <p:outputLabel value="#{messages.miktarLabel}" for="alisMiktar"/>
-                                        <p:inputNumber id="alisMiktar" value="#{stAlisController.alisMiktar}"
-                                                       decimalPlaces="4" minValue="0.0001" emptyValue="empty"
-                                                       styleClass="w-100"/>
-                                    </div>
-                                    <div class="ui-grid-col-2">
-                                        <p:outputLabel value="#{messages.birimMaliyetLabel}" for="alisBirimMaliyet"/>
-                                        <p:inputNumber id="alisBirimMaliyet" value="#{stAlisController.alisBirimMaliyet}"
-                                                       decimalPlaces="4" minValue="0" emptyValue="empty"
-                                                       styleClass="w-100"/>
-                                    </div>
-                                    <div class="ui-grid-col-2">
-                                        <p:commandButton id="btnBarkodEkle" value="#{messages.buttonKalemEkle}"
-                                                         icon="pi pi-plus" styleClass="ui-button-primary w-100 mt-4"
-                                                         actionListener="#{stAlisController.addKalemFromBarkod}"
-                                                         process="alisBarkodPanel"
-                                                         update="alisBarkodPanel kalemTable :growl"
-                                                         onstart="PF('Loading').show()"
-                                                         oncomplete="PF('Loading').hide(); stBarkodOdak('#{alisFormId}:barkodOku');"/>
-                                    </div>
-                                    <div class="ui-grid-col-2">
-                                        <p:commandButton type="button" value="#{messages.stBarkodKameraButon}"
-                                                         icon="pi pi-camera" styleClass="ui-button-secondary w-100 mt-4"
-                                                         onclick="stBarkodScanner.ac('#{alisFormId}:barkodOku')"/>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="mt-2" style="font-size:12px;color:#718295">
-                                #{messages.alisEnterIpucu}
-                            </div>
-                            <h:panelGroup rendered="#{stAlisController.barkodBulunamadi}">
-                                <div style="margin-top:8px;font-size:12px;color:#8a5a00">
-                                    #{messages.alisBarkodBulunamadi}
-                                    <p:commandButton value="#{messages.alisYeniStokKarti}"
-                                                     styleClass="ui-button-text p-0"
-                                                     actionListener="#{stAlisController.yeniStokKartiAc}"
-                                                     process="barkodOku,@this" update="@none"
-                                                     onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
-                                    <p:commandButton value="#{messages.alisSonStokKalemeAl}" type="button"
-                                                     styleClass="ui-button-text p-0"
-                                                     actionListener="#{stAlisController.sonStokuKalemeAl}"
-                                                     update="alisBarkodPanel kalemTable :growl"
-                                                     onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
-                                </div>
-                            </h:panelGroup>
-                        </h:panelGroup>
-
-                        <div class="card-title fw-bold mb-2">#{messages.alisKalemLabel}</div>
-                        <p:dataTable id="kalemTable" value="#{stAlisController.selected.kalemler}" var="kalemItem"
-                                     emptyMessage="#{messages.kayitBulunamadi}" size="small" stripedRows="true"
-                                     rendered="#{stAlisController.selected != null}"
-                                     styleClass="w-100">
-                            <p:column headerText="#{messages.stokText}">
-                                <h:outputText value="#{kalemItem.stStok.stokKodu} - #{kalemItem.stStok.stokAdi}"/>
-                            </p:column>
-                            <p:column headerText="#{messages.miktarText}" styleClass="text-end">
-                                <h:outputText value="#{kalemItem.miktar}">
-                                    <f:convertNumber minFractionDigits="0" maxFractionDigits="4"/>
-                                </h:outputText>
-                            </p:column>
-                            <p:column headerText="#{messages.birimMaliyetText}" styleClass="text-end">
-                                <h:outputText value="#{kalemItem.birimMaliyet}">
-                                    <f:convertNumber minFractionDigits="0" maxFractionDigits="4"/>
-                                </h:outputText>
-                            </p:column>
-                            <p:column headerText="#{messages.toplamLabel}" styleClass="text-end">
-                                <h:outputText value="#{stAlisController.getKalemTutar(kalemItem)}">
-                                    <f:convertNumber minFractionDigits="2" maxFractionDigits="2"/>
-                                </h:outputText>
-                            </p:column>
-                            <p:column style="width:60px;text-align:center;">
-                                <p:commandButton icon="pi pi-trash" styleClass="ui-button-danger rounded-button"
-                                                 actionListener="#{stAlisController.removeKalem(kalemItem)}"
-                                                 process="@this" update="kalemTable :growl"
-                                                 onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
-                            </p:column>
-                            <f:facet name="footer">
-                                <div style="text-align:right;font-size:12px">
-                                    #{messages.alisKalemSayisi}: #{stAlisController.selected.kalemler.size()} |
-                                    #{messages.alisToplamMiktar}: #{stAlisController.toplamMiktar} |
-                                    #{messages.alisToplamTutar}: #{stAlisController.toplamTutar}
-                                </div>
-                            </f:facet>
-                        </p:dataTable>
+                        <ui:include src="/moduls/stokyonetimi/stAlis/Field.xhtml">
+                            <ui:param name="formId" value="StAlisEditForm"/>
+                        </ui:include>
 
                     </div>
                     <div class="card-footer">
                         <div class="float-end">
                             <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
                                              value="#{messages.buttonIptal}" immediate="true"
-                                             onclick="PF('#{alisWidgetVar}').hide()"
+                                             onclick="PF('StAlisEditDialog').hide()"
                                              onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()">
                                 <p:resetInput target="@form"/>
                             </p:commandButton>
-                            <p:commandButton id="btnKaydetDevam" rendered="#{alisShowProceed}" icon="pi pi-check-circle" styleClass="ui-button-help"
-                                             value="#{messages.buttonKaydetDevam}"
-                                             actionListener="#{stAlisController.saveProceed}"
-                                             update="display,:StAlisListForm:datalist:datalist,:growl"
-                                             onstart="PF('Loading').show()" oncomplete="PF('Loading').hide();"/>
                             <p:commandButton icon="pi pi-check" styleClass="ui-button-success"
                                              value="#{messages.buttonKaydet}"
                                              actionListener="#{stAlisController.saveEdit}"
                                              update="display,:StAlisListForm:datalist:datalist,:growl"
-                                             oncomplete="handleSubmit(xhr,status,args,PF('#{alisWidgetVar}'));"
+                                             oncomplete="handleSubmit(xhr,status,args,PF('StAlisEditDialog'));"
                                              onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
                         </div>
                     </div>

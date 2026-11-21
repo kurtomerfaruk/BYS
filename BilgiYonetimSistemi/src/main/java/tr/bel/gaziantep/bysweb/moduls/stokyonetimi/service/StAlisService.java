@@ -82,27 +82,31 @@ public class StAlisService extends AbstractService<StAlis> {
         return alis;
     }
 
+    private StStokHareket buildStockMovement(StAlis alis, StAlisKalem kalem, SyKullanici kullanici) {
+        StStokHareket hareket = new StStokHareket();
+        hareket.setStStok(kalem.getStStok());
+        hareket.setStDepo(alis.getStDepo());
+        hareket.setHareketTuru(EnumStHareketTuru.SATIN_ALMA);
+        hareket.setYon(EnumGirisCikis.GIRIS);
+        hareket.setMiktar(kalem.getMiktar());
+        hareket.setBirimMaliyet(kalem.getBirimMaliyet());
+        hareket.setBelgeTuru(alis.getBelgeTuru().getDisplayValue());
+        hareket.setBelgeNo(alis.getBelgeNo());
+        hareket.setIslemTarihi(alis.getTarih());
+        hareket.setAciklama(kalem.getAciklama());
+        hareket.setEkleyen(kullanici);
+        return hareket;
+    }
+
     private void createStockMovements(StAlis alis, SyKullanici kullanici) {
         for (StAlisKalem k : alis.getKalemler()) {
-            StStokHareket hareket = new StStokHareket();
-            hareket.setStStok(k.getStStok());
-            hareket.setStDepo(alis.getStDepo());
-            hareket.setHareketTuru(EnumStHareketTuru.SATIN_ALMA);
-            hareket.setYon(EnumGirisCikis.GIRIS);
-            hareket.setMiktar(k.getMiktar());
-            hareket.setBirimMaliyet(k.getBirimMaliyet());
-            hareket.setBelgeTuru(alis.getBelgeTuru().getDisplayValue());
-            hareket.setBelgeNo(alis.getBelgeNo());
-            hareket.setIslemTarihi(alis.getTarih());
-            hareket.setAciklama(k.getAciklama());
-            hareket.setEkleyen(kullanici);
-            hareketService.hareketEkle(hareket);
+            hareketService.hareketEkle(buildStockMovement(alis, k, kullanici));
         }
     }
 
     /**
-     * Hatali/eksik girilen alis belgesini gunceller. Eski stok hareketleri ters hareket
-     * ile iptal edilir, yeni hareketler olusturulur (insert-only duzeltme).
+     * Hatali/eksik girilen alis belgesini gunceller. Mevcut stok hareketleri
+     * yerinde guncellenir; yeni hareket kaydi olusturulmaz.
      */
     public StAlis updatePurchase(StAlis form, SyKullanici kullanici) {
         validate(form);
@@ -116,9 +120,10 @@ public class StAlisService extends AbstractService<StAlis> {
 
         String oldDocumentType = managed.getBelgeTuru() == null ? null : managed.getBelgeTuru().getDisplayValue();
         String oldDocumentNo = managed.getBelgeNo();
-        for (StStokHareket old : hareketService.findActiveByPurchaseDocument(oldDocumentType, oldDocumentNo)) {
-            hareketService.tersHareketOlustur(old);
-        }
+        List<StStokHareket> existing = new ArrayList<>(
+                hareketService.findActiveByPurchaseDocument(oldDocumentType, oldDocumentNo));
+        existing.sort(Comparator.comparing(StStokHareket::getId,
+                Comparator.nullsLast(Comparator.naturalOrder())));
 
         managed.setBelgeTuru(form.getBelgeTuru());
         managed.setBelgeNo(form.getBelgeNo());
@@ -131,20 +136,28 @@ public class StAlisService extends AbstractService<StAlis> {
         }
         managed.setAciklama(form.getAciklama());
 
-        managed.getKalemler().clear();
-        em.flush();
+        int index = 0;
         for (StAlisKalem k : form.getKalemler()) {
-            StAlisKalem yeni = new StAlisKalem();
-            yeni.setStStok(em.find(StStok.class, k.getStStok().getId()));
-            yeni.setMiktar(k.getMiktar());
-            yeni.setBirimMaliyet(k.getBirimMaliyet());
-            yeni.setAciklama(k.getAciklama());
-            yeni.setStAlis(managed);
-            managed.getKalemler().add(yeni);
+            StAlisKalem kalem = new StAlisKalem();
+            kalem.setStStok(em.find(StStok.class, k.getStStok().getId()));
+            kalem.setMiktar(k.getMiktar());
+            kalem.setBirimMaliyet(k.getBirimMaliyet());
+            kalem.setAciklama(k.getAciklama());
+            managed.getKalemler().add(kalem);
+
+            StStokHareket template = buildStockMovement(managed, kalem, kullanici);
+            if (index < existing.size()) {
+                hareketService.updateStockMovement(existing.get(index), template, kullanici);
+            } else {
+                hareketService.hareketEkle(template);
+            }
+            index++;
+        }
+        for (; index < existing.size(); index++) {
+            hareketService.cancelStockMovement(existing.get(index), kullanici);
         }
         em.flush();
 
-        createStockMovements(managed, kullanici);
         stIslemLogService.log(EnumStIslemLogTuru.HAREKET, kullanici, managed.getStDepo(),
                 "StAlis", managed.getBelgeNo(),
                 "Alış güncelleme: " + managed.getBelgeTuru().getDisplayValue() + " / " + managed.getKalemler().size() + " kalem");

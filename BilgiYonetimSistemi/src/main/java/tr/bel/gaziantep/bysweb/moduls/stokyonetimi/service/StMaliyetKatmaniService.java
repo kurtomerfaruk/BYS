@@ -91,6 +91,53 @@ public class StMaliyetKatmaniService extends AbstractService<StMaliyetKatmani> {
     }
 
     /**
+     * Hareketin olusturdugu maliyet katmanini bulur.
+     */
+    public StMaliyetKatmani findByStockMovement(StStokHareket hareket) {
+        if (hareket == null || hareket.getId() == null) {
+            return null;
+        }
+        return em.createQuery("SELECT k FROM StMaliyetKatmani k WHERE k.stStokHareket = :hareket AND k.aktif = true",
+                        StMaliyetKatmani.class)
+                .setParameter("hareket", hareket)
+                .getResultStream()
+                .findFirst()
+                .orElse(null);
+    }
+
+    /**
+     * Giriş hareketi miktari/fiyati degistiginde ilgili katmani gunceller.
+     */
+    public void updateCostLayer(StStokHareket hareket, BigDecimal oldQuantity, BigDecimal oldUnitCost) {
+        if (hareket == null || hareket.getYon() != EnumGirisCikis.GIRIS) {
+            return;
+        }
+        StMaliyetKatmani katman = findByStockMovement(hareket);
+        if (katman == null) {
+            katmanOlustur(hareket);
+            return;
+        }
+        BigDecimal yeniMiktar = hareket.getMiktar() == null ? BigDecimal.ZERO : hareket.getMiktar();
+        BigDecimal eskiMiktar = oldQuantity == null ? BigDecimal.ZERO : oldQuantity;
+        BigDecimal delta = yeniMiktar.subtract(eskiMiktar);
+        katman.setAcilanMiktar(yeniMiktar);
+        BigDecimal yeniKalan = katman.getKalanMiktar().add(delta);
+        katman.setKalanMiktar(yeniKalan.compareTo(BigDecimal.ZERO) < 0 ? BigDecimal.ZERO : yeniKalan);
+        katman.setBirimMaliyet(hareket.getBirimMaliyet() == null ? BigDecimal.ZERO : hareket.getBirimMaliyet());
+        katman.setTarih(hareket.getIslemTarihi() == null ? LocalDateTime.now() : hareket.getIslemTarihi());
+    }
+
+    /**
+     * Hareket iptal edildiginde katmani pasif hale getirir.
+     */
+    public void deactivateCostLayer(StStokHareket hareket) {
+        StMaliyetKatmani katman = findByStockMovement(hareket);
+        if (katman != null) {
+            katman.setAktif(false);
+        }
+    }
+
+    /**
      * Çıkış hareketi için katmanları tüketir; hareketin birimMaliyet/toplamMaliyet'ini doldurur.
      */
     public void katmanTuket(StStokHareket hareket) {

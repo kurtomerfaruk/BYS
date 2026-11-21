@@ -8,9 +8,11 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import tr.bel.gaziantep.bysweb.core.enums.bys.EnumGirisCikis;
 import tr.bel.gaziantep.bysweb.core.enums.stokyonetimi.EnumStHareketTuru;
+import tr.bel.gaziantep.bysweb.core.enums.stokyonetimi.EnumStIslemLogTuru;
 import tr.bel.gaziantep.bysweb.core.service.AbstractService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.entity.SyGenelAyar;
+import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.entity.SyKullanici;
 import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.service.SyGenelAyarService;
 import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity.StStok;
 import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity.StStokBakiye;
@@ -115,19 +117,104 @@ public class StStokHareketService extends AbstractService<StStokHareket> {
     }
 
     /**
+     * Mevcut stok hareketini yerinde gunceller; bakiye ve maliyet katmanini
+     * eski/new miktar farki kadar duzeltir. Yeni hareket kaydi olusturmaz.
+     */
+    public StStokHareket updateStockMovement(StStokHareket mevcut, StStokHareket yeni, SyKullanici kullanici) {
+        if (mevcut == null || mevcut.getId() == null) {
+            throw new IllegalArgumentException("Guncellenecek stok hareketi bulunamadi.");
+        }
+        validate(yeni);
+
+        BigDecimal oldQty = mevcut.getMiktar() == null ? BigDecimal.ZERO : mevcut.getMiktar();
+        BigDecimal newQty = yeni.getMiktar() == null ? BigDecimal.ZERO : yeni.getMiktar();
+        BigDecimal oldCost = mevcut.getBirimMaliyet();
+        EnumGirisCikis yon = mevcut.getYon() == null ? yeni.getYon() : mevcut.getYon();
+        int sign = yon == EnumGirisCikis.GIRIS ? 1 : -1;
+        BigDecimal oldDelta = oldQty.multiply(BigDecimal.valueOf(sign));
+        BigDecimal newDelta = newQty.multiply(BigDecimal.valueOf(sign));
+
+        StStokBakiye oldBalance = bakiyeService.getOrCreate(
+                mevcut.getStStok(), mevcut.getStDepo(), mevcut.getSkt());
+        oldBalance.setMiktar(oldBalance.getMiktar().subtract(oldDelta));
+
+        StStokBakiye newBalance = bakiyeService.getOrCreate(
+                yeni.getStStok(), yeni.getStDepo(), yeni.getSkt());
+        BigDecimal updatedBalance = newBalance.getMiktar().add(newDelta);
+        if (yon == EnumGirisCikis.CIKIS && updatedBalance.compareTo(BigDecimal.ZERO) < 0) {
+            SyGenelAyar ayar = syGenelAyarService.findByTanim("StokNegatifStokIzinVer");
+            boolean izinVer = ayar != null && "true".equalsIgnoreCase(ayar.getDeger());
+            if (!izinVer) {
+                oldBalance.setMiktar(oldBalance.getMiktar().add(oldDelta));
+                throw new IllegalArgumentException("Negatif stok oluşturulamaz (Sistem Yöneticiniz ile görüşünüz).");
+            }
+        }
+        newBalance.setMiktar(updatedBalance);
+
+        mevcut.setStStok(yeni.getStStok());
+        mevcut.setStDepo(yeni.getStDepo());
+        mevcut.setSkt(yeni.getSkt());
+        mevcut.setMiktar(newQty);
+        mevcut.setBirimMaliyet(yeni.getBirimMaliyet());
+        mevcut.setToplamMaliyet(yeni.getBirimMaliyet() == null ? null : newQty.multiply(yeni.getBirimMaliyet()));
+        mevcut.setBelgeTuru(yeni.getBelgeTuru());
+        mevcut.setBelgeNo(yeni.getBelgeNo());
+        mevcut.setIslemTarihi(yeni.getIslemTarihi() == null ? LocalDateTime.now() : yeni.getIslemTarihi());
+        mevcut.setAciklama(yeni.getAciklama());
+        if (kullanici != null) {
+            mevcut.setGuncelleyen(kullanici);
+        }
+
+        stMaliyetKatmaniService.updateCostLayer(mevcut, oldQty, oldCost);
+        em.merge(mevcut);
+        stIslemLogService.log(
+                EnumStIslemLogTuru.HAREKET,
+                kullanici,
+                mevcut.getStDepo(),
+                "StStokHareket",
+                mevcut.getHareketNo(),
+                "Hareket güncelleme: " + mevcut.getHareketTuru().getDisplayValue()
+                        + " / " + oldQty + " -> " + newQty);
+        return mevcut;
+    }
+
+    /**
+     * Kalem satiri belgeden cikarildiginda hareketi pasif hale getirir
+     * ve bakiyeyi eski miktar kadar duzeltir. Yeni hareket kaydi olusturmaz.
+     */
+    public void cancelStockMovement(StStokHareket hareket, SyKullanici kullanici) {
+        if (hareket == null || hareket.getId() == null) {
+            return;
+        }
+        StStokHareket managed = em.find(StStokHareket.class, hareket.getId());
+        if (managed == null || !managed.isAktif()) {
+            return;
+        }
+        BigDecimal qty = managed.getMiktar() == null ? BigDecimal.ZERO : managed.getMiktar();
+        int sign = managed.getYon() == EnumGirisCikis.GIRIS ? 1 : -1;
+        StStokBakiye bakiye = bakiyeService.getOrCreate(managed.getStStok(), managed.getStDepo(), managed.getSkt());
+        bakiye.setMiktar(bakiye.getMiktar().subtract(qty.multiply(BigDecimal.valueOf(sign))));
+        managed.setAktif(false);
+        if (kullanici != null) {
+            managed.setGuncelleyen(kullanici);
+        }
+        stMaliyetKatmaniService.deactivateCostLayer(managed);
+        em.flush();
+    }
+
+    /**
      * Belgeye ait, henuz terslenmemis aktif hareketleri dondurur.
      */
     public List<StStokHareket> findActiveByPurchaseDocument(String belgeTuru, String belgeNo) {
-        if (belgeTuru == null || belgeNo == null) {
+        if (belgeNo == null || belgeNo.isBlank()) {
             return List.of();
         }
         return em.createQuery(
-                        "SELECT h FROM StStokHareket h WHERE h.belgeTuru = :belgeTuru AND h.belgeNo = :belgeNo "
+                        "SELECT h FROM StStokHareket h WHERE h.belgeNo = :belgeNo "
                                 + "AND h.aktif = true AND h.tersHareket IS NULL "
-                                + "AND NOT EXISTS (SELECT r FROM StStokHareket r WHERE r.tersHareket = h AND r.aktif = true)",
+                                + "ORDER BY h.id",
                         StStokHareket.class)
-                .setParameter("belgeTuru", belgeTuru)
-                .setParameter("belgeNo", belgeNo)
+                .setParameter("belgeNo", belgeNo.trim())
                 .getResultList();
     }
 

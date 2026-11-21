@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:pt="jakarta.faces.passthrough"
+      xmlns:p="primefaces">
+
+<ui:composition>
+
+    <div class="card-title fw-bold mb-2">Giriş Bilgileri</div>
+    <div class="ui-grid ui-grid-responsive mb-3">
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-2">
+                <p:outputLabel value="#{messages.belgeTuruLabel}" for="@next"/>
+                <p:selectOneMenu id="belgeTuru" value="#{stAlisController.selected.belgeTuru}"
+                                 converter="omnifaces.SelectItemsConverter" required="true"
+                                 styleClass="w-100">
+                    <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}" noSelectionOption="true"/>
+                    <f:selectItems value="#{enumAlisBelgeTuru.ALL_VALUES}" var="tur"
+                                   itemValue="#{tur}" itemLabel="#{tur.displayValue}"/>
+                </p:selectOneMenu>
+            </div>
+            <div class="ui-grid-col-2">
+                <p:outputLabel value="#{messages.belgeNoLabel}" for="@next"/>
+                <p:inputText value="#{stAlisController.selected.belgeNo}" size="30" maxlength="50"/>
+            </div>
+            <div class="ui-grid-col-2">
+                <p:outputLabel value="#{messages.ihaleNoLabel}" for="@next"/>
+                <p:inputText value="#{stAlisController.selected.ihaleNo}" size="30" maxlength="50"/>
+            </div>
+            <div class="ui-grid-col-4">
+                <p:outputLabel value="#{messages.depoLabel}" for="stDepo"/>
+                <p:selectOneMenu id="stDepo" value="#{stAlisController.selected.stDepo}"
+                                 filter="true" converter="omnifaces.SelectItemsConverter"
+                                 required="true" styleClass="w-100">
+                    <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+                    <f:selectItems value="#{stAlisController.yetkiliDepoOptions}"/>
+                </p:selectOneMenu>
+            </div>
+            <div class="ui-grid-col-2">
+                <p:outputLabel value="#{messages.tarihLabel}" for="@next"/>
+                <p:datePicker id="tarih" value="#{stAlisController.selected.tarih}"
+                              pattern="#{messages.tarihSaatKisaFormat}" showTime="true"
+                              showOnFocus="false" required="true" showButtonBar="true" showIcon="true" styleClass="w-100"/>
+            </div>
+        </div>
+    </div>
+
+    <div class="ui-grid ui-grid-responsive mb-3">
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-6">
+                <p:outputLabel value="#{messages.tedarikciLabel}" for="@next"/>
+                <p:selectOneMenu id="tedarikci" value="#{stAlisController.selected.stTedarikci}"
+                                 filter="true" converter="omnifaces.SelectItemsConverter"
+                                 styleClass="w-100">
+                    <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+                    <f:selectItems value="#{stTedarikciController.items}" var="tedarikciItem"
+                                   itemValue="#{tedarikciItem}" itemLabel="#{tedarikciItem.ad}"/>
+                </p:selectOneMenu>
+            </div>
+            <div class="ui-grid-col-6">
+                <p:outputLabel value="#{messages.aciklamaLabel}" for="@next"/>
+                <p:inputTextarea id="aciklama" value="#{stAlisController.selected.aciklama}"
+                                 title="#{messages.aciklamaText}" rows="2" styleClass="w-100"
+                                 autoResize="false" maxlength="300"/>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-title fw-bold mb-2">Ürün Girişi</div>
+    <h:panelGroup id="alisBarkodPanel" layout="block" styleClass="ui-fieldset ui-widget mb-2"
+                  style="padding:10px;border:1px solid #d5dce3;border-radius:6px;background:#f8fbff;">
+        <p:defaultCommand target="btnBarkodEkle" scope="alisBarkodPanel"/>
+        <div class="ui-grid ui-grid-responsive">
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-8">
+                    <p:outputLabel value="#{messages.barkodText} / #{messages.stokKoduText} / #{messages.malzemeKoduText}"
+                                   for="@next"/>
+                    <p:inputText id="barkodOku" value="#{stAlisController.barkodOku}" maxlength="50" autocomplete="off"/>
+                </div>
+                <div class="ui-grid-col-2">
+                    <p:outputLabel value="#{messages.miktarText}" for="@next"/>
+                    <p:inputNumber id="alisMiktar" value="#{stAlisController.alisMiktar}"
+                                   decimalPlaces="4" minValue="0.0001" emptyValue="empty"
+                                   styleClass="w-100"/>
+                </div>
+                <div class="ui-grid-col-2">
+                    <p:outputLabel value="#{messages.birimMaliyetText}" for="@next"/>
+                    <h:panelGroup>
+                        <div class="ui-inputgroup">
+                            <p:inputNumber id="alisBirimMaliyet" value="#{stAlisController.alisBirimMaliyet}"
+                                           decimalPlaces="4" minValue="0" emptyValue="empty"
+                                           styleClass="w-100"/>
+                            <p:commandButton id="btnBarkodEkle" pt:data-tooltip="#{messages.buttonKalemEkle}"
+                                             icon="pi pi-plus" styleClass="ui-button-primary"
+                                             actionListener="#{stAlisController.addKalemFromBarkod}"
+                                             process="alisBarkodPanel"
+                                             update="alisBarkodPanel kalemTable :growl"
+                                             onstart="PF('Loading').show()"
+                                             oncomplete="PF('Loading').hide(); stBarkodOdak('#{formId}:barkodOku');"/>
+                            <p:commandButton type="button" pt:data-tooltip="#{messages.buttonKameraAc}"
+                                             icon="pi pi-camera" styleClass="ui-button-secondary"
+                                             onclick="stBarkodScanner.ac('#{formId}:barkodOku')"/>
+                        </div>
+                    </h:panelGroup>
+                </div>
+            </div>
+        </div>
+        <div class="mt-2" style="font-size:12px;color:#718295">
+            Barkod okutup Enter'a basın; kalem otomatik eklenir.
+        </div>
+        <h:panelGroup rendered="#{stAlisController.barkodBulunamadi}">
+            <div style="margin-top:8px;font-size:12px;color:#8a5a00">
+                Bu barkoda kayıtlı stok yok :
+                <p:commandButton value="#{messages.stokKartiEkleText}"
+                                 styleClass="ui-button-text p-0"
+                                 actionListener="#{stAlisController.yeniStokKartiAc}"
+                                 process="barkodOku,@this" update="@none"
+                                 onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                <p:commandButton value="#{messages.alisSonStokKalemeAlText}" type="button"
+                                 styleClass="ui-button-text p-0"
+                                 actionListener="#{stAlisController.sonStokuKalemeAl}"
+                                 update="alisBarkodPanel kalemTable :growl"
+                                 onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+            </div>
+        </h:panelGroup>
+    </h:panelGroup>
+
+    <div class="card-title fw-bold mb-2">#{messages.alisKalemLabel}</div>
+    <p:dataTable id="kalemTable"
+                 var="kalemItem"
+                 lazy="false"
+                 value="#{stAlisController.selected.kalemler}"
+                 styleClass="w-100"
+                 editable="true"
+                 editMode="cell"
+                 scrollable="true"
+                 scrollHeight="250"
+                 showGridlines="true"
+                 size="small"
+                 reflow="true"
+                 rendered="#{stAlisController.selected != null}"
+                 rowIndexVar="indexVar">
+
+        <p:ajax event="cellEdit" listener="#{stAlisController.onCellEdit}" update="kalemTable :growl"/>
+
+        <p:column headerText="#{messages.stokText}">
+            <h:outputText value="#{kalemItem.stStok.stokKodu} - #{kalemItem.stStok.stokAdi}"/>
+        </p:column>
+        <p:column headerText="#{messages.miktarText}" styleClass="text-end">
+            <p:cellEditor>
+                <f:facet name="output">
+                    <h:outputText value="#{kalemItem.miktar}">
+                        <f:convertNumber minFractionDigits="2" maxFractionDigits="2"/>
+                    </h:outputText>
+                </f:facet>
+                <f:facet name="input">
+                    <p:inputNumber value="#{kalemItem.miktar}" decimalPlaces="2" minValue="0.0001" emptyValue="empty">
+                        <p:ajax event="change" update="kalemTable"/>
+                    </p:inputNumber>
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+        <p:column headerText="#{messages.birimMaliyetText}" styleClass="text-end">
+            <p:cellEditor>
+                <f:facet name="output">
+                    <h:outputText value="#{kalemItem.birimMaliyet}">
+                        <f:convertNumber minFractionDigits="2" maxFractionDigits="2"/>
+                    </h:outputText>
+                </f:facet>
+                <f:facet name="input">
+                    <p:inputNumber value="#{kalemItem.birimMaliyet}" decimalPlaces="2" minValue="0" emptyValue="empty">
+                        <p:ajax event="change" update="kalemTable"/></p:inputNumber>
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+        <p:column headerText="#{messages.toplamText}" styleClass="text-end total">
+            <h:outputText value="#{stAlisController.getKalemTutar(kalemItem)}" styleClass="total">
+                <f:convertNumber minFractionDigits="2" maxFractionDigits="2"/>
+            </h:outputText>
+        </p:column>
+        <p:column style="width:60px;text-align:center;">
+            <p:commandButton icon="pi pi-trash" styleClass="ui-button-danger rounded-button"
+                             actionListener="#{stAlisController.removeKalem(kalemItem)}"
+                             process="@this" update="kalemTable :growl"
+                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+        </p:column>
+        <f:facet name="footer">
+            <div style="text-align:right;font-size:12px">
+                #{messages.kalemSayisiLabel}: #{stAlisController.selected.kalemler.size()} |
+                #{messages.toplamMiktarLabel}:
+                <h:outputText value="#{stAlisController.toplamMiktar}" styleClass="total">
+                    <f:convertNumber minFractionDigits="2" maxFractionDigits="2"/>
+                </h:outputText> |
+                #{messages.toplamTutarLabel}:
+                <h:outputText value="#{stAlisController.toplamTutar}" styleClass="total">
+                    <f:convertNumber minFractionDigits="2" maxFractionDigits="2"/>
+                </h:outputText>
+            </div>
+        </f:facet>
+    </p:dataTable>
+
+</ui:composition>
+
+</html>
