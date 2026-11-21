@@ -10,6 +10,7 @@ import tr.bel.gaziantep.bysweb.core.controller.AbstractController;
 import tr.bel.gaziantep.bysweb.core.enums.bys.EnumGirisCikis;
 import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.EnumSyFiltreAnahtari;
 import tr.bel.gaziantep.bysweb.core.enums.stokyonetimi.EnumStHareketTuru;
+import tr.bel.gaziantep.bysweb.core.service.FilterOptionService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
 import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity.StStokBakiye;
@@ -22,7 +23,6 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
@@ -41,24 +41,36 @@ public class StStokHareketController extends AbstractController<StStokHareket> {
     private StStokHareketService hareketService;
     @Inject
     private StStokBakiyeService stStokBakiyeService;
+    @Inject
+    private FilterOptionService filterOptionService;
 
     public StStokHareketController() {
         super(StStokHareket.class);
     }
 
-
     public List<SelectItem> getFilterOptions(EnumSyFiltreAnahtari key) {
-        if (key == EnumSyFiltreAnahtari.STHAREKET_TURU) {
-            return Arrays.stream(EnumStHareketTuru.values())
-                    .map(value -> new SelectItem(value, value.getDisplayValue()))
-                    .collect(Collectors.toList());
+        switch (key) {
+            case STHAREKET_TURU -> {
+                return filterOptionService.getStHareketTurs();
+            }
+            case GIRIS_CIKIS -> {
+                return filterOptionService.getGirisCikis();
+            }
+            default -> {
+                return Collections.emptyList();
+            }
         }
-        if (key == EnumSyFiltreAnahtari.GIRIS_CIKIS) {
-            return Arrays.stream(EnumGirisCikis.values())
-                    .map(value -> new SelectItem(value, value.getDisplayValue()))
-                    .collect(Collectors.toList());
-        }
-        return Collections.emptyList();
+    }
+
+    public List<SelectItem> getManualHareketTuruOptions() {
+        return Arrays.stream(EnumStHareketTuru.values())
+                .filter(t -> !EnumStHareketTuru.SATIN_ALMA.equals(t))
+                .filter(t -> !EnumStHareketTuru.SATIS.equals(t))
+                .filter(t -> !EnumStHareketTuru.TRANSFER_GIRIS.equals(t))
+                .filter(t -> !EnumStHareketTuru.TRANSFER_CIKIS.equals(t))
+                .filter(t -> !EnumStHareketTuru.SAYIM_FARKI.equals(t))
+                .map(t -> new SelectItem(t, t.getDisplayValue()))
+                .toList();
     }
 
     @Override

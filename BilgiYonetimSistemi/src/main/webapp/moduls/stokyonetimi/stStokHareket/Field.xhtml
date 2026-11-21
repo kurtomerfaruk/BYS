@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces">
+
+<ui:composition>
+
+    <p:outputLabel value="#{messages.stokLabel}" for="@next"/>
+    <p:selectOneMenu id="stStok" value="#{stStokHareketController.selected.stStok}" filter="true"
+                     converter="omnifaces.SelectItemsConverter" required="true">
+        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+        <f:selectItems value="#{stStokController.items}" var="stokItem"
+                       itemValue="#{stokItem}" itemLabel="#{stokItem.stokKodu} - #{stokItem.stokAdi}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.depoLabel}" for="@next"/>
+    <p:selectOneMenu id="stDepo" value="#{stStokHareketController.selected.stDepo}" filter="true"
+                     converter="omnifaces.SelectItemsConverter" required="true">
+        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+        <f:selectItems value="#{stDepoController.items}" var="depoItem"
+                       itemValue="#{depoItem}" itemLabel="#{depoItem.ad}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.hareketTuruLabel}" for="@next"/>
+    <p:selectOneMenu id="hareketTuru" value="#{stStokHareketController.selected.hareketTuru}"
+                     converter="omnifaces.SelectItemsConverter" required="true">
+        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+        <f:selectItems value="#{enumStHareketTuru.ALL_VALUES}" var="tur"
+                       itemValue="#{tur}" itemLabel="#{tur.displayValue}"/>
+        <p:ajax process="@this" update="yon" listener="#{stStokHareketController.onHareketTuruChange}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.yonLabel}" for="@next"/>
+    <p:selectOneMenu id="yon" value="#{stStokHareketController.selected.yon}"
+                     converter="omnifaces.SelectItemsConverter" required="true">
+        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+        <f:selectItems value="#{enumGirisCikis.ALL_VALUES}" var="yonItem"
+                       itemValue="#{yonItem}" itemLabel="#{yonItem.displayValue}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.miktarLabel}" for="@next"/>
+    <p:inputNumber id="miktar" value="#{stStokHareketController.selected.miktar}" decimalPlaces="4"
+                   emptyValue="empty" minValue="0.0001" required="true"/>
+
+    <p:outputLabel value="#{messages.birimMaliyetLabel}" for="@next"/>
+    <p:inputNumber id="birimMaliyet" value="#{stStokHareketController.selected.birimMaliyet}" decimalPlaces="4"
+                   emptyValue="empty" minValue="0"/>
+
+    <p:outputLabel value="#{messages.islemTarihiLabel}" for="@next"/>
+    <p:datePicker id="islemTarihi" value="#{stStokHareketController.selected.islemTarihi}"
+                  pattern="#{messages.tarihSaatKisaFormat}" showTime="true" showOnFocus="false"/>
+
+    <p:outputLabel value="#{messages.belgeTuruLabel}" for="@next"/>
+    <p:inputText id="belgeTuru" value="#{stStokHareketController.selected.belgeTuru}"
+                 size="30" maxlength="50"/>
+
+    <p:outputLabel value="#{messages.belgeNoLabel}" for="@next"/>
+    <p:inputText id="belgeNo" value="#{stStokHareketController.selected.belgeNo}"
+                 size="30" maxlength="50"/>
+
+    <p:outputLabel value="#{messages.aciklamaLabel}" for="@next"/>
+    <p:inputTextarea id="aciklama" value="#{stStokHareketController.selected.aciklama}"
+                     title="#{messages.aciklamaText}" rows="3" styleClass="w-100"
+                     autoResize="false" maxlength="300"/>
+
+</ui:composition>
+
+</html>

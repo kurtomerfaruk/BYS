@@ -15,6 +15,7 @@ import java.io.Serial;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
@@ -49,7 +50,7 @@ public class StDepoController extends AbstractController<StDepo> {
         if (yetkis.isEmpty()) {
             return Collections.emptyList();
         }
-        return yetkis.stream().map(StDepoYetki::getStDepo).toList();
+        return yetkis.stream().map(StDepoYetki::getStDepo).filter(Objects::nonNull).distinct().toList();
     }
 
 
