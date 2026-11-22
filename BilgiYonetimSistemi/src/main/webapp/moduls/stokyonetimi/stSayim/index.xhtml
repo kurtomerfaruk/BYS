@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
                 xmlns:p="primefaces">
+
+    <h:outputScript library="js" name="html5-qrcode.min.js"/>
+    <h:outputScript library="js" name="barcode-scanner.js"/>
+    <h:outputScript library="js" name="count-backup.js"/>
+    <h:outputScript library="js" name="table-filter.js"/>
 
     <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.stokyonetimi.EnumStSayimDurum"
                   var="enumStSayimDurum"/>
@@ -10,5 +16,8 @@
     <ui:include src="/moduls/stokyonetimi/stSayim/View.xhtml"/>
     <ui:include src="/moduls/stokyonetimi/stSayim/Edit.xhtml"/>
     <ui:include src="/moduls/stokyonetimi/stSayim/Create.xhtml"/>
+
+    <!-- Kamera ile barkod okutma (stok kartı ile ortak bileşen) -->
+    <ui:include src="/moduls/stokyonetimi/stStok/BarcodeScanner.xhtml"/>
 
 </ui:composition>

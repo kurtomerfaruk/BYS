@@ -78,9 +78,10 @@ var stBarkodScanner = (function () {
         });
     }
 
-    function ac(scannerInputId) {
+    function ac(scannerInputId, scannerButtonId) {
         inputId = scannerInputId;
-        buttonId = scannerInputId ? scannerInputId.replace(/(yeniBarkod|barkodOku)$/, "btnBarkodEkle") : null;
+        buttonId = scannerButtonId || (scannerInputId ? scannerInputId.replace(/(yeniBarkod|barkodOku|sayimBarkod)$/, "btnBarkodEkle")
+            : null);
         if (!inputId) {
             window.alert("Barkod alani bulunamadi.");
             return;

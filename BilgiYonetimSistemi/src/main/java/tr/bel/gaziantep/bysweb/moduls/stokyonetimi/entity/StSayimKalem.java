@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Nationalized;
 import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
 
@@ -44,6 +45,10 @@ public class StSayimKalem extends BaseEntity {
 
     @Column(name = "FARK", precision = 18, scale = 4)
     private BigDecimal fark;
+
+    @ColumnDefault("1")
+    @Column(name = "SAYILMADI", nullable = false)
+    private boolean sayilmadi;
 
     @Size(max = 300)
     @Nationalized

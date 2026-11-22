@@ -97,26 +97,119 @@ public class StSayimService extends AbstractService<StSayim> {
             kalem.setStStok(stokMap.get(stokId));
             kalem.setSistemMiktari(sistemMap.get(stokId));
             kalem.setSayilanMiktar(null);
+            kalem.setSayilmadi(false);
             sayim.getKalemler().add(kalem);
         }
     }
 
-    public void baslat(StSayim sayim, SyKullanici sayan) {
-        if (sayim == null || sayim.getId() == null) {
-            throw new IllegalArgumentException("İşlem için bir sayım seçin.");
+    /**
+     * Tek bir sayım kaleminin sayılan değerini anında kaydeder ve farkı hesaplar.
+     */
+    public StSayimKalem saveCountValue(StSayimKalem item) {
+        if (item == null || item.getId() == null) {
+            throw new IllegalArgumentException("Sayım kalemi bulunamadı.");
         }
-        StSayim managed = em.find(StSayim.class, sayim.getId());
-        if (managed.getDurum() != EnumStSayimDurum.TASLAK) {
-            throw new IllegalArgumentException("Bu sayım başlatılamaz");
+        StSayimKalem managed = em.find(StSayimKalem.class, item.getId());
+        if (managed == null) {
+            throw new IllegalArgumentException("Sayım kalemi bulunamadı.");
         }
-        managed.setDurum(EnumStSayimDurum.SAYIMDA);
-        if (managed.getBaslangicTarihi() == null) {
-            managed.setBaslangicTarihi(LocalDateTime.now());
+        StSayim sayim = em.find(StSayim.class, managed.getStSayim().getId());
+        if (sayim == null || sayim.getDurum() != EnumStSayimDurum.SAYIMDA) {
+            throw new IllegalArgumentException("Bu sayımda değer girişi yapılamaz.");
         }
-        managed.setSayanSyKullanici(sayan);
+        managed.setSayilanMiktar(item.getSayilanMiktar());
+        managed.setSayilmadi(false);
+        managed.setFark(item.getSayilanMiktar() == null ? null
+                : item.getSayilanMiktar().subtract(managed.getSistemMiktari() == null ? BigDecimal.ZERO : managed.getSistemMiktari()));
+        em.flush();
+        return managed;
     }
 
-    public void tamamlaSayim(StSayim sayim, SyKullanici sayan) {
+    /**
+     * Kalemi "sayılmadı" olarak işaretler; fark üretilmez, onayda hareket oluşmaz.
+     */
+    public StSayimKalem markNotCounted(StSayimKalem item) {
+        if (item == null || item.getId() == null) {
+            throw new IllegalArgumentException("Sayım kalemi bulunamadı.");
+        }
+        StSayimKalem managed = em.find(StSayimKalem.class, item.getId());
+        if (managed == null) {
+            throw new IllegalArgumentException("Sayım kalemi bulunamadı.");
+        }
+        managed.setSayilmadi(true);
+        managed.setSayilanMiktar(null);
+        managed.setFark(null);
+        em.flush();
+        return managed;
+    }
+
+    /**
+     * Sayaç modunda barkod karşılığı olmayan stokları sayıma ekler.
+     */
+    public StSayimKalem addOrGetCountItem(StSayim sayim, StStok stok) {
+        if (sayim == null || sayim.getId() == null || stok == null || stok.getId() == null) {
+            throw new IllegalArgumentException("Sayım veya stok seçilmedi.");
+        }
+        StSayim managedSayim = em.find(StSayim.class, sayim.getId());
+        if (managedSayim == null || managedSayim.getDurum() != EnumStSayimDurum.SAYIMDA) {
+            throw new IllegalArgumentException("Bu sayıma kalem eklenemez.");
+        }
+        StStok managedStok = em.find(StStok.class, stok.getId());
+        for (StSayimKalem mevcut : managedSayim.getKalemler()) {
+            if (mevcut.getStStok() != null && mevcut.getStStok().getId().equals(managedStok.getId())) {
+                return mevcut;
+            }
+        }
+        StSayimKalem kalem = new StSayimKalem();
+        kalem.setStSayim(managedSayim);
+        kalem.setStStok(managedStok);
+        kalem.setSistemMiktari(BigDecimal.ZERO);
+        kalem.setSayilanMiktar(BigDecimal.ZERO);
+        kalem.setSayilmadi(false);
+        managedSayim.getKalemler().add(kalem);
+        em.flush();
+        return kalem;
+    }
+
+    /**
+     * Geri alma islemi için önceki değeri geri yükler.
+     */
+    public StSayimKalem restoreCountValue(StSayimKalem item, BigDecimal quantity, boolean notCounted) {
+        if (item == null || item.getId() == null) {
+            throw new IllegalArgumentException("Sayım kalemi bulunamadı.");
+        }
+        StSayimKalem managed = em.find(StSayimKalem.class, item.getId());
+        if (managed == null) {
+            throw new IllegalArgumentException("Sayım kalemi bulunamadı.");
+        }
+        managed.setSayilmadi(notCounted);
+        managed.setSayilanMiktar(notCounted ? null : quantity);
+        BigDecimal sistem = managed.getSistemMiktari() == null ? BigDecimal.ZERO : managed.getSistemMiktari();
+        managed.setFark(notCounted || quantity == null ? null : quantity.subtract(sistem));
+        em.flush();
+        return managed;
+    }
+
+    /**
+     * Sayaç modunda yanlış eklenen kalemi geri alır.
+     */
+    public void removeCountItem(StSayimKalem item) {
+        if (item == null || item.getId() == null) {
+            return;
+        }
+        StSayimKalem managed = em.find(StSayimKalem.class, item.getId());
+        if (managed == null) {
+            return;
+        }
+        StSayim sayim = managed.getStSayim();
+        if (sayim != null) {
+            sayim.getKalemler().remove(managed);
+        }
+        em.remove(managed);
+        em.flush();
+    }
+
+    public void finish(StSayim sayim, SyKullanici sayan) {
         if (sayim == null || sayim.getId() == null) {
             throw new IllegalArgumentException("Bu sayım başlatılamaz");
         }
@@ -124,10 +217,17 @@ public class StSayimService extends AbstractService<StSayim> {
         if (managed.getDurum() != EnumStSayimDurum.SAYIMDA) {
             throw new IllegalArgumentException("Bu sayım tamamlanamaz");
         }
-        // fark hesapla
+        // fark hesapla: sayılmayan kalemler 0 kabul edilmez, ayrı durumda bırakılır
         for (StSayimKalem k : managed.getKalemler()) {
-            BigDecimal sayilan = k.getSayilanMiktar() == null ? BigDecimal.ZERO : k.getSayilanMiktar();
-            k.setFark(sayilan.subtract(k.getSistemMiktari()));
+            if (k.isSayilmadi() || k.getSayilanMiktar() == null) {
+
+                k.setSayilmadi(true);
+                k.setSayilanMiktar(null);
+                k.setFark(null);
+                continue;
+            }
+            BigDecimal sistem = k.getSistemMiktari() == null ? BigDecimal.ZERO : k.getSistemMiktari();
+            k.setFark(k.getSayilanMiktar().subtract(sistem));
         }
         managed.setDurum(EnumStSayimDurum.ONAY_BEKLIYOR);
         if (managed.getSayanSyKullanici() == null) {
@@ -135,7 +235,7 @@ public class StSayimService extends AbstractService<StSayim> {
         }
     }
 
-    public void onayla(StSayim sayim, SyKullanici onaylayan) {
+    public void confirm(StSayim sayim, SyKullanici onaylayan) {
         if (sayim == null || sayim.getId() == null) {
             throw new IllegalArgumentException("Bu sayım başlatılamaz");
         }
@@ -145,6 +245,9 @@ public class StSayimService extends AbstractService<StSayim> {
         }
         // fark hareketleri
         for (StSayimKalem k : managed.getKalemler()) {
+            if (k.isSayilmadi()) {
+                continue;
+            }
             BigDecimal fark = k.getFark();
             if (fark == null || fark.compareTo(BigDecimal.ZERO) == 0) {
                 continue;
@@ -164,17 +267,6 @@ public class StSayimService extends AbstractService<StSayim> {
         managed.setOnaylayanSyKullanici(onaylayan);
         stIslemLogService.log(EnumStIslemLogTuru.SAYIM, onaylayan, managed.getStDepo(),
                 "StSayim", managed.getSayimNo(), "Sayım onaylandı");
-    }
-
-    public void iptalEt(StSayim sayim) {
-        if (sayim == null || sayim.getId() == null) {
-            throw new IllegalArgumentException("Bu sayım başlatılamaz");
-        }
-        StSayim managed = em.find(StSayim.class, sayim.getId());
-        if (managed.getDurum() == EnumStSayimDurum.TAMAMLANDI) {
-            throw new IllegalArgumentException("Bu sayım iptal edilemez");
-        }
-        managed.setDurum(EnumStSayimDurum.IPTAL);
     }
 
     private void resolveRefs(StSayim sayim) {
