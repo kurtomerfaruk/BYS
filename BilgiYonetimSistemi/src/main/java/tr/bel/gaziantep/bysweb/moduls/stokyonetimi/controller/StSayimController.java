@@ -1,7 +1,6 @@
 package tr.bel.gaziantep.bysweb.moduls.stokyonetimi.controller;
 
 import jakarta.ejb.EJBException;
-import jakarta.faces.context.FacesContext;
 import jakarta.faces.event.ActionEvent;
 import jakarta.faces.model.SelectItem;
 import jakarta.faces.view.ViewScoped;
@@ -65,9 +64,6 @@ public class StSayimController extends AbstractController<StSayim> {
     @Getter
     @Setter
     private boolean duplicateCount;
-    @Getter
-    @Setter
-    private String localBackupData;
 
     private final Deque<CountSnapshot> undoStack = new ArrayDeque<>();
 
@@ -196,7 +192,14 @@ public class StSayimController extends AbstractController<StSayim> {
         }
         StSayimKalem item = findCountItem(stok);
         if (item == null) {
-            FacesUtil.addExclamationMessage("Bu stok sayım listesinde yok.");
+            item = sayimService.addOrGetCountItem(getSelected(), stok);
+
+            if (item != null) {
+                getSelected().getKalemler().add(item);
+            }
+        }
+        if (item == null) {
+            FacesUtil.addExclamationMessage("Sayım kalemi oluşturulamadı.");
             return;
         }
         BigDecimal eklenecek = countQuantity == null ? BigDecimal.ZERO : countQuantity;
@@ -212,9 +215,9 @@ public class StSayimController extends AbstractController<StSayim> {
             countQuantity = BigDecimal.ONE;
             duplicateCount = false;
             FacesUtil.addSuccessMessage(Constants.KAYIT_EKLENDI);
-        } catch (IllegalArgumentException ex) {
+        } catch (EJBException ex) {
             undoStack.pop();
-            FacesUtil.addExclamationMessage(ex.getMessage());
+            FacesUtil.addExclamationMessage(ex.getCause().getMessage());
         }
     }
 
@@ -237,7 +240,14 @@ public class StSayimController extends AbstractController<StSayim> {
         }
         StSayimKalem item = findCountItem(stok);
         if (item == null) {
-            FacesUtil.addExclamationMessage("Bu stok sayım listesinde yok.");
+            item = sayimService.addOrGetCountItem(getSelected(), stok);
+
+            if (item != null) {
+                getSelected().getKalemler().add(item);
+            }
+        }
+        if (item == null) {
+            FacesUtil.addExclamationMessage("Sayım kalemi oluşturulamadı.");
             duplicateCount = false;
             return;
         }
@@ -261,7 +271,7 @@ public class StSayimController extends AbstractController<StSayim> {
             countQuantity = BigDecimal.ONE;
             duplicateCount = false;
             FacesUtil.successMessage(Constants.KAYIT_EKLENDI);
-        } catch (IllegalArgumentException ex) {
+        } catch (EJBException ex) {
             undoStack.pop();
             FacesUtil.addExclamationMessage(ex.getMessage());
         }
@@ -275,53 +285,6 @@ public class StSayimController extends AbstractController<StSayim> {
         snapshot.setSayilanMiktar(notCounted ? null : qty);
         snapshot.setSayilmadi(notCounted);
         return snapshot;
-    }
-
-    /**
-     * Sayaç modu: aynı barkod her okutuluşta sayacı bir artırır.
-     */
-    public void incrementCounter() {
-        changeCounter(BigDecimal.ONE);
-    }
-
-    public void decrementCounter() {
-        changeCounter(BigDecimal.ONE.negate());
-    }
-
-    private void changeCounter(BigDecimal delta) {
-        if (getSelected() == null) {
-            return;
-        }
-        StStok stok = findStock(barcodeInput);
-        if (stok == null) {
-            FacesUtil.addExclamationMessage("Bu barkod/kod ile kayıtlı stok bulunamadı.");
-            return;
-        }
-        try {
-            StSayimKalem item = findCountItem(stok);
-            boolean added = item == null;
-            if (added) {
-                item = sayimService.addOrGetCountItem(getSelected(), stok);
-                getSelected().getKalemler().add(item);
-            }
-            BigDecimal current = item.getSayilanMiktar() == null ? BigDecimal.ZERO : item.getSayilanMiktar();
-            BigDecimal next = current.add(delta);
-            if (next.compareTo(BigDecimal.ZERO) < 0) {
-                next = BigDecimal.ZERO;
-            }
-            pushUndo(item, added);
-            StSayimKalem saved = sayimService.saveCountValue(snapshotWithQuantity(item, next, false));
-            item.setSayilanMiktar(saved.getSayilanMiktar());
-            item.setSayilmadi(false);
-            item.setFark(saved.getFark());
-            countQuantity = next;
-            duplicateCount = false;
-        } catch (IllegalArgumentException ex) {
-            if (!undoStack.isEmpty()) {
-                undoStack.pop();
-            }
-            FacesUtil.addExclamationMessage(ex.getMessage());
-        }
     }
 
     public void undoLastCount() {
@@ -394,46 +357,11 @@ public class StSayimController extends AbstractController<StSayim> {
             StSayimKalem saved = sayimService.saveCountValue(item);
             item.setSayilmadi(saved.isSayilmadi());
             item.setFark(saved.getFark());
-        } catch (IllegalArgumentException ex) {
-            FacesUtil.addExclamationMessage(ex.getMessage());
+        } catch (EJBException ex) {
+            FacesUtil.addExclamationMessage(ex.getCause().getMessage());
         }
     }
 
-    /**
-     * Tarayıcı localStorage yedeğini kullanıcı onayıyla uygular.
-     */
-    public void applyLocalBackup() {
-        String data = FacesContext.getCurrentInstance().getExternalContext()
-                .getRequestParameterMap().get("backupData");
-        if (data == null || data.isBlank() || getSelected() == null) {
-            return;
-        }
-        int applied = 0;
-        for (String entry : data.split(";")) {
-            String[] parts = entry.split("\\|");
-            if (parts.length != 2) {
-                continue;
-            }
-            StStok stok = findStock(parts[0]);
-            StSayimKalem item = findCountItem(stok);
-            if (item == null || item.getSayilanMiktar() != null || item.isSayilmadi()) {
-                continue;
-            }
-            try {
-                BigDecimal qty = new BigDecimal(parts[1]);
-                StSayimKalem saved = sayimService.saveCountValue(snapshotWithQuantity(item, qty, false));
-                item.setSayilanMiktar(saved.getSayilanMiktar());
-                item.setSayilmadi(false);
-                item.setFark(saved.getFark());
-                applied++;
-            } catch (NumberFormatException ignored) {
-            }
-        }
-        if (applied > 0) {
-            FacesUtil.addSuccessMessage(applied + " kayıt yerel yedeften geri yüklendi.");
-            localBackupData = null;
-        }
-    }
 
     public int getCountedCount() {
         if (getSelected() == null || getSelected().getKalemler() == null) {
@@ -460,6 +388,15 @@ public class StSayimController extends AbstractController<StSayim> {
                         && item.getFark() != null
                         && item.getFark().compareTo(BigDecimal.ZERO) != 0)
                 .count();
+    }
+
+    public int completePercentage() {
+        if (getSelected() == null || getSelected().getKalemler() == null) {
+            return 0;
+        }
+        int counted = getCountedCount();
+        System.out.println("counted");
+        return (int) ((double) counted / getSelected().getKalemler().size() * 100);
     }
 
     public BigDecimal getTotalSystem() {

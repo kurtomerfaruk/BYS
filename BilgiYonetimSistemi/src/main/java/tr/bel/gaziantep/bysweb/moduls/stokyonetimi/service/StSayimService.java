@@ -79,23 +79,27 @@ public class StSayimService extends AbstractService<StSayim> {
                 .setParameter("depo", depo)
                 .getResultList();
 
-        // stok bazinda topla
         Map<Integer, BigDecimal> sistemMap = new HashMap<>();
-        Map<Integer, StStok> stokMap = new HashMap<>();
         for (StStokBakiye b : bakiyeler) {
-            Integer stokId = b.getStStok().getId();
-            sistemMap.merge(stokId, b.getMiktar(), BigDecimal::add);
-            stokMap.putIfAbsent(stokId, b.getStStok());
+            if (b.getStStok() == null || b.getStStok().getId() == null) {
+                continue;
+            }
+            sistemMap.merge(b.getStStok().getId(), b.getMiktar() == null ? BigDecimal.ZERO : b.getMiktar(), BigDecimal::add);
         }
+
+        List<StStok> stoklar = em.createQuery(
+                        "SELECT s FROM StStok s WHERE s.aktif = true ORDER BY s.stokKodu, s.stokAdi",
+                        StStok.class)
+                .getResultList();
 
         if (sayim.getKalemler() == null) {
             sayim.setKalemler(new ArrayList<>());
         }
-        for (Integer stokId : sistemMap.keySet()) {
+        for (StStok stok : stoklar) {
             StSayimKalem kalem = new StSayimKalem();
             kalem.setStSayim(sayim);
-            kalem.setStStok(stokMap.get(stokId));
-            kalem.setSistemMiktari(sistemMap.get(stokId));
+            kalem.setStStok(stok);
+            kalem.setSistemMiktari(sistemMap.getOrDefault(stok.getId(), BigDecimal.ZERO));
             kalem.setSayilanMiktar(null);
             kalem.setSayilmadi(false);
             sayim.getKalemler().add(kalem);
@@ -114,7 +118,10 @@ public class StSayimService extends AbstractService<StSayim> {
             throw new IllegalArgumentException("Sayım kalemi bulunamadı.");
         }
         StSayim sayim = em.find(StSayim.class, managed.getStSayim().getId());
-        if (sayim == null || sayim.getDurum() != EnumStSayimDurum.SAYIMDA) {
+        if (sayim == null ||
+                (sayim.getDurum() == EnumStSayimDurum.TASLAK
+                        || sayim.getDurum() == EnumStSayimDurum.IPTAL
+                        || sayim.getDurum() == EnumStSayimDurum.TAMAMLANDI)) {
             throw new IllegalArgumentException("Bu sayımda değer girişi yapılamaz.");
         }
         managed.setSayilanMiktar(item.getSayilanMiktar());
@@ -160,11 +167,18 @@ public class StSayimService extends AbstractService<StSayim> {
                 return mevcut;
             }
         }
+        BigDecimal sistemMiktari = em.createQuery(
+                        "SELECT COALESCE(SUM(b.miktar), 0) FROM StStokBakiye b WHERE b.stDepo = :depo AND b.stStok = :stok AND b.aktif = true",
+                        BigDecimal.class)
+                .setParameter("depo", managedSayim.getStDepo())
+                .setParameter("stok", managedStok)
+                .getSingleResult();
+
         StSayimKalem kalem = new StSayimKalem();
         kalem.setStSayim(managedSayim);
         kalem.setStStok(managedStok);
-        kalem.setSistemMiktari(BigDecimal.ZERO);
-        kalem.setSayilanMiktar(BigDecimal.ZERO);
+        kalem.setSistemMiktari(sistemMiktari == null ? BigDecimal.ZERO : sistemMiktari);
+        kalem.setSayilanMiktar(null);
         kalem.setSayilmadi(false);
         managedSayim.getKalemler().add(kalem);
         em.flush();

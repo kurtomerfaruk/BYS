@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="jakarta.faces.facelets"
       xmlns:h="jakarta.faces.html"
@@ -24,11 +25,6 @@
 
         <h:form id="StSayimEditForm">
             <h:panelGroup id="display">
-                <p:remoteCommand name="stApplySayimBackup"
-                                 actionListener="#{stSayimController.applyLocalBackup}"
-                                 update="display,:growl"
-                                 oncomplete="stCountBackup.clear('#{stSayimController.selected.id}')"/>
-
                 <div class="card">
                     <div class="card-body">
 
@@ -91,164 +87,86 @@
                             </div>
                         </ui:fragment>
 
-                        <!-- SAYIMDA: üç mod -->
+                        <!-- SAYIMDA: tek ekran -->
                         <ui:fragment rendered="#{stSayimController.selected.durum eq 'SAYIMDA'}">
-                            <ul class="nav nav-tabs mb-3 tab-style-8 scaleX">
-                                <li class="nav-item">
-                                    <button class="nav-link active" id="sayimHizliTab" data-bs-toggle="tab"
-                                            data-bs-target="#sayimHizliPane" type="button"
-                                            role="tab">#{messages.hizliGiris}
-                                    </button>
-                                </li>
-                                <li class="nav-item">
-                                    <button class="nav-link" id="sayimListeTab" data-bs-toggle="tab"
-                                            data-bs-target="#sayimListePane" type="button"
-                                            role="tab">#{messages.listeGirisi}
-                                    </button>
-                                </li>
-                                <li class="nav-item">
-                                    <button class="nav-link" id="sayimSayacTab" data-bs-toggle="tab"
-                                            data-bs-target="#sayimSayacPane" type="button"
-                                            role="tab">#{messages.sayacModu}
-                                    </button>
-                                </li>
-                            </ul>
-
-                            <div class="tab-content">
-                                <div class="tab-pane show active" id="sayimHizliPane" role="tabpanel">
-                                    <h:panelGroup id="sayimHizliPanel" layout="block"
-                                                  style="padding:10px;border:1px solid #d5dce3;border-radius:6px;background:#f8fbff;">
-                                        <p:defaultCommand target="btnBarkodEkle" scope="sayimHizliPanel"/>
-                                        <div class="ui-grid ui-grid-responsive">
-                                            <div class="ui-grid-row">
-                                                <div class="ui-grid-col-5">
-                                                    <p:outputLabel
-                                                            value="#{messages.barkodText} / #{messages.stokKoduText} / #{messages.malzemeKoduText}"
-                                                            for="@next"/>
-                                                    <p:inputText id="sayimBarkod"
-                                                                 value="#{stSayimController.barcodeInput}"
-                                                                 maxlength="50" autocomplete="off" styleClass="w-100"
-                                                                 style="font-size:16px;font-weight:600"/>
-                                                </div>
-                                                <div class="ui-grid-col-2">
-                                                    <p:outputLabel value="#{messages.sayilanMiktarText}" for="@next"/>
-                                                    <div class="ui-inputgroup">
-                                                        <p:inputNumber id="sayimMiktar"
-                                                                       value="#{stSayimController.countQuantity}"
-                                                                       decimalPlaces="4" minValue="0" emptyValue="empty"
-                                                                       styleClass="w-100"/>
-                                                        <p:commandButton id="btnBarkodEkle"
-                                                                         pt:data-tooltip="#{messages.buttonKaydet}"
-                                                                         icon="pi pi-check"
-                                                                         styleClass="ui-button-primary"
-                                                                         actionListener="#{stSayimController.addCountFromBarcode}"
-                                                                         process="sayimHizliPanel"
-                                                                         update="sayimHizliPanel sayimKalemTable :growl"
-                                                                         onstart="PF('Loading').show(); window.stSayimLastCode = document.getElementById('StSayimEditForm:sayimBarkod').value; window.stSayimLastQty = (document.querySelector('[id$=\'sayimMiktar_input\']') || {value:'1'}).value"
-                                                                         oncomplete="PF('Loading').hide(); stCountBackup.save('#{stSayimController.selected.id}', window.stSayimLastCode, window.stSayimLastQty); stBarkodOdak('StSayimEditForm:sayimBarkod');"/>
-                                                        <p:commandButton type="button" icon="pi pi-camera"
-                                                                         pt:data-tooltip="#{messages.buttonKameraAc}"
-                                                                         styleClass="ui-button-secondary"
-                                                                         onclick="stBarkodScanner.ac('StSayimEditForm:sayimBarkod','StSayimEditForm:btnBarkodEkle')"/>
-
-                                                    </div>
-                                                </div>
-
+                            <h:panelGroup id="sayimHizliPanel" layout="block"
+                                          style="padding:10px;border:1px solid #d5dce3;border-radius:6px;background:#f8fbff;">
+                                <p:defaultCommand target="btnBarkodEkle" scope="sayimHizliPanel"/>
+                                <div class="ui-grid ui-grid-responsive">
+                                    <div class="ui-grid-row">
+                                        <div class="ui-grid-col-5">
+                                            <p:outputLabel
+                                                    value="#{messages.barkodText} / #{messages.stokKoduText} / #{messages.malzemeKoduText}"
+                                                    for="@next"/>
+                                            <p:inputText id="sayimBarkod"
+                                                         value="#{stSayimController.barcodeInput}"
+                                                         maxlength="50" autocomplete="off" styleClass="w-100"
+                                                         style="font-size:16px;font-weight:600"/>
+                                        </div>
+                                        <div class="ui-grid-col-2">
+                                            <p:outputLabel value="#{messages.sayilanMiktarText}" for="@next"/>
+                                            <div class="ui-inputgroup">
+                                                <p:inputNumber id="sayimMiktar"
+                                                               value="#{stSayimController.countQuantity}"
+                                                               decimalPlaces="4" minValue="0" emptyValue="empty"
+                                                               styleClass="w-100"/>
+                                                <p:commandButton id="btnBarkodEkle"
+                                                                 pt:data-tooltip="#{messages.buttonKaydet}"
+                                                                 icon="pi pi-check"
+                                                                 styleClass="ui-button-primary"
+                                                                 actionListener="#{stSayimController.addCountFromBarcode}"
+                                                                 process="sayimHizliPanel"
+                                                                 update="sayimHizliPanel sayimKalemTable sayimOzetPanel :growl"
+                                                                 onstart="PF('Loading').show()"
+                                                                 oncomplete="PF('Loading').hide(); stBarkodOdak('StSayimEditForm:sayimBarkod');"/>
+                                                <p:commandButton type="button" icon="pi pi-camera"
+                                                                 pt:data-tooltip="#{messages.buttonKameraAc}"
+                                                                 styleClass="ui-button-secondary"
+                                                                 onclick="stBarkodScanner.ac('StSayimEditForm:sayimBarkod','StSayimEditForm:btnBarkodEkle')"/>
                                             </div>
                                         </div>
-                                        <div class="mt-2" style="font-size:12px;color:#718295">
-                                            Barkodu okutup Enter'a basın; değer anında kaydedilir.
-                                        </div>
-                                        <h:panelGroup rendered="#{stSayimController.duplicateCount}">
-                                            <div style="margin-top:6px;font-size:12px;color:#8a5a00">
-                                                Bu stok zaten sayıldı. Ekle veya değiştir
-                                                <p:commandButton value="#{messages.miktarEkle}" icon="pi pi-plus"
-                                                                 styleClass="ui-button-success ms-1"
-                                                                 actionListener="#{stSayimController.addToExistingCount}"
-                                                                 process="sayimHizliPanel"
-                                                                 update="sayimHizliPanel sayimKalemTable :growl"
-                                                                 oncomplete="PF('Loading').hide(); stBarkodOdak('StSayimEditForm:sayimBarkod')"/>
-                                                <p:commandButton value="#{messages.degistir}" icon="pi pi-pencil"
-                                                                 styleClass="ui-button-secondary ms-1"
-                                                                 actionListener="#{stSayimController.overwriteCount}"
-                                                                 process="sayimHizliPanel"
-                                                                 update="sayimHizliPanel sayimKalemTable :growl"
-                                                                 oncomplete="PF('Loading').hide(); stBarkodOdak('StSayimEditForm:sayimBarkod')"/>
-                                            </div>
-                                        </h:panelGroup>
-                                    </h:panelGroup>
-                                </div>
-
-                                <div class="tab-pane" id="sayimListePane" role="tabpanel">
-                                    <div class="d-flex gap-2 mb-2">
-                                        <p:inputText placeholder="Kod / barkod / malzeme kodu / stok adı ara"
-                                                     styleClass="w-100"
-                                                     onkeyup="filterTableRows(this, 'StSayimEditForm:sayimKalemTable')"/>
-                                        <p:commandButton value="Yerel yedeği uygula" icon="pi pi-history"
-                                                         styleClass="ui-button-secondary"
-                                                         onclick="stCountBackup.apply('#{stSayimController.selected.id}','stApplySayimBackup')"
-                                                         process="@this" update="@none"/>
                                     </div>
                                 </div>
+                                <div class="mt-2" style="font-size:12px;color:#718295">
+                                    Barkodu okutup Enter'a basın; değer anında kaydedilir.
+                                </div>
+                                <h:panelGroup rendered="#{stSayimController.duplicateCount}">
+                                    <div style="margin-top:6px;font-size:12px;color:#8a5a00">
+                                        Bu stok zaten sayıldı. Ekle veya değiştir
+                                        <p:commandButton value="#{messages.miktarEkle}" icon="pi pi-plus"
+                                                         styleClass="ui-button-success ms-1"
+                                                         actionListener="#{stSayimController.addToExistingCount}"
+                                                         process="sayimHizliPanel"
+                                                         update="sayimHizliPanel sayimKalemTable sayimOzetPanel :growl"
+                                                         oncomplete="PF('Loading').hide(); stBarkodOdak('StSayimEditForm:sayimBarkod')"/>
+                                        <p:commandButton value="#{messages.degistir}" icon="pi pi-pencil"
+                                                         styleClass="ui-button-secondary ms-1"
+                                                         actionListener="#{stSayimController.overwriteCount}"
+                                                         process="sayimHizliPanel"
+                                                         update="sayimHizliPanel sayimKalemTable sayimOzetPanel :growl"
+                                                         oncomplete="PF('Loading').hide(); stBarkodOdak('StSayimEditForm:sayimBarkod')"/>
+                                    </div>
+                                </h:panelGroup>
+                            </h:panelGroup>
 
-                                <div class="tab-pane" id="sayimSayacPane" role="tabpanel">
-                                    <h:panelGroup id="sayimSayacPanel" layout="block"
-                                                  style="padding:10px;border:1px solid #d5dce3;border-radius:6px;background:#f8fbff;">
-                                        <div class="ui-grid ui-grid-responsive">
-                                            <div class="ui-grid-row">
-                                                <div class="ui-grid-col-6">
-                                                    <p:outputLabel
-                                                            value="#{messages.barkodText} / #{messages.stokKoduText} / #{messages.malzemeKoduText}"
-                                                            for="sayimSayacBarkod"/>
-                                                    <p:inputText id="sayimSayacBarkod"
-                                                                 value="#{stSayimController.barcodeInput}"
-                                                                 maxlength="50" autocomplete="off" styleClass="w-100"
-                                                                 style="font-size:16px;font-weight:600"/>
-                                                </div>
-                                                <div class="ui-grid-col-2">
-                                                    <p:outputLabel value="#{messages.sayilanMiktarText}" for="@next"/>
-                                                    <div style="font-size:26px;font-weight:700;color:#0d6efd">
-                                                        <h:outputText value="#{stSayimController.countQuantity}"/>
-                                                    </div>
-                                                </div>
-                                                <div class="ui-grid-col-2">
-                                                    <p:outputLabel value=" "/>
-                                                    <p:commandButton id="btnSayacEkle" value="+1" icon="pi pi-plus"
-                                                                     styleClass="ui-button-primary w-100"
-                                                                     actionListener="#{stSayimController.incrementCounter}"
-                                                                     process="sayimSayacPanel"
-                                                                     update="sayimSayacPanel sayimKalemTable :growl"
-                                                                     oncomplete="PF('Loading').hide(); stBarkodOdak('StSayimEditForm:sayimSayacBarkod')"/>
-                                                </div>
-                                                <div class="ui-grid-col-2">
-                                                    <p:outputLabel value=" "/>
-                                                    <div class="ui-inputgroup">
-                                                        <p:commandButton value="-1" icon="pi pi-minus"
-                                                                         styleClass="ui-button-secondary"
-                                                                         actionListener="#{stSayimController.decrementCounter}"
-                                                                         process="@this"
-                                                                         update="sayimSayacPanel sayimKalemTable :growl"/>
-                                                        <p:commandButton type="button" icon="pi pi-camera"
-                                                                         pt:data-tooltip="#{messages.buttonKameraAc}"
-                                                                         styleClass="ui-button-secondary"
-                                                                         onclick="stBarkodScanner.ac('StSayimEditForm:sayimSayacBarkod','StSayimEditForm:btnSayacEkle')"/>
-                                                    </div>
-                                                </div>
+                            <h:panelGroup id="sayimOzetPanel" layout="block"
+                                          styleClass="d-flex justify-content-between align-items-center mt-2 mb-2 flex-wrap">
+                                <div style="font-size:12px;color:#5b6b7b">
+                                    #{messages.sayilanMiktarText}: <b>
+                                    <p:outputLabel value="#{stSayimController.countedCount}"/>
+                                </b> /
+                                    #{stSayimController.selected.kalemler.size()} ·
+                                    #{messages.kalan}: <b><p:outputLabel value="#{stSayimController.remainingCount}"/>
+                                </b> ·
+                                    #{messages.farkli}: <b><p:outputLabel value="#{stSayimController.differenceCount}"/></b>
+                                    <div class="progress progress-lg custom-progress-3 progress-animate my-2 ozet-progress" role="progressbar"
+                                         aria-valuenow="#{stSayimController.completePercentage()}" aria-valuemin="0" aria-valuemax="100">
+                                        <div class="progress-bar" style="width: #{stSayimController.completePercentage()}%">
+                                            <div class="progress-bar-value ozet-progress"><p:outputLabel
+                                                    value="#{stSayimController.completePercentage()}"/>%
                                             </div>
                                         </div>
-                                        <div class="mt-2" style="font-size:12px;color:#718295">
-                                            Aynı barkodu her okuttuğunuzda sayaç 1 artar.
-                                        </div>
-                                    </h:panelGroup>
-                                </div>
-                            </div>
-
-                            <div class="d-flex justify-content-between align-items-center mt-2 mb-2 flex-wrap">
-                                <div style="font-size:12px;color:#5b6b7b">
-                                    #{messages.sayilanMiktarText}: <b>#{stSayimController.countedCount}</b> /
-                                    #{stSayimController.selected.kalemler.size()} ·
-                                    #{messages.kalan}: <b>#{stSayimController.remainingCount}</b> ·
-                                    #{messages.farkli}: <b>#{stSayimController.differenceCount}</b>
+                                    </div>
                                 </div>
                                 <div class="d-flex gap-2">
                                     <p:commandButton value="#{messages.buttonSayimGeriAl}" icon="pi pi-undo"
@@ -260,30 +178,42 @@
                                                      actionListener="#{stSayimController.finish}"
                                                      update="display,:StSayimListForm:datalist:datalist,:growl"/>
                                 </div>
-                            </div>
+                            </h:panelGroup>
                         </ui:fragment>
 
                         <!-- SAYIMDA: düzenlenebilir kalem tablosu -->
-                        <p:dataTable id="sayimKalemTable" value="#{stSayimController.selected.kalemler}"
-                                     var="kalemItem" rendered="#{stSayimController.selected.durum eq 'SAYIMDA'}"
-                                     emptyMessage="#{messages.kayitBulunamadi}" size="small" stripedRows="true"
-                                     styleClass="w-100" lazy="false" scrollable="true" scrollHeight="260"
-                                     rowIndexVar="indexVar" widgetVar="sayimTableWidget">
+                        <p:dataTable id="sayimKalemTable"
+                                     value="#{stSayimController.selected.kalemler}"
+                                     var="kalemItem"
+                                     emptyMessage="#{messages.kayitBulunamadi}"
+                                     size="small"
+                                     stripedRows="true"
+                                     lazy="false"
+                                     scrollable="true"
+                                     scrollHeight="260"
+                                     rowIndexVar="indexVar"
+                                     showGridlines="true"
+                                     editable="#{stSayimController.selected.durum eq 'SAYIMDA'
+                                     or stSayimController.selected.durum eq 'ONAY_BEKLIYOR'}"
+                                     editMode="cell">
+
                             <p:ajax event="cellEdit" listener="#{stSayimController.onCountCellEdit}"
-                                    update="sayimKalemTable :growl"/>
-                            <p:column headerText="#{messages.barkodText}">
+                                    update="sayimKalemTable StSayimEditForm:sayimOzetPanel :growl"/>
+                            <p:column headerText="#{messages.stokKoduText}" filterBy="#{kalemItem.stStok.stokKodu}" filterMatchMode="contains"
+                                      width="150">
                                 <h:outputText value="#{kalemItem.stStok.stokKodu}"/>
                             </p:column>
-                            <p:column headerText="#{messages.stokText}">
+                            <p:column headerText="#{messages.stokText}" filterBy="#{kalemItem.stStok.stokAdi}" filterMatchMode="contains">
                                 <h:outputText value="#{kalemItem.stStok.stokAdi}"/>
                             </p:column>
-                            <p:column headerText="#{messages.sistemMiktariText}" styleClass="text-end">
+                            <p:column headerText="#{messages.sistemMiktariText}" styleClass="text-end" filterBy="#{kalemItem.sistemMiktari}"
+                                      width="120">
                                 <h:outputText value="#{kalemItem.sistemMiktari}">
                                     <f:convertNumber minFractionDigits="0" maxFractionDigits="4"/>
                                 </h:outputText>
                             </p:column>
                             <p:column headerText="#{messages.sayilanMiktarText}" styleClass="text-end"
-                                      field="sayilanMiktar">
+                                      filterBy="#{kalemItem.sayilanMiktar}" width="120">
                                 <p:cellEditor>
                                     <f:facet name="output">
                                         <h:outputText value="#{kalemItem.sayilanMiktar}">
@@ -292,58 +222,28 @@
                                     </f:facet>
                                     <f:facet name="input">
                                         <p:inputNumber value="#{kalemItem.sayilanMiktar}" decimalPlaces="4"
-                                                       minValue="0" emptyValue="empty" style="width:100%"/>
+                                                       minValue="0" emptyValue="empty">
+                                            <p:ajax event="change" update="@(.total),StSayimEditForm:sayimOzetPanel"/>
+                                        </p:inputNumber>
                                     </f:facet>
                                 </p:cellEditor>
                             </p:column>
-                            <p:column headerText="#{messages.farkText}" styleClass="text-end">
-                                <h:outputText value="#{kalemItem.fark}"
-                                              styleClass="#{kalemItem.fark != null and kalemItem.fark != 0 ? 'text-warning fw-bold' : ''}">
+                            <p:column headerText="#{messages.farkText}" styleClass="text-end" width="120">
+                                <p:outputLabel value="#{kalemItem.fark}"
+                                               styleClass="total #{kalemItem.fark != null and kalemItem.fark != 0 ? 'text-warning fw-bold' : ''}">
                                     <f:convertNumber minFractionDigits="0" maxFractionDigits="4"/>
-                                </h:outputText>
+                                </p:outputLabel>
                             </p:column>
-                            <p:column headerText="#{messages.durumText}">
-                                <h:outputText value="#{stSayimController.getItemStatus(kalemItem)}"/>
+                            <p:column headerText="#{messages.durumText}" width="100">
+                                <p:outputLabel value="#{stSayimController.getItemStatus(kalemItem)}" styleClass="total"/>
                             </p:column>
-                            <p:column style="width:70px;text-align:center">
-                                <p:commandButton icon="pi pi-ban" styleClass="ui-button-warning rounded-button"
+                            <p:column width="70" styleClass="text-center" headerText="İşlem">
+                                <p:commandButton icon="pi pi-ban" styleClass="ui-button-warning rounded-button ui-button-sm"
                                                  pt:data-tooltip="#{messages.sayilmadi}"
+                                                 disabled="#{stSayimController.selected.durum eq 'TAMAMLANDI'
+                                                 or stSayimController.selected.durum  eq 'IPTAL'}"
                                                  actionListener="#{stSayimController.markNotCounted(kalemItem)}"
-                                                 process="@this" update="sayimKalemTable :growl"/>
-                            </p:column>
-                        </p:dataTable>
-
-                        <!-- Diğer durumlar: salt okunur tablo -->
-                        <p:dataTable id="kalemTable" value="#{stSayimController.selected.kalemler}"
-                                     var="kalemItem" rendered="#{stSayimController.selected.durum ne 'SAYIMDA'}"
-                                     emptyMessage="#{messages.kayitBulunamadi}" size="small" stripedRows="true"
-                                     styleClass="w-100" lazy="false" scrollable="true" scrollHeight="260">
-                            <p:column headerText="#{messages.stokText}">
-                                <h:outputText value="#{kalemItem.stStok.stokKodu} - #{kalemItem.stStok.stokAdi}"/>
-                            </p:column>
-                            <p:column headerText="#{messages.sistemMiktariText}" styleClass="text-end">
-                                <h:outputText value="#{kalemItem.sistemMiktari}">
-                                    <f:convertNumber minFractionDigits="0" maxFractionDigits="4"/>
-                                </h:outputText>
-                            </p:column>
-                            <p:column headerText="#{messages.sayilanMiktarText}" styleClass="text-end">
-                                <h:outputText value="#{kalemItem.sayilanMiktar}">
-                                    <f:convertNumber minFractionDigits="0" maxFractionDigits="4"/>
-                                </h:outputText>
-                            </p:column>
-                            <p:column headerText="#{messages.farkText}" styleClass="text-end">
-                                <h:outputText value="#{kalemItem.fark}">
-                                    <f:convertNumber minFractionDigits="0" maxFractionDigits="4"/>
-                                </h:outputText>
-                            </p:column>
-                            <p:column headerText="#{messages.durumText}">
-                                <h:outputText value="#{stSayimController.getItemStatus(kalemItem)}"/>
-                            </p:column>
-                            <p:column style="width:60px;text-align:center"
-                                      rendered="#{stSayimController.selected.durum eq 'TASLAK'}">
-                                <p:commandButton icon="pi pi-trash" styleClass="ui-button-danger rounded-button"
-                                                 actionListener="#{stSayimController.removeKalem(kalemItem)}"
-                                                 process="@this" update="display,:growl"/>
+                                                 process="@this" update="sayimKalemTable StSayimEditForm:sayimOzetPanel :growl"/>
                             </p:column>
                         </p:dataTable>
 
