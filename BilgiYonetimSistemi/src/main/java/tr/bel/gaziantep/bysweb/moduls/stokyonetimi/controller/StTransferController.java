@@ -1,5 +1,6 @@
 package tr.bel.gaziantep.bysweb.moduls.stokyonetimi.controller;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.ejb.EJBException;
 import jakarta.faces.event.ActionEvent;
 import jakarta.faces.model.SelectItem;
@@ -9,15 +10,17 @@ import jakarta.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.primefaces.model.FilterMeta;
+import org.primefaces.model.MatchMode;
 import tr.bel.gaziantep.bysweb.core.controller.AbstractController;
 import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.EnumSyFiltreAnahtari;
+import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.EnumSyKullaniciTuru;
 import tr.bel.gaziantep.bysweb.core.enums.stokyonetimi.EnumStTransferDurum;
 import tr.bel.gaziantep.bysweb.core.service.FilterOptionService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
-import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity.StTransfer;
-import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity.StTransferKalem;
-import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.service.StTransferService;
+import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity.*;
+import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.service.*;
 
 import java.io.Serial;
 import java.math.BigDecimal;
@@ -41,14 +44,53 @@ public class StTransferController extends AbstractController<StTransfer> {
     @Inject
     private StTransferService service;
     @Inject
+    private StStokBakiyeService stokBakiyeService;
+    @Inject
+    private StStokBarkodService stStokBarkodService;
+    @Inject
+    private StStokService stStokService;
+    @Inject
+    private StDepoYetkiService depoYetkiService;
+    @Inject
+    private StDepoController stDepoController;
+    @Inject
     private FilterOptionService filterOptionService;
 
     @Getter
     @Setter
     private StTransferKalem kalem = new StTransferKalem();
+    @Getter
+    @Setter
+    private String barcodeInput;
+
+    @Getter
+    private BigDecimal kaynakMevcutMiktar = BigDecimal.ZERO;
+    @Getter
+    private BigDecimal kaynakTransferdekiMiktar = BigDecimal.ZERO;
+    @Getter
+    private BigDecimal kaynakKullanilabilirMiktar = BigDecimal.ZERO;
 
     public StTransferController() {
         super(StTransfer.class);
+    }
+
+    @PostConstruct
+    @Override
+    public void init() {
+        super.init();
+        List<Integer> depoListIds = stDepoController.getItems().stream()
+                .map(StDepo::getId)
+                .toList();
+        this.getFilterMap().put("kaynakDepo", FilterMeta.builder()
+                .field("kaynakDepo.id")
+                .filterValue(depoListIds)
+                .matchMode(MatchMode.IN)
+                .build());
+        this.getFilterMap().put("hedefDepo", FilterMeta.builder()
+                .field("hedefDepo.id")
+                .filterValue(depoListIds)
+                .matchMode(MatchMode.IN)
+                .build());
     }
 
     public List<SelectItem> getFilterOptions(EnumSyFiltreAnahtari key) {
@@ -63,6 +105,13 @@ public class StTransferController extends AbstractController<StTransfer> {
     }
 
     @Override
+    public void resetParents() {
+        barcodeInput = null;
+        kalem = new StTransferKalem();
+        clearBakiyeBilgi();
+    }
+
+    @Override
     public StTransfer prepareCreate(ActionEvent event) {
         StTransfer yeni = super.prepareCreate(event);
         if (yeni != null) {
@@ -70,9 +119,61 @@ public class StTransferController extends AbstractController<StTransfer> {
             yeni.setDurum(EnumStTransferDurum.TASLAK);
             yeni.setKalemler(new java.util.ArrayList<>());
         }
-        kalem = new StTransferKalem();
+        resetParents();
         return yeni;
     }
+
+    public void clearBakiyeBilgi() {
+        kaynakMevcutMiktar = BigDecimal.ZERO;
+        kaynakTransferdekiMiktar = BigDecimal.ZERO;
+        kaynakKullanilabilirMiktar = BigDecimal.ZERO;
+    }
+
+    public void refreshKalemBakiye() {
+        clearBakiyeBilgi();
+        if (getSelected() == null || getSelected().getKaynakDepo() == null
+                || kalem == null || kalem.getStStok() == null || kalem.getStStok().getId() == null) {
+            return;
+        }
+        StStokBakiye bakiye = stokBakiyeService.find(kalem.getStStok(), getSelected().getKaynakDepo(), null, false);
+        if (bakiye == null) {
+            return;
+        }
+        kaynakMevcutMiktar = bakiye.getMiktar() == null ? BigDecimal.ZERO : bakiye.getMiktar();
+        kaynakTransferdekiMiktar = bakiye.getTransferdekiMiktar() == null ? BigDecimal.ZERO : bakiye.getTransferdekiMiktar();
+        BigDecimal rezerve = bakiye.getRezerveMiktar() == null ? BigDecimal.ZERO : bakiye.getRezerveMiktar();
+        BigDecimal kullanilabilir = kaynakMevcutMiktar.subtract(rezerve).subtract(kaynakTransferdekiMiktar);
+        kaynakKullanilabilirMiktar = kullanilabilir.compareTo(BigDecimal.ZERO) < 0 ? BigDecimal.ZERO : kullanilabilir;
+    }
+
+    public void onBarcodeInput() {
+        if (barcodeInput == null || barcodeInput.isBlank()) {
+            return;
+        }
+        String code = barcodeInput.trim();
+        StStok stok = null;
+        StStokBarkod barkod = stStokBarkodService.findByBarkod(code);
+        if (barkod != null && barkod.getStStok() != null) {
+            stok = barkod.getStStok();
+        }
+        if (stok == null) {
+            stok = stStokService.findByKod(code);
+        }
+        if (stok == null) {
+            FacesUtil.addExclamationMessage("Bu barkod/kod ile kayıtlı stok bulunamadı.");
+            return;
+        }
+        kalem.setStStok(stok);
+        refreshKalemBakiye();
+    }
+
+    public String getKalemBirimAdi() {
+        if (kalem == null || kalem.getStStok() == null || kalem.getStStok().getStBirim() == null) {
+            return "";
+        }
+        return kalem.getStStok().getStBirim().getAd();
+    }
+
 
     public void addKalem() {
         if (getSelected() == null) {
@@ -82,17 +183,32 @@ public class StTransferController extends AbstractController<StTransfer> {
             FacesUtil.addExclamationMessage("Transfer kalemi için stok seçin");
             return;
         }
-        if (kalem.getMiktar() == null || kalem.getMiktar().compareTo(java.math.BigDecimal.ZERO) <= 0) {
+        if (kalem.getMiktar() == null || kalem.getMiktar().compareTo(BigDecimal.ZERO) <= 0) {
             FacesUtil.addExclamationMessage("Miktar sıfırdan büyük olmalıdır");
             return;
         }
         if (getSelected().getKalemler() == null) {
             getSelected().setKalemler(new java.util.ArrayList<>());
         }
-        kalem.setSevkMiktari(BigDecimal.ZERO);
-        kalem.setTeslimMiktari(BigDecimal.ZERO);
-        kalem.setStTransfer(getSelected());
-        getSelected().getKalemler().add(kalem);
+        StTransferKalem mevcut = getSelected().getKalemler().stream()
+                .filter(item -> item.getStStok() != null && item.getStStok().getId() != null)
+                .filter(item -> item.getStStok().getId().equals(kalem.getStStok().getId()))
+                .findFirst()
+                .orElse(null);
+
+        if (mevcut != null) {
+            BigDecimal mevcutMiktar = mevcut.getMiktar() == null ? BigDecimal.ZERO : mevcut.getMiktar();
+            mevcut.setMiktar(mevcutMiktar.add(kalem.getMiktar()));
+        } else {
+            kalem.setSevkMiktari(BigDecimal.ZERO);
+            kalem.setTeslimMiktari(BigDecimal.ZERO);
+            kalem.setStTransfer(getSelected());
+            getSelected().getKalemler().add(kalem);
+        }
+
+        kalem = new StTransferKalem();
+        barcodeInput = null;
+        clearBakiyeBilgi();
         kalem = new StTransferKalem();
         FacesUtil.successMessage(Constants.KAYIT_EKLENDI);
     }
@@ -102,7 +218,7 @@ public class StTransferController extends AbstractController<StTransfer> {
             return;
         }
         getSelected().getKalemler().remove(item);
-        FacesUtil.successMessage(Constants.KAYIT_SILINDI);
+        FacesUtil.addSuccessMessage("Kalem silindi...");
     }
 
     @Override
@@ -155,8 +271,8 @@ public class StTransferController extends AbstractController<StTransfer> {
 
     public void sevkEt() {
         try {
-            service.sevkEt(getSelected());
-            FacesUtil.addSuccessMessage("Transfer sevkedildi");
+            service.sevkEt(getSelected(), this.getSyKullanici());
+            FacesUtil.addSuccessMessage("Transfer sevk edildi");
             setItems(null);
             setLazyItems(null);
         } catch (IllegalArgumentException ex) {
@@ -202,6 +318,33 @@ public class StTransferController extends AbstractController<StTransfer> {
     }
 
     public void onSelectTransfer() {
-        // kalemler lazy collection; erisim aninda yuklenir.
+        barcodeInput = null;
+        kalem = new StTransferKalem();
+        clearBakiyeBilgi();
+    }
+
+    public boolean isHedefDepoYetkili() {
+        if (getSelected() == null || getSelected().getHedefDepo() == null || getSyKullanici() == null) {
+            return false;
+        }
+        if (getSyKullanici().getKullaniciTuru() == EnumSyKullaniciTuru.SISTEM_YONETICISI) {
+            return true;
+        }
+        return depoYetkiService.findByKullaniciByDepo(getSyKullanici(), getSelected().getHedefDepo()) != null;
+    }
+
+
+    public void prepareSevk() {
+        if (getSelected() != null) {
+            getSelected().setSevkEdenKisi(null);
+            getSelected().setSevkAciklama(null);
+        }
+    }
+
+    public void prepareTeslim() {
+        if (getSelected() != null) {
+            getSelected().setTeslimAlanKisi(null);
+            getSelected().setTeslimAciklama(null);
+        }
     }
 }

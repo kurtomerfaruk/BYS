@@ -63,12 +63,36 @@ public class StTransfer extends BaseEntity {
     @Column(name = "SEVK_TARIHI")
     private LocalDateTime sevkTarihi;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "SEVK_ISLEMI_YAPAN_SYKULLANICI_ID")
+    private SyKullanici sevkIslemiYapanSyKullanici;
+
+    @Size(max = 150)
+    @Nationalized
+    @Column(name = "SEVK_EDEN_KISI", length = 150)
+    private String sevkEdenKisi;
+
+    @Size(max = 300)
+    @Nationalized
+    @Column(name = "SEVK_ACIKLAMA", length = 300)
+    private String sevkAciklama;
+
     @Column(name = "TESLIM_TARIHI")
     private LocalDateTime teslimTarihi;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TESLIM_ALAN_SYKULLANICI_ID")
     private SyKullanici teslimAlanSyKullanici;
+
+    @Size(max = 150)
+    @Nationalized
+    @Column(name = "TESLIM_ALAN_KISI", length = 150)
+    private String teslimAlanKisi;
+
+    @Size(max = 300)
+    @Nationalized
+    @Column(name = "TESLIM_ACIKLAMA", length = 300)
+    private String teslimAciklama;
 
     @Nationalized
     @Lob

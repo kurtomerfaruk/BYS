@@ -5,74 +5,464 @@
       xmlns:f="jakarta.faces.core"
       xmlns:h="jakarta.faces.html"
       xmlns:p="primefaces"
-      xmlns:coco="jakarta.faces.composite/ui">
+      xmlns:pt="jakarta.faces.passthrough">
 
 <ui:composition>
 
-    <coco:createpage id="StTransferCreateForm"
-                     renderedListener="#{stTransferController.selected != null}"
-                     widgetVar="StTransferCreateDialog"
-                     actionListener="#{stTransferController.saveNew}"
-                     listForm="StTransferListForm">
+    <p:dialog widgetVar="StTransferCreateDialog"
+              id="StTransferCreateDialogId"
+              modal="true"
+              resizable="false"
+              closeOnEscape="true"
+              header="Yeni Depo Transferi"
+              appendTo="@(body)"
+              responsive="true"
+              fitViewport="true"
+              position="top"
+              onShow="PF('StTransferCreateDialog').initPosition();"
+              style="min-width:1100px;">
 
-        <p:outputLabel value="#{messages.kaynakDepoLabel}" for="@next"/>
-        <p:selectOneMenu id="kaynakDepo" value="#{stTransferController.selected.kaynakDepo}" filter="true"
-                         converter="omnifaces.SelectItemsConverter" required="true">
-            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
-            <f:selectItems value="#{stDepoController.items}" var="depoItem"
-                           itemValue="#{depoItem}" itemLabel="#{depoItem.ad}"/>
-        </p:selectOneMenu>
+        <h:form id="StTransferCreateForm">
+            <h:panelGroup id="StTransferCreateForm">
+                <style>
+                    .st-transfer-shell .section {
+                        border: 1px solid #dbe4ee;
+                        border-radius: 12px;
+                        background: #fff;
+                        margin-bottom: 16px;
+                    }
 
-        <p:outputLabel value="#{messages.hedefDepoLabel}" for="@next"/>
-        <p:selectOneMenu id="hedefDepo" value="#{stTransferController.selected.hedefDepo}" filter="true"
-                         converter="omnifaces.SelectItemsConverter" required="true">
-            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
-            <f:selectItems value="#{stDepoController.items}" var="depoItem"
-                           itemValue="#{depoItem}" itemLabel="#{depoItem.ad}"/>
-        </p:selectOneMenu>
+                    .st-transfer-shell .section-header {
+                        padding: 12px 16px;
+                        border-bottom: 1px solid #dbe4ee;
+                        font-weight: 700;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        gap: 12px;
+                        background: #fbfdff;
+                        border-radius: 12px 12px 0 0;
+                    }
 
-        <p:outputLabel value="#{messages.aciklamaLabel}" for="@next"/>
-        <p:inputTextarea id="aciklama" value="#{stTransferController.selected.aciklama}"
-                         title="#{messages.aciklamaText}" rows="2" styleClass="w-100"
-                         autoResize="false" maxlength="300"/>
+                    .st-transfer-shell .section-header .hint {
+                        font-size: 12px;
+                        color: #6b7c93;
+                        font-weight: 500;
+                    }
 
-        <p:outputLabel value="#{messages.transferKalemLabel}" for="@next"/>
-        <h:panelGroup>
-            <div class="d-flex gap-2 mb-2 flex-wrap">
-                <p:selectOneMenu id="kalemStok" value="#{stTransferController.kalem.stStok}" filter="true"
-                                 converter="omnifaces.SelectItemsConverter" style="min-width:260px;">
-                    <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
-                    <f:selectItems value="#{stStokController.items}" var="stokItem"
-                                   itemValue="#{stokItem}" itemLabel="#{stokItem.stokKodu} - #{stokItem.stokAdi}"/>
-                </p:selectOneMenu>
-                <p:inputNumber id="kalemMiktar" value="#{stTransferController.kalem.miktar}" decimalPlaces="4"
-                               emptyValue="empty" minValue="0.0001" style="width:140px;"/>
-                <p:commandButton value="#{messages.buttonKalemEkle}" icon="pi pi-plus" styleClass="ui-button-primary"
-                                 actionListener="#{stTransferController.addKalem}"
-                                 update="kalemTable,kalemStok,kalemMiktar" process="@this,kalemStok,kalemMiktar"
-                                 onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
-            </div>
-            <p:dataTable id="kalemTable" value="#{stTransferController.selected.kalemler}" var="kalemItem"
-                         emptyMessage="#{messages.kayitBulunamadi}" size="small" stripedRows="true"
-                         styleClass="w-100" lazy="false">
-                <p:column headerText="#{messages.stokText}">
-                    <h:outputText value="#{kalemItem.stStok.stokKodu} - #{kalemItem.stStok.stokAdi}"/>
-                </p:column>
-                <p:column headerText="#{messages.miktarText}" styleClass="text-end">
-                    <h:outputText value="#{kalemItem.miktar}">
-                        <f:convertNumber minFractionDigits="0" maxFractionDigits="4"/>
-                    </h:outputText>
-                </p:column>
-                <p:column style="width:60px;text-align:center;">
-                    <p:commandButton icon="pi pi-trash" styleClass="ui-button-danger rounded-button"
-                                     actionListener="#{stTransferController.removeKalem(kalemItem)}"
-                                     update="kalemTable" process="@this"
-                                     onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
-                </p:column>
-            </p:dataTable>
-        </h:panelGroup>
+                    .st-transfer-shell .section-body {
+                        padding: 16px;
+                    }
 
-    </coco:createpage>
+                    .st-transfer-shell .stepper {
+                        display: grid;
+                        grid-template-columns: repeat(4, 1fr);
+                        gap: 10px;
+                    }
+
+                    .st-transfer-shell .step {
+                        border: 1px solid #dbe4ee;
+                        border-radius: 10px;
+                        padding: 10px 12px;
+                        background: #f8fafc;
+                    }
+
+                    .st-transfer-shell .step.active {
+                        border-color: #9ec5fe;
+                        background: #e8f1ff;
+                    }
+
+                    .st-transfer-shell .step .num {
+                        width: 26px;
+                        height: 26px;
+                        border-radius: 50%;
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 12px;
+                        font-weight: 700;
+                        background: #dbe5f0;
+                        color: #475569;
+                        margin-bottom: 6px;
+                    }
+
+                    .st-transfer-shell .step.active .num {
+                        background: #0d6efd;
+                        color: #fff;
+                    }
+
+                    .st-transfer-shell .step .name {
+                        font-weight: 700;
+                        font-size: 13px;
+                    }
+
+                    .st-transfer-shell .step .desc {
+                        font-size: 12px;
+                        color: #6b7c93;
+                        margin-top: 2px;
+                    }
+
+                    .st-transfer-shell .info-box {
+                        background: #f8fbff;
+                        border: 1px solid #e3edf7;
+                        border-radius: 10px;
+                        padding: 10px 12px;
+                        text-align: center;
+                    }
+
+                    .st-transfer-shell .info-box .k {
+                        font-size: 11px;
+                        color: #6b7c93;
+                        text-transform: uppercase;
+                        letter-spacing: .03em;
+                    }
+
+                    .st-transfer-shell .info-box .v {
+                        font-size: 16px;
+                        font-weight: 700;
+                        margin-top: 4px;
+                        color: #1f2d3d;
+                    }
+
+                    .st-transfer-shell .info-box.available .v {
+                        color: #198754;
+                    }
+
+                    .st-transfer-shell .info-box.transfer .v {
+                        color: #b45309;
+                    }
+
+                    .st-transfer-shell .stock-panel {
+                        background: #f8fbff;
+                        border: 1px dashed #bfd3e8;
+                        border-radius: 10px;
+                        padding: 14px;
+                    }
+
+                    .st-transfer-shell .summary-pill {
+                        background: #f8fafc;
+                        border: 1px solid #dbe4ee;
+                        color: #42586f;
+                        border-radius: 999px;
+                        padding: 6px 12px;
+                        font-size: 13px;
+                    }
+
+                    .st-transfer-shell .summary-pill b {
+                        color: #1f2d3d;
+                    }
+
+                    .st-transfer-shell .warn-text {
+                        color: #9a6700;
+                        font-size: 12px;
+                        font-weight: 600;
+                    }
+
+                    .st-transfer-shell .muted {
+                        color: #6b7c93;
+                        font-size: 12px;
+                    }
+                </style>
+
+                <h:panelGroup id="display" layout="block" styleClass="st-transfer-shell"
+                              rendered="#{stTransferController.selected != null}">
+
+                    <!-- Durum Akışı -->
+                    <div class="section">
+                        <div class="section-header">
+                            <span><i class="pi pi-directions me-2" style="color:#0d6efd"></i>Transfer Akışı</span>
+                            <span class="hint">Yeni kayıt taslak olarak oluşturulur</span>
+                        </div>
+                        <div class="section-body">
+                            <div class="stepper">
+                                <div class="step active">
+                                    <div class="num">1</div>
+                                    <div class="name">Taslak</div>
+                                    <div class="desc">Bilgiler ve kalemler girilir</div>
+                                </div>
+                                <div class="step">
+                                    <div class="num">2</div>
+                                    <div class="name">Onaylandı</div>
+                                    <div class="desc">Yetkili transferi onaylar</div>
+                                </div>
+                                <div class="step">
+                                    <div class="num">3</div>
+                                    <div class="name">Sevk Edildi</div>
+                                    <div class="desc">Kaynak depodan çıkış yapılır</div>
+                                </div>
+                                <div class="step">
+                                    <div class="num">4</div>
+                                    <div class="name">Tamamlandı</div>
+                                    <div class="desc">Hedef depo teslim alır</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Transfer Bilgileri -->
+                    <div class="section">
+                        <div class="section-header">
+                            <span><i class="pi pi-info-circle me-2" style="color:#0d6efd"></i>Transfer Bilgileri</span>
+                            <span class="hint">Zorunlu alanları doldurun</span>
+                        </div>
+                        <div class="section-body">
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <p:outputLabel value="#{messages.kaynakDepoLabel}" for="kaynakDepo" styleClass="fw-semibold"/>
+                                    <p:selectOneMenu id="kaynakDepo" value="#{stTransferController.selected.kaynakDepo}"
+                                                     filter="true" converter="omnifaces.SelectItemsConverter"
+                                                     required="true" styleClass="w-100">
+                                        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+                                        <f:selectItems value="#{stDepoController.items}" var="depoItem"
+                                                       itemValue="#{depoItem}" itemLabel="#{depoItem.ad}"/>
+                                        <p:ajax event="change" listener="#{stTransferController.refreshKalemBakiye}"
+                                                update="stokBilgiPanel" process="@this"/>
+                                    </p:selectOneMenu>
+                                </div>
+                                <div class="col-md-4">
+                                    <p:outputLabel value="#{messages.hedefDepoLabel}" for="hedefDepo" styleClass="fw-semibold"/>
+                                    <p:selectOneMenu id="hedefDepo" value="#{stTransferController.selected.hedefDepo}"
+                                                     filter="true" converter="omnifaces.SelectItemsConverter"
+                                                     required="true" styleClass="w-100">
+                                        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+                                        <f:selectItems value="#{stDepoController.all()}" var="depoItem"
+                                                       itemValue="#{depoItem}" itemLabel="#{depoItem.ad}"/>
+                                    </p:selectOneMenu>
+                                </div>
+                                <div class="col-md-4">
+                                    <p:outputLabel value="#{messages.talepTarihiText}" for="@next" styleClass="fw-semibold"/>
+                                    <p:datePicker id="talepTarihi" value="#{stTransferController.selected.talepTarihi}" showIcon="true"
+                                                  showTime="true" pattern="#{messages.tarihSaatKisaFormat}" styleClass="w-100" showButtonBar="true"/>
+                                </div>
+                                <div class="col-12">
+                                    <p:outputLabel value="#{messages.aciklamaLabel}" for="@next" styleClass="fw-semibold"/>
+                                    <p:inputTextarea id="aciklama" value="#{stTransferController.selected.aciklama}"
+                                                     rows="2" styleClass="w-100" autoResize="false" maxlength="300"
+                                                     placeholder="Transfer nedeni veya notunuz..."/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Kalem Ekle -->
+                    <div class="section">
+                        <div class="section-header">
+                            <span><i class="pi pi-plus-circle me-2" style="color:#0d6efd"></i>Kalem Ekle</span>
+                            <span class="hint">Barkod okutabilir veya stok seçerek kalem ekleyebilirsiniz</span>
+                        </div>
+                        <div class="section-body">
+                            <h:panelGroup id="kalemEklePanel" layout="block">
+                                <p:defaultCommand target="btnKalemEkle" scope="kalemEklePanel"/>
+
+                                <div class="row g-3 align-items-end">
+                                    <div class="col-lg-4">
+                                        <p:outputLabel value="Barkod / Stok Kodu" for="barcodeInput" styleClass="fw-semibold"/>
+                                        <div class="ui-inputgroup">
+                                            <p:inputText id="barcodeInput" value="#{stTransferController.barcodeInput}"
+                                                         styleClass="w-100" maxlength="50" autocomplete="off"
+                                                         placeholder="Barkod okutun veya kod yazın">
+                                                <p:ajax event="change" listener="#{stTransferController.onBarcodeInput}"
+                                                        process="@this" update="kalemStok stokBilgiPanel :growl"/>
+                                            </p:inputText>
+                                            <p:commandButton icon="pi pi-search" styleClass="ui-button-secondary"
+                                                             pt:data-tooltip="Stok Bul"
+                                                             actionListener="#{stTransferController.onBarcodeInput}"
+                                                             process="barcodeInput"
+                                                             update="kalemStok stokBilgiPanel :growl"
+                                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <p:outputLabel value="#{messages.stokText}" for="kalemStok" styleClass="fw-semibold"/>
+                                        <p:selectOneMenu id="kalemStok" value="#{stTransferController.kalem.stStok}"
+                                                         filter="true" converter="omnifaces.SelectItemsConverter"
+                                                         styleClass="w-100">
+                                            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+                                            <f:selectItems value="#{stStokController.items}" var="stokItem"
+                                                           itemValue="#{stokItem}"
+                                                           itemLabel="#{stokItem.stokKodu} - #{stokItem.stokAdi}"/>
+                                            <p:ajax event="change" listener="#{stTransferController.refreshKalemBakiye}"
+                                                    update="stokBilgiPanel" process="@this"/>
+                                        </p:selectOneMenu>
+                                    </div>
+                                    <div class="col-lg-2 col-md-6">
+                                        <p:outputLabel value="#{messages.miktarText}" for="kalemMiktar" styleClass="fw-semibold"/>
+                                        <p:inputNumber id="kalemMiktar" value="#{stTransferController.kalem.miktar}"
+                                                       decimalPlaces="4" minValue="1" emptyValue="empty"
+                                                       styleClass="w-100">
+                                            <p:ajax event="change" process="@this" update="stokBilgiPanel"/>
+                                        </p:inputNumber>
+                                    </div>
+                                    <div class="col-lg-2 col-md-6">
+                                        <p:commandButton id="btnKalemEkle" value="#{messages.buttonKalemEkle}"
+                                                         icon="pi pi-plus" styleClass="ui-button-primary w-100"
+                                                         actionListener="#{stTransferController.addKalem}"
+                                                         process="kalemEklePanel"
+                                                         update="kalemEklePanel kalemTable transferOzetPanel :growl"
+                                                         onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                                    </div>
+                                </div>
+
+                                <h:panelGroup id="stokBilgiPanel" layout="block" styleClass="stock-panel mt-3">
+                                    <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
+                                        <div class="fw-semibold">
+                                            <i class="pi pi-box me-2" style="color:#0d6efd"></i>Seçili Stok Bilgisi
+                                        </div>
+                                        <div class="muted">
+                                            Kaynak depo:
+                                            <b>#{empty stTransferController.selected.kaynakDepo ? 'Seçilmedi' : stTransferController.selected.kaynakDepo.ad}</b>
+                                        </div>
+                                    </div>
+                                    <div class="row g-2">
+                                        <div class="col-md-3 col-6">
+                                            <div class="info-box">
+                                                <div class="k">Kaynak Mevcut</div>
+                                                <div class="v">
+                                                    <h:outputText value="#{stTransferController.kaynakMevcutMiktar}">
+                                                        <f:convertNumber minFractionDigits="0" maxFractionDigits="4"/>
+                                                    </h:outputText>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 col-6">
+                                            <div class="info-box transfer">
+                                                <div class="k">Transferdeki</div>
+                                                <div class="v">
+                                                    <h:outputText value="#{stTransferController.kaynakTransferdekiMiktar}">
+                                                        <f:convertNumber minFractionDigits="0" maxFractionDigits="4"/>
+                                                    </h:outputText>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 col-6">
+                                            <div class="info-box available">
+                                                <div class="k">Kullanılabilir</div>
+                                                <div class="v">
+                                                    <h:outputText value="#{stTransferController.kaynakKullanilabilirMiktar}">
+                                                        <f:convertNumber minFractionDigits="0" maxFractionDigits="4"/>
+                                                    </h:outputText>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 col-6">
+                                            <div class="info-box">
+                                                <div class="k">Birim</div>
+                                                <div class="v">#{empty stTransferController.kalemBirimAdi ? '-' : stTransferController.kalemBirimAdi}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <h:panelGroup
+                                            rendered="#{not empty stTransferController.kalem.stStok and stTransferController.kalem.miktar != null and stTransferController.kalem.miktar gt stTransferController.kaynakKullanilabilirMiktar}">
+                                        <div class="warn-text mt-2">
+                                            <i class="pi pi-exclamation-triangle me-1"></i>
+                                            Girilen miktar kaynak depodaki kullanılabilir bakiyeden büyük.
+                                        </div>
+                                    </h:panelGroup>
+                                    <div class="muted mt-2">
+                                        <i class="pi pi-info-circle me-1"></i>
+                                        Kullanılabilir = Mevcut - Rezerve - Transferdeki. Sevk aşamasında servis tarafında bakiye kontrolü tekrar yapılır.
+                                    </div>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </div>
+                    </div>
+
+                    <!-- Transfer Kalemleri -->
+                    <div class="section">
+                        <div class="section-header">
+                            <span><i class="pi pi-list me-2" style="color:#0d6efd"></i>Transfer Kalemleri</span>
+                            <h:panelGroup id="kalemSayisiPanel">
+                                <span class="badge rounded-pill text-bg-primary">#{stTransferController.selected.kalemler.size()} Kalem</span>
+                            </h:panelGroup>
+                        </div>
+                        <div class="section-body">
+                            <div class="mb-3">
+                                <p:inputText placeholder="Kod veya stok adına göre filtrele..."
+                                             styleClass="w-100"
+                                             onkeyup="filterTableRows(this, 'StTransferCreateForm:kalemTable')"/>
+                            </div>
+
+                            <p:dataTable id="kalemTable" value="#{stTransferController.selected.kalemler}" var="kalemItem"
+                                         rowIndexVar="rowIndex" emptyMessage="#{messages.kayitBulunamadi}"
+                                         size="small" stripedRows="true" styleClass="w-100" lazy="false"
+                                         scrollable="true" scrollHeight="260" editable="true" editMode="cell">
+                                <p:column headerText="#" style="width:50px;text-align:center">
+                                    <h:outputText value="#{rowIndex + 1}"/>
+                                </p:column>
+                                <p:column headerText="Stok Kodu">
+                                    <h:outputText value="#{kalemItem.stStok.stokKodu}"/>
+                                </p:column>
+                                <p:column headerText="#{messages.stokText}">
+                                    <h:outputText value="#{kalemItem.stStok.stokAdi}"/>
+                                </p:column>
+                                <p:column headerText="Birim" style="width:90px">
+                                    <h:outputText value="#{kalemItem.stStok.stBirim.ad}"/>
+                                </p:column>
+                                <p:column headerText="#{messages.miktarText}" styleClass="text-end" style="width:140px">
+                                    <!--                                    <h:outputText value="#{kalemItem.miktar}">-->
+                                    <!--                                        <f:convertNumber minFractionDigits="0" maxFractionDigits="4"/>-->
+                                    <!--                                    </h:outputText>-->
+                                    <p:cellEditor>
+                                        <f:facet name="output">
+                                            <h:outputText value="#{kalemItem.miktar}">
+                                                <f:convertNumber minFractionDigits="0" maxFractionDigits="4"/>
+                                            </h:outputText>
+                                        </f:facet>
+                                        <f:facet name="input">
+                                            <p:inputNumber value="#{kalemItem.miktar}" decimalPlaces="4" minValue="0" emptyValue="empty">
+                                            </p:inputNumber>
+                                        </f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+                                <p:column headerText="Durum" style="width:160px">
+                                    <span class="badge text-bg-light border">Taslak</span>
+                                </p:column>
+                                <p:column style="width:70px;text-align:center">
+                                    <p:commandButton icon="pi pi-trash" styleClass="ui-button-danger rounded-button"
+                                                     pt:data-tooltip="Kalemi Sil"
+                                                     actionListener="#{stTransferController.removeKalem(kalemItem)}"
+                                                     process="@this"
+                                                     update="kalemTable transferOzetPanel kalemSayisiPanel :growl"
+                                                     onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                                </p:column>
+                            </p:dataTable>
+
+                            <h:panelGroup id="transferOzetPanel" layout="block"
+                                          styleClass="d-flex justify-content-between align-items-center mt-3 gap-3 flex-wrap">
+                                <div class="d-flex gap-2 flex-wrap">
+                                    <span class="summary-pill">Kalem Sayısı: <b>#{stTransferController.selected.kalemler.size()}</b></span>
+                                </div>
+                                <div class="muted">
+                                    <i class="pi pi-shield me-1"></i>Kaydetme sırasında depo ve kalem doğrulamaları yapılır.
+                                </div>
+                            </h:panelGroup>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2 flex-wrap">
+                        <p:commandButton icon="pi pi-times" styleClass="ui-button-secondary"
+                                         value="Vazgeç" onclick="PF('StTransferCreateDialog').hide()"
+                                         immediate="true" process="@this"/>
+                        <p:commandButton icon="pi pi-save" styleClass="ui-button-primary"
+                                         value="Taslak Kaydet"
+                                         actionListener="#{stTransferController.saveNew}"
+                                         process="StTransferCreateForm"
+                                         update="display,:StTransferListForm:datalist:datalist,:growl"
+                                         onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                        <p:commandButton icon="pi pi-check-circle" styleClass="ui-button-success"
+                                         value="Kaydet ve Kapat"
+                                         actionListener="#{stTransferController.saveNew}"
+                                         process="StTransferCreateForm"
+                                         update="display,:StTransferListForm:datalist:datalist,:growl"
+                                         oncomplete="handleSubmit(xhr,status,args,PF('StTransferCreateDialog'));"
+                                         onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                    </div>
+
+                </h:panelGroup>
+            </h:panelGroup>
+        </h:form>
+
+    </p:dialog>
 
 </ui:composition>
 

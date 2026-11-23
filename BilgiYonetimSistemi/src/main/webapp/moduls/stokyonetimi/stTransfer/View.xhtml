@@ -49,10 +49,28 @@
                         <f:convertDateTime pattern="#{messages.tarihSaatKisaFormat}" type="localDateTime"/>
                     </h:outputText>
 
+                    <h:outputText value="Ürünü Teslim Eden"/>
+                    <h:outputText value="#{stTransferController.selected.sevkEdenKisi}"/>
+
+                    <h:outputText value="Sevki Sistemde İşleyen"/>
+                    <h:outputText value="#{stTransferController.selected.sevkIslemiYapanSyKullanici.kullaniciAdi}"/>
+
+                    <h:outputText value="Sevk Açıklaması"/>
+                    <h:outputText value="#{stTransferController.selected.sevkAciklama}"/>
+
                     <h:outputText value="#{messages.teslimTarihiLabel}"/>
                     <h:outputText value="#{stTransferController.selected.teslimTarihi}">
                         <f:convertDateTime pattern="#{messages.tarihSaatKisaFormat}" type="localDateTime"/>
                     </h:outputText>
+
+                    <h:outputText value="Teslim Alan Kişi"/>
+                    <h:outputText value="#{stTransferController.selected.teslimAlanKisi}"/>
+
+                    <h:outputText value="Teslimi Onaylayan"/>
+                    <h:outputText value="#{stTransferController.selected.teslimAlanSyKullanici.kullaniciAdi}"/>
+
+                    <h:outputText value="Teslim Açıklaması"/>
+                    <h:outputText value="#{stTransferController.selected.teslimAciklama}"/>
 
                     <h:outputText value="#{messages.aciklamaLabel}"/>
                     <h:outputText value="#{stTransferController.selected.aciklama}"/>
@@ -82,37 +100,37 @@
                 </p:dataTable>
 
                 <div class="d-flex gap-2 mt-3 flex-wrap float-end">
-                    <p:commandButton value="#{messages.buttonOnayla}" icon="pi pi-check" styleClass="ui-button-success"
-                                     actionListener="#{stTransferController.onayla}"
-                                     update="display,:StTransferListForm:datalist:datalist,:growl"
-                                     rendered="#{stTransferController.selected.durum eq 'TASLAK'}"
-                                     onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                    <!--                    <p:commandButton value="#{messages.buttonOnayla}" icon="pi pi-check" styleClass="ui-button-success"-->
+                    <!--                                     actionListener="#{stTransferController.onayla}"-->
+                    <!--                                     update="display,:StTransferListForm:datalist:datalist,:growl"-->
+                    <!--                                     rendered="#{stTransferController.selected.durum eq 'TASLAK'}"-->
+                    <!--                                     onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>-->
 
-                    <p:commandButton value="#{messages.buttonReddet}" icon="pi pi-times" styleClass="ui-button-danger"
-                                     actionListener="#{stTransferController.reddet}"
-                                     update="display,:StTransferListForm:datalist:datalist,:growl"
-                                     rendered="#{stTransferController.selected.durum eq 'TASLAK'}"
-                                     onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                    <!--                    <p:commandButton value="#{messages.buttonReddet}" icon="pi pi-times" styleClass="ui-button-danger"-->
+                    <!--                                     actionListener="#{stTransferController.reddet}"-->
+                    <!--                                     update="display,:StTransferListForm:datalist:datalist,:growl"-->
+                    <!--                                     rendered="#{stTransferController.selected.durum eq 'TASLAK'}"-->
+                    <!--                                     onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>-->
 
-                    <p:commandButton value="#{messages.buttonSevket}" icon="pi pi-send" styleClass="ui-button-primary"
-                                     actionListener="#{stTransferController.sevkEt}"
-                                     update="display,:StTransferListForm:datalist:datalist,:growl"
-                                     rendered="#{stTransferController.selected.durum eq 'ONAYLANDI'}"
-                                     onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                    <!--                    <p:commandButton value="#{messages.buttonSevket}" icon="pi pi-send" styleClass="ui-button-primary"-->
+                    <!--                                     actionListener="#{stTransferController.sevkEt}"-->
+                    <!--                                     update="display,:StTransferListForm:datalist:datalist,:growl"-->
+                    <!--                                     rendered="#{stTransferController.selected.durum eq 'ONAYLANDI'}"-->
+                    <!--                                     onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>-->
 
-                    <p:commandButton value="#{messages.buttonTeslimEt}" icon="pi pi-check-circle" styleClass="ui-button-success"
-                                     actionListener="#{stTransferController.teslimEt}"
-                                     update="display,:StTransferListForm:datalist:datalist,:growl"
-                                     rendered="#{stTransferController.selected.durum eq 'SEVK_EDILDI'}"
-                                     onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                    <!--                    <p:commandButton value="Teslim Al ve Onayla" icon="pi pi-check-circle" styleClass="ui-button-success"-->
+                    <!--                                     actionListener="#{stTransferController.teslimEt}"-->
+                    <!--                                     update="display,:StTransferListForm:datalist:datalist,:growl"-->
+                    <!--                                     rendered="#{stTransferController.selected.durum eq 'SEVK_EDILDI' and stTransferController.hedefDepoYetkili}"-->
+                    <!--                                     onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>-->
 
-                    <p:commandButton value="#{messages.buttonIptal}" icon="pi pi-ban" styleClass="ui-button-warning"
-                                     actionListener="#{stTransferController.iptalEt}"
-                                     update="display,:StTransferListForm:datalist:datalist,:growl"
-                                     rendered="#{stTransferController.selected.durum ne 'TAMAMLANDI'
-                                                 and stTransferController.selected.durum ne 'IPTAL'
-                                                 and stTransferController.selected.durum ne 'REDDEDILDI'}"
-                                     onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                    <!--                    <p:commandButton value="#{messages.buttonIptal}" icon="pi pi-ban" styleClass="ui-button-warning"-->
+                    <!--                                     actionListener="#{stTransferController.iptalEt}"-->
+                    <!--                                     update="display,:StTransferListForm:datalist:datalist,:growl"-->
+                    <!--                                     rendered="#{stTransferController.selected.durum ne 'TAMAMLANDI'-->
+                    <!--                                                 and stTransferController.selected.durum ne 'IPTAL'-->
+                    <!--                                                 and stTransferController.selected.durum ne 'REDDEDILDI'}"-->
+                    <!--                                     onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>-->
 
                     <p:commandButton icon="pi pi-times" styleClass="ui-button-secondary"
                                      value="#{messages.buttonKapat}" onclick="PF('StTransferViewDialog').hide()"

@@ -39,13 +39,13 @@
             <f:facet name="paginatorBottomLeft">
 
                 <p:commandButton id="createButton" styleClass="ui-button-primary" icon="pi pi-plus" pt:data-tooltip="#{messages.buttonEkle}"
-                                 actionListener="#{stTransferController.prepareCreate}" update=":StTransferCreateForm:StTransferCreateForm"
+                                 actionListener="#{stTransferController.prepareCreate}" update=":StTransferCreateForm"
                                  oncomplete="PF('StTransferCreateDialog').show()" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
                                  rendered="#{syKullaniciController.hasPermission('sttransfer:ekle')}"/>
 
                 <p:commandButton id="editButton" styleClass="ui-button-success" icon="pi pi-pencil" pt:data-tooltip="#{messages.buttonGuncelle}"
                                  actionListener="#{stTransferController.onSelectTransfer}"
-                                 update=":StTransferEditForm:StTransferEditForm" oncomplete="PF('StTransferEditDialog').show()"
+                                 update=":StTransferEditForm" oncomplete="PF('StTransferEditDialog').show()"
                                  disabled="#{empty stTransferController.selected}" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
                                  rendered="#{syKullaniciController.hasPermission('sttransfer:guncelle')}"/>
 

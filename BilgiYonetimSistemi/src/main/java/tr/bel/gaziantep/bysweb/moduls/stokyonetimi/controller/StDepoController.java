@@ -53,5 +53,9 @@ public class StDepoController extends AbstractController<StDepo> {
         return yetkis.stream().map(StDepoYetki::getStDepo).filter(Objects::nonNull).distinct().toList();
     }
 
+    public List<StDepo> all() {
+        return service.findAll();
+    }
+
 
 }
