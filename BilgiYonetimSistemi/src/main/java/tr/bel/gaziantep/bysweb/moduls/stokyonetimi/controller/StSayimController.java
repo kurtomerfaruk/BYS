@@ -395,7 +395,6 @@ public class StSayimController extends AbstractController<StSayim> {
             return 0;
         }
         int counted = getCountedCount();
-        System.out.println("counted");
         return (int) ((double) counted / getSelected().getKalemler().size() * 100);
     }
 

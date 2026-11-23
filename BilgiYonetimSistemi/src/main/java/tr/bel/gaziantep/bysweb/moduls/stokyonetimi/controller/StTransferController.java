@@ -1,5 +1,6 @@
 package tr.bel.gaziantep.bysweb.moduls.stokyonetimi.controller;
 
+import jakarta.ejb.EJBException;
 import jakarta.faces.event.ActionEvent;
 import jakarta.faces.model.SelectItem;
 import jakarta.faces.view.ViewScoped;
@@ -115,8 +116,8 @@ public class StTransferController extends AbstractController<StTransfer> {
             FacesUtil.successMessage(Constants.KAYIT_EKLENDI);
             setItems(null);
             setLazyItems(null);
-        } catch (IllegalArgumentException ex) {
-            FacesUtil.warningMessage(ex.getMessage());
+        } catch (EJBException ex) {
+            FacesUtil.addExclamationMessage(ex.getCause().getMessage());
         } catch (Exception ex) {
             log.error("Transfer olusturulamadi", ex);
             FacesUtil.errorMessage(Constants.HATA_OLUSTU);
