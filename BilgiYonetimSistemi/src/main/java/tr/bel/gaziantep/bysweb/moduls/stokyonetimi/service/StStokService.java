@@ -249,5 +249,119 @@ public class StStokService extends AbstractService<StStok> {
                 .findFirst()
                 .orElse(null);
     }
+
+    @Override
+    public void create(StStok entity) {
+        if (entity != null) {
+            if (entity.getMalzemeKodu() == null || entity.getMalzemeKodu().isBlank()) {
+                entity.setMalzemeKodu(getNextMalzemeKodu());
+            }
+            if (entity.getStokKodu() == null || entity.getStokKodu().isBlank()) {
+                entity.setStokKodu(getNextStokKodu());
+            }
+        }
+        super.create(entity);
+    }
+
+    public String getNextMalzemeKodu() {
+        List<String> codes = em.createQuery(
+                        "SELECT s.malzemeKodu FROM StStok s WHERE s.malzemeKodu IS NOT NULL AND s.malzemeKodu <> '' ORDER BY s.id DESC",
+                        String.class)
+                .setMaxResults(100)
+                .getResultList();
+        return incrementCode(codes, "00001");
+    }
+
+    public String getNextStokKodu() {
+        List<String> codes = em.createQuery(
+                        "SELECT s.stokKodu FROM StStok s WHERE s.stokKodu IS NOT NULL AND s.stokKodu <> '' ORDER BY s.id DESC",
+                        String.class)
+                .setMaxResults(100)
+                .getResultList();
+        return incrementCode(codes, "00001");
+    }
+
+    private String incrementCode(List<String> codes, String defaultValue) {
+        String bestCode = null;
+        long bestNum = -1;
+        String prefix = "";
+        int padLength = defaultValue.replaceAll("\\D", "").length();
+        boolean dotFormat = false;
+
+        for (String code : codes) {
+            if (code == null) continue;
+            String trimmed = code.trim();
+            if (trimmed.isEmpty()) continue;
+
+            if (trimmed.contains(".")) {
+                String[] parts = trimmed.split("\\.");
+                boolean allNumeric = true;
+                for (String part : parts) {
+                    if (!part.matches("\\d+")) {
+                        allNumeric = false;
+                        break;
+                    }
+                }
+                if (allNumeric) {
+                    try {
+                        long num = Long.parseLong(parts[parts.length - 1]);
+                        // also consider earlier parts for comparison
+                        StringBuilder sb = new StringBuilder();
+                        for (String part : parts) sb.append(part);
+                        long fullNum = Long.parseLong(sb.toString());
+                        if (fullNum > bestNum) {
+                            bestNum = fullNum;
+                            bestCode = trimmed;
+                            dotFormat = true;
+                        }
+                    } catch (NumberFormatException ignored) {
+                    }
+                    continue;
+                }
+            }
+
+            java.util.regex.Matcher m = java.util.regex.Pattern.compile("^(.*?)(\\d+)$").matcher(trimmed);
+            if (m.matches()) {
+                try {
+                    long num = Long.parseLong(m.group(2));
+                    // compare by full numeric value for plain suffix codes
+                    StringBuilder sb = new StringBuilder();
+                    for (char c : trimmed.toCharArray()) {
+                        if (Character.isDigit(c)) sb.append(c);
+                    }
+                    long fullNum = sb.length() > 0 ? Long.parseLong(sb.toString()) : num;
+                    if (!dotFormat && fullNum > bestNum) {
+                        bestNum = fullNum;
+                        bestCode = trimmed;
+                        prefix = m.group(1);
+                        padLength = m.group(2).length();
+                    }
+                } catch (NumberFormatException ignored) {
+                }
+            }
+        }
+
+        if (bestCode == null) {
+            return defaultValue;
+        }
+        if (dotFormat) {
+
+            return incrementDotCode(bestCode);
+        }
+        return prefix + String.format("%0" + padLength + "d", Long.parseLong(bestCode.substring(prefix.length())) + 1);
+    }
+
+    private String incrementDotCode(String code) {
+        String[] parts = code.split("\\.");
+        int lastIndex = parts.length - 1;
+        try {
+            int lastValue = Integer.parseInt(parts[lastIndex]);
+            int width = parts[lastIndex].length();
+            parts[lastIndex] = String.format("%0" + width + "d", lastValue + 1);
+            return String.join(".", parts);
+        } catch (NumberFormatException e) {
+            return code;
+        }
+    }
 }
 

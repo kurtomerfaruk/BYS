@@ -50,43 +50,6 @@
                                           styleClass="fw-bold"/>
                         </p:panelGrid>
 
-                        <!-- TASLAK: kalem ekleme -->
-                        <ui:fragment rendered="#{stSayimController.selected.durum eq 'TASLAK'}">
-
-                            <div class="ui-grid ui-grid-responsive">
-                                <div class="ui-grid-row">
-                                    <div class="ui-grid-col-10">
-                                        <p:outputLabel value="#{messages.stokText}" for="@next"/>
-                                        <p:selectOneMenu id="kalemStok" value="#{stSayimController.kalem.stStok}"
-                                                         filter="true"
-                                                         converter="omnifaces.SelectItemsConverter">
-                                            <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
-                                            <f:selectItems value="#{stStokController.items}" var="stokItem"
-                                                           itemValue="#{stokItem}"
-                                                           itemLabel="#{stokItem.stokKodu} - #{stokItem.stokAdi}"/>
-                                        </p:selectOneMenu>
-                                    </div>
-                                    <div class="ui-grid-col-2">
-                                        <p:outputLabel value="#{messages.miktarText}" for="@next"/>
-                                        <div class="ui-inputgroup">
-                                            <p:inputNumber id="kalemSistem"
-                                                           value="#{stSayimController.kalem.sistemMiktari}"
-                                                           decimalPlaces="4" emptyValue="empty" minValue="0"
-                                                           style="width:140px !important;"/>
-                                            <p:commandButton pt:data-tooltip="#{messages.buttonKalemEkle}"
-                                                             icon="pi pi-plus"
-                                                             styleClass="ui-button-primary"
-                                                             actionListener="#{stSayimController.addKalem}"
-                                                             process="@this,kalemStok,kalemSistem"
-                                                             update="display,:growl"
-                                                             onstart="PF('Loading').show()"
-                                                             onsuccess="PF('Loading').hide()"/>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </ui:fragment>
-
                         <!-- SAYIMDA: tek ekran -->
                         <ui:fragment rendered="#{stSayimController.selected.durum eq 'SAYIMDA'}">
                             <h:panelGroup id="sayimHizliPanel" layout="block"
@@ -279,6 +242,13 @@
                                              update="display,:StSayimListForm:datalist:datalist,:growl"
                                              onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
                                              rendered="#{stSayimController.selected.durum ne 'TAMAMLANDI' and stSayimController.selected.durum ne 'IPTAL'}"/>
+
+                            <p:commandButton icon="pi pi-print" styleClass="ui-button-secondary"
+                                             value="#{messages.buttonYazdir}"
+                                             actionListener="#{stSayimPrint.print(stSayimController.selected.id)}"
+                                             update=":PrintForm,:growl"
+                                             oncomplete="PF('PrintDialog').show()"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
 
                             <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
                                              value="#{messages.buttonKapat}" onclick="PF('StSayimEditDialog').hide()"

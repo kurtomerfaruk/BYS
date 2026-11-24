@@ -2,11 +2,10 @@ package tr.bel.gaziantep.bysweb.core.controller;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Named;
-import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
-import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtBasvuruDosya;
 
-import java.io.*;
+import java.io.Serial;
+import java.io.Serializable;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
@@ -29,12 +28,12 @@ public class PdfController implements Serializable {
         this.content = content;
     }
 
-    public StreamedContent getOrtBasvuruDosyaPdf(OrtBasvuruDosya dosya) throws FileNotFoundException {
-        if (dosya != null) {
-            File file = new File(dosya.getDosyaYolu());
-            InputStream stream = new FileInputStream(file);
-            content = DefaultStreamedContent.builder().contentType("application/pdf").name(dosya.getDosyaAdi()).stream(() -> stream).build();
-        }
-        return content;
-    }
+//    public StreamedContent getOrtBasvuruDosyaPdf(OrtBasvuruDosya dosya) throws FileNotFoundException {
+//        if (dosya != null) {
+//            File file = new File(dosya.getDosyaYolu());
+//            InputStream stream = new FileInputStream(file);
+//            content = DefaultStreamedContent.builder().contentType("application/pdf").name(dosya.getDosyaAdi()).stream(() -> stream).build();
+//        }
+//        return content;
+//    }
 }

@@ -17,6 +17,8 @@
                         icon="pi pi-pencil" rendered="#{syKullaniciController.hasPermission('stsayim:guncelle')}"/>
             <p:menuitem value="#{messages.buttonDetay}" onclick="document.getElementById('StSayimListForm:datalist:datalist:viewButton').click();"
                         icon="pi pi-search"/>
+            <p:menuitem value="#{messages.buttonYazdir}" onclick="document.getElementById('StSayimListForm:datalist:datalist:printButton').click();"
+                        icon="pi pi-print"/>
         </p:contextMenu>
 
         <coco:datatable id="datalist"
@@ -24,9 +26,9 @@
                         rowKey="#{item.id}"
                         selection="#{stSayimController.selected}"
                         filtered="#{stSayimController.filtered}"
-                        rowselect=":StSayimListForm:datalist:datalist:createButton,:StSayimListForm:datalist:datalist:viewButton,:StSayimListForm:datalist:datalist:editButton"
+                        rowselect=":StSayimListForm:datalist:datalist:createButton,:StSayimListForm:datalist:datalist:viewButton,:StSayimListForm:datalist:datalist:editButton,:StSayimListForm:datalist:datalist:printButton"
                         rowDblselect="document.getElementById('StSayimListForm:datalist:datalist:editButton').click()"
-                        contextMenu=":StSayimListForm:datalist:datalist:createButton :StSayimListForm:datalist:datalist:viewButton :StSayimListForm:datalist:datalist:editButton"
+                        contextMenu=":StSayimListForm:datalist:datalist:createButton :StSayimListForm:datalist:datalist:viewButton :StSayimListForm:datalist:datalist:editButton :StSayimListForm:datalist:datalist:printButton"
                         selectListener="#{stSayimController.resetParents}"
                         controller="#{stSayimController}"
                         header="#{messages.sayimListesi}">
@@ -50,6 +52,13 @@
                                  oncomplete="PF('StSayimViewDialog').show()" disabled="#{empty stSayimController.selected}"
                                  onstart="PF('Loading').show()"
                                  onsuccess="PF('Loading').hide()"/>
+                <p:commandButton id="printButton" styleClass="ui-button-secondary" icon="pi pi-print" pt:data-tooltip="#{messages.buttonYazdir}"
+                                 actionListener="#{stSayimPrint.print(stSayimController.selected.id)}"
+                                 update=":PrintForm,:growl"
+                                 oncomplete="PF('PrintDialog').show()"
+                                 disabled="#{empty stSayimController.selected}"
+                                 onstart="PF('Loading').show()"
+                                 onsuccess="PF('Loading').hide()"/>
             </f:facet>
 
         </coco:datatable>
@@ -58,5 +67,7 @@
         <ui:include src="/confirmation.xhtml"/>
 
     </h:form>
+
+    <ui:include src="/print/Print.xhtml"/>
 
 </ui:composition>

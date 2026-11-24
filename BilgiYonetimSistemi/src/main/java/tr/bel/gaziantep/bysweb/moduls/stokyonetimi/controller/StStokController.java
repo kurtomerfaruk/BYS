@@ -13,7 +13,6 @@ import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
 import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.EnumSyKullaniciTuru;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
-import tr.bel.gaziantep.bysweb.core.utils.StringUtil;
 import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.entity.SyKullanici;
 import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity.*;
 import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.service.*;
@@ -36,6 +35,8 @@ public class StStokController extends AbstractController<StStok> {
     private static final long serialVersionUID = -2934417348583578519L;
     private static final String TOPLAM_KOLON = "__TOPLAM__";
 
+    @Inject
+    private StStokService stStokService;
     @Inject
     private StStokBarkodService stStokBarkodService;
     @Inject
@@ -258,6 +259,9 @@ public class StStokController extends AbstractController<StStok> {
     public StStok prepareCreate(ActionEvent event) {
         StStok newItem = super.prepareCreate(event);
         barkod = new StStokBarkod();
+        barkod.setBarkod(getNextBarkodForSelected(newItem));
+        newItem.setMalzemeKodu(stStokService.getNextMalzemeKodu());
+        newItem.setStokKodu(stStokService.getNextStokKodu());
         return newItem;
     }
 
@@ -274,8 +278,28 @@ public class StStokController extends AbstractController<StStok> {
         barkod.setStStok(getSelected());
         getSelected().getStokBarkodList().add(barkod);
         barkod = new StStokBarkod();
+        barkod.setBarkod(getNextBarkodForSelected(getSelected()));
         FacesUtil.successMessage(Constants.KAYIT_EKLENDI);
     }
+
+    private String getNextBarkodForSelected(StStok stok) {
+        String next = stStokBarkodService.getNextBarkod();
+        if (stok == null || stok.getStokBarkodList() == null || stok.getStokBarkodList().isEmpty()) {
+            return next;
+        }
+        java.util.Set<String> existing = stok.getStokBarkodList().stream()
+                .map(StStokBarkod::getBarkod)
+                .filter(Objects::nonNull)
+                .collect(java.util.stream.Collectors.toSet());
+        String candidate = next;
+        int guard = 0;
+        while (existing.contains(candidate) && guard < 1000) {
+            candidate = stStokBarkodService.incrementBarkod(candidate);
+            guard++;
+        }
+        return candidate;
+    }
+
 
     public void removeBarkod(StStokBarkod item) {
         if (getSelected() == null || item == null) {
@@ -297,6 +321,8 @@ public class StStokController extends AbstractController<StStok> {
     public void editInfo() {
         if (this.getSelected() == null) return;
         seciliDepo = null;
+        barkod = new StStokBarkod();
+        barkod.setBarkod(getNextBarkodForSelected(getSelected()));
         List<StStokBakiye> gorunurBakiyeler = getYetkiliBakiyeList();
         toplamMiktar = gorunurBakiyeler.stream()
                 .map(StStokBakiye::getMiktar)
@@ -319,8 +345,6 @@ public class StStokController extends AbstractController<StStok> {
         stok.setStStokKategori(oldStok.getStStokKategori());
         stok.setStBirim(oldStok.getStBirim());
         stok.setKdvOrani(oldStok.getKdvOrani());
-        String malzemeKodu = StringUtil.incrementAccountCode(oldStok.getMalzemeKodu());
-        stok.setMalzemeKodu(malzemeKodu);
         stok.setMarka(oldStok.getMarka());
         this.setSelected(stok);
     }
