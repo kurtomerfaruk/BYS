@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:o="omnifaces"
+      xmlns:p="primefaces">
+<ui:composition>
+
+    <p:outputLabel value="#{messages.engelliLabel}" for="@next"/>
+    <p:selectBooleanCheckbox id="engelli" value="#{ortKisiController.selected.engelli}" styleClass="tcUpdate">
+        <p:ajax event="change" update="@(.engelliUpdate)"/>
+    </p:selectBooleanCheckbox>
+
+    <p:outputLabel value="#{messages.engelGrubuLabel}" for="@next"/>
+    <p:selectManyCheckbox id="engelGrubu" value="#{ortKisiController.eyEngelGrubus}"
+                          layout="responsive" columns="3"
+                          disabled="#{!ortKisiController.selected.engelli}"
+                          required="#{ortKisiController.selected.engelli}"
+                          converter="omnifaces.SelectItemsConverter"
+                          styleClass="engelliUpdate tcUpdate">
+        <f:selectItems value="#{eyEngelGrubuController.items}"
+                       var="engelGrubus"
+                       itemValue="#{engelGrubus}"
+                       itemLabel="#{engelGrubus.tanim}"/>
+    </p:selectManyCheckbox>
+
+    <p:outputLabel value="#{messages.engelinOlusumuLabel}" for="@next"/>
+    <p:selectCheckboxMenu id="engelinOlusumu" value="#{ortKisiController.engelinOlusumuList}"
+                          label="Engelin Oluşumu" multiple="true" filter="true"
+                          filterMatchMode="startsWith" styleClass="checkboxMenu">
+        <f:selectItems value="#{eyEngelinOlusumuController.items}"
+                       var="olusum"
+                       itemValue="#{olusum}"
+                       itemLabel="#{olusum.tanim.toString()}"/>
+    </p:selectCheckboxMenu>
+
+    <p:outputLabel value="#{messages.engelSeviyesiLabel}" for="@next"/>
+    <p:panelGrid columns="2"
+                 columnClasses="ui-grid-col-3,ui-grid-col-9"
+                 layout="grid"
+                 styleClass="ui-panelgrid-blank ui-fluid"
+                 style="border:0px none; background-color:transparent;">
+
+        <p:row styleClass="mt-4">
+            <p:column>
+                <p:selectBooleanCheckbox value="#{ortKisiController.selected.protez}" itemLabel="#{messages.protezText}">
+                    <p:ajax event="change" update="protezSeviyesi"/>
+                </p:selectBooleanCheckbox>
+                <p:selectCheckboxMenu id="protezSeviyesi"
+                                      value="#{ortKisiController.amputeSeviyeList}"
+                                      label="#{messages.protezAmputeSeviyeText}" multiple="true"
+                                      filter="true" filterMatchMode="startsWith" styleClass="checkboxMenu"
+                                      disabled="#{!ortKisiController.selected.protez}">
+                    <f:selectItems value="#{ortProtezAmputeSeviyeController.items}"
+                                   var="amputeSeviyes"
+                                   itemValue="#{amputeSeviyes}"
+                                   itemLabel="#{amputeSeviyes.tanim}"/>
+                </p:selectCheckboxMenu>
+            </p:column>
+            <p:column>
+                <!--                <h:panelGroup>-->
+                <!--                            <span class="ui-float-label">-->
+                <!--                                <p:inputText id="protezSeviyesi" value="#{ortKisiController.selected.protezSeviyesi}" title="#{messages
+                .amputeSeviyesiText}"-->
+                <!--                                             disabled="#{!ortKisiController.selected.protez}"/>-->
+                <!--                                <p:outputLabel value="#{messages.amputeSeviyesiText}" for="@previous"/>-->
+                <!--                            </span>-->
+                <!--                </h:panelGroup>-->
+
+            </p:column>
+        </p:row>
+
+        <p:row styleClass="mt-4">
+            <p:column>
+                <p:selectBooleanCheckbox value="#{ortKisiController.selected.ortez}" itemLabel="#{messages.ortezText}">
+                    <p:ajax event="change" update="ortezTipi"/>
+                </p:selectBooleanCheckbox>
+            </p:column>
+            <p:column>
+                <h:panelGroup>
+                           <span class="ui-float-label">
+                                <p:inputText id="ortezTipi" value="#{ortKisiController.selected.ortezTipi}" title="#{messages.ortezTipiText}"
+                                             disabled="#{!ortKisiController.selected.ortez}"/>
+                                <p:outputLabel value="#{messages.ortezTipiText}" for="@previous"/>
+                           </span>
+                </h:panelGroup>
+            </p:column>
+        </p:row>
+
+    </p:panelGrid>
+
+    <p:outputLabel value="#{messages.kullandigiCihazlarOrtezLabel}" for="@next"/>
+    <p:selectCheckboxMenu id="ortezCihaz"
+                          value="#{ortKisiController.ortezCihazList}"
+                          label="#{messages.kullandigiCihazlarText}" multiple="true"
+                          filter="true" filterMatchMode="startsWith" styleClass="checkboxMenu">
+        <f:selectItems value="#{ortCihazController.getCihazList('ORTEZ')}"
+                       var="kullandigiCihazlars"
+                       itemValue="#{kullandigiCihazlars}"
+                       itemLabel="#{kullandigiCihazlars.tanim}"/>
+    </p:selectCheckboxMenu>
+
+    <p:outputLabel value="#{messages.kullandigiCihazlarProtezLabel}" for="@next"/>
+    <p:selectCheckboxMenu id="protezCihaz"
+                          value="#{ortKisiController.protezCihazList}"
+                          label="#{messages.kullandigiCihazlarText}" multiple="true"
+                          filter="true" filterMatchMode="startsWith" styleClass="checkboxMenu">
+        <f:selectItems value="#{ortCihazController.getCihazList('PROTEZ')}"
+                       var="kullandigiCihazlars"
+                       itemValue="#{kullandigiCihazlars}"
+                       itemLabel="#{kullandigiCihazlars.tanim}"/>
+    </p:selectCheckboxMenu>
+
+    <p:outputLabel value="#{messages.ailedekiEngelliSayisiLabel}" for="@next"/>
+    <p:selectOneMenu value="#{ortKisiController.eyKisi.ailedekiEngelliSayisi}" converter="omnifaces.SelectItemsConverter">
+        <f:selectItems value="#{o:createIntegerArray(0, 20)}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.raporTarihiLabel}" for="@next"/>
+    <p:datePicker id="raporTarihi" locale="tr" pattern="#{messages.tarihFormat}"
+                  value="#{ortKisiController.eyKisi.raporTarihi}"
+                  title="#{messages.raporTarihiText}" mask="true"
+                  monthNavigator="true" yearNavigator="true" showButtonBar="true"
+                  showIcon="true" disabled="#{!ortKisiController.selected.engelli}" styleClass="engelliUpdate"/>
+
+    <p:outputLabel value="#{messages.surekliLabel}" for="@next"/>
+    <h:panelGroup>
+        <div class="ui-inputgroup">
+            <div class="ui-inputgroup-addon">
+                <p:selectBooleanCheckbox id="surekli" value="#{ortKisiController.eyKisi.surekli}">
+                    <p:ajax event="change" update="surekliAciklama" listener="#{ortKisiController.eyKisi.setSurekliAciklama('')}"/>
+                </p:selectBooleanCheckbox>
+            </div>
+            <p:inputText id="surekliAciklama"
+                         value="#{ortKisiController.eyKisi.surekliAciklama}"
+                         title="#{messages.surekliAciklamaText}"
+                         disabled="#{ortKisiController.eyKisi.surekli}"/>
+        </div>
+    </h:panelGroup>
+
+    <p:outputLabel value="#{messages.raporBitisTarihiLabel}" for="@next"/>
+    <p:datePicker id="raporBitisTarihi" locale="tr" pattern="#{messages.tarihFormat}"
+                  value="#{ortKisiController.eyKisi.raporBitisTarihi}"
+                  title="#{messages.raporBitisTarihiText}"
+                  disabled="#{ortKisiController.eyKisi.surekli}"
+                  mask="true" monthNavigator="true" yearNavigator="true"
+                  showButtonBar="true" showIcon="true"/>
+
+    <p:outputLabel value="#{messages.hastaneLabel}" for="@next"/>
+    <p:selectOneMenu value="#{ortKisiController.eyKisi.hastahane}" filter="true" converter="omnifaces.SelectItemsConverter">
+        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+        <f:selectItems value="#{gnlHastaneController.items}"
+                       var="hastanes"
+                       itemLabel="#{hastanes.tanim}"
+                       itemValue="#{hastanes.tanim}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.toplamVucutKayipOraniLabel}" for="@next"/>
+    <p:inputText id="toplamVucutKayipOrani"
+                 value="#{ortKisiController.eyKisi.toplamVucutKayipOrani}"
+                 title="#{messages.toplamVucutKayipOraniText}">
+        <p:keyFilter mask="num"/>
+    </p:inputText>
+
+    <p:outputLabel value="#{messages.agirOzurluLabel}" for="@next"/>
+    <p:selectBooleanCheckbox id="agirOzurlu" value="#{ortKisiController.eyKisi.agirOzurlu}"/>
+
+</ui:composition>
+</html>

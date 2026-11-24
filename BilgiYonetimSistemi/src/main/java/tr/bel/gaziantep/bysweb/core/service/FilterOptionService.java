@@ -16,6 +16,7 @@ import tr.bel.gaziantep.bysweb.core.enums.hafriyat.EnumHfFirmaTuru;
 import tr.bel.gaziantep.bysweb.core.enums.hafriyat.EnumHfMalCinsi;
 import tr.bel.gaziantep.bysweb.core.enums.hafriyat.EnumHfTahsilatTuru;
 import tr.bel.gaziantep.bysweb.core.enums.moralevi.EnumMeTalepDurumu;
+import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtCihazTur;
 import tr.bel.gaziantep.bysweb.core.enums.psikiyatriklinigi.EnumPkEgitimTur;
 import tr.bel.gaziantep.bysweb.core.enums.psikiyatriklinigi.EnumPkModul;
 import tr.bel.gaziantep.bysweb.core.enums.psikiyatriklinigi.EnumPkTalepTuru;
@@ -327,56 +328,6 @@ public class FilterOptionService implements java.io.Serializable{
                 .collect(Collectors.toList());
     }
 
-//    public List<SelectItem> getOrtOlcuSablons() {
-//        List<SelectItem> result = new ArrayList<>();
-//        List<OrtOlcuSablon> list = ortOlcuSablonService.findAll();
-//        for (OrtOlcuSablon value : list) {
-//            result.add(new SelectItem(value.getTanim(), value.getTanim()));
-//        }
-//        return result;
-//    }
-//
-//    public List<SelectItem> getOrtOlcuSAblonAlanTurus() {
-//        return Arrays.stream(EnumOrtSablonAlanTuru.values())
-//                .map(value -> new SelectItem(value, value.getDisplayValue()))
-//                .collect(Collectors.toList());
-//    }
-//
-//    public List<SelectItem> getOrtBasvuruDurums() {
-//        return Arrays.stream(EnumOrtBasvuruDurumu.values())
-//                .map(value -> new SelectItem(value, value.getDisplayValue()))
-//                .collect(Collectors.toList());
-//    }
-//
-//    public List<SelectItem> getOrtBasvuruHareketDurums() {
-//        return Arrays.stream(EnumOrtBasvuruHareketDurumu.values())
-//                .map(value -> new SelectItem(value, value.getDisplayValue()))
-//                .collect(Collectors.toList());
-//    }
-//
-//    public List<SelectItem> getOrtOlcuDurums() {
-//        return Arrays.stream(EnumOrtOlcuDurum.values())
-//                .map(value -> new SelectItem(value, value.getDisplayValue()))
-//                .collect(Collectors.toList());
-//    }
-//    public List<SelectItem> getOrtStokBirims() {
-//        return Arrays.stream(EnumOrtStokBirim.values())
-//                .map(value -> new SelectItem(value, value.getDisplayValue()))
-//                .collect(Collectors.toList());
-//    }
-//
-//    public List<SelectItem> getOrtMalzemeTalepOnayDurums() {
-//        return Arrays.stream(EnumOrtMalzemeOnayDurumu.values())
-//                .map(value -> new SelectItem(value, value.getDisplayValue()))
-//                .collect(Collectors.toList());
-//    }
-//
-//    public List<SelectItem> getOrtFizikTedaviDurums() {
-//        return Arrays.stream(EnumOrtFizikTedaviDurum.values())
-//                .map(value -> new SelectItem(value, value.getDisplayValue()))
-//                .collect(Collectors.toList());
-//    }
-
     public List<SelectItem> getMeTalepDurums() {
         return Arrays.stream(EnumMeTalepDurumu.values())
                 .map(value -> new SelectItem(value,value.getDisplayValue()))
@@ -461,12 +412,6 @@ public class FilterOptionService implements java.io.Serializable{
                 .collect(Collectors.toList());
     }
 
-//    public List<SelectItem> getOrtCihazTurs() {
-//        return Arrays.stream(EnumOrtCihazTur.values())
-//                .map(value -> new SelectItem(value,value.getDisplayValue()))
-//                .collect(Collectors.toList());
-//    }
-
     public List<SelectItem> getGirisCikis() {
         return Arrays.stream(EnumGirisCikis.values())
                 .map(value -> new SelectItem(value, value.getDisplayValue()))
@@ -499,6 +444,12 @@ public class FilterOptionService implements java.io.Serializable{
 
     public List<SelectItem> getStHareketTurs() {
         return Arrays.stream(EnumStHareketTuru.values())
+                .map(value -> new SelectItem(value, value.getDisplayValue()))
+                .collect(Collectors.toList());
+    }
+
+    public List<SelectItem> getOrtCihazTurs() {
+        return Arrays.stream(EnumOrtCihazTur.values())
                 .map(value -> new SelectItem(value, value.getDisplayValue()))
                 .collect(Collectors.toList());
     }

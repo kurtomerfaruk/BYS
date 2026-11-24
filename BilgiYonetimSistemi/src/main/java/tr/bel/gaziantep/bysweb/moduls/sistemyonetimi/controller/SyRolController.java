@@ -101,7 +101,10 @@ public class SyRolController extends AbstractController<SyRol> {
     public void readInfo() {
         if (this.getSelected() == null) return;
         selectedYetkis =
-                this.getSelected().getSyRolYetkis().stream().filter(BaseEntity::isAktif).map(SyRolYetki::getSyYetki).toList();
+                this.getSelected().getSyRolYetkis().stream()
+                        .filter(x -> x.getSyRol().isAktif() && x.getSyYetki().isAktif())
+                        .map(SyRolYetki::getSyYetki)
+                        .toList();
         yetkiList = yetkiService.findAll();
 
         selectedKullanicis = this.getSelected().getSyKullaniciRolList().stream().filter(BaseEntity::isAktif).map(SyKullaniciRol::getSyKullanici).toList();

@@ -84,7 +84,6 @@ public class SyKullaniciController extends AbstractController<SyKullanici> {
     }
 
 
-
     public List<SelectItem> getFilterOptions(EnumSyFiltreAnahtari key) {
         switch (key) {
             case KULLANICI_TURU -> {
@@ -105,11 +104,13 @@ public class SyKullaniciController extends AbstractController<SyKullanici> {
     public void init() {
         super.init();
         this.getSyKullanici().getSyKullaniciRols().stream()
-                .flatMap(kullaniciRol -> kullaniciRol.getSyRol().getSyRolYetkis().stream().filter(BaseEntity::isAktif))
+                .flatMap(kullaniciRol -> kullaniciRol.getSyRol().getSyRolYetkis().stream()
+                        .filter(x -> x.getSyYetki().isAktif() && x.getSyRol().isAktif()))
                 .map(rolYetki -> rolYetki.getSyYetki().getYetki())
                 .forEach(permissions::add);
         this.getSyKullanici().getSyKullaniciYetkis().stream()
-                .flatMap(kullaniciYetki -> kullaniciYetki.getSyYetki().getSyKullaniciYetkis().stream().filter(BaseEntity::isAktif))
+                .flatMap(kullaniciYetki -> kullaniciYetki.getSyYetki().getSyKullaniciYetkis().stream()
+                        .filter(x -> x.getSyYetki().isAktif() && x.isAktif()))
                 .map(rolYetki -> rolYetki.getSyYetki().getYetki())
                 .forEach(permissions::add);
         selectedRols = new ArrayList<>();
@@ -149,7 +150,7 @@ public class SyKullaniciController extends AbstractController<SyKullanici> {
         if (this.getSelected() == null) return;
         try {
             this.getSelected().setParola(Function.encrypt(this.getSelected().getParola()));
-            service.update(this.getSelected(), selectedRols,selectedYetkis);
+            service.update(this.getSelected(), selectedRols, selectedYetkis);
             FacesUtil.successMessage(Constants.KAYIT_EKLENDI);
         } catch (Exception ex) {
             log.error(null, ex);
@@ -299,22 +300,22 @@ public class SyKullaniciController extends AbstractController<SyKullanici> {
         }
     }
 
-    public void unlock(){
-        if(this.getSelected()==null) return;
+    public void unlock() {
+        if (this.getSelected() == null) return;
         try {
             this.getSelected().setKilitli(false);
             service.edit(this.getSelected());
             FacesUtil.addSuccessMessage("Kilit başarıyla kaldırıldı");
-        }catch (Exception ex){
-            log.error(null,ex);
+        } catch (Exception ex) {
+            log.error(null, ex);
             FacesUtil.addErrorMessage("Kilit kaldırılırken hata oluştu");
         }
     }
 
-    public void unlockAll(){
+    public void unlockAll() {
         try {
             for (SyKullanici item : getItems()) {
-                if(item.isKilitli()){
+                if (item.isKilitli()) {
                     item.setKilitli(false);
                     service.edit(item);
                 }
@@ -322,7 +323,7 @@ public class SyKullaniciController extends AbstractController<SyKullanici> {
 
             FacesUtil.addSuccessMessage("Tüm kullanıcı kilitleri başarıyla kaldırıldı");
         } catch (Exception e) {
-            log.error(null,e);
+            log.error(null, e);
             throw new RuntimeException(e);
         }
     }

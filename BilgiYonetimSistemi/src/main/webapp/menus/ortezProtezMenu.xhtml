@@ -28,14 +28,14 @@
                             </a>
                             <ul class="slide-menu child2">
 
-                                <ui:fragment rendered="#{syKullaniciController.hasPermission('orthasta:goster')}">
+                                <ui:fragment rendered="#{syKullaniciController.hasPermission('ortkisi:goster')}">
                                     <li class="slide">
                                         <p:commandLink styleClass="side-menu__item sublevel2"
-                                                       actionListener="#{menuController.setPageLink('/moduls/ortezprotez/ortHasta/index')}"
+                                                       actionListener="#{menuController.setPageLink('/moduls/ortezprotez/ortKisi/index')}"
                                                        update="myPanel,:growl"
                                                        onstart="PF('Loading').show()"
                                                        onsuccess="PF('Loading').hide()"
-                                                       value="Hasta Listesi"/>
+                                                       value="Kişi Listesi"/>
                                     </li>
                                 </ui:fragment>
 
@@ -170,7 +170,7 @@
                                                        update="myPanel,:growl"
                                                        onstart="PF('Loading').show()"
                                                        onsuccess="PF('Loading').hide()"
-                                                       value="Ortez Ampute Seviyeleri"/>
+                                                       value="Protez Ampute Seviyeleri"/>
                                     </li>
                                 </ui:fragment>
 

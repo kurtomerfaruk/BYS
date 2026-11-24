@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:p="primefaces"
+>
+
+<ui:composition>
+
+    <p:dialog widgetVar="OrtKisiEditDialog"
+              id="OrtKisiEditDlg"
+              modal="true"
+              resizable="false"
+              closeOnEscape="true"
+              header="#{messages.dialogYeniKayit}"
+              appendTo="@(body)"
+              responsive="true"
+              onShow="PF('OrtKisiEditDialog').initPosition();adjustMenuWidth('OrtKisiEditForm');"
+              fitViewport="true"
+              position="top">
+
+        <h:form id="OrtKisiEditForm" enctype="multipart/form-data">
+            <h:panelGroup id="display">
+                <p:focus context="display"/>
+                <div class="card custom-card">
+
+                    <div class="card-body">
+
+                        <ul class="nav nav-tabs mb-3 tab-style-8 scaleX" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="personEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#personEditTabPane" type="button" role="tab"
+                                        aria-controls="personEditTabPane" aria-selected="true">Kişi Bilgileri
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="healthEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#healthEditTabPane" type="button" role="tab"
+                                        aria-controls="healthEditTabPane" aria-selected="false">Sağlık Durumu
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="examinationEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#examinationEditTabPane" type="button" role="tab"
+                                        aria-controls="examinationEditTabPane" aria-selected="false">Muayene Durumu
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="personHistoryEditTab" data-bs-toggle="tab"
+                                        data-bs-target="#personHistoryEditTabPane" type="button" role="tab"
+                                        aria-controls="personHistoryEditTabPane" aria-selected="false">Kişi Öyküsü
+                                </button>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content text-muted">
+                            <div class="tab-pane show active" id="personEditTabPane">
+                                <p:panelGrid id="personPanel" columns="2" styleClass="w-100" rendered="#{ortKisiController.selected!=null}"
+                                             layout="tabular">
+
+                                    <ui:include src="/moduls/ortezprotez/ortKisi/Person.xhtml"/>
+                                </p:panelGrid>
+                            </div>
+                            <div class="tab-pane" id="healthEditTabPane">
+                                <p:panelGrid id="healthPanel" columns="2" styleClass="w-100" rendered="#{ortKisiController.selected!=null}"
+                                             layout="tabular">
+                                    <ui:include src="/moduls/ortezprotez/ortKisi/Health.xhtml"/>
+                                </p:panelGrid>
+                            </div>
+
+                            <div class="tab-pane" id="examinationEditTabPane">
+                                <p:panelGrid id="examinationPanel" columns="2" styleClass="w-100" rendered="#{ortKisiController.selected!=null}"
+                                             layout="tabular">
+                                    <ui:include src="/moduls/ortezprotez/ortKisi/Examination.xhtml"/>
+                                </p:panelGrid>
+                            </div>
+
+                            <div class="tab-pane" id="personHistoryEditTabPane">
+                                <p:panelGrid id="personHistoryPanel" columns="2" styleClass="w-100" rendered="#{ortKisiController.selected!=null}"
+                                             layout="tabular">
+                                    <ui:include src="/moduls/ortezprotez/ortKisi/PersontHistory.xhtml"/>
+                                </p:panelGrid>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="float-end">
+                            <p:commandButton icon="pi pi-check" styleClass="ui-button-success"
+                                             actionListener="#{ortKisiController.save}"
+                                             value="#{messages.buttonKaydet}"
+                                             update="display,:OrtKisiListForm:datalist:datalist,:growl"
+                                             oncomplete="handleSubmit(xhr,status,args,PF('OrtKisiEditDialog'));"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                            <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                             value="#{messages.buttonIptal}" onclick="PF('OrtKisiEditDialog').hide()"
+                                             immediate="true" onstart="PF('Loading').show()"
+                                             onsuccess="PF('Loading').hide()"/>
+                        </div>
+                    </div>
+                </div>
+            </h:panelGroup>
+        </h:form>
+
+    </p:dialog>
+
+</ui:composition>
+
+</html>
