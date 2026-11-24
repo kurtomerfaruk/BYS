@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:viewpage id="OrtTalepViewForm"
+                   widgetVar="OrtTalepViewDialog"
+                   model="#{ortTalepController.selected}">
+
+        <h:outputText value="#{messages.talepNoLabel}"/>
+        <h:outputText value="#{ortTalepController.selected.talepNo}"/>
+
+        <h:outputText value="#{messages.tcKimlikNoLabel}"/>
+        <h:outputText value="#{ortTalepController.selected.ortKisi.gnlKisi.tcKimlikNo}"/>
+
+        <h:outputText value="#{messages.adSoyadLabel}"/>
+        <h:outputText value="#{ortTalepController.selected.ortKisi.gnlKisi.adSoyad}"/>
+
+        <h:outputText value="#{messages.talepTarihiLabel}"/>
+        <h:outputText value="#{ortTalepController.selected.talepTarihi}">
+            <f:convertDateTime pattern="#{messages.tarihSaatFormat}" type="localDateTime"/>
+        </h:outputText>
+
+        <h:outputText value="#{messages.talepTipiLabel}"/>
+        <h:outputText value="#{ortTalepController.selected.talepTipi.displayValue}"/>
+
+        <h:outputText value="#{messages.durumLabel}"/>
+        <h:outputText value="#{ortTalepController.selected.durum.displayValue}"/>
+
+        <h:outputText value="#{messages.teknikerLabel}"/>
+        <h:outputText value="#{ortTalepController.selected.tekniker.gnlPersonel.gnlKisi.adSoyad}"/>
+
+        <h:outputText value="#{messages.fizyoterapistLabel}"/>
+        <h:outputText value="#{ortTalepController.selected.fizyoterapist.gnlPersonel.gnlKisi.adSoyad}"/>
+
+        <h:outputText value="#{messages.projeLabel}"/>
+        <h:outputText value="#{ortTalepController.selected.ortProje.tanim}"/>
+
+        <h:outputText value="#{messages.sutKoduLabel}"/>
+        <h:outputText value="#{ortTalepController.selected.sutKodu}"/>
+
+        <h:outputText value="#{messages.aciklamaLabel}"/>
+        <h:outputText value="#{ortTalepController.selected.aciklama}"/>
+
+        <h:outputText value="#{messages.durumGecmisiLabel}"/>
+        <p:dataTable value="#{ortTalepController.durumGecmisiList}" var="gecmis"
+                     emptyMessage="#{messages.kayitBulunamadi}" styleClass="w-100" size="small">
+            <p:column headerText="#{messages.tarihText}">
+                <h:outputText value="#{gecmis.islemTarihi}">
+                    <f:convertDateTime pattern="#{messages.tarihSaatFormat}" type="localDateTime"/>
+                </h:outputText>
+            </p:column>
+            <p:column headerText="#{messages.eskiDurumLabel}">
+                <h:outputText value="#{gecmis.eskiDurum.displayValue}"/>
+            </p:column>
+            <p:column headerText="#{messages.yeniDurumLabel}">
+                <h:outputText value="#{gecmis.yeniDurum.displayValue}"/>
+            </p:column>
+            <p:column headerText="#{messages.islemiYapanLabel}">
+                <h:outputText value="#{gecmis.islemiYapan.gnlPersonel.gnlKisi.adSoyad}"/>
+            </p:column>
+            <p:column headerText="#{messages.aciklamaText}">
+                <h:outputText value="#{gecmis.aciklama}"/>
+            </p:column>
+        </p:dataTable>
+
+    </coco:viewpage>
+
+</ui:composition>
+
+</html>

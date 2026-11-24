@@ -74,7 +74,9 @@ public enum EnumSyFiltreAnahtari implements BaseEnum {
     STTRANSFER_DURUM("Stok Takip Tranfer Durum"),
     STSAYIM_DURUMU("Stok Takip Sayım Durumu"),
     STTEDARIKCI_TUR("Stok Takip Tedarikçi Tür"),
-    STALIS_BELGE_TURU("Stok Takip Alış Belge Türü");
+    STALIS_BELGE_TURU("Stok Takip Alış Belge Türü"),
+    ORTTALEP_DURUMU("Ortez/Protez Talep Durumu"),
+    ORTTALEP_TIPI("Ortez/Protez Talep Tipi");
 
     private final String label;
 

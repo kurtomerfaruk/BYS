@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:editpage id="OrtTalepEditForm"
+                   widgetVar="OrtTalepEditDialog"
+                   model="#{ortTalepController.selected}"
+                   listForm="OrtTalepListForm"
+                   actionListener="#{ortTalepController.save}">
+
+        <p:outputLabel value="#{messages.talepNoLabel}" for="@next"/>
+        <p:inputText id="talepNo" value="#{ortTalepController.selected.talepNo}" readonly="true"/>
+
+        <p:outputLabel value="#{messages.kisiLabel}" for="@next"/>
+        <coco:inputWithButton id="inputWithButtonOrtKisi" inputId="ortKisiId"
+                              inputValue="#{ortTalepController.selected.ortKisi.gnlKisi.tcKimlikNo}"
+                              inputTitle="#{messages.tcKimlikNoText}"
+                              actionListener="#{bysController.openCommonDialog('ortKisiSec')}"
+                              ajaxListener="#{ortTalepController.secilenOrtKisi}"
+                              buttonTitle="#{messages.kisiSecmelisiniz}"
+                              size="50"
+                              dialogId="OrtTalepEditDialogId"/>
+
+        <p:outputLabel value="#{messages.adSoyadLabel}" for="@next"/>
+        <p:inputText id="adSoyad" value="#{ortTalepController.selected.ortKisi.gnlKisi.adSoyad}"
+                     title="#{messages.adSoyadText}" readonly="true" styleClass="inputUpdate"/>
+
+        <p:outputLabel value="#{messages.talepTarihiLabel}" for="@next"/>
+        <p:datePicker id="talepTarihi" locale="tr" pattern="#{messages.tarihSaatFormat}"
+                      value="#{ortTalepController.selected.talepTarihi}" title="#{messages.talepTarihiText}"
+                      mask="true" monthNavigator="true" yearNavigator="true" showButtonBar="true"
+                      showIcon="true" showOnFocus="false"/>
+
+        <p:outputLabel value="#{messages.talepTipiLabel}" for="@next"/>
+        <p:selectOneMenu id="talepTipi" value="#{ortTalepController.selected.talepTipi}"
+                         required="true" converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{enumOrtTalepTipi.ALL_VALUES}"
+                           var="talepTipi"
+                           itemLabel="#{talepTipi.displayValue}"
+                           itemValue="#{talepTipi}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.durumLabel}" for="@next"/>
+        <p:selectOneMenu id="durum" value="#{ortTalepController.selected.durum}"
+                         required="true" converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{enumOrtTalepDurumu.ALL_VALUES}"
+                           var="durum"
+                           itemLabel="#{durum.displayValue}"
+                           itemValue="#{durum}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.teknikerLabel}" for="@next"/>
+        <p:selectOneMenu id="tekniker" value="#{ortTalepController.selected.teknikerOrtPersonel}" filter="true"
+                         converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{ortPersonelController.items}"
+                           var="personel"
+                           itemLabel="#{personel.gnlPersonel.gnlKisi.adSoyad}"
+                           itemValue="#{personel}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.fizyoterapistLabel}" for="@next"/>
+        <p:selectOneMenu id="fizyoterapist" value="#{ortTalepController.selected.fizyoterapistOrtPersonel}" filter="true"
+                         converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{ortPersonelController.items}"
+                           var="personel"
+                           itemLabel="#{personel.gnlPersonel.gnlKisi.adSoyad}"
+                           itemValue="#{personel}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.projeLabel}" for="@next"/>
+        <p:selectOneMenu id="ortProje" value="#{ortTalepController.selected.ortProje}" filter="true"
+                         converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{ortProjeController.items}"
+                           var="proje"
+                           itemLabel="#{proje.tanim}"
+                           itemValue="#{proje}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.sutKoduLabel}" for="@next"/>
+        <p:selectOneMenu id="ortSutKodu" value="#{ortTalepController.selected.ortSutKodu}" filter="true"
+                         converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{ortSutKoduController.items}"
+                           var="sutKoduItem"
+                           itemLabel="#{sutKoduItem.tanim}"
+                           itemValue="#{sutKoduItem}"/>
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{messages.aciklamaLabel}" for="@next"/>
+        <p:inputTextarea rows="4" id="aciklama" value="#{ortTalepController.selected.aciklama}"
+                         title="#{messages.aciklamaText}" styleClass="w-100" autoResize="false"/>
+
+    </coco:editpage>
+
+</ui:composition>
+
+</html>

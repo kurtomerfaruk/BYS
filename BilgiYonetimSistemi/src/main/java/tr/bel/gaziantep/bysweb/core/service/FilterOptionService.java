@@ -17,6 +17,8 @@ import tr.bel.gaziantep.bysweb.core.enums.hafriyat.EnumHfMalCinsi;
 import tr.bel.gaziantep.bysweb.core.enums.hafriyat.EnumHfTahsilatTuru;
 import tr.bel.gaziantep.bysweb.core.enums.moralevi.EnumMeTalepDurumu;
 import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtCihazTur;
+import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtTalepDurumu;
+import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtTalepTipi;
 import tr.bel.gaziantep.bysweb.core.enums.psikiyatriklinigi.EnumPkEgitimTur;
 import tr.bel.gaziantep.bysweb.core.enums.psikiyatriklinigi.EnumPkModul;
 import tr.bel.gaziantep.bysweb.core.enums.psikiyatriklinigi.EnumPkTalepTuru;
@@ -450,6 +452,18 @@ public class FilterOptionService implements java.io.Serializable{
 
     public List<SelectItem> getOrtCihazTurs() {
         return Arrays.stream(EnumOrtCihazTur.values())
+                .map(value -> new SelectItem(value, value.getDisplayValue()))
+                .collect(Collectors.toList());
+    }
+
+    public List<SelectItem> getOrtTalepDurumus() {
+        return Arrays.stream(EnumOrtTalepDurumu.values())
+                .map(value -> new SelectItem(value, value.getDisplayValue()))
+                .collect(Collectors.toList());
+    }
+
+    public List<SelectItem> getOrtTalepTipis() {
+        return Arrays.stream(EnumOrtTalepTipi.values())
                 .map(value -> new SelectItem(value, value.getDisplayValue()))
                 .collect(Collectors.toList());
     }

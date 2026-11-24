@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <coco:editpage id="OrtPersonelEditForm"
+                   model="#{ortPersonelController.selected}"
+                   widgetVar="OrtPersonelEditDialog"
+                   actionListener="#{ortPersonelController.save}"
+                   listForm="OrtPersonelListForm">
+
+        <p:outputLabel value="#{messages.personelLabel}" for="@next"/>
+        <p:selectOneMenu id="gnlPersonel" value="#{ortPersonelController.selected.gnlPersonel}" filter="true"
+                         converter="omnifaces.SelectItemsConverter" required="true">
+            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{gnlPersonelController.items}"
+                           var="personel"
+                           itemLabel="#{personel.gnlKisi.adSoyad}"
+                           itemValue="#{personel}"/>
+        </p:selectOneMenu>
+
+    </coco:editpage>
+
+</ui:composition>
+
+</html>

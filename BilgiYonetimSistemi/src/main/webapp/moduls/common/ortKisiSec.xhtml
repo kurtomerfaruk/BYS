@@ -13,18 +13,18 @@
 </h:head>
 <h:body>
 
-    <h:form id="OrtHastaSec">
+    <h:form id="OrtKisiSec">
         <p:dataTable id="datalist"
-                     value="#{ortHastaController.lazyItems}"
+                     value="#{ortKisiController.lazyItems}"
                      var="item"
                      rowKey="#{item.id}"
                      paginator="true"
                      rows="10"
-                     selection="#{ortHastaController.selected}"
+                     selection="#{ortKisiController.selected}"
                      paginatorPosition="bottom"
                      lazy="true"
                      pageLinks="5"
-                     filteredValue="#{ortHastaController.filtered}"
+                     filteredValue="#{ortKisiController.filtered}"
                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                      currentPageReportTemplate="#{messages.currentPageTemplate}"
                      emptyMessage="#{messages.kayitBulunamadi}"
@@ -32,10 +32,10 @@
                      styleClass="w-100">
 
             <f:facet name="header">
-                #{messages.hastaListesi}
+                #{messages.kisiListesi}
             </f:facet>
 
-            <p:ajax event="rowDblselect" listener="#{ortHastaController.onRowDblSelect}"/>
+            <p:ajax event="rowDblselect" listener="#{ortKisiController.onRowDblSelect}"/>
 
             <p:column sortBy="#{item.gnlKisi.tcKimlikNo}" filterBy="#{item.gnlKisi.tcKimlikNo}">
                 <f:facet name="header">
@@ -80,7 +80,7 @@
             </p:column>
 
             <p:column headerText="#{messages.buttonSec}" style="width: 70px;text-align: center">
-                <p:commandButton icon="pi pi-check" actionListener="#{ortHastaController.hastaSecKapat(item)}"
+                <p:commandButton icon="pi pi-check" actionListener="#{ortKisiController.hastaSecKapat(item)}"
                                  style="width: 20px !important; height: 20px !important;"/>
             </p:column>
 
@@ -90,5 +90,3 @@
 
 </h:body>
 </html>
-
-

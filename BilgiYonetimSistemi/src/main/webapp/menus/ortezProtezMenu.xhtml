@@ -39,62 +39,71 @@
                                     </li>
                                 </ui:fragment>
 
-                                <ui:fragment rendered="#{syKullaniciController.hasPermission('ortbasvuru:goster')}">
+                                <ui:fragment rendered="#{syKullaniciController.hasPermission('orttalep:goster')}">
                                     <li class="slide">
                                         <p:commandLink styleClass="side-menu__item sublevel2"
-                                                       actionListener="#{menuController.setPageLink('/moduls/ortezprotez/ortBasvuru/index')}"
+                                                       actionListener="#{menuController.setPageLink('/moduls/ortezprotez/ortTalep/index')}"
                                                        update="myPanel,:growl"
                                                        onstart="PF('Loading').show()"
                                                        onsuccess="PF('Loading').hide()"
-                                                       value="Başvuru Listesi"/>
+                                                       value="Talepler"/>
                                     </li>
                                 </ui:fragment>
 
+                                <!--                                <ui:fragment rendered="#{syKullaniciController.hasPermission('ortbasvuru:goster')}">-->
+                                <!--                                    <li class="slide">-->
+                                <!--                                        <p:commandLink styleClass="side-menu__item sublevel2"-->
+                                <!--                                                       actionListener="#{menuController.setPageLink('/moduls/ortezprotez/ortBasvuru/index')}"-->
+                                <!--                                                       update="myPanel,:growl"-->
+                                <!--                                                       onstart="PF('Loading').show()"-->
+                                <!--                                                       onsuccess="PF('Loading').hide()"-->
+                                <!--                                                       value="Başvuru Listesi"/>-->
+                                <!--                                    </li>-->
+                                <!--                                </ui:fragment>-->
 
+                                <!--                                <ui:fragment rendered="#{syKullaniciController.hasPermission('ortmalzemetalep:goster')}">-->
+                                <!--                                    <li class="slide">-->
+                                <!--                                        <p:commandLink styleClass="side-menu__item sublevel2"-->
+                                <!--                                                       actionListener="#{menuController.setPageLink('/moduls/ortezprotez/ortMalzemeTalep/index')}"-->
+                                <!--                                                       update="myPanel,:growl"-->
+                                <!--                                                       onstart="PF('Loading').show()"-->
+                                <!--                                                       onsuccess="PF('Loading').hide()"-->
+                                <!--                                                       value="Malzeme Talep Listesi"/>-->
+                                <!--                                    </li>-->
+                                <!--                                </ui:fragment>-->
 
-                                <ui:fragment rendered="#{syKullaniciController.hasPermission('ortmalzemetalep:goster')}">
-                                    <li class="slide">
-                                        <p:commandLink styleClass="side-menu__item sublevel2"
-                                                       actionListener="#{menuController.setPageLink('/moduls/ortezprotez/ortMalzemeTalep/index')}"
-                                                       update="myPanel,:growl"
-                                                       onstart="PF('Loading').show()"
-                                                       onsuccess="PF('Loading').hide()"
-                                                       value="Malzeme Talep Listesi"/>
-                                    </li>
-                                </ui:fragment>
+                                <!--                                <ui:fragment rendered="#{syKullaniciController.hasPermission('ortolcu:goster')}">-->
+                                <!--                                    <li class="slide">-->
+                                <!--                                        <p:commandLink styleClass="side-menu__item sublevel2"-->
+                                <!--                                                       actionListener="#{menuController.setPageLink('/moduls/ortezprotez/ortOlcu/index')}"-->
+                                <!--                                                       update="myPanel,:growl"-->
+                                <!--                                                       onstart="PF('Loading').show()"-->
+                                <!--                                                       onsuccess="PF('Loading').hide()"-->
+                                <!--                                                       value="Ölçü Listesi"/>-->
+                                <!--                                    </li>-->
+                                <!--                                </ui:fragment>-->
 
-                                <ui:fragment rendered="#{syKullaniciController.hasPermission('ortolcu:goster')}">
-                                    <li class="slide">
-                                        <p:commandLink styleClass="side-menu__item sublevel2"
-                                                       actionListener="#{menuController.setPageLink('/moduls/ortezprotez/ortOlcu/index')}"
-                                                       update="myPanel,:growl"
-                                                       onstart="PF('Loading').show()"
-                                                       onsuccess="PF('Loading').hide()"
-                                                       value="Ölçü Listesi"/>
-                                    </li>
-                                </ui:fragment>
+                                <!--                                <ui:fragment rendered="#{syKullaniciController.hasPermission('ortfiziktedavi:goster')}">-->
+                                <!--                                    <li class="slide">-->
+                                <!--                                        <p:commandLink styleClass="side-menu__item sublevel2"-->
+                                <!--                                                       actionListener="#{menuController.setPageLink('/moduls/ortezprotez/ortFizikTedavi/index')}"-->
+                                <!--                                                       update="myPanel,:growl"-->
+                                <!--                                                       onstart="PF('Loading').show()"-->
+                                <!--                                                       onsuccess="PF('Loading').hide()"-->
+                                <!--                                                       value="Fizik Tedavi Listesi"/>-->
+                                <!--                                    </li>-->
+                                <!--                                </ui:fragment>-->
 
-                                <ui:fragment rendered="#{syKullaniciController.hasPermission('ortfiziktedavi:goster')}">
-                                    <li class="slide">
-                                        <p:commandLink styleClass="side-menu__item sublevel2"
-                                                       actionListener="#{menuController.setPageLink('/moduls/ortezprotez/ortFizikTedavi/index')}"
-                                                       update="myPanel,:growl"
-                                                       onstart="PF('Loading').show()"
-                                                       onsuccess="PF('Loading').hide()"
-                                                       value="Fizik Tedavi Listesi"/>
-                                    </li>
-                                </ui:fragment>
-
-                                <ui:fragment rendered="#{syKullaniciController.hasPermission('ortrandevu:goster')}">
-                                    <li class="slide">
-                                        <p:commandLink styleClass="side-menu__item sublevel2"
-                                                       actionListener="#{menuController.setPageLink('/moduls/ortezprotez/ortRandevu/index')}"
-                                                       update="myPanel,:growl"
-                                                       onstart="PF('Loading').show()"
-                                                       onsuccess="PF('Loading').hide()"
-                                                       value="Randevu Listesi"/>
-                                    </li>
-                                </ui:fragment>
+                                <!--                                <ui:fragment rendered="#{syKullaniciController.hasPermission('ortrandevu:goster')}">-->
+                                <!--                                    <li class="slide">-->
+                                <!--                                        <p:commandLink styleClass="side-menu__item sublevel2"-->
+                                <!--                                                       actionListener="#{menuController.setPageLink('/moduls/ortezprotez/ortRandevu/index')}"-->
+                                <!--                                                       update="myPanel,:growl"-->
+                                <!--                                                       onstart="PF('Loading').show()"-->
+                                <!--                                                       onsuccess="PF('Loading').hide()"-->
+                                <!--                                                       value="Randevu Listesi"/>-->
+                                <!--                                    </li>-->
+                                <!--                                </ui:fragment>-->
 
                             </ul>
                         </li>
@@ -130,38 +139,38 @@
                                     </li>
                                 </ui:fragment>
 
-                                <ui:fragment rendered="#{syKullaniciController.hasPermission('ortolcusablon:goster')}">
-                                    <li class="slide">
-                                        <p:commandLink styleClass="side-menu__item sublevel2"
-                                                       actionListener="#{menuController.setPageLink('/moduls/ortezprotez/ortOlcuSablon/index')}"
-                                                       update="myPanel,:growl"
-                                                       onstart="PF('Loading').show()"
-                                                       onsuccess="PF('Loading').hide()"
-                                                       value="Ölçü Şablon Listesi"/>
-                                    </li>
-                                </ui:fragment>
+                                <!--                                <ui:fragment rendered="#{syKullaniciController.hasPermission('ortolcusablon:goster')}">-->
+                                <!--                                    <li class="slide">-->
+                                <!--                                        <p:commandLink styleClass="side-menu__item sublevel2"-->
+                                <!--                                                       actionListener="#{menuController.setPageLink('/moduls/ortezprotez/ortOlcuSablon/index')}"-->
+                                <!--                                                       update="myPanel,:growl"-->
+                                <!--                                                       onstart="PF('Loading').show()"-->
+                                <!--                                                       onsuccess="PF('Loading').hide()"-->
+                                <!--                                                       value="Ölçü Şablon Listesi"/>-->
+                                <!--                                    </li>-->
+                                <!--                                </ui:fragment>-->
 
-                                <ui:fragment rendered="#{syKullaniciController.hasPermission('ortolcusablonalan:goster')}">
-                                    <li class="slide">
-                                        <p:commandLink styleClass="side-menu__item sublevel2"
-                                                       actionListener="#{menuController.setPageLink('/moduls/ortezprotez/ortOlcuSablonAlan/index')}"
-                                                       update="myPanel,:growl"
-                                                       onstart="PF('Loading').show()"
-                                                       onsuccess="PF('Loading').hide()"
-                                                       value="Ölçü Şablon Alan Listesi"/>
-                                    </li>
-                                </ui:fragment>
+                                <!--                                <ui:fragment rendered="#{syKullaniciController.hasPermission('ortolcusablonalan:goster')}">-->
+                                <!--                                    <li class="slide">-->
+                                <!--                                        <p:commandLink styleClass="side-menu__item sublevel2"-->
+                                <!--                                                       actionListener="#{menuController.setPageLink('/moduls/ortezprotez/ortOlcuSablonAlan/index')}"-->
+                                <!--                                                       update="myPanel,:growl"-->
+                                <!--                                                       onstart="PF('Loading').show()"-->
+                                <!--                                                       onsuccess="PF('Loading').hide()"-->
+                                <!--                                                       value="Ölçü Şablon Alan Listesi"/>-->
+                                <!--                                    </li>-->
+                                <!--                                </ui:fragment>-->
 
-                                <ui:fragment rendered="#{syKullaniciController.hasPermission('ortstok:goster')}">
-                                    <li class="slide">
-                                        <p:commandLink styleClass="side-menu__item sublevel2"
-                                                       actionListener="#{menuController.setPageLink('/moduls/ortezprotez/ortStok/index')}"
-                                                       update="myPanel,:growl"
-                                                       onstart="PF('Loading').show()"
-                                                       onsuccess="PF('Loading').hide()"
-                                                       value="Stok Listesi"/>
-                                    </li>
-                                </ui:fragment>
+                                <!--                                <ui:fragment rendered="#{syKullaniciController.hasPermission('ortstok:goster')}">-->
+                                <!--                                    <li class="slide">-->
+                                <!--                                        <p:commandLink styleClass="side-menu__item sublevel2"-->
+                                <!--                                                       actionListener="#{menuController.setPageLink('/moduls/ortezprotez/ortStok/index')}"-->
+                                <!--                                                       update="myPanel,:growl"-->
+                                <!--                                                       onstart="PF('Loading').show()"-->
+                                <!--                                                       onsuccess="PF('Loading').hide()"-->
+                                <!--                                                       value="Stok Listesi"/>-->
+                                <!--                                    </li>-->
+                                <!--                                </ui:fragment>-->
 
                                 <ui:fragment rendered="#{syKullaniciController.hasPermission('ortprotezamputeseviye:goster')}">
                                     <li class="slide">
@@ -182,6 +191,17 @@
                                                        onstart="PF('Loading').show()"
                                                        onsuccess="PF('Loading').hide()"
                                                        value="Proje Listesi"/>
+                                    </li>
+                                </ui:fragment>
+
+                                <ui:fragment rendered="#{syKullaniciController.hasPermission('ortsutkodu:goster')}">
+                                    <li class="slide">
+                                        <p:commandLink styleClass="side-menu__item sublevel2"
+                                                       actionListener="#{menuController.setPageLink('/moduls/ortezprotez/ortSutKodu/index')}"
+                                                       update="myPanel,:growl"
+                                                       onstart="PF('Loading').show()"
+                                                       onsuccess="PF('Loading').hide()"
+                                                       value="SUT Kodu Listesi"/>
                                     </li>
                                 </ui:fragment>
 
