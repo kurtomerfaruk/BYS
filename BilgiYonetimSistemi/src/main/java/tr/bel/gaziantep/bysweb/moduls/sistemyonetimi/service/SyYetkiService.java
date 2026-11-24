@@ -5,6 +5,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import tr.bel.gaziantep.bysweb.core.service.AbstractService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
+import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.entity.SyKullanici;
 import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.entity.SyYetki;
 
 import java.io.Serial;
@@ -35,5 +36,37 @@ public class SyYetkiService extends AbstractService<SyYetki> {
     @Override
     public String getSortCol() {
         return "aciklama";
+    }
+
+
+    /**
+     * Kullanıcının rol veya doğrudan kullanıcı yetkisi üzerinden verilen yetkiye
+     * sahip olup olmadığını kontrol eder. Servis katmanı yetki denetimlerinde kullanılır.
+     */
+    public boolean hasYetki(SyKullanici kullanici, String yetkiAnahtari) {
+        if (kullanici == null || yetkiAnahtari == null || yetkiAnahtari.isBlank()) {
+            return false;
+        }
+        Long rolYetkiSayisi = getEntityManager().createQuery(
+                        "SELECT COUNT(y) FROM SyYetki y " +
+                                "WHERE y.aktif = true AND y.yetki = :yetki AND y.id IN " +
+                                "(SELECT ry.syYetki.id FROM SyRolYetki ry WHERE ry.aktif = true AND ry.syRol.id IN " +
+                                "(SELECT kr.syRol.id FROM SyKullaniciRol kr WHERE kr.aktif = true AND kr.syKullanici.id = :kullaniciId))",
+                        Long.class)
+                .setParameter("yetki", yetkiAnahtari)
+                .setParameter("kullaniciId", kullanici.getId())
+                .getSingleResult();
+        if (rolYetkiSayisi != null && rolYetkiSayisi > 0) {
+            return true;
+        }
+        Long kullaniciYetkiSayisi = getEntityManager().createQuery(
+                        "SELECT COUNT(y) FROM SyYetki y " +
+                                "WHERE y.aktif = true AND y.yetki = :yetki AND y.id IN " +
+                                "(SELECT ky.syYetki.id FROM SyKullaniciYetki ky WHERE ky.aktif = true AND ky.syKullanici.id = :kullaniciId)",
+                        Long.class)
+                .setParameter("yetki", yetkiAnahtari)
+                .setParameter("kullaniciId", kullanici.getId())
+                .getSingleResult();
+        return kullaniciYetkiSayisi != null && kullaniciYetkiSayisi > 0;
     }
 }

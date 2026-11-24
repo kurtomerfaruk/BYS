@@ -60,18 +60,13 @@ public class OrtTalepService extends AbstractService<OrtTalep> {
         flush();
     }
 
-    public void updateTalep(OrtTalep talep, String aciklama) {
-        OrtTalep mevcut = find(talep.getId());
-        EnumOrtTalepDurumu eskiDurum = mevcut == null ? null : mevcut.getDurum();
-        EnumOrtTalepDurumu yeniDurum = talep.getDurum();
-
+    /**
+     * Talep genel bilgilerini günceller. Durum değişikliği bu metotla yapılamaz;
+     * tüm geçişler OrtTalepWorkflowService üzerinden doğrulanarak uygulanır.
+     */
+    public void updateTalep(OrtTalep talep) {
         edit(talep);
         flush();
-
-        if (yeniDurum != null && yeniDurum != eskiDurum) {
-            addDurumGecmisi(talep, eskiDurum, yeniDurum, aciklama);
-            flush();
-        }
     }
 
     public List<OrtTalepDurumGecmisi> findDurumGecmisiByTalep(OrtTalep talep) {

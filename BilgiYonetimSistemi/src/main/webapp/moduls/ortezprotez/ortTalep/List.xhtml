@@ -58,7 +58,7 @@
                 <p:commandButton id="viewButton" styleClass="ui-button-info" icon="pi pi-search"
                                  pt:data-tooltip="#{messages.buttonDetay}"
                                  actionListener="#{ortTalepController.readInfo()}"
-                                 update=":OrtTalepViewForm:OrtTalepViewForm"
+                                 update=":OrtTalepViewForm"
                                  oncomplete="PF('OrtTalepViewDialog').show()"
                                  disabled="#{empty ortTalepController.selected}" onstart="PF('Loading').show()"
                                  onsuccess="PF('Loading').hide()"/>

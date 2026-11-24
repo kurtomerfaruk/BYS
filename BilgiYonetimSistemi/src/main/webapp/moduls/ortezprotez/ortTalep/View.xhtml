@@ -5,72 +5,136 @@
       xmlns:h="jakarta.faces.html"
       xmlns:f="jakarta.faces.core"
       xmlns:p="primefaces"
-      xmlns:coco="jakarta.faces.composite/ui">
+>
 
 <ui:composition>
 
-    <coco:viewpage id="OrtTalepViewForm"
-                   widgetVar="OrtTalepViewDialog"
-                   model="#{ortTalepController.selected}">
+    <p:dialog id="OrtTalepViewDlg" widgetVar="OrtTalepViewDialog"
+              header="#{messages.dialogKayitBilgisi}"
+              modal="true" resizable="false" closeOnEscape="true" responsive="true"
+              appendTo="@(body)" fitViewport="true" position="top"
+              maximizable="true" style="min-width: 900px;">
 
-        <h:outputText value="#{messages.talepNoLabel}"/>
-        <h:outputText value="#{ortTalepController.selected.talepNo}"/>
+        <h:form id="OrtTalepViewForm">
 
-        <h:outputText value="#{messages.tcKimlikNoLabel}"/>
-        <h:outputText value="#{ortTalepController.selected.ortKisi.gnlKisi.tcKimlikNo}"/>
+            <div class="card custom-card">
+                <div class="card-body">
 
-        <h:outputText value="#{messages.adSoyadLabel}"/>
-        <h:outputText value="#{ortTalepController.selected.ortKisi.gnlKisi.adSoyad}"/>
+                    <div class="row g-2 mb-3">
+                        <div class="col-md-3">
+                            <strong>#{messages.talepNoLabel}</strong>
+                            <h:outputText value="#{ortTalepController.selected.talepNo}"/>
+                        </div>
+                        <div class="col-md-3">
+                            <strong>#{messages.adSoyadLabel}</strong>
+                            <h:outputText value="#{ortTalepController.selected.ortKisi.gnlKisi.adSoyad}"/>
+                        </div>
+                        <div class="col-md-3">
+                            <strong>#{messages.durumLabel}</strong>
+                            <span class="badge bg-primary-transparent text-primary">
+                                #{ortTalepController.selected.durum.displayValue}
+                            </span>
+                        </div>
+                        <div class="col-md-3">
+                            <strong>#{messages.talepTipiLabel}</strong>
+                            <h:outputText value="#{ortTalepController.selected.talepTipi.displayValue}"/>
+                        </div>
+                        <div class="col-md-3">
+                            <strong>#{messages.teknikerLabel}</strong>
+                            <h:outputText value="#{ortTalepController.selected.teknikerOrtPersonel.gnlPersonel.gnlKisi.adSoyad}"/>
+                        </div>
+                        <div class="col-md-3">
+                            <strong>#{messages.fizyoterapistLabel}</strong>
+                            <h:outputText value="#{ortTalepController.selected.fizyoterapistOrtPersonel.gnlPersonel.gnlKisi.adSoyad}"/>
+                        </div>
+                        <div class="col-md-3">
+                            <strong>#{messages.projeLabel}</strong>
+                            <h:outputText value="#{ortTalepController.selected.ortProje.tanim}"/>
+                        </div>
+                        <div class="col-md-3">
+                            <strong>#{messages.sutKoduLabel}</strong>
+                            <h:outputText value="#{ortTalepController.selected.ortSutKodu.kod} - #{ortTalepController.selected.ortSutKodu.tanim}"/>
+                        </div>
+                    </div>
 
-        <h:outputText value="#{messages.talepTarihiLabel}"/>
-        <h:outputText value="#{ortTalepController.selected.talepTarihi}">
-            <f:convertDateTime pattern="#{messages.tarihSaatFormat}" type="localDateTime"/>
-        </h:outputText>
+                    <div class="alert alert-info py-2">
+                        <i class="ti ti-info-circle me-2"/>
+                        <strong>#{messages.bekleyenIslemLabel}:</strong>
+                        <h:outputText value="#{ortTalepController.bekleyenIslem}"/>
+                    </div>
 
-        <h:outputText value="#{messages.talepTipiLabel}"/>
-        <h:outputText value="#{ortTalepController.selected.talepTipi.displayValue}"/>
+                    <!-- Görsel süreç göstergesi (stepper) -->
+                    <ul class="nav nav-tabs mb-3 tab-style-8 scaleX" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" data-bs-toggle="tab" type="button" role="tab">Süreç</button>
+                        </li>
+                    </ul>
 
-        <h:outputText value="#{messages.durumLabel}"/>
-        <h:outputText value="#{ortTalepController.selected.durum.displayValue}"/>
+                    <div class="card-body border rounded mb-3">
+                        <div class="d-flex flex-wrap gap-2">
+                            <ui:repeat value="#{enumOrtTalepDurumu.ALL_VALUES}" var="durum">
+                                <span class="badge #{durum == ortTalepController.selected.durum ? 'bg-primary' : 'bg-light text-muted'}"
+                                      style="padding: 6px 10px;">
+                                    #{durum.displayValue}
+                                </span>
+                            </ui:repeat>
+                        </div>
+                    </div>
 
-        <h:outputText value="#{messages.teknikerLabel}"/>
-        <h:outputText value="#{ortTalepController.selected.tekniker.gnlPersonel.gnlKisi.adSoyad}"/>
+                    <!-- Bekleyen işlem aksiyonları -->
+                    <h:panelGroup rendered="#{not empty ortTalepController.kullanilabilirIslemler}">
+                        <p:outputLabel value="#{messages.yapilacakIslemLabel}" for="gecisAciklama"/>
+                        <p:inputTextarea id="gecisAciklama" rows="2" styleClass="w-100 mb-2"
+                                         value="#{ortTalepController.gecisAciklama}"
+                                         placeholder="İşlem açıklaması / red gerekçesi"/>
+                        <div class="d-flex flex-wrap gap-2 mb-3">
+                            <ui:repeat value="#{ortTalepController.kullanilabilirIslemler}" var="islem">
+                                <p:commandButton value="#{islem.displayValue}" icon="#{islem.ikon}"
+                                                 styleClass="ui-button-primary"
+                                                 actionListener="#{ortTalepController.gecisYap(islem)}"
+                                                 process="@form"
+                                                 update="@form,:growl"
+                                                 onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                            </ui:repeat>
+                        </div>
+                    </h:panelGroup>
 
-        <h:outputText value="#{messages.fizyoterapistLabel}"/>
-        <h:outputText value="#{ortTalepController.selected.fizyoterapist.gnlPersonel.gnlKisi.adSoyad}"/>
+                    <!-- İşlem geçmişi -->
+                    <h:outputText value="#{messages.islemGecmisiLabel}"/>
+                    <p:dataTable value="#{ortTalepController.durumGecmisiList}" var="gecmis"
+                                 emptyMessage="#{messages.kayitBulunamadi}" styleClass="w-100" size="small">
+                        <p:column headerText="#{messages.tarihText}">
+                            <h:outputText value="#{gecmis.islemTarihi}">
+                                <f:convertDateTime pattern="#{messages.tarihSaatFormat}" type="localDateTime"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="#{messages.eskiDurumLabel}">
+                            <h:outputText value="#{gecmis.eskiDurum.displayValue}"/>
+                        </p:column>
+                        <p:column headerText="#{messages.yeniDurumLabel}">
+                            <h:outputText value="#{gecmis.yeniDurum.displayValue}"/>
+                        </p:column>
+                        <p:column headerText="#{messages.islemiYapanLabel}">
+                            <h:outputText value="#{gecmis.islemiYapanSyKullanici.gnlPersonel.gnlKisi.adSoyad}"/>
+                        </p:column>
+                        <p:column headerText="#{messages.aciklamaText}">
+                            <h:outputText value="#{gecmis.aciklama}"/>
+                        </p:column>
+                    </p:dataTable>
 
-        <h:outputText value="#{messages.projeLabel}"/>
-        <h:outputText value="#{ortTalepController.selected.ortProje.tanim}"/>
+                </div>
+                <div class="card-footer">
+                    <div class="float-end">
+                        <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                         value="#{messages.buttonKapat}"
+                                         onclick="PF('OrtTalepViewDialog').hide()" immediate="true"/>
+                    </div>
+                </div>
+            </div>
 
-        <h:outputText value="#{messages.sutKoduLabel}"/>
-        <h:outputText value="#{ortTalepController.selected.sutKodu}"/>
+        </h:form>
 
-        <h:outputText value="#{messages.aciklamaLabel}"/>
-        <h:outputText value="#{ortTalepController.selected.aciklama}"/>
-
-        <h:outputText value="#{messages.durumGecmisiLabel}"/>
-        <p:dataTable value="#{ortTalepController.durumGecmisiList}" var="gecmis"
-                     emptyMessage="#{messages.kayitBulunamadi}" styleClass="w-100" size="small">
-            <p:column headerText="#{messages.tarihText}">
-                <h:outputText value="#{gecmis.islemTarihi}">
-                    <f:convertDateTime pattern="#{messages.tarihSaatFormat}" type="localDateTime"/>
-                </h:outputText>
-            </p:column>
-            <p:column headerText="#{messages.eskiDurumLabel}">
-                <h:outputText value="#{gecmis.eskiDurum.displayValue}"/>
-            </p:column>
-            <p:column headerText="#{messages.yeniDurumLabel}">
-                <h:outputText value="#{gecmis.yeniDurum.displayValue}"/>
-            </p:column>
-            <p:column headerText="#{messages.islemiYapanLabel}">
-                <h:outputText value="#{gecmis.islemiYapan.gnlPersonel.gnlKisi.adSoyad}"/>
-            </p:column>
-            <p:column headerText="#{messages.aciklamaText}">
-                <h:outputText value="#{gecmis.aciklama}"/>
-            </p:column>
-        </p:dataTable>
-
-    </coco:viewpage>
+    </p:dialog>
 
 </ui:composition>
 

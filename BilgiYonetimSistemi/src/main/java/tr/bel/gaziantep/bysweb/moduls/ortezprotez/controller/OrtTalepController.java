@@ -12,6 +12,7 @@ import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 import tr.bel.gaziantep.bysweb.core.controller.AbstractController;
 import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtTalepDurumu;
+import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtTalepIslem;
 import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.EnumSyFiltreAnahtari;
 import tr.bel.gaziantep.bysweb.core.service.FilterOptionService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
@@ -20,11 +21,13 @@ import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtKisi;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtTalep;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtTalepDurumGecmisi;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.service.OrtTalepService;
+import tr.bel.gaziantep.bysweb.moduls.ortezprotez.service.OrtTalepWorkflowService;
 
 import java.io.Serial;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author OmerFarukKurt
@@ -42,11 +45,22 @@ public class OrtTalepController extends AbstractController<OrtTalep> {
     @Inject
     private OrtTalepService service;
     @Inject
+    private OrtTalepWorkflowService workflowService;
+    @Inject
     private FilterOptionService filterOptionService;
 
     @Getter
     @Setter
     private List<OrtTalepDurumGecmisi> durumGecmisiList = Collections.emptyList();
+    @Getter
+    @Setter
+    private Set<EnumOrtTalepIslem> kullanilabilirIslemler = Collections.emptySet();
+    @Getter
+    @Setter
+    private String gecisAciklama;
+    @Getter
+    @Setter
+    private String bekleyenIslem;
 
     public OrtTalepController() {
         super(OrtTalep.class);
@@ -105,7 +119,7 @@ public class OrtTalepController extends AbstractController<OrtTalep> {
                 FacesUtil.addErrorMessage("Lütfen talep için kişi seçiniz.");
                 return;
             }
-            service.updateTalep(this.getSelected(), "Talep güncellendi.");
+            service.updateTalep(this.getSelected());
             FacesUtil.successMessage(Constants.KAYIT_GUNCELLENDI);
         } catch (Exception ex) {
             log.error(null, ex);
@@ -115,7 +129,34 @@ public class OrtTalepController extends AbstractController<OrtTalep> {
 
     public void readInfo() {
         if (this.getSelected() != null) {
-            durumGecmisiList = service.findDurumGecmisiByTalep(this.getSelected());
+            durumGecmisiList = workflowService.durumGecmisi(this.getSelected());
+            kullanilabilirIslemler = workflowService.kullanilabilirIslemler(this.getSelected());
+            bekleyenIslem = workflowService.bekleyenIslem(this.getSelected().getDurum());
+            gecisAciklama = null;
+        }
+    }
+
+    /**
+     * Merkezi workflow üzerinden durum geçişi uygular. XHTML bu metodu çağırır;
+     * durum doğrudan değiştirilmez.
+     */
+    public void gecisYap(EnumOrtTalepIslem islem) {
+        if (this.getSelected() == null || this.getSelected().getId() == null || islem == null) {
+            FacesUtil.addErrorMessage("Geçersiz talep veya işlem.");
+            return;
+        }
+        try {
+            workflowService.gecisYap(this.getSelected().getId(), islem, gecisAciklama);
+            OrtTalep guncel = service.find(this.getSelected().getId());
+            this.setSelected(guncel);
+            FacesUtil.successMessage(islem.getDisplayValue() + " " + Constants.KAYIT_GUNCELLENDI);
+            gecisAciklama = null;
+            readInfo();
+        } catch (IllegalArgumentException ex) {
+            FacesUtil.addErrorMessage(ex.getMessage());
+        } catch (Exception ex) {
+            log.error(null, ex);
+            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
         }
     }
 

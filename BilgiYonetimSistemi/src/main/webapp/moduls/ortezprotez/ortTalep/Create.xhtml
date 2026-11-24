@@ -45,14 +45,7 @@
         </p:selectOneMenu>
 
         <p:outputLabel value="#{messages.durumLabel}" for="@next"/>
-        <p:selectOneMenu id="durum" value="#{ortTalepController.selected.durum}"
-                         required="true" converter="omnifaces.SelectItemsConverter">
-            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
-            <f:selectItems value="#{enumOrtTalepDurumu.ALL_VALUES}"
-                           var="durum"
-                           itemLabel="#{durum.displayValue}"
-                           itemValue="#{durum}"/>
-        </p:selectOneMenu>
+        <p:inputText id="durum" value="#{ortTalepController.selected.durum.displayValue}" readonly="true"/>
 
         <p:outputLabel value="#{messages.teknikerLabel}" for="@next"/>
         <p:selectOneMenu id="tekniker" value="#{ortTalepController.selected.teknikerOrtPersonel}" filter="true"
