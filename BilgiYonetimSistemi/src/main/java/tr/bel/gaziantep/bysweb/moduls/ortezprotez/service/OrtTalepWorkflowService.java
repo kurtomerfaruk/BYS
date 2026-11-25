@@ -87,6 +87,49 @@ public class OrtTalepWorkflowService implements java.io.Serializable {
         em.flush();
     }
 
+    /**
+     * "Hasta Geldi" türündeki işlemler için: ilgili randevuyu da GELDI yapar,
+     * sonra talep durumunu geçirir. Böylece ayrıca randevu sekmesine gidilmesine gerek kalmaz.
+     */
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void applyAttendanceTransition(Integer talepId, EnumOrtTalepIslem action, String description) {
+        if (talepId == null || action == null) {
+            return;
+        }
+        EnumOrtRandevuTuru randevuTuru = attendanceTypeOf(action);
+        if (randevuTuru != null) {
+            OrtTalep talep = em.find(OrtTalep.class, talepId);
+            if (talep != null) {
+                java.util.List<OrtRandevu> randevular = em.createQuery(
+                                "SELECT r FROM OrtRandevu r WHERE r.aktif=true AND r.ortTalep.id=:talepId " +
+                                        "AND r.randevuTuru=:tur ORDER BY r.randevuTarihi DESC",
+                                OrtRandevu.class)
+                        .setParameter("talepId", talepId)
+                        .setParameter("tur", randevuTuru)
+                        .getResultList();
+                if (!randevular.isEmpty()) {
+                    OrtRandevu randevu = randevular.get(0);
+                    if (randevu.getDurum() != EnumOrtRandevuDurumu.GELDI
+                            && randevu.getDurum() != EnumOrtRandevuDurumu.TAMAMLANDI) {
+                        randevu.setDurum(EnumOrtRandevuDurumu.GELDI);
+                        em.merge(randevu);
+                        em.flush();
+                    }
+                }
+            }
+        }
+        applyTransition(talepId, action, description);
+    }
+
+    private EnumOrtRandevuTuru attendanceTypeOf(EnumOrtTalepIslem action) {
+        return switch (action) {
+            case ON_MUAYENEYE_GEL -> EnumOrtRandevuTuru.ON_MUAYENE;
+            case OLCU_AL -> EnumOrtRandevuTuru.OLCU;
+            case PROVA_YAP -> EnumOrtRandevuTuru.PROVA;
+            default -> null;
+        };
+    }
+
 
     /**
      * Randevu "Geldi"/"Tamamlandı" durumuna geçtiğinde ilgili talep geçişini uygular.
@@ -126,6 +169,46 @@ public class OrtTalepWorkflowService implements java.io.Serializable {
             case ON_MUAYENE -> EnumOrtTalepIslem.ON_MUAYENEYE_GEL;
             case OLCU -> EnumOrtTalepIslem.OLCU_AL;
             case PROVA, YENIDEN_PROVA -> EnumOrtTalepIslem.PROVA_YAP;
+            default -> null;
+        };
+    }
+
+    /**
+     * "Randevu Oluştur" işlemleri için: randevu kaydını ve talep durum geçişini
+     * tek transaction'da yapar. Aynı talep/tipte planlanmış randevu varsa tekrar oluşturmaz.
+     */
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void createAppointmentAndTransition(Integer talepId, EnumOrtTalepIslem action, String description) {
+        if (talepId == null || action == null) {
+            return;
+        }
+        EnumOrtRandevuTuru randevuTuru = appointmentTypeOf(action);
+        if (randevuTuru == null) {
+            applyTransition(talepId, action, description);
+            return;
+        }
+
+        OrtTalep talep = em.find(OrtTalep.class, talepId);
+        if (talep != null && !ortRandevuService.existsPlanned(talep, randevuTuru)) {
+            OrtRandevu randevu = OrtRandevu.builder()
+                    .ortTalep(talep)
+                    .ortKisi(talep.getOrtKisi())
+                    .randevuTuru(randevuTuru)
+                    .randevuTarihi(LocalDateTime.now().plusDays(1).withHour(9).withMinute(0).withSecond(0).withNano(0))
+                    .durum(tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtRandevuDurumu.PLANLANDI)
+                    .build();
+            em.persist(randevu);
+            em.flush();
+        }
+        applyTransition(talepId, action, description);
+    }
+
+    private EnumOrtRandevuTuru appointmentTypeOf(EnumOrtTalepIslem action) {
+        return switch (action) {
+            case ON_MUAYENE_RANDEVUSU -> EnumOrtRandevuTuru.ON_MUAYENE;
+            case OLCU_RANDEVUSU -> EnumOrtRandevuTuru.OLCU;
+            case PROVA_RANDEVUSU -> EnumOrtRandevuTuru.PROVA;
+            case YENIDEN_PROVA_RANDEVUSU -> EnumOrtRandevuTuru.YENIDEN_PROVA;
             default -> null;
         };
     }

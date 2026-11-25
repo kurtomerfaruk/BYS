@@ -4,191 +4,309 @@
       xmlns:ui="jakarta.faces.facelets"
       xmlns:h="jakarta.faces.html"
       xmlns:f="jakarta.faces.core"
-      xmlns:p="primefaces"
->
+      xmlns:p="primefaces">
 
 <ui:composition>
 
     <p:dialog id="OrtTalepViewDlg" widgetVar="OrtTalepViewDialog"
               header="#{messages.dialogKayitBilgisi}"
               modal="true" resizable="false" closeOnEscape="true" responsive="true"
-              appendTo="@(body)" fitViewport="true" position="top"
-              maximizable="true" style="min-width: 900px;">
+              appendTo="@(body)" fitViewport="true" position="top" style="min-width: 1000px; max-width: 1100px;">
 
         <h:form id="OrtTalepViewForm">
 
-            <div class="card custom-card">
-                <div class="card-body">
-
-                    <div class="row g-2 mb-3">
-                        <div class="col-md-3">
-                            <strong>#{messages.talepNoLabel}</strong>
-                            <h:outputText value="#{ortTalepController.selected.talepNo}"/>
-                        </div>
-                        <div class="col-md-3">
-                            <strong>#{messages.adSoyadLabel}</strong>
+            <!-- 1) ÖZET KARTI -->
+            <div class="otd-card otd-pad">
+                <div class="otd-summary">
+                    <div class="otd-avatar">
+                        <h:outputText value="#{ortTalepController.selected.ortKisi.gnlKisi.adSoyad.charAt(0)}"/>
+                    </div>
+                    <div class="otd-who">
+                        <div class="name">
                             <h:outputText value="#{ortTalepController.selected.ortKisi.gnlKisi.adSoyad}"/>
                         </div>
-                        <div class="col-md-3">
-                            <strong>#{messages.durumLabel}</strong>
-                            <span class="badge bg-primary-transparent text-primary">
-                                #{ortTalepController.selected.durum.displayValue}
-                            </span>
-                        </div>
-                        <div class="col-md-3">
-                            <strong>#{messages.talepTipiLabel}</strong>
-                            <h:outputText value="#{ortTalepController.selected.talepTipi.displayValue}"/>
-                        </div>
-                        <div class="col-md-3">
-                            <strong>#{messages.teknikerLabel}</strong>
-                            <h:outputText value="#{ortTalepController.selected.teknikerOrtPersonel.gnlPersonel.gnlKisi.adSoyad}"/>
-                        </div>
-                        <div class="col-md-3">
-                            <strong>#{messages.fizyoterapistLabel}</strong>
-                            <h:outputText value="#{ortTalepController.selected.fizyoterapistOrtPersonel.gnlPersonel.gnlKisi.adSoyad}"/>
-                        </div>
-                        <div class="col-md-3">
-                            <strong>#{messages.projeLabel}</strong>
-                            <h:outputText value="#{ortTalepController.selected.ortProje.tanim}"/>
-                        </div>
-                        <div class="col-md-3">
-                            <strong>#{messages.sutKoduLabel}</strong>
-                            <h:outputText value="#{ortTalepController.selected.ortSutKodu.kod} - #{ortTalepController.selected.ortSutKodu.tanim}"/>
+                        <div class="meta">
+                            <h:outputText value="#{messages.tcKimlikNoText}"/>:
+                            <h:outputText value="#{ortTalepController.selected.ortKisi.gnlKisi.tcKimlikNo}"/>
+                            &nbsp;·&nbsp;
+                            <h:outputText value="#{ortTalepController.selected.ortKisi.gnlKisi.telefon}"/>
+                            &nbsp;·&nbsp;
+                            <h:outputText value="#{ortTalepController.selected.ortKisi.gnlKisi.gnlIlce.tanim}"/>
                         </div>
                     </div>
-
-                    <div class="alert alert-info py-2">
-                        <i class="ti ti-info-circle me-2"/>
-                        <strong>#{messages.bekleyenIslemLabel}:</strong>
-                        <h:outputText value="#{ortTalepController.pendingAction}"/>
-                    </div>
-
-                    <!-- Görsel süreç göstergesi (stepper) -->
-                    <ul class="nav nav-tabs mb-3 tab-style-8 scaleX" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="ortTalepSurecTab" data-bs-toggle="tab"
-                                    data-bs-target="#ortTalepSurecPane" type="button" role="tab">Süreç
-                            </button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="ortTalepRandevuTab" data-bs-toggle="tab"
-                                    data-bs-target="#ortTalepRandevuPane" type="button" role="tab">#{messages.randevuListesi}</button>
-                        </li>
-                    </ul>
-
-                    <div class="tab-content">
-                        <div class="tab-pane active show" id="ortTalepSurecPane" role="tabpanel">
-                            <div class="card-body border rounded mb-3">
-                                <div class="d-flex flex-wrap gap-2">
-                                    <ui:repeat value="#{enumOrtTalepDurumu.ALL_VALUES}" var="durum">
-                                        <span class="badge #{durum == ortTalepController.selected.durum ? 'bg-primary' : 'bg-light text-muted'}"
-                                              style="padding: 6px 10px;">
-                                            #{durum.displayValue}
-                                        </span>
-                                    </ui:repeat>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="tab-pane" id="ortTalepRandevuPane" role="tabpanel">
-                            <div class="d-flex flex-wrap gap-2 mb-3">
-                                <ui:repeat value="#{enumRandevuTuru.ALL_VALUES}" var="tur">
-                                    <p:commandButton value="#{tur.displayValue}" icon="pi pi-calendar-plus"
-                                                     styleClass="ui-button-secondary"
-                                                     actionListener="#{ortRandevuController.prepareCreateForTalep(ortTalepController.selected)}"
-                                                     update=":OrtRandevuCreateForm"
-                                                     oncomplete="PF('OrtRandevuCreateDialog').show()"
-                                                     rendered="#{syKullaniciController.hasPermission('ortrandevu:ekle')}"/>
-                                </ui:repeat>
-                            </div>
-                            <p:dataTable value="#{ortRandevuController.getTalepRandevulari(ortTalepController.selected)}"
-                                         var="randevu" emptyMessage="#{messages.kayitBulunamadi}"
-                                         styleClass="w-100" size="small">
-                                <p:column headerText="#{messages.randevuTuruText}">
-                                    <h:outputText value="#{randevu.randevuTuru.displayValue}"/>
-                                </p:column>
-                                <p:column headerText="#{messages.randevuTarihiText}">
-                                    <h:outputText value="#{randevu.randevuTarihi}">
-                                        <f:convertDateTime pattern="#{messages.tarihSaatFormat}" type="localDateTime"/>
-                                    </h:outputText>
-                                </p:column>
-                                <p:column headerText="#{messages.sorumluPersonelText}">
-                                    <h:outputText value="#{randevu.ortPersonel.gnlPersonel.gnlKisi.adSoyad}"/>
-                                </p:column>
-                                <p:column headerText="#{messages.durumText}">
-                                    <h:outputText value="#{randevu.durum.displayValue}"/>
-                                </p:column>
-                                <p:column headerText="#{messages.sonucText}">
-                                    <h:outputText value="#{randevu.sonuc}"/>
-                                </p:column>
-                                <p:column headerText="#{messages.islemTarihiLabel}" style="width: 240px;">
-                                    <p:commandButton value="Geldi" icon="pi pi-check" styleClass="ui-button-success"
-                                                     actionListener="#{ortRandevuController.markAttended(randevu)}"
-                                                     process="@this" update="@form,:growl"
-                                                     rendered="#{randevu.durum == enumRandevuDurumu.PLANLANDI and syKullaniciController.hasPermission('ortrandevu:guncelle')}"/>
-                                    <p:commandButton value="Tamamla" icon="pi pi-check-circle" styleClass="ui-button-primary"
-                                                     actionListener="#{ortRandevuController.markCompleted(randevu)}"
-                                                     process="@this" update="@form,:growl"
-                                                     rendered="#{randevu.durum == enumRandevuDurumu.GELDI and syKullaniciController.hasPermission('ortrandevu:guncelle')}"/>
-                                </p:column>
-                            </p:dataTable>
-                        </div>
-                    </div>
-
-                    <!-- Bekleyen işlem aksiyonları -->
-                    <h:panelGroup rendered="#{not empty ortTalepController.availableActions}">
-                        <p:outputLabel value="#{messages.yapilacakIslemLabel}" for="gecisAciklama"/>
-                        <p:inputTextarea id="gecisAciklama" rows="2" styleClass="w-100 mb-2"
-                                         value="#{ortTalepController.transitionDescription}"
-                                         placeholder="İşlem açıklaması / red gerekçesi"/>
-                        <div class="d-flex flex-wrap gap-2 mb-3">
-                            <ui:repeat value="#{ortTalepController.availableActions}" var="islem">
-                                <p:commandButton value="#{islem.displayValue}" icon="#{islem.icon}"
-                                                 styleClass="ui-button-primary"
-                                                 actionListener="#{ortTalepController.applyTransition(islem)}"
-                                                 process="@form"
-                                                 update="@form,:growl"
-                                                 onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
-                            </ui:repeat>
-                        </div>
-                    </h:panelGroup>
-
-                    <!-- İşlem geçmişi -->
-                    <h:outputText value="#{messages.islemGecmisiLabel}"/>
-                    <p:dataTable value="#{ortTalepController.statusHistory}" var="gecmis"
-                                 emptyMessage="#{messages.kayitBulunamadi}" styleClass="w-100" size="small">
-                        <p:column headerText="#{messages.tarihText}">
-                            <h:outputText value="#{gecmis.islemTarihi}">
-                                <f:convertDateTime pattern="#{messages.tarihSaatFormat}" type="localDateTime"/>
-                            </h:outputText>
-                        </p:column>
-                        <p:column headerText="#{messages.eskiDurumLabel}">
-                            <h:outputText value="#{gecmis.eskiDurum.displayValue}"/>
-                        </p:column>
-                        <p:column headerText="#{messages.yeniDurumLabel}">
-                            <h:outputText value="#{gecmis.yeniDurum.displayValue}"/>
-                        </p:column>
-                        <p:column headerText="#{messages.islemiYapanLabel}">
-                            <h:outputText value="#{gecmis.islemiYapanSyKullanici.gnlPersonel.gnlKisi.adSoyad}"/>
-                        </p:column>
-                        <p:column headerText="#{messages.aciklamaText}">
-                            <h:outputText value="#{gecmis.aciklama}"/>
-                        </p:column>
-                    </p:dataTable>
-
+                    <span class="otd-pill blue">
+                        <h:outputText value="#{ortTalepController.selected.talepTipi.displayValue}"/>
+                    </span>
+                    <span class="otd-pill big green">
+                        <h:outputText value="#{ortTalepController.selected.durum.displayValue}"/>
+                    </span>
                 </div>
-                <div class="card-footer">
-                    <div class="float-end">
-                        <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
-                                         value="#{messages.buttonKapat}"
-                                         onclick="PF('OrtTalepViewDialog').hide()" immediate="true"/>
+
+                <div class="otd-facts">
+                    <div class="otd-fact">
+                        <label>#{messages.talepNoLabel}</label>
+                        <div><h:outputText value="#{ortTalepController.selected.talepNo}"/></div>
+                    </div>
+                    <div class="otd-fact">
+                        <label>#{messages.talepTarihiLabel}</label>
+                        <div><h:outputText value="#{ortTalepController.selected.talepTarihi}">
+                            <f:convertDateTime pattern="#{messages.tarihSaatFormat}" type="localDateTime"/>
+                        </h:outputText></div>
+                    </div>
+                    <div class="otd-fact">
+                        <label>#{messages.teknikerLabel}</label>
+                        <div><h:outputText value="#{ortTalepController.selected.teknikerOrtPersonel.gnlPersonel.gnlKisi.adSoyad}"/></div>
+                    </div>
+                    <div class="otd-fact">
+                        <label>#{messages.fizyoterapistLabel}</label>
+                        <div><h:outputText value="#{ortTalepController.selected.fizyoterapistOrtPersonel.gnlPersonel.gnlKisi.adSoyad}"/></div>
+                    </div>
+                    <div class="otd-fact">
+                        <label>#{messages.projeLabel}</label>
+                        <div><h:outputText value="#{ortTalepController.selected.ortProje.tanim}"/></div>
+                    </div>
+                    <div class="otd-fact">
+                        <label>#{messages.sutKoduLabel}</label>
+                        <div><h:outputText value="#{ortTalepController.selected.ortSutKodu.kod}"/></div>
                     </div>
                 </div>
             </div>
 
-        </h:form>
+            <!-- 2) STEPPER: 10 ana aşama -->
+            <div class="otd-card otd-pad">
+                <div class="otd-steps">
+                    <ui:repeat value="#{ortTalepController.processStages}" var="stage">
+                        <div class="otd-step #{stage.cssClass}">
+                            <div class="dot">
+                                <h:outputText value="#{stage.sira}" rendered="#{stage.cssClass == 'current'}"/>
+                                <h:outputText value="✓" rendered="#{stage.cssClass == 'done'}"/>
+                            </div>
+                            <div class="lbl">
+                                <h:outputText value="#{stage.ad}"/>
+                                <small><h:outputText value="#{stage.detay}"/></small>
+                            </div>
+                        </div>
+                    </ui:repeat>
+                </div>
+            </div>
 
+            <!-- 3) SIRADAKİ İŞLEM -->
+            <ui:fragment rendered="#{ortTalepController.primaryAction != null}">
+                <div class="otd-card otd-pad otd-next">
+                    <div class="ic"><i class="pi pi-arrow-right"/></div>
+                    <div class="txt">
+                        <h3>
+                            <h:outputText value="#{messages.siradakiIslemLabel}"/>
+                            <h:outputText value="#{ortTalepController.primaryAction.displayValue}"/>
+                        </h3>
+                        <p><h:outputText value="#{ortTalepController.pendingAction}"/></p>
+                        <!-- Personel ataması adımında tekniker/fizyoterapist seçimi -->
+                        <h:panelGroup rendered="#{ortTalepController.primaryAction == enumOrtTalepIslem.PERSONEL_ATA}">
+                            <table style="width:100%;margin-top:10px;font-size:13px;">
+                                <tr>
+                                    <td style="padding:4px 8px 4px 0;width:140px;">
+                                        <h:outputText value="#{messages.teknikerLabel}"/>
+                                    </td>
+                                    <td style="padding:4px 0;">
+                                        <p:selectOneMenu value="#{ortTalepController.selected.teknikerOrtPersonel}"
+                                                         filter="true" style="width:100%;"
+                                                         converter="omnifaces.SelectItemsConverter">
+                                            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+                                            <f:selectItems value="#{ortPersonelController.items}" var="p"
+                                                           itemLabel="#{p.gnlPersonel.gnlKisi.adSoyad}" itemValue="#{p}"/>
+                                        </p:selectOneMenu>
+                                    </td>
+                                    <td style="padding:4px 8px 4px 16px;width:140px;">
+                                        <h:outputText value="#{messages.fizyoterapistLabel}"/>
+                                    </td>
+                                    <td style="padding:4px 0;">
+                                        <p:selectOneMenu value="#{ortTalepController.selected.fizyoterapistOrtPersonel}"
+                                                         filter="true" style="width:100%;"
+                                                         converter="omnifaces.SelectItemsConverter">
+                                            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+                                            <f:selectItems value="#{ortPersonelController.items}" var="p"
+                                                           itemLabel="#{p.gnlPersonel.gnlKisi.adSoyad}" itemValue="#{p}"/>
+                                        </p:selectOneMenu>
+                                    </td>
+                                </tr>
+                            </table>
+                        </h:panelGroup>
+                        <p:inputTextarea styleClass="otd-note"
+                                         value="#{ortTalepController.transitionDescription}"
+                                         placeholder="#{messages.islemAciklamaIpucuText}"
+                                         rows="2" autoResize="false"/>
+                        <div class="otd-more">
+                            <h:outputText value="#{messages.digerIslemlerLabel}"/>
+                            <ui:repeat value="#{ortTalepController.secondaryActions}" var="action">
+                                <p:commandLink value="#{action.displayValue}"
+                                               actionListener="#{ortTalepController.applyTransition(action)}"
+                                               process="@form" update="@form,:growl"
+                                               style="margin-right: 10px;"/>
+                            </ui:repeat>
+                        </div>
+                    </div>
+                    <p:commandButton value="#{ortTalepController.primaryAction.displayValue}"
+                                     icon="#{ortTalepController.primaryAction.icon}"
+                                     styleClass="ui-button-primary"
+                                     actionListener="#{ortTalepController.applyTransition(ortTalepController.primaryAction)}"
+                                     process="@form" update="@form,:growl"
+                                     onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                </div>
+            </ui:fragment>
+
+            <ui:fragment rendered="#{ortTalepController.primaryAction == null}">
+                <div class="otd-card otd-pad">
+                    <div class="otd-next" style="border-color:#dcfce7;background:linear-gradient(100deg,#ecfdf5,#f8fafc)">
+                        <div class="ic" style="background:#16a34a"><i class="pi pi-check"/></div>
+                        <div class="txt">
+                            <h3><h:outputText value="#{messages.surecTamamlandiLabel}"/></h3>
+                            <p><h:outputText value="#{ortTalepController.pendingAction}"/></p>
+                        </div>
+                    </div>
+                </div>
+            </ui:fragment>
+
+            <!-- 4) SEKMELİ İÇERİK -->
+            <div class="otd-card">
+                <div class="otd-tabs">
+                    <button type="button" class="otd-tab active" onclick="otdTab('genel',this)">
+                        <h:outputText value="#{messages.genelBilgilerLabel}"/>
+                    </button>
+                    <button type="button" class="otd-tab" onclick="otdTab('randevu',this)">
+                        <h:outputText value="#{messages.randevuListesi}"/>
+                        <span class="cnt"><h:outputText value="#{ortTalepController.appointmentCount}"/></span>
+                    </button>
+                    <button type="button" class="otd-tab" onclick="otdTab('belge',this)">
+                        <h:outputText value="#{messages.belgelerLabel}"/>
+                        <span class="cnt">0</span>
+                    </button>
+                    <button type="button" class="otd-tab" onclick="otdTab('gecmis',this)">
+                        <h:outputText value="#{messages.islemGecmisiLabel}"/>
+                    </button>
+                </div>
+
+                <div class="otd-pane active" id="otd-genel">
+                    <div class="otd-kv">
+                        <div><label>#{messages.talepTipiLabel}</label>
+                            <div><h:outputText value="#{ortTalepController.selected.talepTipi.displayValue}"/></div>
+                        </div>
+                        <div><label>#{messages.teknikerLabel}</label>
+                            <div><h:outputText value="#{ortTalepController.selected.teknikerOrtPersonel.gnlPersonel.gnlKisi.adSoyad}"/></div>
+                        </div>
+                        <div><label>#{messages.fizyoterapistLabel}</label>
+                            <div><h:outputText value="#{ortTalepController.selected.fizyoterapistOrtPersonel.gnlPersonel.gnlKisi.adSoyad}"/></div>
+                        </div>
+                        <div><label>#{messages.projeLabel}</label>
+                            <div><h:outputText value="#{ortTalepController.selected.ortProje.tanim}"/></div>
+                        </div>
+                        <div><label>#{messages.sutKoduLabel}</label>
+                            <div><h:outputText value="#{ortTalepController.selected.ortSutKodu.tanim}"/></div>
+                        </div>
+                        <div><label>#{messages.aciklamaLabel}</label>
+                            <div><h:outputText value="#{ortTalepController.selected.aciklama}"/></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="otd-pane" id="otd-randevu">
+                    <div class="d-flex flex-wrap gap-2 mb-3">
+                        <ui:repeat value="#{enumRandevuTuru.ALL_VALUES}" var="tur">
+                            <p:commandButton value="#{tur.displayValue}" icon="pi pi-calendar-plus"
+                                             styleClass="ui-button-secondary"
+                                             actionListener="#{ortRandevuController.prepareCreateForTalep(ortTalepController.selected)}"
+                                             update=":OrtRandevuCreateForm"
+                                             oncomplete="PF('OrtRandevuCreateDialog').show()"
+                                             rendered="#{syKullaniciController.hasPermission('ortrandevu:ekle')}"/>
+                        </ui:repeat>
+                    </div>
+                    <p:dataTable value="#{ortRandevuController.getTalepRandevulari(ortTalepController.selected)}"
+                                 var="randevu" emptyMessage="#{messages.kayitBulunamadi}"
+                                 styleClass="w-100" size="small">
+                        <p:column headerText="#{messages.randevuTuruText}">
+                            <h:outputText value="#{randevu.randevuTuru.displayValue}"/>
+                        </p:column>
+                        <p:column headerText="#{messages.randevuTarihiText}">
+                            <h:outputText value="#{randevu.randevuTarihi}">
+                                <f:convertDateTime pattern="#{messages.tarihSaatFormat}" type="localDateTime"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="#{messages.sorumluPersonelText}">
+                            <h:outputText value="#{randevu.ortPersonel.gnlPersonel.gnlKisi.adSoyad}"/>
+                        </p:column>
+                        <p:column headerText="#{messages.durumText}">
+                            <span class="otd-pill #{randevu.durum == enumRandevuDurumu.GELDI or randevu.durum == enumRandevuDurumu.TAMAMLANDI ? 'green' : (randevu.durum == enumRandevuDurumu.GELMEDI or randevu.durum == enumRandevuDurumu.IPTAL_EDILDI ? 'red' : 'gray')}">
+                                <h:outputText value="#{randevu.durum.displayValue}"/>
+                            </span>
+                        </p:column>
+                        <p:column headerText="#{messages.sonucText}">
+                            <h:outputText value="#{randevu.sonuc}"/>
+                        </p:column>
+                        <p:column headerText="#{messages.islemTarihiText}" style="width: 200px;">
+                            <p:commandButton value="Geldi" icon="pi pi-check" styleClass="ui-button-success"
+                                             actionListener="#{ortRandevuController.markAttended(randevu)}"
+                                             process="@this" update="@form,:growl"
+                                             rendered="#{randevu.durum == enumRandevuDurumu.PLANLANDI and syKullaniciController.hasPermission('ortrandevu:guncelle')}"/>
+                            <p:commandButton value="Tamamla" icon="pi pi-check-circle" styleClass="ui-button-primary"
+                                             actionListener="#{ortRandevuController.markCompleted(randevu)}"
+                                             process="@this" update="@form,:growl"
+                                             rendered="#{randevu.durum == enumRandevuDurumu.GELDI and syKullaniciController.hasPermission('ortrandevu:guncelle')}"/>
+                        </p:column>
+                    </p:dataTable>
+                </div>
+
+                <div class="otd-pane" id="otd-belge">
+                    <p class="otd-hint">
+                        <h:outputText value="#{messages.belgeBeklenmiyor}"/>
+                    </p>
+                </div>
+
+                <div class="otd-pane" id="otd-gecmis">
+                    <div class="otd-timeline">
+                        <ui:repeat value="#{ortTalepController.statusHistory}" var="gecmis">
+                            <div class="otd-event">
+                                <div class="eh">
+                                    <span class="et"><h:outputText value="#{gecmis.yeniDurum.displayValue}"/></span>
+                                    <span class="ed"><h:outputText value="#{gecmis.islemTarihi}">
+                                        <f:convertDateTime pattern="#{messages.tarihSaatFormat}" type="localDateTime"/>
+                                    </h:outputText></span>
+                                </div>
+                                <div class="eb"><h:outputText value="#{gecmis.aciklama}"/></div>
+                                <div class="eu">
+                                    <h:outputText value="#{messages.islemiYapanLabel}"/>:
+                                    <h:outputText value="#{gecmis.islemiYapanSyKullanici.gnlPersonel.gnlKisi.adSoyad}"/>
+                                </div>
+                            </div>
+                        </ui:repeat>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end">
+                <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                 value="#{messages.buttonKapat}"
+                                 onclick="PF('OrtTalepViewDialog').hide()" immediate="true"/>
+            </div>
+
+        </h:form>
     </p:dialog>
+
+    <script type="text/javascript">
+        function otdTab(id, btn) {
+            document.querySelectorAll('.otd-pane').forEach(function (p) {
+                p.classList.remove('active');
+            });
+            document.querySelectorAll('.otd-tab').forEach(function (t) {
+                t.classList.remove('active');
+            });
+            var pane = document.getElementById('otd-' + id);
+            if (pane) {
+                pane.classList.add('active');
+            }
+            if (btn) {
+                btn.classList.add('active');
+            }
+        }
+    </script>
 
 </ui:composition>
 

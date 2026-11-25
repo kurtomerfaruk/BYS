@@ -12,6 +12,7 @@ import org.primefaces.event.SelectEvent;
 import org.primefaces.model.*;
 import tr.bel.gaziantep.bysweb.core.controller.AbstractController;
 import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtRandevuDurumu;
+import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtTalepIslem;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.core.utils.DateUtil;
 import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
@@ -42,6 +43,8 @@ public class OrtRandevuController extends AbstractController<OrtRandevu> {
     private OrtRandevuService service;
     @Inject
     private OrtTalepWorkflowService workflowService;
+    @Inject
+    private OrtTalepController ortTalepController;
 
     @Getter
     private ScheduleModel lazyEventModel;
@@ -139,7 +142,29 @@ public class OrtRandevuController extends AbstractController<OrtRandevu> {
 
     @Override
     public void saveNew(ActionEvent event) {
+        OrtRandevu randevu = this.getSelected();
         super.saveNew(event);
+
+        // Randevular sekmesinden yeni randevu eklendiğinde talebin durumunu da ilerlet.
+        if (randevu != null && randevu.getOrtTalep() != null && randevu.getRandevuTuru() != null) {
+            EnumOrtTalepIslem action = switch (randevu.getRandevuTuru()) {
+                case ON_MUAYENE -> EnumOrtTalepIslem.ON_MUAYENE_RANDEVUSU;
+                case OLCU -> EnumOrtTalepIslem.OLCU_RANDEVUSU;
+                case PROVA -> EnumOrtTalepIslem.PROVA_RANDEVUSU;
+                case YENIDEN_PROVA -> EnumOrtTalepIslem.YENIDEN_PROVA_RANDEVUSU;
+                default -> null;
+            };
+            if (action != null) {
+                try {
+                    // Randevu zaten oluşturuldu; sadece durum geçişini uygula.
+                    workflowService.applyTransition(randevu.getOrtTalep().getId(), action,
+                            randevu.getRandevuTuru().getDisplayValue() + " randevusu oluşturuldu.");
+                    refreshTalepDetail(randevu);
+                } catch (RuntimeException ex) {
+                    FacesUtil.addErrorMessage(ex.getMessage());
+                }
+            }
+        }
         refreshIncomingEvents();
     }
 
@@ -166,6 +191,7 @@ public class OrtRandevuController extends AbstractController<OrtRandevu> {
     private void applyTransitionAfterSave(OrtRandevu randevu, EnumOrtRandevuDurumu oncekiDurum) {
         try {
             workflowService.applyAppointmentTransition(randevu.getId(), randevu.getDurum());
+            refreshTalepDetail(randevu);
         } catch (RuntimeException ex) {
             // Talep geçişi başarısızsa randevu durumunu geri al.
             randevu.setDurum(oncekiDurum);
@@ -177,6 +203,19 @@ public class OrtRandevuController extends AbstractController<OrtRandevu> {
 
     private void refreshIncomingEvents() {
         incomingEvents = service.findByDateRange(LocalDateTime.now(), DateUtil.lastOfMonth());
+    }
+
+    /**
+     * Talep detay dialogu açıksa seçili talebi ve aksiyonlarını yeniler.
+     */
+    private void refreshTalepDetail(OrtRandevu randevu) {
+        if (randevu == null || randevu.getOrtTalep() == null || ortTalepController == null) {
+            return;
+        }
+        if (ortTalepController.getSelected() != null
+                && java.util.Objects.equals(ortTalepController.getSelected().getId(), randevu.getOrtTalep().getId())) {
+            ortTalepController.readInfo();
+        }
     }
 
     public List<OrtRandevu> getTalepRandevulari(OrtTalep talep) {
@@ -212,6 +251,8 @@ public class OrtRandevuController extends AbstractController<OrtRandevu> {
             // Randevu tamamlandığında talebin durumunu da merkezi workflow üzerinden ilerlet.
             try {
                 workflowService.applyAppointmentTransition(randevu.getId(), durum);
+                // Talep detay ekranı açıksa durum/aksiyonları yenile.
+                refreshTalepDetail(randevu);
             } catch (RuntimeException ex) {
                 // Tutarsızlığı önlemek için randevu durumunu geri al.
                 randevu.setDurum(oncekiDurum);

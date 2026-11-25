@@ -14,21 +14,23 @@ import org.primefaces.event.SelectEvent;
 import tr.bel.gaziantep.bysweb.core.controller.AbstractController;
 import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtTalepDurumu;
 import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtTalepIslem;
+import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtTalepTipi;
 import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.EnumSyFiltreAnahtari;
 import tr.bel.gaziantep.bysweb.core.service.FilterOptionService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
+import tr.bel.gaziantep.bysweb.core.utils.DateUtil;
 import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
+import tr.bel.gaziantep.bysweb.moduls.ortezprotez.dto.OrtTalepAsama;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtKisi;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtTalep;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtTalepDurumGecmisi;
+import tr.bel.gaziantep.bysweb.moduls.ortezprotez.service.OrtRandevuService;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.service.OrtTalepService;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.service.OrtTalepWorkflowService;
 
 import java.io.Serial;
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author OmerFarukKurt
@@ -47,6 +49,8 @@ public class OrtTalepController extends AbstractController<OrtTalep> {
     private OrtTalepService service;
     @Inject
     private OrtTalepWorkflowService workflowService;
+    @Inject
+    private OrtRandevuService ortRandevuService;
     @Inject
     private FilterOptionService filterOptionService;
 
@@ -86,6 +90,7 @@ public class OrtTalepController extends AbstractController<OrtTalep> {
         OrtTalep newItem = super.prepareCreate(event);
         newItem.setTalepTarihi(LocalDateTime.now());
         newItem.setDurum(EnumOrtTalepDurumu.YENI_TALEP);
+        newItem.setTalepTipi(EnumOrtTalepTipi.ON_GORUSME);
         statusHistory = Collections.emptyList();
         return newItem;
     }
@@ -152,10 +157,27 @@ public class OrtTalepController extends AbstractController<OrtTalep> {
             return;
         }
         try {
-            workflowService.applyTransition(this.getSelected().getId(), action, transitionDescription);
+            boolean appointmentAction = action == EnumOrtTalepIslem.ON_MUAYENE_RANDEVUSU
+                    || action == EnumOrtTalepIslem.OLCU_RANDEVUSU
+                    || action == EnumOrtTalepIslem.PROVA_RANDEVUSU
+                    || action == EnumOrtTalepIslem.YENIDEN_PROVA_RANDEVUSU;
+            boolean attendanceAction = action == EnumOrtTalepIslem.ON_MUAYENEYE_GEL
+                    || action == EnumOrtTalepIslem.OLCU_AL
+                    || action == EnumOrtTalepIslem.PROVA_YAP;
+            if (appointmentAction) {
+                workflowService.createAppointmentAndTransition(this.getSelected().getId(), action, transitionDescription);
+            } else if (attendanceAction) {
+                workflowService.applyAttendanceTransition(this.getSelected().getId(), action, transitionDescription);
+            } else if (action == EnumOrtTalepIslem.PERSONEL_ATA) {
+                // Personel ataması talep üzerinde zaten seçili; değişiklikleri kaydet.
+                service.updateTalep(this.getSelected());
+                workflowService.applyTransition(this.getSelected().getId(), action, transitionDescription);
+            } else {
+                workflowService.applyTransition(this.getSelected().getId(), action, transitionDescription);
+            }
             OrtTalep updated = service.find(this.getSelected().getId());
             this.setSelected(updated);
-            FacesUtil.addSuccessMessage(action.getDisplayValue() + " " + Constants.KAYIT_GUNCELLENDI);
+            FacesUtil.addSuccessMessage(action.getDisplayValue() + " " + FacesUtil.message(Constants.KAYIT_GUNCELLENDI));
             transitionDescription = null;
             readInfo();
         } catch (EJBException ex) {
@@ -164,6 +186,150 @@ public class OrtTalepController extends AbstractController<OrtTalep> {
             log.error(null, ex);
             FacesUtil.errorMessage(Constants.HATA_OLUSTU);
         }
+    }
+
+    /**
+     * 10 ana aşamalı yatay süreç göstergesi verisi.
+     */
+    public List<OrtTalepAsama> getProcessStages() {
+        List<OrtTalepAsama> stages = new ArrayList<>();
+        if (this.getSelected() == null || this.getSelected().getDurum() == null) {
+            return stages;
+        }
+
+        EnumOrtTalepDurumu current = this.getSelected().getDurum();
+        boolean rejected = current == EnumOrtTalepDurumu.TALEP_REDDEDILDI
+                || (current == EnumOrtTalepDurumu.KAPATILDI && hasStatusInHistory(EnumOrtTalepDurumu.TALEP_REDDEDILDI));
+        int currentIndex = findPhaseIndex(current);
+
+        for (int i = 0; i < PHASE_LABELS.length; i++) {
+            String label = PHASE_LABELS[i];
+            String css;
+            String detail;
+
+            if (rejected && i == 3) {
+                label = "Talep Reddedildi";
+                css = "rejected";
+                detail = formatHistoryDate(EnumOrtTalepDurumu.TALEP_REDDEDILDI);
+            } else if (rejected && i > 3) {
+                css = "pending";
+                detail = "";
+            } else if (i == 0) {
+                css = "done";
+                detail = formatDate(this.getSelected().getEklemeTarihi());
+            } else if (i == 1) {
+                css = "done";
+                detail = formatDate(this.getSelected().getTalepTarihi());
+            } else if (i < currentIndex) {
+                css = "done";
+                detail = formatPhaseDate(PHASE_STATUSES.get(i));
+            } else if (i == currentIndex) {
+                css = "current";
+                detail = current == EnumOrtTalepDurumu.KAPATILDI ? "kapatıldı" : "şu an";
+            } else {
+                css = "pending";
+                detail = "";
+            }
+            stages.add(new OrtTalepAsama(label, css, detail, i + 1));
+        }
+        return stages;
+    }
+
+    /**
+     * Tek ana işlem (mockup'taki "Sıradaki İşlem" kartı).
+     */
+    public EnumOrtTalepIslem getPrimaryAction() {
+        if (availableActions == null || availableActions.isEmpty()) {
+            return null;
+        }
+        EnumOrtTalepTipi tipi = this.getSelected() == null ? null : this.getSelected().getTalepTipi();
+        if (tipi == EnumOrtTalepTipi.UCRETLI && availableActions.contains(EnumOrtTalepIslem.UCRET_BELIRLE)) {
+            return EnumOrtTalepIslem.UCRET_BELIRLE;
+        }
+        if (tipi == EnumOrtTalepTipi.PROJE_KAPSAMINDA && availableActions.contains(EnumOrtTalepIslem.PROJE_BELIRLE)) {
+            return EnumOrtTalepIslem.PROJE_BELIRLE;
+        }
+        return availableActions.iterator().next();
+    }
+
+    /**
+     * Ana işlem dışında kalan, daha az kullanılan işlemler.
+     */
+    public Set<EnumOrtTalepIslem> getSecondaryActions() {
+        EnumOrtTalepIslem primary = getPrimaryAction();
+        if (primary == null) {
+            return Set.of();
+        }
+        return availableActions.stream()
+                .filter(a -> a != primary)
+                .collect(java.util.stream.Collectors.toCollection(() -> EnumSet.noneOf(EnumOrtTalepIslem.class)));
+    }
+
+    public int getAppointmentCount() {
+        if (this.getSelected() == null) {
+            return 0;
+        }
+        return ortRandevuService.findByTalep(this.getSelected()).size();
+    }
+
+    private static final String[] PHASE_LABELS = {
+            "Kişi Kaydı", "Talep Oluşturma", "Ön Muayene", "Değerlendirme", "Ücret / Proje",
+            "Ölçü", "Belgeler", "Malzeme", "Prova", "Teslimat"
+    };
+
+    private static final List<Set<EnumOrtTalepDurumu>> PHASE_STATUSES = List.of(
+            EnumSet.noneOf(EnumOrtTalepDurumu.class),
+            EnumSet.of(EnumOrtTalepDurumu.YENI_TALEP),
+            EnumSet.of(EnumOrtTalepDurumu.ON_MUAYENE_RANDEVUSU_BEKLIYOR, EnumOrtTalepDurumu.ON_MUAYENEYE_GELDI),
+            EnumSet.of(EnumOrtTalepDurumu.PERSONEL_ATAMASI_BEKLIYOR, EnumOrtTalepDurumu.DEGERLENDIRME_BEKLIYOR, EnumOrtTalepDurumu.TALEP_REDDEDILDI),
+            EnumSet.of(EnumOrtTalepDurumu.UCRET_BELIRLEME_BEKLIYOR, EnumOrtTalepDurumu.SOZLESME_BEKLIYOR,
+                    EnumOrtTalepDurumu.ODEME_BEKLIYOR, EnumOrtTalepDurumu.PROJE_BELIRLENDI),
+            EnumSet.of(EnumOrtTalepDurumu.OLCU_RANDEVUSU_BEKLIYOR, EnumOrtTalepDurumu.OLCU_ALINDI),
+            EnumSet.of(EnumOrtTalepDurumu.FORMLAR_BEKLENIYOR, EnumOrtTalepDurumu.DOKTOR_RAPORU_BEKLENIYOR,
+                    EnumOrtTalepDurumu.RECETE_BEKLENIYOR),
+            EnumSet.of(EnumOrtTalepDurumu.MALZEME_TALEBI_BEKLIYOR, EnumOrtTalepDurumu.DEPO_ONAYI_BEKLIYOR),
+            EnumSet.of(EnumOrtTalepDurumu.PROVA_RANDEVUSU_BEKLIYOR, EnumOrtTalepDurumu.PROVA_YAPILDI,
+                    EnumOrtTalepDurumu.YENIDEN_PROVA_BEKLIYOR),
+            EnumSet.of(EnumOrtTalepDurumu.TESLIMAT_BEKLIYOR, EnumOrtTalepDurumu.TESLIM_EDILDI,
+                    EnumOrtTalepDurumu.TAMAMLANDI, EnumOrtTalepDurumu.KAPATILDI)
+    );
+
+    private int findPhaseIndex(EnumOrtTalepDurumu durum) {
+        for (int i = 0; i < PHASE_STATUSES.size(); i++) {
+            if (PHASE_STATUSES.get(i).contains(durum)) {
+                return i;
+            }
+        }
+        return PHASE_STATUSES.size() - 1;
+    }
+
+    private boolean hasStatusInHistory(EnumOrtTalepDurumu durum) {
+        return statusHistory != null && statusHistory.stream()
+                .anyMatch(g -> g.getYeniDurum() == durum);
+    }
+
+    private String formatPhaseDate(Set<EnumOrtTalepDurumu> statuses) {
+        if (statusHistory == null) {
+            return "";
+        }
+        return statusHistory.stream()
+                .filter(g -> statuses.contains(g.getYeniDurum()))
+                .map(OrtTalepDurumGecmisi::getIslemTarihi)
+                .filter(java.util.Objects::nonNull)
+                .min(LocalDateTime::compareTo)
+                .map(this::formatDate)
+                .orElse("");
+    }
+
+    private String formatHistoryDate(EnumOrtTalepDurumu durum) {
+        return formatPhaseDate(EnumSet.of(durum));
+    }
+
+    private String formatDate(LocalDateTime tarih) {
+        if (tarih == null) {
+            return "";
+        }
+        return DateUtil.localdateTimeToString(tarih, FacesUtil.message("tarihFormat"));
     }
 
     public void selectOrtKisi(SelectEvent<OrtKisi> event) {

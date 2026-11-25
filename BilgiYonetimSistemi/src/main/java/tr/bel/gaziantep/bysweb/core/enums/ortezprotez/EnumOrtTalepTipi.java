@@ -11,6 +11,7 @@ import tr.bel.gaziantep.bysweb.core.enums.BaseEnum;
 @Getter
 public enum EnumOrtTalepTipi implements BaseEnum {
 
+    ON_GORUSME("Ön Görüşme"),
     UCRETLI("Ücretli"),
     UCRETSIZ("Ücretsiz"),
     PROJE_KAPSAMINDA("Proje Kapsamında");

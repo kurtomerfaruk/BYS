@@ -60,6 +60,14 @@ public class OrtRandevuService extends AbstractService<OrtRandevu> {
     }
 
     /**
+     * Aynı talep ve tipte planlanmış (henüz gerçekleşmemiş) randevu var mı?
+     */
+    public boolean existsPlanned(OrtTalep talep, EnumOrtRandevuTuru randevuTuru) {
+        return findByTalepByType(talep, randevuTuru).stream()
+                .anyMatch(r -> r.getDurum() == tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtRandevuDurumu.PLANLANDI);
+    }
+
+    /**
      * Randevunun hasta tarafından gerçekleştirilip gerçekleştirilmediğini kontrol eder.
      */
     public boolean existsAttended(OrtTalep talep, EnumOrtRandevuTuru randevuTuru) {

@@ -1,0 +1,381 @@
+/* Ortez-Protez Talep Detayı — kullanıcı dostu süreç ekranı */
+.otd-card {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    box-shadow: 0 2px 10px rgba(15, 23, 42, .045);
+    margin-bottom: 16px
+}
+
+.otd-pad {
+    padding: 20px 22px
+}
+
+.otd-summary {
+    display: flex;
+    gap: 22px;
+    align-items: center;
+    flex-wrap: wrap
+}
+
+.otd-avatar {
+    width: 58px;
+    height: 58px;
+    border-radius: 14px;
+    background: #eef2ff;
+    color: #4361ee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: 700;
+    flex: none
+}
+
+.otd-who {
+    flex: 1;
+    min-width: 230px
+}
+
+.otd-who .name {
+    font-size: 19px;
+    font-weight: 700
+}
+
+.otd-who .meta {
+    font-size: 13px;
+    color: #64748b;
+    margin-top: 4px
+}
+
+.otd-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 11px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap
+}
+
+.otd-pill.blue {
+    background: #eef2ff;
+    color: #4361ee
+}
+
+.otd-pill.green {
+    background: #ecfdf5;
+    color: #16a34a
+}
+
+.otd-pill.amber {
+    background: #fffbeb;
+    color: #b45309
+}
+
+.otd-pill.red {
+    background: #fef2f2;
+    color: #dc2626
+}
+
+.otd-pill.gray {
+    background: #f1f5f9;
+    color: #64748b
+}
+
+.otd-pill.big {
+    font-size: 15px;
+    padding: 9px 16px
+}
+
+.otd-facts {
+    display: grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap: 14px;
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px dashed #e2e8f0
+}
+
+.otd-fact label {
+    display: block;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    color: #94a3b8;
+    margin-bottom: 4px
+}
+
+.otd-fact div {
+    font-size: 14px;
+    font-weight: 600
+}
+
+.otd-steps {
+    display: flex;
+    align-items: flex-start;
+    overflow-x: auto;
+    padding: 6px 2px 10px
+}
+
+.otd-step {
+    flex: 1;
+    min-width: 88px;
+    text-align: center;
+    position: relative;
+    padding-top: 30px
+}
+
+.otd-step:not(:last-child):after {
+    content: "";
+    position: absolute;
+    top: 13px;
+    left: 50%;
+    width: 100%;
+    height: 3px;
+    background: #e2e8f0;
+    z-index: 0
+}
+
+.otd-step.done:not(:last-child):after {
+    background: #16a34a
+}
+
+.otd-step .dot {
+    position: absolute;
+    top: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #fff;
+    border: 3px solid #e2e8f0;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: #fff
+}
+
+.otd-step.done .dot {
+    background: #16a34a;
+    border-color: #16a34a
+}
+
+.otd-step.current .dot {
+    background: #4361ee;
+    border-color: #4361ee;
+    box-shadow: 0 0 0 5px #eef2ff
+}
+
+.otd-step.rejected .dot {
+    background: #dc2626;
+    border-color: #dc2626
+}
+
+.otd-step .lbl {
+    font-size: 11px;
+    color: #94a3b8;
+    line-height: 1.35
+}
+
+.otd-step.done .lbl {
+    color: #64748b
+}
+
+.otd-step.current .lbl {
+    color: #4361ee;
+    font-weight: 700
+}
+
+.otd-step.rejected .lbl {
+    color: #dc2626;
+    font-weight: 700
+}
+
+.otd-step small {
+    display: block;
+    font-size: 10px;
+    color: #94a3b8;
+    margin-top: 3px
+}
+
+.otd-next {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    background: linear-gradient(100deg, #eef2ff, #f8fafc);
+    border: 1px solid #dbe4ff
+}
+
+.otd-next .ic {
+    width: 48px;
+    height: 48px;
+    border-radius: 13px;
+    background: #4361ee;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex: none
+}
+
+.otd-next .txt {
+    flex: 1
+}
+
+.otd-next .txt h3 {
+    margin: 0 0 4px;
+    font-size: 15px
+}
+
+.otd-next .txt p {
+    margin: 0;
+    font-size: 13px;
+    color: #64748b
+}
+
+.otd-note {
+    width: 100%;
+    margin-top: 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 9px 11px;
+    font-size: 13px;
+    resize: vertical;
+    min-height: 38px
+}
+
+.otd-more {
+    margin-top: 10px;
+    font-size: 12px;
+    color: #64748b
+}
+
+.otd-tabs {
+    display: flex;
+    gap: 6px;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 0 22px;
+    flex-wrap: wrap
+}
+
+.otd-tab {
+    border: 0;
+    background: none;
+    padding: 14px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #64748b;
+    cursor: pointer;
+    border-bottom: 3px solid transparent
+}
+
+.otd-tab.active {
+    color: #4361ee;
+    border-color: #4361ee
+}
+
+.otd-tab .cnt {
+    background: #f1f5f9;
+    border-radius: 999px;
+    padding: 2px 7px;
+    font-size: 11px;
+    margin-left: 5px;
+    color: #64748b
+}
+
+.otd-pane {
+    display: none;
+    padding: 20px 22px
+}
+
+.otd-pane.active {
+    display: block
+}
+
+.otd-hint {
+    font-size: 12px;
+    color: #94a3b8;
+    margin: 0 0 14px
+}
+
+.otd-kv {
+    display: grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap: 16px
+}
+
+.otd-kv label {
+    font-size: 11px;
+    color: #94a3b8;
+    display: block;
+    margin-bottom: 3px
+}
+
+.otd-kv div {
+    font-size: 13px;
+    font-weight: 600
+}
+
+.otd-timeline {
+    position: relative;
+    margin-left: 8px;
+    padding-left: 26px;
+    border-left: 2px solid #e2e8f0
+}
+
+.otd-event {
+    position: relative;
+    padding: 0 0 20px 6px
+}
+
+.otd-event:before {
+    content: "";
+    position: absolute;
+    left: -33px;
+    top: 2px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #fff;
+    border: 3px solid #4361ee
+}
+
+.otd-event:first-child:before {
+    background: #4361ee;
+    box-shadow: 0 0 0 4px #eef2ff
+}
+
+.otd-event .eh {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap
+}
+
+.otd-event .et {
+    font-size: 13px;
+    font-weight: 700
+}
+
+.otd-event .ed {
+    font-size: 11px;
+    color: #94a3b8
+}
+
+.otd-event .eb {
+    font-size: 12px;
+    color: #64748b;
+    margin-top: 5px
+}
+
+.otd-event .eu {
+    font-size: 11px;
+    color: #94a3b8;
+    margin-top: 3px
+}

@@ -47,25 +47,25 @@
         <p:outputLabel value="#{messages.durumLabel}" for="@next"/>
         <p:inputText id="durum" value="#{ortTalepController.selected.durum.displayValue}" readonly="true"/>
 
-        <p:outputLabel value="#{messages.teknikerLabel}" for="@next"/>
-        <p:selectOneMenu id="tekniker" value="#{ortTalepController.selected.teknikerOrtPersonel}" filter="true"
-                         converter="omnifaces.SelectItemsConverter">
-            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
-            <f:selectItems value="#{ortPersonelController.items}"
-                           var="personel"
-                           itemLabel="#{personel.gnlPersonel.gnlKisi.adSoyad}"
-                           itemValue="#{personel}"/>
-        </p:selectOneMenu>
+        <!--        <p:outputLabel value="#{messages.teknikerLabel}" for="@next"/>-->
+        <!--        <p:selectOneMenu id="tekniker" value="#{ortTalepController.selected.teknikerOrtPersonel}" filter="true"-->
+        <!--                         converter="omnifaces.SelectItemsConverter">-->
+        <!--            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>-->
+        <!--            <f:selectItems value="#{ortPersonelController.items}"-->
+        <!--                           var="personel"-->
+        <!--                           itemLabel="#{personel.gnlPersonel.gnlKisi.adSoyad}"-->
+        <!--                           itemValue="#{personel}"/>-->
+        <!--        </p:selectOneMenu>-->
 
-        <p:outputLabel value="#{messages.fizyoterapistLabel}" for="@next"/>
-        <p:selectOneMenu id="fizyoterapist" value="#{ortTalepController.selected.fizyoterapistOrtPersonel}" filter="true"
-                         converter="omnifaces.SelectItemsConverter">
-            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
-            <f:selectItems value="#{ortPersonelController.items}"
-                           var="personel"
-                           itemLabel="#{personel.gnlPersonel.gnlKisi.adSoyad}"
-                           itemValue="#{personel}"/>
-        </p:selectOneMenu>
+        <!--        <p:outputLabel value="#{messages.fizyoterapistLabel}" for="@next"/>-->
+        <!--        <p:selectOneMenu id="fizyoterapist" value="#{ortTalepController.selected.fizyoterapistOrtPersonel}" filter="true"-->
+        <!--                         converter="omnifaces.SelectItemsConverter">-->
+        <!--            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>-->
+        <!--            <f:selectItems value="#{ortPersonelController.items}"-->
+        <!--                           var="personel"-->
+        <!--                           itemLabel="#{personel.gnlPersonel.gnlKisi.adSoyad}"-->
+        <!--                           itemValue="#{personel}"/>-->
+        <!--        </p:selectOneMenu>-->
 
         <p:outputLabel value="#{messages.projeLabel}" for="@next"/>
         <p:selectOneMenu id="ortProje" value="#{ortTalepController.selected.ortProje}" filter="true"
