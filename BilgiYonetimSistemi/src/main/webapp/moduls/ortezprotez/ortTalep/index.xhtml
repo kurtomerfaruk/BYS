@@ -6,10 +6,15 @@
     <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtTalepDurumu" var="enumOrtTalepDurumu"/>
     <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtTalepTipi" var="enumOrtTalepTipi"/>
     <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtTalepIslem" var="enumOrtTalepIslem"/>
+    <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtRandevuTuru" var="enumRandevuTuru"/>
+    <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtRandevuDurumu" var="enumRandevuDurumu"/>
 
     <ui:include src="/moduls/ortezprotez/ortTalep/List.xhtml"/>
     <ui:include src="/moduls/ortezprotez/ortTalep/View.xhtml"/>
     <ui:include src="/moduls/ortezprotez/ortTalep/Edit.xhtml"/>
     <ui:include src="/moduls/ortezprotez/ortTalep/Create.xhtml"/>
+
+    <!-- Talep detayından randevu oluşturmak için dialog -->
+    <ui:include src="/moduls/ortezprotez/ortRandevu/Create.xhtml"/>
 
 </ui:composition>

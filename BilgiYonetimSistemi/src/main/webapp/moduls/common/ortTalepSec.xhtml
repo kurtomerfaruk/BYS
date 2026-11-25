@@ -13,18 +13,18 @@
 </h:head>
 <h:body>
 
-    <h:form id="OrtHastaSec">
+    <h:form id="OrtTalepSec">
         <p:dataTable id="datalist"
-                     value="#{ortStokController.lazyItems}"
+                     value="#{ortTalepController.lazyItems}"
                      var="item"
                      rowKey="#{item.id}"
                      paginator="true"
                      rows="10"
-                     selection="#{ortStokController.selected}"
+                     selection="#{ortTalepController.selected}"
                      paginatorPosition="bottom"
                      lazy="true"
                      pageLinks="5"
-                     filteredValue="#{ortStokController.filtered}"
+                     filteredValue="#{ortTalepController.filtered}"
                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                      currentPageReportTemplate="#{messages.currentPageTemplate}"
                      emptyMessage="#{messages.kayitBulunamadi}"
@@ -32,49 +32,38 @@
                      styleClass="w-100">
 
             <f:facet name="header">
-                #{messages.stokListesi}
+                #{messages.talepListesi}
             </f:facet>
 
-            <p:ajax event="rowDblselect" listener="#{ortStokController.onRowDblSelect}"/>
+            <p:ajax event="rowDblselect" listener="#{ortTalepController.onRowDblSelect}"/>
 
-            <p:column sortBy="#{item.marka}" filterBy="#{item.marka}">
-                <f:facet name="header">
-                    <h:outputText value="#{messages.markaText}"/>
-                </f:facet>
-                <h:outputText value="#{item.marka}"/>
+            <p:column sortBy="#{item.talepNo}" filterBy="#{item.talepNo}">
+                <f:facet name="header"><h:outputText value="#{messages.talepNoText}"/></f:facet>
+                <h:outputText value="#{item.talepNo}"/>
             </p:column>
 
-            <p:column sortBy="#{item.stokKodu}" filterBy="#{item.stokKodu}">
-                <f:facet name="header">
-                    <h:outputText value="#{messages.stokKoduText}"/>
-                </f:facet>
-                <h:outputText value="#{item.stokKodu}"/>
+            <p:column sortBy="#{item.ortKisi.gnlKisi.tcKimlikNo}" filterBy="#{item.ortKisi.gnlKisi.tcKimlikNo}">
+                <f:facet name="header"><h:outputText value="#{messages.tcKimlikNoText}"/></f:facet>
+                <h:outputText value="#{item.ortKisi.gnlKisi.tcKimlikNo}"/>
             </p:column>
 
-            <p:column sortBy="#{item.stokAdi}" filterBy="#{item.stokAdi}">
-                <f:facet name="header">
-                    <h:outputText value="#{messages.stokAdiText}"/>
-                </f:facet>
-                <h:outputText value="#{item.stokAdi}"/>
+            <p:column sortBy="#{item.ortKisi.gnlKisi.ad}" filterBy="#{item.ortKisi.gnlKisi.ad}">
+                <f:facet name="header"><h:outputText value="#{messages.adText}"/></f:facet>
+                <h:outputText value="#{item.ortKisi.gnlKisi.ad}"/>
             </p:column>
 
-            <p:column sortBy="#{item.miktar}" filterBy="#{item.miktar}">
-                <f:facet name="header">
-                    <h:outputText value="#{messages.miktarText}"/>
-                </f:facet>
-                <h:outputText value="#{item.miktar}"/>
+            <p:column sortBy="#{item.durum}" filterBy="#{item.durum}">
+                <f:facet name="header"><h:outputText value="#{messages.durumText}"/></f:facet>
+                <h:outputText value="#{item.durum.displayValue}"/>
             </p:column>
 
             <p:column headerText="#{messages.buttonSec}" style="width: 70px;text-align: center">
-                <p:commandButton icon="pi pi-check" actionListener="#{ortStokController.stokSecKapat(item)}"
+                <p:commandButton icon="pi pi-check" actionListener="#{ortTalepController.closeTalepSelection(item)}"
                                  style="width: 20px !important; height: 20px !important;"/>
             </p:column>
 
         </p:dataTable>
     </h:form>
 
-
 </h:body>
 </html>
-
-

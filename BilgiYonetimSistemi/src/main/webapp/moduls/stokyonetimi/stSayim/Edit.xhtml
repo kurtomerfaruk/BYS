@@ -96,13 +96,13 @@
                                 <h:panelGroup rendered="#{stSayimController.duplicateCount}">
                                     <div style="margin-top:6px;font-size:12px;color:#8a5a00">
                                         Bu stok zaten sayıldı. Ekle veya değiştir
-                                        <p:commandButton value="#{messages.miktarEkle}" icon="pi pi-plus"
+                                        <p:commandButton value="#{messages.buttonMiktarEkle}" icon="pi pi-plus"
                                                          styleClass="ui-button-success ms-1"
                                                          actionListener="#{stSayimController.addToExistingCount}"
                                                          process="sayimHizliPanel"
                                                          update="sayimHizliPanel sayimKalemTable sayimOzetPanel :growl"
                                                          oncomplete="PF('Loading').hide(); stBarkodOdak('StSayimEditForm:sayimBarkod')"/>
-                                        <p:commandButton value="#{messages.degistir}" icon="pi pi-pencil"
+                                        <p:commandButton value="#{messages.buttonDegistir}" icon="pi pi-pencil"
                                                          styleClass="ui-button-secondary ms-1"
                                                          actionListener="#{stSayimController.overwriteCount}"
                                                          process="sayimHizliPanel"
@@ -119,9 +119,9 @@
                                     <p:outputLabel value="#{stSayimController.countedCount}"/>
                                 </b> /
                                     #{stSayimController.selected.kalemler.size()} ·
-                                    #{messages.kalan}: <b><p:outputLabel value="#{stSayimController.remainingCount}"/>
+                                    #{messages.kalanText}: <b><p:outputLabel value="#{stSayimController.remainingCount}"/>
                                 </b> ·
-                                    #{messages.farkli}: <b><p:outputLabel value="#{stSayimController.differenceCount}"/></b>
+                                    #{messages.farkliText}: <b><p:outputLabel value="#{stSayimController.differenceCount}"/></b>
                                     <div class="progress progress-lg custom-progress-3 progress-animate my-2 ozet-progress" role="progressbar"
                                          aria-valuenow="#{stSayimController.completePercentage()}" aria-valuemin="0" aria-valuemax="100">
                                         <div class="progress-bar" style="width: #{stSayimController.completePercentage()}%">
@@ -202,7 +202,7 @@
                             </p:column>
                             <p:column width="70" styleClass="text-center" headerText="İşlem">
                                 <p:commandButton icon="pi pi-ban" styleClass="ui-button-warning rounded-button ui-button-sm"
-                                                 pt:data-tooltip="#{messages.sayilmadi}"
+                                                 pt:data-tooltip="#{messages.sayilmadiText}"
                                                  disabled="#{stSayimController.selected.durum eq 'TAMAMLANDI'
                                                  or stSayimController.selected.durum  eq 'IPTAL'}"
                                                  actionListener="#{stSayimController.markNotCounted(kalemItem)}"

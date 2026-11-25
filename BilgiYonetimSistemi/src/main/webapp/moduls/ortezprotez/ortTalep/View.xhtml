@@ -60,38 +60,92 @@
                     <div class="alert alert-info py-2">
                         <i class="ti ti-info-circle me-2"/>
                         <strong>#{messages.bekleyenIslemLabel}:</strong>
-                        <h:outputText value="#{ortTalepController.bekleyenIslem}"/>
+                        <h:outputText value="#{ortTalepController.pendingAction}"/>
                     </div>
 
                     <!-- Görsel süreç göstergesi (stepper) -->
                     <ul class="nav nav-tabs mb-3 tab-style-8 scaleX" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link active" data-bs-toggle="tab" type="button" role="tab">Süreç</button>
+                            <button class="nav-link active" id="ortTalepSurecTab" data-bs-toggle="tab"
+                                    data-bs-target="#ortTalepSurecPane" type="button" role="tab">Süreç
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="ortTalepRandevuTab" data-bs-toggle="tab"
+                                    data-bs-target="#ortTalepRandevuPane" type="button" role="tab">#{messages.randevuListesi}</button>
                         </li>
                     </ul>
 
-                    <div class="card-body border rounded mb-3">
-                        <div class="d-flex flex-wrap gap-2">
-                            <ui:repeat value="#{enumOrtTalepDurumu.ALL_VALUES}" var="durum">
-                                <span class="badge #{durum == ortTalepController.selected.durum ? 'bg-primary' : 'bg-light text-muted'}"
-                                      style="padding: 6px 10px;">
-                                    #{durum.displayValue}
-                                </span>
-                            </ui:repeat>
+                    <div class="tab-content">
+                        <div class="tab-pane active show" id="ortTalepSurecPane" role="tabpanel">
+                            <div class="card-body border rounded mb-3">
+                                <div class="d-flex flex-wrap gap-2">
+                                    <ui:repeat value="#{enumOrtTalepDurumu.ALL_VALUES}" var="durum">
+                                        <span class="badge #{durum == ortTalepController.selected.durum ? 'bg-primary' : 'bg-light text-muted'}"
+                                              style="padding: 6px 10px;">
+                                            #{durum.displayValue}
+                                        </span>
+                                    </ui:repeat>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane" id="ortTalepRandevuPane" role="tabpanel">
+                            <div class="d-flex flex-wrap gap-2 mb-3">
+                                <ui:repeat value="#{enumRandevuTuru.ALL_VALUES}" var="tur">
+                                    <p:commandButton value="#{tur.displayValue}" icon="pi pi-calendar-plus"
+                                                     styleClass="ui-button-secondary"
+                                                     actionListener="#{ortRandevuController.prepareCreateForTalep(ortTalepController.selected)}"
+                                                     update=":OrtRandevuCreateForm"
+                                                     oncomplete="PF('OrtRandevuCreateDialog').show()"
+                                                     rendered="#{syKullaniciController.hasPermission('ortrandevu:ekle')}"/>
+                                </ui:repeat>
+                            </div>
+                            <p:dataTable value="#{ortRandevuController.getTalepRandevulari(ortTalepController.selected)}"
+                                         var="randevu" emptyMessage="#{messages.kayitBulunamadi}"
+                                         styleClass="w-100" size="small">
+                                <p:column headerText="#{messages.randevuTuruText}">
+                                    <h:outputText value="#{randevu.randevuTuru.displayValue}"/>
+                                </p:column>
+                                <p:column headerText="#{messages.randevuTarihiText}">
+                                    <h:outputText value="#{randevu.randevuTarihi}">
+                                        <f:convertDateTime pattern="#{messages.tarihSaatFormat}" type="localDateTime"/>
+                                    </h:outputText>
+                                </p:column>
+                                <p:column headerText="#{messages.sorumluPersonelText}">
+                                    <h:outputText value="#{randevu.ortPersonel.gnlPersonel.gnlKisi.adSoyad}"/>
+                                </p:column>
+                                <p:column headerText="#{messages.durumText}">
+                                    <h:outputText value="#{randevu.durum.displayValue}"/>
+                                </p:column>
+                                <p:column headerText="#{messages.sonucText}">
+                                    <h:outputText value="#{randevu.sonuc}"/>
+                                </p:column>
+                                <p:column headerText="#{messages.islemTarihiLabel}" style="width: 240px;">
+                                    <p:commandButton value="Geldi" icon="pi pi-check" styleClass="ui-button-success"
+                                                     actionListener="#{ortRandevuController.markAttended(randevu)}"
+                                                     process="@this" update="@form,:growl"
+                                                     rendered="#{randevu.durum == enumRandevuDurumu.PLANLANDI and syKullaniciController.hasPermission('ortrandevu:guncelle')}"/>
+                                    <p:commandButton value="Tamamla" icon="pi pi-check-circle" styleClass="ui-button-primary"
+                                                     actionListener="#{ortRandevuController.markCompleted(randevu)}"
+                                                     process="@this" update="@form,:growl"
+                                                     rendered="#{randevu.durum == enumRandevuDurumu.GELDI and syKullaniciController.hasPermission('ortrandevu:guncelle')}"/>
+                                </p:column>
+                            </p:dataTable>
                         </div>
                     </div>
 
                     <!-- Bekleyen işlem aksiyonları -->
-                    <h:panelGroup rendered="#{not empty ortTalepController.kullanilabilirIslemler}">
+                    <h:panelGroup rendered="#{not empty ortTalepController.availableActions}">
                         <p:outputLabel value="#{messages.yapilacakIslemLabel}" for="gecisAciklama"/>
                         <p:inputTextarea id="gecisAciklama" rows="2" styleClass="w-100 mb-2"
-                                         value="#{ortTalepController.gecisAciklama}"
+                                         value="#{ortTalepController.transitionDescription}"
                                          placeholder="İşlem açıklaması / red gerekçesi"/>
                         <div class="d-flex flex-wrap gap-2 mb-3">
-                            <ui:repeat value="#{ortTalepController.kullanilabilirIslemler}" var="islem">
-                                <p:commandButton value="#{islem.displayValue}" icon="#{islem.ikon}"
+                            <ui:repeat value="#{ortTalepController.availableActions}" var="islem">
+                                <p:commandButton value="#{islem.displayValue}" icon="#{islem.icon}"
                                                  styleClass="ui-button-primary"
-                                                 actionListener="#{ortTalepController.gecisYap(islem)}"
+                                                 actionListener="#{ortTalepController.applyTransition(islem)}"
                                                  process="@form"
                                                  update="@form,:growl"
                                                  onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
@@ -101,7 +155,7 @@
 
                     <!-- İşlem geçmişi -->
                     <h:outputText value="#{messages.islemGecmisiLabel}"/>
-                    <p:dataTable value="#{ortTalepController.durumGecmisiList}" var="gecmis"
+                    <p:dataTable value="#{ortTalepController.statusHistory}" var="gecmis"
                                  emptyMessage="#{messages.kayitBulunamadi}" styleClass="w-100" size="small">
                         <p:column headerText="#{messages.tarihText}">
                             <h:outputText value="#{gecmis.islemTarihi}">

@@ -31,7 +31,6 @@ import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.*;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.service.OrtKisiService;
 
 import java.io.Serial;
-import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -102,28 +101,18 @@ public class OrtKisiController extends AbstractKisiController<OrtKisi> {
 
     }
 
-
     @Override
     public OrtKisi prepareCreate(ActionEvent event) {
-        OrtKisi newItem;
-        try {
-            newItem = OrtKisi.class.getDeclaredConstructor().newInstance();
-            GnlKisi kisi = GnlKisi.builder()
-                    .kayitTarihi(LocalDate.now())
-                    .gnlIl(new GnlIl())
-                    .gnlIlce(new GnlIlce())
-                    .gnlMahalle(new GnlMahalle())
-                    .eklemeYeri(EnumModul.ORTEZ_PROTEZ).build();
-            eyEngelGrubus = new ArrayList<>();
-            newItem.setGnlKisi(kisi);
-            this.setSelected(newItem);
-            clearList();
-            initializeEmbeddableKey();
-            return newItem;
-        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException ex) {
-            log.error(null, ex);
-        }
-        return null;
+        OrtKisi newItem = super.prepareCreate(event);
+        GnlKisi kisi = GnlKisi.builder()
+                .kayitTarihi(LocalDate.now())
+                .gnlIl(new GnlIl())
+                .gnlIlce(new GnlIlce())
+                .gnlMahalle(new GnlMahalle())
+                .eklemeYeri(EnumModul.ORTEZ_PROTEZ).build();
+        newItem.setGnlKisi(kisi);
+        clearList();
+        return newItem;
     }
 
     public void hastaSecKapat(OrtKisi ortHasta) {
@@ -207,6 +196,7 @@ public class OrtKisiController extends AbstractKisiController<OrtKisi> {
         engelinOlusumuList = new ArrayList<>();
         yakinlikDerecesiList = new ArrayList<>();
         amputeSeviyeList = new ArrayList<>();
+        eyEngelGrubus = new ArrayList<>();
     }
 
     @Override

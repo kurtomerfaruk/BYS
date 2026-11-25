@@ -43,7 +43,7 @@ public class SyYetkiService extends AbstractService<SyYetki> {
      * Kullanıcının rol veya doğrudan kullanıcı yetkisi üzerinden verilen yetkiye
      * sahip olup olmadığını kontrol eder. Servis katmanı yetki denetimlerinde kullanılır.
      */
-    public boolean hasYetki(SyKullanici kullanici, String yetkiAnahtari) {
+    public boolean hasPermission(SyKullanici kullanici, String yetkiAnahtari) {
         if (kullanici == null || yetkiAnahtari == null || yetkiAnahtari.isBlank()) {
             return false;
         }

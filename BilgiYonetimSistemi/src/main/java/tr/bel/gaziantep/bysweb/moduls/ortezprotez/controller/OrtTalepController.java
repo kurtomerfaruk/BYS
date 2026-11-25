@@ -1,5 +1,6 @@
 package tr.bel.gaziantep.bysweb.moduls.ortezprotez.controller;
 
+import jakarta.ejb.EJBException;
 import jakarta.faces.event.ActionEvent;
 import jakarta.faces.model.SelectItem;
 import jakarta.faces.view.ViewScoped;
@@ -51,16 +52,16 @@ public class OrtTalepController extends AbstractController<OrtTalep> {
 
     @Getter
     @Setter
-    private List<OrtTalepDurumGecmisi> durumGecmisiList = Collections.emptyList();
+    private List<OrtTalepDurumGecmisi> statusHistory = Collections.emptyList();
     @Getter
     @Setter
-    private Set<EnumOrtTalepIslem> kullanilabilirIslemler = Collections.emptySet();
+    private Set<EnumOrtTalepIslem> availableActions = Collections.emptySet();
     @Getter
     @Setter
-    private String gecisAciklama;
+    private String transitionDescription;
     @Getter
     @Setter
-    private String bekleyenIslem;
+    private String pendingAction;
 
     public OrtTalepController() {
         super(OrtTalep.class);
@@ -85,7 +86,7 @@ public class OrtTalepController extends AbstractController<OrtTalep> {
         OrtTalep newItem = super.prepareCreate(event);
         newItem.setTalepTarihi(LocalDateTime.now());
         newItem.setDurum(EnumOrtTalepDurumu.YENI_TALEP);
-        durumGecmisiList = Collections.emptyList();
+        statusHistory = Collections.emptyList();
         return newItem;
     }
 
@@ -128,11 +129,16 @@ public class OrtTalepController extends AbstractController<OrtTalep> {
     }
 
     public void readInfo() {
+        if (this.getSelected() != null && this.getSelected().getId() != null) {
+            // Detay her açıldığında talebi veritabanından yenile; randevu gibi
+            // başka bir akış durum değiştirmiş olsa bile güncel durum görünsün.
+            this.setSelected(service.find(this.getSelected().getId()));
+        }
         if (this.getSelected() != null) {
-            durumGecmisiList = workflowService.durumGecmisi(this.getSelected());
-            kullanilabilirIslemler = workflowService.kullanilabilirIslemler(this.getSelected());
-            bekleyenIslem = workflowService.bekleyenIslem(this.getSelected().getDurum());
-            gecisAciklama = null;
+            statusHistory = workflowService.getStatusHistory(this.getSelected());
+            availableActions = workflowService.getAvailableActions(this.getSelected());
+            pendingAction = workflowService.getPendingAction(this.getSelected().getDurum());
+            transitionDescription = null;
         }
     }
 
@@ -140,38 +146,38 @@ public class OrtTalepController extends AbstractController<OrtTalep> {
      * Merkezi workflow üzerinden durum geçişi uygular. XHTML bu metodu çağırır;
      * durum doğrudan değiştirilmez.
      */
-    public void gecisYap(EnumOrtTalepIslem islem) {
-        if (this.getSelected() == null || this.getSelected().getId() == null || islem == null) {
+    public void applyTransition(EnumOrtTalepIslem action) {
+        if (this.getSelected() == null || this.getSelected().getId() == null || action == null) {
             FacesUtil.addErrorMessage("Geçersiz talep veya işlem.");
             return;
         }
         try {
-            workflowService.gecisYap(this.getSelected().getId(), islem, gecisAciklama);
-            OrtTalep guncel = service.find(this.getSelected().getId());
-            this.setSelected(guncel);
-            FacesUtil.successMessage(islem.getDisplayValue() + " " + Constants.KAYIT_GUNCELLENDI);
-            gecisAciklama = null;
+            workflowService.applyTransition(this.getSelected().getId(), action, transitionDescription);
+            OrtTalep updated = service.find(this.getSelected().getId());
+            this.setSelected(updated);
+            FacesUtil.addSuccessMessage(action.getDisplayValue() + " " + Constants.KAYIT_GUNCELLENDI);
+            transitionDescription = null;
             readInfo();
-        } catch (IllegalArgumentException ex) {
-            FacesUtil.addErrorMessage(ex.getMessage());
+        } catch (EJBException ex) {
+            FacesUtil.addErrorMessage(ex.getCause().getMessage());
         } catch (Exception ex) {
             log.error(null, ex);
             FacesUtil.errorMessage(Constants.HATA_OLUSTU);
         }
     }
 
-    public void secilenOrtKisi(SelectEvent<OrtKisi> event) {
+    public void selectOrtKisi(SelectEvent<OrtKisi> event) {
         OrtKisi ortKisi = event.getObject();
         if (this.getSelected() != null) {
             this.getSelected().setOrtKisi(ortKisi);
         }
     }
 
-    public void ortTalepSecKapat(OrtTalep ortTalep) {
+    public void closeTalepSelection(OrtTalep ortTalep) {
         PrimeFaces.current().dialog().closeDynamic(ortTalep);
     }
 
     public void onRowDblSelect(SelectEvent<OrtTalep> event) {
-        ortTalepSecKapat(event.getObject());
+        closeTalepSelection(event.getObject());
     }
 }

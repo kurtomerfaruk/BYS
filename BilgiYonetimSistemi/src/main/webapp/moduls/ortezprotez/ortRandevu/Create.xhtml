@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:h="jakarta.faces.html"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <p:dialog widgetVar="OrtRandevuCreateDialog"
+              modal="true"
+              resizable="false"
+              closeOnEscape="true"
+              header="#{messages.dialogYeniKayit}"
+              appendTo="@(body)"
+              responsive="true"
+              onShow="PF('OrtRandevuCreateDialog').initPosition();"
+              fitViewport="true">
+
+        <h:form id="OrtRandevuCreateForm">
+            <h:panelGroup id="display">
+                <p:focus context="display"/>
+                <p:panelGrid columns="2" columnClasses="column" rendered="#{ortRandevuController.selected!=null}"
+                             layout="tabular">
+
+                    <p:outputLabel value="#{messages.talepLabel}" for="@next"/>
+                    <coco:inputWithButton id="inputWithButtonTalep" inputId="ortTalepId"
+                                          inputValue="#{ortRandevuController.selected.ortTalep.talepNo}"
+                                          inputTitle="#{messages.talepNoText}"
+                                          actionListener="#{bysController.openCommonDialog('ortTalepSec')}"
+                                          ajaxListener="#{ortRandevuController.selectTalep}"
+                                          buttonTitle="#{messages.talepSecmelisiniz}"
+                                          size="30"
+                                          dialogId="OrtRandevuCreateDialogId"/>
+
+                    <p:outputLabel value="#{messages.kisiLabel}" for="@next"/>
+                    <p:inputText value="#{ortRandevuController.selected.ortKisi.gnlKisi.adSoyad}" readonly="true" styleClass="inputUpdate"/>
+
+                    <p:outputLabel value="#{messages.randevuTuruLabel}" for="@next"/>
+                    <p:selectOneMenu value="#{ortRandevuController.selected.randevuTuru}" required="true"
+                                     converter="omnifaces.SelectItemsConverter">
+                        <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+                        <f:selectItems value="#{enumRandevuTuru.ALL_VALUES}"
+                                       var="tur"
+                                       itemLabel="#{tur.displayValue}"
+                                       itemValue="#{tur}"/>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel value="#{messages.randevuTarihiLabel}" for="@next"/>
+                    <p:datePicker value="#{ortRandevuController.selected.randevuTarihi}" locale="tr"
+                                  pattern="#{messages.tarihSaatFormat}" mask="true" monthNavigator="true"
+                                  yearNavigator="true" showButtonBar="true" showIcon="true" required="true"/>
+
+                    <p:outputLabel value="#{messages.sorumluPersonelLabel}" for="@next"/>
+                    <p:selectOneMenu value="#{ortRandevuController.selected.ortPersonel}" filter="true"
+                                     converter="omnifaces.SelectItemsConverter">
+                        <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+                        <f:selectItems value="#{ortPersonelController.items}"
+                                       var="personel"
+                                       itemLabel="#{personel.gnlPersonel.gnlKisi.adSoyad}"
+                                       itemValue="#{personel}"/>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel value="#{messages.durumLabel}" for="@next"/>
+                    <p:inputText value="#{ortRandevuController.selected.durum.displayValue}" readonly="true"/>
+
+                    <p:outputLabel value="#{messages.aciklamaLabel}" for="@next"/>
+                    <p:inputTextarea rows="3" value="#{ortRandevuController.selected.aciklama}"
+                                     styleClass="w-100" autoResize="false"/>
+
+                    <f:facet name="footer">
+                        <div class="float-end">
+                            <p:commandButton icon="pi pi-check" styleClass="ui-button-success"
+                                             style="margin-right: 10px"
+                                             actionListener="#{ortRandevuController.saveNew}"
+                                             value="#{messages.buttonKaydet}"
+                                             update=":growl,display,:OrtRandevuListForm:schedule"
+                                             oncomplete="handleSubmit(xhr,status,args,PF('OrtRandevuCreateDialog'));"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                            <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                             value="#{messages.buttonIptal}"
+                                             onclick="PF('OrtRandevuCreateDialog').hide()" immediate="true"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()">
+                                <p:resetInput target="@form"/>
+                            </p:commandButton>
+                        </div>
+                    </f:facet>
+                </p:panelGrid>
+            </h:panelGroup>
+        </h:form>
+    </p:dialog>
+
+</ui:composition>
+
+</html>

@@ -4,6 +4,7 @@ import lombok.Getter;
 import tr.bel.gaziantep.bysweb.core.enums.BaseEnum;
 
 import java.util.EnumSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -14,72 +15,134 @@ import java.util.Set;
 @Getter
 public enum EnumOrtTalepIslem implements BaseEnum {
 
+//    ON_MUAYENE_RANDEVUSU("Ön Muayene Randevusu Oluştur", EnumOrtTalepDurumu.YENI_TALEP,
+//            EnumOrtTalepDurumu.ON_MUAYENE_RANDEVUSU_BEKLIYOR, "orttalep:randevu", "pi pi-calendar-plus"),
+//    ON_MUAYENEYE_GEL("Ön Muayeneye Geldi", EnumOrtTalepDurumu.ON_MUAYENE_RANDEVUSU_BEKLIYOR,
+//            EnumOrtTalepDurumu.ON_MUAYENEYE_GELDI, "orttalep:onmuayene", "pi pi-check-circle"),
+//    PERSONEL_ATA("Personel Ataması Yap", EnumOrtTalepDurumu.ON_MUAYENEYE_GELDI,
+//            EnumOrtTalepDurumu.PERSONEL_ATAMASI_BEKLIYOR, "orttalep:atama", "pi pi-users"),
+//    DEGERLENDIRMEYE_AL("Değerlendirmeye Al", EnumOrtTalepDurumu.PERSONEL_ATAMASI_BEKLIYOR,
+//            EnumOrtTalepDurumu.DEGERLENDIRME_BEKLIYOR, "orttalep:degerlendirme", "pi pi-clipboard"),
+//    TALEP_REDET("Talebi Reddet", EnumOrtTalepDurumu.DEGERLENDIRME_BEKLIYOR,
+//            EnumOrtTalepDurumu.TALEP_REDDEDILDI, "orttalep:degerlendirme", "pi pi-times-circle"),
+//    UCRET_BELIRLE("Ücret Belirle", EnumOrtTalepDurumu.DEGERLENDIRME_BEKLIYOR,
+//            EnumOrtTalepDurumu.UCRET_BELIRLEME_BEKLIYOR, "orttalep:odeme", "pi pi-money-bill"),
+//    SOZLESME_IMZALA("Sözleşme İmzala", EnumOrtTalepDurumu.UCRET_BELIRLEME_BEKLIYOR,
+//            EnumOrtTalepDurumu.SOZLESME_BEKLIYOR, "orttalep:sozlesme", "pi pi-file-edit"),
+//    ODEME_AL("Ödeme Al", EnumOrtTalepDurumu.SOZLESME_BEKLIYOR,
+//            EnumOrtTalepDurumu.ODEME_BEKLIYOR, "orttalep:odeme", "pi pi-wallet"),
+//    ODEME_TAMAMLA("Ödeme ve Dekontu Tamamla", EnumOrtTalepDurumu.ODEME_BEKLIYOR,
+//            EnumOrtTalepDurumu.OLCU_RANDEVUSU_BEKLIYOR, "orttalep:odeme", "pi pi-receipt"),
+//    PROJE_BELIRLE("Proje Belirle", EnumOrtTalepDurumu.DEGERLENDIRME_BEKLIYOR,
+//            EnumOrtTalepDurumu.PROJE_BELIRLENDI, "orttalep:proje", "pi pi-briefcase"),
+//    OLCU_RANDEVUSU("Ölçü Randevusu Oluştur", EnumOrtTalepDurumu.PROJE_BELIRLENDI,
+//            EnumOrtTalepDurumu.OLCU_RANDEVUSU_BEKLIYOR, "orttalep:randevu", "pi pi-calendar-plus"),
+//    OLCU_AL("Ölçü Alındı", EnumOrtTalepDurumu.OLCU_RANDEVUSU_BEKLIYOR,
+//            EnumOrtTalepDurumu.OLCU_ALINDI, "orttalep:olcu", "pi pi-ruler"),
+//    FORMLARI_TAMAMLA("Ölçü Formlarını Tamamla", EnumOrtTalepDurumu.OLCU_ALINDI,
+//            EnumOrtTalepDurumu.FORMLAR_BEKLENIYOR, "orttalep:belge", "pi pi-file"),
+//    RAPOR_AL("Doktor Raporunu Al", EnumOrtTalepDurumu.FORMLAR_BEKLENIYOR,
+//            EnumOrtTalepDurumu.DOKTOR_RAPORU_BEKLENIYOR, "orttalep:belge", "pi pi-file-pdf"),
+//    RECETE_AL("Reçeteyi Al", EnumOrtTalepDurumu.DOKTOR_RAPORU_BEKLENIYOR,
+//            EnumOrtTalepDurumu.RECETE_BEKLENIYOR, "orttalep:belge", "pi pi-file-pdf"),
+//    MALZEME_TALEP_ET("Malzeme Talebi Oluştur", EnumOrtTalepDurumu.RECETE_BEKLENIYOR,
+//            EnumOrtTalepDurumu.MALZEME_TALEBI_BEKLIYOR, "orttalep:malzeme", "pi pi-shopping-cart"),
+//    DEPO_ONAYINA_GONDER("Depo Onayına Gönder", EnumOrtTalepDurumu.MALZEME_TALEBI_BEKLIYOR,
+//            EnumOrtTalepDurumu.DEPO_ONAYI_BEKLIYOR, "orttalep:malzeme", "pi pi-send"),
+//    PROVA_RANDEVUSU("Prova Randevusu Oluştur", EnumOrtTalepDurumu.DEPO_ONAYI_BEKLIYOR,
+//            EnumOrtTalepDurumu.PROVA_RANDEVUSU_BEKLIYOR, "orttalep:randevu", "pi pi-calendar-plus"),
+//    PROVA_YAP("Prova Yap", EnumOrtTalepDurumu.PROVA_RANDEVUSU_BEKLIYOR,
+//            EnumOrtTalepDurumu.PROVA_YAPILDI, "orttalep:prova", "pi pi-check-circle"),
+//    YENIDEN_PROVA("Yeniden Prova Planla", EnumOrtTalepDurumu.PROVA_YAPILDI,
+//            EnumOrtTalepDurumu.YENIDEN_PROVA_BEKLIYOR, "orttalep:prova", "pi pi-refresh"),
+//    TESLIMATA_HAZIRLA("Teslimata Hazırla", EnumOrtTalepDurumu.PROVA_YAPILDI,
+//            EnumOrtTalepDurumu.TESLIMAT_BEKLIYOR, "orttalep:teslim", "pi pi-truck"),
+//    YENIDEN_PROVA_RANDEVUSU("Yeniden Prova Randevusu", EnumOrtTalepDurumu.YENIDEN_PROVA_BEKLIYOR,
+//            EnumOrtTalepDurumu.PROVA_RANDEVUSU_BEKLIYOR, "orttalep:randevu", "pi pi-calendar-plus"),
+//    TESLIM_ET("Teslim Et", EnumOrtTalepDurumu.TESLIMAT_BEKLIYOR,
+//            EnumOrtTalepDurumu.TESLIM_EDILDI, "orttalep:teslim", "pi pi-check"),
+//    TAMAMLA("Tamamla", EnumOrtTalepDurumu.TESLIM_EDILDI,
+//            EnumOrtTalepDurumu.TAMAMLANDI, "orttalep:teslim", "pi pi-check-square"),
+//    KAPAT("Kapat", EnumOrtTalepDurumu.TAMAMLANDI,
+//            EnumOrtTalepDurumu.KAPATILDI, "orttalep:guncelle", "pi pi-lock"),
+//    KAPAT_RED("Reddedilen Talebi Kapat", EnumOrtTalepDurumu.TALEP_REDDEDILDI,
+//            EnumOrtTalepDurumu.KAPATILDI, "orttalep:guncelle", "pi pi-lock");
+
     ON_MUAYENE_RANDEVUSU("Ön Muayene Randevusu Oluştur", EnumOrtTalepDurumu.YENI_TALEP,
-            EnumOrtTalepDurumu.ON_MUAYENE_RANDEVUSU_BEKLIYOR, "orttalep:randevu", "pi pi-calendar-plus"),
+            EnumOrtTalepDurumu.ON_MUAYENE_RANDEVUSU_BEKLIYOR, "orttalep:guncelle", "pi pi-calendar-plus"),
     ON_MUAYENEYE_GEL("Ön Muayeneye Geldi", EnumOrtTalepDurumu.ON_MUAYENE_RANDEVUSU_BEKLIYOR,
-            EnumOrtTalepDurumu.ON_MUAYENEYE_GELDI, "orttalep:onmuayene", "pi pi-check-circle"),
+            EnumOrtTalepDurumu.ON_MUAYENEYE_GELDI, "orttalep:guncelle", "pi pi-check-circle"),
     PERSONEL_ATA("Personel Ataması Yap", EnumOrtTalepDurumu.ON_MUAYENEYE_GELDI,
-            EnumOrtTalepDurumu.PERSONEL_ATAMASI_BEKLIYOR, "orttalep:atama", "pi pi-users"),
+            EnumOrtTalepDurumu.PERSONEL_ATAMASI_BEKLIYOR, "orttalep:guncelle", "pi pi-users"),
     DEGERLENDIRMEYE_AL("Değerlendirmeye Al", EnumOrtTalepDurumu.PERSONEL_ATAMASI_BEKLIYOR,
-            EnumOrtTalepDurumu.DEGERLENDIRME_BEKLIYOR, "orttalep:degerlendirme", "pi pi-clipboard"),
+            EnumOrtTalepDurumu.DEGERLENDIRME_BEKLIYOR, "orttalep:guncelle", "pi pi-clipboard"),
     TALEP_REDET("Talebi Reddet", EnumOrtTalepDurumu.DEGERLENDIRME_BEKLIYOR,
-            EnumOrtTalepDurumu.TALEP_REDDEDILDI, "orttalep:degerlendirme", "pi pi-times-circle"),
+            EnumOrtTalepDurumu.TALEP_REDDEDILDI, "orttalep:guncelle", "pi pi-times-circle"),
     UCRET_BELIRLE("Ücret Belirle", EnumOrtTalepDurumu.DEGERLENDIRME_BEKLIYOR,
-            EnumOrtTalepDurumu.UCRET_BELIRLEME_BEKLIYOR, "orttalep:odeme", "pi pi-money-bill"),
+            EnumOrtTalepDurumu.UCRET_BELIRLEME_BEKLIYOR, "orttalep:guncelle", "pi pi-money-bill"),
     SOZLESME_IMZALA("Sözleşme İmzala", EnumOrtTalepDurumu.UCRET_BELIRLEME_BEKLIYOR,
-            EnumOrtTalepDurumu.SOZLESME_BEKLIYOR, "orttalep:sozlesme", "pi pi-file-edit"),
+            EnumOrtTalepDurumu.SOZLESME_BEKLIYOR, "orttalep:guncelle", "pi pi-file-edit"),
     ODEME_AL("Ödeme Al", EnumOrtTalepDurumu.SOZLESME_BEKLIYOR,
-            EnumOrtTalepDurumu.ODEME_BEKLIYOR, "orttalep:odeme", "pi pi-wallet"),
+            EnumOrtTalepDurumu.ODEME_BEKLIYOR, "orttalep:guncelle", "pi pi-wallet"),
     ODEME_TAMAMLA("Ödeme ve Dekontu Tamamla", EnumOrtTalepDurumu.ODEME_BEKLIYOR,
-            EnumOrtTalepDurumu.OLCU_RANDEVUSU_BEKLIYOR, "orttalep:odeme", "pi pi-receipt"),
+            EnumOrtTalepDurumu.OLCU_RANDEVUSU_BEKLIYOR, "orttalep:guncelle", "pi pi-receipt"),
     PROJE_BELIRLE("Proje Belirle", EnumOrtTalepDurumu.DEGERLENDIRME_BEKLIYOR,
-            EnumOrtTalepDurumu.PROJE_BELIRLENDI, "orttalep:proje", "pi pi-briefcase"),
+            EnumOrtTalepDurumu.PROJE_BELIRLENDI, "orttalep:guncelle", "pi pi-briefcase"),
     OLCU_RANDEVUSU("Ölçü Randevusu Oluştur", EnumOrtTalepDurumu.PROJE_BELIRLENDI,
-            EnumOrtTalepDurumu.OLCU_RANDEVUSU_BEKLIYOR, "orttalep:randevu", "pi pi-calendar-plus"),
+            EnumOrtTalepDurumu.OLCU_RANDEVUSU_BEKLIYOR, "orttalep:guncelle", "pi pi-calendar-plus"),
     OLCU_AL("Ölçü Alındı", EnumOrtTalepDurumu.OLCU_RANDEVUSU_BEKLIYOR,
-            EnumOrtTalepDurumu.OLCU_ALINDI, "orttalep:olcu", "pi pi-ruler"),
+            EnumOrtTalepDurumu.OLCU_ALINDI, "orttalep:guncelle", "pi pi-ruler"),
     FORMLARI_TAMAMLA("Ölçü Formlarını Tamamla", EnumOrtTalepDurumu.OLCU_ALINDI,
-            EnumOrtTalepDurumu.FORMLAR_BEKLENIYOR, "orttalep:belge", "pi pi-file"),
+            EnumOrtTalepDurumu.FORMLAR_BEKLENIYOR, "orttalep:guncelle", "pi pi-file"),
     RAPOR_AL("Doktor Raporunu Al", EnumOrtTalepDurumu.FORMLAR_BEKLENIYOR,
-            EnumOrtTalepDurumu.DOKTOR_RAPORU_BEKLENIYOR, "orttalep:belge", "pi pi-file-pdf"),
+            EnumOrtTalepDurumu.DOKTOR_RAPORU_BEKLENIYOR, "orttalep:guncelle", "pi pi-file-pdf"),
     RECETE_AL("Reçeteyi Al", EnumOrtTalepDurumu.DOKTOR_RAPORU_BEKLENIYOR,
-            EnumOrtTalepDurumu.RECETE_BEKLENIYOR, "orttalep:belge", "pi pi-file-pdf"),
+            EnumOrtTalepDurumu.RECETE_BEKLENIYOR, "orttalep:guncelle", "pi pi-file-pdf"),
     MALZEME_TALEP_ET("Malzeme Talebi Oluştur", EnumOrtTalepDurumu.RECETE_BEKLENIYOR,
-            EnumOrtTalepDurumu.MALZEME_TALEBI_BEKLIYOR, "orttalep:malzeme", "pi pi-shopping-cart"),
+            EnumOrtTalepDurumu.MALZEME_TALEBI_BEKLIYOR, "orttalep:guncelle", "pi pi-shopping-cart"),
     DEPO_ONAYINA_GONDER("Depo Onayına Gönder", EnumOrtTalepDurumu.MALZEME_TALEBI_BEKLIYOR,
-            EnumOrtTalepDurumu.DEPO_ONAYI_BEKLIYOR, "orttalep:malzeme", "pi pi-send"),
+            EnumOrtTalepDurumu.DEPO_ONAYI_BEKLIYOR, "orttalep:guncelle", "pi pi-send"),
     PROVA_RANDEVUSU("Prova Randevusu Oluştur", EnumOrtTalepDurumu.DEPO_ONAYI_BEKLIYOR,
-            EnumOrtTalepDurumu.PROVA_RANDEVUSU_BEKLIYOR, "orttalep:randevu", "pi pi-calendar-plus"),
+            EnumOrtTalepDurumu.PROVA_RANDEVUSU_BEKLIYOR, "orttalep:guncelle", "pi pi-calendar-plus"),
     PROVA_YAP("Prova Yap", EnumOrtTalepDurumu.PROVA_RANDEVUSU_BEKLIYOR,
-            EnumOrtTalepDurumu.PROVA_YAPILDI, "orttalep:prova", "pi pi-check-circle"),
+            EnumOrtTalepDurumu.PROVA_YAPILDI, "orttalep:guncelle", "pi pi-check-circle"),
     YENIDEN_PROVA("Yeniden Prova Planla", EnumOrtTalepDurumu.PROVA_YAPILDI,
-            EnumOrtTalepDurumu.YENIDEN_PROVA_BEKLIYOR, "orttalep:prova", "pi pi-refresh"),
+            EnumOrtTalepDurumu.YENIDEN_PROVA_BEKLIYOR, "orttalep:guncelle", "pi pi-refresh"),
     TESLIMATA_HAZIRLA("Teslimata Hazırla", EnumOrtTalepDurumu.PROVA_YAPILDI,
-            EnumOrtTalepDurumu.TESLIMAT_BEKLIYOR, "orttalep:teslim", "pi pi-truck"),
+            EnumOrtTalepDurumu.TESLIMAT_BEKLIYOR, "orttalep:guncelle", "pi pi-truck"),
     YENIDEN_PROVA_RANDEVUSU("Yeniden Prova Randevusu", EnumOrtTalepDurumu.YENIDEN_PROVA_BEKLIYOR,
-            EnumOrtTalepDurumu.PROVA_RANDEVUSU_BEKLIYOR, "orttalep:randevu", "pi pi-calendar-plus"),
+            EnumOrtTalepDurumu.PROVA_RANDEVUSU_BEKLIYOR, "orttalep:guncelle", "pi pi-calendar-plus"),
     TESLIM_ET("Teslim Et", EnumOrtTalepDurumu.TESLIMAT_BEKLIYOR,
-            EnumOrtTalepDurumu.TESLIM_EDILDI, "orttalep:teslim", "pi pi-check"),
+            EnumOrtTalepDurumu.TESLIM_EDILDI, "orttalep:guncelle", "pi pi-check"),
     TAMAMLA("Tamamla", EnumOrtTalepDurumu.TESLIM_EDILDI,
-            EnumOrtTalepDurumu.TAMAMLANDI, "orttalep:teslim", "pi pi-check-square"),
+            EnumOrtTalepDurumu.TAMAMLANDI, "orttalep:guncelle", "pi pi-check-square"),
     KAPAT("Kapat", EnumOrtTalepDurumu.TAMAMLANDI,
             EnumOrtTalepDurumu.KAPATILDI, "orttalep:guncelle", "pi pi-lock"),
     KAPAT_RED("Reddedilen Talebi Kapat", EnumOrtTalepDurumu.TALEP_REDDEDILDI,
             EnumOrtTalepDurumu.KAPATILDI, "orttalep:guncelle", "pi pi-lock");
 
     private final String label;
-    private final EnumOrtTalepDurumu kaynakDurum;
-    private final EnumOrtTalepDurumu hedefDurum;
-    private final String yetki;
-    private final String ikon;
+    private final EnumOrtTalepDurumu sourceStatus;
+    private final EnumOrtTalepDurumu targetStatus;
+    private final String permission;
+    private final String icon;
 
-    EnumOrtTalepIslem(String label, EnumOrtTalepDurumu kaynakDurum, EnumOrtTalepDurumu hedefDurum,
-                      String yetki, String ikon) {
+    /**
+     * Randevu tamamlandığında doğrudan ilerlemeye izin verilen ek kaynak durumlar.
+     */
+    private static final Map<EnumOrtTalepIslem, Set<EnumOrtTalepDurumu>> EXTRA_SOURCES = Map.of(
+            ON_MUAYENEYE_GEL, EnumSet.of(EnumOrtTalepDurumu.YENI_TALEP),
+            OLCU_AL, EnumSet.of(EnumOrtTalepDurumu.PROJE_BELIRLENDI, EnumOrtTalepDurumu.ODEME_BEKLIYOR),
+            PROVA_YAP, EnumSet.of(EnumOrtTalepDurumu.DEPO_ONAYI_BEKLIYOR, EnumOrtTalepDurumu.YENIDEN_PROVA_BEKLIYOR)
+    );
+
+    EnumOrtTalepIslem(String label, EnumOrtTalepDurumu sourceStatus, EnumOrtTalepDurumu targetStatus,
+                      String permission, String icon) {
         this.label = label;
-        this.kaynakDurum = kaynakDurum;
-        this.hedefDurum = hedefDurum;
-        this.yetki = yetki;
-        this.ikon = ikon;
+        this.sourceStatus = sourceStatus;
+        this.targetStatus = targetStatus;
+        this.permission = permission;
+        this.icon = icon;
     }
 
     @Override
@@ -88,18 +151,27 @@ public enum EnumOrtTalepIslem implements BaseEnum {
     }
 
     /**
+     * Bu işlemin uygulanabildiği tüm kaynak durumlar.
+     */
+    public Set<EnumOrtTalepDurumu> getSourceStatuses() {
+        EnumSet<EnumOrtTalepDurumu> result = EnumSet.of(sourceStatus);
+        result.addAll(EXTRA_SOURCES.getOrDefault(this, Set.of()));
+        return result;
+    }
+
+    /**
      * Verilen durumda uygulanabilir işlemler.
      */
-    public static Set<EnumOrtTalepIslem> getIslemler(EnumOrtTalepDurumu durum) {
-        if (durum == null) {
+    public static Set<EnumOrtTalepIslem> getActions(EnumOrtTalepDurumu status) {
+        if (status == null) {
             return EnumSet.noneOf(EnumOrtTalepIslem.class);
         }
-        EnumSet<EnumOrtTalepIslem> sonuc = EnumSet.noneOf(EnumOrtTalepIslem.class);
-        for (EnumOrtTalepIslem islem : values()) {
-            if (islem.getKaynakDurum() == durum) {
-                sonuc.add(islem);
+        EnumSet<EnumOrtTalepIslem> result = EnumSet.noneOf(EnumOrtTalepIslem.class);
+        for (EnumOrtTalepIslem action : values()) {
+            if (action.getSourceStatuses().contains(status)) {
+                result.add(action);
             }
         }
-        return sonuc;
+        return result;
     }
 }

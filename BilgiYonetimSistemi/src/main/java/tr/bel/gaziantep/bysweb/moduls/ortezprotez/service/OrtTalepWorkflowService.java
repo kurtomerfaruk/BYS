@@ -5,11 +5,10 @@ import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.LockModeType;
 import jakarta.persistence.PersistenceContext;
-import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtTalepDurumu;
-import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtTalepIslem;
-import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtTalepTipi;
+import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.*;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.core.utils.Util;
+import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtRandevu;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtTalep;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtTalepDurumGecmisi;
 import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.entity.SyKullanici;
@@ -20,18 +19,11 @@ import java.time.LocalDateTime;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
- * Ortez-Protez talebi durum geçişlerini merkezi olarak yönetir.
- *
- * <p>Geçiş kuralları {@link EnumOrtTalepIslem} üzerinde tanımlıdır. Bu servis:
- * <ul>
- *     <li>kullanıcının ilgili işlem yetkisini servis katmanında kontrol eder,</li>
- *     <li>mevcut durumdan hedef duruma geçişin kurallara uygunluğunu doğrular,</li>
- *     <li>iş kuralları (guard) koşullarını uygular,</li>
- *     <li>optimistic lock ile eşzamanlı güncellemeleri engeller,</li>
- *     <li>durum değişikliği ve işlem geçmişini tek transaction'da kaydeder.</li>
- * </ul>
+ * Merkezi yönetim: Ortez-Protez talebi durum geçişleri, yetki ve iş kuralı kontrolleri.
+ * Tüm geçişler {@link EnumOrtTalepIslem} üzerinden doğrulanır; XHTML doğrudan durum değiştirmez.
  *
  * @author OmerFarukKurt
  * @version 1.30.0
@@ -48,20 +40,20 @@ public class OrtTalepWorkflowService implements java.io.Serializable {
     private EntityManager em;
 
     @Inject
-    private OrtTalepDurumGecmisiService durumGecmisiService;
-    @Inject
     private SyYetkiService syYetkiService;
+    @Inject
+    private OrtRandevuService ortRandevuService;
 
     /**
-     * Belirtilen işlemi uygular; talebin durumunu değiştirir ve geçmiş kaydı oluşturur.
-     * Hatalarda anlamlı mesajlı IllegalArgumentException fırlatır; transaction geri alınır.
+     * İşlemi uygular: yetki, geçiş kuralı ve guard kontrollerinden sonra durumu değiştirir
+     * ve geçmiş kaydı oluşturur. Hatalarda transaction geri alınır.
      */
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void gecisYap(Integer talepId, EnumOrtTalepIslem islem, String aciklama) {
+    public void applyTransition(Integer talepId, EnumOrtTalepIslem action, String description) {
         if (talepId == null) {
             throw new IllegalArgumentException("İşlem yapılacak talep bulunamadı.");
         }
-        if (islem == null) {
+        if (action == null) {
             throw new IllegalArgumentException("Geçersiz talep işlemi.");
         }
 
@@ -71,60 +63,103 @@ public class OrtTalepWorkflowService implements java.io.Serializable {
         }
 
         SyKullanici kullanici = Util.getSyKullanici();
-        yetkiKontrol(kullanici, islem);
-        gecisKontrol(talep, islem);
-        guardKontrol(talep, islem, aciklama);
+        checkPermission(kullanici, action);
+        checkTransition(talep, action);
+        checkGuards(talep, action, description);
 
         // Eşzamanlı güncellemeleri optimistic lock ile engelle
         em.lock(talep, LockModeType.OPTIMISTIC);
 
         EnumOrtTalepDurumu eskiDurum = talep.getDurum();
-        talep.setDurum(islem.getHedefDurum());
+        talep.setDurum(action.getTargetStatus());
         em.merge(talep);
         em.flush();
 
         OrtTalepDurumGecmisi gecmis = OrtTalepDurumGecmisi.builder()
                 .ortTalep(talep)
                 .eskiDurum(eskiDurum)
-                .yeniDurum(islem.getHedefDurum())
+                .yeniDurum(action.getTargetStatus())
                 .islemTarihi(LocalDateTime.now())
                 .islemiYapanSyKullanici(kullanici)
-                .aciklama(aciklama == null || aciklama.isBlank() ? islem.getDisplayValue() : aciklama)
+                .aciklama(description == null || description.isBlank() ? action.getDisplayValue() : description)
                 .build();
-        durumGecmisiService.create(gecmis);
+        em.persist(gecmis);
         em.flush();
     }
 
+
     /**
-     * UI'da işlem butonlarını göstermek için: kullanıcının yetkisi ve mevcut duruma
-     * uygunluk kontrolü yapar. Guard koşulları burada uygulanmaz (servis tekrar kontrol eder).
+     * Randevu "Geldi"/"Tamamlandı" durumuna geçtiğinde ilgili talep geçişini uygular.
+     * Randevu tipine göre uygun işlem seçilir; talep henüz "Yeni Talep" olsa bile
+     * ilgili adıma geçiş yapılır.
      */
-    public boolean islemKullanilabilir(OrtTalep talep, EnumOrtTalepIslem islem) {
-        if (talep == null || islem == null) {
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void applyAppointmentTransition(Integer randevuId, EnumOrtRandevuDurumu randevuDurumu) {
+        if (randevuId == null || randevuDurumu == null) {
+            return;
+        }
+        if (randevuDurumu != EnumOrtRandevuDurumu.GELDI
+                && randevuDurumu != EnumOrtRandevuDurumu.TAMAMLANDI) {
+            return;
+        }
+
+        OrtRandevu randevu = em.find(OrtRandevu.class, randevuId);
+        if (randevu == null || randevu.getOrtTalep() == null || randevu.getOrtTalep().getId() == null) {
+            return;
+        }
+
+        EnumOrtTalepIslem action = resolveAppointmentAction(randevu.getRandevuTuru());
+        if (action == null) {
+            return;
+        }
+
+        String aciklama = (randevu.getRandevuTuru() == null ? "Randevu" : randevu.getRandevuTuru().getDisplayValue())
+                + " - " + randevuDurumu.getDisplayValue();
+        applyTransition(randevu.getOrtTalep().getId(), action, aciklama);
+    }
+
+    private EnumOrtTalepIslem resolveAppointmentAction(EnumOrtRandevuTuru randevuTuru) {
+        if (randevuTuru == null) {
+            return null;
+        }
+        return switch (randevuTuru) {
+            case ON_MUAYENE -> EnumOrtTalepIslem.ON_MUAYENEYE_GEL;
+            case OLCU -> EnumOrtTalepIslem.OLCU_AL;
+            case PROVA, YENIDEN_PROVA -> EnumOrtTalepIslem.PROVA_YAP;
+            default -> null;
+        };
+    }
+
+
+    /**
+     * UI butonları için: yetki ve mevcut duruma uygunluk kontrolü.
+     */
+    public boolean isActionAvailable(OrtTalep talep, EnumOrtTalepIslem action) {
+        if (talep == null || action == null) {
             return false;
         }
-        if (talep.getDurum() != islem.getKaynakDurum()) {
+        if (!action.getSourceStatuses().contains(talep.getDurum())) {
             return false;
         }
-        return syYetkiService.hasYetki(Util.getSyKullanici(), islem.getYetki());
+        return syYetkiService.hasPermission(Util.getSyKullanici(), action.getPermission());
     }
 
     /**
      * Mevcut durumda kullanılabilir işlemler (yetki filtreli).
      */
-    public Set<EnumOrtTalepIslem> kullanilabilirIslemler(OrtTalep talep) {
+    public Set<EnumOrtTalepIslem> getAvailableActions(OrtTalep talep) {
         if (talep == null) {
             return Set.of();
         }
-        return EnumOrtTalepIslem.getIslemler(talep.getDurum()).stream()
-                .filter(islem -> syYetkiService.hasYetki(Util.getSyKullanici(), islem.getYetki()))
-                .collect(java.util.stream.Collectors.toCollection(() -> EnumSet.noneOf(EnumOrtTalepIslem.class)));
+        return EnumOrtTalepIslem.getActions(talep.getDurum()).stream()
+                .filter(action -> syYetkiService.hasPermission(Util.getSyKullanici(), action.getPermission()))
+                .collect(Collectors.toCollection(() -> EnumSet.noneOf(EnumOrtTalepIslem.class)));
     }
 
     /**
      * Durum için bekleyen işlem açıklaması (liste ve detay ekranlarında gösterilir).
      */
-    public String bekleyenIslem(EnumOrtTalepDurumu durum) {
+    public String getPendingAction(EnumOrtTalepDurumu durum) {
         if (durum == null) {
             return "-";
         }
@@ -159,7 +194,7 @@ public class OrtTalepWorkflowService implements java.io.Serializable {
     /**
      * Talep durum geçmişi.
      */
-    public List<OrtTalepDurumGecmisi> durumGecmisi(OrtTalep talep) {
+    public List<OrtTalepDurumGecmisi> getStatusHistory(OrtTalep talep) {
         if (talep == null || talep.getId() == null) {
             return List.of();
         }
@@ -171,17 +206,17 @@ public class OrtTalepWorkflowService implements java.io.Serializable {
                 .getResultList();
     }
 
-    private void yetkiKontrol(SyKullanici kullanici, EnumOrtTalepIslem islem) {
-        if (!syYetkiService.hasYetki(kullanici, islem.getYetki())) {
-            throw new IllegalArgumentException("Bu işlem için yetkiniz bulunmuyor: " + islem.getDisplayValue());
+    private void checkPermission(SyKullanici kullanici, EnumOrtTalepIslem action) {
+        if (!syYetkiService.hasPermission(kullanici, action.getPermission())) {
+            throw new IllegalArgumentException("Bu işlem için yetkiniz bulunmuyor: " + action.getDisplayValue());
         }
     }
 
-    private void gecisKontrol(OrtTalep talep, EnumOrtTalepIslem islem) {
-        if (talep.getDurum() != islem.getKaynakDurum()) {
+    private void checkTransition(OrtTalep talep, EnumOrtTalepIslem action) {
+        if (!action.getSourceStatuses().contains(talep.getDurum())) {
             throw new IllegalArgumentException(
                     "Talep mevcut durumda (" + talep.getDurum().getDisplayValue() +
-                            ") bu işlem uygulanamaz: " + islem.getDisplayValue());
+                            ") bu işlem uygulanamaz: " + action.getDisplayValue());
         }
         if (talep.getDurum() == EnumOrtTalepDurumu.KAPATILDI) {
             throw new IllegalArgumentException("Kapatılmış talep üzerinde işlem yapılamaz.");
@@ -189,19 +224,34 @@ public class OrtTalepWorkflowService implements java.io.Serializable {
     }
 
     /**
-     * İş kuralları (guard). Bu dilimde mevcut alanlarla kontrol edilebilen kurallar
-     * uygulanır. Belge/ödeme/malzeme/teslimat entity'leri sonraki dilimlerde eklendiğinde
-     * ilgili kontroller buraya eklenir.
+     * İş kuralları (guard). Belge/ödeme/malzeme/teslimat entity'leri sonraki dilimlerde
+     * eklendiğinde ilgili kontroller buraya eklenir.
      */
-    private void guardKontrol(OrtTalep talep, EnumOrtTalepIslem islem, String aciklama) {
-        switch (islem) {
+    private void checkGuards(OrtTalep talep, EnumOrtTalepIslem action, String description) {
+        switch (action) {
+            case ON_MUAYENEYE_GEL -> {
+                if (!ortRandevuService.existsAttended(talep, EnumOrtRandevuTuru.ON_MUAYENE)) {
+                    throw new IllegalArgumentException("Ön muayene randevusu tamamlanmadan bu işlem yapılamaz.");
+                }
+            }
+            case OLCU_AL -> {
+                if (!ortRandevuService.existsAttended(talep, EnumOrtRandevuTuru.OLCU)) {
+                    throw new IllegalArgumentException("Ölçü randevusu tamamlanmadan ölçü alınamaz.");
+                }
+            }
+            case PROVA_YAP -> {
+                if (!ortRandevuService.existsAttended(talep, EnumOrtRandevuTuru.PROVA)
+                        && !ortRandevuService.existsAttended(talep, EnumOrtRandevuTuru.YENIDEN_PROVA)) {
+                    throw new IllegalArgumentException("Prova randevusu tamamlanmadan prova yapılamaz.");
+                }
+            }
             case DEGERLENDIRMEYE_AL -> {
                 if (talep.getTeknikerOrtPersonel() == null || talep.getFizyoterapistOrtPersonel() == null) {
                     throw new IllegalArgumentException("Değerlendirmeye almadan önce tekniker ve fizyoterapist atanmalıdır.");
                 }
             }
             case TALEP_REDET -> {
-                if (aciklama == null || aciklama.isBlank()) {
+                if (description == null || description.isBlank()) {
                     throw new IllegalArgumentException("Talep reddedilirken gerekçe (açıklama) zorunludur.");
                 }
             }
@@ -232,5 +282,4 @@ public class OrtTalepWorkflowService implements java.io.Serializable {
             }
         }
     }
-
 }

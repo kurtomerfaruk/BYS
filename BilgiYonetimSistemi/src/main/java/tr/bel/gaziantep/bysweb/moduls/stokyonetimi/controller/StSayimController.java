@@ -136,12 +136,12 @@ public class StSayimController extends AbstractController<StSayim> {
             return "";
         }
         if (item.isSayilmadi()) {
-            return FacesUtil.message("sayilmadi");
+            return FacesUtil.message("sayilmadiText");
         }
         if (item.getSayilanMiktar() != null) {
-            return FacesUtil.message("sayildi");
+            return FacesUtil.message("sayildiText");
         }
-        return FacesUtil.message("bekliyor");
+        return FacesUtil.message("bekliyorText");
     }
 
     private StStok findStock(String value) {
