@@ -43,6 +43,10 @@ public class OrtTalepWorkflowService implements java.io.Serializable {
     private SyYetkiService syYetkiService;
     @Inject
     private OrtRandevuService ortRandevuService;
+    @Inject
+    private OrtTalepBelgeService ortTalepBelgeService;
+    @Inject
+    private OrtTalepOdemeService ortTalepOdemeService;
 
     /**
      * İşlemi uygular: yetki, geçiş kuralı ve guard kontrollerinden sonra durumu değiştirir
@@ -339,23 +343,66 @@ public class OrtTalepWorkflowService implements java.io.Serializable {
                 }
             }
             case UCRET_BELIRLE -> {
+                if (talep.getTalepTipi() == EnumOrtTalepTipi.PROJE_KAPSAMINDA) {
+                    throw new IllegalArgumentException("Proje kapsamındaki taleplerde ücret belirlenemez.");
+                }
+                // Ön görüşme/ücretsiz talep, ücret belirlendiğinde ücretliye geçer.
                 if (talep.getTalepTipi() != EnumOrtTalepTipi.UCRETLI) {
-                    throw new IllegalArgumentException("Ücret belirleme işlemi yalnızca ücretli taleplerde yapılabilir.");
+                    talep.setTalepTipi(EnumOrtTalepTipi.UCRETLI);
                 }
             }
             case PROJE_BELIRLE -> {
-                if (talep.getTalepTipi() != EnumOrtTalepTipi.PROJE_KAPSAMINDA) {
-                    throw new IllegalArgumentException("Proje seçimi yalnızca proje kapsamındaki taleplerde yapılabilir.");
+                if (talep.getTalepTipi() == EnumOrtTalepTipi.UCRETLI) {
+                    throw new IllegalArgumentException("Ücretli taleplerde proje seçimi yapılamaz.");
                 }
                 if (talep.getOrtProje() == null) {
-                    throw new IllegalArgumentException("Proje kapsamındaki taleplerde proje seçilmelidir.");
+                    throw new IllegalArgumentException("Ücretsiz talepler mutlaka bir projeye bağlanmalıdır. Lütfen proje seçiniz.");
+                }
+                // Ön görüşme/ücretsiz talep, proje seçildiğinde proje kapsamına geçer.
+                if (talep.getTalepTipi() != EnumOrtTalepTipi.PROJE_KAPSAMINDA) {
+                    talep.setTalepTipi(EnumOrtTalepTipi.PROJE_KAPSAMINDA);
+                }
+            }
+            case SOZLESME_IMZALA -> {
+                if (!ortTalepBelgeService.existsByType(talep, EnumOrtBelgeTuru.SOZLESME)) {
+                    throw new IllegalArgumentException("Sözleşme imzalanmadan önce sözleşme belgesi yüklenmelidir.");
+                }
+            }
+            case ODEME_AL -> {
+                if (!ortTalepBelgeService.existsByType(talep, EnumOrtBelgeTuru.SOZLESME)) {
+                    throw new IllegalArgumentException("Ödeme alınmadan önce hasta sözleşmesi imzalanıp sisteme yüklenmelidir.");
                 }
             }
             case ODEME_TAMAMLA -> {
-                // TODO: OrtTalepOdeme entity'si eklendiğinde ödeme ve dekont belgesi kontrolü eklenecek.
+                if (!ortTalepOdemeService.existsByTalep(talep)) {
+
+                    throw new IllegalArgumentException("Ödeme kaydı oluşturulmadan bu işlem yapılamaz.");
+                }
+                if (!ortTalepBelgeService.existsByType(talep, EnumOrtBelgeTuru.DEKONT)) {
+                    throw new IllegalArgumentException("Ödeme dekontu sisteme yüklenmelidir.");
+                }
             }
-            case FORMLARI_TAMAMLA, RAPOR_AL, RECETE_AL, MALZEME_TALEP_ET, DEPO_ONAYINA_GONDER -> {
-                // TODO: OrtTalepBelge / OrtMalzemeTalep entity'leri eklendiğinde ilgili belge ve onay kontrolleri eklenecek.
+            case FORMLARI_TAMAMLA -> {
+
+                if (!ortTalepBelgeService.existsByType(talep, EnumOrtBelgeTuru.OLCU_FORMU)) {
+                    throw new IllegalArgumentException("Ölçü formu taranıp sisteme yüklenmelidir.");
+                }
+                if (talep.getOrtSutKodu() == null) {
+                    throw new IllegalArgumentException("Talep için SUT kodu girilmelidir.");
+                }
+            }
+            case RAPOR_AL -> {
+                if (!ortTalepBelgeService.existsByType(talep, EnumOrtBelgeTuru.RAPOR)) {
+                    throw new IllegalArgumentException("Doktor raporu taranıp sisteme yüklenmelidir.");
+                }
+            }
+            case RECETE_AL -> {
+                if (!ortTalepBelgeService.existsByType(talep, EnumOrtBelgeTuru.RECETE)) {
+                    throw new IllegalArgumentException("Reçete taranıp sisteme yüklenmelidir.");
+                }
+            }
+            case MALZEME_TALEP_ET, DEPO_ONAYINA_GONDER -> {
+                // TODO: OrtMalzemeTalep entity'si eklendiğinde malzeme/onay kontrolü eklenecek.
             }
             case TESLIM_ET, TAMAMLA -> {
                 // TODO: OrtTeslimat entity'si eklendiğinde imzalı teslim tutanağı kontrolü eklenecek.

@@ -168,8 +168,9 @@ public class OrtTalepController extends AbstractController<OrtTalep> {
                 workflowService.createAppointmentAndTransition(this.getSelected().getId(), action, transitionDescription);
             } else if (attendanceAction) {
                 workflowService.applyAttendanceTransition(this.getSelected().getId(), action, transitionDescription);
-            } else if (action == EnumOrtTalepIslem.PERSONEL_ATA) {
-                // Personel ataması talep üzerinde zaten seçili; değişiklikleri kaydet.
+            } else if (action == EnumOrtTalepIslem.PERSONEL_ATA
+                    || action == EnumOrtTalepIslem.FORMLARI_TAMAMLA) {
+                // Personel ataması / SUT kodu seçimleri talep üzerinde değişir; kaydet.
                 service.updateTalep(this.getSelected());
                 workflowService.applyTransition(this.getSelected().getId(), action, transitionDescription);
             } else {
@@ -246,7 +247,7 @@ public class OrtTalepController extends AbstractController<OrtTalep> {
         if (tipi == EnumOrtTalepTipi.UCRETLI && availableActions.contains(EnumOrtTalepIslem.UCRET_BELIRLE)) {
             return EnumOrtTalepIslem.UCRET_BELIRLE;
         }
-        if (tipi == EnumOrtTalepTipi.PROJE_KAPSAMINDA && availableActions.contains(EnumOrtTalepIslem.PROJE_BELIRLE)) {
+        if (tipi != EnumOrtTalepTipi.UCRETLI && availableActions.contains(EnumOrtTalepIslem.PROJE_BELIRLE)) {
             return EnumOrtTalepIslem.PROJE_BELIRLE;
         }
         return availableActions.iterator().next();
@@ -295,12 +296,21 @@ public class OrtTalepController extends AbstractController<OrtTalep> {
     );
 
     private int findPhaseIndex(EnumOrtTalepDurumu durum) {
+        int index = PHASE_STATUSES.size() - 1;
         for (int i = 0; i < PHASE_STATUSES.size(); i++) {
             if (PHASE_STATUSES.get(i).contains(durum)) {
-                return i;
+                index = i;
+                break;
             }
         }
-        return PHASE_STATUSES.size() - 1;
+        // "Proje Belirlendi" ve "Ödeme Bekliyor" durumlarında Ücret/Proje
+        // aşamasının işi bitmiş, sıradaki adım ölçü randevusudur. Stepper'ı
+        // "Sıradaki İşlem" kartıyla tutarlı göstermek için Ölçü aşamasını işaretle.
+        if (durum == EnumOrtTalepDurumu.PROJE_BELIRLENDI
+                || durum == EnumOrtTalepDurumu.ODEME_BEKLIYOR) {
+            return Math.min(index + 1, PHASE_STATUSES.size() - 1);
+        }
+        return index;
     }
 
     private boolean hasStatusInHistory(EnumOrtTalepDurumu durum) {

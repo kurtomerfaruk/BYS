@@ -100,6 +100,38 @@
                             <h:outputText value="#{ortTalepController.primaryAction.displayValue}"/>
                         </h3>
                         <p><h:outputText value="#{ortTalepController.pendingAction}"/></p>
+                        <!-- Ödeme adımında ödeme kaydı -->
+                        <h:panelGroup rendered="#{ortTalepController.primaryAction == enumOrtTalepIslem.ODEME_AL}">
+                            <table style="width:100%;margin-top:10px;font-size:13px;">
+                                <tr>
+                                    <td style="padding:4px 8px 4px 0;width:100px;">
+                                        <h:outputText value="#{messages.tutarLabel}"/>
+                                    </td>
+                                    <td style="padding:4px 0;">
+                                        <p:inputText value="#{ortTalepBelgeController.odemeTutar}" style="width:100%;"/>
+                                    </td>
+                                    <td style="padding:4px 8px 4px 16px;width:100px;">
+                                        <h:outputText value="#{messages.odemeSekliLabel}"/>
+                                    </td>
+                                    <td style="padding:4px 0;">
+                                        <p:inputText value="#{ortTalepBelgeController.odemeSekli}" style="width:100%;"/>
+                                    </td>
+                                    <td style="padding:4px 8px 4px 16px;width:100px;">
+                                        <h:outputText value="#{messages.dekontNoLabel}"/>
+                                    </td>
+                                    <td style="padding:4px 0;">
+                                        <p:inputText value="#{ortTalepBelgeController.dekontNo}" style="width:100%;"/>
+                                    </td>
+                                    <td style="padding:4px 0 4px 12px;">
+                                        <p:commandButton value="#{messages.buttonKaydet}" icon="pi pi-save"
+                                                         styleClass="ui-button-success"
+                                                         actionListener="#{ortTalepBelgeController.saveOdeme}"
+                                                         process="@form" update="@form,:growl"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </h:panelGroup>
+
                         <!-- Personel ataması adımında tekniker/fizyoterapist seçimi -->
                         <h:panelGroup rendered="#{ortTalepController.primaryAction == enumOrtTalepIslem.PERSONEL_ATA}">
                             <table style="width:100%;margin-top:10px;font-size:13px;">
@@ -130,6 +162,54 @@
                                     </td>
                                 </tr>
                             </table>
+                        </h:panelGroup>
+
+                        <!-- Ölçü formları adımında SUT kodu seçimi -->
+                        <h:panelGroup rendered="#{ortTalepController.primaryAction == enumOrtTalepIslem.FORMLARI_TAMAMLA}">
+                            <table style="width:100%;margin-top:10px;font-size:13px;">
+                                <tr>
+                                    <td style="padding:4px 8px 4px 0;width:100px;">
+                                        <h:outputText value="#{messages.sutKoduLabel}"/>
+                                    </td>
+                                    <td style="padding:4px 0;">
+                                        <p:selectOneMenu value="#{ortTalepController.selected.ortSutKodu}" filter="true"
+                                                         style="width:100%;" converter="omnifaces.SelectItemsConverter">
+                                            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+                                            <f:selectItems value="#{ortSutKoduController.items}" var="sut"
+                                                           itemLabel="#{sut.kod} - #{sut.tanim}" itemValue="#{sut}"/>
+                                        </p:selectOneMenu>
+                                    </td>
+                                </tr>
+                            </table>
+                        </h:panelGroup>
+
+                        <!-- Belge gerektiren adımlarda (ölçü formu, rapor, reçete, sözleşme, dekont, tutanak) doğrudan yükleme -->
+                        <h:panelGroup rendered="#{ortTalepBelgeController.requiredBelgeTuru != null}">
+                            <div style="margin-top:12px;padding:12px;border:1px dashed #cbd5e1;border-radius:10px;background:#f8fafc;">
+                                <div class="d-flex align-items-center gap-2 mb-2">
+                                    <i class="pi pi-paperclip" style="color:#4361ee;"/>
+                                    <strong style="font-size:13px;">
+                                        <h:outputText value="#{ortTalepBelgeController.requiredBelgeTuru.displayValue}"/>
+                                    </strong>
+                                    <ui:fragment rendered="#{ortTalepBelgeController.requiredBelgeYuklendi}">
+                                        <span class="otd-pill green" style="font-size:11px;">
+                                            <h:outputText value="#{messages.yuklendiText}"/>
+                                        </span>
+                                    </ui:fragment>
+                                </div>
+                                <p:fileUpload listener="#{ortTalepBelgeController.uploadRequired}"
+                                              mode="advanced" auto="true" multiple="false"
+                                              dragDropSupport="false"
+                                              uploadLabel="#{messages.buttonYukle}"
+                                              cancelLabel="#{messages.buttonIptal}"
+                                              label="#{messages.buttonSec}"
+                                              invalidFileMessage="#{messages.hataliDosyaTipi}"
+                                              invalidSizeMessage="#{messages.hataliDosyaBoyutu}"
+                                              update="@form,:growl"
+                                              allowTypes="/(\.|\/)(pdf|jpe?g|png|doc|docx|xls|xlsx)$/">
+                                    <p:validateFile sizeLimit="10000000"/>
+                                </p:fileUpload>
+                            </div>
                         </h:panelGroup>
                         <p:inputTextarea styleClass="otd-note"
                                          value="#{ortTalepController.transitionDescription}"
@@ -255,9 +335,83 @@
                 </div>
 
                 <div class="otd-pane" id="otd-belge">
-                    <p class="otd-hint">
-                        <h:outputText value="#{messages.belgeBeklenmiyor}"/>
-                    </p>
+                    <div class="row g-2 mb-3 align-items-end">
+
+                        <div class="col-md-4">
+                            <label style="font-size:11px;color:#94a3b8;">Belge Türü</label>
+                            <p:selectOneMenu value="#{ortTalepBelgeController.seciliBelgeTuru}" style="width:100%;"
+                                             converter="omnifaces.SelectItemsConverter">
+                                <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+                                <f:selectItems value="#{enumOrtBelgeTuru.ALL_VALUES}" var="tur"
+                                               itemLabel="#{tur.displayValue}" itemValue="#{tur}"/>
+                            </p:selectOneMenu>
+                        </div>
+                        <div class="col-md-4">
+                            <label style="font-size:11px;color:#94a3b8;">#{messages.aciklamaLabel}</label>
+                            <p:inputText value="#{ortTalepBelgeController.belgeAciklama}" style="width:100%;"/>
+                        </div>
+                        <div class="col-md-4">
+                            <p:fileUpload listener="#{ortTalepBelgeController.upload}"
+                                          mode="advanced" auto="true" multiple="false"
+                                          update="@form,:growl"
+                                          label="#{messages.buttonEkle}"
+                                          styleClass="ui-button-secondary"/>
+                        </div>
+                    </div>
+                    <p:dataTable id="belgeDatalist" value="#{ortTalepBelgeController.belgeler}" var="belge"
+                                 emptyMessage="#{messages.kayitBulunamadi}" styleClass="w-100" size="small">
+                        <p:column headerText="#{messages.belgeTuruText}">
+                            <h:outputText value="#{belge.belgeTuru.displayValue}"/>
+                        </p:column>
+                        <p:column headerText="#{messages.dosyaAdiText}">
+                            <h:outputText value="#{belge.dosyaAdi}"/>
+                        </p:column>
+                        <p:column headerText="#{messages.tarihText}">
+                            <h:outputText value="#{belge.yuklenmeTarihi}">
+                                <f:convertDateTime pattern="#{messages.tarihSaatFormat}" type="localDateTime"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="#{messages.dosyaBoyutuText}">
+                            <h:outputText value="#{belge.dosyaBoyutu}"/>
+                        </p:column>
+                        <p:column headerText="#{messages.aciklamaText}">
+                            <h:outputText value="#{belge.aciklama}"/>
+                        </p:column>
+                        <p:column headerText="#{messages.islemTarihiText}" style="width:150px;">
+                            <p:commandButton icon="pi pi-download" title="#{messages.buttonIndir}" styleClass="ui-button-info"
+                                             actionListener="#{ortTalepBelgeController.selectForDownload(belge)}"
+                                             ajax="false">
+                                <p:fileDownload value="#{ortTalepBelgeController.download}"/>
+                            </p:commandButton>
+                            <p:commandButton icon="pi pi-trash" title="#{messages.buttonSil}" styleClass="ui-button-danger"
+                                             actionListener="#{ortTalepBelgeController.removeBelge(belge)}"
+                                             process="@this" update="@form,:growl">
+                                <p:confirm header="#{messages.ConfirmationHeader}"
+                                           message="#{messages.ConfirmDeleteMessage}" icon="pi pi-exclamation-triangle"/>
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                    <!-- Ödeme kayıtları -->
+                    <h:outputText value="#{messages.odemeListesi}" style="display:block;margin-top:18px;font-weight:600;"/>
+                    <p:dataTable value="#{ortTalepBelgeController.odemeler}" var="odeme"
+                                 emptyMessage="#{messages.kayitBulunamadi}" styleClass="w-100" size="small">
+                        <p:column headerText="#{messages.tarihText}">
+                            <h:outputText value="#{odeme.odemeTarihi}">
+                                <f:convertDateTime pattern="#{messages.tarihSaatFormat}" type="localDateTime"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="#{messages.tutarLabel}">
+                            <h:outputText value="#{odeme.tutar}">
+                                <f:convertNumber type="currency" currencySymbol="₺"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="#{messages.odemeSekliLabel}">
+                            <h:outputText value="#{odeme.odemeSekli}"/>
+                        </p:column>
+                        <p:column headerText="#{messages.dekontNoLabel}">
+                            <h:outputText value="#{odeme.dekontNo}"/>
+                        </p:column>
+                    </p:dataTable>
                 </div>
 
                 <div class="otd-pane" id="otd-gecmis">
@@ -280,6 +434,9 @@
                     </div>
                 </div>
             </div>
+
+            <p:remoteCommand name="loadOtdBelgeler" actionListener="#{ortTalepBelgeController.loadForTalep()}"
+                             update="otd-belge,belgeDatalist" process="@this"/>
 
             <div class="d-flex justify-content-end">
                 <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
@@ -304,6 +461,9 @@
             }
             if (btn) {
                 btn.classList.add('active');
+            }
+            if (id === 'belge' &amp;&amp; typeof loadOtdBelgeler === 'function') {
+                loadOtdBelgeler();
             }
         }
     </script>
