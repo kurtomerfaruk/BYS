@@ -8,6 +8,7 @@ import jakarta.persistence.PersistenceContext;
 import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.*;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.core.utils.Util;
+import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtMalzemeTalep;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtRandevu;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtTalep;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtTalepDurumGecmisi;
@@ -47,6 +48,8 @@ public class OrtTalepWorkflowService implements java.io.Serializable {
     private OrtTalepBelgeService ortTalepBelgeService;
     @Inject
     private OrtTalepOdemeService ortTalepOdemeService;
+    @Inject
+    private OrtMalzemeTalepService ortMalzemeTalepService;
 
     /**
      * İşlemi uygular: yetki, geçiş kuralı ve guard kontrollerinden sonra durumu değiştirir
@@ -401,8 +404,21 @@ public class OrtTalepWorkflowService implements java.io.Serializable {
                     throw new IllegalArgumentException("Reçete taranıp sisteme yüklenmelidir.");
                 }
             }
-            case MALZEME_TALEP_ET, DEPO_ONAYINA_GONDER -> {
-                // TODO: OrtMalzemeTalep entity'si eklendiğinde malzeme/onay kontrolü eklenecek.
+            case DEPO_ONAYINA_GONDER -> {
+                List<OrtMalzemeTalep> talepler = ortMalzemeTalepService.findByTalep(talep);
+                if (talepler.isEmpty()) {
+                    throw new IllegalArgumentException("Depo onayına göndermeden önce malzeme talebi oluşturulmalıdır.");
+                }
+                if (talepler.stream().noneMatch(m -> m.getDurum() == EnumOrtMalzemeDurumu.BEKLIYOR)) {
+                    throw new IllegalArgumentException("Onaya gönderilecek bekleyen malzeme talebi bulunamadı.");
+                }
+            }
+            case PROVA_RANDEVUSU -> {
+                List<OrtMalzemeTalep> talepler = ortMalzemeTalepService.findByTalep(talep);
+                if (!talepler.isEmpty()
+                        && talepler.stream().anyMatch(m -> m.getDurum() != EnumOrtMalzemeDurumu.ONAYLANDI)) {
+                    throw new IllegalArgumentException("Malzeme talepleri onaylanmadan provaya geçilemez.");
+                }
             }
             case TESLIM_ET, TAMAMLA -> {
                 // TODO: OrtTeslimat entity'si eklendiğinde imzalı teslim tutanağı kontrolü eklenecek.

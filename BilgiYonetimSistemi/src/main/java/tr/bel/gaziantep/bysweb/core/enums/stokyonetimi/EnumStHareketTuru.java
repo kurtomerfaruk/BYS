@@ -23,6 +23,7 @@ public enum EnumStHareketTuru implements BaseEnum {
     ZAYI("Zayi", EnumGirisCikis.CIKIS),
     SARF("Sarf", EnumGirisCikis.CIKIS),
     ACILIS("Açılış", EnumGirisCikis.GIRIS),
+    URUN_CIKISI("Ürün Çıkışı", EnumGirisCikis.CIKIS),
     MANUEL_DUZELTME("Manuel Düzeltme", null);
 
     private final String label;

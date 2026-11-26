@@ -118,4 +118,73 @@ public class StStokBakiyeService extends AbstractService<StStokBakiye> {
                 cb.isTrue(root.get("aktif"))));
         return em.createQuery(cq).getResultList();
     }
+
+
+    /**
+     * Müsait miktar = mevcut - rezerve - transferdeki. Kilitleme ile okur.
+     */
+    public BigDecimal getAvailableQuantity(StStok stStok, StDepo stDepo, LocalDate skt) {
+        StStokBakiye bakiye = find(stStok, stDepo, skt, true);
+        if (bakiye == null) {
+            return BigDecimal.ZERO;
+        }
+        BigDecimal miktar = bakiye.getMiktar() == null ? BigDecimal.ZERO : bakiye.getMiktar();
+        BigDecimal rezerve = bakiye.getRezerveMiktar() == null ? BigDecimal.ZERO : bakiye.getRezerveMiktar();
+        BigDecimal transfer = bakiye.getTransferdekiMiktar() == null ? BigDecimal.ZERO : bakiye.getTransferdekiMiktar();
+        return miktar.subtract(rezerve).subtract(transfer).max(BigDecimal.ZERO);
+    }
+
+    /**
+     * Rezerve miktarı artırır. Müsait miktar yetersizse hata verir.
+     * Bakiye satırını PESSIMISTIC_WRITE ile kilitler; eşzamanlı talepler birbirini bekler.
+     */
+    public void reserve(StStok stStok, StDepo stDepo, LocalDate skt, BigDecimal miktar) {
+        if (miktar == null || miktar.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("Rezerve edilecek miktar sıfırdan büyük olmalıdır.");
+        }
+        BigDecimal available = getAvailableQuantity(stStok, stDepo, skt);
+        if (available.compareTo(miktar) < 0) {
+            throw new IllegalArgumentException("Yeterli müsait stok yok. Müsait miktar: " + available);
+        }
+        StStokBakiye bakiye = find(stStok, stDepo, skt, true);
+        BigDecimal rezerve = bakiye.getRezerveMiktar() == null ? BigDecimal.ZERO : bakiye.getRezerveMiktar();
+        bakiye.setRezerveMiktar(rezerve.add(miktar));
+        edit(bakiye);
+        flush();
+    }
+
+    /**
+     * Rezerve miktarı düşürür (red/iptal durumlarında).
+     */
+    public void releaseReservation(StStok stStok, StDepo stDepo, LocalDate skt, BigDecimal miktar) {
+        if (miktar == null || miktar.compareTo(BigDecimal.ZERO) <= 0) {
+            return;
+        }
+        StStokBakiye bakiye = find(stStok, stDepo, skt, true);
+        if (bakiye == null) {
+            return;
+        }
+        BigDecimal rezerve = bakiye.getRezerveMiktar() == null ? BigDecimal.ZERO : bakiye.getRezerveMiktar();
+        bakiye.setRezerveMiktar(rezerve.subtract(miktar).max(BigDecimal.ZERO));
+        edit(bakiye);
+        flush();
+    }
+
+    /**
+     * Rezerveyi fiili çıkışa çevirir: rezerveMiktar düşürülür, miktar azaltılır.
+     * (StStokHareketService.hareketEkle zaten miktarı düşürdüğü için burada sadece rezerve düşülür.)
+     */
+    public void consumeReservation(StStok stStok, StDepo stDepo, LocalDate skt, BigDecimal miktar) {
+        if (miktar == null || miktar.compareTo(BigDecimal.ZERO) <= 0) {
+            return;
+        }
+        StStokBakiye bakiye = find(stStok, stDepo, skt, true);
+        if (bakiye == null) {
+            return;
+        }
+        BigDecimal rezerve = bakiye.getRezerveMiktar() == null ? BigDecimal.ZERO : bakiye.getRezerveMiktar();
+        bakiye.setRezerveMiktar(rezerve.subtract(miktar).max(BigDecimal.ZERO));
+        edit(bakiye);
+        flush();
+    }
 }
