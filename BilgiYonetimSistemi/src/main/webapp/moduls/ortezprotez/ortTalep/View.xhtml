@@ -498,18 +498,8 @@
                                            update=":OrtTalepViewForm:malzemeDetayPanel"
                                            oncomplete="PF('malzemeDetayDialog').show()"/>
                         </p:column>
-                        <p:column headerText="#{messages.islemTarihiLabel}" style="width:280px;">
-                            <h:panelGroup rendered="#{mt.durum == enumOrtMalzemeDurumu.BEKLIYOR and ortMalzemeTalepController.canApprove()}">
-                                <p:commandButton value="Onayla" icon="pi pi-check" styleClass="ui-button-success"
-                                                 actionListener="#{ortMalzemeTalepController.approve(mt)}"
-                                                 process="@this" update="@form,:growl"/>
-                                <p:commandButton value="Reddet" icon="pi pi-times" styleClass="ui-button-danger"
-                                                 actionListener="#{ortMalzemeTalepController.reject(mt)}"
-                                                 process="@this" update="@form,:growl">
-                                    <p:confirm header="#{messages.ConfirmationHeader}"
-                                               message="#{messages.malzemeRedGerekceText}" icon="pi pi-exclamation-triangle"/>
-                                </p:commandButton>
-                            </h:panelGroup>
+                        <p:column headerText="#{messages.aciklamaText}">
+                            <h:outputText value="#{mt.aciklama}"/>
                         </p:column>
                     </p:dataTable>
 

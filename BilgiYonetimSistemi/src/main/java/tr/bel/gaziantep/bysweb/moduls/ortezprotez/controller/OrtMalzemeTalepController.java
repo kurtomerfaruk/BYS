@@ -67,6 +67,14 @@ public class OrtMalzemeTalepController extends AbstractController<OrtMalzemeTale
     private List<OrtMalzemeTalep> talepler = Collections.emptyList();
     @Getter
     private List<OrtMalzemeTalepDetay> seciliDetaylar = Collections.emptyList();
+    /**
+     * Onay ekranı: sadece BEKLIYOR talepler.
+     */
+    @Getter
+    private List<OrtMalzemeTalep> pendingRequests = Collections.emptyList();
+    @Getter
+    @Setter
+    private OrtMalzemeTalep selectedRequest;
 
     public OrtMalzemeTalepController() {
         super(OrtMalzemeTalep.class);
@@ -129,7 +137,6 @@ public class OrtMalzemeTalepController extends AbstractController<OrtMalzemeTale
         try {
             service.approve(mt.getId(), Util.getSyKullanici(), mt.getAciklama());
             FacesUtil.successMessage("Malzeme talebi onaylandı ve stok rezerve edildi.");
-            loadForRequest();
             refreshDetail();
         } catch (IllegalArgumentException ex) {
             FacesUtil.addErrorMessage(ex.getMessage());
@@ -144,7 +151,6 @@ public class OrtMalzemeTalepController extends AbstractController<OrtMalzemeTale
             service.reject(mt.getId(), Util.getSyKullanici(), redGerekcesi);
             FacesUtil.successMessage("Malzeme talebi reddedildi.");
             redGerekcesi = null;
-            loadForRequest();
             refreshDetail();
         } catch (EJBException ex) {
             FacesUtil.addErrorMessage(ex.getCause().getMessage());
@@ -153,6 +159,50 @@ public class OrtMalzemeTalepController extends AbstractController<OrtMalzemeTale
             FacesUtil.errorMessage(Constants.HATA_OLUSTU);
         }
     }
+
+    /**
+     * Onay ekranını yükler (sadece bekleyen talepler).
+     */
+    public void loadPendingRequests() {
+        pendingRequests = service.findPendingRequests();
+        selectedRequest = null;
+        seciliDetaylar = Collections.emptyList();
+        redGerekcesi = null;
+    }
+
+    /**
+     * Onay dialogunda seçili talebin kalemlerini yükler.
+     */
+    public void selectForApproval(OrtMalzemeTalep mt) {
+        this.selectedRequest = mt;
+        this.seciliDetaylar = mt == null ? Collections.emptyList() : service.findDetails(mt);
+        this.redGerekcesi = null;
+    }
+
+    /**
+     * Onay ekranından onaylar (kısmi onay yok, tamamı rezerve edilir).
+     */
+    public void approveSelected() {
+        if (selectedRequest == null) {
+            FacesUtil.addErrorMessage("Lütfen onaylanacak talebi seçiniz.");
+            return;
+        }
+        approve(selectedRequest);
+        loadPendingRequests();
+    }
+
+    /**
+     * Onay ekranından reddeder (gerekçe zorunlu).
+     */
+    public void rejectSelected() {
+        if (selectedRequest == null) {
+            FacesUtil.addErrorMessage("Lütfen reddedilecek talebi seçiniz.");
+            return;
+        }
+        reject(selectedRequest);
+        loadPendingRequests();
+    }
+
 
     public void showDetails(OrtMalzemeTalep mt) {
         seciliDetaylar = service.findDetails(mt);

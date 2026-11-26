@@ -70,6 +70,17 @@ public class OrtMalzemeTalepService extends AbstractService<OrtMalzemeTalep> {
     }
 
     /**
+     * Depo onay ekranı: sadece onay bekleyen talepler.
+     */
+    public List<OrtMalzemeTalep> findPendingRequests() {
+        return em.createQuery(
+                        "SELECT m FROM OrtMalzemeTalep m WHERE m.aktif=true AND m.durum=:durum ORDER BY m.talepTarihi ASC",
+                        OrtMalzemeTalep.class)
+                .setParameter("durum", EnumOrtMalzemeDurumu.BEKLIYOR)
+                .getResultList();
+    }
+
+    /**
      * Teknikerin malzeme talebini oluşturur.
      */
     @TransactionAttribute(TransactionAttributeType.REQUIRED)

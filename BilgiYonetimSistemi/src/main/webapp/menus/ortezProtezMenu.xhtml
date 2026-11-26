@@ -28,6 +28,16 @@
                         </a>
                         <ul class="slide-menu child2">
 
+                            <ui:fragment rendered="#{syKullaniciController.hasPermission('orttalep:depo_onay')}">
+                                <li class="slide">
+                                    <p:commandLink styleClass="side-menu__item sublevel2"
+                                                   actionListener="#{menuController.setPageLink('/moduls/ortezprotez/ortMalzemeTalep/index')}"
+                                                   update="myPanel,:growl"
+                                                   onstart="PF('Loading').show()"
+                                                   onsuccess="PF('Loading').hide()"
+                                                   value="Malzeme Onay"/>
+                                </li>
+                            </ui:fragment>
                             <ui:fragment rendered="#{syKullaniciController.hasPermission('ortkisi:goster')}">
                                 <li class="slide">
                                     <p:commandLink styleClass="side-menu__item sublevel2"
