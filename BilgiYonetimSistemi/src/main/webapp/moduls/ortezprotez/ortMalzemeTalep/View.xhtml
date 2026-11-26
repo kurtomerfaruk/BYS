@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+>
+
+<ui:composition>
+
+    <p:dialog widgetVar="OrtMalzemeTalepOnayDialog"
+              id="OrtMalzemeTalepOnayDialogId"
+              modal="true"
+              resizable="false"
+              closeOnEscape="true"
+              header="Malzeme Talep Onay"
+              appendTo="@(body)"
+              responsive="true"
+              onShow="PF('OrtMalzemeTalepOnayDialog').initPosition();"
+              fitViewport="true"
+              position="top"
+              style="max-width: 1100px;">
+
+        <h:form id="OrtMalzemeTalepOnayForm">
+            <h:panelGroup id="display">
+                <p:focus context="display"/>
+                <p:panelGrid columns="1" columnClasses="column" rendered="#{ortMalzemeTalepController.selected !=null}" layout="tabular">
+
+                    <p:panelGrid columns="2">
+                        <h:outputText value="#{messages.talepNoLabel}"/>
+                        <h:outputText value="#{ortMalzemeTalepController.selected.ortTalep.talepNo}"/>
+
+                        <h:outputText value="#{messages.adSoyadLabel}"/>
+                        <h:outputText value="#{ortMalzemeTalepController.selected.ortTalep.ortKisi.gnlKisi.adSoyad}"/>
+                    </p:panelGrid>
+
+                    <p:dataTable value="#{ortMalzemeTalepController.selected.detayList}" var="d"
+                                 emptyMessage="#{messages.kayitBulunamadi}" styleClass="w-100" size="small">
+                        <p:column headerText="#{messages.malzemeText}">
+                            <h:outputText value="#{d.stStok.malzemeKodu} - #{d.stStok.stokKodu} - #{d.stStok.stokAdi}"/>
+                        </p:column>
+                        <p:column headerText="#{messages.depoText}">
+                            <h:outputText value="#{d.stDepo.ad}"/>
+                        </p:column>
+                        <p:column headerText="#{messages.miktarText}" width="100">
+                            <h:outputText value="#{d.istenenMiktar}"/>
+                        </p:column>
+                        <p:column headerText="#{messages.aciklamaText}">
+                            <h:outputText value="#{d.aciklama}"/>
+                        </p:column>
+                    </p:dataTable>
+
+                    <p:panelGrid columns="2">
+                        <p:outputLabel value="#{messages.redGerekcesiLabel}" for="@next"/>
+                        <p:inputTextarea id="redGerekce" rows="2" styleClass="w-100" value="#{ortMalzemeTalepController.redGerekcesi}"
+                                         autoResize="false"/>
+                    </p:panelGrid>
+
+                    <f:facet name="footer">
+                        <div class="float-end">
+                            <p:commandButton value="#{messages.buttonOnayla}" icon="pi pi-check"
+                                             styleClass="ui-button-success me-2"
+                                             actionListener="#{ortMalzemeTalepController.approveSelected}"
+                                             process="@this" update=":growl,:OrtMalzemeTalepListForm:datalist:datalist,OrtMalzemeTalepOnayForm"
+                                             oncomplete="handleSubmit(xhr,status,args,PF('OrtMalzemeTalepOnayDialog'));"
+                                             rendered="#{ortMalzemeTalepController.selected.durum eq 'BEKLIYOR'}"/>
+                            <p:commandButton value="#{messages.buttonReddet}" icon="pi pi-times"
+                                             styleClass="ui-button-danger me-2"
+                                             actionListener="#{ortMalzemeTalepController.rejectSelected}"
+                                             process="redGerekce"
+                                             update=":growl,:OrtMalzemeTalepListForm:datalist:datalist,OrtMalzemeTalepOnayForm"
+                                             oncomplete="handleSubmit(xhr,status,args,PF('OrtMalzemeTalepOnayDialog'));"
+                                             rendered="#{ortMalzemeTalepController.selected.durum eq 'BEKLIYOR'}"/>
+                            <p:commandButton value="#{messages.buttonKapat}" icon="pi pi-times"
+                                             styleClass="ui-button-secondary"
+                                             onclick="PF('OrtMalzemeTalepOnayDialog').hide()" immediate="true"/>
+                        </div>
+                    </f:facet>
+                </p:panelGrid>
+            </h:panelGroup>
+        </h:form>
+
+    </p:dialog>
+
+</ui:composition>
+
+</html>

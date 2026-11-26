@@ -160,6 +160,19 @@ public enum EnumOrtTalepIslem implements BaseEnum {
     }
 
     /**
+     * İşleme karşılık gelen randevu tipi (randevu adımlarında dialog için).
+     */
+    public EnumOrtRandevuTuru getRandevuTuruForAction() {
+        return switch (this) {
+            case ON_MUAYENE_RANDEVUSU -> EnumOrtRandevuTuru.ON_MUAYENE;
+            case OLCU_RANDEVUSU -> EnumOrtRandevuTuru.OLCU;
+            case PROVA_RANDEVUSU -> EnumOrtRandevuTuru.PROVA;
+            case YENIDEN_PROVA_RANDEVUSU -> EnumOrtRandevuTuru.YENIDEN_PROVA;
+            default -> null;
+        };
+    }
+
+    /**
      * Verilen durumda uygulanabilir işlemler.
      */
     public static Set<EnumOrtTalepIslem> getActions(EnumOrtTalepDurumu status) {

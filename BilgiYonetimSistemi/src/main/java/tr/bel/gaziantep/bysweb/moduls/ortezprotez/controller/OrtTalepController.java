@@ -24,9 +24,11 @@ import tr.bel.gaziantep.bysweb.moduls.ortezprotez.dto.OrtTalepAsama;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtKisi;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtTalep;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtTalepDurumGecmisi;
+import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtTeslimat;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.service.OrtRandevuService;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.service.OrtTalepService;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.service.OrtTalepWorkflowService;
+import tr.bel.gaziantep.bysweb.moduls.ortezprotez.service.OrtTeslimatService;
 
 import java.io.Serial;
 import java.time.LocalDateTime;
@@ -52,6 +54,8 @@ public class OrtTalepController extends AbstractController<OrtTalep> {
     @Inject
     private OrtRandevuService ortRandevuService;
     @Inject
+    private OrtTeslimatService ortTeslimatService;
+    @Inject
     private FilterOptionService filterOptionService;
 
     @Getter
@@ -66,6 +70,8 @@ public class OrtTalepController extends AbstractController<OrtTalep> {
     @Getter
     @Setter
     private String pendingAction;
+    @Getter
+    private List<OrtTeslimat> teslimatlar = Collections.emptyList();
 
     public OrtTalepController() {
         super(OrtTalep.class);
@@ -143,6 +149,7 @@ public class OrtTalepController extends AbstractController<OrtTalep> {
             statusHistory = workflowService.getStatusHistory(this.getSelected());
             availableActions = workflowService.getAvailableActions(this.getSelected());
             pendingAction = workflowService.getPendingAction(this.getSelected().getDurum());
+            teslimatlar = ortTeslimatService.findByTalep(this.getSelected());
             transitionDescription = null;
         }
     }
@@ -157,22 +164,20 @@ public class OrtTalepController extends AbstractController<OrtTalep> {
             return;
         }
         try {
-            boolean appointmentAction = action == EnumOrtTalepIslem.ON_MUAYENE_RANDEVUSU
-                    || action == EnumOrtTalepIslem.OLCU_RANDEVUSU
-                    || action == EnumOrtTalepIslem.PROVA_RANDEVUSU
-                    || action == EnumOrtTalepIslem.YENIDEN_PROVA_RANDEVUSU;
             boolean attendanceAction = action == EnumOrtTalepIslem.ON_MUAYENEYE_GEL
                     || action == EnumOrtTalepIslem.OLCU_AL
                     || action == EnumOrtTalepIslem.PROVA_YAP;
-            if (appointmentAction) {
-                workflowService.createAppointmentAndTransition(this.getSelected().getId(), action, transitionDescription);
-            } else if (attendanceAction) {
+            if (attendanceAction) {
                 workflowService.applyAttendanceTransition(this.getSelected().getId(), action, transitionDescription);
             } else if (action == EnumOrtTalepIslem.PERSONEL_ATA
-                    || action == EnumOrtTalepIslem.FORMLARI_TAMAMLA) {
-                // Personel ataması / SUT kodu seçimleri talep üzerinde değişir; kaydet.
+                    || action == EnumOrtTalepIslem.FORMLARI_TAMAMLA
+                    || action == EnumOrtTalepIslem.PROJE_BELIRLE) {
+                // Personel / SUT / proje seçimleri talep üzerinde değişir; kaydet.
                 service.updateTalep(this.getSelected());
                 workflowService.applyTransition(this.getSelected().getId(), action, transitionDescription);
+            } else if (action == EnumOrtTalepIslem.TESLIM_ET) {
+                // Teslimat kaydı + stok çıkışı + durum geçişi tek transaction'da.
+                workflowService.applyDelivery(this.getSelected().getId(), transitionDescription);
             } else {
                 workflowService.applyTransition(this.getSelected().getId(), action, transitionDescription);
             }
@@ -340,6 +345,52 @@ public class OrtTalepController extends AbstractController<OrtTalep> {
             return "";
         }
         return DateUtil.localdateTimeToString(tarih, FacesUtil.message("tarihFormat"));
+    }
+
+    /**
+     * Randevu gerektiren adımlarda: seçilen tarihle randevu oluşturur．
+     * Randevu kaydedildiğinde OrtRandevuController z workflow geçişini yapar;
+     * burada sadece dialogu hazırlarız.
+     */
+    public void prepareAppointmentForAction(EnumOrtTalepIslem action) {
+        if (this.getSelected() == null || action == null) {
+            FacesUtil.addErrorMessage("Geçersiz talep veya işlem.");
+            return;
+        }
+        // İlgili randevu tipini ortRandevuController üzerinden hazırla.
+        PrimeFaces.current().executeScript("PF('OrtRandevuCreateDialog').show()");
+    }
+
+    /**
+     * Geri dönüş seçenekleri.
+     */
+    public Set<EnumOrtTalepDurumu> getBackOptions() {
+        if (this.getSelected() == null) {
+            return Set.of();
+        }
+        return workflowService.getBackOptions(this.getSelected());
+    }
+
+    /**
+     * Seçilen adıma geri döner.
+     */
+    public void goBack(EnumOrtTalepDurumu hedefDurum) {
+        if (this.getSelected() == null || this.getSelected().getId() == null || hedefDurum == null) {
+            FacesUtil.addErrorMessage("Geçersiz talep veya hedef durum.");
+            return;
+        }
+        try {
+            workflowService.goBack(this.getSelected().getId(), hedefDurum, transitionDescription);
+            this.setSelected(service.find(this.getSelected().getId()));
+            FacesUtil.successMessage("Talep " + hedefDurum.getDisplayValue() + " adımına geri alındı.");
+            transitionDescription = null;
+            readInfo();
+        } catch (IllegalArgumentException ex) {
+            FacesUtil.addErrorMessage(ex.getMessage());
+        } catch (Exception ex) {
+            log.error(null, ex);
+            FacesUtil.errorMessage(Constants.HATA_OLUSTU);
+        }
     }
 
     public void selectOrtKisi(SelectEvent<OrtKisi> event) {

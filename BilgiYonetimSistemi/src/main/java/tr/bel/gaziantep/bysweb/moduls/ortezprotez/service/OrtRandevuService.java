@@ -60,6 +60,17 @@ public class OrtRandevuService extends AbstractService<OrtRandevu> {
     }
 
     /**
+     * Talep için verilen tipte tarihi girilmiş randevu var mı? (zorunlu randevu kontrolü)
+     */
+    public boolean hasAppointment(OrtTalep talep, EnumOrtRandevuTuru randevuTuru) {
+        if (talep == null || randevuTuru == null) {
+            return false;
+        }
+        return findByTalepByType(talep, randevuTuru).stream()
+                .anyMatch(r -> r.getRandevuTarihi() != null);
+    }
+
+    /**
      * Aynı talep ve tipte planlanmış (henüz gerçekleşmemiş) randevu var mı?
      */
     public boolean existsPlanned(OrtTalep talep, EnumOrtRandevuTuru randevuTuru) {

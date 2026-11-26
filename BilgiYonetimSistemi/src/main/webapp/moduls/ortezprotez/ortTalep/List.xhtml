@@ -32,7 +32,7 @@
                         selection="#{ortTalepController.selected}"
                         filtered="#{ortTalepController.filtered}"
                         rowselect=":OrtTalepListForm:datalist:datalist:createButton,:OrtTalepListForm:datalist:datalist:viewButton,:OrtTalepListForm:datalist:datalist:editButton,:OrtTalepListForm:datalist:datalist:deleteButton"
-                        rowDblselect="document.getElementById('OrtTalepListForm:datalist:datalist:editButton').click()"
+                        rowDblselect="document.getElementById('OrtTalepListForm:datalist:datalist:viewButton').click()"
                         contextMenu=":OrtTalepListForm:datalist:datalist:createButton :OrtTalepListForm:datalist:datalist:viewButton :OrtTalepListForm:datalist:datalist:editButton :OrtTalepListForm:datalist:datalist:deleteButton"
                         selectListener="#{ortTalepController.resetParents}"
                         controller="#{ortTalepController}"
@@ -52,7 +52,9 @@
                                  pt:data-tooltip="#{messages.buttonGuncelle}"
                                  actionListener="#{ortTalepController.readInfo()}"
                                  update=":OrtTalepEditForm:OrtTalepEditForm" oncomplete="PF('OrtTalepEditDialog').show()"
-                                 disabled="#{empty ortTalepController.selected}" onstart="PF('Loading').show()"
+                                 disabled="#{empty ortTalepController.selected or
+                                 (ortTalepController.selected.durum eq 'KAPATILDI' or     ortTalepController.selected.durum eq 'TAMAMLANDI')}"
+                                 onstart="PF('Loading').show()"
                                  onsuccess="PF('Loading').hide()"
                                  rendered="#{syKullaniciController.hasPermission('orttalep:guncelle')}"/>
                 <p:commandButton id="viewButton" styleClass="ui-button-info" icon="pi pi-search"

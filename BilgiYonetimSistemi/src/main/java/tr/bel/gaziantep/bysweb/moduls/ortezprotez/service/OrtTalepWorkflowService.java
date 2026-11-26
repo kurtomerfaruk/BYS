@@ -50,6 +50,8 @@ public class OrtTalepWorkflowService implements java.io.Serializable {
     private OrtTalepOdemeService ortTalepOdemeService;
     @Inject
     private OrtMalzemeTalepService ortMalzemeTalepService;
+    @Inject
+    private OrtTeslimatService ortTeslimatService;
 
     /**
      * İşlemi uygular: yetki, geçiş kuralı ve guard kontrollerinden sonra durumu değiştirir
@@ -220,6 +222,85 @@ public class OrtTalepWorkflowService implements java.io.Serializable {
         };
     }
 
+    /**
+     * Önceki adıma geri döner. Kullanıcı yetkisi ve açıklama zorunludur.
+     * Kapatılmış talepler geri alınamaz; her geri dönüş geçmişe kaydedilir.
+     */
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void goBack(Integer talepId, EnumOrtTalepDurumu hedefDurum, String description) {
+        if (talepId == null || hedefDurum == null) {
+            throw new IllegalArgumentException("Geri dönüş için hedef durum belirtilmelidir.");
+        }
+        if (description == null || description.isBlank()) {
+            throw new IllegalArgumentException("Geri dönüş nedeni (açıklama) zorunludur.");
+        }
+        OrtTalep talep = em.find(OrtTalep.class, talepId);
+        if (talep == null) {
+            throw new IllegalArgumentException("Talep kaydı bulunamadı.");
+        }
+        SyKullanici kullanici = Util.getSyKullanici();
+        if (!syYetkiService.hasPermission(kullanici, "orttalep:guncelle")) {
+            throw new IllegalArgumentException("Geri dönüş yetkiniz bulunmuyor.");
+        }
+        if (talep.getDurum() == EnumOrtTalepDurumu.KAPATILDI) {
+            throw new IllegalArgumentException("Kapatılmış talep geri alınamaz.");
+        }
+        if (!talep.getDurum().getPreviousStatuses().contains(hedefDurum)) {
+            throw new IllegalArgumentException("Bu durumdan hedef adıma geri dönülemez.");
+        }
+
+        em.lock(talep, LockModeType.OPTIMISTIC);
+        EnumOrtTalepDurumu eskiDurum = talep.getDurum();
+        talep.setDurum(hedefDurum);
+        em.merge(talep);
+        em.flush();
+
+        OrtTalepDurumGecmisi gecmis = OrtTalepDurumGecmisi.builder()
+                .ortTalep(talep)
+                .eskiDurum(eskiDurum)
+                .yeniDurum(hedefDurum)
+                .islemTarihi(LocalDateTime.now())
+                .islemiYapanSyKullanici(kullanici)
+                .aciklama("Geri dönüş: " + description)
+                .build();
+        em.persist(gecmis);
+        em.flush();
+    }
+
+    /**
+     * Talep için geri dönüş seçenekleri.
+     */
+    public Set<EnumOrtTalepDurumu> getBackOptions(OrtTalep talep) {
+        if (talep == null || talep.getDurum() == null) {
+            return Set.of();
+        }
+        return talep.getDurum().getPreviousStatuses();
+    }
+
+
+    /**
+     * Teslimat işlemi: teslimat kaydını oluşturur, stok çıkışını yapar ve
+     * talep durumunu geçirir. Tümü tek transaction'da çalışır.
+     */
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void applyDelivery(Integer talepId, String description) {
+        if (talepId == null) {
+            throw new IllegalArgumentException("Teslimat yapılacak talep bulunamadı.");
+        }
+        OrtTalep talep = em.find(OrtTalep.class, talepId);
+        if (talep == null) {
+            throw new IllegalArgumentException("Talep kaydı bulunamadı.");
+        }
+        SyKullanici kullanici = Util.getSyKullanici();
+        EnumOrtTalepIslem action = EnumOrtTalepIslem.TESLIM_ET;
+        checkPermission(kullanici, action);
+        checkTransition(talep, action);
+        checkGuards(talep, action, description);
+
+        ortTeslimatService.createDelivery(talep, description);
+        applyTransition(talepId, action, description);
+    }
+
 
     /**
      * UI butonları için: yetki ve mevcut duruma uygunluk kontrolü.
@@ -319,6 +400,28 @@ public class OrtTalepWorkflowService implements java.io.Serializable {
      */
     private void checkGuards(OrtTalep talep, EnumOrtTalepIslem action, String description) {
         switch (action) {
+            case ON_MUAYENE_RANDEVUSU -> {
+                if (!ortRandevuService.hasAppointment(talep, EnumOrtRandevuTuru.ON_MUAYENE)) {
+                    throw new IllegalArgumentException("Ön muayene randevusu oluşturulmadan bu adıma geçilemez.");
+                }
+            }
+            case OLCU_RANDEVUSU -> {
+                if (!ortRandevuService.hasAppointment(talep, EnumOrtRandevuTuru.OLCU)) {
+                    throw new IllegalArgumentException("Ölçü randevusu oluşturulmadan bu adıma geçilemez.");
+                }
+            }
+            case PROVA_RANDEVUSU, YENIDEN_PROVA_RANDEVUSU -> {
+                EnumOrtRandevuTuru tur = action == EnumOrtTalepIslem.PROVA_RANDEVUSU
+                        ? EnumOrtRandevuTuru.PROVA : EnumOrtRandevuTuru.YENIDEN_PROVA;
+                if (!ortRandevuService.hasAppointment(talep, tur)) {
+                    throw new IllegalArgumentException("Prova randevusu oluşturulmadan bu adıma geçilemez.");
+                }
+                List<OrtMalzemeTalep> talepler = ortMalzemeTalepService.findByTalep(talep);
+                if (!talepler.isEmpty()
+                        && talepler.stream().anyMatch(m -> m.getDurum() != EnumOrtMalzemeDurumu.ONAYLANDI)) {
+                    throw new IllegalArgumentException("Malzeme talepleri onaylanmadan provaya geçilemez.");
+                }
+            }
             case ON_MUAYENEYE_GEL -> {
                 if (!ortRandevuService.existsAttended(talep, EnumOrtRandevuTuru.ON_MUAYENE)) {
                     throw new IllegalArgumentException("Ön muayene randevusu tamamlanmadan bu işlem yapılamaz.");
@@ -333,6 +436,11 @@ public class OrtTalepWorkflowService implements java.io.Serializable {
                 if (!ortRandevuService.existsAttended(talep, EnumOrtRandevuTuru.PROVA)
                         && !ortRandevuService.existsAttended(talep, EnumOrtRandevuTuru.YENIDEN_PROVA)) {
                     throw new IllegalArgumentException("Prova randevusu tamamlanmadan prova yapılamaz.");
+                }
+            }
+            case PERSONEL_ATA -> {
+                if (talep.getTeknikerOrtPersonel() == null || talep.getFizyoterapistOrtPersonel() == null) {
+                    throw new IllegalArgumentException("Personel ataması yapılmadan bu adıma geçilemez. Tekniker ve fizyoterapist seçilmelidir.");
                 }
             }
             case DEGERLENDIRMEYE_AL -> {
@@ -404,6 +512,12 @@ public class OrtTalepWorkflowService implements java.io.Serializable {
                     throw new IllegalArgumentException("Reçete taranıp sisteme yüklenmelidir.");
                 }
             }
+            case MALZEME_TALEP_ET -> {
+                List<OrtMalzemeTalep> talepler = ortMalzemeTalepService.findByTalep(talep);
+                if (talepler.isEmpty()) {
+                    throw new IllegalArgumentException("Malzeme talebi oluşturulmadan bu adıma geçilemez. Lütfen en az bir malzeme kalemi ekleyip kaydediniz.");
+                }
+            }
             case DEPO_ONAYINA_GONDER -> {
                 List<OrtMalzemeTalep> talepler = ortMalzemeTalepService.findByTalep(talep);
                 if (talepler.isEmpty()) {
@@ -413,15 +527,15 @@ public class OrtTalepWorkflowService implements java.io.Serializable {
                     throw new IllegalArgumentException("Onaya gönderilecek bekleyen malzeme talebi bulunamadı.");
                 }
             }
-            case PROVA_RANDEVUSU -> {
-                List<OrtMalzemeTalep> talepler = ortMalzemeTalepService.findByTalep(talep);
-                if (!talepler.isEmpty()
-                        && talepler.stream().anyMatch(m -> m.getDurum() != EnumOrtMalzemeDurumu.ONAYLANDI)) {
-                    throw new IllegalArgumentException("Malzeme talepleri onaylanmadan provaya geçilemez.");
+            case TESLIM_ET -> {
+                if (!ortTalepBelgeService.existsByType(talep, EnumOrtBelgeTuru.TESLIM_TUTANAGI)) {
+                    throw new IllegalArgumentException("Teslimat öncesinde imzalı teslim tutanağı yüklenmelidir.");
                 }
             }
-            case TESLIM_ET, TAMAMLA -> {
-                // TODO: OrtTeslimat entity'si eklendiğinde imzalı teslim tutanağı kontrolü eklenecek.
+            case TAMAMLA -> {
+                if (!ortTeslimatService.existsByTalep(talep)) {
+                    throw new IllegalArgumentException("Teslimat kaydı oluşturulmadan talep tamamlanamaz.");
+                }
             }
             default -> {
                 // Ek guard gerektirmeyen geçişler

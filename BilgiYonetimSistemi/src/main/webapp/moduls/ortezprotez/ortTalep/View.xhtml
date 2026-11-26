@@ -13,7 +13,7 @@
               modal="true" resizable="false" closeOnEscape="true" responsive="true"
               appendTo="@(body)" fitViewport="true" position="top" style="min-width: 1000px; max-width: 1100px;">
 
-        <h:form id="OrtTalepViewForm">
+        <h:form id="OrtTalepViewForm" enctype="multipart/form-data">
 
             <!-- 1) ÖZET KARTI -->
             <div class="otd-card otd-pad">
@@ -93,7 +93,7 @@
             <!-- 3) SIRADAKİ İŞLEM -->
             <ui:fragment rendered="#{ortTalepController.primaryAction != null}">
                 <div class="otd-card otd-pad otd-next">
-                    <div class="ic"><i class="pi pi-arrow-right"/></div>
+                    <!--                    <div class="ic"><i class="pi pi-arrow-right"/></div>-->
                     <div class="txt">
                         <h3>
                             <h:outputText value="#{messages.siradakiIslemLabel}"/>
@@ -137,11 +137,11 @@
                             <table style="width:100%;margin-top:10px;font-size:13px;">
                                 <tr>
                                     <td style="padding:4px 8px 4px 0;width:140px;">
-                                        <h:outputText value="#{messages.teknikerLabel}"/>
+                                        <p:outputLabel value="#{messages.teknikerLabel}" for="@next"/>
                                     </td>
                                     <td style="padding:4px 0;">
                                         <p:selectOneMenu value="#{ortTalepController.selected.teknikerOrtPersonel}"
-                                                         filter="true" style="width:100%;"
+                                                         filter="true" style="width:100%;" required="true"
                                                          converter="omnifaces.SelectItemsConverter">
                                             <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
                                             <f:selectItems value="#{ortPersonelController.items}" var="p"
@@ -149,15 +149,35 @@
                                         </p:selectOneMenu>
                                     </td>
                                     <td style="padding:4px 8px 4px 16px;width:140px;">
-                                        <h:outputText value="#{messages.fizyoterapistLabel}"/>
+                                        <p:outputLabel value="#{messages.fizyoterapistLabel}" for="@next"/>
                                     </td>
                                     <td style="padding:4px 0;">
                                         <p:selectOneMenu value="#{ortTalepController.selected.fizyoterapistOrtPersonel}"
-                                                         filter="true" style="width:100%;"
+                                                         filter="true" style="width:100%;" required="true"
                                                          converter="omnifaces.SelectItemsConverter">
                                             <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
                                             <f:selectItems value="#{ortPersonelController.items}" var="p"
                                                            itemLabel="#{p.gnlPersonel.gnlKisi.adSoyad}" itemValue="#{p}"/>
+                                        </p:selectOneMenu>
+                                    </td>
+                                </tr>
+                            </table>
+                        </h:panelGroup>
+
+                        <!-- Proje belirle adımında zorunlu proje seçimi -->
+                        <h:panelGroup rendered="#{ortTalepController.primaryAction == enumOrtTalepIslem.PROJE_BELIRLE}">
+                            <table style="width:100%;margin-top:10px;font-size:13px;">
+                                <tr>
+                                    <td style="padding:4px 8px 4px 0;width:100px;">
+                                        <p:outputLabel value="#{messages.projeLabel}" for="@next"/>
+                                    </td>
+                                    <td style="padding:4px 0;">
+                                        <p:selectOneMenu value="#{ortTalepController.selected.ortProje}" filter="true"
+                                                         style="width:100%;" required="true"
+                                                         converter="omnifaces.SelectItemsConverter">
+                                            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+                                            <f:selectItems value="#{ortProjeController.items}" var="proje"
+                                                           itemLabel="#{proje.tanim}" itemValue="#{proje}"/>
                                         </p:selectOneMenu>
                                     </td>
                                 </tr>
@@ -184,7 +204,6 @@
                         </h:panelGroup>
 
                         <!-- Malzeme talebi adımında kalem ekleme -->
-
                         <h:panelGroup rendered="#{ortTalepController.primaryAction == enumOrtTalepIslem.MALZEME_TALEP_ET}">
                             <div style="margin-top:12px;padding:12px;border:1px dashed #cbd5e1;border-radius:10px;background:#f8fafc;">
                                 <strong style="font-size:13px;">#{messages.malzemeTalepKalemleriText}</strong>
@@ -214,7 +233,7 @@
                                     <div class="col-md-3">
                                         <p:commandButton value="#{messages.buttonEkle}" icon="pi pi-plus"
                                                          styleClass="ui-button-secondary"
-                                                         actionListener="#{ortMalzemeTalepController.addItem()}"
+                                                         actionListener="#{ortMalzemeTalepController.addItem}"
                                                          process="@form" update="@form,:growl"/>
                                     </div>
                                 </div>
@@ -274,10 +293,23 @@
                                 </p:fileUpload>
                             </div>
                         </h:panelGroup>
+
                         <p:inputTextarea styleClass="otd-note"
                                          value="#{ortTalepController.transitionDescription}"
-                                         placeholder="#{messages.islemAciklamaIpucuText}"
+                                         placeholder="#{messages.islemAciklamaText}"
                                          rows="2" autoResize="false"/>
+
+                        <p:commandButton rendered="#{ortTalepController.primaryAction != enumOrtTalepIslem.ON_MUAYENE_RANDEVUSU
+                                           and ortTalepController.primaryAction != enumOrtTalepIslem.OLCU_RANDEVUSU
+                                           and ortTalepController.primaryAction != enumOrtTalepIslem.PROVA_RANDEVUSU
+                                           and ortTalepController.primaryAction != enumOrtTalepIslem.YENIDEN_PROVA_RANDEVUSU}"
+                                         value="#{ortTalepController.primaryAction.displayValue}"
+                                         icon="#{ortTalepController.primaryAction.icon}"
+                                         styleClass="ui-button-primary"
+                                         actionListener="#{ortTalepController.applyTransition(ortTalepController.primaryAction)}"
+                                         process="@form" update="@form,:growl"
+                                         onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+
                         <div class="otd-more">
                             <h:outputText value="#{messages.digerIslemlerLabel}"/>
                             <ui:repeat value="#{ortTalepController.secondaryActions}" var="action">
@@ -287,13 +319,35 @@
                                                style="margin-right: 10px;"/>
                             </ui:repeat>
                         </div>
+                        <!-- Geri dönüş -->
+                        <h:panelGroup rendered="#{not empty ortTalepController.backOptions}" style="margin-top:8px;">
+                            <p:outputLabel value="#{messages.geriDonusLabel}" for="geriAciklama"/>
+                            <p:inputTextarea id="geriAciklama" rows="1" styleClass="otd-note"
+                                             value="#{ortTalepController.transitionDescription}"
+                                             placeholder="#{messages.geriDonusAciklamaText}"/>
+                            <ui:repeat value="#{ortTalepController.backOptions}" var="oncekiDurum">
+                                <p:commandButton value="#{messages.buttonGeriDon} #{oncekiDurum.displayValue}"
+                                                 icon="pi pi-arrow-left" styleClass="ui-button-secondary"
+                                                 actionListener="#{ortTalepController.goBack(oncekiDurum)}"
+                                                 process="@form" update="@form,:growl"/>
+                            </ui:repeat>
+                        </h:panelGroup>
                     </div>
-                    <p:commandButton value="#{ortTalepController.primaryAction.displayValue}"
-                                     icon="#{ortTalepController.primaryAction.icon}"
-                                     styleClass="ui-button-primary"
-                                     actionListener="#{ortTalepController.applyTransition(ortTalepController.primaryAction)}"
-                                     process="@form" update="@form,:growl"
-                                     onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                    <!-- Randevu adımlarında: randevu tarihi seçimi zorunlu, dialog açılır -->
+                    <h:panelGroup rendered="#{ortTalepController.primaryAction == enumOrtTalepIslem.ON_MUAYENE_RANDEVUSU
+                                            or ortTalepController.primaryAction == enumOrtTalepIslem.OLCU_RANDEVUSU
+                                            or ortTalepController.primaryAction == enumOrtTalepIslem.PROVA_RANDEVUSU
+                                            or ortTalepController.primaryAction == enumOrtTalepIslem.YENIDEN_PROVA_RANDEVUSU}">
+                        <p:commandButton value="#{ortTalepController.primaryAction.displayValue}"
+                                         icon="#{ortTalepController.primaryAction.icon}"
+                                         styleClass="ui-button-primary"
+                                         actionListener="#{ortRandevuController.prepareCreateForTalep(ortTalepController.selected, ortTalepController.primaryAction.randevuTuruForAction)}"
+                                         process="@this" update=":OrtRandevuCreateForm"
+                                         oncomplete="PF('OrtRandevuCreateDialog').show()"
+                                         onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                    </h:panelGroup>
+
+
                 </div>
             </ui:fragment>
 
@@ -313,7 +367,7 @@
             <div class="otd-card">
                 <div class="otd-tabs">
                     <button type="button" class="otd-tab active" onclick="otdTab('genel',this)">
-                        <h:outputText value="#{messages.genelBilgilerLabel}"/>
+                        <h:outputText value="#{messages.genelBilgilerText}"/>
                     </button>
                     <button type="button" class="otd-tab" onclick="otdTab('randevu',this)">
                         <h:outputText value="#{messages.randevuListesi}"/>
@@ -326,8 +380,11 @@
                     <button type="button" class="otd-tab" onclick="otdTab('malzeme',this)">
                         <h:outputText value="#{messages.malzemeText}"/>
                     </button>
+                    <button type="button" class="otd-tab" onclick="otdTab('teslimat',this)">
+                        <h:outputText value="#{messages.teslimatText}"/>
+                    </button>
                     <button type="button" class="otd-tab" onclick="otdTab('gecmis',this)">
-                        <h:outputText value="#{messages.islemGecmisiLabel}"/>
+                        <h:outputText value="#{messages.islemGecmisiText}"/>
                     </button>
                 </div>
 
@@ -359,7 +416,7 @@
                         <ui:repeat value="#{enumRandevuTuru.ALL_VALUES}" var="tur">
                             <p:commandButton value="#{tur.displayValue}" icon="pi pi-calendar-plus"
                                              styleClass="ui-button-secondary"
-                                             actionListener="#{ortRandevuController.prepareCreateForTalep(ortTalepController.selected)}"
+                                             actionListener="#{ortRandevuController.prepareCreateForTalep(ortTalepController.selected, tur)}"
                                              update=":OrtRandevuCreateForm"
                                              oncomplete="PF('OrtRandevuCreateDialog').show()"
                                              rendered="#{syKullaniciController.hasPermission('ortrandevu:ekle')}"/>
@@ -479,6 +536,7 @@
                         </p:column>
                     </p:dataTable>
                 </div>
+
                 <div class="otd-pane" id="otd-malzeme">
                     <p:dataTable value="#{ortMalzemeTalepController.talepler}" var="mt"
                                  emptyMessage="#{messages.kayitBulunamadi}" styleClass="w-100" size="small">
@@ -507,10 +565,10 @@
                         <p:dataTable value="#{ortMalzemeTalepController.seciliDetaylar}" var="d"
                                      emptyMessage="#{messages.kayitBulunamadi}" styleClass="w-100 mt-3" size="small"
                                      rendered="#{not empty ortMalzemeTalepController.seciliDetaylar}">
-                            <p:column headerText="#{messages.malzemeText}">
+                            <p:column headerText="#{messages.malzemeLabel}">
                                 <h:outputText value="#{d.stStok.stokAdi}"/>
                             </p:column>
-                            <p:column headerText="#{messages.depoText}">
+                            <p:column headerText="#{messages.depoLabel}">
                                 <h:outputText value="#{d.stDepo.ad}"/>
                             </p:column>
                             <p:column headerText="#{messages.miktarText}">
@@ -522,6 +580,27 @@
                         </p:dataTable>
                     </h:panelGroup>
                 </div>
+
+                <div class="otd-pane" id="otd-teslimat">
+                    <p:dataTable value="#{ortTalepController.teslimatlar}" var="teslimat"
+                                 emptyMessage="#{messages.kayitBulunamadi}" styleClass="w-100" size="small">
+                        <p:column headerText="#{messages.teslimTarihiLabel}">
+                            <h:outputText value="#{teslimat.teslimTarihi}">
+                                <f:convertDateTime pattern="#{messages.tarihSaatFormat}" type="localDateTime"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="#{messages.teslimEdenPersonelLabel}">
+                            <h:outputText value="#{teslimat.teslimEden.gnlPersonel.gnlKisi.adSoyad}"/>
+                        </p:column>
+                        <p:column headerText="#{messages.teslimAlanLabel}">
+                            <h:outputText value="#{teslimat.teslimAlan.adSoyad}"/>
+                        </p:column>
+                        <p:column headerText="#{messages.aciklamaText}">
+                            <h:outputText value="#{teslimat.aciklama}"/>
+                        </p:column>
+                    </p:dataTable>
+                </div>
+
                 <div class="otd-pane" id="otd-gecmis">
                     <div class="otd-timeline">
                         <ui:repeat value="#{ortTalepController.statusHistory}" var="gecmis">

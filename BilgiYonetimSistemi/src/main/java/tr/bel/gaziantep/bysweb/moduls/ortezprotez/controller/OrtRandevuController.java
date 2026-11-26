@@ -12,6 +12,7 @@ import org.primefaces.event.SelectEvent;
 import org.primefaces.model.*;
 import tr.bel.gaziantep.bysweb.core.controller.AbstractController;
 import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtRandevuDurumu;
+import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtRandevuTuru;
 import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtTalepIslem;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.core.utils.DateUtil;
@@ -125,12 +126,12 @@ public class OrtRandevuController extends AbstractController<OrtRandevu> {
         this.setSelected(event.getData());
     }
 
-    public void prepareCreateForTalep(OrtTalep talep) {
+    public void prepareCreateForTalep(OrtTalep talep, EnumOrtRandevuTuru randevuTuru) {
         try {
             OrtRandevu randevu = OrtRandevu.class.getDeclaredConstructor().newInstance();
             randevu.setOrtTalep(talep);
             randevu.setOrtKisi(talep == null ? null : talep.getOrtKisi());
-            randevu.setRandevuTarihi(LocalDateTime.now().plusDays(1).withHour(9).withMinute(0).withSecond(0).withNano(0));
+            randevu.setRandevuTuru(randevuTuru);
             randevu.setDurum(EnumOrtRandevuDurumu.PLANLANDI);
             this.setSelected(randevu);
             initializeEmbeddableKey();

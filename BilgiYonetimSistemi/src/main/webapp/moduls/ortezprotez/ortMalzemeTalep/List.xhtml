@@ -1,113 +1,40 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="jakarta.faces.facelets"
-      xmlns:h="jakarta.faces.html"
-      xmlns:f="jakarta.faces.core"
-      xmlns:p="primefaces">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:p="primefaces"
+                xmlns:pt="jakarta.faces.passthrough"
+                xmlns:coco="jakarta.faces.composite/ui">
 
-<ui:composition>
+    <h:form id="OrtMalzemeTalepListForm" styleClass="form-height">
 
-    <h:form id="OrtMalzemeOnayListForm">
+        <coco:datatable id="datalist"
+                        value="#{ortMalzemeTalepController.lazyItems}"
+                        rowKey="#{item.id}"
+                        selection="#{ortMalzemeTalepController.selected}"
+                        filtered="#{ortMalzemeTalepController.filtered}"
+                        rowselect=":OrtMalzemeTalepListForm:datalist:datalist:viewButton"
+                        rowDblselect="document.getElementById('OrtMalzemeTalepListForm:datalist:datalist:viewButton').click()"
+                        contextMenu=":OrtMalzemeTalepListForm:datalist:datalist:viewButton"
+                        selectListener="#{ortMalzemeTalepController.resetParents}"
+                        controller="#{ortMalzemeTalepController}"
+                        header="Malzeme Onay Listesi">
 
-        <div class="card custom-card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h3 class="card-title">Onay Bekleyen Malzeme Talepleri</h3>
-                <p:commandButton value="#{messages.buttonYenile}" icon="pi pi-refresh"
-                                 styleClass="ui-button-secondary"
-                                 actionListener="#{ortMalzemeTalepController.loadPendingRequests}"
-                                 process="@this" update=":growl,@form"/>
-            </div>
-            <div class="card-body">
-                <p:dataTable value="#{ortMalzemeTalepController.pendingRequests}" var="mt"
-                             id="onayDatalist"
-                             emptyMessage="#{messages.kayitBulunamadi}" styleClass="w-100" size="small">
-                    <p:column headerText="#{messages.talepNoText}">
-                        <h:outputText value="#{mt.ortTalep.talepNo}"/>
-                    </p:column>
-                    <p:column headerText="#{messages.adText}">
-                        <h:outputText value="#{mt.ortTalep.ortKisi.gnlKisi.ad}"/>
-                    </p:column>
-                    <p:column headerText="#{messages.soyadText}">
-                        <h:outputText value="#{mt.ortTalep.ortKisi.gnlKisi.soyad}"/>
-                    </p:column>
-                    <p:column headerText="#{messages.talepTarihiText}">
-                        <h:outputText value="#{mt.talepTarihi}">
-                            <f:convertDateTime pattern="#{messages.tarihSaatFormat}" type="localDateTime"/>
-                        </h:outputText>
-                    </p:column>
-                    <p:column headerText="#{messages.teknikerText}">
-                        <h:outputText value="#{mt.talepEdenOrtPersonel.gnlPersonel.gnlKisi.adSoyad}"/>
-                    </p:column>
-                    <p:column headerText="#{messages.malzemeTalepKalemleriText}" style="width:120px;">
-                        <p:commandButton value="#{messages.detayText}" icon="pi pi-search"
-                                         styleClass="ui-button-info"
-                                         actionListener="#{ortMalzemeTalepController.selectForApproval(mt)}"
-                                         process="@this"
-                                         update=":growl,malzemeOnayDialogForm"
-                                         oncomplete="PF('malzemeOnayDialog').show()"/>
-                    </p:column>
-                </p:dataTable>
-            </div>
-        </div>
+            <p:ajax event="colResize" listener="#{ortMalzemeTalepController.onResize}"/>
 
-        <p:dialog id="malzemeOnayDialog" widgetVar="malzemeOnayDialog"
-                  header="Malzeme Talebi Onayı" modal="true" resizable="false"
-                  closeOnEscape="true" responsive="true" appendTo="@(body)" fitViewport="true"
-                  style="min-width:750px;">
-            <h:form id="malzemeOnayDialogForm">
-                <h:panelGroup rendered="#{ortMalzemeTalepController.selectedRequest != null}">
-                    <div class="mb-2">
-                        <strong>#{messages.talepNoLabel}</strong>
-                        <h:outputText value="#{ortMalzemeTalepController.selectedRequest.ortTalep.talepNo}"/>
-                        &nbsp;·&nbsp;
-                        <strong>#{messages.adSoyadLabel}</strong>
-                        <h:outputText value="#{ortMalzemeTalepController.selectedRequest.ortTalep.ortKisi.gnlKisi.adSoyad}"/>
-                    </div>
-                    <p:dataTable value="#{ortMalzemeTalepController.seciliDetaylar}" var="d"
-                                 emptyMessage="#{messages.kayitBulunamadi}" styleClass="w-100" size="small">
-                        <p:column headerText="#{messages.malzemeText}">
-                            <h:outputText value="#{d.stStok.stokKodu} - #{d.stStok.stokAdi}"/>
-                        </p:column>
-                        <p:column headerText="#{messages.depoText}">
-                            <h:outputText value="#{d.stDepo.ad}"/>
-                        </p:column>
-                        <p:column headerText="#{messages.miktarText}">
-                            <h:outputText value="#{d.istenenMiktar}"/>
-                        </p:column>
-                        <p:column headerText="#{messages.aciklamaText}">
-                            <h:outputText value="#{d.aciklama}"/>
-                        </p:column>
-                    </p:dataTable>
+            <f:facet name="paginatorBottomLeft">
+                <p:commandButton id="viewButton" styleClass="ui-button-info" icon="pi pi-search" pt:data-tooltip="#{messages.buttonDetay}"
+                                 update=":OrtMalzemeTalepOnayForm" oncomplete="PF('OrtMalzemeTalepOnayDialog').show()"
+                                 disabled="#{empty ortMalzemeTalepController.selected}" onstart="PF('Loading').show()"
+                                 onsuccess="PF('Loading').hide()"/>
+            </f:facet>
 
-                    <div class="mt-3">
-                        <p:outputLabel value="#{messages.redGerekcesiLabel}" for="redGerekce"/>
-                        <p:inputTextarea id="redGerekce" rows="2" styleClass="w-100"
-                                         value="#{ortMalzemeTalepController.redGerekcesi}"/>
-                    </div>
+        </coco:datatable>
 
-                    <div class="d-flex justify-content-end gap-2 mt-3">
-                        <p:commandButton value="#{messages.buttonOnayla}" icon="pi pi-check"
-                                         styleClass="ui-button-success"
-                                         actionListener="#{ortMalzemeTalepController.approveSelected}"
-                                         process="@this" update=":growl,:OrtMalzemeOnayListForm:onayDatalist,malzemeOnayDialogForm"
-                                         oncomplete="handleSubmit(xhr,status,args,PF('malzemeOnayDialog'));"/>
-                        <p:commandButton value="#{messages.buttonReddet}" icon="pi pi-times"
-                                         styleClass="ui-button-danger"
-                                         actionListener="#{ortMalzemeTalepController.rejectSelected}"
-                                         process="redGerekce"
-                                         update=":growl,:OrtMalzemeOnayListForm:onayDatalist,malzemeOnayDialogForm"
-                                         oncomplete="handleSubmit(xhr,status,args,PF('malzemeOnayDialog'));"/>
-                        <p:commandButton value="#{messages.buttonKapat}" icon="pi pi-times"
-                                         styleClass="ui-button-secondary"
-                                         onclick="PF('malzemeOnayDialog').hide()" immediate="true"/>
-                    </div>
-                </h:panelGroup>
-            </h:form>
-        </p:dialog>
+        <ui:include src="/confirmation.xhtml"/>
 
     </h:form>
 
 </ui:composition>
-
-</html>

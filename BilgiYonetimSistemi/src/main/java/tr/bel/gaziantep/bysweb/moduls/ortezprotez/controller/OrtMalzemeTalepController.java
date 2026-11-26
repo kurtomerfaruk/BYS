@@ -1,6 +1,7 @@
 package tr.bel.gaziantep.bysweb.moduls.ortezprotez.controller;
 
 import jakarta.ejb.EJBException;
+import jakarta.faces.model.SelectItem;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -9,6 +10,8 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import tr.bel.gaziantep.bysweb.core.controller.AbstractController;
 import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtMalzemeDurumu;
+import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.EnumSyFiltreAnahtari;
+import tr.bel.gaziantep.bysweb.core.service.FilterOptionService;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.core.utils.FacesUtil;
 import tr.bel.gaziantep.bysweb.core.utils.Util;
@@ -41,6 +44,8 @@ public class OrtMalzemeTalepController extends AbstractController<OrtMalzemeTale
     private OrtMalzemeTalepService service;
     @Inject
     private OrtTalepController ortTalepController;
+    @Inject
+    private FilterOptionService filterOptionService;
 
     @Getter
     @Setter
@@ -78,6 +83,17 @@ public class OrtMalzemeTalepController extends AbstractController<OrtMalzemeTale
 
     public OrtMalzemeTalepController() {
         super(OrtMalzemeTalep.class);
+    }
+
+    public List<SelectItem> getFilterOptions(EnumSyFiltreAnahtari key) {
+        switch (key) {
+            case ORTMALZEME_TALEP_ONAY_DURUMU -> {
+                return filterOptionService.getOrtMalzemeTalepDurums();
+            }
+            default -> {
+                return Collections.emptyList();
+            }
+        }
     }
 
     private OrtTalep currentTalep() {
@@ -136,10 +152,10 @@ public class OrtMalzemeTalepController extends AbstractController<OrtMalzemeTale
     public void approve(OrtMalzemeTalep mt) {
         try {
             service.approve(mt.getId(), Util.getSyKullanici(), mt.getAciklama());
-            FacesUtil.successMessage("Malzeme talebi onaylandı ve stok rezerve edildi.");
+            FacesUtil.addSuccessMessage("Malzeme talebi onaylandı ve stok rezerve edildi.");
             refreshDetail();
-        } catch (IllegalArgumentException ex) {
-            FacesUtil.addErrorMessage(ex.getMessage());
+        } catch (EJBException ex) {
+            FacesUtil.addErrorMessage(ex.getCause().getMessage());
         } catch (Exception ex) {
             log.error(null, ex);
             FacesUtil.errorMessage(Constants.HATA_OLUSTU);
@@ -149,7 +165,7 @@ public class OrtMalzemeTalepController extends AbstractController<OrtMalzemeTale
     public void reject(OrtMalzemeTalep mt) {
         try {
             service.reject(mt.getId(), Util.getSyKullanici(), redGerekcesi);
-            FacesUtil.successMessage("Malzeme talebi reddedildi.");
+            FacesUtil.addSuccessMessage("Malzeme talebi reddedildi.");
             redGerekcesi = null;
             refreshDetail();
         } catch (EJBException ex) {
@@ -183,11 +199,11 @@ public class OrtMalzemeTalepController extends AbstractController<OrtMalzemeTale
      * Onay ekranından onaylar (kısmi onay yok, tamamı rezerve edilir).
      */
     public void approveSelected() {
-        if (selectedRequest == null) {
+        if (this.getSelected() == null) {
             FacesUtil.addErrorMessage("Lütfen onaylanacak talebi seçiniz.");
             return;
         }
-        approve(selectedRequest);
+        approve(this.getSelected());
         loadPendingRequests();
     }
 
@@ -195,11 +211,11 @@ public class OrtMalzemeTalepController extends AbstractController<OrtMalzemeTale
      * Onay ekranından reddeder (gerekçe zorunlu).
      */
     public void rejectSelected() {
-        if (selectedRequest == null) {
+        if (this.getSelected() == null) {
             FacesUtil.addErrorMessage("Lütfen reddedilecek talebi seçiniz.");
             return;
         }
-        reject(selectedRequest);
+        reject(this.getSelected());
         loadPendingRequests();
     }
 

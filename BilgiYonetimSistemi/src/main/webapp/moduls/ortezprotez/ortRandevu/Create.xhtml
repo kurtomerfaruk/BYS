@@ -51,8 +51,8 @@
 
                     <p:outputLabel value="#{messages.randevuTarihiLabel}" for="@next"/>
                     <p:datePicker value="#{ortRandevuController.selected.randevuTarihi}" locale="tr"
-                                  pattern="#{messages.tarihSaatFormat}" mask="true" monthNavigator="true"
-                                  yearNavigator="true" showButtonBar="true" showIcon="true" required="true"/>
+                                  pattern="#{messages.tarihSaatKisaFormat}" mask="true" monthNavigator="true"
+                                  yearNavigator="true" showButtonBar="true" showIcon="true" required="true" showOnFocus="false"/>
 
                     <p:outputLabel value="#{messages.sorumluPersonelLabel}" for="@next"/>
                     <p:selectOneMenu value="#{ortRandevuController.selected.ortPersonel}" filter="true"

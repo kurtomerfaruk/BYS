@@ -219,7 +219,13 @@ public class OrtMalzemeTalepService extends AbstractService<OrtMalzemeTalep> {
             hareket.setMiktar(miktar);
             hareket.setBelgeTuru("ORTTALEP");
             hareket.setBelgeNo(mt.getOrtTalep() == null ? null : mt.getOrtTalep().getTalepNo());
-            hareket.setAciklama("Ortez-Protez teslimat - " + (d.getAciklama() == null ? "" : d.getAciklama()));
+            assert mt.getOrtTalep() != null;
+            String kisi = mt.getOrtTalep().getOrtKisi().getGnlKisi().getTcKimlikNo()
+                    + " "
+                    + mt.getOrtTalep().getOrtKisi().getGnlKisi().getAdSoyad()
+                    + " - ";
+            hareket.setAciklama("Ortez-Protez teslimat - " + kisi + (d.getAciklama() == null ? "" :
+                    d.getAciklama()));
             stokHareketService.hareketEkle(hareket);
 
             bakiyeService.consumeReservation(d.getStStok(), d.getStDepo(), null, miktar);
