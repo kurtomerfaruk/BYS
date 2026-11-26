@@ -92,6 +92,14 @@ public enum EnumOrtTalepDurumu implements BaseEnum {
         return !getPreviousStatuses().isEmpty();
     }
 
+    /**
+     * Ücret/proje kararı sonrası genel güncelleme kilitlidir. Talep tipi, tarih, kişi
+     * ve workflow alanları yalnızca workflow işlemleriyle değiştirilebilir.
+     */
+    public boolean isUpdateLocked() {
+        return ordinal() >= UCRET_BELIRLEME_BEKLIYOR.ordinal();
+    }
+
     @Override
     public String getDisplayValue() {
         return label;

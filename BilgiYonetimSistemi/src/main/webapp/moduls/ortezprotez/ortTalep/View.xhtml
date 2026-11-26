@@ -90,8 +90,8 @@
                 </div>
             </div>
 
-            <!-- 3) SIRADAKİ İŞLEM -->
-            <ui:fragment rendered="#{ortTalepController.primaryAction != null}">
+            <!-- 3) SIRADAKİ İŞLEM (tamamlanmamış taleplerde her zaman gösterilir) -->
+            <ui:fragment rendered="#{not ortTalepController.processComplete and ortTalepController.primaryAction != null}">
                 <div class="otd-card otd-pad otd-next">
                     <!--                    <div class="ic"><i class="pi pi-arrow-right"/></div>-->
                     <div class="txt">
@@ -351,12 +351,31 @@
                 </div>
             </ui:fragment>
 
-            <ui:fragment rendered="#{ortTalepController.primaryAction == null}">
+            <!-- Tamamlanmış talepler -->
+            <ui:fragment rendered="#{ortTalepController.processComplete}">
                 <div class="otd-card otd-pad">
                     <div class="otd-next" style="border-color:#dcfce7;background:linear-gradient(100deg,#ecfdf5,#f8fafc)">
                         <div class="ic" style="background:#16a34a"><i class="pi pi-check"/></div>
                         <div class="txt">
                             <h3><h:outputText value="#{messages.surecTamamlandiLabel}"/></h3>
+                            <p><h:outputText value="#{ortTalepController.pendingAction}"/></p>
+                        </div>
+                    </div>
+                </div>
+            </ui:fragment>
+
+            <!-- Devam eden ama şu an kullanıcıya açık işlemi olmayan talepler -->
+            <ui:fragment rendered="#{not ortTalepController.processComplete and ortTalepController.primaryAction == null}">
+                <div class="otd-card otd-pad">
+                    <div class="otd-next">
+                        <div class="ic"><i class="pi pi-hourglass"/></div>
+                        <div class="txt">
+                            <h3>
+                                <h:outputText value="#{messages.depoOnayiBekleniyorLabel}"
+                                              rendered="#{ortTalepController.waitingForWarehouseApproval}"/>
+                                <h:outputText value="#{messages.siradakiIslemLabel}"
+                                              rendered="#{not ortTalepController.waitingForWarehouseApproval}"/>
+                            </h3>
                             <p><h:outputText value="#{ortTalepController.pendingAction}"/></p>
                         </div>
                     </div>

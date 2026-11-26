@@ -19,6 +19,7 @@ import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtMalzemeTalep;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtMalzemeTalepDetay;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtTalep;
 import tr.bel.gaziantep.bysweb.moduls.ortezprotez.service.OrtMalzemeTalepService;
+import tr.bel.gaziantep.bysweb.moduls.ortezprotez.service.OrtTalepWorkflowService;
 import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity.StDepo;
 import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity.StStok;
 
@@ -44,6 +45,8 @@ public class OrtMalzemeTalepController extends AbstractController<OrtMalzemeTale
     private OrtMalzemeTalepService service;
     @Inject
     private OrtTalepController ortTalepController;
+    @Inject
+    private OrtTalepWorkflowService workflowService;
     @Inject
     private FilterOptionService filterOptionService;
 
@@ -152,7 +155,8 @@ public class OrtMalzemeTalepController extends AbstractController<OrtMalzemeTale
     public void approve(OrtMalzemeTalep mt) {
         try {
             service.approve(mt.getId(), Util.getSyKullanici(), mt.getAciklama());
-            FacesUtil.addSuccessMessage("Malzeme talebi onaylandı ve stok rezerve edildi.");
+            workflowService.applyWarehouseDecision(mt.getOrtTalep().getId(), true, mt.getAciklama());
+            FacesUtil.addSuccessMessage("Malzeme talebi onaylandı ve stok rezerve edildi. Prova randevusu oluşturabilirsiniz.");
             refreshDetail();
         } catch (EJBException ex) {
             FacesUtil.addErrorMessage(ex.getCause().getMessage());
@@ -165,7 +169,8 @@ public class OrtMalzemeTalepController extends AbstractController<OrtMalzemeTale
     public void reject(OrtMalzemeTalep mt) {
         try {
             service.reject(mt.getId(), Util.getSyKullanici(), redGerekcesi);
-            FacesUtil.addSuccessMessage("Malzeme talebi reddedildi.");
+            workflowService.applyWarehouseDecision(mt.getOrtTalep().getId(), false, redGerekcesi);
+            FacesUtil.addSuccessMessage("Malzeme talebi reddedildi. Talep malzeme talebi adımına geri alındı.");
             redGerekcesi = null;
             refreshDetail();
         } catch (EJBException ex) {

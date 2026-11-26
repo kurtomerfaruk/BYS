@@ -63,8 +63,45 @@ public class OrtTalepService extends AbstractService<OrtTalep> {
     /**
      * Talep genel bilgilerini günceller. Durum değişikliği bu metotla yapılamaz;
      * tüm geçişler OrtTalepWorkflowService üzerinden doğrulanarak uygulanır.
+     *
+     * Ücret/proje kararı sonrası genel güncelleme kilitlidir. Talep tipi, talep tarihi,
+     * kişi ve workflow tarafından yönetilen alanlar bu metotla değiştirilemez;
+     * yalnızca açıklama güncellenir.
      */
     public void updateTalep(OrtTalep talep) {
+        if (talep == null || talep.getId() == null) {
+            throw new IllegalArgumentException("Güncellenecek talep bulunamadı.");
+        }
+        OrtTalep mevcut = em.find(OrtTalep.class, talep.getId());
+        if (mevcut == null) {
+            throw new IllegalArgumentException("Talep kaydı bulunamadı.");
+        }
+        if (mevcut.getDurum() != null && mevcut.getDurum().isUpdateLocked()) {
+            throw new IllegalArgumentException("Bu aşamada talep bilgileri güncellenemez. " +
+                    "Değişiklikler workflow işlemleri üzerinden yapılmalıdır.");
+        }
+        mevcut.setAciklama(talep.getAciklama());
+        edit(mevcut);
+        flush();
+    }
+
+    /**
+     * Workflow adımlarında (personel ataması, SUT kodu, proje seçimi) güvenli güncelleme.
+     * Talep no, durum, tarih, tip ve kişi veritabanındaki değerlerde sabitlenir.
+     */
+    public void updateWorkflowFields(OrtTalep talep) {
+        if (talep == null || talep.getId() == null) {
+            throw new IllegalArgumentException("Güncellenecek talep bulunamadı.");
+        }
+        OrtTalep mevcut = em.find(OrtTalep.class, talep.getId());
+        if (mevcut == null) {
+            throw new IllegalArgumentException("Talep kaydı bulunamadı.");
+        }
+        talep.setTalepNo(mevcut.getTalepNo());
+        talep.setDurum(mevcut.getDurum());
+        talep.setTalepTarihi(mevcut.getTalepTarihi());
+        talep.setTalepTipi(mevcut.getTalepTipi());
+        talep.setOrtKisi(mevcut.getOrtKisi());
         edit(talep);
         flush();
     }

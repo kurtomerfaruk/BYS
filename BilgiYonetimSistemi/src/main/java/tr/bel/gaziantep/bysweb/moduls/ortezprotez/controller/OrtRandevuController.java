@@ -216,6 +216,11 @@ public class OrtRandevuController extends AbstractController<OrtRandevu> {
         if (ortTalepController.getSelected() != null
                 && java.util.Objects.equals(ortTalepController.getSelected().getId(), randevu.getOrtTalep().getId())) {
             ortTalepController.readInfo();
+            // Durum değiştiğinde detay dialogundaki "Sıradaki İşlem" kartı da
+            // anında yenilenmeli; aksi hâlde ekran eski adımda kalmış görünür.
+            if (jakarta.faces.context.FacesContext.getCurrentInstance().getPartialViewContext().isAjaxRequest()) {
+                PrimeFaces.current().ajax().update(":OrtTalepViewForm");
+            }
         }
     }
 

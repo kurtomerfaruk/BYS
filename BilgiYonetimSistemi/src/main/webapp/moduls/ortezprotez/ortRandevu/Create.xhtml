@@ -77,7 +77,7 @@
                                              style="margin-right: 10px"
                                              actionListener="#{ortRandevuController.saveNew}"
                                              value="#{messages.buttonKaydet}"
-                                             update=":growl,display,:OrtRandevuListForm:schedule"
+                                             update=":growl,display,:OrtRandevuListForm:schedule,:OrtTalepViewForm"
                                              oncomplete="handleSubmit(xhr,status,args,PF('OrtRandevuCreateDialog'));"
                                              onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
                             <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"

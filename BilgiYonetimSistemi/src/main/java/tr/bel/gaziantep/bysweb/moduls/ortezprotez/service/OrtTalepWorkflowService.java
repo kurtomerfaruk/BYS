@@ -301,6 +301,65 @@ public class OrtTalepWorkflowService implements java.io.Serializable {
         applyTransition(talepId, action, description);
     }
 
+    /**
+     * Depo onayı tamamlandı mı? Bekleyen veya reddedilmiş malzeme talebi varsa
+     * talep "DEPO_ONAYI_BEKLIYOR" durumunda kilitlidir; hiçbir ileri işlem yapılamaz.
+     */
+    public boolean isWarehouseApprovalCompleted(OrtTalep talep) {
+        if (talep == null || talep.getId() == null) {
+            return false;
+        }
+        List<OrtMalzemeTalep> talepler = ortMalzemeTalepService.findByTalep(talep);
+        return !talepler.isEmpty() && talepler.stream()
+                .allMatch(m -> m.getDurum() == EnumOrtMalzemeDurumu.ONAYLANDI);
+    }
+
+    /**
+     * Depo onayı sonucunu işler.
+     * Onay: talep DEPO_ONAYI_BEKLIYOR durumunda kalır; kilit açılır ve
+     * PROVA_RANDEVUSU (randevu oluşturma) adımı kullanılabilir olur.
+     * Red: talep MALZEME_TALEBI_BEKLIYOR adımına geri döner.
+     */
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void applyWarehouseDecision(Integer ortTalepId, boolean approved, String description) {
+        if (ortTalepId == null) {
+            return;
+        }
+        OrtTalep talep = em.find(OrtTalep.class, ortTalepId);
+        if (talep == null || talep.getDurum() != EnumOrtTalepDurumu.DEPO_ONAYI_BEKLIYOR) {
+            return;
+        }
+
+        em.lock(talep, LockModeType.OPTIMISTIC);
+        EnumOrtTalepDurumu eski = talep.getDurum();
+        EnumOrtTalepDurumu hedef = eski;
+        if (!approved) {
+            hedef = EnumOrtTalepDurumu.MALZEME_TALEBI_BEKLIYOR;
+            talep.setDurum(hedef);
+        }
+        em.merge(talep);
+
+        OrtTalepDurumGecmisi gecmis = OrtTalepDurumGecmisi.builder()
+                .ortTalep(talep)
+                .eskiDurum(eski)
+                .yeniDurum(hedef)
+                .islemTarihi(LocalDateTime.now())
+                .islemiYapanSyKullanici(Util.getSyKullanici())
+                .aciklama((approved ? "Depo onayı tamamlandı. " : "Depo reddi: ")
+                        + (description == null ? "" : description))
+                .build();
+        em.persist(gecmis);
+        em.flush();
+    }
+
+    /**
+     * Depo onayı bekleniyor ve kilit hâlâ aktif mi?
+     */
+    public boolean isWaitingForWarehouseApproval(OrtTalep talep) {
+        return talep != null
+                && talep.getDurum() == EnumOrtTalepDurumu.DEPO_ONAYI_BEKLIYOR
+                && !isWarehouseApprovalCompleted(talep);
+    }
 
     /**
      * UI butonları için: yetki ve mevcut duruma uygunluk kontrolü.
@@ -312,7 +371,24 @@ public class OrtTalepWorkflowService implements java.io.Serializable {
         if (!action.getSourceStatuses().contains(talep.getDurum())) {
             return false;
         }
+        if (isWarehouseLocked(talep, action)) {
+            return false;
+        }
         return syYetkiService.hasPermission(Util.getSyKullanici(), action.getPermission());
+    }
+
+    /**
+     * Depo onayı beklenirken ileri işlemlere izin verilmez (geri dönüş dışında).
+     */
+    private boolean isWarehouseLocked(OrtTalep talep, EnumOrtTalepIslem action) {
+        if (talep.getDurum() != EnumOrtTalepDurumu.DEPO_ONAYI_BEKLIYOR) {
+            return false;
+        }
+        if (action == EnumOrtTalepIslem.PROVA_RANDEVUSU
+                || action == EnumOrtTalepIslem.PROVA_YAP) {
+            return !isWarehouseApprovalCompleted(talep);
+        }
+        return false;
     }
 
     /**
@@ -323,6 +399,7 @@ public class OrtTalepWorkflowService implements java.io.Serializable {
             return Set.of();
         }
         return EnumOrtTalepIslem.getActions(talep.getDurum()).stream()
+                .filter(action -> !isWarehouseLocked(talep, action))
                 .filter(action -> syYetkiService.hasPermission(Util.getSyKullanici(), action.getPermission()))
                 .collect(Collectors.toCollection(() -> EnumSet.noneOf(EnumOrtTalepIslem.class)));
     }
@@ -351,7 +428,7 @@ public class OrtTalepWorkflowService implements java.io.Serializable {
             case DOKTOR_RAPORU_BEKLENIYOR -> "Reçete alınacak";
             case RECETE_BEKLENIYOR -> "Malzeme talebi oluşturulacak";
             case MALZEME_TALEBI_BEKLIYOR -> "Depo onayı beklenecek";
-            case DEPO_ONAYI_BEKLIYOR -> "Malzemeler onaylanacak/reddedilecek";
+            case DEPO_ONAYI_BEKLIYOR -> "Malzeme talebi depo onayında. Onaylanana kadar işlem yapılamaz.";
             case PROVA_RANDEVUSU_BEKLIYOR -> "Hasta provaya gelecek";
             case PROVA_YAPILDI -> "Prova sonucuna göre teslimat veya yeniden prova";
             case YENIDEN_PROVA_BEKLIYOR -> "Yeni prova randevusu oluşturulacak";
@@ -360,6 +437,21 @@ public class OrtTalepWorkflowService implements java.io.Serializable {
             case TAMAMLANDI -> "Talep kapatılacak";
             case KAPATILDI -> "İşlem tamamlandı";
         };
+    }
+
+    /**
+     * Talebe özel bekleyen işlem; depo onayı sonrası mesaj güncellenir.
+     */
+    public String getPendingAction(OrtTalep talep) {
+        if (talep == null) {
+            return "-";
+        }
+        if (talep.getDurum() == EnumOrtTalepDurumu.DEPO_ONAYI_BEKLIYOR) {
+            return isWarehouseApprovalCompleted(talep)
+                    ? "Malzeme talebi onaylandı. Prova randevusu oluşturulacak."
+                    : getPendingAction(talep.getDurum());
+        }
+        return getPendingAction(talep.getDurum());
     }
 
     /**
@@ -391,6 +483,11 @@ public class OrtTalepWorkflowService implements java.io.Serializable {
         }
         if (talep.getDurum() == EnumOrtTalepDurumu.KAPATILDI) {
             throw new IllegalArgumentException("Kapatılmış talep üzerinde işlem yapılamaz.");
+        }
+        // Depo onayı bekleniyorsa hiçbir ileri işleme izin verilmez.
+        if (isWarehouseLocked(talep, action)) {
+            throw new IllegalArgumentException("Depo onayı tamamlanmadan bu adıma geçilemez. " +
+                    "Malzeme taleplerinin onaylanması bekleniyor.");
         }
     }
 

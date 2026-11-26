@@ -17,7 +17,8 @@
                         icon="pi pi-plus" rendered="#{syKullaniciController.hasPermission('orttalep:ekle')}"/>
             <p:menuitem value="#{messages.buttonGuncelle}"
                         onclick="document.getElementById('OrtTalepListForm:datalist:datalist:editButton').click();"
-                        icon="pi pi-pencil" rendered="#{syKullaniciController.hasPermission('orttalep:guncelle')}"/>
+                        icon="pi pi-pencil" rendered="#{syKullaniciController.hasPermission('orttalep:guncelle')}"
+                        disabled="#{ortTalepController.updateLocked}"/>
             <p:menuitem value="#{messages.buttonDetay}"
                         onclick="document.getElementById('OrtTalepListForm:datalist:datalist:viewButton').click();"
                         icon="pi pi-search"/>
@@ -31,7 +32,7 @@
                         rowKey="#{item.id}"
                         selection="#{ortTalepController.selected}"
                         filtered="#{ortTalepController.filtered}"
-                        rowselect=":OrtTalepListForm:datalist:datalist:createButton,:OrtTalepListForm:datalist:datalist:viewButton,:OrtTalepListForm:datalist:datalist:editButton,:OrtTalepListForm:datalist:datalist:deleteButton"
+                        rowselect=":OrtTalepListForm:datalist:datalist:createButton,:OrtTalepListForm:datalist:datalist:viewButton,:OrtTalepListForm:datalist:datalist:editButton,:OrtTalepListForm:datalist:datalist:deleteButton,:OrtTalepDataTableContextMenu"
                         rowDblselect="document.getElementById('OrtTalepListForm:datalist:datalist:viewButton').click()"
                         contextMenu=":OrtTalepListForm:datalist:datalist:createButton :OrtTalepListForm:datalist:datalist:viewButton :OrtTalepListForm:datalist:datalist:editButton :OrtTalepListForm:datalist:datalist:deleteButton"
                         selectListener="#{ortTalepController.resetParents}"
@@ -52,8 +53,7 @@
                                  pt:data-tooltip="#{messages.buttonGuncelle}"
                                  actionListener="#{ortTalepController.readInfo()}"
                                  update=":OrtTalepEditForm:OrtTalepEditForm" oncomplete="PF('OrtTalepEditDialog').show()"
-                                 disabled="#{empty ortTalepController.selected or
-                                 (ortTalepController.selected.durum eq 'KAPATILDI' or     ortTalepController.selected.durum eq 'TAMAMLANDI')}"
+                                 disabled="#{empty ortTalepController.selected or ortTalepController.updateLocked}"
                                  onstart="PF('Loading').show()"
                                  onsuccess="PF('Loading').hide()"
                                  rendered="#{syKullaniciController.hasPermission('orttalep:guncelle')}"/>

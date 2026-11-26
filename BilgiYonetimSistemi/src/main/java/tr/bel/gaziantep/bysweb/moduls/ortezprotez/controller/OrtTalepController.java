@@ -132,6 +132,7 @@ public class OrtTalepController extends AbstractController<OrtTalep> {
                 return;
             }
             service.updateTalep(this.getSelected());
+            readInfo();
             FacesUtil.successMessage(Constants.KAYIT_GUNCELLENDI);
         } catch (Exception ex) {
             log.error(null, ex);
@@ -140,6 +141,14 @@ public class OrtTalepController extends AbstractController<OrtTalep> {
     }
 
     public void readInfo() {
+        // Her çağrıda türetilmiş alanlar sıfırlanır; aksi hâlde önceki talebe ait
+        // aksiyonlar/yetkiler sonraki detay ekranında yanlışlıkla görünür kalabilir.
+        statusHistory = Collections.emptyList();
+        availableActions = Collections.emptySet();
+        pendingAction = "-";
+        teslimatlar = Collections.emptyList();
+        transitionDescription = null;
+
         if (this.getSelected() != null && this.getSelected().getId() != null) {
             // Detay her açıldığında talebi veritabanından yenile; randevu gibi
             // başka bir akış durum değiştirmiş olsa bile güncel durum görünsün.
@@ -148,10 +157,36 @@ public class OrtTalepController extends AbstractController<OrtTalep> {
         if (this.getSelected() != null) {
             statusHistory = workflowService.getStatusHistory(this.getSelected());
             availableActions = workflowService.getAvailableActions(this.getSelected());
-            pendingAction = workflowService.getPendingAction(this.getSelected().getDurum());
+            pendingAction = workflowService.getPendingAction(this.getSelected());
             teslimatlar = ortTeslimatService.findByTalep(this.getSelected());
-            transitionDescription = null;
         }
+    }
+
+    /**
+     * Ücret/proje aşamasından sonra genel güncelleme ekranı kapalıdır.
+     */
+    public boolean isUpdateLocked() {
+        return this.getSelected() != null
+                && this.getSelected().getDurum() != null
+                && this.getSelected().getDurum().isUpdateLocked();
+    }
+
+    /**
+     * Yalnızca gerçekten bitmiş taleplerde "Süreç tamamlandı" kartı gösterilir.
+     * Bekleyen/orta aşamadaki taleplerde bu kart görünürse akış kilitli sanılır.
+     */
+    public boolean isProcessComplete() {
+        // TAMAMLANDI ve TALEP_REDDEDILDI hâlâ "Kapat" adımına sahiptir;
+        // yalnızca KAPATILDI gerçek son durumdur.
+        EnumOrtTalepDurumu durum = this.getSelected() == null ? null : this.getSelected().getDurum();
+        return durum == EnumOrtTalepDurumu.KAPATILDI;
+    }
+
+    /**
+     * Detay ekranında "Süreç tamamlandı" yerine bekleme mesajı gösterilir.
+     */
+    public boolean isWaitingForWarehouseApproval() {
+        return workflowService.isWaitingForWarehouseApproval(this.getSelected());
     }
 
     /**
@@ -172,8 +207,8 @@ public class OrtTalepController extends AbstractController<OrtTalep> {
             } else if (action == EnumOrtTalepIslem.PERSONEL_ATA
                     || action == EnumOrtTalepIslem.FORMLARI_TAMAMLA
                     || action == EnumOrtTalepIslem.PROJE_BELIRLE) {
-                // Personel / SUT / proje seçimleri talep üzerinde değişir; kaydet.
-                service.updateTalep(this.getSelected());
+                // Personel / SUT / proje seçimleri workflow alanlarıdır; güvenli güncelleme.
+                service.updateWorkflowFields(this.getSelected());
                 workflowService.applyTransition(this.getSelected().getId(), action, transitionDescription);
             } else if (action == EnumOrtTalepIslem.TESLIM_ET) {
                 // Teslimat kaydı + stok çıkışı + durum geçişi tek transaction'da.
@@ -243,19 +278,38 @@ public class OrtTalepController extends AbstractController<OrtTalep> {
 
     /**
      * Tek ana işlem (mockup'taki "Sıradaki İşlem" kartı).
+     *
+     * Yetki filtresi uygulanmış {@code availableActions} boşsa (ör. detay yenilenmeden
+     * önceki bir ajax çağrısında set edilmemişse) mevcut durumdan hareketle işlem
+     * yeniden hesaplanır. Böylece randevu oluşturulduktan sonra akış ekranda kilitli
+     * görünmez; sunucu tarafındaki yetki/guard kontrolleri yine geçerlidir.
      */
     public EnumOrtTalepIslem getPrimaryAction() {
-        if (availableActions == null || availableActions.isEmpty()) {
+        if (isProcessComplete()) {
             return null;
         }
         EnumOrtTalepTipi tipi = this.getSelected() == null ? null : this.getSelected().getTalepTipi();
-        if (tipi == EnumOrtTalepTipi.UCRETLI && availableActions.contains(EnumOrtTalepIslem.UCRET_BELIRLE)) {
+        EnumOrtTalepDurumu durum = this.getSelected() == null ? null : this.getSelected().getDurum();
+
+        Set<EnumOrtTalepIslem> actions = availableActions;
+        if (actions == null || actions.isEmpty()) {
+            // Yetki ve depo kilidi kontrolleriyle yeniden hesapla.
+            Set<EnumOrtTalepIslem> filtered = EnumOrtTalepIslem.getActions(durum).stream()
+                    .filter(a -> workflowService.isActionAvailable(this.getSelected(), a))
+                    .collect(java.util.stream.Collectors.toCollection(
+                            () -> EnumSet.noneOf(EnumOrtTalepIslem.class)));
+            actions = filtered;
+        }
+        if (actions.isEmpty()) {
+            return null;
+        }
+        if (tipi == EnumOrtTalepTipi.UCRETLI && actions.contains(EnumOrtTalepIslem.UCRET_BELIRLE)) {
             return EnumOrtTalepIslem.UCRET_BELIRLE;
         }
-        if (tipi != EnumOrtTalepTipi.UCRETLI && availableActions.contains(EnumOrtTalepIslem.PROJE_BELIRLE)) {
+        if (tipi != EnumOrtTalepTipi.UCRETLI && actions.contains(EnumOrtTalepIslem.PROJE_BELIRLE)) {
             return EnumOrtTalepIslem.PROJE_BELIRLE;
         }
-        return availableActions.iterator().next();
+        return actions.iterator().next();
     }
 
     /**
