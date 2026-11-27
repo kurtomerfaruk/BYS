@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:p="primefaces">
+
+    <h:form id="TabOlcumForm" enctype="multipart/form-data">
+
+        <p:panel header="#{messages.olcumLabel}" styleClass="w-100 mb-3">
+            <p:panelGrid columns="2" layout="tabular" styleClass="w-100">
+
+                <p:outputLabel value="#{messages.talepLabel}" for="seciliTalepNo"/>
+                <h:panelGroup layout="block">
+                    <p:inputText id="seciliTalepNo" value="#{tabOlcumController.seciliTalep.talepNo}" readonly="true" size="25"/>
+                    <p:commandButton icon="pi pi-search" process="@this" update="@form"
+                                     actionListener="#{bysController.openCommonDialog('tabTalepSec')}">
+                        <p:ajax event="dialogReturn" listener="#{tabOlcumController.onTalepSelected}" update="@form"/>
+                    </p:commandButton>
+                </h:panelGroup>
+
+                <p:outputLabel value="#{messages.kisiLabel}" for="kisiAdSoyad"/>
+                <p:inputText id="kisiAdSoyad" value="#{tabOlcumController.seciliTalep.tabKisi.gnlKisi.adSoyad}"
+                             readonly="true" styleClass="inputUpdate"/>
+
+                <p:outputLabel value="#{messages.olcumTarihiLabel}" for="olcumTarihi"/>
+                <p:datePicker id="olcumTarihi" value="#{tabOlcumController.olcumTarihi}"
+                              locale="tr" pattern="#{messages.tarihSaatKisaFormat}" showIcon="true" showOnFocus="false"/>
+
+                <p:outputLabel value="#{messages.olcumuYapanLabel}" for="olcumuYapan"/>
+                <h:outputText id="olcumuYapan" value="#{tabOlcumController.olcumuYapan}"/>
+
+                <f:facet name="footer">
+                    <p:commandButton value="#{messages.buttonOlcumGir}" icon="pi pi-ruler" styleClass="ui-button-primary"
+                                     actionListener="#{tabOlcumController.saveMeasurement}"
+                                     process="@form" update="@form,:growl"
+                                     rendered="#{syKullaniciController.hasPermission('tabtalep:guncelle')}"/>
+                    <p:commandButton value="#{messages.buttonOlcumTamamla}" icon="pi pi-check-circle"
+                                     styleClass="ui-button-success"
+                                     actionListener="#{tabOlcumController.completeMeasurement}"
+                                     process="@this" update="@form,:growl"
+                                     rendered="#{syKullaniciController.hasPermission('tabtalep:guncelle')}"/>
+                </f:facet>
+            </p:panelGrid>
+        </p:panel>
+
+        <div class="row">
+            <div class="col-md-6">
+                <p:panel header="#{messages.sagAyakText}" styleClass="w-100 mb-3">
+                    <p:panelGrid columns="2" layout="tabular" styleClass="w-100">
+                        <p:outputLabel value="#{messages.ayakNumarasiLabel}" for="sagNumara"/>
+                        <p:inputText id="sagNumara" value="#{tabOlcumController.sagDetay.ayakNumarasi}">
+                            <p:keyFilter mask="num"/>
+                        </p:inputText>
+                        <p:outputLabel value="#{messages.uzunlukLabel}" for="sagUzunluk"/>
+                        <p:inputText id="sagUzunluk" value="#{tabOlcumController.sagDetay.uzunluk}"><p:keyFilter mask="num"/></p:inputText>
+                        <p:outputLabel value="#{messages.genislikLabel}" for="sagGenislik"/>
+                        <p:inputText id="sagGenislik" value="#{tabOlcumController.sagDetay.genislik}"><p:keyFilter mask="num"/></p:inputText>
+                        <p:outputLabel value="#{messages.topukGenisligiLabel}" for="sagTopuk"/>
+                        <p:inputText id="sagTopuk" value="#{tabOlcumController.sagDetay.topukGenisligi}"><p:keyFilter mask="num"/></p:inputText>
+                        <p:outputLabel value="#{messages.kavisYuksekligiLabel}" for="sagKavis"/>
+                        <p:inputText id="sagKavis" value="#{tabOlcumController.sagDetay.kavisYuksekligi}"><p:keyFilter mask="num"/></p:inputText>
+                    </p:panelGrid>
+                </p:panel>
+            </div>
+            <div class="col-md-6">
+                <p:panel header="#{messages.solAyakText}" styleClass="w-100 mb-3">
+                    <p:panelGrid columns="2" layout="tabular" styleClass="w-100">
+                        <p:outputLabel value="#{messages.ayakNumarasiLabel}" for="solNumara"/>
+                        <p:inputText id="solNumara" value="#{tabOlcumController.solDetay.ayakNumarasi}"><p:keyFilter mask="num"/></p:inputText>
+                        <p:outputLabel value="#{messages.uzunlukLabel}" for="solUzunluk"/>
+                        <p:inputText id="solUzunluk" value="#{tabOlcumController.solDetay.uzunluk}"><p:keyFilter mask="num"/></p:inputText>
+                        <p:outputLabel value="#{messages.genislikLabel}" for="solGenislik"/>
+                        <p:inputText id="solGenislik" value="#{tabOlcumController.solDetay.genislik}"><p:keyFilter mask="num"/></p:inputText>
+                        <p:outputLabel value="#{messages.topukGenisligiLabel}" for="solTopuk"/>
+                        <p:inputText id="solTopuk" value="#{tabOlcumController.solDetay.topukGenisligi}"><p:keyFilter mask="num"/></p:inputText>
+                        <p:outputLabel value="#{messages.kavisYuksekligiLabel}" for="solKavis"/>
+                        <p:inputText id="solKavis" value="#{tabOlcumController.solDetay.kavisYuksekligi}"><p:keyFilter mask="num"/></p:inputText>
+                    </p:panelGrid>
+                </p:panel>
+            </div>
+        </div>
+
+        <p:panel header="#{messages.aciklamaLabel}" styleClass="w-100 mb-3">
+            <p:inputTextarea rows="3" value="#{tabOlcumController.aciklama}" styleClass="w-100" autoResize="false"/>
+        </p:panel>
+
+        <p:panel header="#{messages.olcumBelgeleriText}" styleClass="w-100 mb-3">
+            <p:panelGrid columns="2" layout="tabular" styleClass="w-100">
+                <p:outputLabel value="#{messages.aciklamaLabel}" for="belgeAciklama"/>
+                <p:inputText id="belgeAciklama" value="#{tabOlcumController.belgeAciklama}"/>
+            </p:panelGrid>
+            <p:fileUpload listener="#{tabOlcumController.upload}" mode="advanced" auto="true" multiple="false"
+                          dragDropSupport="false" label="#{messages.buttonSec}" uploadLabel="#{messages.buttonYukle}"
+                          cancelLabel="#{messages.buttonIptal}" invalidFileMessage="#{messages.hataliDosyaTipi}"
+                          invalidSizeMessage="#{messages.hataliDosyaBoyutu}"
+                          allowTypes="/(\.|\/)(pdf|jpe?g|png|doc|docx|xls|xlsx)$/"
+                          update="@form,:growl" styleClass="mb-3">
+                <p:validateFile sizeLimit="10000000"/>
+            </p:fileUpload>
+
+            <p:dataTable value="#{tabOlcumController.belgeler}" var="belge" rows="5" paginator="true"
+                         emptyMessage="#{messages.kayitBulunamadi}" styleClass="w-100">
+                <p:column headerText="#{messages.tipText}"><h:outputText value="#{belge.belgeTuru.displayValue}"/></p:column>
+                <p:column headerText="#{messages.dosyaAdiText}"><h:outputText value="#{belge.dosyaAdi}"/></p:column>
+                <p:column headerText="#{messages.tarihText}">
+                    <h:outputText value="#{belge.yuklenmeTarihi}"><f:convertDateTime pattern="#{messages.tarihSaatKisaFormat}" type="localDateTime"/></h:outputText>
+                </p:column>
+                <p:column headerText="" style="width:60px">
+                    <p:commandButton icon="pi pi-download" ajax="false" immediate="true"
+                                     actionListener="#{tabOlcumController.selectForDownload(belge)}">
+                        <p:fileDownload value="#{tabOlcumController.download}"/>
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+        </p:panel>
+
+        <p:panel header="#{messages.olcumLabel}" styleClass="w-100">
+            <p:dataTable value="#{tabOlcumController.olcumler}" var="olcum" rows="10" paginator="true"
+                         emptyMessage="#{messages.kayitBulunamadi}" styleClass="w-100">
+                <p:column headerText="#{messages.olcumTarihiText}">
+                    <h:outputText value="#{olcum.olcumTarihi}"><f:convertDateTime pattern="#{messages.tarihSaatKisaFormat}"
+                                                                                  type="localDateTime"/></h:outputText>
+                </p:column>
+                <p:column headerText="#{messages.sagAyakText}">
+                    <h:outputText value="#{olcum.detayList[0].ayakNumarasi}"/>
+                </p:column>
+                <p:column headerText="#{messages.solAyakText}">
+                    <h:outputText value="#{olcum.detayList[1].ayakNumarasi}"/>
+                </p:column>
+            </p:dataTable>
+        </p:panel>
+
+    </h:form>
+
+</ui:composition>

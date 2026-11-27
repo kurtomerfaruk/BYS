@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
 import tr.bel.gaziantep.bysweb.core.enums.tabanlik.EnumTabTalepDurumu;
+import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.entity.SyKullanici;
 
 import java.io.Serial;
 import java.time.LocalDateTime;
@@ -50,6 +51,18 @@ public class TabTalep extends BaseEntity {
     @Lob
     @Column(name = "ACIKLAMA")
     private String aciklama;
+
+    @Nationalized
+    @Lob
+    @Column(name = "KAPATMA_NEDENI")
+    private String kapatmaNedeni;
+
+    @Column(name = "KAPATMA_TARIHI")
+    private LocalDateTime kapatmaTarihi;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "KAPATAN_SYKULLANICI_ID")
+    private SyKullanici kapatanSyKullanici;
 
     @Override
     public int hashCode() {

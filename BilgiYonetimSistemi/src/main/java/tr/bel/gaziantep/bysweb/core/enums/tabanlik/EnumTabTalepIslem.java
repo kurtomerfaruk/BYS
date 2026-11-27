@@ -15,7 +15,15 @@ import java.util.Set;
 public enum EnumTabTalepIslem implements BaseEnum {
 
     RANDEVU_VER("Ölçüm Randevusu Ver", EnumTabTalepDurumu.YENI,
-            EnumTabTalepDurumu.RANDEVU_BEKLIYOR, "tabtalep:guncelle", "pi pi-calendar-plus");
+            EnumTabTalepDurumu.RANDEVU_BEKLIYOR, "tabtalep:guncelle", "pi pi-calendar-plus"),
+    OLCUM_GIR("Ölçüm Gir", EnumTabTalepDurumu.RANDEVU_BEKLIYOR,
+            EnumTabTalepDurumu.OLCUM_BEKLIYOR, "tabtalep:guncelle", "pi pi-ruler"),
+    OLCUM_TAMAMLA("Ölçümü Tamamla", EnumTabTalepDurumu.OLCUM_BEKLIYOR,
+            EnumTabTalepDurumu.URETIM_KARARI_BEKLIYOR, "tabtalep:guncelle", "pi pi-check-circle"),
+    KARAR_EVET("Üretime Uygun", EnumTabTalepDurumu.URETIM_KARARI_BEKLIYOR,
+            EnumTabTalepDurumu.UCRET_BEKLIYOR, "tabtalep:guncelle", "pi pi-check"),
+    KARAR_HAYIR("Uygun Bulunmadı", EnumTabTalepDurumu.URETIM_KARARI_BEKLIYOR,
+            EnumTabTalepDurumu.UYGUN_BULUNMADI, "tabtalep:guncelle", "pi pi-times-circle");
 
     private final String label;
     private final EnumTabTalepDurumu sourceStatus;

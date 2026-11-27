@@ -37,16 +37,12 @@ public class TabTalepHareket extends BaseEntity {
     @JoinColumn(name = "TABTALEP_ID")
     private TabTalep tabTalep;
 
-    @Size(max = 50)
-    @Nationalized
     @Enumerated(EnumType.STRING)
-    @Column(name = "ESKI_DURUM", length = 50)
+    @Column(name = "ESKI_DURUM")
     private EnumTabTalepDurumu eskiDurum;
 
-    @Size(max = 50)
-    @Nationalized
     @Enumerated(EnumType.STRING)
-    @Column(name = "YENI_DURUM", length = 50)
+    @Column(name = "YENI_DURUM")
     private EnumTabTalepDurumu yeniDurum;
 
     @Size(max = 60)

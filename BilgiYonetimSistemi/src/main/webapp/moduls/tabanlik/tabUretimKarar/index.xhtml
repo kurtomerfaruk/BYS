@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:p="primefaces">
+
+    <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.tabanlik.EnumTabKarar" var="enumTabKarar"/>
+
+    <h:form id="TabUretimKararForm">
+
+        <p:panel header="#{messages.uretimKarariText}" styleClass="w-100 mb-3">
+            <p:panelGrid columns="2" layout="tabular" styleClass="w-100">
+
+                <p:outputLabel value="#{messages.talepLabel}" for="seciliTalepNo"/>
+                <h:panelGroup layout="block">
+                    <p:inputText id="seciliTalepNo" value="#{tabUretimKararController.seciliTalep.talepNo}"
+                                 readonly="true" size="25"/>
+                    <p:commandButton icon="pi pi-search" process="@this" update="@form"
+                                     actionListener="#{bysController.openCommonDialog('tabTalepSec')}">
+                        <p:ajax event="dialogReturn" listener="#{tabUretimKararController.onTalepSelected}" update="@form"/>
+                    </p:commandButton>
+                </h:panelGroup>
+
+                <p:outputLabel value="#{messages.kisiLabel}" for="kisiAdSoyad"/>
+                <p:inputText id="kisiAdSoyad" value="#{tabUretimKararController.seciliTalep.tabKisi.gnlKisi.adSoyad}"
+                             readonly="true" styleClass="inputUpdate"/>
+
+                <p:outputLabel value="#{messages.durumLabel}" for="talepDurumu"/>
+                <h:outputText id="talepDurumu" value="#{tabUretimKararController.seciliTalep.durum.displayValue}"/>
+
+                <p:outputLabel value="#{messages.uretimKarariLabel}" for="karar"/>
+                <p:selectOneMenu id="karar" value="#{tabUretimKararController.karar}" required="true"
+                                 converter="omnifaces.SelectItemsConverter">
+                    <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+                    <f:selectItems value="#{enumTabKarar.ALL_VALUES}" var="k"
+                                   itemLabel="#{k.displayValue}" itemValue="#{k}"/>
+                </p:selectOneMenu>
+
+                <p:outputLabel value="#{messages.kararGerekcesiLabel}" for="gerekce"/>
+                <p:inputTextarea id="gerekce" value="#{tabUretimKararController.gerekce}" rows="4" cols="50"/>
+
+                <f:facet name="footer">
+                    <p:commandButton value="#{messages.buttonKararVer}" icon="pi pi-check"
+                                     styleClass="ui-button-primary"
+                                     actionListener="#{tabUretimKararController.applyDecision}"
+                                     process="@form" update="@form,:growl"
+                                     rendered="#{syKullaniciController.hasPermission('tabtalep:guncelle')}"/>
+                </f:facet>
+            </p:panelGrid>
+        </p:panel>
+
+        <p:panel header="#{messages.kararGecmisiText}" styleClass="w-100">
+            <p:dataTable value="#{tabUretimKararController.kararlar}" var="k" rows="10" paginator="true"
+                         emptyMessage="#{messages.kayitBulunamadi}" styleClass="w-100">
+                <p:column headerText="#{messages.uretimKarariText}">
+                    <h:outputText value="#{k.karar.displayValue}"/>
+                </p:column>
+                <p:column headerText="#{messages.tarihText}">
+                    <h:outputText value="#{k.kararTarihi}">
+                        <f:convertDateTime pattern="#{messages.tarihSaatKisaFormat}" type="localDateTime"/>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="#{messages.kisiText}">
+                    <h:outputText value="#{k.karariVerenSyKullanici.kullaniciAdi}"/>
+                </p:column>
+                <p:column headerText="#{messages.aciklamaText}">
+                    <h:outputText value="#{k.kararGerekcesi}"/>
+                </p:column>
+            </p:dataTable>
+        </p:panel>
+
+    </h:form>
+
+</ui:composition>
