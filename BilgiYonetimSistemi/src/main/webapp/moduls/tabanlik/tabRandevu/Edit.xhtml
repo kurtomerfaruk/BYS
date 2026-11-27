@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces">
+
+<ui:composition>
+
+    <p:dialog widgetVar="TabRandevuEditDialog" id="TabRandevuEditDlg"
+              modal="true" resizable="false" closeOnEscape="true"
+              header="#{messages.buttonGuncelle}" appendTo="@(body)"
+              responsive="true" fitViewport="true" position="top">
+
+        <h:form id="TabRandevuEditForm">
+            <h:panelGroup id="display">
+                <p:panelGrid columns="2" columnClasses="column" layout="tabular"
+                             rendered="#{tabRandevuController.selected != null}">
+
+                    <p:outputLabel value="#{messages.talepLabel}" for="@next"/>
+                    <p:inputText value="#{tabRandevuController.selected.tabTalep.talepNo}" readonly="true"/>
+
+                    <p:outputLabel value="#{messages.kisiLabel}" for="@next"/>
+                    <p:inputText value="#{tabRandevuController.selected.tabKisi.gnlKisi.adSoyad}" readonly="true"/>
+
+                    <p:outputLabel value="#{messages.randevuTuruLabel}" for="@next"/>
+                    <p:inputText value="#{tabRandevuController.selected.randevuTuru.displayValue}" readonly="true"/>
+
+                    <p:outputLabel value="#{messages.randevuTarihiLabel}" for="@next"/>
+                    <p:datePicker value="#{tabRandevuController.selected.randevuTarihi}"
+                                  locale="tr" pattern="#{messages.tarihSaatKisaFormat}" mask="true"
+                                  monthNavigator="true" yearNavigator="true" showButtonBar="true"
+                                  showIcon="true" showOnFocus="false"/>
+
+                    <p:outputLabel value="#{messages.randevuDurumuLabel}" for="@next"/>
+                    <p:inputText value="#{tabRandevuController.selected.durum.displayValue}" readonly="true"/>
+
+                    <p:outputLabel value="#{messages.ertelenmeNedeniLabel}" for="ertelemeNedeni"/>
+                    <p:inputTextarea id="ertelemeNedeni" rows="2" value="#{tabRandevuController.ertelemeNedeni}" autoResize="false"
+                                     styleClass="w-100"/>
+
+                    <p:outputLabel value="#{messages.iptalNedeniLabel}" for="iptalNedeni"/>
+                    <p:inputTextarea id="iptalNedeni" rows="2" value="#{tabRandevuController.iptalNedeni}" autoResize="false" styleClass="w-100"/>
+
+                    <p:outputLabel value="#{messages.aciklamaLabel}" for="@next"/>
+                    <p:inputTextarea rows="2" value="#{tabRandevuController.selected.aciklama}"/>
+
+                    <f:facet name="footer">
+                        <div class="float-end">
+                            <p:commandButton value="#{messages.buttonKaydet}" icon="pi pi-check"
+                                             styleClass="ui-button-success"
+                                             actionListener="#{tabRandevuController.save}"
+                                             update=":growl,display,:TabRandevuListForm:schedule"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                            <p:commandButton value="#{messages.buttonGerceklesti}" icon="pi pi-check-circle"
+                                             styleClass="ui-button-info"
+                                             actionListener="#{tabRandevuController.completeSelected}"
+                                             update=":growl,display,:TabRandevuListForm:schedule"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                            <p:commandButton value="#{messages.buttonErtelendi}" icon="pi pi-clock"
+                                             styleClass="ui-button-warning"
+                                             actionListener="#{tabRandevuController.postponeSelected}"
+                                             update=":growl,display,:TabRandevuListForm:schedule"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                            <p:commandButton value="#{messages.buttonIptalEt}" icon="pi pi-times"
+                                             styleClass="ui-button-danger"
+                                             actionListener="#{tabRandevuController.cancelSelected}"
+                                             update=":growl,display,:TabRandevuListForm:schedule"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                            <p:commandButton value="#{messages.buttonKapat}" icon="pi pi-ban" immediate="true"
+                                             onclick="PF('TabRandevuEditDialog').hide()">
+                                <p:resetInput target="@form"/>
+                            </p:commandButton>
+                        </div>
+                    </f:facet>
+                </p:panelGrid>
+            </h:panelGroup>
+        </h:form>
+    </p:dialog>
+
+</ui:composition>
+</html>

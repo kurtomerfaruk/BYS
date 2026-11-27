@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<ui:composition>
+
+    <p:dialog widgetVar="TabRandevuCreateDialog" id="TabRandevuCreateDlg"
+              modal="true" resizable="false" closeOnEscape="true"
+              header="#{messages.dialogYeniKayit}" appendTo="@(body)"
+              responsive="true" fitViewport="true" position="top">
+
+        <h:form id="TabRandevuCreateForm">
+            <h:panelGroup id="display">
+                <p:focus context="display"/>
+                <p:panelGrid columns="2" columnClasses="column" layout="tabular"
+                             rendered="#{tabRandevuController.selected != null}">
+
+                    <p:outputLabel value="#{messages.talepLabel}" for="@next"/>
+                    <coco:inputWithButton id="inputWithButtonTabTalep" inputId="tabTalepId"
+                                          inputValue="#{tabRandevuController.selected.tabTalep.talepNo}"
+                                          inputTitle="#{messages.talepNoText}"
+                                          buttonTitle="#{messages.talepSecmelisiniz}"
+                                          actionListener="#{bysController.openCommonDialog('tabTalepSec')}"
+                                          ajaxListener="#{tabRandevuController.selectTalep}"
+                                          size="30"
+                                          dialogId="TabRandevuCreateDialogId"/>
+
+                    <p:outputLabel value="#{messages.kisiLabel}" for="@next"/>
+                    <p:inputText value="#{tabRandevuController.selected.tabKisi.gnlKisi.adSoyad}"
+                                 readonly="true" styleClass="inputUpdate"/>
+
+                    <p:outputLabel value="#{messages.randevuTuruLabel}" for="@next"/>
+                    <p:selectOneMenu value="#{tabRandevuController.selected.randevuTuru}"
+                                     required="true" converter="omnifaces.SelectItemsConverter">
+                        <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+                        <f:selectItems value="#{enumRandevuTuru.ALL_VALUES}" var="tur"
+                                       itemLabel="#{tur.displayValue}" itemValue="#{tur}"/>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel value="#{messages.randevuTarihiLabel}" for="@next"/>
+                    <p:datePicker value="#{tabRandevuController.selected.randevuTarihi}"
+                                  locale="tr" pattern="#{messages.tarihSaatKisaFormat}" mask="true"
+                                  monthNavigator="true" yearNavigator="true" showButtonBar="true"
+                                  showIcon="true" required="true" showOnFocus="false"/>
+
+                    <p:outputLabel value="#{messages.randevuDurumuLabel}" for="@next"/>
+                    <p:inputText value="#{tabRandevuController.selected.durum.displayValue}" readonly="true"/>
+
+                    <p:outputLabel value="#{messages.aciklamaLabel}" for="@next"/>
+                    <p:inputTextarea rows="3" value="#{tabRandevuController.selected.aciklama}"
+                                     styleClass="w-100" autoResize="false"/>
+
+                    <f:facet name="footer">
+                        <div class="float-end">
+                            <p:commandButton icon="pi pi-check" styleClass="ui-button-success"
+                                             actionListener="#{tabRandevuController.saveNew}"
+                                             value="#{messages.buttonKaydet}"
+                                             update=":growl,display,:TabRandevuListForm:schedule"
+                                             oncomplete="handleSubmit(xhr,status,args,PF('TabRandevuCreateDialog'));"
+                                             onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
+                            <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                             value="#{messages.buttonIptal}" immediate="true"
+                                             onclick="PF('TabRandevuCreateDialog').hide()">
+                                <p:resetInput target="@form"/>
+                            </p:commandButton>
+                        </div>
+                    </f:facet>
+                </p:panelGrid>
+            </h:panelGroup>
+        </h:form>
+    </p:dialog>
+
+</ui:composition>
+</html>

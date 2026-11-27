@@ -8,6 +8,7 @@ import jakarta.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 import tr.bel.gaziantep.bysweb.core.controller.AbstractController;
 import tr.bel.gaziantep.bysweb.core.enums.tabanlik.EnumTabTalepDurumu;
@@ -106,5 +107,22 @@ public class TabTalepController extends AbstractController<TabTalep> {
     public void secilenTabKisi(SelectEvent<TabKisi> event) {
         TabKisi tabKisi = event.getObject();
         this.getSelected().setTabKisi(tabKisi);
+    }
+
+
+    /**
+     * Talep seçim dialogunda seçilen kaydı dialogReturn ile döndürür.
+     */
+    public void closeSelection(TabTalep tabTalep) {
+        PrimeFaces.current().dialog().closeDynamic(tabTalep);
+    }
+
+    /**
+     * Talep seçim tablosunda satıra çift tıklanınca seçim dialogunu kapatır.
+     */
+    public void onRowDoubleSelect(SelectEvent<TabTalep> event) {
+        if (event != null && event.getObject() != null) {
+            closeSelection(event.getObject());
+        }
     }
 }
