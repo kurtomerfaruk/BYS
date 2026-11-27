@@ -46,6 +46,27 @@ public class OrtTalepController extends AbstractController<OrtTalep> {
 
     @Serial
     private static final long serialVersionUID = -6479112138153571653L;
+    private static final String[] PHASE_LABELS = {
+            "Kişi Kaydı", "Talep Oluşturma", "Ön Muayene", "Değerlendirme", "Ücret / Proje",
+            "Ölçü", "Belgeler", "Malzeme", "Prova", "Teslimat"
+    };
+
+    private static final List<Set<EnumOrtTalepDurumu>> PHASE_STATUSES = List.of(
+            EnumSet.noneOf(EnumOrtTalepDurumu.class),
+            EnumSet.of(EnumOrtTalepDurumu.YENI_TALEP),
+            EnumSet.of(EnumOrtTalepDurumu.ON_MUAYENE_RANDEVUSU_BEKLIYOR, EnumOrtTalepDurumu.ON_MUAYENEYE_GELDI),
+            EnumSet.of(EnumOrtTalepDurumu.PERSONEL_ATAMASI_BEKLIYOR, EnumOrtTalepDurumu.DEGERLENDIRME_BEKLIYOR, EnumOrtTalepDurumu.TALEP_REDDEDILDI),
+            EnumSet.of(EnumOrtTalepDurumu.UCRET_BELIRLEME_BEKLIYOR, EnumOrtTalepDurumu.SOZLESME_BEKLIYOR,
+                    EnumOrtTalepDurumu.ODEME_BEKLIYOR, EnumOrtTalepDurumu.PROJE_BELIRLENDI),
+            EnumSet.of(EnumOrtTalepDurumu.OLCU_RANDEVUSU_BEKLIYOR, EnumOrtTalepDurumu.OLCU_ALINDI),
+            EnumSet.of(EnumOrtTalepDurumu.FORMLAR_BEKLENIYOR, EnumOrtTalepDurumu.DOKTOR_RAPORU_BEKLENIYOR,
+                    EnumOrtTalepDurumu.RECETE_BEKLENIYOR),
+            EnumSet.of(EnumOrtTalepDurumu.MALZEME_TALEBI_BEKLIYOR, EnumOrtTalepDurumu.DEPO_ONAYI_BEKLIYOR),
+            EnumSet.of(EnumOrtTalepDurumu.PROVA_RANDEVUSU_BEKLIYOR, EnumOrtTalepDurumu.PROVA_YAPILDI,
+                    EnumOrtTalepDurumu.YENIDEN_PROVA_BEKLIYOR),
+            EnumSet.of(EnumOrtTalepDurumu.TESLIMAT_BEKLIYOR, EnumOrtTalepDurumu.TESLIM_EDILDI,
+                    EnumOrtTalepDurumu.TAMAMLANDI, EnumOrtTalepDurumu.KAPATILDI)
+    );
 
     @Inject
     private OrtTalepService service;
@@ -101,6 +122,7 @@ public class OrtTalepController extends AbstractController<OrtTalep> {
         return newItem;
     }
 
+    @Override
     public void saveNew(ActionEvent event) {
         if (this.getSelected() == null) {
             return;
@@ -122,6 +144,7 @@ public class OrtTalepController extends AbstractController<OrtTalep> {
         }
     }
 
+    @Override
     public void save(ActionEvent event) {
         if (this.getSelected() == null) {
             return;
@@ -340,28 +363,6 @@ public class OrtTalepController extends AbstractController<OrtTalep> {
         }
         return ortRandevuService.findByTalep(this.getSelected()).size();
     }
-
-    private static final String[] PHASE_LABELS = {
-            "Kişi Kaydı", "Talep Oluşturma", "Ön Muayene", "Değerlendirme", "Ücret / Proje",
-            "Ölçü", "Belgeler", "Malzeme", "Prova", "Teslimat"
-    };
-
-    private static final List<Set<EnumOrtTalepDurumu>> PHASE_STATUSES = List.of(
-            EnumSet.noneOf(EnumOrtTalepDurumu.class),
-            EnumSet.of(EnumOrtTalepDurumu.YENI_TALEP),
-            EnumSet.of(EnumOrtTalepDurumu.ON_MUAYENE_RANDEVUSU_BEKLIYOR, EnumOrtTalepDurumu.ON_MUAYENEYE_GELDI),
-            EnumSet.of(EnumOrtTalepDurumu.PERSONEL_ATAMASI_BEKLIYOR, EnumOrtTalepDurumu.DEGERLENDIRME_BEKLIYOR, EnumOrtTalepDurumu.TALEP_REDDEDILDI),
-            EnumSet.of(EnumOrtTalepDurumu.UCRET_BELIRLEME_BEKLIYOR, EnumOrtTalepDurumu.SOZLESME_BEKLIYOR,
-                    EnumOrtTalepDurumu.ODEME_BEKLIYOR, EnumOrtTalepDurumu.PROJE_BELIRLENDI),
-            EnumSet.of(EnumOrtTalepDurumu.OLCU_RANDEVUSU_BEKLIYOR, EnumOrtTalepDurumu.OLCU_ALINDI),
-            EnumSet.of(EnumOrtTalepDurumu.FORMLAR_BEKLENIYOR, EnumOrtTalepDurumu.DOKTOR_RAPORU_BEKLENIYOR,
-                    EnumOrtTalepDurumu.RECETE_BEKLENIYOR),
-            EnumSet.of(EnumOrtTalepDurumu.MALZEME_TALEBI_BEKLIYOR, EnumOrtTalepDurumu.DEPO_ONAYI_BEKLIYOR),
-            EnumSet.of(EnumOrtTalepDurumu.PROVA_RANDEVUSU_BEKLIYOR, EnumOrtTalepDurumu.PROVA_YAPILDI,
-                    EnumOrtTalepDurumu.YENIDEN_PROVA_BEKLIYOR),
-            EnumSet.of(EnumOrtTalepDurumu.TESLIMAT_BEKLIYOR, EnumOrtTalepDurumu.TESLIM_EDILDI,
-                    EnumOrtTalepDurumu.TAMAMLANDI, EnumOrtTalepDurumu.KAPATILDI)
-    );
 
     private int findPhaseIndex(EnumOrtTalepDurumu durum) {
         int index = PHASE_STATUSES.size() - 1;
