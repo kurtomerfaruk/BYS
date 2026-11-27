@@ -24,7 +24,8 @@ public enum EnumModul implements BaseEnum {
     PSIKIYATRI_KLINIGI("Psikiyatri Kliniği"),
     SAGLIK_HIZMETLERI("Sağlık Hizmetleri"),
     STOK_YONETIMI("Stok Yönetimi"),
-    SISTEM_YONETIMI("Sistem Yönetimi");
+    SISTEM_YONETIMI("Sistem Yönetimi"),
+    TABANLIK("Tabanlık");
 
     private final String modul;
 

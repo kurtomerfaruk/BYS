@@ -136,6 +136,9 @@ public class GnlKisi extends BaseEntity {
     @Column(name = "COCUK_SAYISI")
     private Short cocukSayisi;
 
+    @Column(name = "AYAK_NUMARASI")
+    private String ayakNumarasi;
+
     @Column(name = "EVDE_YASAYAN")
     private Short evdeYasayan;
 

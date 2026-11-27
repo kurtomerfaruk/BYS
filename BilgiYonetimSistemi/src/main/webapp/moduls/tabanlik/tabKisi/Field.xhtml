@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:coco="jakarta.faces.composite/ui">
+<ui:composition>
+
+    <h:outputText value="#{messages.eklemeYeriLabel}"/>
+    <h:outputText value="#{tabKisiController.selected.gnlKisi.eklemeYeri.displayValue}"/>
+
+    <p:outputLabel value="#{messages.kayitTarihiLabel}" for="@next"/>
+    <p:datePicker id="kayitTarihi" locale="tr" pattern="#{messages.tarihFormat}"
+                  value="#{tabKisiController.selected.gnlKisi.kayitTarihi}"
+                  title="#{messages.kayitTarihiText}" mask="true"
+                  monthNavigator="true" yearNavigator="true" showButtonBar="true"
+                  showIcon="true" showOnFocus="false"/>
+
+    <p:outputLabel value="#{messages.uyrukLabel}" for="@next"/>
+    <p:selectOneMenu id="uyruk" value="#{tabKisiController.selected.gnlKisi.uyruk}"
+                     required="true" converter="omnifaces.SelectItemsConverter">
+        <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+        <f:selectItems value="#{enumUyruk.ALL_VALUES}"
+                       var="uyruks"
+                       itemLabel="#{uyruks.displayValue}"
+                       itemValue="#{uyruks}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.tcKimlikNoLabel}" for="@next"/>
+    <coco:tcKimlikNoDogumTarihi actionListener="#{tabKisiController.getTcKimlik()}"
+                                update=":growl,@(.tcUpdate)"
+                                value="#{tabKisiController.selected.gnlKisi.tcKimlikNo}"
+                                dateValue="#{tabKisiController.selected.gnlKisi.dogumTarihi}"/>
+
+    <p:outputLabel value="#{messages.adLabel}" for="@next"/>
+    <p:inputText id="ad" value="#{tabKisiController.selected.gnlKisi.ad}" size="50" title="#{messages.adText}" required="true"
+                 readonly="#{facesContext.renderResponse}" styleClass="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.soyadLabel}" for="@next"/>
+    <p:inputText id="soyad" value="#{tabKisiController.selected.gnlKisi.soyad}" title="#{messages.soyadText}" required="true"
+                 readonly="#{facesContext.renderResponse}" styleClass="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.telefonLabel}" for="@next"/>
+    <p:inputMask id="telefon" value="#{tabKisiController.selected.gnlKisi.telefon}" mask="#{messages.telefonFormat}" required="true"
+                 title="#{messages.telefonText}" size="14" styleClass="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.telefonLabel}" for="@next"/>
+    <p:inputMask id="telefon2" value="#{tabKisiController.selected.gnlKisi.telefon2}" mask="#{messages.telefonFormat}" title="#{messages.telefonText}"
+                 size="14" styleClass="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.anaAdiLabel}" for="@next"/>
+    <p:inputText id="anaAdi" value="#{tabKisiController.selected.gnlKisi.anaAdi}" title="#{messages.anaAdiLabel}" required="true"
+                 styleClass="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.babaAdiLabel}" for="@next"/>
+    <p:inputText id="babaAdi" value="#{tabKisiController.selected.gnlKisi.babaAdi}" title="#{messages.babaAdiLabel}" required="true"
+                 styleClass="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.dogumYeriLabel}" for="@next"/>
+    <p:inputText id="dogumYeri" value="#{tabKisiController.selected.gnlKisi.dogumYeri}" title="#{messages.dogumYeriText}" required="true"
+                 styleClass="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.cinsiyetLabel}" for="@next"/>
+    <p:inputText id="cinsiyet" value="#{tabKisiController.selected.gnlKisi.cinsiyet}" required="true" readonly="#{facesContext.renderResponse}"
+                 styleClass="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.medeniDurumLabel}" for="@next"/>
+    <p:inputText id="medeniDurum" value="#{tabKisiController.selected.gnlKisi.medeniDurum}" title="#{messages.medeniDurumText}" required="true"
+                 readonly="#{facesContext.renderResponse}"
+                 styleClass="tcUpdate"/>
+
+    <p:outputLabel value="#{messages.egitimDurumuLabel}" for="@next"/>
+    <p:selectOneMenu id="egitimDurumu" styleClass="tcUpdate"
+                     value="#{tabKisiController.selected.gnlKisi.egitimDurumu}"
+                     required="true" converter="omnifaces.SelectItemsConverter">
+        <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+        <f:selectItems value="#{enumEgitimDurumu.ALL_VALUES}"
+                       var="enumEgitimDurumus"
+                       itemLabel="#{enumEgitimDurumus.displayValue}"
+                       itemValue="#{enumEgitimDurumus}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.sehirLabel}" for="@next"/>
+    <p:selectOneMenu id="sehir" value="#{tabKisiController.selected.gnlKisi.gnlIl}" filter="true" converter="omnifaces.SelectItemsConverter"
+                     disabled="#{!tabKisiController.sehirDisi}" styleClass="tcUpdate" required="true">
+        <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+        <f:selectItems value="#{gnlIlController.items}"
+                       var="sehirs"
+                       itemValue="#{sehirs}"
+                       itemLabel="#{sehirs.tanim}"/>
+        <p:ajax event="change" update="ilce"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.ilceLabel}" for="@next"/>
+    <p:selectOneMenu id="ilce" value="#{tabKisiController.selected.gnlKisi.gnlIlce}" filter="true" converter="omnifaces.SelectItemsConverter"
+                     disabled="#{!tabKisiController.sehirDisi}" styleClass="tcUpdate" required="true">
+        <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+        <f:selectItems value="#{gnlIlceController.getIlceByIlId(tabKisiController.selected.gnlKisi.gnlIl)}"
+                       var="ilces"
+                       itemLabel="#{ilces.tanim}"
+                       itemValue="#{ilces}"/>
+        <p:ajax event="change" update="mahalle"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.mahalleLabel}" for="@next"/>
+    <p:selectOneMenu id="mahalle" value="#{tabKisiController.selected.gnlKisi.gnlMahalle}" filter="true" required="true"
+                     converter="omnifaces.SelectItemsConverter" styleClass="tcUpdate" disabled="#{!tabKisiController.sehirDisi}">
+        <f:selectItem itemValue="#{null}" itemLabel="#{messages.seciniz}"/>
+        <f:selectItems value="#{gnlMahalleController.getMahalleByIlce(tabKisiController.selected.gnlKisi.gnlIlce)}"
+                       var="mahalles"
+                       itemLabel="#{mahalles.tanim}"
+                       itemValue="#{mahalles}"/>
+    </p:selectOneMenu>
+
+    <p:outputLabel value="#{messages.adresLabel}" for="@next"/>
+    <p:inputTextarea rows="4" id="adres" value="#{tabKisiController.selected.gnlKisi.adres}" title="#{messages.adresText}" styleClass="w-100 tcUpdate"
+                     autoResize="false" readonly="#{!tabKisiController.sehirDisi}"/>
+
+    <p:outputLabel value="#{messages.ayakNumarasiLabel}" for="@next"/>
+    <p:inputText value="#{tabKisiController.selected.gnlKisi.ayakNumarasi}" title="#{messages.ayakNumarasiText}" required="true" size="50"
+                 maxlength="5"/>
+
+</ui:composition>
+</html>
