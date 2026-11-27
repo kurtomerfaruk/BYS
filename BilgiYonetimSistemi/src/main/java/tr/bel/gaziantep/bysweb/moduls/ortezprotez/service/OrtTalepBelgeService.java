@@ -93,7 +93,7 @@ public class OrtTalepBelgeService extends AbstractService<OrtTalepBelge> {
         String root = Function.isWindows()
                 ? Constants.ORTEZ_PROTEZ_TALEP_BELGE_KLASORU
                 : Constants.ORTEZ_PROTEZ_TALEP_BELGE_KLASORU_MAC;
-        File personFolder = new File(root + tcKimlikNo);
+        File personFolder = new File(root + tcKimlikNo + File.separator + talep.getTalepNo());
         if (!personFolder.exists() && !personFolder.mkdirs()) {
             throw new IllegalArgumentException("Belge klasörü oluşturulamadı: " + personFolder.getAbsolutePath());
         }

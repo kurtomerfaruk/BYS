@@ -191,41 +191,41 @@ public class OrtTalepWorkflowService implements java.io.Serializable {
      * "Randevu Oluştur" işlemleri için: randevu kaydını ve talep durum geçişini
      * tek transaction'da yapar. Aynı talep/tipte planlanmış randevu varsa tekrar oluşturmaz.
      */
-    @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void createAppointmentAndTransition(Integer talepId, EnumOrtTalepIslem action, String description) {
-        if (talepId == null || action == null) {
-            return;
-        }
-        EnumOrtRandevuTuru randevuTuru = appointmentTypeOf(action);
-        if (randevuTuru == null) {
-            applyTransition(talepId, action, description);
-            return;
-        }
+//    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+//    public void createAppointmentAndTransition(Integer talepId, EnumOrtTalepIslem action, String description) {
+//        if (talepId == null || action == null) {
+//            return;
+//        }
+//        EnumOrtRandevuTuru randevuTuru = appointmentTypeOf(action);
+//        if (randevuTuru == null) {
+//            applyTransition(talepId, action, description);
+//            return;
+//        }
+//
+//        OrtTalep talep = em.find(OrtTalep.class, talepId);
+//        if (talep != null && !ortRandevuService.existsPlanned(talep, randevuTuru)) {
+//            OrtRandevu randevu = OrtRandevu.builder()
+//                    .ortTalep(talep)
+//                    .ortKisi(talep.getOrtKisi())
+//                    .randevuTuru(randevuTuru)
+//                    .randevuTarihi(LocalDateTime.now().plusDays(1).withHour(9).withMinute(0).withSecond(0).withNano(0))
+//                    .durum(tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtRandevuDurumu.PLANLANDI)
+//                    .build();
+//            em.persist(randevu);
+//            em.flush();
+//        }
+//        applyTransition(talepId, action, description);
+//    }
 
-        OrtTalep talep = em.find(OrtTalep.class, talepId);
-        if (talep != null && !ortRandevuService.existsPlanned(talep, randevuTuru)) {
-            OrtRandevu randevu = OrtRandevu.builder()
-                    .ortTalep(talep)
-                    .ortKisi(talep.getOrtKisi())
-                    .randevuTuru(randevuTuru)
-                    .randevuTarihi(LocalDateTime.now().plusDays(1).withHour(9).withMinute(0).withSecond(0).withNano(0))
-                    .durum(tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtRandevuDurumu.PLANLANDI)
-                    .build();
-            em.persist(randevu);
-            em.flush();
-        }
-        applyTransition(talepId, action, description);
-    }
-
-    private EnumOrtRandevuTuru appointmentTypeOf(EnumOrtTalepIslem action) {
-        return switch (action) {
-            case ON_MUAYENE_RANDEVUSU -> EnumOrtRandevuTuru.ON_MUAYENE;
-            case OLCU_RANDEVUSU -> EnumOrtRandevuTuru.OLCU;
-            case PROVA_RANDEVUSU -> EnumOrtRandevuTuru.PROVA;
-            case YENIDEN_PROVA_RANDEVUSU -> EnumOrtRandevuTuru.YENIDEN_PROVA;
-            default -> null;
-        };
-    }
+//    private EnumOrtRandevuTuru appointmentTypeOf(EnumOrtTalepIslem action) {
+//        return switch (action) {
+//            case ON_MUAYENE_RANDEVUSU -> EnumOrtRandevuTuru.ON_MUAYENE;
+//            case OLCU_RANDEVUSU -> EnumOrtRandevuTuru.OLCU;
+//            case PROVA_RANDEVUSU -> EnumOrtRandevuTuru.PROVA;
+//            case YENIDEN_PROVA_RANDEVUSU -> EnumOrtRandevuTuru.YENIDEN_PROVA;
+//            default -> null;
+//        };
+//    }
 
     /**
      * Önceki adıma geri döner. Kullanıcı yetkisi ve açıklama zorunludur.
