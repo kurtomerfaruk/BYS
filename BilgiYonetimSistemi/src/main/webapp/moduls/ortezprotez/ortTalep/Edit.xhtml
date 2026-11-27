@@ -32,7 +32,14 @@
         </p:inputText>
 
         <p:outputLabel value="#{messages.talepTipiLabel}" for="@next"/>
-        <p:inputText id="talepTipi" value="#{ortTalepController.selected.talepTipi.displayValue}" readonly="true"/>
+        <p:selectOneMenu id="talepTipi" value="#{ortTalepController.selected.talepTipi}"
+                         required="true" converter="omnifaces.SelectItemsConverter">
+            <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+            <f:selectItems value="#{enumOrtTalepTipi.ALL_VALUES}"
+                           var="talepTipi"
+                           itemLabel="#{talepTipi.displayValue}"
+                           itemValue="#{talepTipi}"/>
+        </p:selectOneMenu>
 
         <p:outputLabel value="#{messages.durumLabel}" for="@next"/>
         <p:inputText id="durum" value="#{ortTalepController.selected.durum.displayValue}" readonly="true"/>

@@ -79,7 +79,10 @@ public enum EnumOrtTalepIslem implements BaseEnum {
      */
     private static final Map<EnumOrtTalepIslem, Set<EnumOrtTalepDurumu>> EXTRA_SOURCES = Map.of(
             ON_MUAYENEYE_GEL, EnumSet.of(EnumOrtTalepDurumu.YENI_TALEP),
-            OLCU_AL, EnumSet.of(EnumOrtTalepDurumu.PROJE_BELIRLENDI, EnumOrtTalepDurumu.ODEME_BEKLIYOR)
+            OLCU_AL, EnumSet.of(EnumOrtTalepDurumu.PROJE_BELIRLENDI, EnumOrtTalepDurumu.ODEME_BEKLIYOR),
+            // Randevu oluşturulmadan PROVA_RANDEVUSU_BEKLIYOR'a geçilmişse
+            // (ör. eski depo onayı akışı) buradan kurtarma yolu açılır.
+            PROVA_RANDEVUSU, EnumSet.of(EnumOrtTalepDurumu.PROVA_RANDEVUSU_BEKLIYOR)
     );
 
     EnumOrtTalepIslem(String label, EnumOrtTalepDurumu sourceStatus, EnumOrtTalepDurumu targetStatus,

@@ -374,7 +374,31 @@ public class OrtTalepWorkflowService implements java.io.Serializable {
         if (isWarehouseLocked(talep, action)) {
             return false;
         }
+        if (!isActionReady(talep, action)) {
+            return false;
+        }
         return syYetkiService.hasPermission(Util.getSyKullanici(), action.getPermission());
+    }
+
+    /**
+     * Randevu gerektiren adımlarda doğru sırayı garanti eder:
+     * randevu yoksa "randevu oluştur", randevu varsa "prova yap" işlemi açılır.
+     * Böylece guard'ın her zaman reddettiği bir buton kullanıcıya gösterilmez.
+     */
+    private boolean isActionReady(OrtTalep talep, EnumOrtTalepIslem action) {
+        if (talep == null || action == null) {
+            return false;
+        }
+        if (action == EnumOrtTalepIslem.PROVA_YAP) {
+            return ortRandevuService.hasAppointment(talep, EnumOrtRandevuTuru.PROVA)
+                    || ortRandevuService.hasAppointment(talep, EnumOrtRandevuTuru.YENIDEN_PROVA);
+        }
+        if (action == EnumOrtTalepIslem.PROVA_RANDEVUSU
+                && talep.getDurum() == EnumOrtTalepDurumu.PROVA_RANDEVUSU_BEKLIYOR) {
+            // Bu durumdayken randevu zaten varsa yeniden oluşturma seçeneği kapanır.
+            return !ortRandevuService.hasAppointment(talep, EnumOrtRandevuTuru.PROVA);
+        }
+        return true;
     }
 
     /**
@@ -400,6 +424,7 @@ public class OrtTalepWorkflowService implements java.io.Serializable {
         }
         return EnumOrtTalepIslem.getActions(talep.getDurum()).stream()
                 .filter(action -> !isWarehouseLocked(talep, action))
+                .filter(action -> isActionReady(talep, action))
                 .filter(action -> syYetkiService.hasPermission(Util.getSyKullanici(), action.getPermission()))
                 .collect(Collectors.toCollection(() -> EnumSet.noneOf(EnumOrtTalepIslem.class)));
     }
