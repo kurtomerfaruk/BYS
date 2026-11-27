@@ -6,21 +6,16 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.LockModeType;
 import jakarta.persistence.PersistenceContext;
 import tr.bel.gaziantep.bysweb.core.enums.bys.EnumEvetHayir;
-import tr.bel.gaziantep.bysweb.core.enums.tabanlik.EnumTabRandevuDurumu;
-import tr.bel.gaziantep.bysweb.core.enums.tabanlik.EnumTabRandevuTuru;
-import tr.bel.gaziantep.bysweb.core.enums.tabanlik.EnumTabTalepDurumu;
-import tr.bel.gaziantep.bysweb.core.enums.tabanlik.EnumTabTalepIslem;
+import tr.bel.gaziantep.bysweb.core.enums.tabanlik.*;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.core.utils.StringUtil;
 import tr.bel.gaziantep.bysweb.core.utils.Util;
 import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.entity.SyKullanici;
 import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.service.SyYetkiService;
-import tr.bel.gaziantep.bysweb.moduls.tabanlik.entity.TabOlcum;
-import tr.bel.gaziantep.bysweb.moduls.tabanlik.entity.TabRandevu;
-import tr.bel.gaziantep.bysweb.moduls.tabanlik.entity.TabTalep;
-import tr.bel.gaziantep.bysweb.moduls.tabanlik.entity.TabUretimKarar;
+import tr.bel.gaziantep.bysweb.moduls.tabanlik.entity.*;
 
 import java.io.Serial;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -46,6 +41,12 @@ public class TabTalepWorkflowService implements java.io.Serializable {
     private TabOlcumService olcumService;
     @Inject
     private TabUretimKararService kararService;
+    @Inject
+    private TabOdemeService odemeService;
+    @Inject
+    private TabBelgeService belgeService;
+    @Inject
+    private TabBelgeZorunlulukService belgeZorunlulukService;
     @Inject
     private TabTalepHareketService hareketService;
 
@@ -183,6 +184,85 @@ public class TabTalepWorkflowService implements java.io.Serializable {
         doTransition(talep, action, StringUtil.isBlank(gerekce) ? action.getDisplayValue() : gerekce);
     }
 
+    /**
+     * Ücretli/ücretsiz işlem kaydını oluşturur (onay bekliyor durumunda); talep tipini günceller.
+     */
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void saveCharge(Integer talepId, EnumTabUcretTuru ucretTuru, BigDecimal tutar,
+                           LocalDateTime odemeTarihi, String odemeYontemi, String dekontNo,
+                           String ucretsizGerekce, String aciklama) {
+        if (talepId == null || ucretTuru == null) {
+            throw new IllegalArgumentException("Ücret türü ve talep zorunludur.");
+        }
+        TabTalep talep = em.find(TabTalep.class, talepId);
+        if (talep == null) {
+            throw new IllegalArgumentException("Talep kaydı bulunamadı.");
+        }
+        if (talep.getDurum() != EnumTabTalepDurumu.UCRET_BEKLIYOR) {
+            throw new IllegalArgumentException("Bu aşamada ücretlendirme yapılamaz.");
+        }
+        if (ucretTuru == EnumTabUcretTuru.UCRETLI) {
+            if (tutar == null || tutar.compareTo(BigDecimal.ZERO) <= 0) {
+                throw new IllegalArgumentException("Ücretli işlemlerde ödeme tutarı sıfırdan büyük olmalıdır.");
+            }
+            if (odemeTarihi == null) {
+                throw new IllegalArgumentException("Ödeme tarihi zorunludur.");
+            }
+        } else if (StringUtil.isBlank(ucretsizGerekce)) {
+            throw new IllegalArgumentException("Ücretsiz işlem gerekçesi zorunludur.");
+        }
+
+        TabOdeme odeme = TabOdeme.builder()
+                .tabTalep(talep)
+                .ucretTuru(ucretTuru)
+                .tutar(tutar)
+                .odemeTarihi(odemeTarihi)
+                .odemeYontemi(odemeYontemi)
+                .dekontNo(dekontNo)
+                .ucretsizGerekce(ucretsizGerekce)
+                .onayDurumu(EnumTabOnayDurumu.BEKLIYOR)
+                .aciklama(aciklama)
+                .build();
+        em.persist(odeme);
+        em.flush();
+
+        talep.setUcretTuru(ucretTuru);
+        em.merge(talep);
+        em.flush();
+    }
+
+    /**
+     * Ödeme/ücretsiz işlem onayı: zorunlu belgeler kontrol edilir, onay yazılır ve
+     * talep üretim aşamasına geçirilir. Hepsi tek transaction'da çalışır.
+     */
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void approveCharge(Integer odemeId, String aciklama) {
+        if (odemeId == null) {
+            throw new IllegalArgumentException("Onaylanacak ödeme kaydı bulunamadı.");
+        }
+        TabOdeme odeme = em.find(TabOdeme.class, odemeId);
+        if (odeme == null || odeme.getTabTalep() == null) {
+            throw new IllegalArgumentException("Ödeme kaydı bulunamadı.");
+        }
+        TabTalep talep = em.find(TabTalep.class, odeme.getTabTalep().getId());
+        EnumTabUcretTuru tur = odeme.getUcretTuru() == null ? talep.getUcretTuru() : odeme.getUcretTuru();
+        EnumTabTalepIslem action = tur == EnumTabUcretTuru.UCRETLI
+                ? EnumTabTalepIslem.UCRETLI_ODEME_ONAYLA
+                : EnumTabTalepIslem.UCRETSIZ_ONAYLA;
+
+        checkPermission(action);
+        checkTransition(talep, action);
+        checkActionGuards(talep, action);
+        checkRequiredDocuments(talep, action, tur);
+
+        odeme.setOnayDurumu(EnumTabOnayDurumu.ONAYLANDI);
+        odeme.setOnaylayanSyKullanici(Util.getSyKullanici());
+        odeme.setOnayTarihi(LocalDateTime.now());
+        em.merge(odeme);
+        em.flush();
+
+        doTransition(talep, action, aciklama);
+    }
 
     /**
      * Mevcut durumda uygulanabilir işlemler (yetki filtreli).
@@ -233,7 +313,21 @@ public class TabTalepWorkflowService implements java.io.Serializable {
         }
     }
 
+    private void checkRequiredDocuments(TabTalep talep, EnumTabTalepIslem action, EnumTabUcretTuru tur) {
+        for (EnumTabBelgeTuru belgeTuru : belgeZorunlulukService.getRequiredTurler(tur, action.name())) {
+            if (!belgeService.existsByType(talep, belgeTuru)) {
+                throw new IllegalArgumentException("Onay için zorunlu belge yüklenmelidir: "
+                        + belgeTuru.getDisplayValue());
+            }
+        }
+    }
+
     private void checkActionGuards(TabTalep talep, EnumTabTalepIslem action) {
+        if (action == EnumTabTalepIslem.UCRETLI_ODEME_ONAYLA || action == EnumTabTalepIslem.UCRETSIZ_ONAYLA) {
+            if (talep.getUcretTuru() == null) {
+                throw new IllegalArgumentException("Ücret türü belirlenmeden onay yapılamaz.");
+            }
+        }
         if (action == EnumTabTalepIslem.KARAR_EVET || action == EnumTabTalepIslem.KARAR_HAYIR) {
             if (!olcumService.existsByTalep(talep)) {
                 throw new IllegalArgumentException("Ölçüm kaydı olmadan üretim kararı verilemez.");

@@ -23,7 +23,11 @@ public enum EnumTabTalepIslem implements BaseEnum {
     KARAR_EVET("Üretime Uygun", EnumTabTalepDurumu.URETIM_KARARI_BEKLIYOR,
             EnumTabTalepDurumu.UCRET_BEKLIYOR, "tabtalep:guncelle", "pi pi-check"),
     KARAR_HAYIR("Uygun Bulunmadı", EnumTabTalepDurumu.URETIM_KARARI_BEKLIYOR,
-            EnumTabTalepDurumu.UYGUN_BULUNMADI, "tabtalep:guncelle", "pi pi-times-circle");
+            EnumTabTalepDurumu.UYGUN_BULUNMADI, "tabtalep:guncelle", "pi pi-times-circle"),
+    UCRETLI_ODEME_ONAYLA("Ödeme Onayla", EnumTabTalepDurumu.UCRET_BEKLIYOR,
+            EnumTabTalepDurumu.URETIM_BEKLIYOR, "tabtalep:guncelle", "pi pi-receipt"),
+    UCRETSIZ_ONAYLA("Ücretsiz İşlemi Onayla", EnumTabTalepDurumu.UCRET_BEKLIYOR,
+            EnumTabTalepDurumu.URETIM_BEKLIYOR, "tabtalep:guncelle", "pi pi-check-circle");
 
     private final String label;
     private final EnumTabTalepDurumu sourceStatus;

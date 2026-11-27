@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 import tr.bel.gaziantep.bysweb.core.entity.BaseEntity;
 import tr.bel.gaziantep.bysweb.core.enums.tabanlik.EnumTabTalepDurumu;
+import tr.bel.gaziantep.bysweb.core.enums.tabanlik.EnumTabUcretTuru;
 import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.entity.SyKullanici;
 
 import java.io.Serial;
@@ -46,6 +47,10 @@ public class TabTalep extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "DURUM")
     private EnumTabTalepDurumu durum;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "UCRET_TURU")
+    private EnumTabUcretTuru ucretTuru;
 
     @Nationalized
     @Lob

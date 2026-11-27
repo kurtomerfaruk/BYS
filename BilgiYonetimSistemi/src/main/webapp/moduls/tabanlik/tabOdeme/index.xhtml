@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:p="primefaces">
+
+    <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.tabanlik.EnumTabUcretTuru" var="enumUcretTuru"/>
+    <p:importEnum type="tr.bel.gaziantep.bysweb.core.enums.tabanlik.EnumTabBelgeTuru" var="enumBelgeTuru"/>
+
+    <h:form id="TabOdemeForm" enctype="multipart/form-data">
+
+        <p:panel header="#{messages.odemeBilgileri}" styleClass="w-100 mb-3">
+            <p:panelGrid columns="2" layout="tabular" styleClass="w-100">
+
+                <p:outputLabel value="#{messages.talepLabel}" for="seciliTalepNo"/>
+                <h:panelGroup layout="block">
+                    <p:inputText id="seciliTalepNo" value="#{tabOdemeController.seciliTalep.talepNo}"
+                                 readonly="true" size="25"/>
+                    <p:commandButton icon="pi pi-search" process="@this" update="@form"
+                                     actionListener="#{bysController.openCommonDialog('tabTalepSec')}">
+                        <p:ajax event="dialogReturn" listener="#{tabOdemeController.onTalepSelected}" update="@form"/>
+                    </p:commandButton>
+                </h:panelGroup>
+
+                <p:outputLabel value="#{messages.kisiLabel}" for="kisiAdSoyad"/>
+                <p:inputText id="kisiAdSoyad" value="#{tabOdemeController.seciliTalep.tabKisi.gnlKisi.adSoyad}"
+                             readonly="true" styleClass="inputUpdate"/>
+
+                <p:outputLabel value="#{messages.ucretTuruLabel}" for="ucretTuru"/>
+                <p:selectOneMenu id="ucretTuru" value="#{tabOdemeController.ucretTuru}" required="true"
+                                 converter="omnifaces.SelectItemsConverter">
+                    <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+                    <f:selectItems value="#{enumUcretTuru.ALL_VALUES}" var="tur"
+                                   itemLabel="#{tur.displayValue}" itemValue="#{tur}"/>
+                    <p:ajax event="change" update="@form"/>
+                </p:selectOneMenu>
+
+                <ui:fragment rendered="#{tabOdemeController.ucretTuru eq 'UCRETLI'}">
+                    <p:outputLabel value="#{messages.odemeTutarLabel}" for="tutar"/>
+                    <p:inputText id="tutar" value="#{tabOdemeController.tutar}"><p:keyFilter mask="num"/></p:inputText>
+                </ui:fragment>
+
+                <ui:fragment rendered="#{tabOdemeController.ucretTuru eq 'UCRETLI'}">
+                    <p:outputLabel value="#{messages.odemeTarihiLabel}" for="odemeTarihi"/>
+                    <p:datePicker id="odemeTarihi" value="#{tabOdemeController.odemeTarihi}"
+                                  locale="tr" pattern="#{messages.tarihSaatKisaFormat}" showIcon="true" showOnFocus="false"/>
+                </ui:fragment>
+
+                <ui:fragment rendered="#{tabOdemeController.ucretTuru eq 'UCRETLI'}">
+                    <p:outputLabel value="#{messages.odemeYontemiLabel}" for="odemeYontemi"/>
+                    <p:inputText id="odemeYontemi" value="#{tabOdemeController.odemeYontemi}"/>
+                </ui:fragment>
+
+                <ui:fragment rendered="#{tabOdemeController.ucretTuru eq 'UCRETLI'}">
+                    <p:outputLabel value="#{messages.dekontNoLabel}" for="dekontNo"/>
+                    <p:inputText id="dekontNo" value="#{tabOdemeController.dekontNo}"/>
+                </ui:fragment>
+
+                <ui:fragment rendered="#{tabOdemeController.ucretTuru eq 'UCRETSIZ'}">
+                    <p:outputLabel value="#{messages.ucretsizGerekceLabel}" for="gerekce"/>
+                    <p:inputTextarea id="gerekce" value="#{tabOdemeController.ucretsizGerekce}" rows="3" cols="50"/>
+                </ui:fragment>
+
+                <p:outputLabel value="#{messages.aciklamaLabel}" for="aciklama"/>
+                <p:inputTextarea id="aciklama" value="#{tabOdemeController.aciklama}" rows="2" cols="50"/>
+
+                <f:facet name="footer">
+                    <p:commandButton value="#{messages.odemeKaydet}" icon="pi pi-save"
+                                     styleClass="ui-button-primary"
+                                     actionListener="#{tabOdemeController.saveCharge}"
+                                     process="@form" update="@form,:growl"
+                                     rendered="#{syKullaniciController.hasPermission('tabtalep:guncelle')}"/>
+                    <p:commandButton value="#{messages.odemeOnayla}" icon="pi pi-check"
+                                     styleClass="ui-button-success"
+                                     actionListener="#{tabOdemeController.approveCharge}"
+                                     process="@this" update="@form,:growl"
+                                     rendered="#{syKullaniciController.hasPermission('tabtalep:guncelle')}"/>
+                </f:facet>
+            </p:panelGrid>
+        </p:panel>
+
+        <p:panel header="#{messages.zorunluBelgeler}" styleClass="w-100 mb-3">
+            <ui:repeat value="#{tabOdemeController.requiredBelgeler}" var="zorunlu">
+                <p:tag value="#{zorunlu.displayValue}" icon="pi pi-file" severity="info" styleClass="mr-2"/>
+            </ui:repeat>
+
+            <p:panelGrid columns="2" layout="tabular" styleClass="w-100 mt-2">
+                <p:outputLabel value="#{messages.belgeTuruLabel}" for="belgeTuru"/>
+                <p:selectOneMenu id="belgeTuru" value="#{tabOdemeController.belgeTuru}"
+                                 converter="omnifaces.SelectItemsConverter">
+                    <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
+                    <f:selectItems value="#{enumBelgeTuru.ALL_VALUES}" var="b"
+                                   itemLabel="#{b.displayValue}" itemValue="#{b}"/>
+                </p:selectOneMenu>
+
+                <p:outputLabel value="#{messages.aciklamaLabel}" for="belgeAciklama"/>
+                <p:inputText id="belgeAciklama" value="#{tabOdemeController.belgeAciklama}"/>
+            </p:panelGrid>
+
+            <p:fileUpload listener="#{tabOdemeController.upload}" mode="advanced" auto="true" multiple="false"
+                          dragDropSupport="false" label="#{messages.buttonSec}" uploadLabel="#{messages.buttonYukle}"
+                          cancelLabel="#{messages.buttonIptal}" invalidFileMessage="#{messages.hataliDosyaTipi}"
+                          invalidSizeMessage="#{messages.hataliDosyaBoyutu}"
+                          allowTypes="/(\.|\/)(pdf|jpe?g|png|doc|docx|xls|xlsx)$/"
+                          update="@form,:growl" styleClass="mb-3">
+                <p:validateFile sizeLimit="10000000"/>
+            </p:fileUpload>
+
+            <p:dataTable value="#{tabOdemeController.belgeler}" var="belge" rows="5" paginator="true"
+                         emptyMessage="#{messages.kayitBulunamadi}" styleClass="w-100">
+                <p:column headerText="#{messages.tip}"><h:outputText value="#{belge.belgeTuru.displayValue}"/></p:column>
+                <p:column headerText="#{messages.dosyaAdi}"><h:outputText value="#{belge.dosyaAdi}"/></p:column>
+                <p:column headerText="#{messages.tarih}">
+                    <h:outputText value="#{belge.yuklenmeTarihi}">
+                        <f:convertDateTime pattern="#{messages.tarihSaatKisaFormat}" type="localDateTime"/>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="" style="width:60px">
+                    <p:commandButton icon="pi pi-download" ajax="false" immediate="true"
+                                     actionListener="#{tabOdemeController.selectForDownload(belge)}">
+                        <p:fileDownload value="#{tabOdemeController.download}"/>
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+        </p:panel>
+
+        <p:panel header="#{messages.odemeBilgileri}" styleClass="w-100">
+            <p:dataTable value="#{tabOdemeController.odemeler}" var="odeme" rows="10" paginator="true"
+                         emptyMessage="#{messages.kayitBulunamadi}" styleClass="w-100">
+                <p:column headerText="#{messages.ucretTuruLabel}">
+                    <h:outputText value="#{odeme.ucretTuru.displayValue}"/>
+                </p:column>
+                <p:column headerText="#{messages.odemeTutarLabel}">
+                    <h:outputText value="#{odeme.tutar}"><f:convertNumber type="currency"/></h:outputText>
+                </p:column>
+                <p:column headerText="#{messages.odemeTarihiLabel}">
+                    <h:outputText value="#{odeme.odemeTarihi}">
+                        <f:convertDateTime pattern="#{messages.tarihSaatKisaFormat}" type="localDateTime"/>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="#{messages.durumLabel}">
+                    <h:outputText value="#{odeme.onayDurumu.displayValue}"/>
+                </p:column>
+            </p:dataTable>
+        </p:panel>
+
+    </h:form>
+
+</ui:composition>
