@@ -80,6 +80,11 @@ public class OrtTalepService extends AbstractService<OrtTalep> {
             throw new IllegalArgumentException("Bu aşamada talep bilgileri güncellenemez. " +
                     "Değişiklikler workflow işlemleri üzerinden yapılmalıdır.");
         }
+        // Talep tipi (Ücretli / Proje Kapsamında) değerlendirme öncesi kararıdır;
+        // kaydedilmezse workflow yanlış dalı (Proje Belirle) seçer.
+        if (talep.getTalepTipi() != null) {
+            mevcut.setTalepTipi(talep.getTalepTipi());
+        }
         mevcut.setAciklama(talep.getAciklama());
         edit(mevcut);
         flush();

@@ -164,8 +164,8 @@
                             </table>
                         </h:panelGroup>
 
-                        <!-- Proje belirle adımında zorunlu proje seçimi -->
-                        <h:panelGroup rendered="#{ortTalepController.primaryAction == enumOrtTalepIslem.PROJE_BELIRLE}">
+                        <!-- Proje belirle adımında proje seçimi (ücretli taleplerde isteğe bağlı) -->
+                        <h:panelGroup rendered="#{ortTalepController.projeSecimiVisible}">
                             <table style="width:100%;margin-top:10px;font-size:13px;">
                                 <tr>
                                     <td style="padding:4px 8px 4px 0;width:100px;">

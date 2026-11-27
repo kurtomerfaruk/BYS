@@ -80,14 +80,19 @@ public class OrtTalepWorkflowService implements java.io.Serializable {
         em.lock(talep, LockModeType.OPTIMISTIC);
 
         EnumOrtTalepDurumu eskiDurum = talep.getDurum();
-        talep.setDurum(action.getTargetStatus());
+        // Ücretli talepte proje seçimi sadece bilgi ekler; ödeme akışı
+        // (fiyat -> sözleşme -> ödeme -> dekont) kesilmez.
+        boolean sadeceProjeBilgisi = action == EnumOrtTalepIslem.PROJE_BELIRLE
+                && talep.getTalepTipi() == EnumOrtTalepTipi.UCRETLI;
+        EnumOrtTalepDurumu yeniDurum = sadeceProjeBilgisi ? eskiDurum : action.getTargetStatus();
+        talep.setDurum(yeniDurum);
         em.merge(talep);
         em.flush();
 
         OrtTalepDurumGecmisi gecmis = OrtTalepDurumGecmisi.builder()
                 .ortTalep(talep)
                 .eskiDurum(eskiDurum)
-                .yeniDurum(action.getTargetStatus())
+                .yeniDurum(yeniDurum)
                 .islemTarihi(LocalDateTime.now())
                 .islemiYapanSyKullanici(kullanici)
                 .aciklama(description == null || description.isBlank() ? action.getDisplayValue() : description)
@@ -382,8 +387,9 @@ public class OrtTalepWorkflowService implements java.io.Serializable {
 
     /**
      * Randevu gerektiren adımlarda doğru sırayı garanti eder:
-     * randevu yoksa "randevu oluştur", randevu varsa "prova yap" işlemi açılır.
-     * Böylece guard'ın her zaman reddettiği bir buton kullanıcıya gösterilmez.
+     * randevu yoksa "randevu oluştur", randevu varsa işlemi tamamla butonu açılır.
+     * Böylece guard'ın her zaman reddettiği bir buton kullanıcıya gösterilmez
+     * (ön muayene, ölçü ve prova için aynı kural geçerlidir).
      */
     private boolean isActionReady(OrtTalep talep, EnumOrtTalepIslem action) {
         if (talep == null || action == null) {
@@ -393,9 +399,22 @@ public class OrtTalepWorkflowService implements java.io.Serializable {
             return ortRandevuService.hasAppointment(talep, EnumOrtRandevuTuru.PROVA)
                     || ortRandevuService.hasAppointment(talep, EnumOrtRandevuTuru.YENIDEN_PROVA);
         }
+        if (action == EnumOrtTalepIslem.ON_MUAYENEYE_GEL) {
+            return ortRandevuService.hasAppointment(talep, EnumOrtRandevuTuru.ON_MUAYENE);
+        }
+        if (action == EnumOrtTalepIslem.OLCU_AL) {
+            return ortRandevuService.hasAppointment(talep, EnumOrtRandevuTuru.OLCU);
+        }
+        if (action == EnumOrtTalepIslem.ON_MUAYENE_RANDEVUSU
+                && talep.getDurum() == EnumOrtTalepDurumu.ON_MUAYENE_RANDEVUSU_BEKLIYOR) {
+            return !ortRandevuService.hasAppointment(talep, EnumOrtRandevuTuru.ON_MUAYENE);
+        }
+        if (action == EnumOrtTalepIslem.OLCU_RANDEVUSU
+                && talep.getDurum() == EnumOrtTalepDurumu.OLCU_RANDEVUSU_BEKLIYOR) {
+            return !ortRandevuService.hasAppointment(talep, EnumOrtRandevuTuru.OLCU);
+        }
         if (action == EnumOrtTalepIslem.PROVA_RANDEVUSU
                 && talep.getDurum() == EnumOrtTalepDurumu.PROVA_RANDEVUSU_BEKLIYOR) {
-            // Bu durumdayken randevu zaten varsa yeniden oluşturma seçeneği kapanır.
             return !ortRandevuService.hasAppointment(talep, EnumOrtRandevuTuru.PROVA);
         }
         return true;
@@ -585,14 +604,13 @@ public class OrtTalepWorkflowService implements java.io.Serializable {
                 }
             }
             case PROJE_BELIRLE -> {
-                if (talep.getTalepTipi() == EnumOrtTalepTipi.UCRETLI) {
-                    throw new IllegalArgumentException("Ücretli taleplerde proje seçimi yapılamaz.");
-                }
                 if (talep.getOrtProje() == null) {
-                    throw new IllegalArgumentException("Ücretsiz talepler mutlaka bir projeye bağlanmalıdır. Lütfen proje seçiniz.");
+                    throw new IllegalArgumentException("Proje seçilmeden bu işlem yapılamaz. Lütfen proje seçiniz.");
                 }
-                // Ön görüşme/ücretsiz talep, proje seçildiğinde proje kapsamına geçer.
-                if (talep.getTalepTipi() != EnumOrtTalepTipi.PROJE_KAPSAMINDA) {
+                // Ücretli talep projeye dahil olabilir veya olmayabilir. Proje
+                // bilgisi eklenir; talep tipi ve ücret akışı değiştirilmez.
+                if (talep.getTalepTipi() != EnumOrtTalepTipi.UCRETLI
+                        && talep.getTalepTipi() != EnumOrtTalepTipi.PROJE_KAPSAMINDA) {
                     talep.setTalepTipi(EnumOrtTalepTipi.PROJE_KAPSAMINDA);
                 }
             }

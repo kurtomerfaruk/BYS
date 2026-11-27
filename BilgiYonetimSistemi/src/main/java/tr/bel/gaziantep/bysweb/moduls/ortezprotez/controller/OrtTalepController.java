@@ -325,6 +325,15 @@ public class OrtTalepController extends AbstractController<OrtTalep> {
                 .collect(java.util.stream.Collectors.toCollection(() -> EnumSet.noneOf(EnumOrtTalepIslem.class)));
     }
 
+    /**
+     * Proje seçim alanı hem proje kapsamlı taleplerde (ana işlem) hem de
+     * ücretli taleplerde (isteğe bağlı ikincil işlem) gösterilir.
+     */
+    public boolean isProjeSecimiVisible() {
+        return getPrimaryAction() == EnumOrtTalepIslem.PROJE_BELIRLE
+                || getSecondaryActions().contains(EnumOrtTalepIslem.PROJE_BELIRLE);
+    }
+
     public int getAppointmentCount() {
         if (this.getSelected() == null) {
             return 0;
@@ -362,13 +371,9 @@ public class OrtTalepController extends AbstractController<OrtTalep> {
                 break;
             }
         }
-        // "Proje Belirlendi" ve "Ödeme Bekliyor" durumlarında Ücret/Proje
-        // aşamasının işi bitmiş, sıradaki adım ölçü randevusudur. Stepper'ı
-        // "Sıradaki İşlem" kartıyla tutarlı göstermek için Ölçü aşamasını işaretle.
-        if (durum == EnumOrtTalepDurumu.PROJE_BELIRLENDI
-                || durum == EnumOrtTalepDurumu.ODEME_BEKLIYOR) {
-            return Math.min(index + 1, PHASE_STATUSES.size() - 1);
-        }
+        // PROJE_BELIRLENDI ve ODEME_BEKLIYOR hâlâ "Ücret / Proje" aşamasının
+        // içindedir. Burada sonraki aşamaya (Ölçü) geçiş yapılırsa stepper bu
+        // aşamayı atlamış gibi görünür; mevcut adım doğru gösterilmelidir.
         return index;
     }
 
