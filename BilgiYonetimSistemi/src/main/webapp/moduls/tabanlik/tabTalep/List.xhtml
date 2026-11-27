@@ -45,7 +45,8 @@
                                  disabled="#{empty tabTalepController.selected}" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"
                                  rendered="#{syKullaniciController.hasPermission('tabtalep:guncelle')}"/>
                 <p:commandButton id="viewButton" styleClass="ui-button-info" icon="pi pi-search" pt:data-tooltip="#{messages.buttonDetay}"
-                                 update=":TabTalepViewForm:TabTalepViewForm" oncomplete="PF('TabTalepViewDialog').show()"
+                                 actionListener="#{tabTalepController.readInfo}"
+                                 update=":TabTalepViewForm,:growl" oncomplete="PF('TabTalepViewDialog').show()"
                                  disabled="#{empty tabTalepController.selected}" onstart="PF('Loading').show()" onsuccess="PF('Loading').hide()"/>
                 <p:commandButton id="deleteButton" styleClass="ui-button-danger" icon="pi pi-trash" pt:data-tooltip="#{messages.buttonSil}"
                                  actionListener="#{tabTalepController.delete}" update=":growl,datalist"

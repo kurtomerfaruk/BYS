@@ -36,8 +36,9 @@ import java.util.List;
 /**
  * Ücretlendirme, ödeme ve onay ekranı.
  *
- * @author OmerFarukKurt
- * @version 1.0.0
+ * @author Omer Faruk KURT kurtomerfaruk@gmail.com
+ * @version 1.30.0
+ * @since 27.11.2026 16:15
  */
 @Named
 @ViewScoped

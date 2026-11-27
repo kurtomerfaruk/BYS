@@ -6,12 +6,19 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.LockModeType;
 import jakarta.persistence.PersistenceContext;
 import tr.bel.gaziantep.bysweb.core.enums.bys.EnumEvetHayir;
+import tr.bel.gaziantep.bysweb.core.enums.bys.EnumGirisCikis;
+import tr.bel.gaziantep.bysweb.core.enums.stokyonetimi.EnumStHareketTuru;
 import tr.bel.gaziantep.bysweb.core.enums.tabanlik.*;
 import tr.bel.gaziantep.bysweb.core.utils.Constants;
 import tr.bel.gaziantep.bysweb.core.utils.StringUtil;
 import tr.bel.gaziantep.bysweb.core.utils.Util;
 import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.entity.SyKullanici;
 import tr.bel.gaziantep.bysweb.moduls.sistemyonetimi.service.SyYetkiService;
+import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity.StDepo;
+import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity.StStok;
+import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.entity.StStokHareket;
+import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.service.StDepoYetkiService;
+import tr.bel.gaziantep.bysweb.moduls.stokyonetimi.service.StStokHareketService;
 import tr.bel.gaziantep.bysweb.moduls.tabanlik.entity.*;
 
 import java.io.Serial;
@@ -47,6 +54,14 @@ public class TabTalepWorkflowService implements java.io.Serializable {
     private TabBelgeService belgeService;
     @Inject
     private TabBelgeZorunlulukService belgeZorunlulukService;
+    @Inject
+    private TabUretimService uretimService;
+    @Inject
+    private TabTeslimatService teslimatService;
+    @Inject
+    private StStokHareketService stStokHareketService;
+    @Inject
+    private StDepoYetkiService stDepoYetkiService;
     @Inject
     private TabTalepHareketService hareketService;
 
@@ -104,6 +119,38 @@ public class TabTalepWorkflowService implements java.io.Serializable {
         checkActionGuards(talep, action);
         doTransition(talep, action, description);
     }
+
+    /**
+     * Yetkili düzeltme: önceki bir aşamaya geri döner. Gerekçe zorunludur ve
+     * her geri dönüş işlem geçmişine kaydedilir.
+     */
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void goBack(Integer talepId, EnumTabTalepDurumu hedefDurum, String aciklama) {
+        if (talepId == null || hedefDurum == null) {
+            throw new IllegalArgumentException("Geri dönüş için hedef durum belirtilmelidir.");
+        }
+        if (StringUtil.isBlank(aciklama)) {
+            throw new IllegalArgumentException("Geri dönüş gerekçesi zorunludur.");
+        }
+        TabTalep talep = em.find(TabTalep.class, talepId);
+        if (talep == null) {
+            throw new IllegalArgumentException("Talep kaydı bulunamadı.");
+        }
+        if (!syYetkiService.hasPermission(Util.getSyKullanici(), "tabtalep:guncelle")) {
+            throw new IllegalArgumentException("Geri dönüş yetkiniz bulunmuyor.");
+        }
+        if (!talep.getDurum().getPreviousStatuses().contains(hedefDurum)) {
+            throw new IllegalArgumentException("Bu durumdan hedef adıma geri dönülemez.");
+        }
+        em.lock(talep, LockModeType.OPTIMISTIC);
+        EnumTabTalepDurumu eskiDurum = talep.getDurum();
+        talep.setDurum(hedefDurum);
+        em.merge(talep);
+        em.flush();
+        hareketService.add(talep, eskiDurum, hedefDurum, "GO_BACK", "Geri dönüş: " + aciklama);
+        em.flush();
+    }
+
 
     /**
      * Ölçüm kaydı (sağ/sol detaylarla) + talep durum geçişi tek transaction'da.
@@ -265,6 +312,172 @@ public class TabTalepWorkflowService implements java.io.Serializable {
     }
 
     /**
+     * Üretim kaydını açar ve talebi üretim aşamasına geçirir.
+     * Ödeme/ücretsiz işlem onayı ve stok/depo bilgileri zorunludur.
+     */
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void startProduction(Integer talepId, Integer sorumluKullaniciId, Integer stStokId,
+                                Integer stDepoId, BigDecimal miktar, String aciklama) {
+        if (talepId == null || stStokId == null || stDepoId == null) {
+            throw new IllegalArgumentException("Üretim için talep, stok kartı ve depo zorunludur.");
+        }
+        TabTalep talep = em.find(TabTalep.class, talepId);
+        SyKullanici sorumlu = sorumluKullaniciId == null ? Util.getSyKullanici() : em.find(SyKullanici.class, sorumluKullaniciId);
+        StStok stStok = em.find(StStok.class, stStokId);
+        StDepo stDepo = em.find(StDepo.class, stDepoId);
+        if (talep == null || stStok == null || stDepo == null || sorumlu == null) {
+            throw new IllegalArgumentException("Üretim için seçilen kayıtlar bulunamadı.");
+        }
+
+        EnumTabTalepIslem action = EnumTabTalepIslem.URETIM_BASLAT;
+        checkPermission(action);
+        checkTransition(talep, action);
+        checkActionGuards(talep, action);
+        checkDepoYetki(stDepo);
+
+        TabOdeme odeme = odemeService.findLatestByTalep(talep);
+        if (odeme == null || odeme.getOnayDurumu() != EnumTabOnayDurumu.ONAYLANDI) {
+            throw new IllegalArgumentException("Ödeme/ücretsiz işlem onaylanmadan üretime başlanamaz.");
+        }
+
+        TabUretim uretim = TabUretim.builder()
+                .tabTalep(talep)
+                .asama(EnumTabUretimAsamasi.URETIMDE)
+                .baslangicTarihi(LocalDateTime.now())
+                .sorumluSyKullanici(sorumlu)
+                .stStok(stStok)
+                .stDepo(stDepo)
+                .miktar(miktar == null ? BigDecimal.ONE : miktar)
+                .aciklama(aciklama)
+                .build();
+        em.persist(uretim);
+        em.flush();
+
+        doTransition(talep, action, aciklama);
+    }
+
+    /**
+     * Üretimi tamamlar ve mamul için URETIM_GIRISI stok hareketi oluşturur.
+     * Bakiye, maliyet katmanı ve stok işlem logu StStokHareketService tarafından yazılır.
+     */
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void completeProduction(Integer talepId, String aciklama) {
+        if (talepId == null) {
+            throw new IllegalArgumentException("Üretim tamamlanacak talep bulunamadı.");
+        }
+        TabTalep talep = em.find(TabTalep.class, talepId);
+        if (talep == null) {
+            throw new IllegalArgumentException("Talep kaydı bulunamadı.");
+        }
+        EnumTabTalepIslem action = EnumTabTalepIslem.URETIM_TAMAMLA;
+        checkPermission(action);
+        checkTransition(talep, action);
+        checkActionGuards(talep, action);
+
+        TabUretim uretim = uretimService.findLatestByTalep(talep);
+        if (uretim == null || uretim.getAsama() != EnumTabUretimAsamasi.URETIMDE) {
+            throw new IllegalArgumentException("Devam eden üretim kaydı bulunamadı.");
+        }
+        if (uretim.getStStok() == null || uretim.getStDepo() == null) {
+            throw new IllegalArgumentException("Üretim stok kartı/depo bilgisi eksik.");
+        }
+
+        if (uretim.getUretimGirisHareket() == null) {
+            StStokHareket hareket = new StStokHareket();
+            hareket.setStStok(uretim.getStStok());
+            hareket.setStDepo(uretim.getStDepo());
+            hareket.setHareketTuru(EnumStHareketTuru.URETIM_GIRISI);
+            hareket.setYon(EnumGirisCikis.GIRIS);
+            hareket.setMiktar(uretim.getMiktar() == null ? BigDecimal.ONE : uretim.getMiktar());
+            hareket.setIslemTarihi(LocalDateTime.now());
+            hareket.setBelgeTuru("TABTALEP");
+            hareket.setBelgeNo(talep.getTalepNo());
+            hareket.setAciklama("Tabanlık üretim girişi - " + talep.getTalepNo()
+                    + (StringUtil.isBlank(aciklama) ? "" : " / " + aciklama));
+            StStokHareket kaydedilen = stStokHareketService.hareketEkle(hareket);
+            uretim.setUretimGirisHareket(kaydedilen);
+            em.merge(uretim);
+            em.flush();
+        }
+
+        uretim.setAsama(EnumTabUretimAsamasi.URETIM_TAMAMLANDI);
+        uretim.setTamamlanmaTarihi(LocalDateTime.now());
+        em.merge(uretim);
+        em.flush();
+
+        doTransition(talep, action, aciklama);
+    }
+
+    /**
+     * Teslimat kaydı + stok çıkışı + talep kapatma tek transaction'da.
+     * Ücretli → SATIS, ücretsiz → URUN_CIKISI.
+     */
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void applyDelivery(Integer talepId, String aciklama) {
+        if (talepId == null) {
+            throw new IllegalArgumentException("Teslimat yapılacak talep bulunamadı.");
+        }
+        TabTalep talep = em.find(TabTalep.class, talepId);
+        if (talep == null) {
+            throw new IllegalArgumentException("Talep kaydı bulunamadı.");
+        }
+        EnumTabTalepIslem action = EnumTabTalepIslem.TESLIM_ET;
+        checkPermission(action);
+        checkTransition(talep, action);
+        checkActionGuards(talep, action);
+
+        if (!randevuService.existsAttended(talep, EnumTabRandevuTuru.TESLIMAT)) {
+            throw new IllegalArgumentException("Teslimat randevusu gerçekleşmeden teslimat yapılamaz.");
+        }
+        if (!belgeService.existsByType(talep, EnumTabBelgeTuru.TESLIMAT_FORMU)) {
+            throw new IllegalArgumentException("Teslimat öncesinde imzalı teslimat formu yüklenmelidir.");
+        }
+        TabUretim uretim = uretimService.findLatestByTalep(talep);
+        if (uretim == null || uretim.getAsama() != EnumTabUretimAsamasi.URETIM_TAMAMLANDI) {
+            throw new IllegalArgumentException("Üretimi tamamlanmayan ürün teslim edilemez.");
+        }
+
+        if (!teslimatService.existsByTalep(talep)) {
+            TabRandevu randevu = randevuService.findByTalepAndTur(talep, EnumTabRandevuTuru.TESLIMAT).stream()
+                    .filter(r -> r.getDurum() == EnumTabRandevuDurumu.GERCEKLESTI)
+                    .findFirst()
+                    .orElse(null);
+
+            EnumStHareketTuru hareketTuru = talep.getUcretTuru() == EnumTabUcretTuru.UCRETLI
+                    ? EnumStHareketTuru.SATIS
+                    : EnumStHareketTuru.URUN_CIKISI;
+            StStokHareket hareket = new StStokHareket();
+            hareket.setStStok(uretim.getStStok());
+            hareket.setStDepo(uretim.getStDepo());
+            hareket.setHareketTuru(hareketTuru);
+            hareket.setYon(EnumGirisCikis.CIKIS);
+            hareket.setMiktar(uretim.getMiktar() == null ? BigDecimal.ONE : uretim.getMiktar());
+            hareket.setIslemTarihi(LocalDateTime.now());
+            hareket.setBelgeTuru("TABTALEP");
+            hareket.setBelgeNo(talep.getTalepNo());
+            hareket.setAciklama("Tabanlık teslimatı - " + talep.getTalepNo()
+                    + (StringUtil.isBlank(aciklama) ? "" : " / " + aciklama));
+            StStokHareket kaydedilen = stStokHareketService.hareketEkle(hareket);
+
+            String urunBilgileri = uretim.getStStok() == null ? "" : uretim.getStStok().getMalzemeKodu();
+            TabTeslimat teslimat = TabTeslimat.builder()
+                    .tabTalep(talep)
+                    .tabRandevu(randevu)
+                    .teslimatTarihi(LocalDateTime.now())
+                    .teslimEdenSyKullanici(Util.getSyKullanici())
+                    .urunBilgileri(urunBilgileri)
+                    .stStokHareket(kaydedilen)
+                    .stokHareketTuru(hareketTuru)
+                    .aciklama(aciklama)
+                    .build();
+            em.persist(teslimat);
+            em.flush();
+        }
+
+        doTransition(talep, action, aciklama);
+    }
+
+    /**
      * Mevcut durumda uygulanabilir işlemler (yetki filtreli).
      */
     public boolean isActionAvailable(TabTalep talep, EnumTabTalepIslem action) {
@@ -281,7 +494,9 @@ public class TabTalepWorkflowService implements java.io.Serializable {
         if (tur == EnumTabRandevuTuru.OLCU && durum == EnumTabTalepDurumu.YENI) {
             return EnumTabTalepIslem.RANDEVU_VER;
         }
-        // Teslimat randevusu üretim tamamlandıktan sonra eklenecek (Adım 8).
+        if (tur == EnumTabRandevuTuru.TESLIMAT && durum == EnumTabTalepDurumu.TESLIMAT_RANDEVUSU_BEKLIYOR) {
+            return EnumTabTalepIslem.TESLIMAT_RANDEVUSU_VER;
+        }
         throw new IllegalArgumentException("Bu aşamada " + tur.getDisplayValue() + " randevusu verilemez.");
     }
 
@@ -311,6 +526,22 @@ public class TabTalepWorkflowService implements java.io.Serializable {
                 throw new IllegalArgumentException("Bu aşamada yalnızca ölçüm randevusu verilebilir.");
             }
         }
+        if (action == EnumTabTalepIslem.TESLIMAT_RANDEVUSU_VER) {
+            TabUretim uretim = uretimService.findLatestByTalep(talep);
+            if (uretim == null || uretim.getAsama() != EnumTabUretimAsamasi.URETIM_TAMAMLANDI) {
+                throw new IllegalArgumentException("Üretim tamamlanmadan teslimat randevusu verilemez.");
+            }
+        }
+    }
+
+    private void checkDepoYetki(StDepo depo) {
+        SyKullanici kullanici = Util.getSyKullanici();
+        if (kullanici == null || stDepoYetkiService.isSistemYoneticisi(kullanici)) {
+            return;
+        }
+        if (stDepoYetkiService.findByKullaniciByDepo(kullanici, depo) == null) {
+            throw new IllegalArgumentException("Seçili depoda işlem yapma yetkiniz bulunmuyor.");
+        }
     }
 
     private void checkRequiredDocuments(TabTalep talep, EnumTabTalepIslem action, EnumTabUcretTuru tur) {
@@ -323,6 +554,18 @@ public class TabTalepWorkflowService implements java.io.Serializable {
     }
 
     private void checkActionGuards(TabTalep talep, EnumTabTalepIslem action) {
+        if (action == EnumTabTalepIslem.TESLIM_ET) {
+            TabUretim uretim = uretimService.findLatestByTalep(talep);
+            if (uretim == null || uretim.getAsama() != EnumTabUretimAsamasi.URETIM_TAMAMLANDI) {
+                throw new IllegalArgumentException("Üretim tamamlanmadan teslimat yapılamaz.");
+            }
+        }
+        if (action == EnumTabTalepIslem.URETIM_TAMAMLA) {
+            TabUretim uretim = uretimService.findLatestByTalep(talep);
+            if (uretim == null || uretim.getAsama() != EnumTabUretimAsamasi.URETIMDE) {
+                throw new IllegalArgumentException("Devam eden üretim kaydı olmadan üretim tamamlanamaz.");
+            }
+        }
         if (action == EnumTabTalepIslem.UCRETLI_ODEME_ONAYLA || action == EnumTabTalepIslem.UCRETSIZ_ONAYLA) {
             if (talep.getUcretTuru() == null) {
                 throw new IllegalArgumentException("Ücret türü belirlenmeden onay yapılamaz.");

@@ -24,6 +24,7 @@ public enum EnumStHareketTuru implements BaseEnum {
     SARF("Sarf", EnumGirisCikis.CIKIS),
     ACILIS("Açılış", EnumGirisCikis.GIRIS),
     URUN_CIKISI("Ürün Çıkışı", EnumGirisCikis.CIKIS),
+    URETIM_GIRISI("Üretim Girişi", EnumGirisCikis.GIRIS),
     MANUEL_DUZELTME("Manuel Düzeltme", null);
 
     private final String label;

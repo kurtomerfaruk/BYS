@@ -15,8 +15,9 @@ import java.time.LocalDateTime;
 /**
  * Ücretli/ücretsiz işlem kaydı. Bir talebe ait birden fazla ödeme/onay kaydı geçmişe dönük tutulabilir.
  *
- * @author OmerFarukKurt
- * @version 1.0.0
+ * @author Omer Faruk KURT kurtomerfaruk@gmail.com
+ * @version 1.30.0
+ * @since 27.11.2026 16:15
  */
 @Getter
 @Setter

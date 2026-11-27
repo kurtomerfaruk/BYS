@@ -41,7 +41,8 @@ public enum EnumTabTalepDurumu implements BaseEnum {
             Map.entry(URETIM_BEKLIYOR, EnumSet.of(UCRET_BEKLIYOR)),
             Map.entry(URETIMDE, EnumSet.of(URETIM_BEKLIYOR)),
             Map.entry(TESLIMAT_RANDEVUSU_BEKLIYOR, EnumSet.of(URETIMDE)),
-            Map.entry(TESLIMAT_BEKLIYOR, EnumSet.of(TESLIMAT_RANDEVUSU_BEKLIYOR))
+            Map.entry(TESLIMAT_BEKLIYOR, EnumSet.of(TESLIMAT_RANDEVUSU_BEKLIYOR)),
+            Map.entry(TAMAMLANDI, EnumSet.of(TESLIMAT_BEKLIYOR))
     );
 
     EnumTabTalepDurumu(String label) {

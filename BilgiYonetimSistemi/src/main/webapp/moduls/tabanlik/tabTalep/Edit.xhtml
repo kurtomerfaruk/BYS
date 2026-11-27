@@ -2,6 +2,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
       xmlns:coco="jakarta.faces.composite/ui">
 
 <ui:composition>
@@ -12,9 +14,21 @@
                    actionListener="#{tabTalepController.save}"
                    listForm="TabTalepListForm">
 
+        <p:outputLabel value="#{messages.talepNoText}" for="talepNo"/>
+        <p:inputText id="talepNo" value="#{tabTalepController.selected.talepNo}" readonly="true"/>
+
+        <p:outputLabel value="#{messages.kisiLabel}" for="kisiAdSoyad"/>
+        <p:inputText id="kisiAdSoyad" value="#{tabTalepController.selected.tabKisi.gnlKisi.adSoyad}" readonly="true"/>
+
+        <p:outputLabel value="#{messages.talepTarihiLabel}" for="talepTarihi"/>
+        <p:inputText id="talepTarihi" value="#{tabTalepController.selected.talepTarihi}" readonly="true">
+            <f:convertDateTime type="localDateTime" pattern="#{messages.tarihSaatFormat}"/>
+        </p:inputText>
+
+        <p:outputLabel value="#{messages.aciklamaLabel}" for="aciklama"/>
+        <p:inputTextarea id="aciklama" value="#{tabTalepController.selected.aciklama}" rows="4" cols="50"/>
 
     </coco:editpage>
 
 </ui:composition>
-
 </html>

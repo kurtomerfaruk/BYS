@@ -27,7 +27,15 @@ public enum EnumTabTalepIslem implements BaseEnum {
     UCRETLI_ODEME_ONAYLA("Ödeme Onayla", EnumTabTalepDurumu.UCRET_BEKLIYOR,
             EnumTabTalepDurumu.URETIM_BEKLIYOR, "tabtalep:guncelle", "pi pi-receipt"),
     UCRETSIZ_ONAYLA("Ücretsiz İşlemi Onayla", EnumTabTalepDurumu.UCRET_BEKLIYOR,
-            EnumTabTalepDurumu.URETIM_BEKLIYOR, "tabtalep:guncelle", "pi pi-check-circle");
+            EnumTabTalepDurumu.URETIM_BEKLIYOR, "tabtalep:guncelle", "pi pi-check-circle"),
+    URETIM_BASLAT("Üretime Başla", EnumTabTalepDurumu.URETIM_BEKLIYOR,
+            EnumTabTalepDurumu.URETIMDE, "tabtalep:guncelle", "pi pi-cog"),
+    URETIM_TAMAMLA("Üretimi Tamamla", EnumTabTalepDurumu.URETIMDE,
+            EnumTabTalepDurumu.TESLIMAT_RANDEVUSU_BEKLIYOR, "tabtalep:guncelle", "pi pi-check-square"),
+    TESLIMAT_RANDEVUSU_VER("Teslimat Randevusu Ver", EnumTabTalepDurumu.TESLIMAT_RANDEVUSU_BEKLIYOR,
+            EnumTabTalepDurumu.TESLIMAT_BEKLIYOR, "tabtalep:guncelle", "pi pi-calendar-plus"),
+    TESLIM_ET("Teslim Et", EnumTabTalepDurumu.TESLIMAT_BEKLIYOR,
+            EnumTabTalepDurumu.TAMAMLANDI, "tabtalep:guncelle", "pi pi-check");
 
     private final String label;
     private final EnumTabTalepDurumu sourceStatus;

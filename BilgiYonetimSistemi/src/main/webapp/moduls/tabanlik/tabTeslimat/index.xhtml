@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:p="primefaces">
+
+    <h:form id="TabTeslimatForm" enctype="multipart/form-data">
+
+        <p:panel header="#{messages.teslimatBilgileri}" styleClass="w-100 mb-3">
+            <p:panelGrid columns="2" layout="tabular" styleClass="w-100">
+
+                <p:outputLabel value="#{messages.talepLabel}" for="seciliTalepNo"/>
+                <h:panelGroup layout="block">
+                    <p:inputText id="seciliTalepNo" value="#{tabTeslimatController.seciliTalep.talepNo}"
+                                 readonly="true" size="25"/>
+                    <p:commandButton icon="pi pi-search" process="@this" update="@form"
+                                     actionListener="#{bysController.openCommonDialog('tabTalepSec')}">
+                        <p:ajax event="dialogReturn" listener="#{tabTeslimatController.onTalepSelected}" update="@form"/>
+                    </p:commandButton>
+                </h:panelGroup>
+
+                <p:outputLabel value="#{messages.kisiLabel}" for="kisiAdSoyad"/>
+                <p:inputText id="kisiAdSoyad" value="#{tabTeslimatController.seciliTalep.tabKisi.gnlKisi.adSoyad}"
+                             readonly="true" styleClass="inputUpdate"/>
+
+                <p:outputLabel value="#{messages.durumLabel}" for="talepDurumu"/>
+                <h:outputText id="talepDurumu" value="#{tabTeslimatController.seciliTalep.durum.displayValue}"/>
+
+                <p:outputLabel value="#{messages.randevuTarihiLabel}" for="randevuTarihi"/>
+                <p:datePicker id="randevuTarihi" value="#{tabTeslimatController.randevuTarihi}"
+                              locale="tr" pattern="#{messages.tarihSaatKisaFormat}" showIcon="true" showOnFocus="false"/>
+
+                <p:outputLabel value="#{messages.aciklamaLabel}" for="aciklama"/>
+                <p:inputTextarea id="aciklama" value="#{tabTeslimatController.aciklama}" rows="2" cols="50"/>
+
+                <f:facet name="footer">
+                    <p:commandButton value="#{messages.teslimatRandevusuVer}" icon="pi pi-calendar-plus"
+                                     styleClass="ui-button-primary"
+                                     actionListener="#{tabTeslimatController.scheduleAppointment}"
+                                     process="@form" update="@form,:growl"
+                                     rendered="#{syKullaniciController.hasPermission('tabtalep:guncelle')}"/>
+                    <p:commandButton value="#{messages.randevuTamamla}" icon="pi pi-check-circle"
+                                     styleClass="ui-button-info"
+                                     actionListener="#{tabTeslimatController.completeAppointment}"
+                                     process="@this" update="@form,:growl"
+                                     rendered="#{syKullaniciController.hasPermission('tabtalep:guncelle')}"/>
+                    <p:commandButton value="#{messages.teslimEt}" icon="pi pi-check"
+                                     styleClass="ui-button-success"
+                                     actionListener="#{tabTeslimatController.deliver}"
+                                     process="@this" update="@form,:growl"
+                                     rendered="#{syKullaniciController.hasPermission('tabtalep:guncelle')}"/>
+                </f:facet>
+            </p:panelGrid>
+        </p:panel>
+
+        <p:panel header="#{messages.imzaliTeslimatFormu}" styleClass="w-100 mb-3">
+            <p:panelGrid columns="2" layout="tabular" styleClass="w-100">
+                <p:outputLabel value="#{messages.aciklamaLabel}" for="belgeAciklama"/>
+                <p:inputText id="belgeAciklama" value="#{tabTeslimatController.belgeAciklama}"/>
+            </p:panelGrid>
+            <p:fileUpload listener="#{tabTeslimatController.upload}" mode="advanced" auto="true" multiple="false"
+                          dragDropSupport="false" label="#{messages.buttonSec}" uploadLabel="#{messages.buttonYukle}"
+                          cancelLabel="#{messages.buttonIptal}" invalidFileMessage="#{messages.hataliDosyaTipi}"
+                          invalidSizeMessage="#{messages.hataliDosyaBoyutu}"
+                          allowTypes="/(\.|\/)(pdf|jpe?g|png|doc|docx|xls|xlsx)$/"
+                          update="@form,:growl" styleClass="mb-3">
+                <p:validateFile sizeLimit="10000000"/>
+            </p:fileUpload>
+
+            <p:dataTable value="#{tabTeslimatController.belgeler}" var="belge" rows="5" paginator="true"
+                         emptyMessage="#{messages.kayitBulunamadi}" styleClass="w-100">
+                <p:column headerText="#{messages.tip}"><h:outputText value="#{belge.belgeTuru.displayValue}"/></p:column>
+                <p:column headerText="#{messages.dosyaAdi}"><h:outputText value="#{belge.dosyaAdi}"/></p:column>
+                <p:column headerText="#{messages.tarih}">
+                    <h:outputText value="#{belge.yuklenmeTarihi}">
+                        <f:convertDateTime pattern="#{messages.tarihSaatKisaFormat}" type="localDateTime"/>
+                    </h:outputText>
+                </p:column>
+            </p:dataTable>
+        </p:panel>
+
+        <p:panel header="#{messages.randevuListesi}" styleClass="w-100 mb-3">
+            <p:dataTable value="#{tabTeslimatController.teslimatRandevulari}" var="r" rows="5" paginator="true"
+                         emptyMessage="#{messages.kayitBulunamadi}" styleClass="w-100">
+                <p:column headerText="#{messages.randevuTarihiLabel}">
+                    <h:outputText value="#{r.randevuTarihi}">
+                        <f:convertDateTime pattern="#{messages.tarihSaatKisaFormat}" type="localDateTime"/>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="#{messages.durumLabel}">
+                    <h:outputText value="#{r.durum.displayValue}"/>
+                </p:column>
+            </p:dataTable>
+        </p:panel>
+
+        <p:panel header="#{messages.teslimatTakip}" styleClass="w-100">
+            <p:dataTable value="#{tabTeslimatController.teslimatlar}" var="t" rows="10" paginator="true"
+                         emptyMessage="#{messages.kayitBulunamadi}" styleClass="w-100">
+                <p:column headerText="#{messages.teslimatTarihiLabel}">
+                    <h:outputText value="#{t.teslimatTarihi}">
+                        <f:convertDateTime pattern="#{messages.tarihSaatKisaFormat}" type="localDateTime"/>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="#{messages.teslimEdenLabel}">
+                    <h:outputText value="#{t.teslimEdenSyKullanici.kullaniciAdi}"/>
+                </p:column>
+                <p:column headerText="#{messages.teslimEdilenUrunLabel}">
+                    <h:outputText value="#{t.urunBilgileri}"/>
+                </p:column>
+                <p:column headerText="#{messages.uretimGirisHareketi}">
+                    <h:outputText value="#{t.stStokHareket.hareketNo}"/>
+                </p:column>
+                <p:column headerText="#{messages.durumLabel}">
+                    <h:outputText value="#{t.stokHareketTuru.displayValue}"/>
+                </p:column>
+            </p:dataTable>
+        </p:panel>
+
+    </h:form>
+
+</ui:composition>

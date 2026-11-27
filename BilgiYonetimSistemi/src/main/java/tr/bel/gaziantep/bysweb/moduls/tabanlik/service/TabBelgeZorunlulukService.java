@@ -15,8 +15,9 @@ import java.util.List;
 /**
  * Ücretli/ücretsiz süreçler için zorunlu belge kurallarını veritabanından okur.
  *
- * @author OmerFarukKurt
- * @version 1.0.0
+ * @author Omer Faruk KURT kurtomerfaruk@gmail.com
+ * @version 1.30.0
+ * @since 27.11.2026 16:15
  */
 @Stateless
 public class TabBelgeZorunlulukService extends AbstractService<TabBelgeZorunluluk> {
