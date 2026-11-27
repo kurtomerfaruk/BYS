@@ -11,7 +11,7 @@ import java.io.Serial;
 import java.util.List;
 
 /**
- * @author OmerFarukKurt
+ * @author Omer Faruk KURT kurtomerfaruk@gmail.com
  * @version 1.30.0
  * @since 27.11.2026 10:19
  */

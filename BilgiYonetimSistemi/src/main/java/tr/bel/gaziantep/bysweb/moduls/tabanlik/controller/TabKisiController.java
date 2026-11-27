@@ -8,6 +8,8 @@ import jakarta.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.primefaces.PrimeFaces;
+import org.primefaces.event.SelectEvent;
 import tr.bel.gaziantep.bysweb.core.controller.AbstractKisiController;
 import tr.bel.gaziantep.bysweb.core.enums.bys.EnumModul;
 import tr.bel.gaziantep.bysweb.core.enums.sistemyonetimi.EnumSyFiltreAnahtari;
@@ -29,7 +31,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * @author OmerFarukKurt
+ * @author Omer Faruk KURT kurtomerfaruk@gmail.com
  * @version 1.30.0
  * @since 27.11.2026 10:20
  */
@@ -126,6 +128,42 @@ public class TabKisiController extends AbstractKisiController<TabKisi> {
                 log.error(null, ex);
                 FacesUtil.errorMessage(Constants.HATA_OLUSTU);
             }
+        }
+    }
+
+    /**
+     * Talep formundan açılan "Yeni Kişi" dialogu için boş kayıt hazırlar.
+     */
+    public void initCreate() {
+        prepareCreate(null);
+    }
+
+    /**
+     * Dialog içinde yeni kişi kaydı oluşturur ve dialogReturn ile döndürür.
+     */
+    public void saveNewAndClose() {
+        if (isDuplicatePerson()) {
+            return;
+        }
+        saveNew(null);
+        if (!FacesUtil.isValidationFailed() && this.getSelected() != null) {
+            closeSelection(this.getSelected());
+        }
+    }
+
+    /**
+     * Diğer modüllerden açılan kişi seçim dialogunda seçilen kaydı döndürür.
+     */
+    public void closeSelection(TabKisi tabKisi) {
+        PrimeFaces.current().dialog().closeDynamic(tabKisi);
+    }
+
+    /**
+     * Kişi seçim tablosunda satıra çift tıklanınca seçim dialogunu kapatır.
+     */
+    public void onRowDoubleSelect(SelectEvent<TabKisi> event) {
+        if (event != null && event.getObject() != null) {
+            closeSelection(event.getObject());
         }
     }
 }

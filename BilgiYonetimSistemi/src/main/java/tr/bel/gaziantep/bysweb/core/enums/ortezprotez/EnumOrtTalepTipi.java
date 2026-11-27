@@ -4,7 +4,7 @@ import lombok.Getter;
 import tr.bel.gaziantep.bysweb.core.enums.BaseEnum;
 
 /**
- * @author OmerFarukKurt
+ * @author Omer Faruk KURT kurtomerfaruk@gmail.com
  * @version 1.30.0
  * @since 24.11.2026 15:37
  */

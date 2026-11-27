@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * @author OmerFarukKurt
+ * @author Omer Faruk KURT kurtomerfaruk@gmail.com
  * @version 1.30.0
  * @since 24.11.2026 15:36
  */

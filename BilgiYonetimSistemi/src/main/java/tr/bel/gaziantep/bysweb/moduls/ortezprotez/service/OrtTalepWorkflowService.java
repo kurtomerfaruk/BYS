@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
  * Merkezi yönetim: Ortez-Protez talebi durum geçişleri, yetki ve iş kuralı kontrolleri.
  * Tüm geçişler {@link EnumOrtTalepIslem} üzerinden doğrulanır; XHTML doğrudan durum değiştirmez.
  *
- * @author OmerFarukKurt
+ * @author Omer Faruk KURT kurtomerfaruk@gmail.com
  * @version 1.30.0
  * @since 24.11.2026 16:46
  */

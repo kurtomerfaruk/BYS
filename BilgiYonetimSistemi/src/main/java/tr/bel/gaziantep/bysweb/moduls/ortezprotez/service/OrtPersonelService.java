@@ -10,7 +10,7 @@ import tr.bel.gaziantep.bysweb.moduls.ortezprotez.entity.OrtPersonel;
 import java.io.Serial;
 
 /**
- * @author OmerFarukKurt
+ * @author Omer Faruk KURT kurtomerfaruk@gmail.com
  * @version 1.30.0
  * @since 24.11.2026 15:55
  */

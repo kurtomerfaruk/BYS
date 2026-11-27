@@ -11,7 +11,7 @@ import tr.bel.gaziantep.bysweb.core.enums.ortezprotez.EnumOrtCihazTur;
 import java.io.Serial;
 
 /**
- * @author OmerFarukKurt
+ * @author Omer Faruk KURT kurtomerfaruk@gmail.com
  * @version 1.30.0
  * @since 24.11.2026 13:19
  */

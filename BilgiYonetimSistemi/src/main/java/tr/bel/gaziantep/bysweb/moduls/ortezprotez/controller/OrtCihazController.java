@@ -17,7 +17,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * @author OmerFarukKurt
+ * @author Omer Faruk KURT kurtomerfaruk@gmail.com
  * @version 1.30.0
  * @since 24.11.2026 14:06
  */

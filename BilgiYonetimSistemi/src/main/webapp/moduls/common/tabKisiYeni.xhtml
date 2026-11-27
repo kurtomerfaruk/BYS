@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:p="primefaces"
+      xmlns:f="jakarta.faces.core"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<f:view>
+    <f:metadata>
+        <f:viewAction action="#{tabKisiController.initCreate}"/>
+    </f:metadata>
+
+    <h:head>
+        <h:outputScript library="primefaces" name="jquery/jquery.js"/>
+        <h:outputScript library="primefaces" name="jquery/jquery-plugins.js"/>
+        <h:outputStylesheet library="css" name="pfcrud.css"/>
+    </h:head>
+    <h:body>
+
+        <h:form id="TabKisiYeniForm">
+            <p:panel id="TabKisiYeniPanel" header="#{messages.dialogYeniKayit}" styleClass="w-100">
+                <p:panelGrid columns="2" layout="tabular" styleClass="w-100"
+                             rendered="#{tabKisiController.selected != null}">
+
+                    <p:outputLabel value="#{messages.tcKimlikNoLabel}" for="@next"/>
+                    <coco:tcKimlikNoDogumTarihi actionListener="#{tabKisiController.getTcKimlik()}"
+                                                update=":growl,@(.tcUpdate)"
+                                                value="#{tabKisiController.selected.gnlKisi.tcKimlikNo}"
+                                                dateValue="#{tabKisiController.selected.gnlKisi.dogumTarihi}"/>
+
+                    <p:outputLabel value="#{messages.adLabel}" for="ad"/>
+                    <p:inputText id="ad" value="#{tabKisiController.selected.gnlKisi.ad}"
+                                 required="true" readonly="#{facesContext.renderResponse}" styleClass="tcUpdate"/>
+
+                    <p:outputLabel value="#{messages.soyadLabel}" for="soyad"/>
+                    <p:inputText id="soyad" value="#{tabKisiController.selected.gnlKisi.soyad}"
+                                 required="true" readonly="#{facesContext.renderResponse}" styleClass="tcUpdate"/>
+
+                    <p:outputLabel value="#{messages.telefonLabel}" for="telefon"/>
+                    <p:inputMask id="telefon" value="#{tabKisiController.selected.gnlKisi.telefon}"
+                                 mask="#{messages.telefonFormat}" required="true" styleClass="tcUpdate"/>
+
+                    <f:facet name="footer">
+                        <p:commandButton value="#{messages.buttonKaydet}" icon="pi pi-check"
+                                         styleClass="ui-button-success"
+                                         actionListener="#{tabKisiController.saveNewAndClose()}"
+                                         process="@form" update="@form,:growl"/>
+                        <p:commandButton value="#{messages.buttonIptal}" icon="pi pi-times"
+                                         actionListener="#{tabKisiController.closeSelection(null)}"
+                                         immediate="true" styleClass="ui-button-secondary"/>
+                    </f:facet>
+                </p:panelGrid>
+            </p:panel>
+        </h:form>
+
+    </h:body>
+</f:view>
+</html>
