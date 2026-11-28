@@ -61,6 +61,19 @@ public enum EnumTabTalepIslem implements BaseEnum {
         return EnumSet.of(sourceStatus);
     }
 
+
+    /**
+     * Randevu gerektiren işlemlerin açacağı randevu türü (Ortez-Protez
+     * {@code getRandevuTuruForAction()} kalıbı).
+     */
+    public EnumTabRandevuTuru getRandevuTuruForAction() {
+        return switch (this) {
+            case RANDEVU_VER -> EnumTabRandevuTuru.OLCU;
+            case TESLIMAT_RANDEVUSU_VER -> EnumTabRandevuTuru.TESLIMAT;
+            default -> null;
+        };
+    }
+
     public static Set<EnumTabTalepIslem> getActions(EnumTabTalepDurumu durum) {
         if (durum == null) {
             return EnumSet.noneOf(EnumTabTalepIslem.class);

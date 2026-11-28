@@ -11,7 +11,7 @@
 
     <h:form id="TabOdemeForm" enctype="multipart/form-data">
 
-        <p:panel header="#{messages.odemeBilgileri}" styleClass="w-100 mb-3">
+        <p:panel header="#{messages.odemeBilgileriText}" styleClass="w-100 mb-3">
             <p:panelGrid columns="2" layout="tabular" styleClass="w-100">
 
                 <p:outputLabel value="#{messages.talepLabel}" for="seciliTalepNo"/>
@@ -126,7 +126,7 @@
             </p:dataTable>
         </p:panel>
 
-        <p:panel header="#{messages.odemeBilgileri}" styleClass="w-100">
+        <p:panel header="#{messages.odemeBilgileriText}" styleClass="w-100">
             <p:dataTable value="#{tabOdemeController.odemeler}" var="odeme" rows="10" paginator="true"
                          emptyMessage="#{messages.kayitBulunamadi}" styleClass="w-100">
                 <p:column headerText="#{messages.ucretTuruLabel}">

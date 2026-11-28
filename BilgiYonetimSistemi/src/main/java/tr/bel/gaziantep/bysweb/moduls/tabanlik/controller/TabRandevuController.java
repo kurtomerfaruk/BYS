@@ -48,6 +48,8 @@ public class TabRandevuController extends AbstractController<TabRandevu> {
     private TabRandevuService service;
     @Inject
     private TabTalepWorkflowService workflowService;
+    @Inject
+    private TabTalepController tabTalepController;
 
     @Getter
     private ScheduleModel lazyEventModel;
@@ -179,6 +181,7 @@ public class TabRandevuController extends AbstractController<TabRandevu> {
                     randevu.getRandevuTarihi(),
                     randevu.getAciklama());
             FacesUtil.successMessage(Constants.KAYIT_EKLENDI);
+            refreshTalepDetail(randevu);
             if (!isValidationFailed()) {
                 this.setItems(null);
                 this.setLazyItems(null);
@@ -216,6 +219,7 @@ public class TabRandevuController extends AbstractController<TabRandevu> {
         try {
             service.cancel(this.getSelected().getId(), iptalNedeni);
             reloadSelected();
+            refreshTalepDetail(this.getSelected());
             FacesUtil.successMessage(Constants.KAYIT_GUNCELLENDI);
             PrimeFaces.current().executeScript("PF('TabRandevuEditDialog').hide()");
         } catch (EJBException ex) {
@@ -234,6 +238,7 @@ public class TabRandevuController extends AbstractController<TabRandevu> {
         try {
             service.postpone(this.getSelected().getId(), ertelemeNedeni);
             reloadSelected();
+            refreshTalepDetail(this.getSelected());
             FacesUtil.successMessage(Constants.KAYIT_GUNCELLENDI);
         } catch (EJBException ex) {
             Throwable cause = FacesUtil.getRootCause(ex.getCause());
@@ -244,6 +249,17 @@ public class TabRandevuController extends AbstractController<TabRandevu> {
         refreshIncomingEvents();
     }
 
+    /**
+     * Detay ekranındaki randevu tablosundan doğrudan gerçekleşti işareti.
+     */
+    public void completeRandevu(TabRandevu randevu) {
+        if (randevu == null) {
+            return;
+        }
+        this.setSelected(randevu);
+        completeSelected();
+    }
+
     public void completeSelected() {
         if (this.getSelected() == null || this.getSelected().getId() == null) {
             return;
@@ -251,6 +267,7 @@ public class TabRandevuController extends AbstractController<TabRandevu> {
         try {
             service.complete(this.getSelected().getId());
             reloadSelected();
+            refreshTalepDetail(this.getSelected());
             FacesUtil.successMessage(Constants.KAYIT_GUNCELLENDI);
         } catch (EJBException ex) {
             Throwable cause = FacesUtil.getRootCause(ex.getCause());
@@ -264,6 +281,23 @@ public class TabRandevuController extends AbstractController<TabRandevu> {
     private void reloadSelected() {
         if (this.getSelected() != null && this.getSelected().getId() != null) {
             this.setSelected(service.find(this.getSelected().getId()));
+        }
+    }
+
+    /**
+     * Ortez-Protez'deki refreshTalepDetail kalıbı: randevu işlemi talep detayını
+     * değiştirdiğinde açık detay dialogunu anında tazeler; kapatıp açmaya gerek kalmaz.
+     */
+    private void refreshTalepDetail(TabRandevu randevu) {
+        if (randevu == null || randevu.getTabTalep() == null || tabTalepController.getSelected() == null) {
+            return;
+        }
+        if (java.util.Objects.equals(randevu.getTabTalep().getId(), tabTalepController.getSelected().getId())) {
+            tabTalepController.readInfo();
+            // Durum değiştiğinde detay dialogundaki "Sıradaki İşlem" kartı anında yenilenmeli.
+            if (jakarta.faces.context.FacesContext.getCurrentInstance().getPartialViewContext().isAjaxRequest()) {
+                PrimeFaces.current().ajax().update(":TabTalepViewForm");
+            }
         }
     }
 

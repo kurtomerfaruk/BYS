@@ -38,8 +38,8 @@
                     <p:selectOneMenu value="#{tabRandevuController.selected.randevuTuru}"
                                      required="true" converter="omnifaces.SelectItemsConverter">
                         <f:selectItem itemLabel="#{messages.seciniz}" itemValue="#{null}"/>
-                        <f:selectItems value="#{enumRandevuTuru.ALL_VALUES}" var="tur"
-                                       itemLabel="#{tur.displayValue}" itemValue="#{tur}"/>
+                        <f:selectItems value="#{enumRandevuTuru.ALL_VALUES}" var="turs"
+                                       itemLabel="#{turs.displayValue}" itemValue="#{turs}"/>
                     </p:selectOneMenu>
 
                     <p:outputLabel value="#{messages.randevuTarihiLabel}" for="@next"/>

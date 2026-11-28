@@ -24,6 +24,7 @@ import tr.bel.gaziantep.bysweb.moduls.tabanlik.entity.*;
 import java.io.Serial;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 /**
  * @author Omer Faruk KURT kurtomerfaruk@gmail.com
@@ -279,6 +280,23 @@ public class TabTalepWorkflowService implements java.io.Serializable {
     }
 
     /**
+     * Detay ekranındaki tek adımlık işlem: ödeme kaydı + onay + durum geçişi
+     * aynı transaction'da yapılır.
+     */
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void applyChargeAndApprove(Integer talepId, EnumTabUcretTuru ucretTuru, BigDecimal tutar,
+                                      LocalDateTime odemeTarihi, String odemeYontemi, String dekontNo,
+                                      String ucretsizGerekce, String aciklama) {
+        saveCharge(talepId, ucretTuru, tutar, odemeTarihi, odemeYontemi, dekontNo, ucretsizGerekce, aciklama);
+        TabTalep talep = em.find(TabTalep.class, talepId);
+        TabOdeme odeme = odemeService.findLatestByTalep(talep);
+        if (odeme == null) {
+            throw new IllegalArgumentException("Ödeme kaydı oluşturulamadı.");
+        }
+        approveCharge(odeme.getId(), aciklama);
+    }
+
+    /**
      * Ödeme/ücretsiz işlem onayı: zorunlu belgeler kontrol edilir, onay yazılır ve
      * talep üretim aşamasına geçirilir. Hepsi tek transaction'da çalışır.
      */
@@ -475,6 +493,16 @@ public class TabTalepWorkflowService implements java.io.Serializable {
         }
 
         doTransition(talep, action, aciklama);
+    }
+
+    /**
+     * Mevcut durumdan geri dönülebilecek adımlar.
+     */
+    public Set<EnumTabTalepDurumu> getBackOptions(TabTalep talep) {
+        if (talep == null || talep.getDurum() == null) {
+            return Set.of();
+        }
+        return talep.getDurum().getPreviousStatuses();
     }
 
     /**
